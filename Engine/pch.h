@@ -10,8 +10,11 @@
 
 
 
+#include <Windows.h>
+#include <memory>
 #include <iostream>
 #include <assert.h>
+#include <vector>
 
 
 // add headers that you want to pre-compile here

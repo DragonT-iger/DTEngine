@@ -1,5 +1,4 @@
 #include "pch.h"
-#include <Windows.h>
 #include "WindowBase.h"
 
 
@@ -38,10 +37,10 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-bool WindowBase::Create(const wchar_t* windowName, int width, int height, int posX, int posY, WindowMode windowMode)
+bool WindowBase::Create(const wchar_t* windowName, int width, int height, WindowMode windowMode, int posX, int posY)
 {
 
-	//  https://learn.microsoft.com/ko-kr/windows/win32/api/winuser/ns-winuser-wndclassexw
+	//https://learn.microsoft.com/ko-kr/windows/win32/api/winuser/ns-winuser-wndclassexw
 
 	WNDCLASSEX wc = {};
 
@@ -155,4 +154,8 @@ bool WindowBase::SetWindowed()
 
 void WindowBase::Destroy()
 {
+	if (m_hWnd) {
+		DestroyWindow(m_hWnd);
+		m_hWnd = NULL;
+	}
 }

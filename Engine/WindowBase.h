@@ -1,9 +1,6 @@
 #pragma once
 
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-
 
 
 
@@ -17,8 +14,10 @@ public:
 		Fullscreen
 	};
 
-	bool Create(const wchar_t* windowName, int width, int height, int posX, int posY , WindowMode windowMode);
+	bool Create(const wchar_t* windowName = L"D3DEngine", int width = 1920, int height = 1080,
+				WindowMode windowMode = WindowMode::Windowed, int posX = 0, int posY = 0);
 
+	// posX, posY는 창 모드에서만 적용됨 개발하면서 콘솔창 띄우고 테스트할 때 편하게 하려고
 
 
 	bool ResizeWindow(int width, int height, int posX, int posY);
