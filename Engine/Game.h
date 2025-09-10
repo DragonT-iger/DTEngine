@@ -1,5 +1,8 @@
 #pragma once
 
+#include "WindowBase.h"
+#include "GameTimer.h"
+#include "DX11Renderer.h"
 
 class Game : public WindowBase
 {
@@ -17,6 +20,8 @@ private:
 	void OnResize(int width, int height) override; 
 	void OnClose() override; 
 	
-	GameTimer m_timer;
+
+	std::unique_ptr<DX11Renderer> m_renderer;
+	std::unique_ptr<GameTimer> m_timer;
 };
 

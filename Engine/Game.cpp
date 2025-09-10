@@ -2,17 +2,23 @@
 #include "WindowBase.h"
 #include "GameTimer.h"
 #include "Game.h"
+#include "DX11Renderer.h"
 
 bool Game::Init()
 {
 	// 타이머 초기화
-	m_timer.Reset();
-
-	// 렌더러 초기화
-
+	m_timer = std::make_unique<GameTimer>();
+	m_timer->Reset();
 
 	// 창 만들기
 	if (!WindowBase::Create(L"D3DEngine", 1920, 1080, WindowMode::Windowed, 500, 0)) { return false; };
+
+	// 렌더러 초기화
+	m_renderer = std::make_unique<DX11Renderer>();
+	if (!m_renderer->Init(m_hWnd)) { return false; }
+
+
+
 
 	return true; 
 }
@@ -29,8 +35,8 @@ void Game::Run()
 		}
 		else
 		{
-			m_timer.Tick();
-			Update(m_timer.DeltaTime()); // ms 아님
+			m_timer->Tick();
+			Update(m_timer->DeltaTime()); // ms 아님
 		}
 	}
 }

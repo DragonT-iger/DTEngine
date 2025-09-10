@@ -28,6 +28,7 @@ public:
 	bool SetWindowed();
 
 
+	HWND GetHwnd() const { return m_hWnd; }
 
 
 	void Destroy();
@@ -42,6 +43,6 @@ protected:
 	virtual void OnResize(int width, int height) abstract;
 	virtual void OnClose() {};
 
-	std::unique_ptr<HWND> m_hWnd;
+	HWND m_hWnd;
 };
 
