@@ -11,9 +11,6 @@ bool Game::Init()
 	// 렌더러 초기화
 
 
-
-
-
 	// 창 만들기
 	if (!WindowBase::Create(L"D3DEngine", 1920, 1080, WindowMode::Windowed, 500, 0)) { return false; };
 

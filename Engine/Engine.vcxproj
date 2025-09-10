@@ -136,17 +136,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="IRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DX11Renderer.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

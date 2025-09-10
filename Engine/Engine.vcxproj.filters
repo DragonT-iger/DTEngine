@@ -21,6 +21,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{91b8feec-72b9-4a1d-a7ef-e3305ebfe228}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{71d0cd6e-258a-4418-853c-a88dddd2d36e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -41,6 +44,12 @@
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -60,6 +69,12 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11Renderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

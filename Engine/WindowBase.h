@@ -42,6 +42,6 @@ protected:
 	virtual void OnResize(int width, int height) abstract;
 	virtual void OnClose() {};
 
-	HWND m_hWnd;
+	std::unique_ptr<HWND> m_hWnd;
 };
 
