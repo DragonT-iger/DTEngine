@@ -1,12 +1,15 @@
 #pragma once
 
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-
 
 class WindowBase
 {
 public:
+	
+	virtual ~WindowBase() = default;
+
 	enum class WindowMode
 	{
 		Windowed,
@@ -15,9 +18,9 @@ public:
 	};
 
 	bool Create(const wchar_t* windowName = L"D3DEngine", int width = 1920, int height = 1080,
-				WindowMode windowMode = WindowMode::Windowed, int posX = 0, int posY = 0);
+		WindowMode windowMode = WindowMode::Windowed, int posX = 0, int posY = 0);
 
-	// posX, posY´Â Ã¢ ¸ğµå¿¡¼­¸¸ Àû¿ëµÊ °³¹ßÇÏ¸é¼­ ÄÜ¼ÖÃ¢ ¶ç¿ì°í Å×½ºÆ®ÇÒ ¶§ ÆíÇÏ°Ô ÇÏ·Á°í
+	// posX, posYëŠ” ì°½ ëª¨ë“œì—ì„œë§Œ ì ìš©ë¨ ê°œë°œí•˜ë©´ì„œ ì½˜ì†”ì°½ ë„ìš°ê³  í…ŒìŠ¤íŠ¸í•  ë•Œ í¸í•˜ê²Œ í•˜ë ¤ê³ 
 
 
 	bool ResizeWindow(int width, int height, int posX, int posY);
@@ -45,4 +48,3 @@ protected:
 
 	HWND m_hWnd;
 };
-

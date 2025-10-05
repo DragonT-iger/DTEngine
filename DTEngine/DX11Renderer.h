@@ -22,10 +22,10 @@ private:
 	ComPtr<IDXGISwapChain>         m_pSwapChain;
 	ComPtr<ID3D11Device>           m_pDevice;
 	ComPtr<ID3D11DeviceContext>    m_pDXDC;
-	ComPtr<ID3D11RenderTargetView> m_pRTView;;
+	ComPtr<ID3D11RenderTargetView> m_pRTView;
 
 	bool m_bWindowMode = true;
-	bool m_bVSync = false; // ³ª´Â ¼öÁ÷µ¿±âÈ­°¡ ½È¿ö¿ä
+	bool m_bVSync = false; // ë‚˜ëŠ” ìˆ˜ì§ë™ê¸°í™”ê°€ ì‹«ì›Œìš”
 
 	struct { UINT Width; UINT Height; DXGI_FORMAT Format; } m_Mode = { 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM };
 

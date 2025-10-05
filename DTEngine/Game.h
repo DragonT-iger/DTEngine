@@ -1,19 +1,20 @@
 #pragma once
 
 #include "WindowBase.h"
-#include "GameTimer.h"
-#include "DX11Renderer.h"
+
+class DX11Renderer;
+class GameTimer;
 
 class Game : public WindowBase
 {
 public:
-	Game() = default; 
-	virtual ~Game() = default; 
+	Game();
+	virtual ~Game();
 	bool Init(); 
 	void Run(); 
 	void Release();
 
-	void Update(float deltaTime); // ³ªÁß¿¡ ¸®ÆÑÅä¸µ ¿¹Á¤
+	void Update(float deltaTime); // ë‚˜ì¤‘ì— ë¦¬íŒ©í† ë§ ì˜ˆì •
 
 private: 
 	bool OnWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) override; 

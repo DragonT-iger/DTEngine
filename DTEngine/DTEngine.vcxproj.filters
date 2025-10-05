@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{7dfc8902-f0e0-40df-9998-d288bcf45ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="d3d11">
+      <UniqueIdentifier>{99c8fd05-2f37-41fc-9f92-024e92e2b23b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{73f03079-6f1b-4213-9f7a-e11231f4cf8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Logger">
+      <UniqueIdentifier>{6011faef-5fae-4f87-bec0-e89697e25fb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{109eead9-6bf0-4dea-94a7-3ac27182a804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scene">
+      <UniqueIdentifier>{078ec595-31e2-4dd4-b12e-adfb7f2a1801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scene\Component">
+      <UniqueIdentifier>{49e0604b-3857-4e63-90ec-fb19352f8b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scene\ComponentBase">
+      <UniqueIdentifier>{8a1ff18f-7ea7-408f-b96c-c2659cef34bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{74f67aca-7cd6-4baf-956e-6bbdf8348d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{492921af-0af5-44e6-9888-20c6ddc24cd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Game">
+      <UniqueIdentifier>{fa38d28b-3d43-4029-9576-1f3a8af2a05f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GameTimer">
+      <UniqueIdentifier>{682af787-8de3-41ed-902f-a0c5af2fe6ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DTEngine.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Core\Scene\ComponentBase</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Core\GameTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBase.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11Renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Core\Scene\ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>Core\Scene\ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Core\Scene\ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Core\GameTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBase.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Renderer.h" />
+  </ItemGroup>
+</Project>

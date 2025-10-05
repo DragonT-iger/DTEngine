@@ -1,25 +1,18 @@
-#include "CommonInclude.h"
-#include "../Engine/Game.h"
-
+ï»¿#include "Common.h"
+#include "../DTEngine/Game.h"
 int main() {
 
-	// ´©¼ö Ã¼Å©
+	// ëˆ„ìˆ˜ ì²´í¬
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-
 
 	Game game;
 
 	if (!game.Init()) {
-		std::cout << "°ÔÀÓ ÃÊ±âÈ­ ½ÇÆĞ" << std::endl;
+		std::cout << "ê²Œì„ ì´ˆê¸°í™” ì‹¤íŒ¨" << std::endl;
 		return false;
 	}
 
 	game.Run();
 
 	game.Release();
-
-
-
-
 }

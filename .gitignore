@@ -40,9 +40,14 @@
 # debug information files
 *.dwo
 
+# SVN으로 관리 (나중에)
+#/ThirdParty/*
 
 .vs
 
 # temporary files
+
+
+
 
 *x64

@@ -14,7 +14,7 @@ public:
 	float TotalTime()const; // in seconds
 	float DeltaTime()const; // in seconds
 
-	float DeltaTimeMS()const; // in mili-seconds, Ãß°¡
+	float DeltaTimeMS()const; // in mili-seconds, ï¿½ß°ï¿½
 
 	void Reset(); // Call before message loop.
 	void Start(); // Call when unpaused.
