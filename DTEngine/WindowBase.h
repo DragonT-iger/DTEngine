@@ -1,50 +1,36 @@
-#pragma once
+﻿#pragma once
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <Windows.h>
 
+struct HWND__;
+using HWND = HWND__*;
 
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-class WindowBase
-{
+class WindowBase {
 public:
-	
-	virtual ~WindowBase() = default;
+    enum class WindowMode { Windowed, Borderless, Fullscreen };
+    virtual ~WindowBase();
 
-	enum class WindowMode
-	{
-		Windowed,
-		Borderless,
-		Fullscreen
-	};
+    bool Create(const wchar_t* title = L"D3DEngine",
+        int width = 1920, int height = 1080,
+        WindowMode mode = WindowMode::Windowed,
+        int posX = 0, int posY = 0);
 
-	bool Create(const wchar_t* windowName = L"D3DEngine", int width = 1920, int height = 1080,
-		WindowMode windowMode = WindowMode::Windowed, int posX = 0, int posY = 0);
-
-	// posX, posY는 창 모드에서만 적용됨 개발하면서 콘솔창 띄우고 테스트할 때 편하게 하려고
-
-
-	bool ResizeWindow(int width, int height, int posX, int posY);
-
-	bool SetResolution(int width, int height);
-	bool SetFullScreen();
-	bool SetBorderless();
-	bool SetWindowed();
-
-
-	HWND GetHwnd() const { return m_hWnd; }
-
-
-	void Destroy();
-
+    bool ResizeWindow(int width, int height, int posX, int posY);
+    void Destroy();
+    bool PumpEvents();
 
 protected:
+    
+    HWND GetHwnd() const { return m_hWnd; }
 
-	friend LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    virtual bool OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam);
+    virtual void OnResize(int width, int height) = 0;
+    virtual void OnClose() {}
 
-	virtual bool OnWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { return false; }
+private:
+    static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	virtual void OnResize(int width, int height) abstract;
-	virtual void OnClose() {};
-
-	HWND m_hWnd;
+private: 
+    HWND m_hWnd = nullptr;
 };

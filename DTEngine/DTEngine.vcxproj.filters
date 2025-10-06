@@ -1,95 +1,116 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{7dfc8902-f0e0-40df-9998-d288bcf45ff9}</UniqueIdentifier>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="d3d11">
-      <UniqueIdentifier>{99c8fd05-2f37-41fc-9f92-024e92e2b23b}</UniqueIdentifier>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{73f03079-6f1b-4213-9f7a-e11231f4cf8c}</UniqueIdentifier>
+    <Filter Include="Window">
+      <UniqueIdentifier>{a85c0811-f300-45c7-886e-1d999b169a35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Logger">
-      <UniqueIdentifier>{6011faef-5fae-4f87-bec0-e89697e25fb6}</UniqueIdentifier>
+    <Filter Include="Game">
+      <UniqueIdentifier>{0b6107c2-25cb-49c9-a16d-bf38757c714a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32">
-      <UniqueIdentifier>{109eead9-6bf0-4dea-94a7-3ac27182a804}</UniqueIdentifier>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{25cd44b5-97b5-42eb-b356-b5054fbb4f3a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Scene">
-      <UniqueIdentifier>{078ec595-31e2-4dd4-b12e-adfb7f2a1801}</UniqueIdentifier>
+    <Filter Include="Time">
+      <UniqueIdentifier>{748e60b1-2f5b-4654-81e4-71e5fcc80af3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Scene\Component">
-      <UniqueIdentifier>{49e0604b-3857-4e63-90ec-fb19352f8b8b}</UniqueIdentifier>
+    <Filter Include="ImGUI">
+      <UniqueIdentifier>{51091478-12a4-43c2-849c-cc1677a3acdd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Scene\ComponentBase">
-      <UniqueIdentifier>{8a1ff18f-7ea7-408f-b96c-c2659cef34bc}</UniqueIdentifier>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{12911482-7a7f-40a7-8b0c-0f9c6f5c94b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PCH">
-      <UniqueIdentifier>{74f67aca-7cd6-4baf-956e-6bbdf8348d14}</UniqueIdentifier>
+    <Filter Include="ComponentBase">
+      <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Input">
-      <UniqueIdentifier>{492921af-0af5-44e6-9888-20c6ddc24cd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Game">
-      <UniqueIdentifier>{fa38d28b-3d43-4029-9576-1f3a8af2a05f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\GameTimer">
-      <UniqueIdentifier>{682af787-8de3-41ed-902f-a0c5af2fe6ef}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DTEngine.cpp">
-      <Filter>PCH</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>PCH</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Core\Scene\ComponentBase</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Core\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Core\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>Core\GameTimer</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowBase.cpp">
-      <Filter>Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="DX11Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>PCH</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>PCH</Filter>
-    </ClInclude>
-    <ClInclude Include="Behaviour.h">
-      <Filter>Core\Scene\ComponentBase</Filter>
-    </ClInclude>
-    <ClInclude Include="MonoBehaviour.h">
-      <Filter>Core\Scene\ComponentBase</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Core\Scene\ComponentBase</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Core\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Core\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>Core\GameTimer</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WindowBase.h">
-      <Filter>Win32</Filter>
+      <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="DX11Renderer.h" />
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DX11Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="DXHelper.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiLayer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>ComponentBase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DTEngine.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBase.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="DXHelper.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiLayer.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>ComponentBase</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,34 +1,70 @@
-#pragma once
+﻿#pragma once
 
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <wrl/client.h>
-using namespace DirectX;
-using namespace Microsoft::WRL;
+#include <cstdint>
+#include <wrl/client.h> 
 
+
+
+struct HWND__;
+using HWND = HWND__*;
+
+
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+struct IDXGISwapChain1;
+struct ID3D11Texture2D;
+struct ID3D11RenderTargetView;
+struct ID3D11DepthStencilView;
 
 class DX11Renderer
 {
 public:
-	bool Init(HWND hwnd);
+    DX11Renderer();
+    ~DX11Renderer();
 
-	HRESULT CreateDeviceSwapChain(HWND hWnd);
-	HRESULT CreateRenderTarget();
-	void SetViewPort();
-	int ClearBackBuffer(XMFLOAT4 col);
-	int Flip();
+    bool Initialize(HWND hwnd, int width, int height, bool vsync = true);
+    void Resize(int width, int height);
+
+    void BeginFrame(const float clearColor[4]/*, bool clearDepth = true*/);
+    void EndFrame();
+    void Present();
+
+    void SetFullscreen(bool enable);
+    void Destroy();
+
+
+    HWND GetHwnd();
+    ID3D11Device* GetDevice()  const;
+    ID3D11DeviceContext* GetContext() const;
+    ID3D11RenderTargetView* GetBackbufferRTV() const;
+
+    int  Width()  const { return m_width; }
+    int  Height() const { return m_height; }
+    bool IsVSync() const { return m_vsync; }
+    void ToggleVSync() { m_vsync = !m_vsync; }
 
 private:
-	ComPtr<IDXGISwapChain>         m_pSwapChain;
-	ComPtr<ID3D11Device>           m_pDevice;
-	ComPtr<ID3D11DeviceContext>    m_pDXDC;
-	ComPtr<ID3D11RenderTargetView> m_pRTView;
+    bool CreateDeviceAndSwapchain();
+    void CreateBackbuffers(int width, int height);
+    void ReleaseBackbuffers();
 
-	bool m_bWindowMode = true;
-	bool m_bVSync = false; // 나는 수직동기화가 싫워요
+private:
+    // Platform
+    HWND m_hwnd = nullptr;
 
-	struct { UINT Width; UINT Height; DXGI_FORMAT Format; } m_Mode = { 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM };
+    // D3D11 core
+    Microsoft::WRL::ComPtr<ID3D11Device>           m_device;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_context;
+    Microsoft::WRL::ComPtr<IDXGISwapChain1>        m_swapchain;
 
-	D3D_FEATURE_LEVEL m_FeatureLevels = D3D_FEATURE_LEVEL_11_0;
+    // Backbuffer & Depth
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_backbufferTex; 
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_rtv;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
+
+    // State
+    int   m_width = 0;
+    int   m_height = 0;
+    bool  m_vsync = true;
 };
-

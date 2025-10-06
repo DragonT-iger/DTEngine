@@ -1,9 +1,10 @@
-#include "pch.h"
+﻿#include "pch.h"
 //***************************************************************************************
 // GameTimer.cpp by Frank Luna (C) 2011 All Rights Reserved.
 //***************************************************************************************
 
 #include "GameTimer.h"
+#include <Windows.h>
 
 GameTimer::GameTimer()
 	: mSecondsPerCount(0.0), mDeltaTime(-1.0), mBaseTime(0),

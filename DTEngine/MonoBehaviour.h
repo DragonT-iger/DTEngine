@@ -1,8 +1,5 @@
 ﻿#pragma once
 #include "Behaviour.h"
-/// 날짜 / 이름 / 수정내용
-/// 2025-07-02 권용범 최초버전 작성
-/// 2025-07-22 물리 Trigger 이벤트 추가
 
 class Collider;
 
@@ -19,7 +16,12 @@ public:
 	virtual void FixedUpdate(float fixedDelta) {};
 	virtual void LateUpdate(float deltaTime) {};
 
-    //virtual void OnTriggerEnter(Collider* other) {} 
-    //virtual void OnTriggerStay(Collider* other) {}
-    //virtual void OnTriggerExit(Collider* other) {}
+
+    //virtual void OnCollisionEnter(Collider* other) {};
+    //virtual void OnCollisionStay(Collider* other) {};
+    //virtual void OnCollisionExit(Collider* other) {};
+
+    virtual void OnTriggerEnter(Collider* other) {} 
+    virtual void OnTriggerStay(Collider* other) {}
+    virtual void OnTriggerExit(Collider* other) {}
 };

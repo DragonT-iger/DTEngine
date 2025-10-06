@@ -1,13 +1,14 @@
 ﻿#include "Common.h"
-#include "../DTEngine/Game.h"
-int main() {
+#include "Game.h"
 
-	// 누수 체크
+
+int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 
 	Game game;
 
-	if (!game.Init()) {
+	if (!game.Initialize()) {
 		std::cout << "게임 초기화 실패" << std::endl;
 		return false;
 	}
@@ -15,4 +16,6 @@ int main() {
 	game.Run();
 
 	game.Release();
+
+	return 0;
 }

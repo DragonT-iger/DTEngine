@@ -1,28 +1,37 @@
-#pragma once
+﻿#pragma once
+#include <cstdint>
+#include <memory>
 
 #include "WindowBase.h"
 
-class DX11Renderer;
+class DX11Renderer; 
 class GameTimer;
+class ImGuiLayer;
 
-class Game : public WindowBase
-{
+
+class Game : public WindowBase {
 public:
 	Game();
-	virtual ~Game();
-	bool Init(); 
-	void Run(); 
+	~Game() override;
+
+
+	bool Initialize();
+	void Run();
 	void Release();
 
-	void Update(float deltaTime); // 나중에 리팩토링 예정
+
+	void Update(float deltaTime);
+
+
+protected:
+	bool OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam) override;
+	void OnResize(int width, int height) override;
+	void OnClose() override;
 
 private: 
-	bool OnWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) override; 
-	void OnResize(int width, int height) override; 
-	void OnClose() override; 
-	
+	const float backBufferColor[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 
 	std::unique_ptr<DX11Renderer> m_renderer;
 	std::unique_ptr<GameTimer> m_timer;
+	std::unique_ptr<ImGuiLayer> m_imgui;
 };
-
