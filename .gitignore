@@ -40,8 +40,19 @@
 # debug information files
 *.dwo
 
+
+# package
+/packages/*
+
 # SVN으로 관리 (나중에)
 #/ThirdParty/*
+
+#imgui 위치 저장 데이터
+Client/imgui.ini
+
+*.ini
+*.aps
+*.rc
 
 .vs
 

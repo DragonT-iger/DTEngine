@@ -30,6 +30,9 @@
     <Filter Include="ComponentBase">
       <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{6f641540-26bd-448b-bf8b-ae97c8641eb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -74,6 +77,12 @@
     <ClInclude Include="Transform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMathHelper.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DTEngine.cpp">
@@ -112,5 +121,14 @@
     <ClCompile Include="Transform.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleMathHelper.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DTEngine.rc" />
   </ItemGroup>
 </Project>

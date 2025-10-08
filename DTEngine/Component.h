@@ -19,9 +19,9 @@ public:
     T* GetComponent() const;
 
 
-    void _SetOwner(GameObject* owner) { m_owner = owner; } // 
+    void _SetOwner(GameObject* owner) { m_owner = owner; }
 
-private: // 항상 아래
+private:
 
     GameObject* _GetOwner() const { return m_owner; }
     

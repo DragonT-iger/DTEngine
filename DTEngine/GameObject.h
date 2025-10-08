@@ -35,8 +35,7 @@ public:
 
     Transform* GetTransform() { return m_transform.get(); }
     
-
-
+    
     //  ------------------------엔진 전용 함수------------------------
 
     void _Awake();
@@ -53,9 +52,6 @@ public:
     const std::vector<std::unique_ptr<Component>>& _GetComponents() const { return m_components; }
 
 
-
-    
-
     //Getter Setter
 
     const std::string& GetName() const { return m_name; }
@@ -63,6 +59,7 @@ public:
 
     const std::string& GetTag() const { return m_tag; }
     void SetTag(const std::string& tag) { m_tag = tag; }
+
 
 private:
 
@@ -124,7 +121,7 @@ template<>
 Transform* GameObject::AddComponent<Transform>() {
     if (m_transform)
     {
-        std::cout << L"[GameObject] Transform already exists\n";
+        std::cout << "[GameObject] Transform already exists\n";
         return m_transform.get();
     }
     m_transform = std::make_unique<Transform>();
