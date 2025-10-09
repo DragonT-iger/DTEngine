@@ -31,7 +31,9 @@ bool GameObject::IsActive() const { return m_active; }
 
 /* Lifecycle Methods -------------------------------------------- */
 
-void GameObject::_Awake() {
+void GameObject::Awake() {
+
+    if (m_awakeCalled) return;
     m_phase = Phase::Awake;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -42,7 +44,8 @@ void GameObject::_Awake() {
     m_awakeCalled = true;
 }
 
-void GameObject::_Start() {
+void GameObject::Start() {
+    if (m_startCalled) return;
     m_phase = Phase::Start;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -53,7 +56,7 @@ void GameObject::_Start() {
     m_startCalled = true;
 }
 
-void GameObject::_Update(float deltaTime) {
+void GameObject::Update(float deltaTime) {
     m_phase = Phase::Update;
     m_isIterating = true;
     for (auto& comp : m_components) {
@@ -66,7 +69,7 @@ void GameObject::_Update(float deltaTime) {
     FlushPending();
 }
 
-void GameObject::_FixedUpdate(float fixedDeltaTime) {
+void GameObject::FixedUpdate(float fixedDeltaTime) {
     m_phase = Phase::FixedUpdate;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -78,7 +81,7 @@ void GameObject::_FixedUpdate(float fixedDeltaTime) {
     FlushPending();
 }
 
-void GameObject::_LateUpdate(float deltaTime) {
+void GameObject::LateUpdate(float deltaTime) {
     m_phase = Phase::LateUpdate;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -90,7 +93,7 @@ void GameObject::_LateUpdate(float deltaTime) {
     FlushPending();
 }
 
-void GameObject::_BroadcastTriggerEnter(Collider* other)
+void GameObject::BroadcastTriggerEnter(Collider* other)
 {
     for (auto& comp : m_components) {
         if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get())) {
@@ -99,7 +102,7 @@ void GameObject::_BroadcastTriggerEnter(Collider* other)
     }
 }
 
-void GameObject::_BroadcastTriggerStay(Collider* other)
+void GameObject::BroadcastTriggerStay(Collider* other)
 {
     for (auto& comp : m_components) {
         if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get())) {
@@ -108,7 +111,7 @@ void GameObject::_BroadcastTriggerStay(Collider* other)
     }
 }
 
-void GameObject::_BroadcastTriggerExit(Collider* other)
+void GameObject::BroadcastTriggerExit(Collider* other)
 {
     for (auto& comp : m_components) {
         if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get())) {
@@ -135,18 +138,16 @@ void GameObject::FlushPending()
     }
     m_pendingAdd.clear();
 
-    bool callAwake = (m_phase == Phase::Awake) || m_awakeCalled;
-    bool callStart = (m_phase == Phase::Start) || m_startCalled;
 
     if (!added.empty())
     {
         for (auto* comp : added)
             if (auto* mb = dynamic_cast<MonoBehaviour*>(comp))
             {
-                if (callAwake && IsActive() && mb->IsActive())
+                if (IsActive() && mb->IsActive()) {
                     mb->Awake();
-                if (callStart && IsActive() && mb->IsActive())
                     mb->Start();
+                }
             }
     }
 

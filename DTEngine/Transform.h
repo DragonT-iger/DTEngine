@@ -38,8 +38,6 @@ private:
 
 
 
-
-
 	const Matrix& GetLocalMatrix();
 	const Matrix& GetWorldMatrix();
 	

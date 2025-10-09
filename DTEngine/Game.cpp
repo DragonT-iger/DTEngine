@@ -25,7 +25,7 @@ bool Game::Initialize()
 	}
 
 	m_renderer = std::make_unique<DX11Renderer>();
-	if (!m_renderer->Initialize(GetHwnd(), initW, initH, true)) {
+	if (!m_renderer->Initialize(GetHwnd(), initW, initH)) {
 		assert(false && "DX11Renderer 초기화 실패");
 		return false;
 	}

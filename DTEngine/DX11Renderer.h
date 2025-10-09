@@ -22,7 +22,7 @@ public:
     DX11Renderer();
     ~DX11Renderer();
 
-    bool Initialize(HWND hwnd, int width, int height, bool vsync = true);
+    bool Initialize(HWND hwnd, int width, int height, bool vsync = false);
     void Resize(int width, int height);
 
     void BeginFrame(const float clearColor[4]/*, bool clearDepth = true*/);
@@ -66,5 +66,5 @@ private:
     // State
     int   m_width = 0;
     int   m_height = 0;
-    bool  m_vsync = true;
+    bool  m_vsync = false;
 };

@@ -38,16 +38,16 @@ public:
     
     //  ------------------------엔진 전용 함수------------------------
 
-    void _Awake();
-    void _Start();
-    void _Update(float deltaTime);
-    void _FixedUpdate(float fixedDeltaTime);
-    void _LateUpdate(float deltaTime);
+    void Awake();
+    void Start();
+    void Update(float deltaTime);
+    void FixedUpdate(float fixedDeltaTime);
+    void LateUpdate(float deltaTime);
 
 
-    void _BroadcastTriggerEnter(Collider* other);
-    void _BroadcastTriggerStay(Collider* other);
-    void _BroadcastTriggerExit(Collider* other);
+    void BroadcastTriggerEnter(Collider* other);
+    void BroadcastTriggerStay(Collider* other);
+    void BroadcastTriggerExit(Collider* other);
 
     const std::vector<std::unique_ptr<Component>>& _GetComponents() const { return m_components; }
 
@@ -81,8 +81,8 @@ private:
     std::vector<Component*>                       m_pendingRemove;
 
     enum class Phase { None, Awake, Start, Update, FixedUpdate, LateUpdate };
-
     Phase                                         m_phase = Phase::None;
+
     bool                                          m_awakeCalled = false;
     bool                                          m_startCalled = false;
 };
