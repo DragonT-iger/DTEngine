@@ -4,7 +4,15 @@
 
 using namespace SimpleMathHelper;
 
-Matrix Transform::GetLocalMatrix()
+void Transform::ResetValue()
+{
+	m_position = { 0, 0, 0 };
+	m_rotation = { 0, 0, 0 };
+	m_scale	   = { 1 ,1 ,1 };
+	MarkDirtyRecursive();
+}
+
+const Matrix& Transform::GetLocalMatrix()
 {
 	if (IsDirty()) {
 		UpdateMatrices();
@@ -13,7 +21,7 @@ Matrix Transform::GetLocalMatrix()
 	return m_matrixLocal;
 }
 
-Matrix Transform::GetWorldMatrix()
+const Matrix& Transform::GetWorldMatrix()
 {
 	if (IsDirty()) {
 		UpdateMatrices();
@@ -24,29 +32,32 @@ Matrix Transform::GetWorldMatrix()
 
 void Transform::UpdateMatrices()
 {
-	m_matrixLocal = Matrix::Identity;
-	m_matrixLocal.Translation(m_scale);
+	if (!m_dirty) return;
 
-	const auto R = D2D1::Matrix3x2F::Rotation(m_rotation);
+	const Matrix S = Matrix::CreateScale(m_scale);
 
-	const auto T = D2D1::Matrix3x2F::Translation(m_position.x, m_position.y);
+	const Quaternion q = EulerToQuaternion_ZXY(m_rotation);
+
+	const Matrix R = Matrix::CreateFromQuaternion(q);
+
+	const Matrix T = Matrix::CreateTranslation(m_position);
 
 	m_matrixLocal = S * R * T;
 
-	if (m_parent)
+	if (m_parent) {
 		m_matrixWorld = m_matrixLocal * m_parent->GetWorldMatrix();
-	else
+	}
+	else {
 		m_matrixWorld = m_matrixLocal;
-
+	}
 	m_dirty = false;
 }
 
-void Transform::SetDirty()
-{
-	m_dirty = true;
 
-	for (auto* child : m_children) {
-		child->SetDirty();
+void Transform::MarkDirtyRecursive() {
+	m_dirty = true;
+	for (auto* c : m_children) {
+		if (c) c->MarkDirtyRecursive();
 	}
 }
 
@@ -72,55 +83,83 @@ const Vector3& Transform::GetScale()
 {
 	return m_scale;
 }
-
+const Vector3& Transform::Forward() {
+	const Matrix& w = GetWorldMatrix();
+	Vector3 f{ w._31, w._32, w._33 };
+	f.Normalize(); 
+	return f;
+}
+const Vector3& Transform::Right() {
+	const Matrix& w = GetWorldMatrix();
+	Vector3 r{ w._11, w._12, w._13 };
+	r.Normalize(); 
+	return r;
+}
+const Vector3& Transform::Up() {
+	const Matrix& w = GetWorldMatrix();
+	Vector3 u{ w._21, w._22, w._23 };
+	u.Normalize(); 
+	return u;
+}
 void Transform::SetPosition(const Vector3& position)
 {
 	m_position = position;
-	SetDirty();
+	MarkDirtyRecursive();
 }
 
 void Transform::SetRotation(const Vector3& rotation)
 {
 	m_rotation = rotation;
-	SetDirty();
+	MarkDirtyRecursive();
 }
 
 void Transform::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
-	SetDirty();
+	MarkDirtyRecursive();
 }
 
-void Transform::SetParent(Transform* parent, bool worldPositionStays)
+void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 {
+	if (newParent == m_parent) return;
+
+	Matrix oldWorld = GetWorldMatrix();
+
 	if (m_parent) {
-		if (worldPositionStays == true) {
-
-			Vector3 position;
-			Quaternion rotation;
-			Vector3 scale;
-			
-			
-
-			GetWorldMatrix().Decompose(position, rotation, scale);
-
-
-			m_position = position;
-
-			rotation.
-
-			m_rotation = 
-		}
+		m_parent->RemoveChild(this);
 	}
-	else {
 
+	m_parent = newParent;
+	if (m_parent) {
+		m_parent->AddChild(this);
 	}
+
+	if (worldPositionStays) {
+		Matrix parentWorld = (m_parent) ? m_parent->GetWorldMatrix() : Matrix::Identity;
+		Matrix invParent = parentWorld.Invert();
+
+		Matrix newLocal = oldWorld * invParent;
+
+		Vector3 s, t;
+		Quaternion r;
+		newLocal.Decompose(s, r, t);
+		m_scale = s;
+		m_rotation = QuaternionToEulerDeg_ZXY(r); 
+		m_position = t;
+	}
+
+	UpdateMatrices();
 }
+
 
 void Transform::AddChild(Transform* child)
 {
+	m_children.push_back(child);
 }
 
 void Transform::RemoveChild(Transform* child)
 {
+	auto it = std::remove(m_children.begin(), m_children.end(), child);
+
+	m_children.erase(it, m_children.end());
 }

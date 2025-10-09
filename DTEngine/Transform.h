@@ -22,14 +22,26 @@ class Transform : public MonoBehaviour
 
 	void SetParent(Transform* parent, bool worldPositionStays = true);
 
+	const Vector3& Forward();
+	const Vector3& Right()  ;
+	const Vector3& Up()     ;
+
+
+	void ResetValue();
+	
+
+
+private:
+	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
 	void AddChild(Transform* child);
 	void RemoveChild(Transform* child);
 
 
-	void ResetValue();
-private:
-	Matrix GetLocalMatrix();
-	Matrix GetWorldMatrix();
+
+
+
+	const Matrix& GetLocalMatrix();
+	const Matrix& GetWorldMatrix();
 	
 
 
@@ -46,7 +58,7 @@ private:
 	Matrix m_matrixLocal = Matrix::Identity;
 	Matrix m_matrixWorld = Matrix::Identity;
 
-	void SetDirty();
+	void MarkDirtyRecursive();
 	bool IsDirty();
 	bool m_dirty = false;
 };

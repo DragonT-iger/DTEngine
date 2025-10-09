@@ -10,9 +10,6 @@
 
 
 
-
-
-
 // 일반 new/delete 포인터 안전 삭제
 template <typename T>
 inline void SafeDelete(T*& p) noexcept {
