@@ -46,7 +46,7 @@ private:
 	void UpdateMatrices();
 
 	Vector3 m_position;
-	Vector3 m_rotation;
+	Quaternion m_rotation;
 	Vector3 m_scale;
 
 

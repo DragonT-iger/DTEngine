@@ -36,9 +36,7 @@ void Transform::UpdateMatrices()
 
 	const Matrix S = Matrix::CreateScale(m_scale);
 
-	const Quaternion q = EulerToQuaternion_ZXY(m_rotation);
-
-	const Matrix R = Matrix::CreateFromQuaternion(q);
+	const Matrix R = Matrix::CreateFromQuaternion(m_rotation);
 
 	const Matrix T = Matrix::CreateTranslation(m_position);
 
@@ -76,7 +74,7 @@ const Vector3& Transform::GetPosition()
 
 const Vector3& Transform::GetRotation()
 {
-	return m_rotation;
+	return QuaternionToEulerDeg_ZXY(m_rotation);
 }
 
 const Vector3& Transform::GetScale()
@@ -109,7 +107,7 @@ void Transform::SetPosition(const Vector3& position)
 
 void Transform::SetRotation(const Vector3& rotation)
 {
-	m_rotation = rotation;
+	m_rotation = EulerToQuaternion_ZXY(rotation);
 	MarkDirtyRecursive();
 }
 
@@ -144,7 +142,7 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 		Quaternion r;
 		newLocal.Decompose(s, r, t);
 		m_scale = s;
-		m_rotation = QuaternionToEulerDeg_ZXY(r); 
+		m_rotation = r; 
 		m_position = t;
 	}
 
