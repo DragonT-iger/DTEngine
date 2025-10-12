@@ -1,0 +1,64 @@
+﻿#pragma once
+#include <string>
+#include <array>
+#include <vector>
+
+#include <nlohmann/json_fwd.hpp>
+class JsonWriter {
+public:
+    JsonWriter();
+
+    void BeginObject();
+    void EndObject();
+
+    void BeginArray(const char* name);
+    void EndArray();
+
+    void Key(const char* /*unused*/);
+
+    void Write(const char* name, const std::string& v);
+    void Write(const char* name, bool v);
+    void Write(const char* name, float v);
+    void Write(const char* name, int v);
+    void WriteVec3(const char* name, float x, float y, float z);
+
+    // 배열에 객체 하나 푸시/팝 (선택 API)
+    void ArrayBeginObject(const char* arrayName);
+    void ArrayEndObject();
+
+    std::string ToString() const;
+
+private:
+    nlohmann::json& Current();
+
+private: // ⚑ 항상 아래
+    nlohmann::json* m_root;
+    std::vector<nlohmann::json*> m_stack;
+    std::vector<std::string> m_arrayStack;
+};
+
+class JsonReader {
+public:
+    explicit JsonReader(const char* jsonText);
+    explicit JsonReader(const std::string& jsonText);
+
+    bool Has(const char* name) const;
+
+    std::string ReadString(const char* name, const std::string& def = {}) const;
+    bool        ReadBool(const char* name, bool def = true) const;
+    float       ReadFloat(const char* name, float def = 0.f) const;
+    int         ReadInt(const char* name, int def = 0) const;
+    std::array<float, 3> ReadVec3(const char* name, std::array<float, 3> def = { 0,0,0 }) const;
+
+    // 배열 순회
+    int  BeginArray(const char* name);
+    bool NextArrayItem();
+    void EndArray();
+
+private: // ⚑ 항상 아래
+    nlohmann::json* m_root{};
+    nlohmann::json* m_cursor{};
+    const nlohmann::json* m_array{ nullptr };
+    int m_index{ -1 };
+    std::vector<nlohmann::json*> m_stack;
+};

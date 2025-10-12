@@ -42,6 +42,9 @@
     <Filter Include="Component\ComponentBase">
       <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization">
+      <UniqueIdentifier>{df84eb2c-44ce-45d2-ae6c-b11899d89d8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="SimpleMathHelper.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="JsonIO.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -138,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonIO.cpp">
+      <Filter>Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

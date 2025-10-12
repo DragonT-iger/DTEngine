@@ -10,8 +10,6 @@ public:
     Component() = default;
     virtual ~Component() = default;
 
-    virtual void OnInspectorGUI() {}
-
     virtual void Serialize(JsonWriter&) const {}
     virtual void Deserialize(JsonReader&) {}
 
