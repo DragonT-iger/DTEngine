@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <imgui.h>
+#include <iostream>
 
 
 #include "Game.h"
@@ -70,7 +71,10 @@ void Game::LifeCycle(float deltaTime)
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
 
-	if (!scene) return;
+	if (!scene) {
+		std::cout << "현재 활성화된 씬이 없음" << std::endl;
+		return;
+	}
 
 	static float elapsedTime = 0.0f;
 	static float fixedDeltaTime = 0.02f;

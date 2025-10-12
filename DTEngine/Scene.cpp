@@ -37,8 +37,11 @@ void Scene::Destroy(GameObject* object)
         m_pendingDestroy.push_back(object);
 }
 
+
 void Scene::Awake()
 {
+    Initialize();
+
     m_phase = ScenePhase::Awake;
     m_isIterating = true;
     for (auto& obj : m_gameObjects) obj->Awake();

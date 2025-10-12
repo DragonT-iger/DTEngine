@@ -27,23 +27,23 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{12911482-7a7f-40a7-8b0c-0f9c6f5c94b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ComponentBase">
-      <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{6f641540-26bd-448b-bf8b-ae97c8641eb2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{da77db2d-93ea-4821-9eb5-b1956c8c82cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{85c32b42-9b44-4031-afeb-d1539b6cc7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{975c9545-7ba8-4eac-b64e-fc30f1a550d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\ComponentBase">
+      <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WindowBase.h">
       <Filter>Window</Filter>
     </ClInclude>
@@ -59,47 +59,47 @@
     <ClInclude Include="DXHelper.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiLayer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Behaviour.h">
-      <Filter>ComponentBase</Filter>
+      <Filter>Component\ComponentBase</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>ComponentBase</Filter>
+      <Filter>Component\ComponentBase</Filter>
     </ClInclude>
     <ClInclude Include="MonoBehaviour.h">
-      <Filter>ComponentBase</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component\ComponentBase</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleMathHelper.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiLayer.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMathHelper.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DTEngine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="WindowBase.cpp">
       <Filter>Window</Filter>
     </ClCompile>
@@ -122,16 +122,22 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>ComponentBase</Filter>
+      <Filter>Component\ComponentBase</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="DTEngine.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
