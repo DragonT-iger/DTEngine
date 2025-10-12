@@ -15,8 +15,7 @@
 #include <string> // string
 #include <vector> // vector
 
-#include <nlohmann/abi_macros.hpp>
-
+#include "abi_macros.hpp"
 /*!
 @brief namespace for Niels Lohmann
 @see https://github.com/nlohmann

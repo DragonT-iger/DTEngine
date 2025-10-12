@@ -2,7 +2,6 @@
 #include <string>
 #include <array>
 #include <vector>
-
 #include <nlohmann/json_fwd.hpp>
 class JsonWriter {
 public:

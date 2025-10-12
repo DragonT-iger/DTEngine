@@ -4,7 +4,6 @@
 #include <imgui.h>
 #include <iostream>
 
-
 #include "Game.h"
 #include "DX11Renderer.h"
 #include "GameTimer.h"
