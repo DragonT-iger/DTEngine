@@ -11,13 +11,20 @@ class GameObject;
 class Scene
 {
 
-    explicit Scene(const std::string& name) : m_name(name) {};
-    virtual ~Scene() = default;
+public:
+    explicit Scene(const std::string& name);
+    virtual ~Scene();
 
     GameObject* FindGameObject(std::string name);
     void Destroy(GameObject* object);
 
+
+
+
+    // 엔진 전용 public 함수들
+
     GameObject* CreateGameObject(const std::string& name = "GameObject");
+        
     void Awake();
     void Start();
     void Update(float deltaTime);
@@ -27,7 +34,7 @@ class Scene
     const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const { return m_gameObjects; }
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
-    std::string m_name = "Scene";
+    std::string m_name;
 
 
 

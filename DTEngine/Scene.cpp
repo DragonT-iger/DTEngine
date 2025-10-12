@@ -15,6 +15,12 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     return raw;
 }
 
+
+
+Scene::Scene(const std::string& name) : m_name(name) {}
+
+Scene::~Scene() = default;
+
 GameObject* Scene::FindGameObject(std::string name)
 {
     for (auto it = m_gameObjects.begin(); it != m_gameObjects.end(); it++) {
