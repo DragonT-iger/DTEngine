@@ -10,38 +10,35 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 
 class Transform : public MonoBehaviour
 {
+public:
+	Transform();
 	// Getter Setter
 	const Vector3& GetPosition();
-	const Vector3& GetRotation();
+	const Vector3& GetRotationEuler();
+	const Quaternion& GetRotationQuat() const;
 	const Vector3& GetScale();
 
 	void SetPosition(const Vector3& position);
-	void SetRotation(const Vector3& rotation);
+	void SetRotationQuat(const Quaternion& rotation);
+	void SetRotationEuler(const Vector3& rotation);
 	void SetScale(const Vector3& scale);
 
 
 	void SetParent(Transform* parent, bool worldPositionStays = true);
 
-	const Vector3& Forward();
-	const Vector3& Right()  ;
-	const Vector3& Up()     ;
-
+	const Vector3 Forward();
+	const Vector3 Right()  ;
+	const Vector3 Up()     ;
 
 	void ResetValue();
-	
-
 
 private:
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
 	void AddChild(Transform* child);
 	void RemoveChild(Transform* child);
 
-
-
 	const Matrix& GetLocalMatrix();
 	const Matrix& GetWorldMatrix();
-	
-
 
 	void UpdateMatrices();
 
@@ -53,8 +50,8 @@ private:
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children = {};
 
-	Matrix m_matrixLocal = Matrix::Identity;
-	Matrix m_matrixWorld = Matrix::Identity;
+	Matrix m_matrixLocal;
+	Matrix m_matrixWorld;
 
 	void MarkDirtyRecursive();
 	bool IsDirty();

@@ -19,9 +19,8 @@ public:
 	void Run();
 	void Release();
 
-
-	void Update(float deltaTime);
-
+	
+	void LifeCycle(float deltaTime);
 
 protected:
 	bool OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam) override;

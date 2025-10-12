@@ -87,7 +87,7 @@ namespace SimpleMathHelper {
         return Vector3(Rad2Deg(x), Rad2Deg(y), Rad2Deg(z));
     }
 
-
+    inline Matrix Identity() { return Matrix::CreateScale(1.0f); }
 
 
 }

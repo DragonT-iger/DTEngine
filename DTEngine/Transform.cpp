@@ -67,33 +67,44 @@ bool Transform::IsDirty()
 	return false;
 }
 
+Transform::Transform()
+	: m_matrixLocal(IdentityMatrix())
+	, m_matrixWorld(IdentityMatrix())
+{
+}
+
 const Vector3& Transform::GetPosition()
 {
 	return m_position;
 }
 
-const Vector3& Transform::GetRotation()
+const Vector3& Transform::GetRotationEuler()
 {
 	return QuaternionToEulerDeg_ZXY(m_rotation);
+}
+
+const Quaternion& Transform::GetRotationQuat() const
+{
+	return m_rotation;
 }
 
 const Vector3& Transform::GetScale()
 {
 	return m_scale;
 }
-const Vector3& Transform::Forward() {
+const Vector3 Transform::Forward() {
 	const Matrix& w = GetWorldMatrix();
 	Vector3 f{ w._31, w._32, w._33 };
 	f.Normalize(); 
 	return f;
 }
-const Vector3& Transform::Right() {
+const Vector3 Transform::Right() {
 	const Matrix& w = GetWorldMatrix();
 	Vector3 r{ w._11, w._12, w._13 };
 	r.Normalize(); 
 	return r;
 }
-const Vector3& Transform::Up() {
+const Vector3 Transform::Up() {
 	const Matrix& w = GetWorldMatrix();
 	Vector3 u{ w._21, w._22, w._23 };
 	u.Normalize(); 
@@ -105,7 +116,13 @@ void Transform::SetPosition(const Vector3& position)
 	MarkDirtyRecursive();
 }
 
-void Transform::SetRotation(const Vector3& rotation)
+void Transform::SetRotationQuat(const Quaternion& rotation)
+{
+	m_rotation = rotation;
+	MarkDirtyRecursive();
+}
+
+void Transform::SetRotationEuler(const Vector3& rotation)
 {
 	m_rotation = EulerToQuaternion_ZXY(rotation);
 	MarkDirtyRecursive();
@@ -133,7 +150,7 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 	}
 
 	if (worldPositionStays) {
-		Matrix parentWorld = (m_parent) ? m_parent->GetWorldMatrix() : Matrix::Identity;
+		Matrix parentWorld = (m_parent) ? m_parent->GetWorldMatrix() : IdentityMatrix();
 		Matrix invParent = parentWorld.Invert();
 
 		Matrix newLocal = oldWorld * invParent;

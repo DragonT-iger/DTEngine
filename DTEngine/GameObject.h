@@ -89,9 +89,8 @@ private:
 
 // 템플릿은 cpp로 못옮겨
 
-// 리턴 raw로 주니까 delete 절대하지마셈
 template<typename T, typename... Args> // inline은 ODR 방지용
-T* GameObject::AddComponent(Args&&... args)
+inline T* GameObject::AddComponent(Args&&... args)
 {
     static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
     // 컴파일 타임 타입 체크
@@ -118,7 +117,7 @@ T* GameObject::AddComponent(Args&&... args)
     return raw;
 }
 template<>
-Transform* GameObject::AddComponent<Transform>() {
+inline Transform* GameObject::AddComponent<Transform>() {
     if (m_transform)
     {
         std::cout << "[GameObject] Transform already exists\n";
@@ -133,7 +132,7 @@ Transform* GameObject::AddComponent<Transform>() {
 }
 
 template<typename T>
-T* GameObject::GetComponent() const
+inline T* GameObject::GetComponent() const
 {
     static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
     // 컴파일 타임 타입 체크
@@ -144,14 +143,14 @@ T* GameObject::GetComponent() const
     return nullptr;
 }
 template<>
-Transform* GameObject::GetComponent<Transform>() const
+inline Transform* GameObject::GetComponent<Transform>() const
 {
     return m_transform.get();
 }
 
 
 template<typename T, typename... Args>
-T* Component::AddComponent(Args&&... args) {
+inline T* Component::AddComponent(Args&&... args) {
     auto* owner = _GetOwner();
     if (!owner) {
         assert(false && "Component has no owner");
@@ -161,7 +160,7 @@ T* Component::AddComponent(Args&&... args) {
 }
 
 template<typename T>
-T* Component::GetComponent() const {
+inline T* Component::GetComponent() const {
     auto* owner = _GetOwner();
     if (!owner) return nullptr;
     return owner->template GetComponent<T>();

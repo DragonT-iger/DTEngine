@@ -8,6 +8,8 @@
 #include "DX11Renderer.h"
 #include "GameTimer.h"
 #include "ImGuiLayer.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -48,7 +50,7 @@ void Game::Run()
 			break;
 
 		m_timer->Tick();
-		Update(m_timer->DeltaTime());
+		LifeCycle(m_timer->DeltaTime());
 	}
 }
 
@@ -61,22 +63,48 @@ void Game::Release()
 }
 
 
-void Game::Update(float deltaTime)
+void Game::LifeCycle(float deltaTime)
 {
 	m_renderer->BeginFrame(backBufferColor);
+	SceneManager::Instance().ProcessSceneChange();
+
+	Scene* scene = SceneManager::Instance().GetActiveScene();
+
+	if (!scene) return;
+
+	static float elapsedTime = 0.0f;
+	static float fixedDeltaTime = 0.02f;
+
+	elapsedTime += deltaTime;
+
+	scene->Update(deltaTime);
+	if (scene)
+	{
+		while (elapsedTime >= fixedDeltaTime)
+		{
+			scene->FixedUpdate(fixedDeltaTime);
+			elapsedTime -= fixedDeltaTime;
+		}
+
+		scene->Update(deltaTime);
+
+		scene->LateUpdate(deltaTime);
+	}
+
+
 
 	// ImGui 프레임
-	m_imgui->NewFrame();
-	if (ImGui::Begin("Engine Stats")) {
-		ImGui::Text("Delta: %.3f ms (%.1f FPS)", m_timer->DeltaTimeMS(),
-			(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
-		bool vsync = m_renderer->IsVSync();
-		if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
-	}
-	ImGui::End();
+	//m_imgui->NewFrame();
+	//if (ImGui::Begin("Engine Stats")) {
+	//	ImGui::Text("Delta: %.3f ms (%.1f FPS)", m_timer->DeltaTimeMS(),
+	//		(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
+	//	bool vsync = m_renderer->IsVSync();
+	//	if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
+	//}
+	//ImGui::End();
 
-	// ImGui 드로우
-	m_imgui->Render();
+	//// ImGui 드로우
+	//m_imgui->Render();
 
 	m_renderer->EndFrame();
 	m_renderer->Present();
