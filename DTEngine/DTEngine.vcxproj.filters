@@ -152,7 +152,4 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DTEngine.rc" />
-  </ItemGroup>
 </Project>

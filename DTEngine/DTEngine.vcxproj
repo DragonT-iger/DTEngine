@@ -181,15 +181,15 @@
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DTEngine\DTEngine\ThirdParty\ImGUIDX11\ImGUIDX11.vcxproj">
-      <Project>{d5ed1200-d321-490f-a5b4-cf4db2593dc4}</Project>
+    <ProjectReference Include="..\ThirdParty\ImGUIDX11\ImGUIDX11.vcxproj">
+      <Project>{9865dbc1-dd57-425e-a982-6b4a3f216d07}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\nlohmann\nlohmann.vcxproj">
+      <Project>{3e075d32-017b-489d-b639-c6cb216f748c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DTEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
