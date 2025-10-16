@@ -20,6 +20,7 @@ public:
     void Write(const char* name, float v);
     void Write(const char* name, int v);
     void WriteVec3(const char* name, float x, float y, float z);
+    void WriteVec4(const char* name, float x, float y, float z, float w);
 
     // 배열에 객체 하나 푸시/팝 (선택 API)
     void ArrayBeginObject(const char* arrayName);
@@ -30,7 +31,7 @@ public:
 private:
     nlohmann::json& Current();
 
-private: // ⚑ 항상 아래
+private:
     nlohmann::json* m_root;
     std::vector<nlohmann::json*> m_stack;
     std::vector<std::string> m_arrayStack;
@@ -48,13 +49,14 @@ public:
     float       ReadFloat(const char* name, float def = 0.f) const;
     int         ReadInt(const char* name, int def = 0) const;
     std::array<float, 3> ReadVec3(const char* name, std::array<float, 3> def = { 0,0,0 }) const;
+    std::array<float, 4> ReadVec4(const char* name, std::array<float, 4> def = { 0,0,0 }) const;
 
     // 배열 순회
     int  BeginArray(const char* name);
     bool NextArrayItem();
     void EndArray();
 
-private: // ⚑ 항상 아래
+private:
     nlohmann::json* m_root{};
     nlohmann::json* m_cursor{};
     const nlohmann::json* m_array{ nullptr };

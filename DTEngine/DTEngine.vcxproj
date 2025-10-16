@@ -154,6 +154,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneSerializer.h" />
     <ClInclude Include="SimpleMathHelper.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Transform.h" />
@@ -177,6 +178,7 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SceneSerializer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>

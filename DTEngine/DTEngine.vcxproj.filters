@@ -104,6 +104,9 @@
     <ClInclude Include="JsonIO.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="SceneSerializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -146,6 +149,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="JsonIO.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSerializer.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <vector>
 
 using Vector3 = DirectX::SimpleMath::Vector3;
+using Vector4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
@@ -25,6 +26,7 @@ public:
 
 
 	void SetParent(Transform* parent, bool worldPositionStays = true);
+	Transform* GetParent() const { return m_parent; }
 
 	const Vector3 Forward();
 	const Vector3 Right()  ;
@@ -45,19 +47,21 @@ private:
 
 	void UpdateMatrices();
 
-	Vector3 m_position;
-	Quaternion m_rotation;
-	Vector3 m_scale;
-
-
-	Transform* m_parent = nullptr;
-	std::vector<Transform*> m_children = {};
-
 	Matrix m_matrixLocal;
 	Matrix m_matrixWorld;
 
 	void MarkDirtyRecursive();
 	bool IsDirty();
 	bool m_dirty = false;
+
+
+	// 직렬화 해야 하는 값들
+
+	Vector3 m_position;
+	Quaternion m_rotation;
+	Vector3 m_scale;
+
+	Transform* m_parent = nullptr;
+	std::vector<Transform*> m_children = {};
 };
 

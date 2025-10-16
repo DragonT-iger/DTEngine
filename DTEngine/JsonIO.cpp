@@ -27,6 +27,10 @@ void JsonWriter::WriteVec3(const char* name, float x, float y, float z) {
     Current()[name] = { x, y, z };
 }
 
+void JsonWriter::WriteVec4(const char* name, float x, float y, float z, float w) {
+    Current()[name] = { x, y, z ,w};
+}
+
 void JsonWriter::ArrayBeginObject(const char* arrayName) {
     auto& arr = Current()[arrayName];
     if (!arr.is_array()) arr = json::array();
@@ -78,6 +82,15 @@ std::array<float, 3> JsonReader::ReadVec3(const char* name, std::array<float, 3>
     const auto& a = (*m_cursor)[name];
     if (a.is_array() && a.size() == 3 && a[0].is_number()) {
         return { a[0].get<float>(), a[1].get<float>(), a[2].get<float>() };
+    }
+    return def;
+}
+
+std::array<float, 4> JsonReader::ReadVec4(const char* name, std::array<float, 4> def) const {
+    if (!Has(name)) return def;
+    const auto& a = (*m_cursor)[name];
+    if (a.is_array() && a.size() == 4 && a[0].is_number()) {
+        return { a[0].get<float>(), a[1].get<float>(), a[2].get<float>() , a[3].get<float>() };
     }
     return def;
 }

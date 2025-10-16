@@ -15,17 +15,17 @@ void Transform::ResetValue()
 void Transform::Serialize(JsonWriter& w) const
 {
 	w.WriteVec3("position", m_position.x, m_position.y, m_position.z);
-	w.WriteVec3("rotationEuler", m_rotation.x, m_rotation.y, m_rotation.z);
+	w.WriteVec4("rotation", m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w);
 	w.WriteVec3("scale", m_scale.x, m_scale.y, m_scale.z);
 }
 
 void Transform::Deserialize(JsonReader& r)
 {
 	auto p = r.ReadVec3("position", { 0,0,0 });
-	auto e = r.ReadVec3("rotationEuler", { 0,0,0 });
+	auto e = r.ReadVec4("rotation", { 0,0,0,1 });
 	auto s = r.ReadVec3("scale", { 1,1,1 });
 	m_position = Vector3(p[0], p[1], p[2]);
-	m_rotation = EulerToQuaternion_ZXY(Vector3(e[0], e[1], e[2]));
+	m_rotation = Vector4(e[0], e[1], e[2], e[3]);
 	m_scale = Vector3(s[0], s[1], s[2]);
 }
 
@@ -182,6 +182,7 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 
 	UpdateMatrices();
 }
+
 
 
 void Transform::AddChild(Transform* child)
