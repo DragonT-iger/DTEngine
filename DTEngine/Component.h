@@ -2,20 +2,17 @@
 
 class GameObject;
 
-class JsonWriter; 
-class JsonReader;
+#include "JsonIO.h"
 
 class Component {
 public:
     Component() = default;
     virtual ~Component() = default;
 
-    virtual void Serialize(JsonWriter&) const {}
-    virtual void Deserialize(JsonReader&) {}
-
     void Destroy(GameObject* gameObject);
 
-    
+    void Instantiate(std::string name);
+
     template<typename T, typename... Args>
     T* AddComponent(Args&&... args);
 
@@ -24,6 +21,9 @@ public:
 
 
     void _SetOwner(GameObject* owner) { m_owner = owner; }
+
+    virtual void Serialize(JsonWriter&) const {}
+    virtual void Deserialize(JsonReader&) {}
 
 private:
 

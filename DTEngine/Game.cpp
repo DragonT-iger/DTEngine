@@ -59,7 +59,7 @@ void Game::Release()
 {
 	if (m_imgui) { m_imgui->Shutdown(); m_imgui.reset(); }
 	if (m_renderer) { m_renderer->Destroy(); m_renderer.reset(); }
-	Destroy();
+	__super::Destroy();
 }
 
 

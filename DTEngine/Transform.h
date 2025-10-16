@@ -32,6 +32,9 @@ public:
 
 	void ResetValue();
 
+	void Serialize(JsonWriter& w) const override;
+	void Deserialize(JsonReader& r) override;
+
 private:
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
 	void AddChild(Transform* child);
