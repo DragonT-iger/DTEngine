@@ -8,7 +8,6 @@ class Scene;
 
 class SceneManager : public Singleton<SceneManager>
 {
-    friend class Singleton<SceneManager>;
 
 public:
     Scene*  GetActiveScene() const;

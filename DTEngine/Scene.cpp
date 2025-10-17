@@ -21,6 +21,41 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
+bool Scene::LoadFromFile(const std::string& fullPath)
+{
+    auto rd = JsonReader::LoadJson(fullPath);
+    if (!rd) return false;
+    JsonReader& r = *rd;
+
+    const int n = r.BeginArray("gameObjects");
+    std::vector<GameObject*> gos(n, nullptr);
+    std::vector<int> parents(n, -1);
+
+    int i = 0;
+    while (r.NextArrayItem())
+    {
+        GameObject* go = CreateGameObject(r.ReadString("name", "GameObject"));
+        gos[i] = go;
+
+        if (auto* tf = go->GetComponent<Transform>())
+            tf->Deserialize(r); 
+
+        parents[i] = r.ReadInt("parent", -1);
+        ++i;
+    }
+    r.EndArray();
+
+    for (int ci = 0; ci < n; ++ci) {
+        int pi = parents[ci];
+        if (pi >= 0 && pi < n && gos[ci] && gos[pi]) {
+            auto* cT = gos[ci]->GetComponent<Transform>();
+            auto* pT = gos[pi]->GetComponent<Transform>();
+            if (cT && pT) cT->SetParent(pT, true);
+        }
+    }
+    return true;
+}
+
 GameObject* Scene::FindGameObject(std::string name)
 {
     for (auto it = m_gameObjects.begin(); it != m_gameObjects.end(); it++) {

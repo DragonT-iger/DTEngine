@@ -45,6 +45,9 @@
     <Filter Include="Serialization">
       <UniqueIdentifier>{df84eb2c-44ce-45d2-ae6c-b11899d89d8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization\Resources">
+      <UniqueIdentifier>{c7d70f96-ff12-4b41-9499-d053d073d417}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -107,6 +110,12 @@
     <ClInclude Include="SceneSerializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Serialization\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="IResource.h">
+      <Filter>Serialization\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -153,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="SceneSerializer.cpp">
       <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Serialization\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

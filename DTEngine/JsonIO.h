@@ -3,6 +3,9 @@
 #include <array>
 #include <vector>
 #include <nlohmann/json_fwd.hpp>
+#include <unordered_map>
+#include <optional>
+
 class JsonWriter {
 public:
     JsonWriter();
@@ -21,6 +24,7 @@ public:
     void Write(const char* name, int v);
     void WriteVec3(const char* name, float x, float y, float z);
     void WriteVec4(const char* name, float x, float y, float z, float w);
+    void WritePointer(const char* name, void* ptr);
 
     // 배열에 객체 하나 푸시/팝 (선택 API)
     void ArrayBeginObject(const char* arrayName);
@@ -35,6 +39,7 @@ private:
     nlohmann::json* m_root;
     std::vector<nlohmann::json*> m_stack;
     std::vector<std::string> m_arrayStack;
+	std::unordered_map<int , std::string> m_pointerToId;
 };
 
 class JsonReader {
@@ -50,6 +55,9 @@ public:
     int         ReadInt(const char* name, int def = 0) const;
     std::array<float, 3> ReadVec3(const char* name, std::array<float, 3> def = { 0,0,0 }) const;
     std::array<float, 4> ReadVec4(const char* name, std::array<float, 4> def = { 0,0,0 }) const;
+
+
+    static std::optional<JsonReader> LoadJson(const std::string& fullPath);
 
     // 배열 순회
     int  BeginArray(const char* name);

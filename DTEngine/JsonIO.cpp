@@ -1,6 +1,9 @@
 ﻿#include "pch.h"
 #include "JsonIO.h"
 #include <nlohmann/json.hpp>
+#include <fstream>
+#include <sstream>
+
 using nlohmann::json;
 
 /* ---------------- JsonWriter ---------------- */
@@ -94,6 +97,17 @@ std::array<float, 4> JsonReader::ReadVec4(const char* name, std::array<float, 4>
     }
     return def;
 }
+
+std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
+{
+    std::ifstream ifs(fullPath, std::ios::binary);
+    if (!ifs) return std::nullopt;
+
+    std::ostringstream ss;
+    ss << ifs.rdbuf();
+    return JsonReader{ ss.str().c_str() };
+}
+
 
 int JsonReader::BeginArray(const char* name) {
     m_array = nullptr; m_index = -1;

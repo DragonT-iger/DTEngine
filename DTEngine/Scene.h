@@ -6,14 +6,19 @@
 #include <string>
 
 
+#include "IResource.h"
+
+
 class GameObject;
 
-class Scene
+class Scene : public IResource
 {
 
 public:
     explicit Scene(const std::string& name);
     virtual ~Scene();
+
+    bool LoadFromFile(const std::string& fullPath) override;
 
     GameObject* FindGameObject(std::string name);
     void Destroy(GameObject* object);
