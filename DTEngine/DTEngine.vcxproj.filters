@@ -107,9 +107,6 @@
     <ClInclude Include="JsonIO.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="SceneSerializer.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Serialization\Resources</Filter>
     </ClInclude>
@@ -158,9 +155,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="JsonIO.cpp">
-      <Filter>Serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneSerializer.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">

@@ -105,7 +105,7 @@ std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
 
     std::ostringstream ss;
     ss << ifs.rdbuf();
-    return JsonReader{ ss.str().c_str() };
+    return JsonReader{ ss.str() };
 }
 
 

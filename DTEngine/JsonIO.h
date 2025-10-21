@@ -24,7 +24,6 @@ public:
     void Write(const char* name, int v);
     void WriteVec3(const char* name, float x, float y, float z);
     void WriteVec4(const char* name, float x, float y, float z, float w);
-    void WritePointer(const char* name, void* ptr);
 
     // 배열에 객체 하나 푸시/팝 (선택 API)
     void ArrayBeginObject(const char* arrayName);
@@ -39,7 +38,6 @@ private:
     nlohmann::json* m_root;
     std::vector<nlohmann::json*> m_stack;
     std::vector<std::string> m_arrayStack;
-	std::unordered_map<int , std::string> m_pointerToId;
 };
 
 class JsonReader {

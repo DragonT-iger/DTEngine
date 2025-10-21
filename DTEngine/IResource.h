@@ -11,7 +11,8 @@ class IResource {
 public:
     virtual ~IResource() = default;
 
-    virtual bool LoadFromFile(const std::string& fullPath) = 0;
+    virtual bool LoadFile(const std::string& fullPath) = 0;
+    virtual bool SaveFile(const std::string& fullPath) = 0;
     virtual void Unload() = 0;
 
     const ResourceMeta& GetMeta() const { return m_meta; }

@@ -21,7 +21,7 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
-bool Scene::LoadFromFile(const std::string& fullPath)
+bool Scene::LoadFile(const std::string& fullPath)
 {
     auto rd = JsonReader::LoadJson(fullPath);
     if (!rd) return false;
@@ -54,6 +54,11 @@ bool Scene::LoadFromFile(const std::string& fullPath)
         }
     }
     return true;
+}
+
+bool Scene::SaveFile(const std::string& fullPath)
+{
+    return false;
 }
 
 GameObject* Scene::FindGameObject(std::string name)
