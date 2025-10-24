@@ -28,14 +28,14 @@ bool Scene::LoadFile(const std::string& fullPath)
     JsonReader& r = *rd;
 
     const int n = r.BeginArray("gameObjects");
-    std::vector<GameObject*> gos(n, nullptr);
+    std::vector<GameObject*> gameObjects(n, nullptr);
     std::vector<int> parents(n, -1);
 
     int i = 0;
     while (r.NextArrayItem())
     {
         GameObject* go = CreateGameObject(r.ReadString("name", "GameObject"));
-        gos[i] = go;
+        gameObjects[i] = go;
 
         if (auto* tf = go->GetComponent<Transform>())
             tf->Deserialize(r); 
@@ -47,9 +47,9 @@ bool Scene::LoadFile(const std::string& fullPath)
 
     for (int ci = 0; ci < n; ++ci) {
         int pi = parents[ci];
-        if (pi >= 0 && pi < n && gos[ci] && gos[pi]) {
-            auto* cT = gos[ci]->GetComponent<Transform>();
-            auto* pT = gos[pi]->GetComponent<Transform>();
+        if (pi >= 0 && pi < n && gameObjects[ci] && gameObjects[pi]) {
+            auto* cT = gameObjects[ci]->GetComponent<Transform>();
+            auto* pT = gameObjects[pi]->GetComponent<Transform>();
             if (cT && pT) cT->SetParent(pT, true);
         }
     }

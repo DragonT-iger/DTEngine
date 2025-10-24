@@ -6,12 +6,8 @@
 
 using nlohmann::json;
 
-/* ---------------- JsonWriter ---------------- */
 
 JsonWriter::JsonWriter() : m_root(new json(json::object())), m_stack{ m_root } {}
-
-void JsonWriter::BeginObject() { Current() = json::object(); }
-void JsonWriter::EndObject() { /* no-op */ }
 
 void JsonWriter::BeginArray(const char* name) {
     Current()[name] = json::array();
@@ -19,29 +15,26 @@ void JsonWriter::BeginArray(const char* name) {
 }
 void JsonWriter::EndArray() { if (!m_arrayStack.empty()) m_arrayStack.pop_back(); }
 
-void JsonWriter::Key(const char*) { /* nlohmann 필요 없음 */ }
-
 void JsonWriter::Write(const char* name, const std::string& v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, bool v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, float v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, int v) { Current()[name] = v; }
 
-void JsonWriter::WriteVec3(const char* name, float x, float y, float z) {
+void JsonWriter::Write(const char* name, float x, float y, float z) {
     Current()[name] = { x, y, z };
 }
 
-void JsonWriter::WriteVec4(const char* name, float x, float y, float z, float w) {
-    Current()[name] = { x, y, z ,w};
+void JsonWriter::Write(const char* name, float x, float y, float z, float w) {
+    Current()[name] = { x, y, z , w };
 }
 
-void JsonWriter::ArrayBeginObject(const char* arrayName) {
-    auto& arr = Current()[arrayName];
-    if (!arr.is_array()) arr = json::array();
-    arr.push_back(json::object());
-    m_stack.push_back(&arr.back());
-}
-void JsonWriter::ArrayEndObject() {
-    if (m_stack.size() > 1) m_stack.pop_back();
+std::optional<JsonWriter> JsonWriter::SaveJson(const std::string& fullPath)
+{
+    JsonWriter writer;
+    std::ofstream ofs(fullPath, std::ios::binary);
+    if (!ofs) return std::nullopt;
+    ofs << writer.ToString();
+	return writer;
 }
 
 std::string JsonWriter::ToString() const { return m_root->dump(2); }

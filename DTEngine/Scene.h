@@ -38,6 +38,7 @@ public:
     void LateUpdate(float deltaTime);
 
     const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const { return m_gameObjects; }
+
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
     std::string m_name;

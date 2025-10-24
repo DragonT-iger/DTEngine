@@ -30,9 +30,5 @@ std::string ResourceManager::ResolveFullPath(const std::string& id) const
 	if (last == '/' || last == '\\')
 		return m_resourceRootPath + id;
 
-//#ifdef _WIN32
 	return m_resourceRootPath + "\\" + id;
-//#else
-//	return m_resourceRootPath + "/" + id;
-//#endif
 }

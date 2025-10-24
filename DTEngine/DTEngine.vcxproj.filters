@@ -48,6 +48,9 @@
     <Filter Include="Serialization\Resources">
       <UniqueIdentifier>{c7d70f96-ff12-4b41-9499-d053d073d417}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization\Glassify">
+      <UniqueIdentifier>{f1ac3540-2a4a-49f1-8c41-bfa35583c644}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">

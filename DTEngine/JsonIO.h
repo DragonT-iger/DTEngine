@@ -10,28 +10,23 @@ class JsonWriter {
 public:
     JsonWriter();
 
-    void BeginObject();
-    void EndObject();
-
     void BeginArray(const char* name);
     void EndArray();
-
-    void Key(const char* /*unused*/);
 
     void Write(const char* name, const std::string& v);
     void Write(const char* name, bool v);
     void Write(const char* name, float v);
     void Write(const char* name, int v);
-    void WriteVec3(const char* name, float x, float y, float z);
-    void WriteVec4(const char* name, float x, float y, float z, float w);
+    void Write(const char* name, float x, float y, float z);
+    void Write(const char* name, float x, float y, float z, float w);
 
-    // 배열에 객체 하나 푸시/팝 (선택 API)
-    void ArrayBeginObject(const char* arrayName);
-    void ArrayEndObject();
 
-    std::string ToString() const;
+	static std::optional<JsonWriter> SaveJson(const std::string& fullPath);
+
 
 private:
+    std::string ToString() const;
+
     nlohmann::json& Current();
 
 private:

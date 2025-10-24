@@ -25,6 +25,9 @@ public:
     virtual void Serialize(JsonWriter&) const {}
     virtual void Deserialize(JsonReader&) {}
 
+    virtual uint32_t GetUid() const = 0;
+    virtual const char* GetTypeName() const = 0;
+
 private:
 
     GameObject* _GetOwner() const { return m_owner; }

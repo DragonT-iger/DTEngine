@@ -7,16 +7,17 @@ using namespace SimpleMathHelper;
 void Transform::ResetValue()
 {
 	m_position = { 0, 0, 0 };
-	m_rotation = { 0, 0, 0 };
+	m_rotation = { 0, 0, 0 ,1 };
 	m_scale	   = { 1 ,1 ,1 };
 	MarkDirtyRecursive();
 }
 
 void Transform::Serialize(JsonWriter& w) const
 {
-	w.WriteVec3("position", m_position.x, m_position.y, m_position.z);
-	w.WriteVec4("rotation", m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w);
-	w.WriteVec3("scale", m_scale.x, m_scale.y, m_scale.z);
+	w.Write("SetActive", IsActive());
+	w.Write("position", m_position.x, m_position.y, m_position.z);
+	w.Write("rotation", m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w);
+	w.Write("scale", m_scale.x, m_scale.y, m_scale.z);
 }
 
 void Transform::Deserialize(JsonReader& r)
