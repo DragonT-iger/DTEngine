@@ -175,6 +175,18 @@ void JsonReader::EndArray() {
     m_array = nullptr; m_index = -1;
 }
 
+bool JsonReader::NextArrayItem() {
+    if (!m_array) return false;
+
+    ++m_index;
+
+    if (m_index >= static_cast<int>(m_array->size())) return false;
+
+    m_stack.push_back(m_cursor);
+
+    m_cursor = const_cast<json*>(&(*m_array)[m_index]);
+    return true;
+}
 
 void JsonWriter::NextArrayItem() {
     json& curr = Current();

@@ -117,7 +117,7 @@ bool Scene::SaveFile(const std::string& fullPath)
             // meta
             w.BeginObject("meta"); 
             // w.Write("id", comp->GetID()); 
-            w.Write("type", comp->GetTypeName()); 
+            w.Write("type", comp->_GetTypeName()); 
             w.EndObject(); 
 
             w.BeginObject("data");

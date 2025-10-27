@@ -11,6 +11,8 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 
 class Transform : public MonoBehaviour
 {
+	DTCLASS(Transform);
+
 public:
 	Transform();
 	// Getter Setter

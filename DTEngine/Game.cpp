@@ -71,7 +71,7 @@ void Game::LifeCycle(float deltaTime)
 	Scene* scene = SceneManager::Instance().GetActiveScene();
 
 	if (!scene) {
-		std::cout << "현재 활성화된 씬이 없음" << std::endl;
+		//std::cout << "현재 활성화된 씬이 없음" << std::endl;
 		return;
 	}
 

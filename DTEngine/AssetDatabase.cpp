@@ -14,6 +14,8 @@ void AssetDatabase::Initialize(const std::string& assetRootPath)
     std::cout << "AssetDatabase: " << m_idToPathMap.size() << " assets loaded." << std::endl;
 }
 
+
+//파일 이름 ignore 
 void AssetDatabase::ScanDirectory(const std::string& directoryPath)
 {
     static const std::set<std::string> ignoredExtensions = {
@@ -30,14 +32,14 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
     {
         const auto& entry = *it;
 
-        if (entry.is_directory())
-        {
-            if (entry.path().filename() == "x64")
-            {
-                it.disable_recursion_pending();
-            }
-            continue;
-        }
+        //if (entry.is_directory())
+        //{
+        //    if (entry.path().filename() == "x64")
+        //    {
+        //        it.disable_recursion_pending();
+        //    }
+        //    continue;
+        //}
 
         if (!entry.is_regular_file())
         {
@@ -112,7 +114,6 @@ uint64_t AssetDatabase::CreateMetaFile(const std::string& assetPath)
     return 0; // false
 }
 
-// --- 맵 조회 함수 ---
 
 uint64_t AssetDatabase::GetIDFromPath(const std::string& path) const
 {

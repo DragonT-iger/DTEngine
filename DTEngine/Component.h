@@ -3,6 +3,7 @@
 class GameObject;
 
 #include "JsonIO.h"
+#include "ReflectionMacros.h"
 
 class Component {
 public:
@@ -20,6 +21,8 @@ public:
     T* GetComponent() const;
 
 
+    // ----------------- 엔진 전용 -------------------
+
     void _SetOwner(GameObject* owner) { m_owner = owner; }
     GameObject* _GetOwner() const { return m_owner; }
 
@@ -28,6 +31,8 @@ public:
 
     uint64_t _GetID() const { return m_id; }
     void _SetID(uint64_t id) { m_id = id; }
+
+    virtual const char* _GetTypeName() const = 0;
 
 private:
 
