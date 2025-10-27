@@ -7,18 +7,26 @@
 using nlohmann::json;
 
 
-JsonWriter::JsonWriter() : m_root(new json(json::object())), m_stack{ m_root } {}
+JsonWriter::JsonWriter() : m_root(std::make_unique<json>(json::object())), m_stack{ m_root.get() } {}
+
+JsonWriter::~JsonWriter() = default;
 
 void JsonWriter::BeginArray(const char* name) {
     Current()[name] = json::array();
-    m_arrayStack.emplace_back(name);
+    m_stack.push_back(&Current()[name]); 
 }
-void JsonWriter::EndArray() { if (!m_arrayStack.empty()) m_arrayStack.pop_back(); }
+
+void JsonWriter::EndArray() {
+    if (m_stack.size() > 1) {
+        m_stack.pop_back(); 
+    }
+}
 
 void JsonWriter::Write(const char* name, const std::string& v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, bool v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, float v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, int v) { Current()[name] = v; }
+void JsonWriter::Write(const char* name, uint64_t v) { Current()[name] = v; }
 
 void JsonWriter::Write(const char* name, float x, float y, float z) {
     Current()[name] = { x, y, z };
@@ -28,13 +36,24 @@ void JsonWriter::Write(const char* name, float x, float y, float z, float w) {
     Current()[name] = { x, y, z , w };
 }
 
-std::optional<JsonWriter> JsonWriter::SaveJson(const std::string& fullPath)
+void JsonWriter::BeginObject(const char* name) {
+    Current()[name] = json::object();
+    m_stack.push_back(&Current()[name]);
+}
+
+void JsonWriter::EndObject() {
+    if (m_stack.size() > 1) { 
+        m_stack.pop_back();
+    }
+}
+
+bool JsonWriter::SaveFile(const std::string& fullPath) const
 {
-    JsonWriter writer;
     std::ofstream ofs(fullPath, std::ios::binary);
-    if (!ofs) return std::nullopt;
-    ofs << writer.ToString();
-	return writer;
+    if (!ofs) return false;
+
+    ofs << this->ToString();
+    return true;
 }
 
 std::string JsonWriter::ToString() const { return m_root->dump(2); }
@@ -48,6 +67,8 @@ JsonReader::JsonReader(const char* jsonText) {
     m_cursor = m_root;
 }
 JsonReader::JsonReader(const std::string& jsonText) : JsonReader(jsonText.c_str()) {}
+
+JsonReader::~JsonReader() = default;
 
 bool JsonReader::Has(const char* name) const {
     return m_cursor->contains(name);
@@ -73,6 +94,18 @@ int JsonReader::ReadInt(const char* name, int def) const {
     const auto& v = (*m_cursor)[name];
     return v.is_number_integer() ? v.get<int>() : def;
 }
+
+uint64_t JsonReader::ReadUInt64(const char* name, uint64_t def) const {
+    if (!Has(name)) return def;
+    const auto& v = (*m_cursor)[name];
+
+    //if (v.is_number_integer() || v.is_number_unsigned()) {
+    //    return v.get<uint64_t>();
+    //}
+    return def;
+}
+
+
 std::array<float, 3> JsonReader::ReadVec3(const char* name, std::array<float, 3> def) const {
     if (!Has(name)) return def;
     const auto& a = (*m_cursor)[name];
@@ -89,6 +122,26 @@ std::array<float, 4> JsonReader::ReadVec4(const char* name, std::array<float, 4>
         return { a[0].get<float>(), a[1].get<float>(), a[2].get<float>() , a[3].get<float>() };
     }
     return def;
+}
+
+
+bool JsonReader::BeginObject(const char* name) {
+    if (Has(name)) {
+        const auto& obj = (*m_cursor)[name];
+        if (obj.is_object()) {
+            m_stack.push_back(m_cursor); 
+            m_cursor = const_cast<json*>(&obj);
+            return true;
+        }
+    }
+    return false;
+}
+
+void JsonReader::EndObject() {
+    if (!m_stack.empty()) {
+        m_cursor = m_stack.back();
+        m_stack.pop_back();
+    }
 }
 
 std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
@@ -113,18 +166,28 @@ int JsonReader::BeginArray(const char* name) {
     }
     return 0;
 }
-bool JsonReader::NextArrayItem() {
-    if (!m_array) return false;
-    ++m_index;
-    if (m_index >= static_cast<int>(m_array->size())) return false;
-    m_stack.push_back(m_cursor);
-    m_cursor = const_cast<json*>(&(*m_array)[m_index]);
-    return true;
-}
+
 void JsonReader::EndArray() {
     if (!m_stack.empty()) {
         m_cursor = m_stack.back();
         m_stack.pop_back();
     }
     m_array = nullptr; m_index = -1;
+}
+
+
+void JsonWriter::NextArrayItem() {
+    json& curr = Current();
+    if (!curr.is_array()) {
+        return;
+    }
+    curr.push_back(json::object());
+
+    m_stack.push_back(&curr.back());
+}
+
+void JsonWriter::EndArrayItem() {
+    if (m_stack.size() > 1) {
+        m_stack.pop_back();
+    }
 }

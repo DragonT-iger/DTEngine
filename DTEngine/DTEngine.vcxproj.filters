@@ -42,14 +42,14 @@
     <Filter Include="Component\ComponentBase">
       <UniqueIdentifier>{f885f1ce-e5b8-4528-a588-dcbfd3304498}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization">
+    <Filter Include="Reflection">
+      <UniqueIdentifier>{5c4d2f1d-188c-4ca1-9ddc-f8749ecafd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection\Serialization">
       <UniqueIdentifier>{df84eb2c-44ce-45d2-ae6c-b11899d89d8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization\Resources">
+    <Filter Include="Reflection\Serialization\Resources">
       <UniqueIdentifier>{c7d70f96-ff12-4b41-9499-d053d073d417}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Serialization\Glassify">
-      <UniqueIdentifier>{f1ac3540-2a4a-49f1-8c41-bfa35583c644}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,14 +107,26 @@
     <ClInclude Include="SimpleMathHelper.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="IResource.h">
+      <Filter>Reflection\Serialization\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="JsonIO.h">
-      <Filter>Serialization</Filter>
+      <Filter>Reflection</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Serialization\Resources</Filter>
+      <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="IResource.h">
-      <Filter>Serialization\Resources</Filter>
+    <ClInclude Include="ReflectionMacros.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="IDManager.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetDatabase.h">
+      <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,10 +170,16 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="JsonIO.cpp">
-      <Filter>Serialization</Filter>
+      <Filter>Reflection</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Serialization\Resources</Filter>
+      <Filter>Reflection\Serialization\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="IDManager.cpp">
+      <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetDatabase.cpp">
+      <Filter>Reflection\Serialization\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

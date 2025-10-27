@@ -139,19 +139,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="IDManager.h" />
     <ClInclude Include="ImGuiLayer.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="JsonIO.h" />
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ReflectionMacros.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -162,6 +166,7 @@
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DTEngine.cpp" />
     <ClCompile Include="DX11Renderer.cpp" />
@@ -169,6 +174,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="ImGuiLayer.cpp" />
     <ClCompile Include="JsonIO.cpp" />
     <ClCompile Include="pch.cpp">

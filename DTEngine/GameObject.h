@@ -17,7 +17,7 @@ class Collider;
 class GameObject
 {
 public:
-    GameObject(const std::string& name = "GameObject");
+    GameObject(const std::string& name = "GameObject", bool isUI = false);
 
     template<typename T, typename... Args>
     T* AddComponent(Args&&... args);
@@ -34,6 +34,12 @@ public:
 
 
     Transform* GetTransform() { return m_transform.get(); }
+
+    const std::string& GetName() const { return m_name; }
+    void SetName(const std::string& name) { m_name = name; }
+
+    const std::string& GetTag() const { return m_tag; }
+    void SetTag(const std::string& tag) { m_tag = tag; }
     
     
     //  ------------------------엔진 전용 함수------------------------
@@ -51,14 +57,15 @@ public:
 
     const std::vector<std::unique_ptr<Component>>& _GetComponents() const { return m_components; }
 
+    //Deserialization
+    Component* AddComponent(const std::string& typeName);
+
+    uint64_t _GetID() const { return m_id; }
+    void _SetID(uint64_t id) { m_id = id; }
 
     //Getter Setter
 
-    const std::string& GetName() const { return m_name; }
-    void SetName(const std::string& name) { m_name = name; }
 
-    const std::string& GetTag() const { return m_tag; }
-    void SetTag(const std::string& tag) { m_tag = tag; }
 
 
 private:
@@ -68,8 +75,6 @@ private:
     bool                                          m_active = true;
     std::vector<std::unique_ptr<Component>>       m_components;
     std::unique_ptr<Transform>                    m_transform;
-
-
 
 
     //지연처리 로직
@@ -85,6 +90,12 @@ private:
 
     bool                                          m_awakeCalled = false;
     bool                                          m_startCalled = false;
+
+
+    // id
+    uint64_t m_id;
+
+
 };
 
 // 템플릿은 cpp로 못옮겨
@@ -109,6 +120,7 @@ inline T* GameObject::AddComponent(Args&&... args)
     T* raw = comp.get();
 
     raw->SetOwner(this);
+
 
     if (m_isIterating)
         m_pendingAdd.emplace_back(std::move(comp));
@@ -156,6 +168,7 @@ inline T* Component::AddComponent(Args&&... args) {
         assert(false && "Component has no owner");
         return nullptr;
     }
+
     return owner->template AddComponent<T>(std::forward<Args>(args)...);
 }
 

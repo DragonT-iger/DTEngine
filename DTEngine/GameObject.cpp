@@ -2,10 +2,12 @@
 
 #include "GameObject.h"
 #include "MonoBehaviour.h"
+#include "ComponentFactory.h"
+#include "IDManager.h"
 
-GameObject::GameObject(const std::string& name)
+GameObject::GameObject(const std::string& name , bool isUI)
     : m_name{ name }, m_active{ true } {
-    this->AddComponent<Transform>();
+    this->AddComponent<Transform>(); 
 }
 
 void GameObject::RemoveComponent(Component* component)
@@ -118,6 +120,21 @@ void GameObject::BroadcastTriggerExit(Collider* other)
             mb->OnTriggerExit(other);
         }
     }
+}
+Component* GameObject::AddComponent(const std::string& typeName)
+{
+    std::unique_ptr<Component> newComponent =
+        ComponentFactory::Instance().Create(typeName);
+
+    if (!newComponent) {
+        return nullptr;
+    }
+
+    Component* raw = newComponent.get();
+
+    m_components.emplace_back(std::move(newComponent));
+
+    return raw;
 }
 GameObject* GameObject::Find(std::string name)
 {

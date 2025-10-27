@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "IDManager.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
@@ -40,7 +41,7 @@ bool Scene::LoadFile(const std::string& fullPath)
         if (auto* tf = go->GetComponent<Transform>())
             tf->Deserialize(r); 
 
-        parents[i] = r.ReadInt("parent", -1);
+        parents[i] = r.ReadUInt64("parent", -1);
         ++i;
     }
     r.EndArray();
@@ -58,7 +59,80 @@ bool Scene::LoadFile(const std::string& fullPath)
 
 bool Scene::SaveFile(const std::string& fullPath)
 {
-    return false;
+    JsonWriter w; 
+
+    std::unordered_map<Transform*, int> transformIndexMap;
+    transformIndexMap[nullptr] = -1; 
+
+    for (int i = 0; i < m_gameObjects.size(); ++i)
+    {
+        Transform* tf = m_gameObjects[i]->GetTransform(); 
+        if (tf) {
+            transformIndexMap[tf] = i;
+        }
+    }
+
+    w.BeginArray("gameObjects");
+
+    for (int i = 0; i < m_gameObjects.size(); ++i)
+    {
+        GameObject* go = m_gameObjects[i].get();
+        if (!go) continue;
+
+        w.NextArrayItem(); 
+
+        // w.Write("id", go->GetID()); 
+        w.Write("name", go->GetName()); 
+        w.Write("tag", go->GetTag());   
+
+        Transform* tf = go->GetTransform(); 
+        Transform* parentTf = tf ? tf->GetParent() : nullptr; 
+
+        int parentIndex = -1;
+        auto it = transformIndexMap.find(parentTf);
+        if (it != transformIndexMap.end()) {
+            parentIndex = it->second;
+        }
+        w.Write("parent", parentIndex); 
+
+        
+        if (tf)
+        {
+            tf->Serialize(w);
+        }
+
+        w.BeginArray("components");
+
+        for (auto& comp_ptr : go->_GetComponents())
+        {
+            Component* comp = comp_ptr.get();
+
+            if (dynamic_cast<Transform*>(comp))
+            {
+                continue;
+            }
+
+            w.NextArrayItem(); 
+
+            // meta
+            w.BeginObject("meta"); 
+            // w.Write("id", comp->GetID()); 
+            w.Write("type", comp->GetTypeName()); 
+            w.EndObject(); 
+
+            w.BeginObject("data");
+            comp->Serialize(w); 
+            w.EndObject();
+
+            w.EndArrayItem(); 
+        }
+        w.EndArray();     
+
+        w.EndArrayItem();  
+    }
+    w.EndArray();         
+
+    return w.SaveFile(fullPath);
 }
 
 GameObject* Scene::FindGameObject(std::string name)

@@ -21,16 +21,17 @@ public:
 
 
     void _SetOwner(GameObject* owner) { m_owner = owner; }
+    GameObject* _GetOwner() const { return m_owner; }
 
     virtual void Serialize(JsonWriter&) const {}
     virtual void Deserialize(JsonReader&) {}
 
-    virtual uint32_t GetUid() const = 0;
-    virtual const char* GetTypeName() const = 0;
+    uint64_t _GetID() const { return m_id; }
+    void _SetID(uint64_t id) { m_id = id; }
 
 private:
 
-    GameObject* _GetOwner() const { return m_owner; }
     
     GameObject* m_owner = nullptr;
+    uint64_t m_id = 0; 
 };
