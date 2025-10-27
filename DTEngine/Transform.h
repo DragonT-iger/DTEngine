@@ -9,6 +9,7 @@ using Vector4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
+
 class Transform : public MonoBehaviour
 {
 	DTCLASS(Transform);

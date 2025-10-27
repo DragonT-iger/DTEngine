@@ -10,6 +10,8 @@
 #include "ImGuiLayer.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "AssetDataBase.h"
+#include <filesystem>
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -37,6 +39,11 @@ bool Game::Initialize()
 		assert(false && "ImGui 초기화 실패");
 		return false;
 	}
+
+	if (!AssetDatabase::Instance().Initialize("../Assets")) {
+		assert(false && "id 초기화 실패");
+		return false;
+	};
 
 	return true;
 }

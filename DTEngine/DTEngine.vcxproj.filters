@@ -166,9 +166,6 @@
     <ClCompile Include="DTEngine.cpp">
       <Filter>PCH</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="JsonIO.cpp">
       <Filter>Reflection</Filter>
     </ClCompile>
@@ -180,6 +177,9 @@
     </ClCompile>
     <ClCompile Include="AssetDatabase.cpp">
       <Filter>Reflection\Serialization\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,8 +4,6 @@
 #include <memory>
 
 
-
-
 #define DTCLASS(CLASS_NAME) \
 public: \
     static const char* GetStaticTypeName() { return #CLASS_NAME; } \
@@ -21,3 +19,5 @@ private: \
         ); \
         return true;\
     }();
+
+// s_isRegistered 는 그냥 람다를 실행하기 위한 트릭임

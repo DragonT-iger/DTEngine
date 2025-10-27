@@ -7,11 +7,13 @@
 #include <set>
 namespace fs = std::filesystem;
 
-void AssetDatabase::Initialize(const std::string& assetRootPath)
+bool AssetDatabase::Initialize(const std::string& assetRootPath)
 {
     m_assetRoot = assetRootPath;
     ScanDirectory(m_assetRoot);
     std::cout << "AssetDatabase: " << m_idToPathMap.size() << " assets loaded." << std::endl;
+
+    return true;
 }
 
 
@@ -26,8 +28,7 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
         "packages.config"
     };
 
-    for (auto it = fs::recursive_directory_iterator(directoryPath);
-        it != fs::end(it);
+    for (auto it = fs::recursive_directory_iterator(directoryPath); it != fs::end(it);
         ++it)
     {
         const auto& entry = *it;

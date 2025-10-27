@@ -19,7 +19,7 @@ class ComponentFactory : public Singleton<ComponentFactory>
 public:
     void Register(const std::string& typeName, ComponentCreator creator) {
         m_creators[typeName] = creator;
-        std::cout << typeName << "등록" << std::endl;
+        std::cout << typeName << " 등록" << std::endl;
     }
 
     std::unique_ptr<Component> Create(const std::string& typeName) {
