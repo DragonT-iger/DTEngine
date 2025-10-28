@@ -8,9 +8,9 @@ Scene* SceneManager::GetActiveScene() const
     return m_active;
 }
 
-void SceneManager::RegisterScene(const std::string& name, std::unique_ptr<Scene> scene)
+void SceneManager::RegisterScene(const std::string& name, Scene* scene)
 { 
-    m_scenes.emplace(name, std::move(scene));
+    m_scenes.emplace(name, scene);
 }
 
 void SceneManager::LoadScene(const std::string& name)
@@ -26,7 +26,7 @@ void SceneManager::ProcessSceneChange()
 
     auto it = m_scenes.find(m_nextName);
     assert(it != m_scenes.end());
-    m_active = it->second.get();
+    m_active = it->second;
 
     if (m_active)
     {

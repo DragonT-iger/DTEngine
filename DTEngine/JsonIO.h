@@ -62,7 +62,7 @@ public:
     bool BeginObject(const char* name);
     void EndObject();
 
-    static std::optional<JsonReader> LoadJson(const std::string& fullPath);
+    static std::optional<JsonReader> LoadJson(const std::string& relativePath);
 
     int  BeginArray(const char* name);
     bool NextArrayItem();

@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "IResource.h"
+#include "AssetDatabase.h"
 
 class DX11Renderer;
 
@@ -11,7 +12,7 @@ class DX11Renderer;
 class ResourceManager : public Singleton<ResourceManager>
 {
 public:
-	bool Initalize(const std::string& resourceRootPath);
+	bool Initialize(const std::string& resourceRootPath);
 
 	template<typename T>
 	T* Load(const std::string& filePath);
@@ -19,9 +20,11 @@ public:
 	void Unload(const std::string& id);
 	void UnloadAll();
 
-private:
-	std::string ResolveFullPath(const std::string& id) const;
+    std::string ResolveFullPath(const std::string& id) const;
 
+	std::string GetResourceRootPath() const { return m_resourceRootPath; }
+
+private:
 	std::string m_resourceRootPath;
 	std::unordered_map<std::string, std::unique_ptr<IResource>> m_cache;
 };
@@ -37,9 +40,9 @@ inline T* ResourceManager::Load(const std::string& filePath)
     const std::string fullPath = ResolveFullPath(filePath);
 
     auto res = std::make_unique<T>();
-    res->SetMeta(ResourceMeta{ filePath });
+    res->SetMeta(ResourceMeta{ AssetDatabase::Instance().GetIDFromPath(fullPath) });
 
-    if (!res->LoadFromFile(fullPath))
+    if (!res->LoadFile(fullPath))
         return nullptr;
 
     T* raw = res.get();

@@ -4,9 +4,7 @@
 class DX11Renderer;
 
 struct ResourceMeta {
-    int id;
-    std::string type;
-    std::string filePath;
+    uint64_t guid;
 };
 
 class IResource {

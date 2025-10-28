@@ -5,11 +5,12 @@
 #include <filesystem> 
 #include <iostream>
 #include <set>
+#include "ResourceManager.h"
 namespace fs = std::filesystem;
 
-bool AssetDatabase::Initialize(const std::string& assetRootPath)
+bool AssetDatabase::Initialize()
 {
-    m_assetRoot = assetRootPath;
+	m_assetRoot = ResourceManager::Instance().GetResourceRootPath();
     ScanDirectory(m_assetRoot);
     std::cout << "AssetDatabase: " << m_idToPathMap.size() << " assets loaded." << std::endl;
 
@@ -72,6 +73,8 @@ void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
     if (fs::exists(metaPath))
     {
         id = ReadMetaFile(metaPath);
+
+		std::cout << "Loaded .meta for " << assetPath << " with ID: " << id << std::endl;
     }
     else
     {

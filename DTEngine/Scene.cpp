@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include <filesystem>
 #include "Scene.h"
 #include "GameObject.h"
 #include "IDManager.h"
@@ -18,14 +19,28 @@ GameObject* Scene::CreateGameObject(const std::string& name)
 
 
 
+Scene::Scene() : m_name("Untitled Scene") {}
+
 Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
 bool Scene::LoadFile(const std::string& fullPath)
 {
+
+    try {
+        std::filesystem::path p(fullPath);
+        m_name = p.stem().string(); 
+    }
+    catch (...) {
+        m_name = "Load Failed";
+    }
+
     auto rd = JsonReader::LoadJson(fullPath);
-    if (!rd) return false;
+    if (!rd) {
+		std::cout << "비어 있는 씬 파일 로드: " << fullPath << std::endl;
+        return true; // 비어 있는 씬은 나중에 새로 기본적인걸 만들어 주는걸로할까?
+    }
     JsonReader& r = *rd;
 
     const int n = r.BeginArray("gameObjects");
@@ -81,7 +96,7 @@ bool Scene::SaveFile(const std::string& fullPath)
 
         w.NextArrayItem(); 
 
-        // w.Write("id", go->GetID()); 
+         //w.Write("id", go->GetID()); 
         w.Write("name", go->GetName()); 
         w.Write("tag", go->GetTag());   
 
@@ -133,6 +148,11 @@ bool Scene::SaveFile(const std::string& fullPath)
     w.EndArray();         
 
     return w.SaveFile(fullPath);
+}
+
+void Scene::Unload()
+{
+
 }
 
 GameObject* Scene::FindGameObject(std::string name)

@@ -10,8 +10,9 @@
 #include "ImGuiLayer.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "AssetDataBase.h"
+#include "AssetDatabase.h"
 #include <filesystem>
+#include "ResourceManager.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -40,10 +41,24 @@ bool Game::Initialize()
 		return false;
 	}
 
-	if (!AssetDatabase::Instance().Initialize("../Assets")) {
+	if(!ResourceManager::Instance().Initialize("Assets"))
+	{
+		assert(false && "ResourceManager 초기화 실패");
+		return false;
+	}
+	// 리소스 매니저 먼저 초기화
+
+	if (!AssetDatabase::Instance().Initialize()) {
 		assert(false && "id 초기화 실패");
 		return false;
 	};
+
+	Scene* scene = ResourceManager::Instance().Load<Scene>("Scenes/SampleScene.scene");
+
+	SceneManager::Instance().RegisterScene("SampleScene", scene);
+	SceneManager::Instance().LoadScene("SampleScene");
+
+
 
 	return true;
 }
@@ -72,13 +87,14 @@ void Game::Release()
 
 void Game::LifeCycle(float deltaTime)
 {
-	m_renderer->BeginFrame(backBufferColor);
 	SceneManager::Instance().ProcessSceneChange();
+
+	m_renderer->BeginFrame(backBufferColor);
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
 
 	if (!scene) {
-		//std::cout << "현재 활성화된 씬이 없음" << std::endl;
+		std::cout << "현재 활성화된 씬이 없음" << std::endl;
 		return;
 	}
 
@@ -103,18 +119,18 @@ void Game::LifeCycle(float deltaTime)
 
 
 
-	// ImGui 프레임
-	//m_imgui->NewFrame();
-	//if (ImGui::Begin("Engine Stats")) {
-	//	ImGui::Text("Delta: %.3f ms (%.1f FPS)", m_timer->DeltaTimeMS(),
-	//		(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
-	//	bool vsync = m_renderer->IsVSync();
-	//	if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
-	//}
-	//ImGui::End();
+	 //ImGui 프레임
+	m_imgui->NewFrame();
+	if (ImGui::Begin("Engine Stats")) {
+		ImGui::Text("Delta: %.3f ms (%.1f FPS)", m_timer->DeltaTimeMS(),
+			(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
+		bool vsync = m_renderer->IsVSync();
+		if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
+	}
+	ImGui::End();
 
-	//// ImGui 드로우
-	//m_imgui->Render();
+	// ImGui 드로우
+	m_imgui->Render();
 
 	m_renderer->EndFrame();
 	m_renderer->Present();

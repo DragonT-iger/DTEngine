@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 using nlohmann::json;
 
@@ -99,9 +100,9 @@ uint64_t JsonReader::ReadUInt64(const char* name, uint64_t def) const {
     if (!Has(name)) return def;
     const auto& v = (*m_cursor)[name];
 
-    //if (v.is_number_integer() || v.is_number_unsigned()) {
-    //    return v.get<uint64_t>();
-    //}
+    if (v.is_number_integer() || v.is_number_unsigned()) {
+        return v.get<uint64_t>();
+    }
     return def;
 }
 
@@ -147,10 +148,23 @@ void JsonReader::EndObject() {
 std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
 {
     std::ifstream ifs(fullPath, std::ios::binary);
-    if (!ifs) return std::nullopt;
+    
+    std::cout << fullPath << std::endl;
+
+    if (!ifs) {
+		std::cout << "Failed to open JSON file: " << fullPath << std::endl;
+        return std::nullopt;
+    }
 
     std::ostringstream ss;
     ss << ifs.rdbuf();
+
+
+    if (ss.str().empty()) {
+		std::cout << "JSON file is empty: " << fullPath << std::endl;
+		return std::nullopt;
+    }
+
     return JsonReader{ ss.str() };
 }
 

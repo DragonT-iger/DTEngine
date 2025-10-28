@@ -4,12 +4,14 @@
 #include <string>
 #include <unordered_map>
 
+// ResourceManager의 아래단에서 동작하는 ID 관리 데이터베이스
+
 class AssetDatabase : public Singleton<AssetDatabase>
 {
     friend class Singleton<AssetDatabase>;
 
 public:
-    bool Initialize(const std::string& assetRootPath);
+    bool Initialize();
 
     uint64_t GetIDFromPath(const std::string& path) const;
 

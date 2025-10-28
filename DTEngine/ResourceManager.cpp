@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ResourceManager.h"
 
-bool ResourceManager::Initalize(const std::string& resourceRootPath)
+bool ResourceManager::Initialize(const std::string& resourceRootPath)
 {
 	m_resourceRootPath = resourceRootPath;
 	return true;

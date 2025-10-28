@@ -15,11 +15,13 @@ class Scene : public IResource
 {
 
 public:
+	Scene(); // 엔진에서 경로 받아서 그 씬의 이름으로 씬 생성할 때 사용 이름이 없는 씬을 만드는건 load가 불가능함 당연히
     explicit Scene(const std::string& name);
     virtual ~Scene();
 
     bool LoadFile(const std::string& fullPath) override;
     bool SaveFile(const std::string& fullPath) override;
+	void Unload() override;
 
     GameObject* FindGameObject(std::string name);
     void Destroy(GameObject* object);
