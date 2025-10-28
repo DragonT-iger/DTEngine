@@ -13,7 +13,6 @@
 
 
 
-
 struct HWND__;
 using HWND = HWND__*;
 

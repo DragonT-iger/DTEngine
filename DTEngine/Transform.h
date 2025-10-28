@@ -4,6 +4,7 @@
 #include "MonoBehaviour.h"
 #include <vector>
 
+
 using Vector3 = DirectX::SimpleMath::Vector3;
 using Vector4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
@@ -61,8 +62,19 @@ private:
 	// 직렬화 해야 하는 값들
 
 	Vector3 m_position;
+	inline static bool s_propRegistered_m_position = []() { \
+		ReflectionDatabase::Instance().RegisterDTPROPERTY(\
+			ThisType::GetStaticTypeName(),  /* "Transform" */ \
+			"m_position",                          /* "m_position" */ \
+			typeid(m_position),                   /* typeid(Vector3) */ \
+			offsetof(ThisType, m_position)        /* offsetof(Transform, m_position) */ \
+		); \
+		return true; \
+		}();
 	Quaternion m_rotation;
+	//DTPROPERTY(Quaternion, m_rotation);
 	Vector3 m_scale;
+	//DTPROPERTY(Vector3, m_scale);
 
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children = {};

@@ -128,6 +128,9 @@
     <ClInclude Include="AssetDatabase.h">
       <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ReflectionDatabase.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -180,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionDatabase.cpp">
+      <Filter>Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

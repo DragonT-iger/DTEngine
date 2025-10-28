@@ -1,5 +1,7 @@
 ﻿#include "pch.h" 
 #include "DX11Renderer.h"
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 
 #include <Windows.h>
 #include <dxgi1_6.h>
