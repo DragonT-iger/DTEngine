@@ -97,7 +97,7 @@ uint64_t AssetDatabase::ReadMetaFile(const std::string& metaPath)
     }
 
     JsonReader& reader = *readerOpt;
-    return reader.ReadUInt64("guid", 0);
+    return reader.ReadUInt64("FileID", 0);
 }
 
 uint64_t AssetDatabase::CreateMetaFile(const std::string& assetPath)
@@ -107,8 +107,8 @@ uint64_t AssetDatabase::CreateMetaFile(const std::string& assetPath)
     uint64_t newID = IDManager::Instance().GetNewUniqueID();
 
     JsonWriter writer; 
-    writer.Write("guid", newID); 
-
+    writer.Write("FileID", newID); 
+     
     if (writer.SaveFile(metaPath)) 
     {
         std::cout << "Created .meta for " << assetPath << std::endl;

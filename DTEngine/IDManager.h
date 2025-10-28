@@ -1,25 +1,20 @@
 #pragma once
 #include "Singleton.h"
 #include <cstdint>
-#include <random>
+#include <memory>   
 
-class IDManager : public Singleton<IDManager>
+class IDManager : public Singleton<IDManager> 
 {
-    friend class Singleton;
+    friend class Singleton<IDManager>;
+
 public:
-    uint64_t GetNewUniqueID()
-    {
-        return m_distribution(m_generator);
-    }
+    ~IDManager();
+
+    uint64_t GetNewUniqueID();
 
 private:
-    IDManager()
-        : m_generator(std::random_device{}()),
-        m_distribution(1, std::numeric_limits<uint64_t>::max())
-    {
-    }
-    ~IDManager() = default;
+    IDManager(); 
 
-    std::mt19937_64 m_generator;
-    std::uniform_int_distribution<uint64_t> m_distribution;
+    struct Impl;
+    std::unique_ptr<Impl> m_pImpl;
 };

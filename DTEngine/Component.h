@@ -32,7 +32,7 @@ public:
     uint64_t _GetID() const { return m_id; }
     void _SetID(uint64_t id) { m_id = id; }
 
-    virtual const char* _GetTypeName() const = 0;
+	virtual const char* _GetTypeName() const = 0; // DTCLASS 매크로쓰면 자동생성됨
 
 private:
 
