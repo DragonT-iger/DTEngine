@@ -71,8 +71,7 @@ void DX11Renderer::EndFrame()
 void DX11Renderer::Present()
 {
     if (!m_swapchain) return;
-    const UINT sync = m_vsync ? 1 : 0;
-    m_swapchain->Present(sync, 0);
+    m_swapchain->Present(m_vsync, 0);
 }
 
 void DX11Renderer::SetFullscreen(bool enable)

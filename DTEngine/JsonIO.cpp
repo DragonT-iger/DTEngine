@@ -64,8 +64,23 @@ json& JsonWriter::Current() { return *m_stack.back(); }
 /* ---------------- JsonReader ---------------- */
 
 JsonReader::JsonReader(const char* jsonText) {
-    m_root = new json(json::parse(jsonText));
-    m_cursor = m_root;
+
+    try
+    {
+        m_root = new json(json::parse(jsonText));
+        m_cursor = m_root;
+    }
+    catch (const nlohmann::json::parse_error& e)
+    {
+        std::cerr << "[JsonReader] Parse Error: " << e.what() << std::endl;
+
+        if (jsonText[0] == '\0') {
+			std::cout << "씬 파일이 비어있습니다. 기본값으로 초기화합니다." << std::endl;
+        }
+
+        m_root = new json(json::object());
+        m_cursor = m_root;
+    }
 }
 JsonReader::JsonReader(const std::string& jsonText) : JsonReader(jsonText.c_str()) {}
 
@@ -155,15 +170,17 @@ std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
 		std::cout << "Failed to open JSON file: " << fullPath << std::endl;
         return std::nullopt;
     }
+    // 얘는 fail이 뜨는게 맞고
 
     std::ostringstream ss;
     ss << ifs.rdbuf();
 
 
-    if (ss.str().empty()) {
-		std::cout << "JSON file is empty: " << fullPath << std::endl;
-		return std::nullopt;
-    }
+  //  if (ss.str().empty()) {
+		//std::cout << "JSON file is empty: " << fullPath << std::endl;
+		//return std::nullopt;
+  //  }
+    // 얘는 만들어 주는게 맞음
 
     return JsonReader{ ss.str() };
 }

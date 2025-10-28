@@ -49,11 +49,17 @@ bool Game::Initialize()
 	// 리소스 매니저 먼저 초기화
 
 	if (!AssetDatabase::Instance().Initialize()) {
-		assert(false && "id 초기화 실패");
+		assert(false && "전역 id 초기화 실패");
 		return false;
 	};
 
 	Scene* scene = ResourceManager::Instance().Load<Scene>("Scenes/SampleScene.scene");
+
+	if(scene == nullptr)
+	{
+		assert(false && "기본 씬 로드 실패");
+		return false;
+	}
 
 	SceneManager::Instance().RegisterScene("SampleScene", scene);
 	SceneManager::Instance().LoadScene("SampleScene");
@@ -117,8 +123,6 @@ void Game::LifeCycle(float deltaTime)
 		scene->LateUpdate(deltaTime);
 	}
 
-
-
 	 //ImGui 프레임
 	m_imgui->NewFrame();
 	if (ImGui::Begin("Engine Stats")) {
@@ -126,6 +130,7 @@ void Game::LifeCycle(float deltaTime)
 			(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
 		bool vsync = m_renderer->IsVSync();
 		if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
+		ImGui::DragFloat4("Clear Color", backBufferColor, 0.001f, 0.0f, 1.0f);
 	}
 	ImGui::End();
 

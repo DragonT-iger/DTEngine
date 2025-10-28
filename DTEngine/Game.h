@@ -28,7 +28,7 @@ protected:
 	void OnClose() override;
 
 private: 
-	const float backBufferColor[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	float backBufferColor[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 
 	std::unique_ptr<DX11Renderer> m_renderer;
 	std::unique_ptr<GameTimer> m_timer;

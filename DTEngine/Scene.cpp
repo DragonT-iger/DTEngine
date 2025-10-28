@@ -38,8 +38,7 @@ bool Scene::LoadFile(const std::string& fullPath)
 
     auto rd = JsonReader::LoadJson(fullPath);
     if (!rd) {
-		std::cout << "비어 있는 씬 파일 로드: " << fullPath << std::endl;
-        return true; // 비어 있는 씬은 나중에 새로 기본적인걸 만들어 주는걸로할까?
+        return false; // 비어 있는 씬은 나중에 새로 기본적인걸 만들어 주는걸로할까?
     }
     JsonReader& r = *rd;
 
