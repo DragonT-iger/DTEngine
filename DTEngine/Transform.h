@@ -38,8 +38,8 @@ public:
 
 	void ResetValue();
 
-	void Serialize(JsonWriter& w) const override;
-	void Deserialize(JsonReader& r) override;
+	//void Serialize() const override;
+	//void Deserialize() override;
 
 private:
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
@@ -62,15 +62,15 @@ private:
 	// 직렬화 해야 하는 값들
 
 	Vector3 m_position;
-	inline static bool s_propRegistered_m_position = []() { \
-		ReflectionDatabase::Instance().RegisterDTPROPERTY(\
-			ThisType::GetStaticTypeName(),  /* "Transform" */ \
-			"m_position",                          /* "m_position" */ \
-			typeid(m_position),                   /* typeid(Vector3) */ \
-			offsetof(ThisType, m_position)        /* offsetof(Transform, m_position) */ \
-		); \
-		return true; \
-		}();
+	//inline static bool s_propRegistered_m_position = []() { \
+	//	ReflectionDatabase::Instance().RegisterDTPROPERTY(\
+	//		ThisType::GetStaticTypeName(),  /* "Transform" */ \
+	//		"m_position",                          /* "m_position" */ \
+	//		typeid(m_position),                   /* typeid(Vector3) */ \
+	//		offsetof(ThisType, m_position)        /* offsetof(Transform, m_position) */ \
+	//	); \
+	//	return true; \
+	//	}();
 	Quaternion m_rotation;
 	//DTPROPERTY(Quaternion, m_rotation);
 	Vector3 m_scale;

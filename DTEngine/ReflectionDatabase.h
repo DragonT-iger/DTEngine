@@ -24,7 +24,7 @@ class ReflectionDatabase : public Singleton<ReflectionDatabase>
     friend class Singleton<ReflectionDatabase>;
 
 public:
-    //void RegisterClass(const char* className); // <-- window.h ¸ÅÅ©·Î ÀÌ½´
+    //void RegisterClass(const char* className); // <-- Windows.h ¸ÅÅ©·Î ÀÌ½´
     void RegisterDTCLASS(const char* className);
 
     void RegisterDTPROPERTY(const char* className, const char* propName,

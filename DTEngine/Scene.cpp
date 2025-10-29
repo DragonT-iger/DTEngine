@@ -2,12 +2,14 @@
 #include <filesystem>
 #include "Scene.h"
 #include "GameObject.h"
+#include "IDManager.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
     auto go = std::make_unique<GameObject>(name);
     GameObject* raw = go.get();
+	raw->_SetID(IDManager::Instance().GetNewUniqueID());
 
     if (m_isIterating)
         m_pendingAdd.emplace_back(std::move(go));
@@ -52,7 +54,7 @@ bool Scene::LoadFile(const std::string& fullPath)
         gameObjects[i] = go;
 
         if (auto* tf = go->GetComponent<Transform>())
-            tf->Deserialize(r); 
+            //tf->Deserialize(r); 
 
         parents[i] = r.ReadUInt64("parent", -1);
         ++i;
@@ -111,7 +113,7 @@ bool Scene::SaveFile(const std::string& fullPath)
         
         if (tf)
         {
-            tf->Serialize(w);
+            //tf->Serialize(w);
         }
 
         w.BeginArray("components");
@@ -134,7 +136,7 @@ bool Scene::SaveFile(const std::string& fullPath)
             w.EndObject(); 
 
             w.BeginObject("data");
-            comp->Serialize(w); 
+            //comp->Serialize(w); 
             w.EndObject();
 
             w.EndArrayItem(); 

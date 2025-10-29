@@ -12,24 +12,6 @@ void Transform::ResetValue()
 	MarkDirtyRecursive();
 }
 
-void Transform::Serialize(JsonWriter& w) const
-{
-	w.Write("SetActive", IsActive());
-	w.Write("position", m_position.x, m_position.y, m_position.z);
-	w.Write("rotation", m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w);
-	w.Write("scale", m_scale.x, m_scale.y, m_scale.z);
-}
-
-void Transform::Deserialize(JsonReader& r)
-{
-	auto p = r.ReadVec3("position", { 0,0,0 });
-	auto e = r.ReadVec4("rotation", { 0,0,0,1 });
-	auto s = r.ReadVec3("scale", { 1,1,1 });
-	m_position = Vector3(p[0], p[1], p[2]);
-	m_rotation = Vector4(e[0], e[1], e[2], e[3]);
-	m_scale = Vector3(s[0], s[1], s[2]);
-}
-
 const Matrix& Transform::GetLocalMatrix()
 {
 	if (IsDirty()) {

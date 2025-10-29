@@ -2,7 +2,6 @@
 
 class GameObject;
 
-#include "JsonIO.h"
 #include "ReflectionMacros.h"
 
 class Component {
@@ -26,13 +25,14 @@ public:
     void _SetOwner(GameObject* owner) { m_owner = owner; }
     GameObject* _GetOwner() const { return m_owner; }
 
-    virtual void Serialize(JsonWriter&) const {}
-    virtual void Deserialize(JsonReader&) {}
+
 
     uint64_t _GetID() const { return m_id; }
     void _SetID(uint64_t id) { m_id = id; }
 
-	virtual const char* _GetTypeName() const = 0; // DTCLASS 매크로쓰면 자동생성됨
+
+    // DTCLASS 매크로로 자동 생성
+	virtual const char* _GetTypeName() const = 0; 
 
 private:
 

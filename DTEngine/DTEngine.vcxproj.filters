@@ -125,11 +125,11 @@
     <ClInclude Include="IDManager.h">
       <Filter>Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="AssetDatabase.h">
-      <Filter>Reflection\Serialization\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ReflectionDatabase.h">
       <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetDatabase.h">
+      <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,14 +178,14 @@
     <ClCompile Include="IDManager.cpp">
       <Filter>Reflection</Filter>
     </ClCompile>
-    <ClCompile Include="AssetDatabase.cpp">
-      <Filter>Reflection\Serialization\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="ReflectionDatabase.cpp">
       <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetDatabase.cpp">
+      <Filter>Reflection\Serialization\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
