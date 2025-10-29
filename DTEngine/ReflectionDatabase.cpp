@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "ReflectionDatabase.h"
+#include <functional>
+#include "Component.h"
+
 //#include <iostream>
 
-void ReflectionDatabase::RegisterDTCLASS(const char* className)
+void ReflectionDatabase::RegisterDTGENERATED_BODY(const char* className)
 {
 	m_classes.emplace(className, ClassInfo{ className });
 
@@ -10,12 +13,13 @@ void ReflectionDatabase::RegisterDTCLASS(const char* className)
 }
 
 void ReflectionDatabase::RegisterDTPROPERTY(const char* className, const char* propName,
-	const std::type_info& type, size_t offset)
+	const std::type_info& type, std::function<void* (Component*)> getter)
 {
 	auto it = m_classes.find(className);
 	if (it != m_classes.end())
 	{
-		it->second.m_properties.push_back({ propName, type, offset });
+		// (수정) offset 대신 getter 사용
+		it->second.m_properties.push_back({ propName, type, std::move(getter) });
 	}
 }
 

@@ -25,7 +25,7 @@ private:
     void ProcessAssetFile(const std::string& assetPath);
 
     uint64_t ReadMetaFile(const std::string& metaPath);
-    uint64_t CreateMetaFile(const std::string& assetPath);
+    uint64_t CreateMetaFile(const std::string& assetPath); // 이것도 매크로 먹네 근데 실행은 됨
 
     std::string m_assetRoot;
 

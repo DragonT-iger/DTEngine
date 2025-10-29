@@ -4,6 +4,12 @@
 
 using namespace SimpleMathHelper;
 
+BEGINPROPERTY(Transform)
+	DTPROPERTY(Transform, m_position)
+	DTPROPERTY(Transform, m_rotation)
+	DTPROPERTY(Transform, m_scale)
+ENDPROPERTY()
+
 void Transform::ResetValue()
 {
 	m_position = { 0, 0, 0 };

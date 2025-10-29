@@ -31,7 +31,7 @@ public:
     void _SetID(uint64_t id) { m_id = id; }
 
 
-    // DTCLASS 매크로로 자동 생성
+    // DTGENERATED_BODY 매크로로 자동 생성
 	virtual const char* _GetTypeName() const = 0; 
 
 private:

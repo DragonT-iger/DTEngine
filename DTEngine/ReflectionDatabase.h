@@ -4,12 +4,15 @@
 #include <string>
 #include <typeindex>
 #include <vector>
+#include <functional>
+
+class Component;
 
 struct PropertyInfo
 {
     std::string m_name;
-    std::type_index m_type;
-    size_t m_offset;
+    std::type_index m_type; 
+    std::function<void* (Component*)> m_getter;
 };
 
 struct ClassInfo
@@ -25,10 +28,10 @@ class ReflectionDatabase : public Singleton<ReflectionDatabase>
 
 public:
     //void RegisterClass(const char* className); // <-- Windows.h ¸ÅÅ©·Î ÀÌ½´
-    void RegisterDTCLASS(const char* className);
+    void RegisterDTGENERATED_BODY(const char* className);
 
     void RegisterDTPROPERTY(const char* className, const char* propName,
-        const std::type_info& type, size_t offset);
+        const std::type_info& type, std::function<void* (Component*)> getter);
     const ClassInfo* GetClassInfo(const std::string& className) const;
 
 private:
