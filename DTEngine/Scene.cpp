@@ -3,7 +3,95 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "IDManager.h"
+#include "ResourceManager.h"
+#include <iostream>
 
+
+
+struct FixupTask
+{
+    void* targetObject;             // 속성을 설정할 객체 (e.g. Transform*)
+    PropertyInfo    property;       // 사용할 Setter 정보 (e.g. m_parent의 setter)
+    uint64_t        targetID;       // 연결할 객체의 ID (e.g. 부모의 ID)
+};
+
+
+static void ReadPropertyRecursive(
+    JsonReader& reader,
+    const PropertyInfo& prop,
+    void* base, 
+    std::vector<FixupTask>& fixupList)
+{
+    const std::type_index& type = prop.m_type;
+    const char* name = prop.m_name.c_str();
+
+    if (!reader.Has(name)) return;
+
+
+    if (type == typeid(int)) {
+        int v = reader.ReadInt(name);
+        prop.m_setter(base, &v);
+    }
+    else if (type == typeid(float)) {
+        float v = reader.ReadFloat(name);
+        prop.m_setter(base, &v);
+    }
+    else if (type == typeid(uint64_t)) {
+        uint64_t v = reader.ReadUInt64(name);
+        prop.m_setter(base, &v);
+    }
+    else if (type == typeid(bool)) {
+        bool v = reader.ReadBool(name);
+        prop.m_setter(base, &v);
+    }
+    else if (type == typeid(std::string)) {
+        std::string v = reader.ReadString(name);
+        prop.m_setter(base, &v);
+    }
+
+
+    else if (type == typeid(Transform*)) {
+        uint64_t id = reader.ReadUInt64(name);
+        fixupList.push_back({ base, prop, id });
+    }
+
+
+    else
+    {
+        const ClassInfo* structInfo = ReflectionDatabase::Instance().GetClassInfomation(type.name());
+
+        if (structInfo)
+        {
+            if (reader.BeginObject(name))
+            {
+                void* memberData = prop.m_getter(base);
+
+                for (const PropertyInfo& structProp : structInfo->m_properties)
+                {
+                    ReadPropertyRecursive(reader, structProp, memberData, fixupList);
+                }
+                reader.EndObject();
+            }
+        }
+        else {
+            std::cout << "Warning: No deserializer for type " << type.name() << std::endl;
+        }
+    }
+}
+
+static void DeserializeComponentProperties(
+    JsonReader& reader,
+    Component* comp, 
+    std::vector<FixupTask>& fixupList)
+{
+    const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(comp->_GetTypeName());
+    if (!info) return;
+
+    for (const PropertyInfo& prop : info->m_properties)
+    {
+        ReadPropertyRecursive(reader, prop, comp, fixupList);
+    }
+}
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -28,126 +116,144 @@ Scene::~Scene() = default;
 
 bool Scene::LoadFile(const std::string& fullPath)
 {
-
-    try {
-        std::filesystem::path p(fullPath);
-        m_name = p.stem().string(); 
-    }
-    catch (...) {
-        m_name = "LOAD_FAILED";
-    }
-
     auto rd = JsonReader::LoadJson(fullPath);
-    if (!rd) {
-        return false;
-    }
-    JsonReader& r = *rd;
+    if (!rd) return false;
+    JsonReader& reader = *rd;
 
-    const int n = r.BeginArray("gameObjects");
-    std::vector<GameObject*> gameObjects(n, nullptr);
-    std::vector<int> parents(n, -1);
+    // --- Pass 1: 객체 생성, ID 매핑, 값 설정 ---
 
-    int i = 0;
-    while (r.NextArrayItem())
+
+    std::unordered_map<uint64_t, Component*> idToComponentMap;
+
+
+    std::vector<FixupTask> fixupList;
+
+    const int n = reader.BeginArray("gameObjects");
+    while (reader.NextArrayItem())
     {
-        GameObject* go = CreateGameObject(r.ReadString("name", "GameObject"));
-        gameObjects[i] = go;
+        std::string goName = reader.ReadString("name", "GameObject");
+        GameObject* go = CreateGameObject(goName);
 
-        if (auto* tf = go->GetComponent<Transform>())
-            //tf->Deserialize(r); 
+        uint64_t go_id = reader.ReadUInt64("id", 0);
+        go->_SetID(go_id);
+        go->SetTag(reader.ReadString("tag", "Untagged"));
+        go->SetActive(reader.ReadBool("active", true));
 
-        parents[i] = r.ReadUInt64("parent", -1);
-        ++i;
-    }
-    r.EndArray();
 
-    for (int ci = 0; ci < n; ++ci) {
-        int pi = parents[ci];
-        if (pi >= 0 && pi < n && gameObjects[ci] && gameObjects[pi]) {
-            auto* cT = gameObjects[ci]->GetComponent<Transform>();
-            auto* pT = gameObjects[pi]->GetComponent<Transform>();
-            if (cT && pT) cT->SetParent(pT, true);
+        if (reader.BeginObject("transform"))
+        {
+            Transform* tf = go->GetTransform();
+            uint64_t tf_id = reader.ReadUInt64("id", 0);
+            tf->_SetID(tf_id);
+
+            idToComponentMap[tf_id] = tf; 
+
+			//std::cout << "Deserializing Transform ID: " << tf_id << " for GameObject: " << goName << std::endl;
+
+            DeserializeComponentProperties(reader, tf, fixupList);
+
+            reader.EndObject();
         }
+
+        const int compCount = reader.BeginArray("components");
+        while (reader.NextArrayItem())
+        {
+            std::string typeName = reader.ReadString("typeName", "");
+            uint64_t comp_id = reader.ReadUInt64("id", 0);
+
+            if (typeName.empty() || comp_id == 0) continue;
+
+            Component* newComp = go->AddComponent(typeName);
+            if (!newComp) continue;
+
+            newComp->_SetID(comp_id);
+            idToComponentMap[comp_id] = newComp;
+
+            DeserializeComponentProperties(reader, newComp, fixupList);
+
+            reader.EndArray();
+        }
+        reader.EndArray();
+
+        reader.EndArray();
     }
+    reader.EndArray();
+
+    // --- Pass 2 ---
+
+    for (const auto& task : fixupList)
+    {
+        uint64_t targetID = task.targetID;
+        Component* targetPtr = nullptr; 
+
+        if (targetID != 0)
+        {
+            auto it = idToComponentMap.find(targetID);
+            if (it != idToComponentMap.end())
+            {
+                targetPtr = it->second; 
+            }
+            else
+            {
+                std::cout << "Warning: Failed to find targetID " << targetID << std::endl;
+            }
+        }
+
+        task.property.m_setter(task.targetObject, &targetPtr);
+    }
+
     return true;
 }
 
-bool Scene::SaveFile(const std::string& fullPath)
+bool Scene::SaveFile(const std::string& solutionPath)
 {
-    JsonWriter w; 
+    JsonWriter writer;
 
-    std::unordered_map<Transform*, int> transformIndexMap;
-    transformIndexMap[nullptr] = -1; 
 
-    for (int i = 0; i < m_gameObjects.size(); ++i)
+    std::string assetPath = ResourceManager::Instance().ResolveFullPath(solutionPath);
+
+    writer.BeginArray("gameObjects");
+
+    for (auto& go : m_gameObjects)
     {
-        Transform* tf = m_gameObjects[i]->GetTransform(); 
-        if (tf) {
-            transformIndexMap[tf] = i;
-        }
-    }
-
-    w.BeginArray("gameObjects");
-
-    for (int i = 0; i < m_gameObjects.size(); ++i)
-    {
-        GameObject* go = m_gameObjects[i].get();
         if (!go) continue;
 
-        w.NextArrayItem(); 
+        writer.NextArrayItem();
 
-         //w.Write("id", go->GetID()); 
-        w.Write("name", go->GetName()); 
-        w.Write("tag", go->GetTag());   
+        writer.Write("id", go->_GetID());
+        writer.Write("name", go->GetName());
+        writer.Write("tag", go->GetTag());
+        writer.Write("active", go->IsActive());
 
-        Transform* tf = go->GetTransform(); 
-        Transform* parentTf = tf ? tf->GetParent() : nullptr; 
-
-        int parentIndex = -1;
-        auto it = transformIndexMap.find(parentTf);
-        if (it != transformIndexMap.end()) {
-            parentIndex = it->second;
-        }
-        w.Write("parent", parentIndex); 
-
-        
-        if (tf)
+        if (auto* tf = go->GetTransform())
         {
-            //tf->Serialize(w);
+            writer.BeginObject("transform");
+
+            writer.Write("id", tf->_GetID());
+
+            tf->Serialize(writer);
+
+            writer.EndObject();
         }
 
-        w.BeginArray("components");
-
-        for (auto& comp_ptr : go->_GetComponents())
+        writer.BeginArray("components");
+        for (auto& comp : go->_GetComponents())
         {
-            Component* comp = comp_ptr.get();
+            if (!comp) continue;
 
-            if (dynamic_cast<Transform*>(comp))
-            {
-                continue;
-            }
+            writer.NextArrayItem();
 
-            w.NextArrayItem(); 
+            comp->Serialize(writer);
 
-            // meta
-            w.BeginObject("meta"); 
-            // w.Write("id", comp->GetID()); 
-            w.Write("type", comp->_GetTypeName()); 
-            w.EndObject(); 
-
-            w.BeginObject("data");
-            //comp->Serialize(w); 
-            w.EndObject();
-
-            w.EndArrayItem(); 
+            writer.EndArrayItem();
         }
-        w.EndArray();     
+        writer.EndArray();
 
-        w.EndArrayItem();  
+        writer.EndArrayItem();
     }
-    w.EndArray();         
+    writer.EndArray();
 
-    return w.SaveFile(fullPath);
+    return writer.SaveFile(assetPath);
 }
 
 void Scene::Unload()

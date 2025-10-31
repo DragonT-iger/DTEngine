@@ -8,6 +8,7 @@
 
 #include "Component.h"
 #include "Transform.h";
+#include "IDManager.h"
 
 
 class Collider;
@@ -120,6 +121,7 @@ inline T* GameObject::AddComponent(Args&&... args)
     T* raw = comp.get();
 
     raw->SetOwner(this);
+	raw->_SetID(IDManager::Instance().GetNewUniqueID());
 
 
     if (m_isIterating)
@@ -139,6 +141,7 @@ inline Transform* GameObject::AddComponent<Transform>() {
     auto* raw = m_transform.get();
 
     raw->_SetOwner(this);
+    raw->_SetID(IDManager::Instance().GetNewUniqueID());
 
     return m_transform.get();
 }

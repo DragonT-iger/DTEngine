@@ -5,10 +5,17 @@
 using namespace SimpleMathHelper;
 
 BEGINPROPERTY(Transform)
-	DTPROPERTY(Transform, m_position)
-	DTPROPERTY(Transform, m_rotation)
-	DTPROPERTY(Transform, m_scale)
+
+DTPROPERTY_ACCESSOR(Transform, m_position, GetPosition, SetPosition)
+DTPROPERTY_ACCESSOR(Transform, m_rotation, GetRotationQuat, SetRotationQuat)
+DTPROPERTY_ACCESSOR(Transform, m_scale, GetScale, SetScale)
+DTPROPERTY_SETTER(Transform, m_parent, SetParent)
+
+// DTPROPERTY로 해결이 안되는 경우들.
 ENDPROPERTY()
+
+
+
 
 void Transform::ResetValue()
 {
@@ -77,6 +84,7 @@ Transform::Transform()
 	: m_matrixLocal(IdentityMatrix())
 	, m_matrixWorld(IdentityMatrix())
 {
+	ResetValue();
 }
 
 const Vector3& Transform::GetPosition()

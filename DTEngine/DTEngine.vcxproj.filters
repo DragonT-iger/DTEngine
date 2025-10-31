@@ -51,6 +51,12 @@
     <Filter Include="Reflection\Serialization\Resources">
       <UniqueIdentifier>{c7d70f96-ff12-4b41-9499-d053d073d417}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Reflection\ID">
+      <UniqueIdentifier>{01eecb75-351a-4013-8eb3-c0d25adb5bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection\Register">
+      <UniqueIdentifier>{ce380b74-cf1e-4348-88b5-03417d059408}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -110,26 +116,29 @@
     <ClInclude Include="IResource.h">
       <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentFactory.h">
-      <Filter>Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="JsonIO.h">
       <Filter>Reflection</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Reflection\Serialization\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ReflectionMacros.h">
+    <ClInclude Include="AssetDatabase.h">
+      <Filter>Reflection\Serialization\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterCoreTypes.h">
       <Filter>Reflection</Filter>
     </ClInclude>
     <ClInclude Include="IDManager.h">
-      <Filter>Reflection</Filter>
+      <Filter>Reflection\ID</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
+      <Filter>Reflection\Register</Filter>
     </ClInclude>
     <ClInclude Include="ReflectionDatabase.h">
-      <Filter>Reflection</Filter>
+      <Filter>Reflection\Register</Filter>
     </ClInclude>
-    <ClInclude Include="AssetDatabase.h">
-      <Filter>Reflection\Serialization\Resources</Filter>
+    <ClInclude Include="ReflectionMacros.h">
+      <Filter>Reflection\Register</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -175,17 +184,20 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Reflection\Serialization\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="IDManager.cpp">
-      <Filter>Reflection</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="ReflectionDatabase.cpp">
-      <Filter>Reflection</Filter>
-    </ClCompile>
     <ClCompile Include="AssetDatabase.cpp">
       <Filter>Reflection\Serialization\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterCoreTypes.cpp">
+      <Filter>Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="IDManager.cpp">
+      <Filter>Reflection\ID</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionDatabase.cpp">
+      <Filter>Reflection\Register</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

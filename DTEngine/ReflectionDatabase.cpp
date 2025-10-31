@@ -13,17 +13,16 @@ void ReflectionDatabase::RegisterDTGENERATED_BODY(const char* className)
 }
 
 void ReflectionDatabase::RegisterDTPROPERTY(const char* className, const char* propName,
-	const std::type_info& type, std::function<void* (Component*)> getter)
+	const std::type_info& type, std::function<void* (void*)> getter, std::function<void(void*, void*)> setter)
 {
 	auto it = m_classes.find(className);
 	if (it != m_classes.end())
 	{
-		// (수정) offset 대신 getter 사용
-		it->second.m_properties.push_back({ propName, type, std::move(getter) });
+		it->second.m_properties.push_back({ propName, type, std::move(getter) , std::move(setter)});
 	}
 }
 
-const ClassInfo* ReflectionDatabase::GetClassInfo(const std::string& className) const
+const ClassInfo* ReflectionDatabase::GetClassInfomation(const std::string& className) const
 {
 	auto it = m_classes.find(className);
 	if (it != m_classes.end())

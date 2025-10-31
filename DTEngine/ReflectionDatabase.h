@@ -12,7 +12,8 @@ struct PropertyInfo
 {
     std::string m_name;
     std::type_index m_type; 
-    std::function<void* (Component*)> m_getter;
+    std::function<void* (void*)> m_getter;
+    std::function<void(void*, void*)> m_setter;
 };
 
 struct ClassInfo
@@ -31,8 +32,8 @@ public:
     void RegisterDTGENERATED_BODY(const char* className);
 
     void RegisterDTPROPERTY(const char* className, const char* propName,
-        const std::type_info& type, std::function<void* (Component*)> getter);
-    const ClassInfo* GetClassInfo(const std::string& className) const;
+        const std::type_info& type, std::function<void* (void*)> getter , std::function<void(void*, void*)> setter);
+    const ClassInfo* GetClassInfomation(const std::string& className) const;
 
 private:
     ReflectionDatabase();

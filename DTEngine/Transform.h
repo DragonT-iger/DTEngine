@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include <SimpleMath.h>
-#include "MonoBehaviour.h"
 #include <vector>
+
+#include "Component.h"
 
 
 using Vector3 = DirectX::SimpleMath::Vector3;
@@ -11,7 +12,7 @@ using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
 
-class Transform : public MonoBehaviour
+class Transform : public Component
 {
 	DTGENERATED_BODY(Transform);
 
@@ -30,7 +31,7 @@ public:
 
 
 	void SetParent(Transform* parent, bool worldPositionStays = true);
-	Transform* GetParent() const { return m_parent; }
+	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 주의
 
 	const Vector3 Forward();
 	const Vector3 Right()  ;

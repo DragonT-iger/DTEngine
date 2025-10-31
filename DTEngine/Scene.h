@@ -20,7 +20,7 @@ public:
     virtual ~Scene();
 
     bool LoadFile(const std::string& fullPath) override;
-    bool SaveFile(const std::string& fullPath) override;
+    bool SaveFile(const std::string& solutionPath) override;
 	void Unload() override;
 
     GameObject* FindGameObject(std::string name);

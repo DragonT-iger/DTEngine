@@ -1,7 +1,8 @@
 ﻿#pragma once
+#include <string>
 
 class GameObject;
-
+class JsonWriter;
 #include "ReflectionMacros.h"
 
 class Component {
@@ -25,7 +26,7 @@ public:
     void _SetOwner(GameObject* owner) { m_owner = owner; }
     GameObject* _GetOwner() const { return m_owner; }
 
-
+    virtual void Serialize(JsonWriter& writer) const;
 
     uint64_t _GetID() const { return m_id; }
     void _SetID(uint64_t id) { m_id = id; }
