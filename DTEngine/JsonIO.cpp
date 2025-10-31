@@ -12,14 +12,22 @@ JsonWriter::JsonWriter() : m_root(std::make_unique<json>(json::object())), m_sta
 
 JsonWriter::~JsonWriter() = default;
 
-void JsonWriter::BeginArray(const char* name) {
-    Current()[name] = json::array();
-    m_stack.push_back(&Current()[name]); 
+int JsonReader::BeginArray(const char* name) {
+    m_arrayStack.push_back({ nullptr, -1 });
+
+    if (Has(name)) {
+        const auto& arr = (*m_cursor)[name];
+        if (arr.is_array()) {
+            m_arrayStack.back().array = &arr;
+            return static_cast<int>(arr.size());
+        }
+    }
+    return 0;
 }
 
-void JsonWriter::EndArray() {
-    if (m_stack.size() > 1) {
-        m_stack.pop_back(); 
+void JsonReader::EndArray() {
+    if (!m_arrayStack.empty()) {
+        m_arrayStack.pop_back();
     }
 }
 
@@ -186,39 +194,42 @@ std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
 }
 
 
-int JsonReader::BeginArray(const char* name) {
-    m_array = nullptr; m_index = -1;
-    if (Has(name)) {
-        const auto& arr = (*m_cursor)[name];
-        if (arr.is_array()) {
-            m_array = &arr;
-            return static_cast<int>(arr.size());
-        }
-    }
-    return 0;
+void JsonWriter::BeginArray(const char* name) {
+    Current()[name] = json::array();
+    m_stack.push_back(&Current()[name]);
 }
 
-void JsonReader::EndArray() {
+void JsonWriter::EndArray() {
+    if (m_stack.size() > 1) {
+        m_stack.pop_back();
+    }
+}
+
+bool JsonReader::NextArrayItem() {
+    if (m_arrayStack.empty() || !m_arrayStack.back().array) {
+        return false;
+    }
+
+    ArrayState& currentState = m_arrayStack.back();
+
+    ++currentState.index; 
+
+    if (currentState.index >= static_cast<int>(currentState.array->size())) {
+        return false; 
+    }
+
+    m_stack.push_back(m_cursor);
+
+    m_cursor = const_cast<json*>(&(*currentState.array)[currentState.index]);
+    return true;
+}
+
+void JsonReader::EndArrayItem() {
     if (!m_stack.empty()) {
         m_cursor = m_stack.back();
         m_stack.pop_back();
     }
-    m_array = nullptr; m_index = -1;
 }
-
-bool JsonReader::NextArrayItem() {
-    if (!m_array) return false;
-
-    ++m_index;
-
-    if (m_index >= static_cast<int>(m_array->size())) return false;
-
-    m_stack.push_back(m_cursor);
-
-    m_cursor = const_cast<json*>(&(*m_array)[m_index]);
-    return true;
-}
-
 void JsonWriter::NextArrayItem() {
     json& curr = Current();
     if (!curr.is_array()) {

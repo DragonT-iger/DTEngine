@@ -3,8 +3,10 @@
 #define NOMINMAX
 
 #include <Windows.h>
-#include <imgui.h>
 #include <iostream>
+#include <filesystem>
+
+#include <imgui.h>
 
 #include "Game.h"
 #include "DX11Renderer.h"
@@ -13,9 +15,9 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "AssetDatabase.h"
-#include <filesystem>
 #include "ResourceManager.h"
 #include "RegisterCoreTypes.h"
+#include "EditorUI.h"
 //#include "Transform.h"
 //#include "GameObject.h"
 
@@ -45,6 +47,8 @@ bool Game::Initialize()
 		assert(false && "ImGui 초기화 실패");
 		return false;
 	}
+
+	m_editorUI = std::make_unique<EditorUI>();
 
 	if(!ResourceManager::Instance().Initialize("Assets"))
 	{
@@ -123,6 +127,7 @@ void Game::Run()
 
 void Game::Release()
 {
+	if (m_editorUI) { m_editorUI.reset(); }
 	if (m_imgui) { m_imgui->Shutdown(); m_imgui.reset(); }
 	if (m_renderer) { m_renderer->Destroy(); m_renderer.reset(); }
 	__super::Destroy();
@@ -161,22 +166,15 @@ void Game::LifeCycle(float deltaTime)
 		scene->LateUpdate(deltaTime);
 	}
 
-	 //ImGui 프레임
 	m_imgui->NewFrame();
-	if (ImGui::Begin("Engine Stats")) {
-		ImGui::Text("Delta: %.3f ms (%.1f FPS)", m_timer->DeltaTimeMS(),
-			(deltaTime > 0.f ? 1.0f / deltaTime : 0.f));
-		bool vsync = m_renderer->IsVSync();
-		if (ImGui::Checkbox("VSync", &vsync)) m_renderer->ToggleVSync();
-		ImGui::DragFloat4("Clear Color", backBufferColor, 0.001f, 0.0f, 1.0f);
-	}
-	ImGui::End();
 
-	// ImGui 드로우
+	m_editorUI->Render(scene);
+
 	m_imgui->Render();
 
 	m_renderer->EndFrame();
 	m_renderer->Present();
+
 }
 
 bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)

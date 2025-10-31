@@ -7,6 +7,7 @@
 class DX11Renderer; 
 class GameTimer;
 class ImGuiLayer;
+class EditorUI;
 
 
 class Game : public WindowBase {
@@ -33,4 +34,5 @@ private:
 	std::unique_ptr<DX11Renderer> m_renderer;
 	std::unique_ptr<GameTimer> m_timer;
 	std::unique_ptr<ImGuiLayer> m_imgui;
+	std::unique_ptr<EditorUI> m_editorUI;
 };

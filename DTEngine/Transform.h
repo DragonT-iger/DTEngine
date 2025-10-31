@@ -31,16 +31,18 @@ public:
 
 
 	void SetParent(Transform* parent, bool worldPositionStays = true);
-	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 주의
+	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 수정주의
 
 	const Vector3 Forward();
 	const Vector3 Right()  ;
 	const Vector3 Up()     ;
 
-	void ResetValue();
+	void ResetValue(); // not found는 인텔리센스 오류
 
 	//void Serialize() const override;
 	//void Deserialize() override;
+
+	const std::vector<Transform*>& GetChildren() const { return m_children; }
 
 private:
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
@@ -64,11 +66,9 @@ private:
 
 	Vector3 m_position;
 	Quaternion m_rotation;
-	//DTPROPERTY(Quaternion, m_rotation);
 	Vector3 m_scale;
-	//DTPROPERTY(Vector3, m_scale);
 
 	Transform* m_parent = nullptr;
-	std::vector<Transform*> m_children = {};
+	std::vector<Transform*> m_children = {}; // 생각해보니까 이건 안해도 됨
 };
 

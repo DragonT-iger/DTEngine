@@ -6,6 +6,12 @@
 #include <unordered_map>
 #include <optional>
 
+
+struct ArrayState {
+    const nlohmann::json* array;
+    int index;
+};
+
 class JsonWriter {
 public:
     JsonWriter();
@@ -65,13 +71,13 @@ public:
     static std::optional<JsonReader> LoadJson(const std::string& relativePath);
 
     int  BeginArray(const char* name);
-    bool NextArrayItem();
+    bool NextArrayItem(); 
+    void EndArrayItem();
     void EndArray();
 
 private:
     nlohmann::json* m_root{};
     nlohmann::json* m_cursor{};
-    const nlohmann::json* m_array{ nullptr };
-    int m_index{ -1 };
+    std::vector<ArrayState> m_arrayStack;
     std::vector<nlohmann::json*> m_stack;
 };

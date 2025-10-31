@@ -145,6 +145,7 @@
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="DXHelper.h" />
+    <ClInclude Include="EditorUI.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="DTEngine.cpp" />
     <ClCompile Include="DX11Renderer.cpp" />
     <ClCompile Include="DXHelper.cpp" />
+    <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />

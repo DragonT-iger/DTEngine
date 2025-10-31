@@ -140,6 +140,9 @@
     <ClInclude Include="ReflectionMacros.h">
       <Filter>Reflection\Register</Filter>
     </ClInclude>
+    <ClInclude Include="EditorUI.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -198,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="ReflectionDatabase.cpp">
       <Filter>Reflection\Register</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorUI.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -79,10 +79,7 @@ static void ReadPropertyRecursive(
     }
 }
 
-static void DeserializeComponentProperties(
-    JsonReader& reader,
-    Component* comp, 
-    std::vector<FixupTask>& fixupList)
+static void DeserializeComponentProperties(JsonReader& reader, Component* comp, std::vector<FixupTask>& fixupList)
 {
     const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(comp->_GetTypeName());
     if (!info) return;
@@ -134,6 +131,8 @@ bool Scene::LoadFile(const std::string& fullPath)
         std::string goName = reader.ReadString("name", "GameObject");
         GameObject* go = CreateGameObject(goName);
 
+		std::cout << "Deserializing GameObject: " << goName << std::endl;
+
         uint64_t go_id = reader.ReadUInt64("id", 0);
         go->_SetID(go_id);
         go->SetTag(reader.ReadString("tag", "Untagged"));
@@ -170,12 +169,11 @@ bool Scene::LoadFile(const std::string& fullPath)
             idToComponentMap[comp_id] = newComp;
 
             DeserializeComponentProperties(reader, newComp, fixupList);
-
-            reader.EndArray();
+            reader.EndArrayItem();
         }
         reader.EndArray();
 
-        reader.EndArray();
+		reader.EndArrayItem();
     }
     reader.EndArray();
 
@@ -192,13 +190,17 @@ bool Scene::LoadFile(const std::string& fullPath)
             if (it != idToComponentMap.end())
             {
                 targetPtr = it->second; 
+				std::cout << "Fixup: Resolved targetID " << targetID << std::endl;
             }
             else
             {
                 std::cout << "Warning: Failed to find targetID " << targetID << std::endl;
             }
         }
-
+        else {
+			std::cout << "Fixup: targetID is 0, setting to nullptr" << std::endl;
+        }
+        
         task.property.m_setter(task.targetObject, &targetPtr);
     }
 
