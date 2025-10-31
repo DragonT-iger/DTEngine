@@ -190,16 +190,16 @@ bool Scene::LoadFile(const std::string& fullPath)
             if (it != idToComponentMap.end())
             {
                 targetPtr = it->second; 
-				std::cout << "Fixup: Resolved targetID " << targetID << std::endl;
+				//std::cout << "Fixup: Resolved targetID " << targetID << std::endl;
             }
             else
             {
                 std::cout << "Warning: Failed to find targetID " << targetID << std::endl;
             }
         }
-        else {
-			std::cout << "Fixup: targetID is 0, setting to nullptr" << std::endl;
-        }
+   //     else {
+			//std::cout << "Fixup: targetID is 0, setting to nullptr" << std::endl;
+   //     }
         
         task.property.m_setter(task.targetObject, &targetPtr);
     }

@@ -18,6 +18,9 @@ class Transform : public Component
 
 public:
 	Transform();
+
+	const Vector3& GetEditorEuler() const;
+
 	// Getter Setter
 	const Vector3& GetPosition();
 	const Vector3& GetRotationEuler();
@@ -64,8 +67,12 @@ private:
 
 	// 직렬화 해야 하는 값들
 
+	Vector3 m_editorEulerAngles; // 에디터용 임시 저장 변수
+
 	Vector3 m_position;
+	
 	Quaternion m_rotation;
+
 	Vector3 m_scale;
 
 	Transform* m_parent = nullptr;

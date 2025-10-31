@@ -9,6 +9,7 @@ BEGINPROPERTY(Transform)
 DTPROPERTY_ACCESSOR(Transform, m_position, GetPosition, SetPosition)
 DTPROPERTY_ACCESSOR(Transform, m_rotation, GetRotationQuat, SetRotationQuat)
 DTPROPERTY_ACCESSOR(Transform, m_scale, GetScale, SetScale)
+DTPROPERTY_ACCESSOR(Transform, m_editorEulerAngles, GetEditorEuler, SetRotationEuler)
 DTPROPERTY_SETTER(Transform, m_parent, SetParent)
 
 // DTPROPERTY로 해결이 안되는 경우들.
@@ -20,6 +21,7 @@ ENDPROPERTY()
 void Transform::ResetValue()
 {
 	m_position = { 0, 0, 0 };
+	m_editorEulerAngles = { 0, 0, 0 };
 	m_rotation = { 0, 0, 0 ,1 };
 	m_scale	   = { 1 ,1 ,1 };
 	MarkDirtyRecursive();
@@ -87,6 +89,11 @@ Transform::Transform()
 	ResetValue();
 }
 
+const Vector3& Transform::GetEditorEuler() const
+{
+	return m_editorEulerAngles;
+}
+
 const Vector3& Transform::GetPosition()
 {
 	return m_position;
@@ -133,12 +140,19 @@ void Transform::SetPosition(const Vector3& position)
 void Transform::SetRotationQuat(const Quaternion& rotation)
 {
 	m_rotation = rotation;
+
+	m_editorEulerAngles = QuaternionToEulerDeg_ZXY(m_rotation);
+
+
 	MarkDirtyRecursive();
 }
 
 void Transform::SetRotationEuler(const Vector3& rotation)
 {
-	m_rotation = EulerToQuaternion_ZXY(rotation);
+	m_editorEulerAngles = rotation;
+
+	m_rotation = EulerToQuaternion_ZXY(m_editorEulerAngles);
+
 	MarkDirtyRecursive();
 }
 

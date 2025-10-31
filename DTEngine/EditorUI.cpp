@@ -103,6 +103,14 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
+
+
+            if (prop.m_name == "m_editorEulerAngles")
+            {
+                continue;
+            }
+
+
             void* data = prop.m_getter(comp);
             const auto& type = prop.m_type;
             const char* name = prop.m_name.c_str();
@@ -124,25 +132,16 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                 if (tf && prop.m_name == "m_rotation")
                 {
+                    static int count = 0;
 
                     if (!ImGui::IsItemActive())
                     {
-                        m_cachedEulerRotation = tf->GetRotationEuler();
-
-                        
-                    }
-                    else {
-						std::cout << "Transform m_rotation is active." << std::endl;
+                        m_cachedEulerRotation = tf->GetEditorEuler();
                     }
 
                     if (ImGui::DragFloat3("m_rotation", &m_cachedEulerRotation.x, 0.5f))
                     {
                         tf->SetRotationEuler(m_cachedEulerRotation);
-
-                        std::cout << "Cached Euler Rotation: "
-                            << m_cachedEulerRotation.x << ", "
-                            << m_cachedEulerRotation.y << ", "
-                            << m_cachedEulerRotation.z << std::endl;
                     }
                 }
                 else
