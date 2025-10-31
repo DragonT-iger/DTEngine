@@ -18,8 +18,8 @@
 #include "ResourceManager.h"
 #include "RegisterCoreTypes.h"
 #include "EditorUI.h"
-//#include "Transform.h"
-//#include "GameObject.h"
+#include "Transform.h"
+#include "GameObject.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -84,26 +84,26 @@ bool Game::Initialize()
 	SceneManager::Instance().LoadScene("SampleScene");
 
 
-	//Scene testScene("TestScene");
+	Scene testScene("TestScene");
 
-	//GameObject* parentGO = testScene.CreateGameObject("Parent");
-	//Transform* parentTF = parentGO->GetTransform();
-	//parentTF->SetPosition(Vector3(1.0f, 0.0f, 0.0f));
-	//parentTF->SetRotationEuler(Vector3(0.0f, 45.0f, 0.0f));
-	//parentTF->SetScale(Vector3(1.0f, 2.0f, 1.0f));
+	GameObject* parentGO = testScene.CreateGameObject("Parent");
+	Transform* parentTF = parentGO->GetTransform();
+	parentTF->SetPosition(Vector3(1.0f, 0.0f, 0.0f));
+	parentTF->SetRotationEuler(Vector3(0.0f, 45.0f, 0.0f));
+	parentTF->SetScale(Vector3(1.0f, 2.0f, 1.0f));
 
-	//GameObject* childGO = testScene.CreateGameObject("Child");
-	//Transform* childTF = childGO->GetTransform();
-	//childTF->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
+	GameObject* childGO = testScene.CreateGameObject("Child");
+	Transform* childTF = childGO->GetTransform();
+	childTF->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
 
-	//childTF->SetParent(parentTF);
+	childTF->SetParent(parentTF);
 
-	//std::cout << "--- SAVING ---" << std::endl;
-	//std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
-	//std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
-	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
+	std::cout << "--- SAVING ---" << std::endl;
+	std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
+	std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
+	std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
 
-	//testScene.SaveFile("Scenes/my_test_scene.json");
+	testScene.SaveFile("Scenes/SampleScene.scene");
 
 
 

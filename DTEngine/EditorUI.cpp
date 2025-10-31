@@ -103,20 +103,72 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-
-
+            // [m_editorEulerAngles] 속성은 건너뛰기
             if (prop.m_name == "m_editorEulerAngles")
             {
                 continue;
             }
 
-
             void* data = prop.m_getter(comp);
             const auto& type = prop.m_type;
             const char* name = prop.m_name.c_str();
 
-            // Vector3 처리
-            if (type == typeid(Vector3))
+
+            // float
+            if (type == typeid(float))
+            {
+                float temp = *static_cast<float*>(data);
+                if (ImGui::DragFloat(name, &temp, 0.1f))
+                {
+                    prop.m_setter(comp, &temp);
+                }
+            }
+            // int
+            else if (type == typeid(int))
+            {
+                int temp = *static_cast<int*>(data);
+                if (ImGui::DragInt(name, &temp))
+                {
+                    prop.m_setter(comp, &temp);
+                }
+            }
+            // bool
+            else if (type == typeid(bool))
+            {
+                bool temp = *static_cast<bool*>(data);
+                if (ImGui::Checkbox(name, &temp))
+                {
+                    prop.m_setter(comp, &temp);
+                }
+            }
+            // uint64_t (ID 등)
+            else if (type == typeid(uint64_t))
+            {
+                // DragInt는 uint64_t를 지원하지 않으므로 InputScalar 사용
+                uint64_t temp = *static_cast<uint64_t*>(data);
+                if (ImGui::InputScalar(name, ImGuiDataType_U64, &temp, nullptr, nullptr, "%llu", ImGuiInputTextFlags_ReadOnly))
+                {
+                    // (읽기 전용이므로 Setter 호출 안 함)
+                }
+            }
+            // std::string
+            else if (type == typeid(std::string))
+            {
+                std::string temp = *static_cast<std::string*>(data);
+                char buffer[256]; // 임시 버퍼
+                strncpy_s(buffer, temp.c_str(), sizeof(buffer) - 1);
+                buffer[sizeof(buffer) - 1] = '\0'; // 널 종료 보장
+
+                if (ImGui::InputText(name, buffer, sizeof(buffer)))
+                {
+                    temp = buffer;
+                    prop.m_setter(comp, &temp);
+                }
+            }
+
+
+            // Vector3
+            else if (type == typeid(Vector3))
             {
                 Vector3 temp = *static_cast<Vector3*>(data);
                 if (ImGui::DragFloat3(name, &temp.x, 0.1f))
@@ -124,29 +176,31 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     prop.m_setter(comp, &temp);
                 }
             }
-
+            // Vector4 (추가)
+            else if (type == typeid(Vector4))
+            {
+                Vector4 temp = *static_cast<Vector4*>(data);
+                if (ImGui::DragFloat4(name, &temp.x, 0.1f))
+                {
+                    prop.m_setter(comp, &temp);
+                }
+            }
+            // Quaternion (m_rotation 특별 처리)
             else if (type == typeid(Quaternion))
             {
-                // 이 컴포넌트가 Transform인지 확인
                 Transform* tf = dynamic_cast<Transform*>(comp);
 
                 if (tf && prop.m_name == "m_rotation")
                 {
-                    static int count = 0;
-
-                    if (!ImGui::IsItemActive())
+                    // (m_cachedEulerRotation 로직은 유지)
+                    Vector3 displayEuler = tf->GetEditorEuler();
+                    if (ImGui::DragFloat3("Rotation", &displayEuler.x, 0.5f))
                     {
-                        m_cachedEulerRotation = tf->GetEditorEuler();
-                    }
-
-                    if (ImGui::DragFloat3("m_rotation", &m_cachedEulerRotation.x, 0.5f))
-                    {
-                        tf->SetRotationEuler(m_cachedEulerRotation);
+                        tf->SetRotationEuler(displayEuler);
                     }
                 }
-                else
+                else // m_rotation이 아닌 다른 쿼터니언
                 {
-                    // Transform이 아니거나 m_rotation이 아닌 Quaternion은 그냥 DragFloat4로 표시
                     Quaternion temp = *static_cast<Quaternion*>(data);
                     if (ImGui::DragFloat4(name, &temp.x, 0.1f))
                     {
@@ -154,14 +208,16 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     }
                 }
             }
-
+            // Transform* (포인터)
             else if (type == typeid(Transform*))
             {
                 //Transform* parentTf = *static_cast<Transform**>(data);
                 //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
-            // ...
+            else {
+				std::cout << "타입 미구현: " << type.name() << std::endl;
+            }
         }
     }
 }

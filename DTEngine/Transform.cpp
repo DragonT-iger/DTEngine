@@ -9,6 +9,8 @@ BEGINPROPERTY(Transform)
 DTPROPERTY_ACCESSOR(Transform, m_position, GetPosition, SetPosition)
 DTPROPERTY_ACCESSOR(Transform, m_rotation, GetRotationQuat, SetRotationQuat)
 DTPROPERTY_ACCESSOR(Transform, m_scale, GetScale, SetScale)
+DTPROPERTY(Transform, abc)
+DTPROPERTY(Transform, kkkl)
 DTPROPERTY_ACCESSOR(Transform, m_editorEulerAngles, GetEditorEuler, SetRotationEuler)
 DTPROPERTY_SETTER(Transform, m_parent, SetParent)
 
