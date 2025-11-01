@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "JsonIO.h"
 #include <nlohmann/json.hpp>
 #include <fstream>

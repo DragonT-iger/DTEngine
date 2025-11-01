@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "WindowBase.h"
 
 LRESULT CALLBACK WindowBase::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

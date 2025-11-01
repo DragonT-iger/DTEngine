@@ -103,7 +103,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-            // [m_editorEulerAngles] ¼Ó¼ºÀº °Ç³Ê¶Ù±â
+            // [m_editorEulerAngles] ì†ì„±ì€ ê±´ë„ˆë›°ê¸°
             if (prop.m_name == "m_editorEulerAngles")
             {
                 continue;
@@ -141,23 +141,23 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     prop.m_setter(comp, &temp);
                 }
             }
-            // uint64_t (ID µî)
+            // uint64_t (ID ë“±)
             else if (type == typeid(uint64_t))
             {
-                // DragInt´Â uint64_t¸¦ Áö¿øÇÏÁö ¾ÊÀ¸¹Ç·Î InputScalar »ç¿ë
+                // DragIntëŠ” uint64_të¥¼ ì§€ì›í•˜ì§€ ì•Šìœ¼ë¯€ë¡œ InputScalar ì‚¬ìš©
                 uint64_t temp = *static_cast<uint64_t*>(data);
                 if (ImGui::InputScalar(name, ImGuiDataType_U64, &temp, nullptr, nullptr, "%llu", ImGuiInputTextFlags_ReadOnly))
                 {
-                    // (ÀĞ±â Àü¿ëÀÌ¹Ç·Î Setter È£Ãâ ¾È ÇÔ)
+                    // (ì½ê¸° ì „ìš©ì´ë¯€ë¡œ Setter í˜¸ì¶œ ì•ˆ í•¨)
                 }
             }
             // std::string
             else if (type == typeid(std::string))
             {
                 std::string temp = *static_cast<std::string*>(data);
-                char buffer[256]; // ÀÓ½Ã ¹öÆÛ
+                char buffer[256]; // ì„ì‹œ ë²„í¼
                 strncpy_s(buffer, temp.c_str(), sizeof(buffer) - 1);
-                buffer[sizeof(buffer) - 1] = '\0'; // ³Î Á¾·á º¸Àå
+                buffer[sizeof(buffer) - 1] = '\0'; // ë„ ì¢…ë£Œ ë³´ì¥
 
                 if (ImGui::InputText(name, buffer, sizeof(buffer)))
                 {
@@ -176,7 +176,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     prop.m_setter(comp, &temp);
                 }
             }
-            // Vector4 (Ãß°¡)
+            // Vector4 (ì¶”ê°€)
             else if (type == typeid(Vector4))
             {
                 Vector4 temp = *static_cast<Vector4*>(data);
@@ -185,21 +185,21 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     prop.m_setter(comp, &temp);
                 }
             }
-            // Quaternion (m_rotation Æ¯º° Ã³¸®)
+            // Quaternion (m_rotation íŠ¹ë³„ ì²˜ë¦¬)
             else if (type == typeid(Quaternion))
             {
                 Transform* tf = dynamic_cast<Transform*>(comp);
 
                 if (tf && prop.m_name == "m_rotation")
                 {
-                    // (m_cachedEulerRotation ·ÎÁ÷Àº À¯Áö)
+                    // (m_cachedEulerRotation ë¡œì§ì€ ìœ ì§€)
                     Vector3 displayEuler = tf->GetEditorEuler();
                     if (ImGui::DragFloat3("Rotation", &displayEuler.x, 0.5f))
                     {
                         tf->SetRotationEuler(displayEuler);
                     }
                 }
-                else // m_rotationÀÌ ¾Æ´Ñ ´Ù¸¥ ÄõÅÍ´Ï¾ğ
+                else // m_rotationì´ ì•„ë‹Œ ë‹¤ë¥¸ ì¿¼í„°ë‹ˆì–¸
                 {
                     Quaternion temp = *static_cast<Quaternion*>(data);
                     if (ImGui::DragFloat4(name, &temp.x, 0.1f))
@@ -208,7 +208,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     }
                 }
             }
-            // Transform* (Æ÷ÀÎÅÍ)
+            // Transform* (í¬ì¸í„°)
             else if (type == typeid(Transform*))
             {
                 //Transform* parentTf = *static_cast<Transform**>(data);
@@ -216,7 +216,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
             else {
-				std::cout << "Å¸ÀÔ ¹Ì±¸Çö: " << type.name() << std::endl;
+				std::cout << "íƒ€ì… ë¯¸êµ¬í˜„: " << type.name() << std::endl;
             }
         }
     }
