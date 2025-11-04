@@ -48,7 +48,7 @@ private: \
 
 
 
-// Á÷Á¢ Á¢±Ùµµ °¡´ÉÇÏÁö¸¸ ´ç¿¬È÷ Ä¸½¶È­°¡ ƒÆÁü
+// ì§ì ‘ ì ‘ê·¼ë„ ê°€ëŠ¥í•˜ì§€ë§Œ ë‹¹ì—°íˆ ìº¡ìŠí™”ê°€ ÂƒíŒ?
 
 #define DTPROPERTY_ACCESSOR(CLASS_NAME, MEMBER_NAME, GETTER_FUNC, SETTER_FUNC) \
     ReflectionDatabase::Instance().RegisterDTPROPERTY(#CLASS_NAME, #MEMBER_NAME, \
@@ -62,7 +62,7 @@ private: \
             ); \
         });
 
-// Getter Setter ÇÔ¼ö È£Ãâ TransformÀ» Á÷Á¢ Á¢±ÙÇÏ¸é ¾ÈµÊ
+// Getter Setter í•¨ìˆ˜ í˜¸ì¶œ Transformì„ ì§ì ‘ ì ‘ê·¼í•˜ë©´ ì•ˆë¨
 
 
 

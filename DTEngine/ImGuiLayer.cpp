@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "ImGuiLayer.h"
 #include "DX11Renderer.h"
 

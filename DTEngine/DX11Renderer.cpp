@@ -1,4 +1,4 @@
-﻿#include "pch.h" 
+#include "pch.h" 
 #include "DX11Renderer.h"
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX

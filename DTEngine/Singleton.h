@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // Meyers Singleton (C++11 thread-safe)
 template <typename T>

@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include <cassert>
 #include "SceneManager.h"
 #include "Scene.h"

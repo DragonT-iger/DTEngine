@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <exception>
 #include <cstdio>
 #define WIN32_LEAN_AND_MEAN

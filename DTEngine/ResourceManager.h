@@ -7,7 +7,7 @@
 
 class DX11Renderer;
 
-// ÇÑ¹ø ·ÎµåµÈ ¸®¼Ò½º´Â Ä³½ÌµÈ´Ù.
+// í•œë²ˆ ë¡œë“œëœ ë¦¬ì†ŒìŠ¤ëŠ” ìºì‹±ëœë‹¤.
 
 class ResourceManager : public Singleton<ResourceManager>
 {

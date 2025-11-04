@@ -18,7 +18,7 @@ bool AssetDatabase::Initialize()
 }
 
 
-//ÆÄÀÏ ÀÌ¸§ ignore 
+//íŒŒì¼ ì´ë¦„ ignore 
 void AssetDatabase::ScanDirectory(const std::string& directoryPath)
 {
     static const std::set<std::string> ignoredExtensions = {
@@ -64,7 +64,7 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
     }
 }
 
-// .meta ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ°í Ã³¸®
+// .meta íŒŒì¼ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ê³  ì²˜ë¦¬
 void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
 {
     std::string metaPath = assetPath + ".meta";
@@ -126,7 +126,7 @@ uint64_t AssetDatabase::GetIDFromPath(const std::string& path) const
     {
         return it->second;
     }
-    return 0; // Å½»ö ½ÇÆĞ
+    return 0; // íƒìƒ‰ ì‹¤íŒ¨
 }
 
 std::string AssetDatabase::GetPathFromID(uint64_t id) const
@@ -136,5 +136,5 @@ std::string AssetDatabase::GetPathFromID(uint64_t id) const
     {
         return it->second;
     }
-    return ""; // °æ·Î ¾øÀ½
+    return ""; // ê²½ë¡œ ì—†ìŒ
 }

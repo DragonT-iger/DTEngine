@@ -6,9 +6,9 @@
 #include <memory>
 #include <iostream>
 
-// Àå±âÀûÀ¸·Î ºÃÀ»¶§´Â StringÀ¸·Î ºñ±³ÇÏ´Â°Ç ¼º´ÉÀÌ ´À¸² ÀÏ´ÜÀº Å« ¹®Á¦¾ø´Ù¸é ³Ñ±â±â
-// idManager·Î ¸¸µé±î ÀÌ°Íµµ?
-// CreateÇÒ¶§ ¼ÒÀ¯±ÇÀ» Àá½Ã °¡Áö°í ÀÖ´Ù°¡ move·Î Scene¿¡°Ô ¼ÒÀ¯±ÇÀ» ³Ñ±æ¿¹Á¤
+// ì¥ê¸°ì ìœ¼ë¡œ ë´¤ì„ë•ŒëŠ” Stringìœ¼ë¡œ ë¹„êµí•˜ëŠ”ê±´ ì„±ëŠ¥ì´ ëŠë¦¼ ì¼ë‹¨ì€ í° ë¬¸ì œì—†ë‹¤ë©´ ë„˜ê¸°ê¸°
+// idManagerë¡œ ë§Œë“¤ê¹Œ ì´ê²ƒë„?
+// Createí• ë•Œ ì†Œìœ ê¶Œì„ ì ì‹œ ê°€ì§€ê³  ìˆë‹¤ê°€ moveë¡œ Sceneì—ê²Œ ì†Œìœ ê¶Œì„ ë„˜ê¸¸ì˜ˆì •
 
 class Component; 
 
@@ -19,7 +19,7 @@ class ComponentFactory : public Singleton<ComponentFactory>
 public:
     void Register(const std::string& typeName, ComponentCreator creator) {
         m_creators[typeName] = creator;
-        std::cout << typeName << " µî·Ï" << std::endl;
+        std::cout << typeName << " ë“±ë¡" << std::endl;
     }
 
     std::unique_ptr<Component> Create(const std::string& typeName) {
