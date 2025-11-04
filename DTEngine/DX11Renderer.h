@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <wrl/client.h> 
-
+#include "Singleton.h"
 
 
 struct HWND__;
@@ -16,7 +16,7 @@ struct ID3D11Texture2D;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
 
-class DX11Renderer
+class DX11Renderer : public Singleton<DX11Renderer>
 {
 public:
     DX11Renderer();
@@ -40,8 +40,17 @@ public:
 
     int  Width()  const { return m_width; }
     int  Height() const { return m_height; }
-    bool IsVSync() const { return m_vsync; }
-    void ToggleVSync() { m_vsync = !m_vsync; }
+
+    bool GetVsync() { return m_vsync; }
+    void SetVsync(bool vsync) { m_vsync = vsync; }
+
+
+    float GetAspectRatio() const
+    {
+        if (m_height == 0) return 1.0f;
+        return static_cast<float>(m_width) / static_cast<float>(m_height);
+    }
+
 
 private:
     bool CreateDeviceAndSwapchain();

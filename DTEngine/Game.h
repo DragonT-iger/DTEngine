@@ -3,8 +3,6 @@
 #include <memory>
 
 #include "WindowBase.h"
-
-class DX11Renderer; 
 class GameTimer;
 class ImGuiLayer;
 class EditorUI;
@@ -31,7 +29,6 @@ protected:
 private: 
 	float backBufferColor[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 
-	std::unique_ptr<DX11Renderer> m_renderer;
 	std::unique_ptr<GameTimer> m_timer;
 	std::unique_ptr<ImGuiLayer> m_imgui;
 	std::unique_ptr<EditorUI> m_editorUI;

@@ -36,14 +36,13 @@ bool Game::Initialize()
 		return false;
 	}
 
-	m_renderer = std::make_unique<DX11Renderer>();
-	if (!m_renderer->Initialize(GetHwnd(), initW, initH)) {
+	if (!DX11Renderer::Instance().Initialize(GetHwnd(), initW, initH)) {
 		assert(false && "DX11Renderer 초기화 실패");
 		return false;
 	}
 
 	m_imgui = std::make_unique<ImGuiLayer>();
-	if (!m_imgui->Initialize(m_renderer.get())) {
+	if (!m_imgui->Initialize(&DX11Renderer::Instance())) {
 		assert(false && "ImGui 초기화 실패");
 		return false;
 	}
@@ -82,7 +81,6 @@ bool Game::Initialize()
 
 	SceneManager::Instance().RegisterScene("SampleScene", scene);
 	SceneManager::Instance().LoadScene("SampleScene");
-
 
 	Scene testScene("TestScene");
 
@@ -129,7 +127,7 @@ void Game::Release()
 {
 	if (m_editorUI) { m_editorUI.reset(); }
 	if (m_imgui) { m_imgui->Shutdown(); m_imgui.reset(); }
-	if (m_renderer) { m_renderer->Destroy(); m_renderer.reset(); }
+	DX11Renderer::Instance().Destroy();
 	__super::Destroy();
 }
 
@@ -138,7 +136,7 @@ void Game::LifeCycle(float deltaTime)
 {
 	SceneManager::Instance().ProcessSceneChange();
 
-	m_renderer->BeginFrame(backBufferColor);
+	DX11Renderer::Instance().BeginFrame(backBufferColor);
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
 
@@ -172,8 +170,8 @@ void Game::LifeCycle(float deltaTime)
 
 	m_imgui->Render();
 
-	m_renderer->EndFrame();
-	m_renderer->Present();
+	DX11Renderer::Instance().EndFrame();
+	DX11Renderer::Instance().Present();
 
 }
 
@@ -189,9 +187,8 @@ bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
 
 void Game::OnResize(int width, int height)
 {
-	if (!m_renderer) return;
 	if (width <= 0 || height <= 0) return;
-	m_renderer->Resize(width, height);
+	DX11Renderer::Instance().Resize(width, height);
 }
 
 void Game::OnClose()
