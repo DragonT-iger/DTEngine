@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Camera.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -59,9 +59,8 @@ void Camera::SetThisCameraToMain()
         scene->SetMainCamera(this);
     }
     else {
-        std::cout << "Two Camera exists in this Scene" << std::endl;
+        std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
     }
-
 
 }
 

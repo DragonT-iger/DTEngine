@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <d3d11.h>
 #include <wrl/client.h>
@@ -13,6 +13,7 @@ public:
 
     bool LoadFile(const std::string& fullPath) override;
     bool SaveFile(const std::string& fullPath) override;
+    void Unload() override;
 
     bool CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
