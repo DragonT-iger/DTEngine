@@ -23,7 +23,7 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
 {
     static const std::set<std::string> ignoredExtensions = {
         ".meta", ".h", ".cpp",
-        ".vcxproj", ".filters", ".user"
+        ".vcxproj", ".filters", ".user" , ".orig"
     };
     static const std::set<std::string> ignoredFileNames = {
         "packages.config"

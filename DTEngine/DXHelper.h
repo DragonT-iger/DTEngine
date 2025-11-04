@@ -35,7 +35,6 @@ public:
             throw com_exception(hr);
     }
 
-    // (선택) hr 검사하고 문자열 리턴하는 함수
     static inline const char* HrToString(HRESULT hr)
     {
         static char buf[64];

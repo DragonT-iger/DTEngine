@@ -120,7 +120,7 @@ inline T* GameObject::AddComponent(Args&&... args)
     auto comp = std::make_unique<T>(std::forward<Args>(args)...);
     T* raw = comp.get();
 
-    raw->SetOwner(this);
+    raw->_SetOwner(this);
 	raw->_SetID(IDManager::Instance().GetNewUniqueID());
 
 

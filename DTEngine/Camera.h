@@ -1,13 +1,18 @@
 #pragma once
 #include "MonoBehaviour.h"
 #include <SimpleMath.h>
+#include "SimpleMathHelper.h"
+
 
 using Matrix = DirectX::SimpleMath::Matrix;
 using Vector3 = DirectX::SimpleMath::Vector3;
+using Vector4 = DirectX::SimpleMath::Vector4;
 
 class Camera : public MonoBehaviour
 {
+    DTGENERATED_BODY(Camera);
 public:
+
     Camera();
     virtual ~Camera() = default;
 
@@ -20,6 +25,17 @@ public:
     const Matrix& GetViewMatrix() const { return m_view; }
     const Matrix& GetProjectionMatrix() const { return m_projection; }
 
+    void SetThisCameraToMain();
+
+
+
+    const float& GetFovY() { return SimpleMathHelper::Rad2Deg(m_fovY); }
+    void SetFovY(const float& fovY) { m_fovY = SimpleMathHelper::Deg2Rad(fovY); }
+
+    const Vector4& GetClearColor() const { return m_clearColor; }
+    void SetClearColor(const Vector4& color) { m_clearColor = color; }
+
+
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -28,7 +44,11 @@ private:
     Matrix m_projection;
 
     float m_lastAspectRatio = -1.0f;
-    float m_fovY = DirectX::XMConvertToRadians(60.0f);
+    float m_fovY = SimpleMathHelper::Deg2Rad(60.0f);
     float m_nearZ = 0.1f;
     float m_farZ = 1000.0f;
+
+
+    Vector4 m_clearColor = { 0.2,0.2,0.2,0.2 };
+
 };

@@ -10,6 +10,7 @@
 
 
 class GameObject;
+class Camera;
 
 class Scene : public IResource
 {
@@ -41,9 +42,14 @@ public:
 
     const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const { return m_gameObjects; }
 
+    Camera* GetMainCamera();
+    void SetMainCamera(Camera* mainCamera);
+
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
     std::string m_name;
+
+    Camera* m_mainCamera;
 
 
 

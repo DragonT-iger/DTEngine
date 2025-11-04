@@ -20,6 +20,7 @@
 #include "EditorUI.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "Camera.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -27,6 +28,10 @@ Game::~Game() = default;
 
 bool Game::Initialize()
 {
+
+	SetConsoleOutputCP(65001);
+	SetConsoleCP(65001);
+
 	m_timer = std::make_unique<GameTimer>();
 	m_timer->Reset();
 
@@ -82,26 +87,30 @@ bool Game::Initialize()
 	SceneManager::Instance().RegisterScene("SampleScene", scene);
 	SceneManager::Instance().LoadScene("SampleScene");
 
-	Scene testScene("TestScene");
+	//Scene testScene("TestScene");
 
-	GameObject* parentGO = testScene.CreateGameObject("Parent");
-	Transform* parentTF = parentGO->GetTransform();
-	parentTF->SetPosition(Vector3(1.0f, 0.0f, 0.0f));
-	parentTF->SetRotationEuler(Vector3(0.0f, 45.0f, 0.0f));
-	parentTF->SetScale(Vector3(1.0f, 2.0f, 1.0f));
+	//GameObject* parentGO = testScene.CreateGameObject("Parent");
+	//Transform* parentTF = parentGO->GetTransform();
+	//parentTF->SetPosition(Vector3(1.0f, 0.0f, 0.0f));
+	//parentTF->SetRotationEuler(Vector3(0.0f, 45.0f, 0.0f));
+	//parentTF->SetScale(Vector3(1.0f, 2.0f, 1.0f));
 
-	GameObject* childGO = testScene.CreateGameObject("Child");
-	Transform* childTF = childGO->GetTransform();
-	childTF->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
+	//GameObject* childGO = testScene.CreateGameObject("Child");
+	//Transform* childTF = childGO->GetTransform();
+	//childTF->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
 
-	childTF->SetParent(parentTF);
+	//childTF->SetParent(parentTF);
 
-	std::cout << "--- SAVING ---" << std::endl;
-	std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
-	std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
-	std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
+	//GameObject* camera = testScene.CreateGameObject("Camera");
+	//camera->GetTransform()->SetPosition({ 1,1,1 });
+	//camera->AddComponent<Camera>();
 
-	testScene.SaveFile("Scenes/SampleScene.scene");
+	//std::cout << "--- SAVING ---" << std::endl;
+	//std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
+	//std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
+	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
+
+	//testScene.SaveFile("Scenes/SampleScene.scene");
 
 
 
@@ -136,14 +145,34 @@ void Game::LifeCycle(float deltaTime)
 {
 	SceneManager::Instance().ProcessSceneChange();
 
-	DX11Renderer::Instance().BeginFrame(backBufferColor);
+
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
+
 
 	if (!scene) {
 		std::cout << "현재 활성화된 씬이 없음" << std::endl;
 		return;
 	}
+
+	Camera* mainCamera = scene->GetMainCamera();
+
+	const float* clearColor;
+
+	if (mainCamera != nullptr) {
+		clearColor = &mainCamera->GetClearColor().x;
+	}
+	else
+	{
+		static const float defaultColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		clearColor = defaultColor;
+		std::cout << "메인 카메라가 존재하지 않습니다" << std::endl;
+	}
+
+
+
+	DX11Renderer::Instance().BeginFrame(clearColor);
+
 
 	static float elapsedTime = 0.0f;
 	static float fixedDeltaTime = 0.02f;

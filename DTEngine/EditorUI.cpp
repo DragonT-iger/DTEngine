@@ -2,7 +2,7 @@
 #include "EditorUI.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "Component.h"
+#include "MonoBehaviour.h"
 #include "Transform.h" 
 #include "ReflectionDatabase.h"
 
@@ -83,8 +83,44 @@ void EditorUI::DrawInspectorWindow()
         return;
     }
 
+    bool isActive = m_selectedGameObject->IsActive();
+    if (ImGui::Checkbox("##ActiveCheckbox", &isActive)) 
+    {
+        m_selectedGameObject->SetActive(isActive);
+    }
 
+    ImGui::SameLine();
+
+    char nameBuffer[128];
+    strncpy_s(nameBuffer, m_selectedGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
+    nameBuffer[sizeof(nameBuffer) - 1] = '\0'; 
+
+    ImGui::SetNextItemWidth(150); 
+    if (ImGui::InputText("##NameInput", nameBuffer, sizeof(nameBuffer)))
+    {
+        m_selectedGameObject->SetName(nameBuffer);
+    }
+
+    ImGui::SameLine();
+    ImGui::Spacing();
+    ImGui::SameLine();
+
+    char tagBuffer[128];
+    strncpy_s(tagBuffer, m_selectedGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
+    tagBuffer[sizeof(tagBuffer) - 1] = '\0';
+
+    ImGui::SetNextItemWidth(80);
+    if (ImGui::InputText("Tag", tagBuffer, sizeof(tagBuffer)))
+    {
+        m_selectedGameObject->SetTag(tagBuffer);
+    }
+
+    ImGui::Separator();
+    
     DrawComponentProperties(m_selectedGameObject->GetTransform());
+
+   
+
     for (const auto& comp : m_selectedGameObject->_GetComponents())
     {
         if (comp) DrawComponentProperties(comp.get());
@@ -96,14 +132,35 @@ void EditorUI::DrawInspectorWindow()
 void EditorUI::DrawComponentProperties(Component* comp)
 {
     if (!comp) return;
+
+    ImGui::PushID(comp);
+
     const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(comp->_GetTypeName());
     if (!info) return;
 
-    if (ImGui::CollapsingHeader(comp->_GetTypeName()))
+    bool header_open = false;
+    bool compIsActive = true;
+
+    MonoBehaviour* mb = dynamic_cast<MonoBehaviour*>(comp);
+    if (mb)
+    {
+        compIsActive = mb->IsActive();
+
+        std::string chkID = "##active_";
+        chkID += comp->_GetTypeName();
+
+        if (ImGui::Checkbox(chkID.c_str(), &compIsActive))
+        {
+            mb->SetActive(compIsActive);
+        }
+        ImGui::SameLine(); 
+    }
+
+
+    if (!ImGui::CollapsingHeader(comp->_GetTypeName()))
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-            // [m_editorEulerAngles] 속성은 건너뛰기
             if (prop.m_name == "m_editorEulerAngles")
             {
                 continue;
@@ -220,4 +277,6 @@ void EditorUI::DrawComponentProperties(Component* comp)
             }
         }
     }
+
+    ImGui::PopID();
 }

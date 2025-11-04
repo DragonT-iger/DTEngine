@@ -211,7 +211,6 @@ bool Scene::SaveFile(const std::string& solutionPath)
 {
     JsonWriter writer;
 
-
     std::string assetPath = ResourceManager::Instance().ResolveFullPath(solutionPath);
 
     writer.BeginArray("gameObjects");
@@ -244,6 +243,10 @@ bool Scene::SaveFile(const std::string& solutionPath)
             if (!comp) continue;
 
             writer.NextArrayItem();
+
+            writer.Write("typeName", comp->_GetTypeName());
+            
+            writer.Write("id", comp->_GetID());
 
             comp->Serialize(writer);
 
@@ -328,6 +331,16 @@ void Scene::LateUpdate(float deltaTime)
     for (auto& obj : m_gameObjects) obj->LateUpdate(deltaTime);
     m_isIterating = false;
     FlushPending();
+}
+
+Camera* Scene::GetMainCamera()
+{
+    return m_mainCamera;
+}
+
+void Scene::SetMainCamera(Camera* mainCamera)
+{
+    m_mainCamera = mainCamera;
 }
 
 void Scene::FlushPending()

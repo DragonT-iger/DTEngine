@@ -5,20 +5,30 @@
 #include "Scene.h"
 #include "DX11Renderer.h"
 #include "SceneManager.h"
+#include "SimpleMathHelper.h"
+
+BEGINPROPERTY(Camera)
+
+DTPROPERTY_ACCESSOR(Camera, m_fovY, GetFovY, SetFovY)
+DTPROPERTY(Camera, m_nearZ)
+DTPROPERTY(Camera, m_farZ)
+DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
+
+ENDPROPERTY()
+
+
+
 
 Camera::Camera()
-    : m_view(Matrix::Identity), m_projection(Matrix::Identity)
+    : m_view(SimpleMathHelper::IdentityMatrix()), m_projection(SimpleMathHelper::IdentityMatrix())
 {
 }
 
 void Camera::Awake()
 {
-    Scene* ownerScene = SceneManager::Instance().GetActiveScene();
+    SetThisCameraToMain();
 
-    //if (ownerScene && ownerScene->GetMainCamera() == nullptr)
-    //{
-    //    ownerScene->_SetMainCamera(this);
-    //}
+    UpdateViewMatrix();
 }
 
 void Camera::LateUpdate(float deltaTime)
@@ -40,6 +50,22 @@ void Camera::SetProjectionOrthographic(float viewWidth, float viewHeight, float 
 {
     m_projection = Matrix::CreateOrthographic(viewWidth, viewHeight, nearZ, farZ);
 }
+
+void Camera::SetThisCameraToMain()
+{
+    Scene* scene = SceneManager::Instance().GetActiveScene();
+
+    if (scene->GetMainCamera() == nullptr) {
+        scene->SetMainCamera(this);
+    }
+    else {
+        std::cout << "Two Camera exists in this Scene" << std::endl;
+    }
+
+
+}
+
+
 
 void Camera::UpdateViewMatrix()
 {

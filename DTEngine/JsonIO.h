@@ -24,6 +24,7 @@ public:
     void EndArrayItem();
 
     void Write(const char* name, const std::string& v);
+    void Write(const char* name, const char* v);
     void Write(const char* name, bool v);
     void Write(const char* name, float v);
     void Write(const char* name, int v);

@@ -25,7 +25,7 @@ public:
     bool Initialize(HWND hwnd, int width, int height, bool vsync = false);
     void Resize(int width, int height);
 
-    void BeginFrame(const float clearColor[4]/*, bool clearDepth = true*/);
+    void BeginFrame(const float clearColor[4]);
     void EndFrame();
     void Present();
 
@@ -51,7 +51,6 @@ public:
         return static_cast<float>(m_width) / static_cast<float>(m_height);
     }
 
-
 private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
@@ -76,4 +75,5 @@ private:
     int   m_width = 0;
     int   m_height = 0;
     bool  m_vsync = false;
+
 };
