@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <wrl/client.h> 
 #include "Singleton.h"
+#include <SimpleMath.h>
+
+using Matrix = DirectX::SimpleMath::Matrix;
 
 
 struct HWND__;
@@ -15,6 +18,7 @@ struct IDXGISwapChain1;
 struct ID3D11Texture2D;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
+struct ID3D11Buffer;
 
 class DX11Renderer : public Singleton<DX11Renderer>
 {
@@ -24,6 +28,8 @@ public:
 
     bool Initialize(HWND hwnd, int width, int height, bool vsync = false);
     void Resize(int width, int height);
+
+    void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);
 
     void BeginFrame(const float clearColor[4]);
     void EndFrame();
@@ -56,6 +62,14 @@ private:
     void CreateBackbuffers(int width, int height);
     void ReleaseBackbuffers();
 
+
+    __declspec(align(16))
+        struct CBuffer_Frame_Data
+    {
+        Matrix ViewTM;
+        Matrix ProjectionTM;
+    };
+
 private:
     // Platform
     HWND m_hwnd = nullptr;
@@ -70,6 +84,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_rtv;
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame;
 
     // State
     int   m_width = 0;

@@ -131,6 +131,9 @@ Component* GameObject::AddComponent(const std::string& typeName)
 
     Component* raw = newComponent.get();
 
+    raw->_SetOwner(this);
+    raw->_SetID(IDManager::Instance().GetNewUniqueID());
+
     m_components.emplace_back(std::move(newComponent));
 
     return raw;

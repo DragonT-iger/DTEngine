@@ -56,6 +56,9 @@ Client/imgui.ini
 
 .vs
 
+*.cso
+*.cso.meta
+
 # temporary files
 
 

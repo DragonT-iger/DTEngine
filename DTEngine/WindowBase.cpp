@@ -35,7 +35,7 @@ bool WindowBase::Create(const wchar_t* windowName, int width, int height,
 {
     WNDCLASSEXW wc{}; wc.cbSize = sizeof(wc);
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc = &WindowBase::WndProc; // ★ 멤버 정적 함수 등록
+    wc.lpfnWndProc = &WindowBase::WndProc;
     wc.hInstance = ::GetModuleHandleW(nullptr);
     wc.hCursor = ::LoadCursorW(nullptr, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
@@ -85,7 +85,7 @@ bool WindowBase::ResizeWindow(int width, int height, int posX, int posY)
     RECT desk{}; ::GetClientRect(::GetDesktopWindow(), &desk);
     int cx = desk.right / 2 - width / 2;
     int cy = desk.bottom / 2 - height / 2;
-    ::MoveWindow((HWND)m_hWnd, cx + posX, cy + posY, width, height, TRUE);
+    ::MoveWindow((HWND)m_hWnd, cx + posX, cy + posY, newWidth, newHeight, TRUE);
 
 
     return true;

@@ -3,6 +3,7 @@
 
 class GameObject;
 class JsonWriter;
+class Transform;
 #include "ReflectionMacros.h"
 
 class Component {
@@ -19,6 +20,8 @@ public:
 
     template<typename T>
     T* GetComponent() const;
+
+    Transform* GetTransform();
 
 
     // ----------------- 엔진 전용 -------------------

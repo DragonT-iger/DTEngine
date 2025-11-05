@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <cassert>
+#include <iostream>
 #include "SceneManager.h"
 #include "Scene.h"
 

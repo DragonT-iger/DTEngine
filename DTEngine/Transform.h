@@ -36,6 +36,7 @@ public:
 	void SetParent(Transform* parent, bool worldPositionStays = true);
 	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 수정주의
 
+
 	const Vector3 Forward();
 	const Vector3 Right()  ;
 	const Vector3 Up()     ;
@@ -47,13 +48,22 @@ public:
 
 	const std::vector<Transform*>& GetChildren() const { return m_children; }
 
+
+
+
+
+	// 이것도 엔진에서 전용으로 하는걸 생각하고 푼거임
+
+	const Matrix& GetLocalMatrix();
+	const Matrix& GetWorldMatrix();
+	const Matrix& GetWorldInverseTransposeMatrix();
+
 private:
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
 	void AddChild(Transform* child);
 	void RemoveChild(Transform* child);
 
-	const Matrix& GetLocalMatrix();
-	const Matrix& GetWorldMatrix();
+	
 
 	void UpdateMatrices();
 

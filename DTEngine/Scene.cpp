@@ -117,6 +117,19 @@ bool Scene::LoadFile(const std::string& fullPath)
     if (!rd) return false;
     JsonReader& reader = *rd;
 
+
+    try
+    {
+        std::filesystem::path p(fullPath);
+        m_name = p.stem().string(); 
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Warning: Could not parse scene name from path. " << e.what() << std::endl;
+        
+        m_name = "ErrorSceneName";
+    }
+
     // --- Pass 1: 객체 생성, ID 매핑, 값 설정 ---
 
 
@@ -285,7 +298,6 @@ void Scene::Destroy(GameObject* object)
 
 void Scene::Awake()
 {
-    Initialize();
 
     m_phase = ScenePhase::Awake;
     m_isIterating = true;

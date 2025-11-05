@@ -27,8 +27,6 @@ public:
     GameObject* FindGameObject(std::string name);
     void Destroy(GameObject* object);
 
-    virtual void Initialize() {} // 게임오브젝트 등 처음에 배치되어 있는거 초기화 해주는 함수
-
     // 엔진 전용 public 함수들
 
     GameObject* CreateGameObject(const std::string& name = "GameObject");
@@ -44,6 +42,8 @@ public:
 
     Camera* GetMainCamera();
     void SetMainCamera(Camera* mainCamera);
+
+    const std::string& GetName() const { return m_name; }
 
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;

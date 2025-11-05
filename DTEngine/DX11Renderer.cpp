@@ -9,6 +9,7 @@
 #include <wrl/client.h>
 #include <cassert>
 #include <stdexcept>
+#include <iostream>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -29,6 +30,17 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_hwnd = hwnd; m_width = width; m_height = height; m_vsync = vsync;
     if (!m_hwnd) return false;
     if (!CreateDeviceAndSwapchain()) return false;
+
+
+    D3D11_BUFFER_DESC cbDesc = {};
+    cbDesc.ByteWidth = sizeof(CBuffer_Frame_Data);
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
     CreateBackbuffers(width, height);
     return true;
 }
@@ -44,6 +56,23 @@ void DX11Renderer::Resize(int width, int height)
 
     CreateBackbuffers(width, height);
     m_width = width; m_height = height;
+}
+ 
+void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_frame.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    CBuffer_Frame_Data* dataPtr = static_cast<CBuffer_Frame_Data*>(mappedData.pData);
+
+    dataPtr->ViewTM = viewTM.Transpose();
+    dataPtr->ProjectionTM = projectionTM.Transpose();
+
+    m_context->Unmap(m_cbuffer_frame.Get(), 0);
+
+    m_context->VSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
+    m_context->PSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
 }
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
@@ -67,6 +96,8 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
 void DX11Renderer::EndFrame()
 {
+
+    //std::cout << m_width << " " << m_height << std::endl;
     // 필요 시 파이프라인 언바인드/커맨드 종료 등
 }
 
@@ -85,6 +116,7 @@ void DX11Renderer::SetFullscreen(bool enable)
 void DX11Renderer::Destroy()
 {
     ReleaseBackbuffers();
+    m_cbuffer_frame.Reset();
     m_swapchain.Reset();
     m_context.Reset();
     m_device.Reset();
@@ -167,9 +199,13 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+    D3D11_TEXTURE2D_DESC rtvDesc;
+    m_backbufferTex->GetDesc(&rtvDesc);
+
+
     // Depth/Stencil
     D3D11_TEXTURE2D_DESC ds{};
-    ds.Width = width; ds.Height = height; ds.MipLevels = 1; ds.ArraySize = 1;
+    ds.Width = rtvDesc.Width; ds.Height = rtvDesc.Height; ds.MipLevels = 1; ds.ArraySize = 1;
     ds.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     ds.SampleDesc = { 1, 0 };
     ds.Usage = D3D11_USAGE_DEFAULT;
@@ -180,6 +216,12 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
 
     hr = m_device->CreateDepthStencilView(m_depthTex.Get(), nullptr, m_dsv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
+
+    m_width = rtvDesc.Width;
+    m_height = rtvDesc.Height;
+
+
+
 }
 
 void DX11Renderer::ReleaseBackbuffers()

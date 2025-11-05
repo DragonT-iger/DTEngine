@@ -1,4 +1,4 @@
-﻿cbuffer CBuffer_Frame : register(b0)
+cbuffer CBuffer_Frame : register(b0)
 {
     matrix ViewTM;
     matrix ProjectionTM;
@@ -32,18 +32,14 @@ PS_INPUT VS(VS_INPUT input)
     PS_INPUT output = (PS_INPUT) 0;
 
     float4 worldPos = mul(float4(input.Pos, 1.0f), WorldTM);
-    float4 viewPos = mul(worldPos, ViewTM);
-    float4 projPos = mul(viewPos, ProjectionTM);
+    float4 viewPos  = mul(worldPos, ViewTM);
+    float4 projPos  = mul(viewPos, ProjectionTM);
 
 
+    //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
     output.Color = input.Color;
     
     return output;
 }
 
-
-float4 PS(PS_INPUT input) : SV_Target
-{
-    return input.Color;
-}

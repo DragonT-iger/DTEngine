@@ -104,6 +104,11 @@ bool Mesh::SaveFile(const std::string& fullPath)
     return false;
 }
 
+void Mesh::Unload()
+{
+    return;
+}
+
 bool Mesh::CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 {
     assert(vertices.size() > 0 && indices.size() > 0);
@@ -155,7 +160,7 @@ void Mesh::Bind() const
 
 void Mesh::Draw() const
 {
-    auto* context = DX11Renderer::Instance().GetContext();
+     auto* context = DX11Renderer::Instance().GetContext();
     if (!context) return;
 
     context->DrawIndexed(m_indexCount, 0, 0);

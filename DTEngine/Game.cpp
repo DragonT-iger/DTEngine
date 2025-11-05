@@ -21,6 +21,10 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "MeshRenderer.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "InputManager.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -75,6 +79,8 @@ bool Game::Initialize()
 	}
 
 
+	InputManager::Instance().Initialize();
+
 
 	Scene* scene = ResourceManager::Instance().Load<Scene>("Scenes/SampleScene.scene");
 
@@ -102,13 +108,33 @@ bool Game::Initialize()
 	//childTF->SetParent(parentTF);
 
 	//GameObject* camera = testScene.CreateGameObject("Camera");
-	//camera->GetTransform()->SetPosition({ 1,1,1 });
+	//camera->GetTransform()->SetPosition(Vector3(0, 2, -5));
+	//camera->GetTransform()->SetRotationEuler(Vector3(15.0f, 0.0f, 0.0f));
 	//camera->AddComponent<Camera>();
+
+
+
+
+	//GameObject* cubeGO = testScene.CreateGameObject("TestCube");
+
+	//Mesh* cubeMesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
+	//Material* defaultMat = ResourceManager::Instance().Load<Material>("Shaders/Default");
+
+	//MeshRenderer* renderer = cubeGO->AddComponent<MeshRenderer>();
+	//renderer->SetMesh(cubeMesh);
+	//renderer->SetMaterial(defaultMat);
+
+
+
+
 
 	//std::cout << "--- SAVING ---" << std::endl;
 	//std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
 	//std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
 	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
+
+
+
 
 	//testScene.SaveFile("Scenes/SampleScene.scene");
 
@@ -143,7 +169,7 @@ void Game::Release()
 
 void Game::LifeCycle(float deltaTime)
 {
-	SceneManager::Instance().ProcessSceneChange();
+	SceneManager::Instance().ProcessSceneChange(); // Awake Start
 
 
 
@@ -154,6 +180,26 @@ void Game::LifeCycle(float deltaTime)
 		std::cout << "현재 활성화된 씬이 없음" << std::endl;
 		return;
 	}
+
+
+	static float elapsedTime = 0.0f;
+	static float fixedDeltaTime = 0.02f;
+
+	elapsedTime += deltaTime;
+
+	while (elapsedTime >= fixedDeltaTime)
+	{
+		scene->FixedUpdate(fixedDeltaTime);
+		elapsedTime -= fixedDeltaTime;
+	}
+
+	scene->Update(deltaTime);
+
+	scene->LateUpdate(deltaTime);
+
+
+
+	// 렌더링
 
 	Camera* mainCamera = scene->GetMainCamera();
 
@@ -169,29 +215,102 @@ void Game::LifeCycle(float deltaTime)
 		std::cout << "메인 카메라가 존재하지 않습니다" << std::endl;
 	}
 
-
-
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
 
-	static float elapsedTime = 0.0f;
-	static float fixedDeltaTime = 0.02f;
-
-	elapsedTime += deltaTime;
-
-	scene->Update(deltaTime);
-	if (scene)
+	if (mainCamera)
 	{
-		while (elapsedTime >= fixedDeltaTime)
-		{
-			scene->FixedUpdate(fixedDeltaTime);
-			elapsedTime -= fixedDeltaTime;
-		}
+		const Matrix& viewTM = mainCamera->GetViewMatrix();
 
-		scene->Update(deltaTime);
+		//std::cout << viewTM << std::endl;
 
-		scene->LateUpdate(deltaTime);
+		const Matrix& projTM = mainCamera->GetProjectionMatrix();
+
+
+		//std::cout << projTM << std::endl;
+
+		DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
 	}
+
+	for (const auto& go : scene->GetGameObjects())
+	{
+		if (!go || !go->IsActive()) continue;
+
+		MeshRenderer* renderer = go->GetComponent<MeshRenderer>();
+		Transform* transform = go->GetTransform();
+
+
+		if (!renderer || !transform) continue;
+
+		if (renderer->IsActive() == false) continue;
+
+		//Mesh* mesh = renderer->GetMesh();
+		//Material* material = renderer->GetMaterial();
+
+
+		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
+		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
+
+		if (!mesh || !material) continue;
+
+		const Matrix& worldTM = transform->GetWorldMatrix();
+		Matrix worldInvT_TM = transform->GetWorldInverseTransposeMatrix();
+		material->Bind(worldTM, worldInvT_TM);
+
+		mesh->Bind();
+
+		mesh->Draw();
+	}
+	
+
+
+	//Scene Save (CTAL + S)
+	
+
+
+
+
+
+
+	if (m_imgui)
+	{
+		bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
+		bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
+
+		if (ctrlPressed && sPressed_Down)
+		{
+			if (scene)
+			{
+				std::string sceneName = scene->GetName();
+				if (!sceneName.empty())
+				{
+					std::string relativePath = "Scenes/" + sceneName + ".scene";
+					//std::string fullSavePath = ResourceManager::Instance().ResolveFullPath(relativePath);
+
+					std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
+
+					if (scene->SaveFile(relativePath))
+					{
+						std::cout << "Scene save successful." << std::endl;
+					}
+					else
+					{
+						std::cout << "Scene save FAILED." << std::endl;
+					}
+				}
+				else
+				{
+					std::cout << "Cannot save: Scene name is empty." << std::endl;
+				}
+			}
+		}
+	}
+
+
+
+
+
+
 
 	m_imgui->NewFrame();
 
@@ -202,6 +321,10 @@ void Game::LifeCycle(float deltaTime)
 	DX11Renderer::Instance().EndFrame();
 	DX11Renderer::Instance().Present();
 
+
+
+	InputManager::Instance().EndFrame();
+
 }
 
 bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
@@ -210,6 +333,8 @@ bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
 	if (m_imgui && m_imgui->WndProcHandler(hWnd, msg, wparam, lparam))
 		return true;
 
+
+	InputManager::Instance().HandleMessage((UINT)msg, (WPARAM)wparam, (LPARAM)lparam);
 
 	return false;
 }

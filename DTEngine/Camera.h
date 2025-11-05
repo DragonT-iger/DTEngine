@@ -32,6 +32,26 @@ public:
     const float& GetFovY() { return SimpleMathHelper::Rad2Deg(m_fovY); }
     void SetFovY(const float& fovY) { m_fovY = SimpleMathHelper::Deg2Rad(fovY); }
 
+    const float& GetNearZ() { return m_nearZ; }
+    void SetNearZ(float nearZ) {
+        if (m_nearZ < 0.5) {
+            m_nearZ = 0.5;
+        }
+        else {
+            m_nearZ = nearZ;
+        }
+    }
+
+    const float& GetFarZ() { return m_farZ; }
+    void SetFarZ(float farZ) {
+        if (m_farZ < m_nearZ + 1) {
+            m_farZ = m_nearZ + 1;
+        }
+        else {
+            m_farZ = farZ;
+        }
+    }
+
     const Vector4& GetClearColor() const { return m_clearColor; }
     void SetClearColor(const Vector4& color) { m_clearColor = color; }
 

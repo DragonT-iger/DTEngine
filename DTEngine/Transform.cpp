@@ -47,6 +47,15 @@ const Matrix& Transform::GetWorldMatrix()
 	return m_matrixWorld;
 }
 
+const Matrix& Transform::GetWorldInverseTransposeMatrix()
+{
+	if (IsDirty()) {
+		UpdateMatrices();
+	}
+
+	return m_matrixWorld.Invert().Transpose();
+}
+
 void Transform::UpdateMatrices()
 {
 	if (!m_dirty) return;

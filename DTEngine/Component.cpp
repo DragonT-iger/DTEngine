@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "ReflectionDatabase.h"
 #include "Transform.h"
+#include "GameObject.h"
 
 void Component::Destroy(GameObject* gameobject) {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
@@ -14,6 +15,10 @@ void Component::Instantiate(std::string name)
 {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
 	curScene->CreateGameObject(name);
+}
+
+Transform* Component::GetTransform() {
+    return this->_GetOwner()->GetTransform();
 }
 
 static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& type, const char* name, void* data)

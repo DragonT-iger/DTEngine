@@ -8,6 +8,7 @@
 
 #include <imgui.h>
 #include <string>
+#include <cctype>
 
 EditorUI::EditorUI() = default;
 EditorUI::~EditorUI() = default;
@@ -37,6 +38,25 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
 
     bool node_open = ImGui::TreeNodeEx((void*)go->_GetID(), flags, go->GetName().c_str());
 
+    if (ImGui::BeginDragDropSource())
+    {
+        ImGui::SetDragDropPayload("HIERARCHY_DRAG_ITEM", &tf, sizeof(Transform*));
+        ImGui::Text("%s (Reparenting)", go->GetName().c_str()); 
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+
+            draggedTf->SetParent(tf, true); 
+        }
+        ImGui::EndDragDropTarget();
+    }
+
     if (ImGui::IsItemClicked())
     {
         m_selectedGameObject = go;
@@ -56,17 +76,42 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
-    const auto& gameObjects = activeScene->GetGameObjects();
-    for (const auto& go : gameObjects)
+    std::string sceneName = activeScene->GetName();
+
+    ImGuiTreeNodeFlags sceneFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+    bool scene_node_open = ImGui::TreeNodeEx(sceneName.c_str(), sceneFlags);
+
+    if (ImGui::BeginDragDropTarget())
     {
-        if (go)
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
         {
-            Transform* tf = go->GetTransform();
-            if (tf && tf->GetParent() == nullptr)
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+
+            if (draggedTf)
             {
-                DrawHierarchyNode(tf);
+                draggedTf->SetParent(nullptr, true);
             }
         }
+        ImGui::EndDragDropTarget();
+    }
+
+
+    if (scene_node_open)
+    {
+        const auto& gameObjects = activeScene->GetGameObjects();
+        for (const auto& go : gameObjects)
+        {
+            if (go)
+            {
+                Transform* tf = go->GetTransform();
+                if (tf && tf->GetParent() == nullptr) 
+                {
+                    DrawHierarchyNode(tf);
+                }
+            }
+        }
+        ImGui::TreePop(); 
     }
     ImGui::End();
 }
@@ -168,8 +213,22 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
             void* data = prop.m_getter(comp);
             const auto& type = prop.m_type;
-            const char* name = prop.m_name.c_str();
+            //const char* name = prop.m_name.c_str();
 
+
+            std::string prettyName = prop.m_name;
+
+            if (prettyName.length() > 2 && prettyName.find("m_") == 0)
+            {
+                prettyName = prettyName.substr(2); // 예: "m_position" -> "position"
+            }
+
+            if (!prettyName.empty())
+            {
+                prettyName[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(prettyName[0]))); // 예: "position" -> "Position"
+            }
+
+            const char* name = prettyName.c_str();
 
             // float
             if (type == typeid(float))
