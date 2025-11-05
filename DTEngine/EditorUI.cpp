@@ -27,8 +27,12 @@ void EditorUI::Render(Scene* activeScene)
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
+    DrawGizmo(activeScene);
 
+    
+}
 
+void EditorUI::DrawGizmo(Scene* activeScene) {
     Camera* camera = activeScene->GetMainCamera();
     if (camera)
     {
@@ -52,7 +56,7 @@ void EditorUI::Render(Scene* activeScene)
                 (float*)&viewMatrix,
                 (float*)&projMatrix,
                 m_currentOperation,
-                m_currentMode, 
+                m_currentMode,
                 (float*)&worldMatrix
             );
 
