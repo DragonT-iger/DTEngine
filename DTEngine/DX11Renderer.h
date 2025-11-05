@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <cstdint>
 #include <wrl/client.h> 
@@ -57,6 +57,11 @@ public:
         return static_cast<float>(m_width) / static_cast<float>(m_height);
     }
 
+
+    int GetWidth() { return m_width; }
+    int GetHeight() { return m_height; }
+
+
 private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
@@ -69,6 +74,7 @@ private:
         Matrix ViewTM;
         Matrix ProjectionTM;
     };
+
 
 private:
     // Platform

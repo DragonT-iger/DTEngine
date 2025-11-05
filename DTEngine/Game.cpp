@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
@@ -25,6 +25,7 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "InputManager.h"
+#include "ImGuizmo.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -55,6 +56,8 @@ bool Game::Initialize()
 		assert(false && "ImGui 초기화 실패");
 		return false;
 	}
+
+	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 
 	m_editorUI = std::make_unique<EditorUI>();
 
@@ -314,14 +317,20 @@ void Game::LifeCycle(float deltaTime)
 
 	m_imgui->NewFrame();
 
+	ImGuizmo::BeginFrame();
+
+	ImGuizmo::SetRect(
+		0, 0,
+		(float)DX11Renderer::Instance().GetWidth(), 
+		(float)DX11Renderer::Instance().GetHeight() 
+	);
+
 	m_editorUI->Render(scene);
 
 	m_imgui->Render();
 
 	DX11Renderer::Instance().EndFrame();
 	DX11Renderer::Instance().Present();
-
-
 
 	InputManager::Instance().EndFrame();
 

@@ -1,14 +1,23 @@
-#include "pch.h"
+﻿#include "pch.h"
+
+
+#include <imgui.h>
+#include <string>
+#include <cctype>
+
 #include "EditorUI.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "MonoBehaviour.h"
 #include "Transform.h" 
 #include "ReflectionDatabase.h"
+#include "ImGuizmo.h"
+#include "Camera.h"
 
-#include <imgui.h>
-#include <string>
-#include <cctype>
+
+
+static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
+static ImGuizmo::MODE m_currentMode = ImGuizmo::LOCAL;
 
 EditorUI::EditorUI() = default;
 EditorUI::~EditorUI() = default;
@@ -18,6 +27,56 @@ void EditorUI::Render(Scene* activeScene)
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
+
+
+    Camera* camera = activeScene->GetMainCamera();
+    if (camera)
+    {
+        Matrix viewMatrix = camera->GetViewMatrix();
+        Matrix projMatrix = camera->GetProjectionMatrix();
+
+        GameObject* selectedObject = m_selectedGameObject;
+        if (selectedObject)
+        {
+            Transform* transform = selectedObject->GetTransform();
+
+            Matrix worldMatrix = transform->GetWorldMatrix();
+
+            if (ImGui::IsKeyPressed(ImGuiKey_W)) m_currentOperation = ImGuizmo::TRANSLATE;
+            if (ImGui::IsKeyPressed(ImGuiKey_E)) m_currentOperation = ImGuizmo::ROTATE;
+            if (ImGui::IsKeyPressed(ImGuiKey_R)) m_currentOperation = ImGuizmo::SCALE;
+
+            //std::cout << "Rendering Gizmo for: " << selectedObject->GetName() << std::endl;
+
+            ImGuizmo::Manipulate(
+                (float*)&viewMatrix,
+                (float*)&projMatrix,
+                m_currentOperation,
+                m_currentMode, 
+                (float*)&worldMatrix
+            );
+
+            if (ImGuizmo::IsUsing())
+            {
+                worldMatrix = worldMatrix;
+
+                Matrix newLocalMatrix = worldMatrix;
+                if (transform->GetParent())
+                {
+                    Matrix parentWorldInv = transform->GetParent()->GetWorldMatrix().Invert();
+                    newLocalMatrix = worldMatrix * parentWorldInv;
+                }
+
+                Vector3 newPos, newScale;
+                Quaternion newRot;
+                newLocalMatrix.Decompose(newScale, newRot, newPos);
+
+                transform->SetPosition(newPos);
+                transform->SetRotationQuat(newRot);
+                transform->SetScale(newScale);
+            }
+        }
+    }
 }
 
 void EditorUI::DrawHierarchyNode(Transform* tf)
