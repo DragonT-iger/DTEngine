@@ -272,36 +272,32 @@ void Game::LifeCycle(float deltaTime)
 
 
 
-	if (m_imgui)
+	bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
+	bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
+
+	if (ctrlPressed && sPressed_Down)
 	{
-		bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
-		bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
-
-		if (ctrlPressed && sPressed_Down)
+		if (scene)
 		{
-			if (scene)
+			std::string sceneName = scene->GetName();
+			if (!sceneName.empty())
 			{
-				std::string sceneName = scene->GetName();
-				if (!sceneName.empty())
+				std::string relativePath = "Scenes/" + sceneName + ".scene";
+
+				std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
+
+				if (scene->SaveFile(relativePath))
 				{
-					std::string relativePath = "Scenes/" + sceneName + ".scene";
-					//std::string fullSavePath = ResourceManager::Instance().ResolveFullPath(relativePath);
-
-					std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
-
-					if (scene->SaveFile(relativePath))
-					{
-						std::cout << "Scene save successful." << std::endl;
-					}
-					else
-					{
-						std::cout << "Scene save FAILED." << std::endl;
-					}
+					std::cout << "Scene save successful." << std::endl;
 				}
 				else
 				{
-					std::cout << "Cannot save: Scene name is empty." << std::endl;
+					std::cout << "Scene save FAILED." << std::endl;
 				}
+			}
+			else
+			{
+				std::cout << "Cannot save: Scene name is empty." << std::endl;
 			}
 		}
 	}
