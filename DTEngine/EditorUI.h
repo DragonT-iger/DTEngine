@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include <SimpleMath.h>
 
@@ -21,6 +21,8 @@ private:
     void DrawHierarchyWindow(Scene* activeScene);
 
     void DrawInspectorWindow();
+
+    void DrawGizmo(Scene* activeScene);
 
     void DrawHierarchyNode(Transform* tf);
 
