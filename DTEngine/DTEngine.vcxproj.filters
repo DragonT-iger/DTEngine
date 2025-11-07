@@ -66,6 +66,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{5840ad57-bbce-4a12-a6ce-0073dd878616}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGUI\Undo">
+      <UniqueIdentifier>{b806074d-46d1-45fc-9369-a0297909c5f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -179,6 +182,15 @@
     <ClInclude Include="ImGuizmo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="HistoryManager.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeTransformCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -264,6 +276,12 @@
     </ClCompile>
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HistoryManager.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeTransformCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

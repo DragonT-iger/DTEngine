@@ -17,7 +17,7 @@
 
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
-static ImGuizmo::MODE m_currentMode = ImGuizmo::LOCAL;
+static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
 EditorUI::EditorUI() = default;
 EditorUI::~EditorUI() = default;
@@ -62,8 +62,6 @@ void EditorUI::DrawGizmo(Scene* activeScene) {
 
             if (ImGuizmo::IsUsing())
             {
-                worldMatrix = worldMatrix;
-
                 Matrix newLocalMatrix = worldMatrix;
                 if (transform->GetParent())
                 {

@@ -142,6 +142,7 @@
     <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChangeTransformCommand.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="DX11Renderer.h" />
@@ -151,6 +152,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="HistoryManager.h" />
+    <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
     <ClInclude Include="ImGuiLayer.h" />
     <ClInclude Include="ImGuizmo.h" />
@@ -180,6 +183,7 @@
   <ItemGroup>
     <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChangeTransformCommand.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DTEngine.cpp" />
     <ClCompile Include="DX11Renderer.cpp" />
@@ -188,6 +192,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="ImGuiLayer.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />

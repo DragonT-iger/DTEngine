@@ -77,10 +77,10 @@ private:
 
 	// 직렬화 해야 하는 값들
 
-	//Vector3 abc;
+	Vector3 abc;
 	//Vector4 kkkl;
 
-	Vector3 m_editorEulerAngles; // 에디터용 임시 저장 변수
+	Vector3 m_editorEulerAngles; // 에디터용 저장 변수
 
 	Vector3 m_position;
 	
