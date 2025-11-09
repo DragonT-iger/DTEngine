@@ -2,11 +2,11 @@
 #include "IResource.h"
 #include <d3d11.h>
 #include <wrl/client.h>
-#include <SimpleMath.h> // Matrix ¿ë
+#include <SimpleMath.h> // Matrix ìš©
 
 using Matrix = DirectX::SimpleMath::Matrix;
 
-class Shader; // Àü¹æ ¼±¾ð
+class Shader; // ì „ë°© ì„ ì–¸
 
 class Material : public IResource
 {

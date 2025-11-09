@@ -44,7 +44,7 @@ bool Material::SaveFile(const std::string& fullPath)
 void Material::Unload()
 {
     m_cbuffer_object.Reset();
-    m_shader = nullptr; // ÂüÁ¶¸¸ ÇÏ¹Ç·Î deleteÇÏÁö ¾ÊÀ½
+    m_shader = nullptr; // ì°¸ì¡°ë§Œ í•˜ë¯€ë¡œ deleteí•˜ì§€ ì•ŠìŒ
 }
 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
