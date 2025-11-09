@@ -9,7 +9,7 @@
 
 BEGINPROPERTY(Camera)
 
-DTPROPERTY_ACCESSOR(Camera, m_fovY, GetFovY, SetFovY)
+DTPROPERTY_ACCESSOR(Camera, m_editorFovY , GetEditorFovY , SetEditorFovY)
 DTPROPERTY_ACCESSOR(Camera, m_nearZ, GetNearZ , SetNearZ)
 DTPROPERTY_ACCESSOR(Camera, m_farZ , GetFarZ , SetFarZ)
 DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
@@ -27,6 +27,11 @@ Camera::Camera()
 void Camera::Awake()
 {
     SetThisCameraToMain();
+
+    m_editorFovY = SimpleMathHelper::Rad2Deg(m_fovY);
+
+    UpdateViewMatrix();
+    UpdateProjectionMatrix();
 }
 
 void Camera::LateUpdate(float deltaTime)
@@ -66,6 +71,9 @@ void Camera::SetThisCameraToMain()
 
 void Camera::UpdateViewMatrix()
 {
+
+    if (!m_dirtyView) return;
+
     Transform* tf = GetComponent<Transform>();
     //if (!tf)
     //{
@@ -77,12 +85,21 @@ void Camera::UpdateViewMatrix()
     const Vector3& up = tf->Up();
 
     m_view = Matrix::CreateLookAt(pos, pos + forward, up);
+
+    m_dirtyView = false;
 }
 
 void Camera::UpdateProjectionMatrix()
 {
+    if (!m_dirtyProj) return;
+
     float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio();
+
 
     m_projection = Matrix::CreatePerspectiveFieldOfView(m_fovY, currentAspectRatio, m_nearZ, m_farZ);
     m_lastAspectRatio = currentAspectRatio;
+
+
+    m_dirtyProj = false;
+   
 }

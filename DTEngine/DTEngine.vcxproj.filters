@@ -286,6 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl">

@@ -1,0 +1,13 @@
+DTEngine.sln 파일이 있는 경로에서 우클릭 -> 터미널 열기
+git submodule add https://github.com/microsoft/vcpkg.git ThirdParty/vcpkg
+
+vcpkg를 설치한다
+
+
+ThirdParty\vcpkg 들어가서
+
+.\vcpkg.exe integrate install 연동한다
+
+
+아마 이건 안해줘도 될거 같은데
+로그에 vcpkg  manifest = true 어쩌구는 그냥 vcpkg 설정 들어가서 예 하면 됨 메니페스트

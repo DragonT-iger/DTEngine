@@ -50,6 +50,10 @@
 #imgui 위치 저장 데이터
 Client/imgui.ini
 
+#vcpkg
+/vcpkg_installed
+
+
 *.ini
 *.aps
 *.rc

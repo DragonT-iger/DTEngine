@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cstdint>
 #include <memory>
 
@@ -13,6 +13,10 @@ public:
 	Game();
 	~Game() override;
 
+	enum class EngineMode {
+		Edit,
+		Play
+	};
 
 	bool Initialize();
 	void Run();
@@ -21,12 +25,19 @@ public:
 	
 	void LifeCycle(float deltaTime);
 
+	EngineMode GetEngineMode() const { return m_engineMode; }
+	void SetEngineMode(EngineMode mode) { m_engineMode = mode; }
+
 protected:
 	bool OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam) override;
 	void OnResize(int width, int height) override;
 	void OnClose() override;
 
 private: 
+
+
+	EngineMode m_engineMode = EngineMode::Edit;
+
 	float backBufferColor[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 
 	std::unique_ptr<GameTimer> m_timer;

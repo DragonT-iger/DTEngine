@@ -7,7 +7,6 @@
 #include <filesystem>
 
 #include <imgui.h>
-
 #include "Game.h"
 #include "DX11Renderer.h"
 #include "GameTimer.h"
@@ -185,6 +184,7 @@ void Game::LifeCycle(float deltaTime)
 	}
 
 
+
 	static float elapsedTime = 0.0f;
 	static float fixedDeltaTime = 0.02f;
 
@@ -199,6 +199,7 @@ void Game::LifeCycle(float deltaTime)
 	scene->Update(deltaTime);
 
 	scene->LateUpdate(deltaTime);
+	
 
 
 
@@ -239,16 +240,15 @@ void Game::LifeCycle(float deltaTime)
 	{
 		if (!go || !go->IsActive()) continue;
 
-		MeshRenderer* renderer = go->GetComponent<MeshRenderer>();
+		MeshRenderer* meshRenderer = go->GetComponent<MeshRenderer>();
 		Transform* transform = go->GetTransform();
 
+		if (!meshRenderer || !transform) continue;
 
-		if (!renderer || !transform) continue;
+		if (meshRenderer->IsActive() == false) continue;
 
-		if (renderer->IsActive() == false) continue;
-
-		//Mesh* mesh = renderer->GetMesh();
-		//Material* material = renderer->GetMaterial();
+		//Mesh* mesh = meshRenderer->GetMesh();
+		//Material* material = meshRenderer->GetMaterial();
 
 
 		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
@@ -268,9 +268,6 @@ void Game::LifeCycle(float deltaTime)
 
 
 	//Scene Save (CTAL + S), 
-
-
-
 
 	bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
 	bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
@@ -345,6 +342,8 @@ void Game::OnResize(int width, int height)
 {
 	if (width <= 0 || height <= 0) return;
 	DX11Renderer::Instance().Resize(width, height);
+	
+	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 
 void Game::OnClose()
