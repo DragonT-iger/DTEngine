@@ -1,0 +1,35 @@
+#pragma once
+#include "ICommand.h"
+#include "GameObject.h"
+
+class ChangeGameObjectActiveCommand : public ICommand
+{
+public:
+    ChangeGameObjectActiveCommand(GameObject* target, bool oldState, bool newState)
+        : m_target(target),
+        m_oldState(oldState),
+        m_newState(newState)
+    {
+    }
+
+    void Execute() override
+    {
+        if (m_target)
+        {
+            m_target->SetActive(m_newState);
+        }
+    }
+
+    void Undo() override
+    {
+        if (m_target)
+        {
+            m_target->SetActive(m_oldState);
+        }
+    }
+
+private:
+    GameObject* m_target;
+    bool m_oldState;
+    bool m_newState;
+};

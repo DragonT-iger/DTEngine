@@ -25,6 +25,7 @@
 #include "Mesh.h"
 #include "InputManager.h"
 #include "ImGuizmo.h"
+#include "HistoryManager.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -297,6 +298,26 @@ void Game::LifeCycle(float deltaTime)
 				std::cout << "Cannot save: Scene name is empty." << std::endl;
 			}
 		}
+	}
+
+	// Redo Undo
+
+	bool shiftPressed = InputManager::Instance().GetKey(KeyCode::Shift);
+	bool zPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Z);
+	bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
+
+	// Undo (Ctrl + Z)
+	if (ctrlPressed && !shiftPressed && zPressed_Down)
+	{
+		HistoryManager::Instance().Undo();
+		//std::cout << "Undo Performed" << std::endl;
+	}
+
+	// Redo (Ctrl + Y) 또는 (Ctrl + Shift + Z)
+	if ((ctrlPressed && yPressed_Down) || (ctrlPressed && shiftPressed && zPressed_Down))
+	{
+		HistoryManager::Instance().Redo();
+		//std::cout << "Redo Performed" << std::endl;
 	}
 
 

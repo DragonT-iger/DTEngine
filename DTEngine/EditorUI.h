@@ -1,13 +1,18 @@
 ﻿#pragma once
 #include <memory>
-#include <SimpleMath.h>
+
+#include <any>
+
+#include "SimpleMathHelper.h"
 
 class Scene;
 class GameObject;
 class Component;
 class Transform;
 
-using Vector3 = DirectX::SimpleMath::Vector3;
+
+
+
 
 class EditorUI
 {
@@ -27,6 +32,20 @@ private:
     void DrawHierarchyNode(Transform* tf);
 
     void DrawComponentProperties(Component* comp);
+
+
+
+
+
+    std::any m_dragStartValue;
+    bool m_isGizmoUsing = false;
+    Vector3 m_gizmoDragStartPosition;
+    Quaternion m_gizmoDragStartRotation;
+    Vector3 m_gizmoDragStartScale;
+
+    Vector3 m_editorDragStartRotation;
+
+
 
     GameObject* m_selectedGameObject = nullptr;
 

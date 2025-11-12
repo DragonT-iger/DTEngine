@@ -2,7 +2,7 @@
 
 #include <SimpleMath.h>
 #include <algorithm>
-
+#include <iostream>
 
 inline std::ostream& operator<<(std::ostream& os, const DirectX::SimpleMath::Matrix& m)
 {
@@ -13,11 +13,13 @@ inline std::ostream& operator<<(std::ostream& os, const DirectX::SimpleMath::Mat
     return os;
 }
 
+using Matrix = DirectX::SimpleMath::Matrix;
+using Vector2 = DirectX::SimpleMath::Vector2;
+using Vector3 = DirectX::SimpleMath::Vector3;
+using Vector4 = DirectX::SimpleMath::Vector4;
+using Quaternion = DirectX::SimpleMath::Quaternion;
 
 namespace SimpleMathHelper {
-    using Vector3 = DirectX::SimpleMath::Vector3;
-    using Matrix = DirectX::SimpleMath::Matrix;
-    using Quaternion = DirectX::SimpleMath::Quaternion;
 
     constexpr float Deg2Rad(float deg)
     {
@@ -30,9 +32,9 @@ namespace SimpleMathHelper {
 
     inline Quaternion EulerToQuaternion_ZXY(const Vector3& eulerDeg)
     {
-        return Quaternion::CreateFromYawPitchRoll(-Deg2Rad(eulerDeg.y), Deg2Rad(eulerDeg.x), -Deg2Rad(eulerDeg.z));
+        return Quaternion::CreateFromYawPitchRoll(Deg2Rad(eulerDeg.y), Deg2Rad(eulerDeg.x), Deg2Rad(eulerDeg.z));
 
-        // 왠진 모르겠지만 왼손기준으로 안돔 이렇게 안하면
+        // 왠진 모르겠지만 왼손기준으로 안돔 y z - 해주지 않으면
     }
 
     inline Vector3 QuaternionToEulerDeg_ZXY(const Quaternion& q)

@@ -1,17 +1,24 @@
 #pragma once
 #include "Singleton.h"
 #include "ICommand.h"
-#include <vector>
+#include <deque>
 #include <memory>
 
 class HistoryManager : public Singleton<HistoryManager>
 {
 public:
+    static constexpr size_t MAX_HISTORY_COUNT = 100;
+
     void Do(std::unique_ptr<ICommand> cmd)
     {
         cmd->Execute();
 
         m_undoStack.push_back(std::move(cmd));
+
+        while (m_undoStack.size() > MAX_HISTORY_COUNT)
+        {
+            m_undoStack.pop_front();
+        }
 
         m_redoStack.clear();
     }
@@ -41,6 +48,6 @@ public:
     }
 
 private:
-    std::vector<std::unique_ptr<ICommand>> m_undoStack;
-    std::vector<std::unique_ptr<ICommand>> m_redoStack;
+    std::deque<std::unique_ptr<ICommand>> m_undoStack;
+    std::deque<std::unique_ptr<ICommand>> m_redoStack;
 };

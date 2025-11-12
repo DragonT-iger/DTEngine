@@ -6,8 +6,17 @@ vcpkg를 설치한다
 
 ThirdParty\vcpkg 들어가서
 
-.\vcpkg.exe integrate install 연동한다
+bootstrap-vcpkg.bat 실행후 터미널 열어서
+
+.\vcpkg.exe integrate install 연동한다 <-- 이건 그냥 vcpkg.exe 실행만 해도 상관 없는거 같음
+
+
+cmake 에러가 뜰때가 있는데 3.31.6 버전 쓰고 있으면 (이득우의 게임수학 호환버전) 안될꺼임
 
 
 아마 이건 안해줘도 될거 같은데
 로그에 vcpkg  manifest = true 어쩌구는 그냥 vcpkg 설정 들어가서 예 하면 됨 메니페스트
+
+
+참고로 DirectXTK 는 Nuget을 통해서 받고있음
+assimp 만 Vcpkg

@@ -13,6 +13,13 @@
 #include "ReflectionDatabase.h"
 #include "ImGuizmo.h"
 #include "Camera.h"
+#include "ChangePropertyCommand.h"
+#include "ChangeTransformCommand.h"
+#include "HistoryManager.h"
+#include "ChangeEditorTransformCommand.h"
+#include "ChangeParentCommand.h"
+#include "ChangeComponentActiveCommand.h"
+#include "ChangeGameObjectActiveCommand.h"
 
 
 
@@ -60,7 +67,17 @@ void EditorUI::DrawGizmo(Scene* activeScene) {
                 (float*)&worldMatrix
             );
 
-            if (ImGuizmo::IsUsing())
+            bool isUsing = ImGuizmo::IsUsing();
+
+            if (isUsing && !m_isGizmoUsing)
+            {
+                m_isGizmoUsing = true;
+                m_gizmoDragStartPosition = transform->GetPosition();
+                m_gizmoDragStartRotation = transform->GetRotationQuat();
+                m_gizmoDragStartScale = transform->GetScale();
+            }
+
+            if (isUsing)
             {
                 Matrix newLocalMatrix = worldMatrix;
                 if (transform->GetParent())
@@ -76,6 +93,24 @@ void EditorUI::DrawGizmo(Scene* activeScene) {
                 transform->SetPosition(newPos);
                 transform->SetRotationQuat(newRot);
                 transform->SetScale(newScale);
+            }
+
+            if (!isUsing && m_isGizmoUsing)
+            {
+                m_isGizmoUsing = false;
+
+                Vector3 newPos = transform->GetPosition();
+                Quaternion newRot = transform->GetRotationQuat();
+                Vector3 newScale = transform->GetScale();
+
+                auto cmd = std::make_unique<ChangeTransformCommand>(
+                    transform,
+                    m_gizmoDragStartPosition, newPos,  
+                    m_gizmoDragStartRotation, newRot,  
+                    m_gizmoDragStartScale, newScale    
+                );
+
+                HistoryManager::Instance().Do(std::move(cmd));
             }
         }
     }
@@ -112,8 +147,14 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
         {
             IM_ASSERT(payload->DataSize == sizeof(Transform*));
             Transform* draggedTf = *(Transform**)payload->Data;
+            Transform* newParent = tf;
+            Transform* oldParent = draggedTf->GetParent();
 
-            draggedTf->SetParent(tf, true); 
+            if (draggedTf && newParent != oldParent && draggedTf != newParent)
+            {
+                auto cmd = std::make_unique<ChangeParentCommand>(draggedTf, oldParent, newParent);
+                HistoryManager::Instance().Do(std::move(cmd));
+            }
         }
         ImGui::EndDragDropTarget();
     }
@@ -148,10 +189,13 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
         {
             IM_ASSERT(payload->DataSize == sizeof(Transform*));
             Transform* draggedTf = *(Transform**)payload->Data;
+            Transform* oldParent = (draggedTf) ? draggedTf->GetParent() : nullptr;
+            Transform* newParent = nullptr; 
 
-            if (draggedTf)
+            if (draggedTf && oldParent != newParent)
             {
-                draggedTf->SetParent(nullptr, true);
+                auto cmd = std::make_unique<ChangeParentCommand>(draggedTf, oldParent, newParent);
+                HistoryManager::Instance().Do(std::move(cmd));
             }
         }
         ImGui::EndDragDropTarget();
@@ -189,10 +233,13 @@ void EditorUI::DrawInspectorWindow()
         return;
     }
 
-    bool isActive = m_selectedGameObject->IsActive();
-    if (ImGui::Checkbox("##ActiveCheckbox", &isActive)) 
+    bool oldState = m_selectedGameObject->IsActive(); 
+    bool newState = oldState;
+
+    if (ImGui::Checkbox("##ActiveCheckbox", &newState))
     {
-        m_selectedGameObject->SetActive(isActive);
+        auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(m_selectedGameObject, oldState, newState);
+        HistoryManager::Instance().Do(std::move(cmd));
     }
 
     ImGui::SameLine();
@@ -250,16 +297,18 @@ void EditorUI::DrawComponentProperties(Component* comp)
     MonoBehaviour* mb = dynamic_cast<MonoBehaviour*>(comp);
     if (mb)
     {
-        compIsActive = mb->IsActive();
+        bool oldState = mb->IsActive();
+        bool newState = oldState; 
 
         std::string chkID = "##active_";
         chkID += comp->_GetTypeName();
 
-        if (ImGui::Checkbox(chkID.c_str(), &compIsActive))
+        if (ImGui::Checkbox(chkID.c_str(), &newState)) 
         {
-            mb->SetActive(compIsActive);
+            auto cmd = std::make_unique<ChangeComponentActiveCommand>(mb, oldState, newState);
+            HistoryManager::Instance().Do(std::move(cmd));
         }
-        ImGui::SameLine(); 
+        ImGui::SameLine();
     }
 
 
@@ -299,6 +348,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 {
                     prop.m_setter(comp, &temp);
                 }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<float*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    float oldVal = std::any_cast<float>(m_dragStartValue);
+                    float newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<float>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
             }
             // int
             else if (type == typeid(int))
@@ -308,6 +371,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 {
                     prop.m_setter(comp, &temp);
                 }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<int*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    int oldVal = std::any_cast<int>(m_dragStartValue);
+                    int newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<int>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
             }
             // bool
             else if (type == typeid(bool))
@@ -315,7 +392,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 bool temp = *static_cast<bool*>(data);
                 if (ImGui::Checkbox(name, &temp))
                 {
-                    prop.m_setter(comp, &temp);
+                    bool oldVal = *static_cast<bool*>(data);
+                    bool newVal = temp;
+                    auto cmd = std::make_unique<ChangePropertyCommand<bool>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
                 }
             }
             // uint64_t (ID 등)
@@ -341,6 +423,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     temp = buffer;
                     prop.m_setter(comp, &temp);
                 }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<std::string*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    std::string oldVal = std::any_cast<std::string>(m_dragStartValue);
+                    std::string newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<std::string>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
             }
 
 
@@ -352,6 +448,21 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 {
                     prop.m_setter(comp, &temp);
                 }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<Vector3*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    // 5. 이전 값과 새 값으로 커맨드 생성
+                    Vector3 oldVal = std::any_cast<Vector3>(m_dragStartValue);
+                    Vector3 newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<Vector3>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
             }
             // Vector4 (추가)
             else if (type == typeid(Vector4))
@@ -361,6 +472,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 {
                     prop.m_setter(comp, &temp);
                 }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<Vector4*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    Vector4 oldVal = std::any_cast<Vector4>(m_dragStartValue);
+                    Vector4 newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<Vector4>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
             }
             // Quaternion (m_rotation 특별 처리)
             else if (type == typeid(Quaternion))
@@ -369,11 +494,24 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                 if (tf && prop.m_name == "m_rotation")
                 {
-                    // (m_cachedEulerRotation 로직은 유지)
                     Vector3 displayEuler = tf->GetEditorEuler();
                     if (ImGui::DragFloat3("Rotation", &displayEuler.x, 0.5f))
                     {
                         tf->SetRotationEuler(displayEuler);
+                    }
+                    if (ImGui::IsItemActivated())
+                    {
+                        m_editorDragStartRotation = tf->GetEditorEuler();
+                    }
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        auto cmd = std::make_unique<ChangeEditorTransformCommand>(
+                            tf,
+                            tf->GetPosition(), tf->GetPosition(),
+                            m_editorDragStartRotation, tf->GetEditorEuler(),
+                            tf->GetScale(), tf->GetScale()
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
                     }
                 }
                 else // m_rotation이 아닌 다른 쿼터니언
@@ -382,6 +520,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     if (ImGui::DragFloat4(name, &temp.x, 0.1f))
                     {
                         prop.m_setter(comp, &temp);
+                    }
+                    if (ImGui::IsItemActivated())
+                    {
+                        m_dragStartValue = *static_cast<Quaternion*>(data);
+                    }
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        Quaternion oldVal = std::any_cast<Quaternion>(m_dragStartValue);
+                        Quaternion newVal = temp;
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<Quaternion>>(
+                            comp, prop.m_setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
                     }
                 }
             }
@@ -393,7 +545,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
             else {
-				std::cout << "타입 미구현: " << type.name() << std::endl;
+                std::cout << "타입 미구현: " << type.name() << std::endl;
             }
         }
     }

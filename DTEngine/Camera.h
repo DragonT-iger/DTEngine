@@ -1,12 +1,6 @@
 ﻿#pragma once
 #include "MonoBehaviour.h"
-#include <SimpleMath.h>
 #include "SimpleMathHelper.h"
-
-
-using Matrix = DirectX::SimpleMath::Matrix;
-using Vector3 = DirectX::SimpleMath::Vector3;
-using Vector4 = DirectX::SimpleMath::Vector4;
 
 class Camera : public MonoBehaviour
 {

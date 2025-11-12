@@ -179,9 +179,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuizmo.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ICommand.h">
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
@@ -189,6 +186,24 @@
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
     <ClInclude Include="ChangeTransformCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangePropertyCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeEditorTransformCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeComponentActiveCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeParentCommand.h">
+      <Filter>ImGUI\Undo</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeGameObjectActiveCommand.h">
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
   </ItemGroup>
@@ -274,13 +289,28 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuizmo.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="HistoryManager.cpp">
       <Filter>ImGUI\Undo</Filter>
     </ClCompile>
     <ClCompile Include="ChangeTransformCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangePropertyCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeEditorTransformCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeComponentActiveCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeParentCommand.cpp">
+      <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeGameObjectActiveCommand.cpp">
       <Filter>ImGUI\Undo</Filter>
     </ClCompile>
   </ItemGroup>

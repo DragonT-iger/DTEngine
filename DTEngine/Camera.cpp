@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Camera.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -72,21 +72,20 @@ void Camera::SetThisCameraToMain()
 void Camera::UpdateViewMatrix()
 {
 
-    if (!m_dirtyView) return;
-
     Transform* tf = GetComponent<Transform>();
     //if (!tf)
     //{
     //    return;
     //}
 
-    const Vector3& pos = tf->GetPosition();
-    const Vector3& forward = tf->Forward();
-    const Vector3& up = tf->Up();
+    const Matrix& worldMatrix = tf->GetWorldMatrix();
 
-    m_view = Matrix::CreateLookAt(pos, pos + forward, up);
+    const Vector3& worldPos = worldMatrix.Translation();
+    const Vector3& worldForward = worldMatrix.Forward();
+    const Vector3& worldUp = worldMatrix.Up();
 
-    m_dirtyView = false;
+    m_view = Matrix::CreateLookAt(worldPos, worldPos + worldForward, worldUp);
+
 }
 
 void Camera::UpdateProjectionMatrix()

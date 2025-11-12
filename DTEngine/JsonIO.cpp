@@ -32,14 +32,7 @@ void JsonReader::EndArray() {
 }
 
 void JsonWriter::Write(const char* name, const std::string& v) { Current()[name] = v; }
-void JsonWriter::Write(const char* name, const char* v) {
-    if (v) {
-        Current()[name] = v;
-    }
-    else {
-        Current()[name] = nullptr;
-    }
-}
+void JsonWriter::Write(const char* name, const char* v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, bool v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, float v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, int v) { Current()[name] = v; }

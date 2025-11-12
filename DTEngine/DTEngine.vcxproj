@@ -145,6 +145,11 @@
     <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChangeComponentActiveCommand.h" />
+    <ClInclude Include="ChangeEditorTransformCommand.h" />
+    <ClInclude Include="ChangeGameObjectActiveCommand.h" />
+    <ClInclude Include="ChangeParentCommand.h" />
+    <ClInclude Include="ChangePropertyCommand.h" />
     <ClInclude Include="ChangeTransformCommand.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
@@ -186,6 +191,11 @@
   <ItemGroup>
     <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChangeComponentActiveCommand.cpp" />
+    <ClCompile Include="ChangeEditorTransformCommand.cpp" />
+    <ClCompile Include="ChangeGameObjectActiveCommand.cpp" />
+    <ClCompile Include="ChangeParentCommand.cpp" />
+    <ClCompile Include="ChangePropertyCommand.cpp" />
     <ClCompile Include="ChangeTransformCommand.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DTEngine.cpp" />
