@@ -213,10 +213,58 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
         if (InputManager::Instance().GetKeyDown(KeyCode::Delete) &&
             !ImGui::IsAnyItemActive())
         {
+
+            GameObject* objectToSelectNext = nullptr;
+            Transform* currentTf = m_selectedGameObject->GetTransform(); 
+
+            if (currentTf)
+            {
+                Transform* parentTf = currentTf->GetParent();
+
+                if (parentTf)
+                {
+                    objectToSelectNext = parentTf->_GetOwner();
+                }
+                else
+                {
+                    std::vector<GameObject*> rootGameObjects;
+                    for (const auto& go : activeScene->GetGameObjects()) 
+                    {
+                        if (go && go->GetTransform()->GetParent() == nullptr)
+                        {
+                            rootGameObjects.push_back(go.get());
+                        }
+                    }
+
+                    int index = -1;
+                    for (size_t i = 0; i < rootGameObjects.size(); ++i)
+                    {
+                        if (rootGameObjects[i] == m_selectedGameObject)
+                        {
+                            index = (int)i;
+                            break;
+                        }
+                    }
+
+                    if (index != -1)
+                    {
+                        if (index + 1 < (int)rootGameObjects.size())
+                        {
+                            objectToSelectNext = rootGameObjects[index + 1];
+                        }
+                        else if (index > 0)
+                        {
+                            objectToSelectNext = rootGameObjects[index - 1];
+                        }
+                    }
+                }
+            }
+
             auto cmd = std::make_unique<DestroyGameObjectCommand>(activeScene, m_selectedGameObject);
             HistoryManager::Instance().Do(std::move(cmd));
 
-            m_selectedGameObject = nullptr;
+            m_selectedGameObject = objectToSelectNext;
+
         }
     }
 
