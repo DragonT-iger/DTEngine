@@ -67,6 +67,10 @@ public:
     //Getter Setter
 
 
+    // Undo Redo 호환용 내부 커멘드
+    void _Internal_AddComponent(std::unique_ptr<Component> comp);
+    std::unique_ptr<Component> _Internal_RemoveComponent(Component* comp);
+
 
 
 private:

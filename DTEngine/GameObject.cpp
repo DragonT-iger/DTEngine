@@ -138,6 +138,60 @@ Component* GameObject::AddComponent(const std::string& typeName)
 
     return raw;
 }
+void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
+{
+    Component* raw = comp.get();
+    raw->_SetOwner(this);
+    if (raw->_GetID() == 0) 
+    {
+        raw->_SetID(IDManager::Instance().GetNewUniqueID());
+    }
+
+    m_components.push_back(std::move(comp));
+
+    if (m_phase == Phase::Awake)
+    {
+        if (auto* mb = dynamic_cast<MonoBehaviour*>(raw)) mb->Awake();
+    }
+    else if (m_phase != Phase::None)
+    {
+        if (auto* mb = dynamic_cast<MonoBehaviour*>(raw))
+        {
+            mb->Awake();
+            mb->Start();
+        }
+    }
+}
+
+std::unique_ptr<Component> GameObject::_Internal_RemoveComponent(Component* comp)
+{
+    if (!comp || dynamic_cast<Transform*>(comp))
+    {
+        return nullptr;
+    }
+
+    auto it = std::find_if(m_components.begin(), m_components.end(),
+        [comp](const auto& p) { return p.get() == comp; });
+
+    if (it != m_components.end())
+    {
+        std::unique_ptr<Component> found = std::move(*it);
+        m_components.erase(it);
+        return found;
+    }
+
+    it = std::find_if(m_pendingAdd.begin(), m_pendingAdd.end(),
+        [comp](const auto& p) { return p.get() == comp; });
+
+    if (it != m_pendingAdd.end())
+    {
+        std::unique_ptr<Component> found = std::move(*it);
+        m_pendingAdd.erase(it);
+        return found;
+    }
+
+    return nullptr;
+}
 GameObject* GameObject::Find(std::string name)
 {
     //Scene* curScene = SceneManager::Instance().GetActiveScene();

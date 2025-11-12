@@ -32,8 +32,10 @@ public:
     GameObject* CreateGameObject(const std::string& name = "GameObject");
 
     // Undo Redo 호환용 내부 커멘드 (소유권을 넘긴다) 왜냐면 ID (포인터)가 깨져서 완전 삭제 대신 소유권을 커멘드에 넘길 필요가 있음
-    void _AddGameObject(std::unique_ptr<GameObject> go);
-    std::unique_ptr<GameObject> _RemoveGameObject(GameObject* go);
+    // 굳이 pending 에 넣을 필요는 없는거 같음 
+
+    void _Internal_AddGameObject(std::unique_ptr<GameObject> go);
+    std::unique_ptr<GameObject> _Internal_RemoveGameObject(GameObject* go);
 
         
     void Awake();

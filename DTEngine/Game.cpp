@@ -287,6 +287,7 @@ void Game::LifeCycle(float deltaTime)
 				if (scene->SaveFile(relativePath))
 				{
 					std::cout << "Scene save successful." << std::endl;
+					HistoryManager::Instance().MarkAsSaved();
 				}
 				else
 				{
@@ -300,25 +301,7 @@ void Game::LifeCycle(float deltaTime)
 		}
 	}
 
-	// Redo Undo
 
-	bool shiftPressed = InputManager::Instance().GetKey(KeyCode::Shift);
-	bool zPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Z);
-	bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
-
-	// Undo (Ctrl + Z)
-	if (ctrlPressed && !shiftPressed && zPressed_Down)
-	{
-		HistoryManager::Instance().Undo();
-		//std::cout << "Undo Performed" << std::endl;
-	}
-
-	// Redo (Ctrl + Y) 또는 (Ctrl + Shift + Z)
-	if ((ctrlPressed && yPressed_Down) || (ctrlPressed && shiftPressed && zPressed_Down))
-	{
-		HistoryManager::Instance().Redo();
-		//std::cout << "Redo Performed" << std::endl;
-	}
 
 
 

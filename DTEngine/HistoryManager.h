@@ -4,11 +4,10 @@
 #include <deque>
 #include <memory>
 
+
 class HistoryManager : public Singleton<HistoryManager>
 {
 public:
-    static constexpr size_t MAX_HISTORY_COUNT = 100;
-
     void Do(std::unique_ptr<ICommand> cmd)
     {
         cmd->Execute();
@@ -21,6 +20,8 @@ public:
         }
 
         m_redoStack.clear();
+
+        m_isDirty = true;
     }
 
     void Undo()
@@ -33,6 +34,8 @@ public:
         cmd->Undo();
 
         m_redoStack.push_back(std::move(cmd));
+
+        m_isDirty = true;
     }
 
     void Redo()
@@ -45,9 +48,24 @@ public:
         cmd->Execute();
 
         m_undoStack.push_back(std::move(cmd));
+
+        m_isDirty = true;
+    }
+
+    void MarkAsSaved()
+    {
+        m_isDirty = false;
+    }
+
+    bool IsDirty() const
+    {
+        return m_isDirty;
     }
 
 private:
     std::deque<std::unique_ptr<ICommand>> m_undoStack;
     std::deque<std::unique_ptr<ICommand>> m_redoStack;
+    static constexpr int MAX_HISTORY_COUNT = 100;
+
+    bool m_isDirty = false;
 };

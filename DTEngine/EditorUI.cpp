@@ -20,7 +20,12 @@
 #include "ChangeParentCommand.h"
 #include "ChangeComponentActiveCommand.h"
 #include "ChangeGameObjectActiveCommand.h"
-
+#include "CreateGameObjectCommand.h"
+#include "ComponentFactory.h"
+#include "AddComponentCommand.h"
+#include "RemoveComponentCommand.h"
+#include "DestroyGameObjectCommand.h"
+#include "InputManager.h"
 
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -35,6 +40,28 @@ void EditorUI::Render(Scene* activeScene)
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
     DrawGizmo(activeScene);
+
+
+    // Redo Undo
+
+    bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
+    bool shiftPressed = InputManager::Instance().GetKey(KeyCode::Shift);
+    bool zPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Z);
+    bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
+
+    // Undo (Ctrl + Z)
+    if (ctrlPressed && !shiftPressed && zPressed_Down)
+    {
+        HistoryManager::Instance().Undo();
+        //std::cout << "Undo Performed" << std::endl;
+    }
+
+    // Redo (Ctrl + Y) 또는 (Ctrl + Shift + Z)
+    if ((ctrlPressed && yPressed_Down) || (ctrlPressed && shiftPressed && zPressed_Down))
+    {
+        HistoryManager::Instance().Redo();
+        //std::cout << "Redo Performed" << std::endl;
+    }
 
     
 }
@@ -178,10 +205,46 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
+
+    if (!activeScene) return;
+
+    if (m_selectedGameObject)
+    {
+        if (InputManager::Instance().GetKeyDown(KeyCode::Delete) &&
+            !ImGui::IsAnyItemActive())
+        {
+            auto cmd = std::make_unique<DestroyGameObjectCommand>(activeScene, m_selectedGameObject);
+            HistoryManager::Instance().Do(std::move(cmd));
+
+            m_selectedGameObject = nullptr;
+        }
+    }
+
+
+
     std::string sceneName = activeScene->GetName();
+
+    if (HistoryManager::Instance().IsDirty())
+    {
+        sceneName += "*";
+    }
 
     ImGuiTreeNodeFlags sceneFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
     bool scene_node_open = ImGui::TreeNodeEx(sceneName.c_str(), sceneFlags);
+
+
+
+    if (ImGui::BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags_MouseButtonRight))
+    {
+        if (ImGui::MenuItem("Create Empty"))
+        {
+            auto cmd = std::make_unique<CreateGameObjectCommand>(activeScene, "GameObject");
+            HistoryManager::Instance().Do(std::move(cmd));
+        }
+        ImGui::EndPopup();
+    }
+
+
 
     if (ImGui::BeginDragDropTarget())
     {
@@ -272,11 +335,56 @@ void EditorUI::DrawInspectorWindow()
     
     DrawComponentProperties(m_selectedGameObject->GetTransform());
 
-   
-
     for (const auto& comp : m_selectedGameObject->_GetComponents())
     {
         if (comp) DrawComponentProperties(comp.get());
+    }
+
+    float totalWidth = ImGui::GetContentRegionAvail().x;
+
+    float buttonWidth = totalWidth * 0.6f;
+
+    float padding = totalWidth * 0.20f;
+
+    ImGui::Separator();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    ImGui::SetCursorPosX(padding);
+
+    if (ImGui::Button("Add Component", ImVec2(buttonWidth, 0)))
+    {
+        ImGui::OpenPopup("AddComponentPopup");
+    }
+
+    if (ImGui::BeginPopup("AddComponentPopup"))
+    {
+        ImGui::Text("Component Type:");
+        ImGui::Separator();
+
+        auto& factory = ComponentFactory::Instance();
+        std::vector<std::string> componentNames = factory.GetAllRegisteredTypeNames();
+
+        std::sort(componentNames.begin(), componentNames.end());
+
+        for (const std::string& typeName : componentNames)
+        {
+            if (typeName == "Transform")
+            {
+                continue;
+            }
+
+            if (ImGui::Selectable(typeName.c_str()))
+            {
+                auto cmd = std::make_unique<AddComponentCommand>(m_selectedGameObject, typeName);
+                HistoryManager::Instance().Do(std::move(cmd));
+                ImGui::CloseCurrentPopup();
+            }
+        }
+
+        ImGui::EndPopup();
     }
 
     ImGui::End();
@@ -291,7 +399,6 @@ void EditorUI::DrawComponentProperties(Component* comp)
     const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(comp->_GetTypeName());
     if (!info) return;
 
-    bool header_open = false;
     bool compIsActive = true;
 
     MonoBehaviour* mb = dynamic_cast<MonoBehaviour*>(comp);
@@ -312,7 +419,36 @@ void EditorUI::DrawComponentProperties(Component* comp)
     }
 
 
-    if (!ImGui::CollapsingHeader(comp->_GetTypeName()))
+    bool header_open = ImGui::CollapsingHeader(comp->_GetTypeName(), ImGuiTreeNodeFlags_DefaultOpen);
+
+    bool isTransform = (dynamic_cast<Transform*>(comp) != nullptr);
+    if (ImGui::BeginPopupContextItem("ComponentContextMenu"))
+    {
+        if (isTransform)
+        {
+            ImGui::MenuItem("Remove Component", NULL, false, false);
+            ImGui::TextDisabled("Cannot remove Transform");
+        }
+        else
+        {
+            if (ImGui::MenuItem("Remove Component"))
+            {
+                if (m_selectedGameObject)
+                {
+                    auto cmd = std::make_unique<RemoveComponentCommand>(m_selectedGameObject, comp);
+                    HistoryManager::Instance().Do(std::move(cmd));
+
+                    ImGui::EndPopup();
+                    ImGui::PopID();
+                    return;
+                }
+            }
+        }
+        ImGui::EndPopup();
+    }
+
+
+    if (header_open)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
@@ -454,7 +590,6 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
                 if (ImGui::IsItemDeactivatedAfterEdit())
                 {
-                    // 5. 이전 값과 새 값으로 커맨드 생성
                     Vector3 oldVal = std::any_cast<Vector3>(m_dragStartValue);
                     Vector3 newVal = temp;
 

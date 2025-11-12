@@ -20,6 +20,7 @@ enum class KeyCode
     Escape,
     Tab,
     Backspace,
+    Delete,
 
     // ¹®ÀÚ
     A = 'A',

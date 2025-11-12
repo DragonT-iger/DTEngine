@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AddComponentCommand.h" />
     <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
@@ -153,6 +154,8 @@
     <ClInclude Include="ChangeTransformCommand.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
+    <ClInclude Include="CreateGameObjectCommand.h" />
+    <ClInclude Include="DestroyGameObjectCommand.h" />
     <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="EditorUI.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="ReflectionDatabase.h" />
     <ClInclude Include="ReflectionMacros.h" />
     <ClInclude Include="RegisterCoreTypes.h" />
+    <ClInclude Include="RemoveComponentCommand.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -189,6 +193,7 @@
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddComponentCommand.cpp" />
     <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChangeComponentActiveCommand.cpp" />
@@ -198,6 +203,8 @@
     <ClCompile Include="ChangePropertyCommand.cpp" />
     <ClCompile Include="ChangeTransformCommand.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CreateGameObjectCommand.cpp" />
+    <ClCompile Include="DestroyGameObjectCommand.cpp" />
     <ClCompile Include="DTEngine.cpp" />
     <ClCompile Include="DX11Renderer.cpp" />
     <ClCompile Include="DXHelper.cpp" />
@@ -222,6 +229,7 @@
     </ClCompile>
     <ClCompile Include="ReflectionDatabase.cpp" />
     <ClCompile Include="RegisterCoreTypes.cpp" />
+    <ClCompile Include="RemoveComponentCommand.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />

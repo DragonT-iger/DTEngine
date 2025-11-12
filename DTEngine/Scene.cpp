@@ -103,6 +103,47 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     return raw;
 }
 
+void Scene::_Internal_AddGameObject(std::unique_ptr<GameObject> go)
+{
+    GameObject* raw = go.get();
+    m_gameObjects.push_back(std::move(go));
+
+    if (m_phase == ScenePhase::Awake)
+    {
+        raw->Awake();
+    }
+    else if (m_phase != ScenePhase::None)
+    {
+        raw->Awake();
+        raw->Start();
+    }
+}
+
+std::unique_ptr<GameObject> Scene::_Internal_RemoveGameObject(GameObject* go)
+{
+    auto it = std::find_if(m_gameObjects.begin(), m_gameObjects.end(),
+        [go](const auto& p) { return p.get() == go; });
+
+    if (it != m_gameObjects.end())
+    {
+        std::unique_ptr<GameObject> found = std::move(*it);
+        m_gameObjects.erase(it);
+        return found;
+    }
+
+    it = std::find_if(m_pendingAdd.begin(), m_pendingAdd.end(),
+        [go](const auto& p) { return p.get() == go; });
+
+    if (it != m_pendingAdd.end())
+    {
+        std::unique_ptr<GameObject> found = std::move(*it);
+        m_pendingAdd.erase(it);
+        return found;
+    }
+
+    return nullptr;
+}
+
 
 
 Scene::Scene() : m_name("Untitled Scene") {}
@@ -144,7 +185,7 @@ bool Scene::LoadFile(const std::string& fullPath)
         std::string goName = reader.ReadString("name", "GameObject");
         GameObject* go = CreateGameObject(goName);
 
-		std::cout << "Deserializing GameObject: " << goName << std::endl;
+		//std::cout << "Deserializing GameObject: " << goName << std::endl;
 
         uint64_t go_id = reader.ReadUInt64("id", 0);
         go->_SetID(go_id);
