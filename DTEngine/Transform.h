@@ -33,7 +33,7 @@ public:
 	void SetScale(const Vector3& scale);
 
 
-	void SetParent(Transform* parent, bool worldPositionStays = true);
+	void SetParent(Transform* parent, bool worldPositionStays = false);
 	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 수정주의
 
 

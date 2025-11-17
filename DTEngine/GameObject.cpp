@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 #include "GameObject.h"
 #include "MonoBehaviour.h"
@@ -58,6 +58,9 @@ void GameObject::Start() {
 }
 
 void GameObject::Update(float deltaTime) {
+
+    if (!IsActiveInHierarchy()) return;
+
     m_phase = Phase::Update;
     m_isIterating = true;
     for (auto& comp : m_components) {
@@ -71,6 +74,9 @@ void GameObject::Update(float deltaTime) {
 }
 
 void GameObject::FixedUpdate(float fixedDeltaTime) {
+
+    if (!IsActiveInHierarchy()) return;
+
     m_phase = Phase::FixedUpdate;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -83,6 +89,9 @@ void GameObject::FixedUpdate(float fixedDeltaTime) {
 }
 
 void GameObject::LateUpdate(float deltaTime) {
+
+    if (!IsActiveInHierarchy()) return;
+
     m_phase = Phase::LateUpdate;
     m_isIterating = true;
     for (auto& comp : m_components)
@@ -191,6 +200,18 @@ std::unique_ptr<Component> GameObject::_Internal_RemoveComponent(Component* comp
     }
 
     return nullptr;
+}
+bool GameObject::IsActiveInHierarchy() const
+{
+    if (!m_active) return false;
+
+    Transform* parent = m_transform->GetParent();
+    if (parent)
+    {
+        return parent->_GetOwner()->IsActiveInHierarchy();
+    }
+
+    return true;
 }
 GameObject* GameObject::Find(std::string name)
 {

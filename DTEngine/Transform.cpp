@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Transform.h"
 #include "SimpleMathHelper.h"
 
@@ -199,6 +199,9 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 		m_rotation = r; 
 		m_position = t;
 	}
+
+	if(!worldPositionStays) MarkDirtyRecursive();
+
 
 	UpdateMatrices();
 }

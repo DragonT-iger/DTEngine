@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <filesystem>
 #include "Scene.h"
 #include "GameObject.h"
@@ -332,8 +332,22 @@ GameObject* Scene::FindGameObject(std::string name)
 }
 void Scene::Destroy(GameObject* object)
 {
-    if (object)
-        m_pendingDestroy.push_back(object);
+    auto it = std::find(m_pendingDestroy.begin(), m_pendingDestroy.end(), object);
+    if (it != m_pendingDestroy.end()) return;
+
+
+    m_pendingDestroy.push_back(object);
+
+
+    Transform* tf = object->GetTransform();
+    if (tf)
+    {
+        const auto& children = tf->GetChildren();
+        for (Transform* child : children)
+        {
+            Destroy(child->_GetOwner());
+        }
+    }
 }
 
 
@@ -360,7 +374,13 @@ void Scene::Update(float deltaTime)
 {
     m_phase = ScenePhase::Update;
     m_isIterating = true;
-    for (auto& obj : m_gameObjects) obj->Update(deltaTime);
+    for (auto& obj : m_gameObjects)
+    {
+        if (obj->GetTransform()->GetParent() == nullptr)
+        {
+            obj->Update(deltaTime); 
+        }
+    }
     m_isIterating = false;
     FlushPending();
 }
@@ -370,7 +390,13 @@ void Scene::FixedUpdate(float fixedDelta)
     m_phase = ScenePhase::FixedUpdate;
 
     m_isIterating = true;
-    for (auto& obj : m_gameObjects) obj->FixedUpdate(fixedDelta);
+    for (auto& obj : m_gameObjects)
+    {
+        if (obj->GetTransform()->GetParent() == nullptr)
+        {
+            obj->FixedUpdate(fixedDelta);
+        }
+    }
     m_isIterating = false;
     FlushPending();
 
@@ -381,7 +407,13 @@ void Scene::LateUpdate(float deltaTime)
 {
     m_phase = ScenePhase::LateUpdate;
     m_isIterating = true;
-    for (auto& obj : m_gameObjects) obj->LateUpdate(deltaTime);
+    for (auto& obj : m_gameObjects)
+    {
+        if (obj->GetTransform()->GetParent() == nullptr)
+        {
+            obj->LateUpdate(deltaTime);
+        }
+    }
     m_isIterating = false;
     FlushPending();
 }

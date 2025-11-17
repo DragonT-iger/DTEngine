@@ -239,7 +239,7 @@ void Game::LifeCycle(float deltaTime)
 
 	for (const auto& go : scene->GetGameObjects())
 	{
-		if (!go || !go->IsActive()) continue;
+		if (!go || !go->IsActive() || !go->IsActiveInHierarchy()) continue;
 
 		MeshRenderer* meshRenderer = go->GetComponent<MeshRenderer>();
 		Transform* transform = go->GetTransform();

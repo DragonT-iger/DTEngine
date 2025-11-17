@@ -16,7 +16,7 @@ public:
     {
         if (m_target)
         {
-            // SetParentÀÇ worldPositionStays¸¦ true·Î ¼³Á¤
+            // SetParentì˜ worldPositionStaysë¥¼ trueë¡œ ì„¤ì •
             m_target->SetParent(m_newParent, true);
         }
     }
@@ -25,7 +25,7 @@ public:
     {
         if (m_target)
         {
-            // UndoÇÒ ¶§µµ ¿ùµå ÁÂÇ¥ ±âÁØÀ¸·Î ºÎ¸ğ¸¦ º¹¿ø
+            // Undoí•  ë•Œë„ ì›”ë“œ ì¢Œí‘œ ê¸°ì¤€ìœ¼ë¡œ ë¶€ëª¨ë¥¼ ë³µì›
             m_target->SetParent(m_oldParent, true);
         }
     }

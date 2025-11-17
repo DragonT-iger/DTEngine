@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <memory>
@@ -70,6 +70,8 @@ public:
     // Undo Redo 호환용 내부 커멘드
     void _Internal_AddComponent(std::unique_ptr<Component> comp);
     std::unique_ptr<Component> _Internal_RemoveComponent(Component* comp);
+
+    bool IsActiveInHierarchy() const;
 
 
 

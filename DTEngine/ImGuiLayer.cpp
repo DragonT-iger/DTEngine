@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ImGuiLayer.h"
 #include "DX11Renderer.h"
 
@@ -24,6 +24,9 @@ bool ImGuiLayer::Initialize(DX11Renderer* renderer)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
+
+    //ImGuiIO& io = ImGui::GetIO();
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     // 백엔드 초기화
     ImGui_ImplWin32_Init(m_hwnd);
