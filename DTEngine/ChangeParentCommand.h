@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ICommand.h"
 #include "Transform.h"
 
@@ -17,7 +17,9 @@ public:
         if (m_target)
         {
             // SetParent의 worldPositionStays를 true로 설정
-            m_target->SetParent(m_newParent, true);
+            if (!m_target->SetParent(m_newParent, true)) {
+				isSuccess = false;
+            }
         }
     }
 
@@ -26,11 +28,12 @@ public:
         if (m_target)
         {
             // Undo할 때도 월드 좌표 기준으로 부모를 복원
-            m_target->SetParent(m_oldParent, true);
+            m_target->SetParent(m_oldParent, isSuccess);
         }
     }
 
 private:
+	bool isSuccess = true;
     Transform* m_target;
     Transform* m_oldParent;
     Transform* m_newParent;
