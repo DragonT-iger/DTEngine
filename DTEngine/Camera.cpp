@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Camera.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -45,6 +45,9 @@ void Camera::SetProjectionPerspective(float fovY, float aspectRatio, float nearZ
     m_fovY = fovY;
     m_nearZ = nearZ;
     m_farZ = farZ;
+
+    
+
     m_projection = Matrix::CreatePerspectiveFieldOfView(fovY, aspectRatio, nearZ, farZ);
     m_lastAspectRatio = aspectRatio;
 }
@@ -93,6 +96,18 @@ void Camera::UpdateProjectionMatrix()
     if (!m_dirtyProj) return;
 
     float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio();
+
+
+    if (m_nearZ < 0.01f)
+    {
+        m_nearZ = 0.01f;
+    }
+    if (m_farZ < m_nearZ + 0.1f)
+    {
+        m_farZ = m_nearZ + 0.1f;
+    }
+
+    // 얘없음  0보다 작은거 들어가서 튕김
 
 
     m_projection = Matrix::CreatePerspectiveFieldOfView(m_fovY, currentAspectRatio, m_nearZ, m_farZ);

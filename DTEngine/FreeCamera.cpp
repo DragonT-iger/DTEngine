@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FreeCamera.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -41,8 +41,8 @@ void FreeCamera::HandleInput(float deltaTime)
     {
         auto delta = input.GetMouseDelta();
 
-        m_yaw += delta.x * m_rotationSpeed;
-        m_pitch += delta.y * m_rotationSpeed;
+        m_yaw -= delta.x * m_rotationSpeed;
+        m_pitch -= delta.y * m_rotationSpeed;
 
         transform->SetRotationEuler(Vector3(m_pitch, m_yaw, 0.0f));
 
