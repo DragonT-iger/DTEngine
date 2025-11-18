@@ -209,8 +209,6 @@ bool Transform::SetParent(Transform* newParent, bool worldPositionStays)
 
 		Vector3 s, t;
 		Quaternion r;
-
-		s.x = 1;
 		
 		if (newLocal.Decompose(s, r, t)) {
 			m_scale = s;
