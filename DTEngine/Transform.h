@@ -7,7 +7,7 @@
 
 
 using Vector3 = DirectX::SimpleMath::Vector3;
-//using Vector4 = DirectX::SimpleMath::Vector4;`
+//using Vector4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
@@ -19,13 +19,13 @@ class Transform : public Component
 public:
 	Transform();
 
-	const Vector3& GetEditorEuler() const;
-
 	// Getter Setter
 	const Vector3& GetPosition();
-	const Vector3& GetRotationEuler();
 	const Quaternion& GetRotationQuat() const;
+	const Vector3& GetEditorEuler() const; // 이걸로 가져와야함
 	const Vector3& GetScale();
+
+	Vector3 GetLossyScale(); // Sheer인 경우
 
 	void SetPosition(const Vector3& position);
 	void SetRotationQuat(const Quaternion& rotation);
@@ -59,6 +59,12 @@ public:
 	const Matrix& GetWorldInverseTransposeMatrix();
 
 private:
+
+
+	const Vector3& GetRotationEuler(); // 사용하지 말고 EditorEuler 사용하셈 이걸 사용하면 값이 뒤집히는데
+									   // 원인을 모르겠음
+
+
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것
 	void AddChild(Transform* child);
 	void RemoveChild(Transform* child);

@@ -10,6 +10,20 @@ void InputManager::Initialize()
     m_keyUpState.fill(false);
 }
 
+void InputManager::Update()
+{
+    POINT pt;
+    GetCursorPos(&pt); 
+
+    m_mousePos.x = static_cast<int>(pt.x);
+    m_mousePos.y = static_cast<int>(pt.y);
+
+    m_mouseDelta.x = m_mousePos.x - m_prevMousePos.x;
+    m_mouseDelta.y = m_mousePos.y - m_prevMousePos.y;
+
+    m_prevMousePos = m_mousePos;
+}
+
 void InputManager::EndFrame()
 {
     m_keyDownState.fill(false);

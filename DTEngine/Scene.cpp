@@ -15,7 +15,6 @@ struct FixupTask
     uint64_t        targetID;       // 연결할 객체의 ID (e.g. 부모의 ID)
 };
 
-
 static void ReadPropertyRecursive(
     JsonReader& reader,
     const PropertyInfo& prop,
@@ -26,7 +25,6 @@ static void ReadPropertyRecursive(
     const char* name = prop.m_name.c_str();
 
     if (!reader.Has(name)) return;
-
 
     if (type == typeid(int)) {
         int v = reader.ReadInt(name);
@@ -48,8 +46,6 @@ static void ReadPropertyRecursive(
         std::string v = reader.ReadString(name);
         prop.m_setter(base, &v);
     }
-
-
     else if (type == typeid(Transform*)) {
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });

@@ -123,6 +123,19 @@ const Vector3& Transform::GetScale()
 {
 	return m_scale;
 }
+Vector3 Transform::GetLossyScale()
+{
+	Vector3 scale = m_scale;
+	Transform* p = m_parent;
+
+	while (p != nullptr)
+	{
+		scale *= p->GetScale();
+		p = p->GetParent();
+	}
+
+	return scale;
+}
 const Vector3 Transform::Forward() {
 	const Matrix& w = GetWorldMatrix();
 	Vector3 f{ w._31, w._32, w._33 };
@@ -194,10 +207,18 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 
 		Vector3 s, t;
 		Quaternion r;
-		newLocal.Decompose(s, r, t);
-		m_scale = s;
-		m_rotation = r; 
-		m_position = t;
+
+		s.x = 1;
+		
+		if (newLocal.Decompose(s, r, t)) {
+			m_scale = s;
+			m_rotation = r;
+			m_position = t;
+		}
+		else {
+			std::cout << "Decompose 불가능 근사값으로 대체" << std::endl;
+		}
+		
 	}
 
 	if(!worldPositionStays) MarkDirtyRecursive();

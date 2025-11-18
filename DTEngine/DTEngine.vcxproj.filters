@@ -218,6 +218,9 @@
     <ClInclude Include="RemoveComponentCommand.h">
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -336,6 +339,9 @@
     </ClCompile>
     <ClCompile Include="RemoveComponentCommand.cpp">
       <Filter>ImGUI\Undo</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeCamera.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,7 @@
 #include "InputManager.h"
 #include "ImGuizmo.h"
 #include "HistoryManager.h"
+#include "FreeCamera.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -185,6 +186,7 @@ void Game::LifeCycle(float deltaTime)
 	}
 
 
+	InputManager::Instance().Update();
 
 	static float elapsedTime = 0.0f;
 	static float fixedDeltaTime = 0.02f;

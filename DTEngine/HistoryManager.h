@@ -62,6 +62,11 @@ public:
         return m_isDirty;
     }
 
+    void SetDirty()
+    {
+        m_isDirty = true;
+    }
+
 private:
     std::deque<std::unique_ptr<ICommand>> m_undoStack;
     std::deque<std::unique_ptr<ICommand>> m_redoStack;

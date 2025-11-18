@@ -6,6 +6,13 @@
 #include <cstdint>   
 #include "KeyCode.h" 
 
+struct MousePos
+{
+    int x;
+    int y;
+};
+
+
 class InputManager : public Singleton<InputManager>
 {
 public:
@@ -16,6 +23,7 @@ public:
     using LPARAM = std::intptr_t;
 
     void Initialize();
+    void Update();
 
     void HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -25,6 +33,9 @@ public:
     bool GetKey(KeyCode key) const;     
     bool GetKeyUp(KeyCode key) const;   
 
+    const MousePos& GetMousePosition() const { return m_mousePos; }
+    const MousePos& GetMouseDelta() const { return m_mouseDelta; }
+
 private:
     InputManager() = default;
     ~InputManager() = default;
@@ -32,6 +43,10 @@ private:
     std::array<bool, 256> m_keyState;
     std::array<bool, 256> m_keyDownState;
     std::array<bool, 256> m_keyUpState;
+
+    MousePos m_mousePos = { 0, 0 };
+    MousePos m_prevMousePos = { 0, 0 };
+    MousePos m_mouseDelta = { 0, 0 };
 
     int MapKeyCodeToVKey(KeyCode key) const;
 };
