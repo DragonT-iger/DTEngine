@@ -69,8 +69,10 @@ void FreeCamera::HandleInput(float deltaTime)
 
             Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
             transform->SetPosition(newPos);
-            HistoryManager::Instance().SetDirty();
         }
+
+
+        HistoryManager::Instance().SetDirty();
     }
 
     
