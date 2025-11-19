@@ -23,26 +23,16 @@ public:
 
     const float& GetNearZ() { return m_nearZ; }
     void SetNearZ(float nearZ) {
-        if (m_nearZ < 0.5) {
-            m_nearZ = 0.5;
-        }
-        else {
-            m_nearZ = nearZ;
-        }
+        m_nearZ = nearZ;
         
-        m_dirtyProj = true;
+        //m_dirtyProj = true;
     }
 
     const float& GetFarZ() { return m_farZ; }
     void SetFarZ(float farZ) {
-        if (m_farZ < m_nearZ + 1) {
-            m_farZ = m_nearZ + 1;
-        }
-        else {
-            m_farZ = farZ;
-        }
+        m_farZ = farZ;
 
-        m_dirtyProj = true;
+        //m_dirtyProj = true;
     }
 
     const Vector4& GetClearColor() const { return m_clearColor; }

@@ -216,7 +216,17 @@ bool Transform::SetParent(Transform* newParent, bool worldPositionStays)
 			m_position = t;
 		}
 		else {
-			std::cout << "[Warning] Can't decompose matrix in Transform::SetParent\n"; // 부모의 스케일이 1 2 1(비등방) 그리고 회전값이 있으면 분해가 안됨. 유니티도 안되더라?
+			std::cout << "[Warning] Can't decompose matrix in Transform::SetParent\n"; 
+			
+			// 부모의 스케일이 1 2 1(비등방) 그리고 회전값이 있으면 분해가 안됨. 유니티도 안되더라?  전단인 경우.
+			// 언리얼은 됨 스케일 처리 로직이 달라서 보면 스케일 맥이는 방식이 좀 다름
+			// 우리는 유니티 방식을 따르기 때문에 처리하지 않을것
+			// 만약 모델러가 버텍스 데이터에 스케일이나 Rotation 값을 넣어서 줘서 그걸 파싱해도 이거 뜰꺼임
+			// 우리 엔진에서는 처리하지 않음 그냥 모델링 툴에서 Apply Transform 할것 
+			// (모든 정점 위치를 옮겨서 스케일과 rot을 적용하는것)
+			// 그리고 애초에 충돌처리도 제대로 지원할 수가 없다.
+			// PhysX 도 Shear인 경우 지원하지 않는다 카더라.
+
 			MarkDirtyRecursive();
 			flag = false;
 		}

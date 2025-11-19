@@ -45,9 +45,6 @@ void Camera::SetProjectionPerspective(float fovY, float aspectRatio, float nearZ
     m_fovY = fovY;
     m_nearZ = nearZ;
     m_farZ = farZ;
-
-    
-
     m_projection = Matrix::CreatePerspectiveFieldOfView(fovY, aspectRatio, nearZ, farZ);
     m_lastAspectRatio = aspectRatio;
 }

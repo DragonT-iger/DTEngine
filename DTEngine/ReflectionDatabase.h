@@ -28,7 +28,7 @@ class ReflectionDatabase : public Singleton<ReflectionDatabase>
     friend class Singleton<ReflectionDatabase>;
 
 public:
-    //void RegisterClass(const char* className); // <-- Windows.h ��ũ�� �̽�
+    //void RegisterClass(const char* className); // <-- Windows.h 
     void RegisterDTGENERATED_BODY(const char* className);
 
     void RegisterDTPROPERTY(const char* className, const char* propName,
