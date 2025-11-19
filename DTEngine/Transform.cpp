@@ -184,9 +184,11 @@ void Transform::SetScale(const Vector3& scale)
 	MarkDirtyRecursive();
 }
 
-void Transform::SetParent(Transform* newParent, bool worldPositionStays)
+bool Transform::SetParent(Transform* newParent, bool worldPositionStays)
 {
-	if (newParent == m_parent) return;
+	if (newParent == m_parent) return true;
+
+	bool flag = true;
 
 	Matrix oldWorld = GetWorldMatrix();
 
@@ -207,8 +209,6 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 
 		Vector3 s, t;
 		Quaternion r;
-
-		s.x = 1;
 		
 		if (newLocal.Decompose(s, r, t)) {
 			m_scale = s;
@@ -216,7 +216,9 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 			m_position = t;
 		}
 		else {
-			std::cout << "Decompose 불가능 근사값으로 대체" << std::endl;
+			std::cout << "[Warning] Can't decompose matrix in Transform::SetParent\n"; // 부모의 스케일이 1 2 1(비등방) 그리고 회전값이 있으면 분해가 안됨. 유니티도 안되더라?
+			MarkDirtyRecursive();
+			flag = false;
 		}
 		
 	}
@@ -225,6 +227,8 @@ void Transform::SetParent(Transform* newParent, bool worldPositionStays)
 
 
 	UpdateMatrices();
+
+	return flag;
 }
 
 

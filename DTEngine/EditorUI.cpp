@@ -474,6 +474,29 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         if (isTransform)
         {
+
+            if (ImGui::MenuItem("Reset"))
+            {
+                Transform* tf = static_cast<Transform*>(comp);
+
+                Vector3 oldPos = tf->GetPosition();
+                Quaternion oldRot = tf->GetRotationQuat();
+                Vector3 oldScale = tf->GetScale();
+
+                Vector3 newPos = Vector3(0, 0, 0);
+                Quaternion newRot = Quaternion(0.f, 0.f, 0.f, 1.f);
+                Vector3 newScale = Vector3(1, 1, 1);
+
+                auto cmd = std::make_unique<ChangeTransformCommand>(
+                    tf,
+                    oldPos, newPos,
+                    oldRot, newRot,
+                    oldScale, newScale
+                );
+                HistoryManager::Instance().Do(std::move(cmd));
+            }
+
+
             ImGui::MenuItem("Remove Component", NULL, false, false);
             ImGui::TextDisabled("Cannot remove Transform");
         }
