@@ -27,6 +27,7 @@
 #include "ImGuizmo.h"
 #include "HistoryManager.h"
 #include "FreeCamera.h"
+#include "RenderTexture.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -52,16 +53,18 @@ bool Game::Initialize()
 		return false;
 	}
 
+#ifdef _DEBUG
+
 	m_imgui = std::make_unique<ImGuiLayer>();
 	if (!m_imgui->Initialize(&DX11Renderer::Instance())) {
 		assert(false && "ImGui 초기화 실패");
 		return false;
 	}
-
 	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 
 	m_editorUI = std::make_unique<EditorUI>();
 
+#endif
 	if(!ResourceManager::Instance().Initialize("Assets"))
 	{
 		assert(false && "ResourceManager 초기화 실패");
@@ -94,8 +97,32 @@ bool Game::Initialize()
 		return false;
 	}
 
+
+#ifdef _DEBUG
+	m_sceneRT = std::make_unique<RenderTexture>();
+	m_sceneRT->Initialize(1280, 720);
+	
+	m_gameRT = std::make_unique<RenderTexture>();
+	m_gameRT->Initialize(1280, 720);
+
+	m_editorCameraObject = scene->CreateGameObject("EditorCamera");
+	m_editorCameraObject->AddComponent<Camera>();
+	m_editorCameraObject->AddComponent<FreeCamera>();
+	m_editorCameraObject->SetFlag(GameObject::Flags::HideAndDontSave, true);
+#else
+	m_gameRT = std::make_unique<RenderTexture>();
+	m_gameRT->Initialize(1920, 1080);
+#endif
+	
+
+
 	SceneManager::Instance().RegisterScene("SampleScene", scene);
 	SceneManager::Instance().LoadScene("SampleScene");
+
+
+
+	
+
 
 	//Scene testScene("TestScene");
 
@@ -144,7 +171,6 @@ bool Game::Initialize()
 
 
 
-
 	return true;
 }
 
@@ -164,8 +190,10 @@ void Game::Run()
 
 void Game::Release()
 {
+#ifdef _DEBUG
 	if (m_editorUI) { m_editorUI.reset(); }
 	if (m_imgui) { m_imgui->Shutdown(); m_imgui.reset(); }
+#endif
 	DX11Renderer::Instance().Destroy();
 	__super::Destroy();
 }
@@ -205,69 +233,7 @@ void Game::LifeCycle(float deltaTime)
 	
 
 
-
 	// 렌더링
-
-	Camera* mainCamera = scene->GetMainCamera();
-
-	const float* clearColor;
-
-	if (mainCamera != nullptr) {
-		clearColor = &mainCamera->GetClearColor().x;
-	}
-	else
-	{
-		static const float defaultColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
-		clearColor = defaultColor;
-		std::cout << "메인 카메라가 존재하지 않습니다" << std::endl;
-	}
-
-	DX11Renderer::Instance().BeginFrame(clearColor);
-
-
-	if (mainCamera)
-	{
-		const Matrix& viewTM = mainCamera->GetViewMatrix();
-
-		//std::cout << viewTM << std::endl;
-
-		const Matrix& projTM = mainCamera->GetProjectionMatrix();
-
-
-		//std::cout << projTM << std::endl;
-
-		DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
-	}
-
-	for (const auto& go : scene->GetGameObjects())
-	{
-		if (!go || !go->IsActive() || !go->IsActiveInHierarchy()) continue;
-
-		MeshRenderer* meshRenderer = go->GetComponent<MeshRenderer>();
-		Transform* transform = go->GetTransform();
-
-		if (!meshRenderer || !transform) continue;
-
-		if (meshRenderer->IsActive() == false) continue;
-
-		//Mesh* mesh = meshRenderer->GetMesh();
-		//Material* material = meshRenderer->GetMaterial();
-
-
-		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
-		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
-
-		if (!mesh || !material) continue;
-
-		const Matrix& worldTM = transform->GetWorldMatrix();
-		Matrix worldInvT_TM = transform->GetWorldInverseTransposeMatrix();
-		material->Bind(worldTM, worldInvT_TM);
-
-		mesh->Bind();
-
-		mesh->Draw();
-	}
-	
 
 
 	//Scene Save (CTAL + S), 
@@ -304,26 +270,80 @@ void Game::LifeCycle(float deltaTime)
 	}
 
 
+#ifdef _DEBUG
+	m_sceneRT->Bind();
 
 
+	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
+	// 씬 뷰
+
+	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
+
+	RenderScene(scene, editorCam, m_sceneRT.get());
 
 
+	m_gameRT->Bind();
+
+	Camera* mainCamera = scene->GetMainCamera();
+
+	if (mainCamera)
+	{
+		const auto& col = mainCamera->GetClearColor();
+		m_gameRT->Clear(col.x, col.y, col.z, 1.0f);
+
+		RenderScene(scene, mainCamera, m_gameRT.get());
+	}
 
 
+	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	DX11Renderer::Instance().BeginFrame(black);
 
 	m_imgui->NewFrame();
-
 	ImGuizmo::BeginFrame();
 
-	ImGuizmo::SetRect(
-		0, 0,
-		(float)DX11Renderer::Instance().GetWidth(), 
-		(float)DX11Renderer::Instance().GetHeight() 
-	);
+	m_editorUI->RenderSceneWindow(m_sceneRT.get(), scene, editorCam);
+	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
+
+
+	//ImGuizmo::SetRect(
+	//	0, 0,
+	//	(float)DX11Renderer::Instance().GetWidth(), 
+	//	(float)DX11Renderer::Instance().GetHeight() 
+	//);
 
 	m_editorUI->Render(scene);
 
 	m_imgui->Render();
+
+
+#else
+
+
+	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	DX11Renderer::Instance().BeginFrame(black);
+
+	Camera* mainCam = scene->GetMainCamera();
+
+	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0, 0, 0, 1};
+	DX11Renderer::Instance().BeginFrame(clearColor);
+
+	if (mainCam)
+	{
+		float ratio = DX11Renderer::Instance().GetAspectRatio();
+		mainCam->SetAspectRatio(ratio);
+
+		RenderScene(scene, mainCam, nullptr);
+	}
+
+
+
+#endif
+
+
+
+
+
+
 
 	DX11Renderer::Instance().EndFrame();
 	DX11Renderer::Instance().Present();
@@ -334,10 +354,10 @@ void Game::LifeCycle(float deltaTime)
 
 bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
 {
-
+#ifdef _DEBUG
 	if (m_imgui && m_imgui->WndProcHandler(hWnd, msg, wparam, lparam))
 		return true;
-
+#endif
 
 	InputManager::Instance().HandleMessage((UINT)msg, (WPARAM)wparam, (LPARAM)lparam);
 
@@ -354,4 +374,50 @@ void Game::OnResize(int width, int height)
 
 void Game::OnClose()
 {
+}
+
+void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
+{
+	if (!scene || !camera) return;
+
+	float ratio = 1.777f;
+
+	if (rt != nullptr)
+	{
+		ratio = (float)rt->GetWidth() / (float)rt->GetHeight();
+	}
+	else
+	{
+		ratio = DX11Renderer::Instance().GetAspectRatio();
+	}
+	
+	camera->SetAspectRatio(ratio);
+
+	//if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
+
+	const Matrix& viewTM = camera->GetViewMatrix();
+	const Matrix& projTM = camera->GetProjectionMatrix();
+	DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
+
+	for (const auto& go : scene->GetGameObjects())
+	{
+		if (!go || !go->IsActiveInHierarchy()) continue;
+
+		MeshRenderer* meshRenderer = go->GetComponent<MeshRenderer>();
+		Transform* transform = go->GetTransform();
+
+		if (!meshRenderer || !transform || !meshRenderer->IsActive()) continue;
+
+		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
+		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
+
+		if (!mesh || !material) continue;
+
+		const Matrix& worldTM = transform->GetWorldMatrix();
+		Matrix worldInvT_TM = transform->GetWorldInverseTransposeMatrix();
+
+		material->Bind(worldTM, worldInvT_TM);
+		mesh->Bind();
+		mesh->Draw();
+	}
 }

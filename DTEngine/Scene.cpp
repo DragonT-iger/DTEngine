@@ -269,6 +269,9 @@ bool Scene::SaveFile(const std::string& solutionPath)
     {
         if (!go) continue;
 
+        if (go->HasFlag(GameObject::Flags::DontSave))
+            continue;
+
         writer.NextArrayItem();
 
         writer.Write("id", go->_GetID());

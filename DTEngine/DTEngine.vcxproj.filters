@@ -221,6 +221,9 @@
     <ClInclude Include="FreeCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -341,6 +344,9 @@
       <Filter>ImGUI\Undo</Filter>
     </ClCompile>
     <ClCompile Include="FreeCamera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

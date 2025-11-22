@@ -56,6 +56,24 @@ public:
     void BroadcastTriggerStay(Collider* other);
     void BroadcastTriggerExit(Collider* other);
 
+    enum class Flags : uint8_t
+    {
+        None = 0,
+        DontSave = 1 << 0,       
+        HideInHierarchy = 1 << 1,
+        HideAndDontSave = DontSave | HideInHierarchy
+    };
+
+    void SetFlag(Flags flag, bool enable) {
+        if (enable) m_flags = (Flags)((uint8_t)m_flags | (uint8_t)flag);
+        else m_flags = (Flags)((uint8_t)m_flags & ~(uint8_t)flag);
+    }
+
+    bool HasFlag(Flags flag) const {
+        return ((uint8_t)m_flags & (uint8_t)flag) == (uint8_t)flag;
+    }
+
+
     const std::vector<std::unique_ptr<Component>>& _GetComponents() const { return m_components; }
 
     //Deserialization
@@ -101,6 +119,7 @@ private:
 
     // id
     uint64_t m_id;
+    Flags m_flags = Flags::None;
 
 
 };
@@ -184,6 +203,9 @@ inline T* Component::AddComponent(Args&&... args) {
 template<typename T>
 inline T* Component::GetComponent() const {
     auto* owner = _GetOwner();
-    if (!owner) return nullptr;
+    if (!owner) {
+        assert(false && "no owner!!!!!!!!!!");
+        return nullptr;
+    }
     return owner->template GetComponent<T>();
 }

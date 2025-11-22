@@ -46,7 +46,6 @@ void Camera::SetProjectionPerspective(float fovY, float aspectRatio, float nearZ
     m_nearZ = nearZ;
     m_farZ = farZ;
     m_projection = Matrix::CreatePerspectiveFieldOfView(fovY, aspectRatio, nearZ, farZ);
-    m_lastAspectRatio = aspectRatio;
 }
 
 void Camera::SetProjectionOrthographic(float viewWidth, float viewHeight, float nearZ, float farZ)
@@ -92,7 +91,7 @@ void Camera::UpdateProjectionMatrix()
 {
     if (!m_dirtyProj) return;
 
-    float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio();
+    //float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio(); 이건 전체 화면의 해상비임 
 
 
     if (m_nearZ < 0.01f)
@@ -107,8 +106,7 @@ void Camera::UpdateProjectionMatrix()
     // 얘없음  0보다 작은거 들어가서 튕김
 
 
-    m_projection = Matrix::CreatePerspectiveFieldOfView(m_fovY, currentAspectRatio, m_nearZ, m_farZ);
-    m_lastAspectRatio = currentAspectRatio;
+    m_projection = Matrix::CreatePerspectiveFieldOfView(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
 
 
     m_dirtyProj = false;

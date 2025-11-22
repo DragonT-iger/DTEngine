@@ -25,8 +25,9 @@ bool ImGuiLayer::Initialize(DX11Renderer* renderer)
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
 
-    //ImGuiIO& io = ImGui::GetIO();
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
+
 
     // 백엔드 초기화
     ImGui_ImplWin32_Init(m_hwnd);

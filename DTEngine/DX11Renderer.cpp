@@ -1,4 +1,4 @@
-#include "pch.h" 
+﻿#include "pch.h" 
 #include "DX11Renderer.h"
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -121,6 +121,29 @@ void DX11Renderer::Destroy()
     m_context.Reset();
     m_device.Reset();
     m_hwnd = nullptr;
+}
+
+void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
+{
+    if (rtv == nullptr)
+    {
+        ID3D11RenderTargetView* rtvs[1] = { m_rtv.Get() };
+        m_context->OMSetRenderTargets(1, rtvs, m_dsv.Get());
+
+        D3D11_VIEWPORT vp{};
+        vp.Width = static_cast<float>(m_width);
+        vp.Height = static_cast<float>(m_height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_context->RSSetViewports(1, &vp);
+    }
+    else
+    {
+        ID3D11RenderTargetView* rtvs[1] = { rtv };
+        m_context->OMSetRenderTargets(1, rtvs, dsv);
+    }
 }
 
 HWND DX11Renderer::GetHwnd()

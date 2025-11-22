@@ -38,6 +38,7 @@ public:
     void SetFullscreen(bool enable);
     void Destroy();
 
+    void SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr);
 
     HWND GetHwnd();
     ID3D11Device* GetDevice()  const;
@@ -60,6 +61,9 @@ public:
 
     int GetWidth() { return m_width; }
     int GetHeight() { return m_height; }
+    void SetWidth(int width) { m_width = width; }
+    void SetHeight(int height) { m_height = height; }
+
 
 
 private:

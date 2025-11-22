@@ -42,6 +42,7 @@ public:
     void SetEditorFovY(float editorFovY) { m_editorFovY = editorFovY; m_fovY = SimpleMathHelper::Deg2Rad(editorFovY);  m_dirtyProj = true; }
 
     void SetViewDirty() { m_dirtyView = true; }
+    void SetAspectRatio(float ratio) { m_aspectRatio = ratio; m_dirtyProj = true; }
 
 
 private:
@@ -51,7 +52,7 @@ private:
     Matrix m_view;
     Matrix m_projection;
 
-    float m_lastAspectRatio = -1.0f;
+    float m_aspectRatio = -1;
 
     float m_fovY = SimpleMathHelper::Deg2Rad(60.0f);
     float m_editorFovY = 60.0f;

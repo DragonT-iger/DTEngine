@@ -9,7 +9,8 @@ class Scene;
 class GameObject;
 class Component;
 class Transform;
-
+class RenderTexture;
+class Camera;
 
 
 
@@ -22,17 +23,19 @@ public:
 
     void Render(Scene* activeScene);
 
+    void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
+    void RenderGameWindow(RenderTexture* rt, Scene* scene);
+
 private:
     void DrawHierarchyWindow(Scene* activeScene);
 
     void DrawInspectorWindow();
 
-    void DrawGizmo(Scene* activeScene);
+    void DrawGizmo(Scene* activeScene, Camera* camera);
 
     void DrawHierarchyNode(Transform* tf);
 
     void DrawComponentProperties(Component* comp);
-
 
 
 

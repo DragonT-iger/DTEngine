@@ -182,6 +182,7 @@
     <ClInclude Include="ReflectionMacros.h" />
     <ClInclude Include="RegisterCoreTypes.h" />
     <ClInclude Include="RemoveComponentCommand.h" />
+    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="ReflectionDatabase.cpp" />
     <ClCompile Include="RegisterCoreTypes.cpp" />
     <ClCompile Include="RemoveComponentCommand.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />

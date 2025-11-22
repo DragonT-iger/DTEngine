@@ -26,6 +26,7 @@
 #include "RemoveComponentCommand.h"
 #include "DestroyGameObjectCommand.h"
 #include "InputManager.h"
+#include "RenderTexture.h"
 
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -39,8 +40,7 @@ void EditorUI::Render(Scene* activeScene)
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
-    DrawGizmo(activeScene);
-
+    //DrawGizmo(activeScene);
 
     // Redo Undo
 
@@ -66,8 +66,9 @@ void EditorUI::Render(Scene* activeScene)
     
 }
 
-void EditorUI::DrawGizmo(Scene* activeScene) {
-    Camera* camera = activeScene->GetMainCamera();
+void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
+    //Camera* camera = activeScene->GetMainCamera();
+
     if (camera)
     {
         Matrix viewMatrix = camera->GetViewMatrix();
@@ -320,6 +321,9 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
         {
             if (go)
             {
+                if (go->HasFlag(GameObject::Flags::HideInHierarchy))
+                    continue;
+
                 Transform* tf = go->GetTransform();
                 if (tf && tf->GetParent() == nullptr) 
                 {
@@ -757,4 +761,52 @@ void EditorUI::DrawComponentProperties(Component* comp)
     }
 
     ImGui::PopID();
+}
+
+void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
+{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::Begin("Scene");
+
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+    if (rt->GetWidth() != (int)viewportPanelSize.x || rt->GetHeight() != (int)viewportPanelSize.y)
+    {
+        rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
+    }
+
+    ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
+
+    ImVec2 imageMin = ImGui::GetItemRectMin();
+    ImVec2 imageMax = ImGui::GetItemRectMax();
+
+    ImGuizmo::SetRect(imageMin.x, imageMin.y, imageMax.x - imageMin.x, imageMax.y - imageMin.y);
+
+    ImGuizmo::SetDrawlist();
+
+    if (camera)
+    {
+        DrawGizmo(activeScene, camera);
+    }
+
+    ImGui::End();
+    ImGui::PopStyleVar();
+}
+
+void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
+{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::Begin("Game");
+
+    ImVec2 size = ImGui::GetContentRegionAvail();
+
+    if (rt->GetWidth() != (int)size.x || rt->GetHeight() != (int)size.y)
+    {
+        rt->Resize((int)size.x, (int)size.y);
+    }
+
+    ImGui::Image((void*)rt->GetSRV(), size);
+
+    ImGui::End();
+    ImGui::PopStyleVar();
 }
