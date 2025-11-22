@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "MonoBehaviour.h"
 #include <SimpleMath.h> 
 
@@ -15,6 +15,8 @@ public:
     void Awake() override;
     void Update(float deltaTime) override;
 
+    static void SetIsSceneHovered(bool hovered) { s_isSceneHovered = hovered; }
+
 private:
     void HandleInput(float deltaTime);
 
@@ -24,4 +26,8 @@ private:
 
     float m_yaw = 0.0f;   
     float m_pitch = 0.0f; 
+
+    bool m_isControlling = false;
+
+    inline static bool s_isSceneHovered = false;
 };

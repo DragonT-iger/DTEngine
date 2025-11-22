@@ -27,6 +27,7 @@
 #include "DestroyGameObjectCommand.h"
 #include "InputManager.h"
 #include "RenderTexture.h"
+#include "FreeCamera.h"
 
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -776,6 +777,9 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     }
 
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
+
+    bool isHovered = ImGui::IsWindowHovered();
+    FreeCamera::SetIsSceneHovered(isHovered);
 
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();

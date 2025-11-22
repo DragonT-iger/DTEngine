@@ -37,7 +37,20 @@ void FreeCamera::HandleInput(float deltaTime)
 
     InputManager& input = InputManager::Instance();
 
-    if (input.GetKey(KeyCode::MouseRight))
+    if (input.GetKeyDown(KeyCode::MouseRight))
+    {
+        if (s_isSceneHovered)
+        {
+            m_isControlling = true;
+        }
+    }
+
+    if (input.GetKeyUp(KeyCode::MouseRight))
+    {
+        m_isControlling = false;
+    }
+
+    if (m_isControlling && input.GetKey(KeyCode::MouseRight))
     {
         auto delta = input.GetMouseDelta();
 
