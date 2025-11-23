@@ -36,6 +36,75 @@ static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 EditorUI::EditorUI() = default;
 EditorUI::~EditorUI() = default;
 
+void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Game::EngineMode)> onModeChanged)
+{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);   
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 4.0f)); 
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+    auto& colors = ImGui::GetStyle().Colors;
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(colors[ImGuiCol_ButtonHovered].x, colors[ImGuiCol_ButtonHovered].y, colors[ImGuiCol_ButtonHovered].z, 0.5f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(colors[ImGuiCol_ButtonActive].x, colors[ImGuiCol_ButtonActive].y, colors[ImGuiCol_ButtonActive].z, 0.5f));
+
+
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y));
+
+    ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, 30.0f));
+
+
+    ImGuiWindowFlags window_flags =
+        ImGuiWindowFlags_NoDecoration               
+        | ImGuiWindowFlags_NoMove                   
+        | ImGuiWindowFlags_NoScrollbar              
+        | ImGuiWindowFlags_NoSavedSettings          
+        | ImGuiWindowFlags_NoBringToFrontOnFocus;   
+
+
+    if (ImGui::Begin("MainToolbar", nullptr, window_flags))
+    {
+        float buttonWidth = 50.0f;
+        float buttonCount = 2.0f; 
+
+        float groupWidth = (buttonWidth * buttonCount) + (ImGui::GetStyle().ItemSpacing.x * (buttonCount - 1));
+
+        float startPosX = (ImGui::GetContentRegionAvail().x * 0.5f) - (groupWidth * 0.5f);
+
+        ImGui::SetCursorPosX(startPosX);
+
+
+        bool isPlay = (currentMode == Game::EngineMode::Play);
+        if (isPlay) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.7f, 1.0f, 1.0f));
+
+        if (ImGui::Button(isPlay ? "Stop" : "Play", ImVec2(buttonWidth, 0)))
+        {
+            onModeChanged(Game::EngineMode::Play);
+        }
+
+        if (isPlay) ImGui::PopStyleColor();
+
+
+        ImGui::SameLine(); 
+
+
+        bool isPause = (currentMode == Game::EngineMode::Pause);
+
+        ImGui::BeginDisabled(currentMode == Game::EngineMode::Edit);
+        if (ImGui::Button(isPause ? "Resume" : "Pause", ImVec2(buttonWidth, 0)))
+        {
+            onModeChanged(Game::EngineMode::Pause);
+        }
+        ImGui::EndDisabled();
+    }
+
+    ImGui::End();
+
+    ImGui::PopStyleColor(3);
+    ImGui::PopStyleVar(3);
+}
+
 void EditorUI::Render(Scene* activeScene)
 {
     if (!activeScene) return;

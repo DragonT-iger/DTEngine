@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include <vector>
@@ -50,6 +50,9 @@ public:
     void SetMainCamera(Camera* mainCamera);
 
     const std::string& GetName() const { return m_name; }
+	void SetName(const std::string& name) { m_name = name; }
+
+    void Clear();
 
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;

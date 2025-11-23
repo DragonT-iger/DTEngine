@@ -9,6 +9,8 @@ BEGINPROPERTY(FreeCamera)
 DTPROPERTY(FreeCamera, m_moveSpeed)
 DTPROPERTY(FreeCamera, m_turboScale)
 DTPROPERTY(FreeCamera, m_rotationSpeed)
+DTPROPERTY(FreeCamera, m_yaw)
+DTPROPERTY(FreeCamera, m_pitch);
 ENDPROPERTY()
 
 FreeCamera::FreeCamera() = default;

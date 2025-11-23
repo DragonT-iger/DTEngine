@@ -28,6 +28,7 @@
 #include "HistoryManager.h"
 #include "FreeCamera.h"
 #include "RenderTexture.h"
+#include "move.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -105,10 +106,23 @@ bool Game::Initialize()
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1280, 720);
 
-	m_editorCameraObject = scene->CreateGameObject("EditorCamera");
-	m_editorCameraObject->AddComponent<Camera>();
-	m_editorCameraObject->AddComponent<FreeCamera>();
-	m_editorCameraObject->SetFlag(GameObject::Flags::HideAndDontSave, true);
+
+	m_editorCameraObject = scene->FindGameObject("EditorCamera55");
+
+	if(m_editorCameraObject)
+	{
+		std::cout << "EditorCamera 게임 오브젝트를 씬에서 찾았습니다." << std::endl;
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+	}
+	else
+	{
+		std::cout << "EditorCamera 게임 오브젝트가 씬에 없음. 새로 생성합니다." << std::endl;
+		m_editorCameraObject = scene->CreateGameObject("EditorCamera55");
+		m_editorCameraObject->AddComponent<Camera>();
+		m_editorCameraObject->AddComponent<FreeCamera>();
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+	}
+	
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1080);
@@ -216,22 +230,46 @@ void Game::LifeCycle(float deltaTime)
 
 	InputManager::Instance().Update();
 
-	static float elapsedTime = 0.0f;
-	static float fixedDeltaTime = 0.02f;
-
-	elapsedTime += deltaTime;
-
-	while (elapsedTime >= fixedDeltaTime)
+#ifdef _DEBUG
+	if (m_engineMode == EngineMode::Play)
 	{
-		scene->FixedUpdate(fixedDeltaTime);
-		elapsedTime -= fixedDeltaTime;
+#endif  
+		static float elapsedTime = 0.0f;
+		static float fixedDeltaTime = 0.02f;
+
+		elapsedTime += deltaTime;
+
+		while (elapsedTime >= fixedDeltaTime)
+		{
+			scene->FixedUpdate(fixedDeltaTime);
+			elapsedTime -= fixedDeltaTime;
+		}
+
+		scene->Update(deltaTime);
+
+
+
+
+
+		scene->LateUpdate(deltaTime);
+#ifdef _DEBUG
 	}
 
-	scene->Update(deltaTime);
+	if (m_engineMode == EngineMode::Edit || m_engineMode == EngineMode::Pause) {
 
-	scene->LateUpdate(deltaTime);
-	
+		if (m_editorCameraObject != nullptr) {
+		
+			m_editorCameraObject->Update(deltaTime);
 
+			m_editorCameraObject->LateUpdate(deltaTime);
+
+
+			if (SceneManager::Instance().GetActiveScene()->GetMainCamera() != nullptr) {
+				SceneManager::Instance().GetActiveScene()->GetMainCamera()->LateUpdate(deltaTime);
+			}
+
+		}
+	}
 
 	// 렌더링
 
@@ -245,30 +283,38 @@ void Game::LifeCycle(float deltaTime)
 	{
 		if (scene)
 		{
-			std::string sceneName = scene->GetName();
-			if (!sceneName.empty())
+			if (m_engineMode == EngineMode::Edit)
 			{
-				std::string relativePath = "Scenes/" + sceneName + ".scene";
-
-				std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
-
-				if (scene->SaveFile(relativePath))
+				std::string sceneName = scene->GetName();
+				if (!sceneName.empty())
 				{
-					std::cout << "Scene save successful." << std::endl;
-					HistoryManager::Instance().MarkAsSaved();
+					std::string relativePath = "Scenes/" + sceneName + ".scene";
+
+					std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
+
+					if (scene->SaveFile(relativePath))
+					{
+						std::cout << "Scene save successful." << std::endl;
+						HistoryManager::Instance().MarkAsSaved();
+					}
+					else
+					{
+						std::cout << "Scene save FAILED." << std::endl;
+					}
 				}
 				else
 				{
-					std::cout << "Scene save FAILED." << std::endl;
+					std::cout << "Cannot save: Scene name is empty." << std::endl;
 				}
 			}
-			else
-			{
-				std::cout << "Cannot save: Scene name is empty." << std::endl;
+			else {
+				std::cout << "Cannot Save In PlayMode." << std::endl;
 			}
 		}
 	}
 
+
+#endif
 
 #ifdef _DEBUG
 	m_sceneRT->Bind();
@@ -300,6 +346,18 @@ void Game::LifeCycle(float deltaTime)
 
 	m_imgui->NewFrame();
 	ImGuizmo::BeginFrame();
+
+
+	m_editorUI->RenderToolbar(m_engineMode, [this](EngineMode mode) {
+		if (mode == EngineMode::Play) {
+			if (m_engineMode == EngineMode::Edit) SetPlayState(true);
+			else SetPlayState(false);
+		}
+		else if (mode == EngineMode::Pause) {
+			if (m_engineMode == EngineMode::Play) m_engineMode = EngineMode::Pause;
+			else if (m_engineMode == EngineMode::Pause) m_engineMode = EngineMode::Play;
+		}
+		});
 
 	m_editorUI->RenderSceneWindow(m_sceneRT.get(), scene, editorCam);
 	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
@@ -351,6 +409,52 @@ void Game::LifeCycle(float deltaTime)
 	InputManager::Instance().EndFrame();
 
 }
+#ifdef _DEBUG
+void Game::SetPlayState(bool isPlay)
+{
+
+	if (m_editorUI) m_editorUI->ClearSelection();
+
+	if (isPlay)
+	{
+		if (SceneManager::Instance().BackupActiveScene())
+		{
+			m_engineMode = EngineMode::Play;
+
+		}
+	}
+	else
+	{
+		m_engineMode = EngineMode::Edit;
+		
+
+		SceneManager::Instance().RestoreActiveScene();
+
+		Scene* scene = SceneManager::Instance().GetActiveScene();
+		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+
+
+
+
+		Camera* newMainCam = nullptr;
+
+		for (const auto& go : scene->GetGameObjects())
+		{
+			if (go.get() == m_editorCameraObject) continue;
+
+			if (Camera* cam = go->GetComponent<Camera>())
+			{
+				newMainCam = cam;
+				break; 
+			}
+		}
+
+		scene->SetMainCamera(newMainCam);
+
+	}
+}
+#endif
 
 bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
 {

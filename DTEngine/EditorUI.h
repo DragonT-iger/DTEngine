@@ -4,6 +4,7 @@
 #include <any>
 
 #include "SimpleMathHelper.h"
+#include "Game.h"
 
 class Scene;
 class GameObject;
@@ -21,11 +22,14 @@ public:
     EditorUI();
     ~EditorUI();
 
+    void RenderToolbar(Game::EngineMode currentMode, std::function<void(Game::EngineMode)> onModeChanged);
+
     void Render(Scene* activeScene);
 
     void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
     void RenderGameWindow(RenderTexture* rt, Scene* scene);
 
+    void ClearSelection() { m_selectedGameObject = nullptr; }
 private:
     void DrawHierarchyWindow(Scene* activeScene);
 

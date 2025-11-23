@@ -1,8 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <cassert>
 #include <iostream>
 #include "SceneManager.h"
 #include "Scene.h"
+#include "ResourceManager.h"
 
 Scene* SceneManager::GetActiveScene() const
 {
@@ -36,4 +37,37 @@ void SceneManager::ProcessSceneChange()
     }
 
     m_nextName.clear();
+}
+
+bool SceneManager::BackupActiveScene()
+{
+    if (!m_active) return false;
+
+    m_originalSceneName = m_active->GetName();
+
+    if (m_active->SaveFile(m_backupPath))
+    {
+        std::cout << "[SceneManager] Scene Backup Saved." << std::endl;
+        return true;
+    }
+    return false;
+}
+
+bool SceneManager::RestoreActiveScene()
+{
+    if (!m_active) return false;
+
+    m_active->Clear();
+
+    std::string fullPath = ResourceManager::Instance().ResolveFullPath(m_backupPath);
+
+    if (m_active->LoadFile(fullPath))
+    {
+        m_active->SetName(m_originalSceneName);
+        std::cout << "[SceneManager] Scene Restored from Backup." << std::endl;
+        return true;
+    }
+
+    std::cerr << "[SceneManager] Failed to restore scene! Path was: " << fullPath << std::endl;
+    return false;
 }

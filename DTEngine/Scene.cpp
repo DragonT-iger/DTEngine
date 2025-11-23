@@ -427,6 +427,15 @@ void Scene::SetMainCamera(Camera* mainCamera)
     m_mainCamera = mainCamera;
 }
 
+
+void Scene::Clear()
+{
+    m_gameObjects.clear();     
+    m_pendingAdd.clear();      
+    m_pendingDestroy.clear();
+    m_mainCamera = nullptr;
+}
+
 void Scene::FlushPending()
 {
     std::vector<GameObject*> added;
