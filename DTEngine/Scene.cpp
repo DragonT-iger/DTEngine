@@ -436,6 +436,16 @@ void Scene::Clear()
     m_mainCamera = nullptr;
 }
 
+GameObject* Scene::FindGameObjectByID(uint64_t id)
+{
+    for (const auto& go : m_gameObjects)
+    {
+        if (go->_GetID() == id)
+            return go.get();
+    }
+    return nullptr;
+}
+
 void Scene::FlushPending()
 {
     std::vector<GameObject*> added;

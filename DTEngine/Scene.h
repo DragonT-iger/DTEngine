@@ -54,6 +54,8 @@ public:
 
     void Clear();
 
+    GameObject* FindGameObjectByID(uint64_t id);
+
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
     std::string m_name;

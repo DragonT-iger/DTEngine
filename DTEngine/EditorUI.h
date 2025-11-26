@@ -29,7 +29,13 @@ public:
     void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
     void RenderGameWindow(RenderTexture* rt, Scene* scene);
 
+    void DrawOverlay();
+
     void ClearSelection() { m_selectedGameObject = nullptr; }
+
+    GameObject* GetSelectedGameObject() const { return m_selectedGameObject; }
+    void SetSelectedGameObject(GameObject* go) { m_selectedGameObject = go; }
+
 private:
     void DrawHierarchyWindow(Scene* activeScene);
 

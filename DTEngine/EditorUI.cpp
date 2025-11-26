@@ -134,6 +134,7 @@ void EditorUI::Render(Scene* activeScene)
     }
 
     
+    //DrawOverlay();
 }
 
 void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
@@ -882,4 +883,44 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 
     ImGui::End();
     ImGui::PopStyleVar();
+}
+
+
+void EditorUI::DrawOverlay()
+{
+    static float elapsed = 0.0f;
+    static float displayedFPS = 60.0f; 
+    static float displayedMS = 16.6f;  
+
+    elapsed += ImGui::GetIO().DeltaTime;
+
+    if (elapsed > 1.0f)
+    {
+        displayedFPS = ImGui::GetIO().Framerate;
+        displayedMS = 1000.0f / (displayedFPS > 0.0f ? displayedFPS : 1.0f);
+        elapsed = 0.0f;
+    }
+
+
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+
+    const float PAD = 10.0f;
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 workPos = viewport->WorkPos;
+
+    // 텍스트 내용 만들기
+    char overlayText[64];
+    sprintf_s(overlayText, "FPS: %.1f\n%.2f ms", displayedFPS, displayedMS);
+
+    ImVec2 windowPos = ImVec2(workPos.x + PAD, workPos.y + PAD + 30.0f);
+
+    ImVec2 textSize = ImGui::CalcTextSize(overlayText);
+    ImVec2 padding = ImVec2(10.0f, 5.0f);
+    ImVec2 boxMin = windowPos;
+    ImVec2 boxMax = ImVec2(windowPos.x + textSize.x + padding.x * 2, windowPos.y + textSize.y + padding.y * 2);
+
+    drawList->AddRectFilled(boxMin, boxMax, IM_COL32(0, 0, 0, 150), 5.0f); 
+
+    drawList->AddText(ImVec2(windowPos.x + padding.x, windowPos.y + padding.y),
+        IM_COL32(255, 255, 0, 255), overlayText);
 }

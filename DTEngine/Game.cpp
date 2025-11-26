@@ -413,6 +413,12 @@ void Game::LifeCycle(float deltaTime)
 void Game::SetPlayState(bool isPlay)
 {
 
+	uint64_t lastSelectedID = 0;
+	if (m_editorUI && m_editorUI->GetSelectedGameObject())
+	{
+		lastSelectedID = m_editorUI->GetSelectedGameObject()->_GetID();
+	}
+
 	if (m_editorUI) m_editorUI->ClearSelection();
 
 	if (isPlay)
@@ -453,6 +459,21 @@ void Game::SetPlayState(bool isPlay)
 		scene->SetMainCamera(newMainCam);
 
 	}
+
+	if (lastSelectedID != 0 && m_editorUI)
+	{
+		Scene* currentScene = SceneManager::Instance().GetActiveScene();
+		if (currentScene)
+		{
+			GameObject* foundGO = currentScene->FindGameObjectByID(lastSelectedID);
+
+			if (foundGO)
+			{
+				m_editorUI->SetSelectedGameObject(foundGO);
+			}
+		}
+	}
+
 }
 #endif
 
