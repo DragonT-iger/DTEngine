@@ -1,9 +1,14 @@
-﻿#pragma once
+#pragma once
 #include <vector>
-#include <d3d11.h>
+#include <string>
 #include <wrl/client.h>
 #include "IResource.h"
 #include "Vertex.h"
+
+struct ID3D11Buffer;
+struct aiScene;
+struct aiNode;
+struct aiMesh;
 
 class Mesh : public IResource
 {
@@ -18,10 +23,13 @@ public:
     bool CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
     void Bind() const;
-
     void Draw() const;
 
     UINT GetIndexCount() const { return m_indexCount; }
+
+private:
+    void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
+    void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_vertexBuffer;

@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
@@ -533,7 +533,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 
 		if (!meshRenderer || !transform || !meshRenderer->IsActive()) continue;
 
-		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
+		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("Models/vehicle.fbx");
 		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
 
 		if (!mesh || !material) continue;
