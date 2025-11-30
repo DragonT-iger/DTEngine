@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-// ResourceManagerÀÇ ¾Æ·¡´Ü¿¡¼­ µ¿ÀÛÇÏ´Â ID °ü¸® µ¥ÀÌÅÍº£ÀÌ½º
+// ResourceManagerì˜ ì•„ë˜ë‹¨ì—ì„œ ë™ì‘í•˜ëŠ” ID ê´€ë¦¬ ë°ì´í„°ë² ì´ìŠ¤
 
 class AssetDatabase : public Singleton<AssetDatabase>
 {
@@ -25,7 +25,7 @@ private:
     void ProcessAssetFile(const std::string& assetPath);
 
     uint64_t ReadMetaFile(const std::string& metaPath);
-    uint64_t CreateMetaFile(const std::string& assetPath); // ÀÌ°Íµµ ¸ÅÅ©·Î ¸Ô³× ±Ùµ¥ ½ÇÇàÀº µÊ
+    uint64_t CreateMetaFile(const std::string& assetPath); // ì´ê²ƒë„ ë§¤í¬ë¡œ ë¨¹ë„¤ ê·¼ë° ì‹¤í–‰ì€ ë¨
 
     std::string m_assetRoot;
 

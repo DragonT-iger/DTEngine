@@ -19,6 +19,8 @@
 
 
 using namespace DirectX::SimpleMath;
+namespace fs = std::filesystem;
+
 
 static Matrix ConvertMatrix(const aiMatrix4x4& from)
 {
@@ -53,13 +55,26 @@ void ResourceManager::UnloadAll()
 
 std::string ResourceManager::ResolveFullPath(const std::string& id) const
 {
-	if (m_resourceRootPath.empty()) return id;
+    if (m_resourceRootPath.empty()) return id;
 
-	const char last = m_resourceRootPath.back();
-	if (last == '/' || last == '\\')
-		return m_resourceRootPath + id;
+    fs::path pRoot(m_resourceRootPath); 
+    fs::path pId(id);                   
 
-	return m_resourceRootPath + "\\" + id;
+    if (pId.is_absolute())
+        return id;
+
+    auto itRoot = pRoot.begin();
+    auto itId = pId.begin();
+
+    if (itRoot != pRoot.end() && itId != pId.end())
+    {
+        if (*itRoot == *itId)
+        {
+            return id;
+        }
+    }
+
+    return (pRoot / pId).string();
 }
 
 void ResourceManager::CollectDescendants(GameObject* target, std::vector<GameObject*>& outList)
@@ -167,12 +182,12 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
     std::string fileName = std::filesystem::path(fullPath).stem().string();
     GameObject* rootObject = SceneManager::Instance().GetActiveScene()->CreateGameObject(fileName);
 
-    ProcessNode(scene->mRootNode, scene, rootObject);
+    ProcessNode(scene->mRootNode, scene, rootObject, fullPath);
 
     return rootObject;
 }
 
-void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO)
+void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath)
 {
     GameObject* currentGO = nullptr;
 
@@ -198,40 +213,31 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
 
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
-        aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        Mesh* newMesh = ProcessMesh(aiMesh, scene);
-
-        // GameObject에 MeshRenderer 추가
-        // 주의: 하나의 GO에는 하나의 MeshRenderer만 붙는 구조라면, 
-        // 메쉬가 여러 개일 경우 자식 GO를 추가로 만들어야 할 수도 있음.
-        // 여기서는 편의상 첫 번째 메쉬만 붙이거나, SubObject를 만드는 방식을 추천함.
+        unsigned int meshIndex = node->mMeshes[i];
 
         if (i == 0)
         {
             MeshRenderer* renderer = currentGO->AddComponent<MeshRenderer>();
-            renderer->SetMesh(newMesh);
 
-            // 머터리얼/텍스처 경로 가져오기 (예시)
-            if (aiMesh->mMaterialIndex >= 0)
-            {
-                aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
-                // 여기서 텍스처 경로 추출 로직 수행
-            }
+            renderer->SetModelPath(modelPath);
+            renderer->SetMeshIndex(meshIndex);
+
         }
         else
         {
-            // 멀티 메쉬의 경우 자식 오브젝트로 분리 생성
-            GameObject* subGO = SceneManager::Instance().GetActiveScene()->CreateGameObject(currentGO->GetName() + "_SubMesh_" + std::to_string(i));
+            // 한 노드에 여러 메쉬가 있는 경우 서브 오브젝트 생성
+            GameObject* subGO = SceneManager::Instance().GetActiveScene()->CreateGameObject(currentGO->GetName() + "_Sub_" + std::to_string(i));
             subGO->GetTransform()->SetParent(currentGO->GetTransform());
+
             MeshRenderer* renderer = subGO->AddComponent<MeshRenderer>();
-            renderer->SetMesh(newMesh);
+            renderer->SetModelPath(modelPath);
+            renderer->SetMeshIndex(meshIndex);
         }
     }
 
-    // 4. 자식 노드 순회
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene, currentGO);
+        ProcessNode(node->mChildren[i], scene, currentGO , modelPath);
     }
 }
 

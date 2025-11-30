@@ -37,7 +37,7 @@ public:
     GameObject* LoadModel(const std::string& fullPath);
 
 private:
-    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parent);
+    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parent, const std::string& modelPath);
     Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
     void CollectDescendants(GameObject* target, std::vector<GameObject*>& outList);

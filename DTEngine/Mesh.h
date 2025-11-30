@@ -28,8 +28,6 @@ public:
     UINT GetIndexCount() const { return m_indexCount; }
 
 private:
-    //void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
-    //void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_vertexBuffer;

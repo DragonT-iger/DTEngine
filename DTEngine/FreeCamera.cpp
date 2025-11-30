@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "InputManager.h" 
 #include "HistoryManager.h"
-#include "ResourceManager.h"
+//#include "ResourceManager.h"
 
 BEGINPROPERTY(FreeCamera)
 DTPROPERTY(FreeCamera, m_moveSpeed)
@@ -27,8 +27,7 @@ void FreeCamera::Awake()
         m_yaw = euler.y;
     }
 
-
-    ResourceManager::Instance().LoadModel("Assets/Models/Dwarf.x");
+	//ResourceManager::Instance().LoadModel("Assets/Models/Dwarf.x");
 }
 
 void FreeCamera::Update(float deltaTime)
