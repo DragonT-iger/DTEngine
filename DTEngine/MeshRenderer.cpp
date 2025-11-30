@@ -4,9 +4,17 @@
 #include "Model.h"
 
 BEGINPROPERTY(MeshRenderer)
-DTPROPERTY(MeshRenderer, m_modelPath)
-DTPROPERTY(MeshRenderer ,m_meshIndex)
+DTPROPERTY_SETTER(MeshRenderer, m_modelPath, SetModelPath)
+DTPROPERTY_SETTER(MeshRenderer, m_meshIndex, SetMeshIndex)
 ENDPROPERTY()
+
+void MeshRenderer::Awake()
+{
+    if (m_mesh == nullptr && !m_modelPath.empty())
+    {
+        SetModelPath(m_modelPath);
+    }
+}
 
 void MeshRenderer::SetModelPath(const std::string& path)
 {
@@ -22,16 +30,12 @@ void MeshRenderer::SetModelPath(const std::string& path)
     }
 }
 
-void MeshRenderer::Awake()
-{
-    SetModelPath(m_modelPath);
-}
-
 void MeshRenderer::SetMeshIndex(int index)
 {
     m_meshIndex = index;
+
     if (!m_modelPath.empty())
     {
-        SetModelPath(m_modelPath); // 인덱스 변경 시 메쉬 재할당
+        SetModelPath(m_modelPath);
     }
 }
