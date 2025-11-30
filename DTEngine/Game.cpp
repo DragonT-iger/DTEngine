@@ -518,6 +518,11 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 	
 	camera->SetAspectRatio(ratio);
 
+
+
+	DX11Renderer::Instance().ResetRenderState();
+
+
 	//if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
 
 	const Matrix& viewTM = camera->GetViewMatrix();

@@ -199,6 +199,7 @@
   <ItemGroup>
     <ClCompile Include="AddComponentCommand.cpp" />
     <ClCompile Include="AssetDatabase.cpp" />
+    <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChangeComponentActiveCommand.cpp" />
     <ClCompile Include="ChangeEditorTransformCommand.cpp" />

@@ -54,11 +54,17 @@ bool GameObject::IsActive() const { return m_active; }
 void GameObject::Awake() {
 
     if (m_awakeCalled) return;
+
     m_phase = Phase::Awake;
     m_isIterating = true;
     for (auto& comp : m_components)
-        if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get()))
+        if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get())) {
             mb->Awake();
+            if (mb->IsActive() && this->IsActiveInHierarchy() && this->IsActive()) {
+                mb->OnEnable();
+            }
+        }
+            
     m_isIterating = false;
     FlushPending();
     m_awakeCalled = true;

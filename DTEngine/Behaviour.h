@@ -7,7 +7,7 @@ public:
     Behaviour() : m_active(true) {}
     virtual ~Behaviour() = default;
 
-    void SetActive(bool state) { m_active = state; }
+    void SetActive(bool state);
     bool IsActive() const { return m_active; }
 
 private:

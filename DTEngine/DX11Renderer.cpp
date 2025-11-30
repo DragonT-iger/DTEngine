@@ -207,6 +207,19 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
 }
 
+void DX11Renderer::ResetRenderState()
+{
+    if (m_context)
+    {
+        m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
+        m_context->RSSetState(m_defaultRasterizerState.Get());
+        
+        // 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
+        float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+        m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+    }
+}
+
 bool DX11Renderer::CreateDeviceAndSwapchain()
 {
     UINT flags = 0;
@@ -231,6 +244,26 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     ComPtr<IDXGIDevice>   dxgiDev;  dev.As(&dxgiDev);
     ComPtr<IDXGIAdapter>  adapter;  dxgiDev->GetAdapter(&adapter);
     ComPtr<IDXGIFactory2> factory;  adapter->GetParent(__uuidof(IDXGIFactory2), &factory);
+
+
+    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+    dsDesc.DepthEnable = TRUE;
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    dsDesc.StencilEnable = FALSE;
+
+    hr = dev->CreateDepthStencilState(&dsDesc, m_defaultDepthStencilState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    D3D11_RASTERIZER_DESC rsDesc = {};
+    rsDesc.FillMode = D3D11_FILL_SOLID;
+    rsDesc.CullMode = D3D11_CULL_BACK;
+    rsDesc.FrontCounterClockwise = FALSE;
+    rsDesc.DepthClipEnable = TRUE;
+
+    hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
 
     DXGI_SWAP_CHAIN_DESC1 scd{};
     scd.Width = 0;

@@ -23,6 +23,7 @@ void Light::OnEnable()
     if (std::find(s_allLights.begin(), s_allLights.end(), this) == s_allLights.end())
     {
         s_allLights.push_back(this);
+		std::cout << "Light enabled. Total lights: " << s_allLights.size() << std::endl;
     }
 }
 
@@ -32,5 +33,6 @@ void Light::OnDisable()
     if (it != s_allLights.end())
     {
         s_allLights.erase(it);
+		std::cout << "Light disabled. Total lights: " << s_allLights.size() << std::endl;
     }
 }

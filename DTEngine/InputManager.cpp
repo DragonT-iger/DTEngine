@@ -113,7 +113,6 @@ int InputManager::MapKeyCodeToVKey(KeyCode key) const
         return static_cast<int>(key);
     }
 
-    // 그 외 특수 키들
     switch (key)
     {
     case KeyCode::MouseLeft:    return VK_LBUTTON;
@@ -121,7 +120,7 @@ int InputManager::MapKeyCodeToVKey(KeyCode key) const
     case KeyCode::MouseMiddle:  return VK_MBUTTON;
     case KeyCode::Control:      return VK_CONTROL;
     case KeyCode::Shift:        return VK_SHIFT;
-    case KeyCode::Alt:          return VK_MENU; // (VK_ALT는 없음)
+    case KeyCode::Alt:          return VK_MENU; 
     case KeyCode::Space:        return VK_SPACE;
     case KeyCode::Enter:        return VK_RETURN;
     case KeyCode::Escape:       return VK_ESCAPE;

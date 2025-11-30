@@ -19,6 +19,8 @@ struct ID3D11Texture2D;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
 struct ID3D11Buffer;
+struct ID3D11DepthStencilState;
+struct ID3D11RasterizerState;
 
 class DX11Renderer : public Singleton<DX11Renderer>
 {
@@ -65,6 +67,8 @@ public:
     void SetHeight(int height) { m_height = height; }
 
     void UpdateLights(const std::vector<class Light*>& lights);
+
+    void ResetRenderState();
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -114,6 +118,9 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame; 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights;
+
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
     // State
     int   m_width = 0;

@@ -361,6 +361,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Behaviour.cpp">
+      <Filter>Component\ComponentBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

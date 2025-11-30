@@ -37,11 +37,15 @@ PS_INPUT VS(VS_INPUT input)
     float4 worldPos = mul(float4(input.Pos, 1.0f), WorldTM);
     float4 viewPos  = mul(worldPos, ViewTM);
     float4 projPos  = mul(viewPos, ProjectionTM);
+    
+    float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
 
 
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
     output.Color = input.Color;
+    output.UV = input.UV;
+    output.Normal = worldNormal;
     
     return output;
 }
