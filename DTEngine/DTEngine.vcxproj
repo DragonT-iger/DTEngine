@@ -189,6 +189,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SerializationUtils.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMathHelper.h" />
     <ClInclude Include="Singleton.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SerializationUtils.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex.cpp" />

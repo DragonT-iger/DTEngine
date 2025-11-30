@@ -218,17 +218,20 @@
     <ClInclude Include="RemoveComponentCommand.h">
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
-    <ClInclude Include="FreeCamera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTexture.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="move.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="move.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializationUtils.h">
+      <Filter>Reflection\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -349,20 +352,23 @@
     <ClCompile Include="RemoveComponentCommand.cpp">
       <Filter>ImGUI\Undo</Filter>
     </ClCompile>
-    <ClCompile Include="FreeCamera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTexture.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="move.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Behaviour.cpp">
       <Filter>Component\ComponentBase</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeCamera.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="move.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializationUtils.cpp">
+      <Filter>Reflection\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

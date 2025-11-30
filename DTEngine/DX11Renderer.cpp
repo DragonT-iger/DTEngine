@@ -196,7 +196,7 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
         Vector3 pos = tf->GetPosition();
         data->Lights[i].PositionRange = Vector4(pos.x, pos.y, pos.z, light->m_range);
 
-        Vector3 dir = tf->Forward();
+        Vector3 dir = -tf->Forward();
         data->Lights[i].DirectionType = Vector4(dir.x, dir.y, dir.z, (float)light->m_type);
 
         data->Lights[i].ColorIntensity = Vector4(light->m_color.x, light->m_color.y, light->m_color.z, light->m_intensity);
@@ -221,9 +221,9 @@ void DX11Renderer::ResetRenderState()
         m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
         m_context->RSSetState(m_defaultRasterizerState.Get());
         
-        // 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
-        float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
-        m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        //// 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
+        //float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+        //m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
     }
 }
 

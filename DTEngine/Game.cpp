@@ -29,6 +29,7 @@
 #include "FreeCamera.h"
 #include "RenderTexture.h"
 #include "move.h"
+#include "Light.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -134,6 +135,8 @@ bool Game::Initialize()
 	SceneManager::Instance().LoadScene("SampleScene");
 
 
+
+	
 
 	
 
@@ -262,6 +265,8 @@ void Game::LifeCycle(float deltaTime)
 			m_editorCameraObject->Update(deltaTime);
 
 			m_editorCameraObject->LateUpdate(deltaTime);
+
+			DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
 
 
 			if (SceneManager::Instance().GetActiveScene()->GetMainCamera() != nullptr) {
@@ -538,7 +543,10 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 
 		if (!meshRenderer || !transform || !meshRenderer->IsActive()) continue;
 
-		Mesh* mesh = ResourceManager::Instance().Load<Mesh>("Models/vehicle.fbx");
+		//Mesh* mesh = ResourceManager::Instance().Load<Mesh>("Models/Dwarf.x");
+		//Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
+
+		Mesh* mesh = meshRenderer->GetMesh();
 		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
 
 		if (!mesh || !material) continue;

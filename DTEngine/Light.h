@@ -29,18 +29,6 @@ public:
     static const std::vector<Light*>& GetAllLights() { return s_allLights; }
 
 
-    const float& GetIntensity() const { return m_intensity; }
-    void SetIntensity(float val);
-
-    const float& GetRange() const { return m_range; }
-    void SetRange(float val);
-
-    const Vector3& GetColor() const { return m_color; }
-    void SetColor(Vector3 val); 
-
-    const int& GetTypeInt() const { return (const int&)m_type; }
-    void SetTypeInt(int val);
-
 public:
 
 

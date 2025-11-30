@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Camera.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -32,6 +32,7 @@ void Camera::Awake()
 
     UpdateViewMatrix();
     UpdateProjectionMatrix();
+
 }
 
 void Camera::LateUpdate(float deltaTime)

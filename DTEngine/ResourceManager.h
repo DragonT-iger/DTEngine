@@ -1,11 +1,18 @@
 #pragma once
 #include "Singleton.h"
+
 #include <string>
 #include <unordered_map>
+
 #include "IResource.h"
 #include "AssetDatabase.h"
 
 class DX11Renderer;
+class GameObject;
+class aiNode;
+class aiScene;
+class aiMesh;
+class Mesh;
 
 // 한번 로드된 리소스는 캐싱된다.
 
@@ -24,7 +31,17 @@ public:
 
 	std::string GetResourceRootPath() const { return m_resourceRootPath; }
 
+    GameObject* InstantiatePrefab(const std::string& fullPath);
+    bool SavePrefab(GameObject* root, const std::string& fullPath);
+
+    GameObject* LoadModel(const std::string& fullPath);
+
 private:
+    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parent);
+    Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
+    void CollectDescendants(GameObject* target, std::vector<GameObject*>& outList);
+
 	std::string m_resourceRootPath;
 	std::unordered_map<std::string, std::unique_ptr<IResource>> m_cache;
 };
