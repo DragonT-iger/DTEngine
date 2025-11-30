@@ -5,6 +5,7 @@
 #include "ReflectionDatabase.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "Behaviour.h"
 
 void Component::Destroy(GameObject* gameobject) {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
@@ -79,8 +80,15 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
 
 void Component::Serialize(JsonWriter& writer) const
 {
+
+    if (const Behaviour* behaviour = dynamic_cast<const Behaviour*>(this))
+    {
+        writer.Write("Active", behaviour->IsActive());
+    }
+
     const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(_GetTypeName());
     if (!info) return;
+
 
     for (const PropertyInfo& prop : info->m_properties)
     {

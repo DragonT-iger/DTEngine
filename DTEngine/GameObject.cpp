@@ -60,9 +60,6 @@ void GameObject::Awake() {
     for (auto& comp : m_components)
         if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get())) {
             mb->Awake();
-            if (mb->IsActive() && this->IsActiveInHierarchy() && this->IsActive()) {
-                mb->OnEnable();
-            }
         }
             
     m_isIterating = false;
@@ -168,6 +165,10 @@ Component* GameObject::AddComponent(const std::string& typeName)
     raw->_SetOwner(this);
     raw->_SetID(IDManager::Instance().GetNewUniqueID());
 
+    if (auto* mb = dynamic_cast<MonoBehaviour*>(raw)) {
+        if (IsActive() && mb->IsActive() && IsActiveInHierarchy()) mb->OnEnable();
+    }
+
     m_components.emplace_back(std::move(newComponent));
 
     return raw;
@@ -185,7 +186,10 @@ void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
 
     if (m_phase == Phase::Awake)
     {
-        if (auto* mb = dynamic_cast<MonoBehaviour*>(raw)) mb->Awake();
+        if (auto* mb = dynamic_cast<MonoBehaviour*>(raw)) {
+            mb->Awake();
+            if (IsActive() && mb->IsActive() && IsActiveInHierarchy()) mb->OnEnable();
+        }
     }
     else if (m_phase != Phase::None)
     {
@@ -193,6 +197,7 @@ void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
         {
             mb->Awake();
             mb->Start();
+            if (IsActive() && mb->IsActive() && IsActiveInHierarchy()) mb->OnEnable();
         }
     }
 }

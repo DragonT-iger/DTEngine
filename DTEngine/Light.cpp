@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Light.h"
 #include <algorithm> 
-
+#include "DX11Renderer.h"
 std::vector<Light*> Light::s_allLights;
 
 BEGINPROPERTY(Light)
@@ -25,6 +25,8 @@ void Light::OnEnable()
         s_allLights.push_back(this);
 		std::cout << "Light enabled. Total lights: " << s_allLights.size() << std::endl;
     }
+
+    DX11Renderer::Instance().UpdateLights(GetAllLights());
 }
 
 void Light::OnDisable()
@@ -35,4 +37,6 @@ void Light::OnDisable()
         s_allLights.erase(it);
 		std::cout << "Light disabled. Total lights: " << s_allLights.size() << std::endl;
     }
+
+    DX11Renderer::Instance().UpdateLights(GetAllLights());
 }

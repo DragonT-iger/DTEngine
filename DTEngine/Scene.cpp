@@ -7,6 +7,7 @@
 #include <iostream>
 #include "DX11Renderer.h"
 #include "Light.h"
+#include "Behaviour.h"
 
 
 
@@ -220,6 +221,12 @@ bool Scene::LoadFile(const std::string& fullPath)
             newComp->_SetID(comp_id);
             idToComponentMap[comp_id] = newComp;
 
+            if (auto* behaviour = dynamic_cast<Behaviour*>(newComp))
+            {
+                bool isActive = reader.ReadBool("Active", true);
+                behaviour->SetActive(isActive);
+            }
+
             DeserializeComponentProperties(reader, newComp, fixupList);
             reader.EndArrayItem();
         }
@@ -360,6 +367,8 @@ void Scene::Awake()
     for (auto& obj : m_gameObjects) obj->Awake();
     m_isIterating = false;
     FlushPending();
+
+    
 }
 
 void Scene::Start()
