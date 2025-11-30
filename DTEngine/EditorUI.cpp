@@ -134,6 +134,13 @@ void EditorUI::Render(Scene* activeScene)
         //std::cout << "Redo Performed" << std::endl;
     }
 
+
+
+    if (ctrlPressed && shiftPressed && InputManager::Instance().GetKeyDown(KeyCode::F))
+    {
+        AlignWithView();
+    }
+
     
     //DrawOverlay();
 }
@@ -546,11 +553,39 @@ void EditorUI::DrawComponentProperties(Component* comp)
     bool header_open = ImGui::CollapsingHeader(comp->_GetTypeName(), ImGuiTreeNodeFlags_DefaultOpen);
 
     bool isTransform = (dynamic_cast<Transform*>(comp) != nullptr);
+    bool isCamera = (dynamic_cast<Camera*>(comp) != nullptr);
+
     if (ImGui::BeginPopupContextItem("ComponentContextMenu"))
     {
-        if (isTransform)
+        if (isTransform || isCamera)
         {
+            if (ImGui::MenuItem("Align With View"))
+            {
+                if (m_sceneCamera && comp->_GetOwner())
+                {
+                    Transform* targetTf = comp->_GetOwner()->GetTransform();
+                    Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
 
+                    if (targetTf && camTf)
+                    {
+                        Vector3 oldPos = targetTf->GetPosition();
+                        Quaternion oldRot = targetTf->GetRotationQuat();
+                        Vector3 oldScale = targetTf->GetScale();
+
+                        Vector3 newPos = camTf->GetPosition();
+                        Quaternion newRot = camTf->GetRotationQuat();
+                        Vector3 newScale = oldScale;
+
+                        auto cmd = std::make_unique<ChangeTransformCommand>(
+                            targetTf,
+                            oldPos, newPos,
+                            oldRot, newRot,
+                            oldScale, newScale
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
+                    }
+                }
+            }
             if (ImGui::MenuItem("Reset"))
             {
                 Transform* tf = static_cast<Transform*>(comp);
@@ -857,8 +892,37 @@ void EditorUI::DrawComponentProperties(Component* comp)
     ImGui::PopID();
 }
 
+void EditorUI::AlignWithView()
+{
+    if (!m_selectedGameObject || !m_sceneCamera) return;
+
+    Transform* targetTf = m_selectedGameObject->GetTransform();
+    Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
+
+    if (!targetTf || !camTf) return;
+
+    Vector3 oldPos = targetTf->GetPosition();
+    Quaternion oldRot = targetTf->GetRotationQuat();
+    Vector3 oldScale = targetTf->GetScale();
+
+    Vector3 newPos = camTf->GetPosition();
+    Quaternion newRot = camTf->GetRotationQuat();
+    Vector3 newScale = oldScale; 
+
+    auto cmd = std::make_unique<ChangeTransformCommand>(
+        targetTf,
+        oldPos, newPos,
+        oldRot, newRot,
+        oldScale, newScale
+    );
+
+    HistoryManager::Instance().Do(std::move(cmd));
+}
+
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
 {
+    m_sceneCamera = camera;
+
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("Scene");
 

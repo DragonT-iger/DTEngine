@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 
 #include <any>
@@ -47,7 +47,7 @@ private:
 
     void DrawComponentProperties(Component* comp);
 
-
+    void AlignWithView();
 
 
     std::any m_dragStartValue;
@@ -61,6 +61,7 @@ private:
 
 
     GameObject* m_selectedGameObject = nullptr;
+    Camera* m_sceneCamera = nullptr;
 
     GameObject* m_lastSelectedGameObject = nullptr;
     Vector3 m_cachedEulerRotation;
