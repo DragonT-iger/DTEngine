@@ -24,4 +24,8 @@ public:
     virtual void OnTriggerEnter(Collider* other) {} 
     virtual void OnTriggerStay(Collider* other) {}
     virtual void OnTriggerExit(Collider* other) {}
+
+
+    virtual void OnEnable() {}
+    virtual void OnDisable() {}
 };

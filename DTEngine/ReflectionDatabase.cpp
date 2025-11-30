@@ -13,7 +13,8 @@ void ReflectionDatabase::RegisterDTGENERATED_BODY(const char* className)
 }
 
 void ReflectionDatabase::RegisterDTPROPERTY(const char* className, const char* propName,
-	const std::type_info& type, std::function<void* (void*)> getter, std::function<void(void*, void*)> setter)
+	const std::type_info& type, std::function<void* (void*)> getter, std::function<void(void*, void*)> setter,
+	const std::vector<std::string>& enumNames)
 {
 	auto it = m_classes.find(className);
 	if (it != m_classes.end())

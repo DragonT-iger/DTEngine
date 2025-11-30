@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 
 #include "GameObject.h"
 #include "MonoBehaviour.h"
@@ -25,7 +25,26 @@ void GameObject::RemoveComponent(Component* component)
 }
 
 /* Activation -------------------------------------------------- */
-void GameObject::SetActive(bool active) { m_active = active; }
+void GameObject::SetActive(bool active) { 
+    m_active = active; 
+
+    for (const auto& comp : m_components)
+    {
+        // MonoBehaviour를 상속받지 않은  Transform은 nullptr 반환되어 무시됨
+        if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get()))
+        {
+            if (m_active)
+            {
+                mb->OnEnable();
+            }
+            else
+            {
+                mb->OnDisable();
+            }
+        }
+    }
+
+}
 bool GameObject::IsActive() const { return m_active; }
 
 

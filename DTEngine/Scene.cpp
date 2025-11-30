@@ -1,10 +1,12 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include <filesystem>
 #include "Scene.h"
 #include "GameObject.h"
 #include "IDManager.h"
 #include "ResourceManager.h"
 #include <iostream>
+#include "DX11Renderer.h"
+#include "Light.h"
 
 
 
@@ -415,6 +417,8 @@ void Scene::LateUpdate(float deltaTime)
     }
     m_isIterating = false;
     FlushPending();
+
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
 }
 
 Camera* Scene::GetMainCamera()

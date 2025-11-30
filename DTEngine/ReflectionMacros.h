@@ -82,6 +82,19 @@ private: \
 
 
 
+#define DTPROPERTY_ENUM(CLASS_NAME, MEMBER_NAME, ...) \
+    ReflectionDatabase::Instance().RegisterDTPROPERTY(#CLASS_NAME, #MEMBER_NAME, \
+        typeid(decltype(CLASS_NAME::MEMBER_NAME)), \
+        [](void* base) -> void* { \
+            return &(static_cast<CLASS_NAME*>(base)->MEMBER_NAME); \
+        }, \
+        [](void* base, void* value) { \
+            static_cast<CLASS_NAME*>(base)->MEMBER_NAME = \
+                *static_cast<decltype(CLASS_NAME::MEMBER_NAME)*>(value); \
+        }, \
+        std::vector<std::string>{__VA_ARGS__});
+
+
 
 #define ENDPROPERTY() \
     }
@@ -107,3 +120,5 @@ private: \
 
 #define REGISTER_STRUCT_END() \
     }();
+
+

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <cstdint>
 #include <wrl/client.h> 
@@ -64,7 +64,7 @@ public:
     void SetWidth(int width) { m_width = width; }
     void SetHeight(int height) { m_height = height; }
 
-
+    void UpdateLights(const std::vector<class Light*>& lights);
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -77,6 +77,23 @@ private:
     {
         Matrix ViewTM;
         Matrix ProjectionTM;
+    };
+
+    struct LightData
+    {
+        DirectX::SimpleMath::Vector4 PositionRange;  // xyz: 위치, w: 범위(Range)
+        DirectX::SimpleMath::Vector4 DirectionType;  // xyz: 방향, w: 타입(0=Dir, 1=Point)
+        DirectX::SimpleMath::Vector4 ColorIntensity; // xyz: 색상, w: 강도(Intensity)
+    };
+
+	constexpr static int MAX_LIGHTS = 4;
+
+    __declspec(align(16))
+        struct CBuffer_GlobalLight
+    {
+        LightData Lights[MAX_LIGHTS];           // 배열로 선언
+        int ActiveCount;                        // 현재 활성화된 조명 개수
+        DirectX::SimpleMath::Vector3 Padding;   // 16바이트 정렬 맞춤
     };
 
 
@@ -95,7 +112,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights;
 
     // State
     int   m_width = 0;

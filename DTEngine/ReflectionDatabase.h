@@ -14,6 +14,10 @@ struct PropertyInfo
     std::type_index m_type; 
     std::function<void* (void*)> m_getter;
     std::function<void(void*, void*)> m_setter;
+
+
+    //enum 인 경우 특수처리
+    std::vector<std::string> m_enumNames;
 };
 
 struct ClassInfo
@@ -32,7 +36,8 @@ public:
     void RegisterDTGENERATED_BODY(const char* className);
 
     void RegisterDTPROPERTY(const char* className, const char* propName,
-        const std::type_info& type, std::function<void* (void*)> getter , std::function<void(void*, void*)> setter);
+        const std::type_info& type, std::function<void* (void*)> getter , std::function<void(void*, void*)> setter, 
+        const std::vector<std::string>& enumNames = {});
     const ClassInfo* GetClassInfomation(const std::string& className) const;
 
 private:

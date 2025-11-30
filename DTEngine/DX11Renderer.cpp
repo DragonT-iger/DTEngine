@@ -1,4 +1,4 @@
-﻿#include "pch.h" 
+#include "pch.h" 
 #include "DX11Renderer.h"
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -15,7 +15,9 @@
 #pragma comment(lib, "dxgi.lib")
 
 
-
+#include "Simplemathhelper.h"
+#include "Transform.h"
+#include "Light.h"
 
 #include "DXHelper.h"
 
@@ -40,6 +42,17 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
+
+
+    D3D11_BUFFER_DESC lbDesc = {};
+    lbDesc.ByteWidth = sizeof(CBuffer_GlobalLight);
+    lbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    lbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    lbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    hr = m_device->CreateBuffer(&lbDesc, nullptr, m_cbuffer_lights.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
 
     CreateBackbuffers(width, height);
     return true;
@@ -154,6 +167,45 @@ HWND DX11Renderer::GetHwnd()
 ID3D11Device* DX11Renderer::GetDevice() const { return m_device.Get(); }
 ID3D11DeviceContext* DX11Renderer::GetContext() const { return m_context.Get(); }
 ID3D11RenderTargetView* DX11Renderer::GetBackbufferRTV() const { return m_rtv.Get(); }
+
+void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
+{
+    if (!m_cbuffer_lights) return;
+
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_lights.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    if (FAILED(hr)) return;
+
+    CBuffer_GlobalLight* data = static_cast<CBuffer_GlobalLight*>(mappedData.pData);
+
+    int count = std::min((int)lights.size(), MAX_LIGHTS);
+    data->ActiveCount = count;
+
+    for (int i = 0; i < count; ++i)
+    {
+        Light* light = lights[i];
+        Transform* tf = light->GetTransform();
+
+        Vector3 pos = tf->GetPosition();
+        data->Lights[i].PositionRange = Vector4(pos.x, pos.y, pos.z, light->m_range);
+
+        Vector3 dir = tf->Forward();
+        data->Lights[i].DirectionType = Vector4(dir.x, dir.y, dir.z, (float)light->m_type);
+
+        data->Lights[i].ColorIntensity = Vector4(light->m_color.x, light->m_color.y, light->m_color.z, light->m_intensity);
+    }
+
+    for (int i = count; i < MAX_LIGHTS; ++i)
+    {
+        data->Lights[i].PositionRange = Vector4(0, 0, 0, 0);
+        data->Lights[i].DirectionType = Vector4(0, 0, 0, 0);
+        data->Lights[i].ColorIntensity = Vector4(0, 0, 0, 0);
+    }
+
+    m_context->Unmap(m_cbuffer_lights.Get(), 0);
+
+    m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
+}
 
 bool DX11Renderer::CreateDeviceAndSwapchain()
 {

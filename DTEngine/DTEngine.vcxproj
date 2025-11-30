@@ -173,6 +173,7 @@
     <ClInclude Include="IResource.h" />
     <ClInclude Include="JsonIO.h" />
     <ClInclude Include="KeyCode.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="JsonIO.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
