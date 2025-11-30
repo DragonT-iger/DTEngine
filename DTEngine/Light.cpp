@@ -5,10 +5,10 @@
 std::vector<Light*> Light::s_allLights;
 
 BEGINPROPERTY(Light)
-DTPROPERTY_ENUM(Light, m_type, "Directional", "Point");
-DTPROPERTY(Light, m_color);
-DTPROPERTY(Light, m_intensity);
-DTPROPERTY(Light, m_range);
+DTPROPERTY_ACCESSOR(Light, m_type, GetTypeInt, SetTypeInt)
+DTPROPERTY_ACCESSOR(Light, m_intensity, GetIntensity, SetIntensity)
+DTPROPERTY_ACCESSOR(Light, m_range, GetRange, SetRange)
+DTPROPERTY_ACCESSOR(Light, m_color, GetColor, SetColor)
 ENDPROPERTY()
 
 Light::Light() = default;
@@ -39,4 +39,36 @@ void Light::OnDisable()
     }
 
     DX11Renderer::Instance().UpdateLights(GetAllLights());
+}
+
+void Light::SetIntensity(float val)
+{
+    if (m_intensity == val) return;
+
+    m_intensity = val;
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+}
+
+void Light::SetRange(float val)
+{
+    if (m_range == val) return;
+
+    m_range = val;
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+}
+
+void Light::SetColor(Vector3 val)
+{
+    if (m_color == val) return;
+
+    m_color = val;
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+}
+
+void Light::SetTypeInt(int val)
+{
+    if ((int)m_type == val) return;
+
+    m_type = (LightType)val;
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
 }

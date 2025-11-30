@@ -92,6 +92,11 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 {
     assert(m_context && m_rtv);
 
+    if (m_defaultDepthStencilState)
+    {
+        m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
+    }
+
     bool clearDepth = true;
 
     ID3D11RenderTargetView* rtvs[1] = { m_rtv.Get() };
@@ -171,6 +176,8 @@ ID3D11RenderTargetView* DX11Renderer::GetBackbufferRTV() const { return m_rtv.Ge
 void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
 {
     if (!m_cbuffer_lights) return;
+
+    if (!m_context) return;
 
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
     HRESULT hr = m_context->Map(m_cbuffer_lights.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
@@ -258,7 +265,7 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     D3D11_RASTERIZER_DESC rsDesc = {};
     rsDesc.FillMode = D3D11_FILL_SOLID;
     rsDesc.CullMode = D3D11_CULL_BACK;
-    rsDesc.FrontCounterClockwise = FALSE;
+    rsDesc.FrontCounterClockwise = TRUE;
     rsDesc.DepthClipEnable = TRUE;
 
     hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());

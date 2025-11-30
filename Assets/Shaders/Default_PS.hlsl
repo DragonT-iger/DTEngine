@@ -9,9 +9,9 @@ struct PS_INPUT
 
 struct LightData
 {
-    float4 PositionRange;   // xyz=Pos, w=Range
-    float4 DirectionType;   // xyz=Dir, w=Type (0:Dir, 1:Point)
-    float4 ColorIntensity;  // rgb=Color, w=Intensity
+    float4 PositionRange;               // xyz=Pos, w=Range
+    float4 DirectionType;               // xyz=Dir, w=Type (0:Dir, 1:Point)
+    float4 ColorIntensity;              // rgb=Color, w=Intensity
 };
 
 #define MAX_LIGHTS 4
@@ -57,13 +57,21 @@ float4 PS(PS_INPUT input) : SV_Target
             // 범위(Range)를 넘어가면 0이 되도록 처리하는 것이 좋음
             float range = Lights[i].PositionRange.w;
             
-            attenuation = 1.0 / (1.0 + 0.1 * dist + 0.01 * dist * dist);
+            attenuation = 1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range); 
+            
+            // 일단 간단하게 dist / range 비율로 감쇠
+            // attenuation 파라미터는 일단 적용하지 않았음
             
             //if (dist > range)
             //    attenuation = 0.0f;
+            
+            
         }
-
-        // Diffuse (Lambert)
+        float3 skyColor = float3(0.3f, 0.3f, 0.3f); 
+        float3 groundColor = float3(0.1f, 0.1f, 0.1f); 
+        float up = normal.y * 0.5 + 0.5;
+        
+        ambient = lerp(groundColor, skyColor, up);
         float NdotL = max(dot(normal, L), 0.0f);
         totalDiffuse += NdotL * lightColor * intensity * attenuation;
     }
