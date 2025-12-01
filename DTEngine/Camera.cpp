@@ -46,12 +46,14 @@ void Camera::SetProjectionPerspective(float fovY, float aspectRatio, float nearZ
     m_fovY = fovY;
     m_nearZ = nearZ;
     m_farZ = farZ;
-    m_projection = Matrix::CreatePerspectiveFieldOfView(fovY, aspectRatio, nearZ, farZ);
+    m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
 }
 
 void Camera::SetProjectionOrthographic(float viewWidth, float viewHeight, float nearZ, float farZ)
 {
-    m_projection = Matrix::CreateOrthographic(viewWidth, viewHeight, nearZ, farZ);
+    //m_projection = Matrix::CreateOrthographic(viewWidth, viewHeight, nearZ, farZ); 이것도 RH임
+
+	m_projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, nearZ, farZ);
 }
 
 void Camera::SetThisCameraToMain()
@@ -84,7 +86,7 @@ void Camera::UpdateViewMatrix()
     const Vector3& worldForward = worldMatrix.Forward();
     const Vector3& worldUp = worldMatrix.Up();
 
-    m_view = Matrix::CreateLookAt(worldPos, worldPos + worldForward, worldUp);
+    m_view = DirectX::XMMatrixLookAtLH(worldPos, worldPos + worldForward, worldUp);
 
 }
 
@@ -107,7 +109,7 @@ void Camera::UpdateProjectionMatrix()
     // 얘없음  0보다 작은거 들어가서 튕김
 
 
-    m_projection = Matrix::CreatePerspectiveFieldOfView(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
+    m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
 
 
     m_dirtyProj = false;

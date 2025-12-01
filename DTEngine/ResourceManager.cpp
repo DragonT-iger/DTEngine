@@ -71,6 +71,7 @@ std::string ResourceManager::ResolveFullPath(const std::string& id) const
         if (*itRoot == *itId)
         {
             return id;
+			// Assets/Assets 경로 방지
         }
     }
 

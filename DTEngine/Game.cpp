@@ -112,7 +112,7 @@ bool Game::Initialize()
 
 	if(m_editorCameraObject)
 	{
-		std::cout << "EditorCamera 게임 오브젝트를 씬에서 찾았습니다." << std::endl;
+		//std::cout << "EditorCamera 게임 오브젝트를 씬에서 찾았습니다." << std::endl;
 		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
 	}
 	else

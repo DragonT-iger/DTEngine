@@ -2,10 +2,12 @@
 #include "MeshRenderer.h"
 #include "ResourceManager.h"
 #include "Model.h"
+#include "Material.h"
 
 BEGINPROPERTY(MeshRenderer)
 DTPROPERTY_SETTER(MeshRenderer, m_modelPath, SetModelPath)
 DTPROPERTY_SETTER(MeshRenderer, m_meshIndex, SetMeshIndex)
+DTPROPERTY_SETTER(MeshRenderer, m_materialPath, SetMaterialPath)
 ENDPROPERTY()
 
 void MeshRenderer::Awake()
@@ -37,5 +39,23 @@ void MeshRenderer::SetMeshIndex(int index)
     if (!m_modelPath.empty())
     {
         SetModelPath(m_modelPath);
+    }
+}
+
+void MeshRenderer::SetMaterialPath(const std::string& path)
+{
+    m_materialPath = path;
+
+    if (!m_materialPath.empty())
+    {
+        Material* mat = ResourceManager::Instance().Load<Material>(m_materialPath);
+        if (mat)
+        {
+            SetMaterial(mat);
+        }
+    }
+    else
+    {
+        SetMaterial(nullptr);
     }
 }

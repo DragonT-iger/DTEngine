@@ -28,10 +28,14 @@ public:
     void SetMaterial(Material* material) { m_material = material; }
     Material* GetMaterial() const { return m_material; }
 
+    void SetMaterialPath(const std::string& path);
+    std::string GetMaterialPath() const { return m_materialPath; }
+
 private:
     Mesh* m_mesh = nullptr;
     Material* m_material = nullptr;
 
     std::string m_modelPath = "";
+    std::string m_materialPath = "";
     int m_meshIndex = 0;
 };

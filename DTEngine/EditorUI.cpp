@@ -241,6 +241,27 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
 
     bool node_open = ImGui::TreeNodeEx((void*)go->_GetID(), flags, go->GetName().c_str());
 
+    if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+    {
+        m_selectedGameObject = go;
+
+        if (m_sceneCamera)
+        {
+            Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
+
+            Vector3 targetPos = tf->GetPosition();
+
+            Vector3 camForward = -camTf->Forward(); // 왜 -지?
+
+            float focusDist = 10.0f;
+
+            Vector3 newCamPos = targetPos - (camForward * focusDist);
+
+            camTf->SetPosition(newCamPos);
+        }
+    }
+
+
     if (ImGui::BeginDragDropSource())
     {
         ImGui::SetDragDropPayload("HIERARCHY_DRAG_ITEM", &tf, sizeof(Transform*));

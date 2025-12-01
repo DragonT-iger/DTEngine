@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "InputManager.h" 
 #include "HistoryManager.h"
-//#include "ResourceManager.h"
+#include "ResourceManager.h"
 
 BEGINPROPERTY(FreeCamera)
 DTPROPERTY(FreeCamera, m_moveSpeed)
@@ -27,7 +27,7 @@ void FreeCamera::Awake()
         m_yaw = euler.y;
     }
 
-	//ResourceManager::Instance().LoadModel("Assets/Models/Dwarf.x");
+	//ResourceManager::Instance().LoadModel("Assets/Models/airplane02.x");
 }
 
 void FreeCamera::Update(float deltaTime)
@@ -60,7 +60,7 @@ void FreeCamera::HandleInput(float deltaTime)
         auto delta = input.GetMouseDelta();
 
         m_yaw -= delta.x * m_rotationSpeed;
-        m_pitch -= delta.y * m_rotationSpeed;
+        m_pitch += delta.y * m_rotationSpeed;
 
         transform->SetRotationEuler(Vector3(m_pitch, m_yaw, 0.0f));
 
@@ -69,8 +69,8 @@ void FreeCamera::HandleInput(float deltaTime)
 
         if (input.GetKey(KeyCode::W)) moveDir.z -= 1.0f;
         if (input.GetKey(KeyCode::S)) moveDir.z += 1.0f;
-        if (input.GetKey(KeyCode::D)) moveDir.x += 1.0f;
-        if (input.GetKey(KeyCode::A)) moveDir.x -= 1.0f;
+        if (input.GetKey(KeyCode::D)) moveDir.x -= 1.0f;
+        if (input.GetKey(KeyCode::A)) moveDir.x += 1.0f;
         if (input.GetKey(KeyCode::E)) moveDir.y += 1.0f;
         if (input.GetKey(KeyCode::Q)) moveDir.y -= 1.0f;
 

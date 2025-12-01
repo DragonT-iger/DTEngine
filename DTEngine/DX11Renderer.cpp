@@ -265,7 +265,7 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     D3D11_RASTERIZER_DESC rsDesc = {};
     rsDesc.FillMode = D3D11_FILL_SOLID;
     rsDesc.CullMode = D3D11_CULL_BACK;
-    rsDesc.FrontCounterClockwise = TRUE;
+    rsDesc.FrontCounterClockwise = FALSE;
     rsDesc.DepthClipEnable = TRUE;
 
     hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
