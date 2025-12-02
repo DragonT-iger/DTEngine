@@ -206,7 +206,10 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
 
     Vector3 scale, pos;
     Quaternion rot;
-    transformMatrix.Decompose(scale, rot, pos);
+    transformMatrix.Transpose().Decompose(scale, rot, pos);
+
+    // DirectX -> 행우선
+    // Assimp -> 열우선
 
 	currentGO->GetTransform()->SetPosition(pos);
     currentGO->GetTransform()->SetRotationQuat(rot);
