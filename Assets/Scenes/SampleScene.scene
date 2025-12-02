@@ -65,46 +65,6 @@
       }
     },
     {
-      "active": false,
-      "components": [
-        {
-          "Active": true,
-          "id": 16789181676625566810,
-          "m_meshIndex": 0,
-          "m_modelPath": "",
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 9692719752972240471,
-      "name": "TestCube",
-      "tag": "Untagged",
-      "transform": {
-        "id": 16099412530061544792,
-        "m_editorEulerAngles": {
-          "x": -14.777012825012207,
-          "y": 24.061016082763672,
-          "z": -70.34799194335938
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 5.102829456329346,
-          "y": -4.6975274085998535,
-          "z": 14.438976287841797
-        },
-        "m_rotation": {
-          "w": 0.7773750424385071,
-          "x": -0.016265923157334328,
-          "y": -0.2414119988679886,
-          "z": 0.5806407928466797
-        },
-        "m_scale": {
-          "x": 5.0,
-          "y": 1.0,
-          "z": 0.9999986886978149
-        }
-      }
-    },
-    {
       "active": true,
       "components": [
         {
@@ -152,118 +112,6 @@
       }
     },
     {
-      "active": false,
-      "components": [],
-      "id": 10319500480104943465,
-      "name": "gimbumjinbabo",
-      "tag": "Untagged",
-      "transform": {
-        "id": 10193186038662684474,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": -0.0,
-          "z": -0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 2306965087770003312,
-          "m_meshIndex": 0,
-          "m_modelPath": "",
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 8266518915151949999,
-      "name": "GameObject",
-      "tag": "Untagged",
-      "transform": {
-        "id": 9748690810261567468,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": -165.5,
-          "z": -0.0
-        },
-        "m_parent": 10193186038662684474,
-        "m_position": {
-          "x": 3.537191867828369,
-          "y": 0.07465720176696777,
-          "z": 0.9440107345581055
-        },
-        "m_rotation": {
-          "w": 0.1261989027261734,
-          "x": 0.0,
-          "y": 0.9920049905776978,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0000001192092896,
-          "y": 2.299999952316284,
-          "z": 1.0000001192092896
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 3794220503109214844,
-          "m_meshIndex": 0,
-          "m_modelPath": "",
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 862889510330864248,
-      "name": "GameObject",
-      "tag": "Untagged",
-      "transform": {
-        "id": 2551312179185593456,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": -105.49998474121094,
-          "z": -0.0
-        },
-        "m_parent": 9748690810261567468,
-        "m_position": {
-          "x": 3.7768919467926025,
-          "y": 1.2265007495880127,
-          "z": 0.42233800888061523
-        },
-        "m_rotation": {
-          "w": 0.6052940487861633,
-          "x": 0.0,
-          "y": 0.7960019707679749,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 0.9999984502792358,
-          "y": 0.47956523299217224,
-          "z": 0.9999984502792358
-        }
-      }
-    },
-    {
       "active": true,
       "components": [
         {
@@ -284,10 +132,10 @@
           "Active": true,
           "id": 405847514673205467,
           "m_moveSpeed": 10.0,
-          "m_pitch": -20.90119743347168,
+          "m_pitch": 31.49881362915039,
           "m_rotationSpeed": 0.10000000149011612,
           "m_turboScale": 3.0,
-          "m_yaw": -1294.2403564453125,
+          "m_yaw": -1078.861328125,
           "typeName": "FreeCamera"
         }
       ],
@@ -297,21 +145,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": -20.90119743347168,
-          "y": -1294.2403564453125,
+          "x": 31.49881362915039,
+          "y": -1078.861328125,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 1.4398434162139893,
-          "y": 1.7527955770492554,
-          "z": -1.68953537940979
+          "x": -0.11861756443977356,
+          "y": 3.65736722946167,
+          "z": -5.967377662658691
         },
         "m_rotation": {
-          "w": 0.2894929349422455,
-          "x": -0.05339620262384415,
-          "y": 0.939836323261261,
-          "z": 0.17335031926631927
+          "w": -0.962410569190979,
+          "x": -0.27141711115837097,
+          "y": -0.009564293548464775,
+          "z": 0.0026973027270287275
         },
         "m_scale": {
           "x": 1.0,
@@ -454,7 +302,7 @@
         "id": 17817023070564714421,
         "m_editorEulerAngles": {
           "x": 0.0,
-          "y": -0.0,
+          "y": 0.0,
           "z": -0.0
         },
         "m_parent": 0,
@@ -467,7 +315,7 @@
           "w": 1.0,
           "x": 0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
         "m_scale": {
           "x": 1.0,
@@ -482,6 +330,7 @@
         {
           "Active": true,
           "id": 1955011809921994136,
+          "m_materialPath": "Shaders/Default",
           "m_meshIndex": 0,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -522,6 +371,7 @@
         {
           "Active": true,
           "id": 18256295447643683131,
+          "m_materialPath": "",
           "m_meshIndex": 1,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -562,6 +412,7 @@
         {
           "Active": true,
           "id": 3838251913171991316,
+          "m_materialPath": "",
           "m_meshIndex": 2,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -602,6 +453,7 @@
         {
           "Active": true,
           "id": 10467631547376540590,
+          "m_materialPath": "",
           "m_meshIndex": 3,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -642,6 +494,7 @@
         {
           "Active": true,
           "id": 14267655014117176994,
+          "m_materialPath": "",
           "m_meshIndex": 4,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -682,6 +535,7 @@
         {
           "Active": true,
           "id": 2074258377530709645,
+          "m_materialPath": "",
           "m_meshIndex": 5,
           "m_modelPath": "Assets/Models/Dwarf.x",
           "typeName": "MeshRenderer"
@@ -708,6 +562,366 @@
           "x": 0.0,
           "y": -0.0,
           "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 16146610334460571162,
+      "name": "airplane02",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8082250890689724893,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -9.41171646118164,
+          "y": 5.74415922164917,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10674224241697894278,
+          "m_materialPath": "",
+          "m_meshIndex": 0,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 2965757093414831102,
+      "name": "airplane_b",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10407988054200730678,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16931086377916826409,
+          "m_materialPath": "",
+          "m_meshIndex": 1,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 5626900833477294788,
+      "name": "wing_poles",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13286566349299158079,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14798649179333485234,
+          "m_materialPath": "",
+          "m_meshIndex": 2,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 3469391822658782940,
+      "name": "wings",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5328744103089148204,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12153074419243862322,
+          "m_materialPath": "",
+          "m_meshIndex": 3,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 16881868698480683672,
+      "name": "elevator",
+      "tag": "Untagged",
+      "transform": {
+        "id": 15885986641565333753,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 13633493032316252276,
+          "m_materialPath": "",
+          "m_meshIndex": 4,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 12719461404868566778,
+      "name": "landing_ge",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4091836401582407200,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5048116944734159865,
+          "m_materialPath": "",
+          "m_meshIndex": 5,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 3243076622927739727,
+      "name": "propeller",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9899593331288971410,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": -0.0,
+          "z": -0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 3342994960303856042,
+          "m_materialPath": "",
+          "m_meshIndex": 6,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10223671511065382273,
+      "name": "rudder",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8971372523903075936,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 2661196730112780500,
+          "m_materialPath": "",
+          "m_meshIndex": 7,
+          "m_modelPath": "Assets/Models/airplane02.x",
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 8515093513339407081,
+      "name": "wheels",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13428187788920731873,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": -0.0,
+          "z": 0.0
+        },
+        "m_parent": 8082250890689724893,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
         },
         "m_scale": {
           "x": 1.0,

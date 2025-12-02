@@ -53,6 +53,7 @@ Client/imgui.ini
 #vcpkg
 /vcpkg_installed
 
+/Assets/Scenes/PlayMode_Backup.scene
 
 *.ini
 *.aps
