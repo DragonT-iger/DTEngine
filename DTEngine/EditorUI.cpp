@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <string>
 #include <cctype>
+#include <algorithm>
 
 #include "EditorUI.h"
 #include "Scene.h"
@@ -29,6 +30,11 @@
 #include "RenderTexture.h"
 #include "FreeCamera.h"
 #include "Light.h"
+#include "SceneManager.h"
+#include "ResourceManager.h"
+#include "MeshRenderer.h"
+#include "Mesh.h"
+#include "Material.h"
 
 namespace fs = std::filesystem;
 
@@ -387,6 +393,13 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
                 HistoryManager::Instance().Do(std::move(cmd));
             }
         }
+
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+        {
+            const char* filePath = (const char*)payload->Data;
+            OnDropFile(filePath); 
+        }
+
         ImGui::EndDragDropTarget();
     }
 
@@ -914,6 +927,38 @@ void EditorUI::AlignWithView()
     );
 
     HistoryManager::Instance().Do(std::move(cmd));
+}
+
+void EditorUI::OnDropFile(const std::string& rawPath)
+{
+    fs::path path(rawPath);
+    std::string ext = path.extension().string();
+
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+    if (ext == ".fbx" || ext == ".obj" || ext == ".x")
+    {
+        fs::path relativePath = fs::relative(path, "Assets");
+        std::string resourcePath = relativePath.string();
+
+        Scene* scene = SceneManager::Instance().GetActiveScene();
+        if (!scene) return;
+
+        std::string goName = path.stem().string(); 
+        GameObject* go = scene->CreateGameObject(goName);
+
+        MeshRenderer* mr = go->AddComponent<MeshRenderer>();
+
+        Mesh* mesh = ResourceManager::Instance().Load<Mesh>(resourcePath);
+        Material* mat = ResourceManager::Instance().Load<Material>("Shaders/Default"); 
+
+        if (mesh) mr->SetMesh(mesh);
+        if (mat) mr->SetMaterial(mat);
+
+        m_selectedGameObject = go;
+
+        std::cout << "[Editor] Created Model from: " << resourcePath << std::endl;
+    }
 }
 
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)

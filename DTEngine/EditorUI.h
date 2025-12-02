@@ -52,6 +52,8 @@ private:
 
     void AlignWithView();
 
+    void OnDropFile(const std::string& filePath);
+
 
     std::any m_dragStartValue;
     bool m_isGizmoUsing = false;
