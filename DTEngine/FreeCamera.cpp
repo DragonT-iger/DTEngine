@@ -59,7 +59,7 @@ void FreeCamera::HandleInput(float deltaTime)
     {
         auto delta = input.GetMouseDelta();
 
-        m_yaw -= delta.x * m_rotationSpeed;
+        m_yaw += delta.x * m_rotationSpeed;
         m_pitch += delta.y * m_rotationSpeed;
 
         transform->SetRotationEuler(Vector3(m_pitch, m_yaw, 0.0f));
@@ -67,10 +67,10 @@ void FreeCamera::HandleInput(float deltaTime)
 
         Vector3 moveDir = Vector3(0, 0, 0); 
 
-        if (input.GetKey(KeyCode::W)) moveDir.z -= 1.0f;
-        if (input.GetKey(KeyCode::S)) moveDir.z += 1.0f;
-        if (input.GetKey(KeyCode::D)) moveDir.x -= 1.0f;
-        if (input.GetKey(KeyCode::A)) moveDir.x += 1.0f;
+        if (input.GetKey(KeyCode::W)) moveDir.z += 1.0f;
+        if (input.GetKey(KeyCode::S)) moveDir.z -= 1.0f;
+        if (input.GetKey(KeyCode::D)) moveDir.x += 1.0f;
+        if (input.GetKey(KeyCode::A)) moveDir.x -= 1.0f;
         if (input.GetKey(KeyCode::E)) moveDir.y += 1.0f;
         if (input.GetKey(KeyCode::Q)) moveDir.y -= 1.0f;
 

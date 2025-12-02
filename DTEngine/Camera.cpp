@@ -83,7 +83,10 @@ void Camera::UpdateViewMatrix()
     const Matrix& worldMatrix = tf->GetWorldMatrix();
 
     const Vector3& worldPos = worldMatrix.Translation();
-    const Vector3& worldForward = worldMatrix.Forward();
+	const Vector3& worldForward = tf->Forward();
+    // SimpleMath에서 앞방향이 -Z임 우리는 +Z이 앞방향이니까 Transform에서 구하는게 맞음
+	// SimpleMath는 RH 좌표계 기준 그러므로 뷰행렬이나 프로젝션 행렬 만들때 주의할 것
+
     const Vector3& worldUp = worldMatrix.Up();
 
     m_view = DirectX::XMMatrixLookAtLH(worldPos, worldPos + worldForward, worldUp);

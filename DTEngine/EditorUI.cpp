@@ -251,9 +251,9 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
 
             Vector3 targetPos = tf->GetPosition();
 
-            Vector3 camForward = -camTf->Forward(); // 왜 -지?
+			Vector3 camForward = camTf->Forward();
 
-            float focusDist = 10.0f;
+            float focusDist = 7.0f;
 
             Vector3 newCamPos = targetPos - (camForward * focusDist);
 
