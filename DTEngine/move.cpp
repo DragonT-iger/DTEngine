@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "move.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -16,6 +16,8 @@ void move::Update(float deltaTime)
 
     Vector3 nextEuler = currentPos + (m_speed * deltaTime);
 
-    // 적용
     transform->SetPosition(nextEuler);
+    
+
+    //std::cout << this->_GetOwner()->GetName() << std::endl;
 }

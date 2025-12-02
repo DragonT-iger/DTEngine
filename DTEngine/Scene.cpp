@@ -314,10 +314,7 @@ void Scene::Update(float deltaTime)
     m_isIterating = true;
     for (auto& obj : m_gameObjects)
     {
-        if (obj->GetTransform()->GetParent() == nullptr)
-        {
-            obj->Update(deltaTime); 
-        }
+        obj->Update(deltaTime);
     }
     m_isIterating = false;
     FlushPending();
@@ -330,10 +327,7 @@ void Scene::FixedUpdate(float fixedDelta)
     m_isIterating = true;
     for (auto& obj : m_gameObjects)
     {
-        if (obj->GetTransform()->GetParent() == nullptr)
-        {
-            obj->FixedUpdate(fixedDelta);
-        }
+        obj->FixedUpdate(fixedDelta);
     }
     m_isIterating = false;
     FlushPending();
@@ -347,18 +341,17 @@ void Scene::LateUpdate(float deltaTime)
     m_isIterating = true;
     for (auto& obj : m_gameObjects)
     {
-        if (obj->GetTransform()->GetParent() == nullptr)
-        {
-            obj->LateUpdate(deltaTime);
-        }
+        obj->LateUpdate(deltaTime);
     }
     m_isIterating = false;
     FlushPending();
 
 
 
-
+    // 빛 업데이트
     DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+
+    // 물리 업데이트
 }
 
 Camera* Scene::GetMainCamera()

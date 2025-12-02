@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <SimpleMath.h>
 #include <vector>
@@ -24,6 +24,8 @@ public:
 	const Quaternion& GetRotationQuat() const;
 	const Vector3& GetEditorEuler() const; // 이걸로 가져와야함
 	const Vector3& GetScale();
+
+	Vector3 GetWorldPosition();
 
 	Vector3 GetLossyScale(); // Sheer인 경우
 

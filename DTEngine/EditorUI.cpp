@@ -30,6 +30,7 @@
 #include "FreeCamera.h"
 #include "Light.h"
 
+namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
@@ -39,42 +40,20 @@ EditorUI::~EditorUI() = default;
 
 void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Game::EngineMode)> onModeChanged)
 {
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);   
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 4.0f)); 
-
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 5.0f));
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
     auto& colors = ImGui::GetStyle().Colors;
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(colors[ImGuiCol_ButtonHovered].x, colors[ImGuiCol_ButtonHovered].y, colors[ImGuiCol_ButtonHovered].z, 0.5f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(colors[ImGuiCol_ButtonActive].x, colors[ImGuiCol_ButtonActive].y, colors[ImGuiCol_ButtonActive].z, 0.5f));
 
-
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y));
-
-    ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, 30.0f));
-
-
-    ImGuiWindowFlags window_flags =
-        ImGuiWindowFlags_NoDecoration               
-        | ImGuiWindowFlags_NoMove                   
-        | ImGuiWindowFlags_NoScrollbar              
-        | ImGuiWindowFlags_NoSavedSettings          
-        | ImGuiWindowFlags_NoBringToFrontOnFocus;   
-
-
-    if (ImGui::Begin("MainToolbar", nullptr, window_flags))
+    if (ImGui::BeginMainMenuBar())
     {
         float buttonWidth = 50.0f;
-        float buttonCount = 2.0f; 
-
+        float buttonCount = 2.0f;
         float groupWidth = (buttonWidth * buttonCount) + (ImGui::GetStyle().ItemSpacing.x * (buttonCount - 1));
 
         float startPosX = (ImGui::GetContentRegionAvail().x * 0.5f) - (groupWidth * 0.5f);
-
         ImGui::SetCursorPosX(startPosX);
-
 
         bool isPlay = (currentMode == Game::EngineMode::Play);
         if (isPlay) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.7f, 1.0f, 1.0f));
@@ -86,24 +65,21 @@ void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Ga
 
         if (isPlay) ImGui::PopStyleColor();
 
-
-        ImGui::SameLine(); 
-
+        ImGui::SameLine();
 
         bool isPause = (currentMode == Game::EngineMode::Pause);
-
         ImGui::BeginDisabled(currentMode == Game::EngineMode::Edit);
         if (ImGui::Button(isPause ? "Resume" : "Pause", ImVec2(buttonWidth, 0)))
         {
             onModeChanged(Game::EngineMode::Pause);
         }
         ImGui::EndDisabled();
+
+        ImGui::EndMainMenuBar();
     }
 
-    ImGui::End();
-
     ImGui::PopStyleColor(3);
-    ImGui::PopStyleVar(3);
+    ImGui::PopStyleVar(1); 
 }
 
 void EditorUI::Render(Scene* activeScene)
@@ -111,6 +87,7 @@ void EditorUI::Render(Scene* activeScene)
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
+    DrawProjectWindow();
     //DrawGizmo(activeScene);
 
     // Redo Undo
@@ -249,7 +226,7 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
         {
             Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
 
-            Vector3 targetPos = tf->GetPosition();
+            Vector3 targetPos = m_selectedGameObject->GetTransform()->GetWorldPosition();
 
 			Vector3 camForward = camTf->Forward();
 
@@ -574,11 +551,10 @@ void EditorUI::DrawComponentProperties(Component* comp)
     bool header_open = ImGui::CollapsingHeader(comp->_GetTypeName(), ImGuiTreeNodeFlags_DefaultOpen);
 
     bool isTransform = (dynamic_cast<Transform*>(comp) != nullptr);
-    bool isCamera = (dynamic_cast<Camera*>(comp) != nullptr);
 
     if (ImGui::BeginPopupContextItem("ComponentContextMenu"))
     {
-        if (isTransform || isCamera)
+        if (isTransform)
         {
             if (ImGui::MenuItem("Align With View"))
             {
@@ -991,6 +967,84 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 
     ImGui::End();
     ImGui::PopStyleVar();
+}
+
+void EditorUI::DrawProjectWindow()
+{
+    ImGui::Begin("Project");
+
+    if (m_currentProjectDirectory != "Assets")
+    {
+        if (ImGui::Button("<- Back"))
+        {
+            m_currentProjectDirectory = m_currentProjectDirectory.parent_path();
+        }
+        ImGui::SameLine();
+    }
+    ImGui::Text("Current Path: %s", m_currentProjectDirectory.string().c_str());
+    ImGui::Separator();
+
+    float padding = 16.0f;
+    float thumbnailSize = 64.0f;
+    float cellSize = thumbnailSize + padding;
+
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columnCount = (int)(panelWidth / cellSize);
+    if (columnCount < 1) columnCount = 1;
+
+    ImGui::Columns(columnCount, 0, false);
+
+    if (fs::exists(m_currentProjectDirectory))
+    {
+        for (auto& directoryEntry : fs::directory_iterator(m_currentProjectDirectory))
+        {
+            const auto& path = directoryEntry.path();
+            std::string filename = path.filename().string();
+
+            if (path.extension() == ".meta") continue;
+			if (path.extension() == ".cso") continue;
+			if (path.extension() == ".vso") continue;
+			if (filename == "PlayMode_Backup.scene") continue;
+
+            ImGui::PushID(filename.c_str());
+
+            bool isDirectory = directoryEntry.is_directory();
+
+            if (isDirectory)
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.7f, 0.2f, 1.0f));
+            else
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+
+            if (ImGui::Button(isDirectory ? "[Dir]" : "[File]", ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                if (isDirectory)
+                {
+                    m_currentProjectDirectory /= path.filename();
+                }
+                else
+                {
+                    std::cout << "Selected File: " << filename << std::endl;
+                }
+            }
+            ImGui::PopStyleColor();
+
+            if (ImGui::BeginDragDropSource())
+            {
+                std::string itemPath = path.string();
+                ImGui::SetDragDropPayload("PROJECT_FILE", itemPath.c_str(), itemPath.size() + 1);
+                ImGui::Text("%s", filename.c_str());
+                ImGui::EndDragDropSource();
+            }
+
+            ImGui::TextWrapped("%s", filename.c_str());
+
+            ImGui::NextColumn();
+            ImGui::PopID();
+        }
+    }
+
+    ImGui::Columns(1);
+    ImGui::End();
 }
 
 

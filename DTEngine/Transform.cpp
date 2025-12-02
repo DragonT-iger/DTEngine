@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Transform.h"
 #include "SimpleMathHelper.h"
 
@@ -122,6 +122,10 @@ const Quaternion& Transform::GetRotationQuat() const
 const Vector3& Transform::GetScale()
 {
 	return m_scale;
+}
+Vector3 Transform::GetWorldPosition()
+{
+	return GetWorldMatrix().Translation();
 }
 Vector3 Transform::GetLossyScale()
 {

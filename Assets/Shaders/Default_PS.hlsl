@@ -65,7 +65,6 @@ float4 PS(PS_INPUT input) : SV_Target
             //if (dist > range)
             //    attenuation = 0.0f;
             
-            
         }
         float3 skyColor = float3(0.3f, 0.3f, 0.3f); 
         float3 groundColor = float3(0.1f, 0.1f, 0.1f); 

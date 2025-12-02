@@ -2,6 +2,7 @@
 #include <memory>
 
 #include <any>
+#include <filesystem>
 
 #include "SimpleMathHelper.h"
 #include "Game.h"
@@ -28,6 +29,8 @@ public:
 
     void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
     void RenderGameWindow(RenderTexture* rt, Scene* scene);
+
+    void DrawProjectWindow();
 
     void DrawOverlay();
 
@@ -65,4 +68,6 @@ private:
 
     GameObject* m_lastSelectedGameObject = nullptr;
     Vector3 m_cachedEulerRotation;
+
+    std::filesystem::path m_currentProjectDirectory = "Assets";
 };
