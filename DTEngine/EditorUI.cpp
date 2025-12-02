@@ -378,30 +378,7 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 
 
 
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
-        {
-            IM_ASSERT(payload->DataSize == sizeof(Transform*));
-            Transform* draggedTf = *(Transform**)payload->Data;
-            Transform* oldParent = (draggedTf) ? draggedTf->GetParent() : nullptr;
-            Transform* newParent = nullptr; 
 
-            if (draggedTf && oldParent != newParent)
-            {
-                auto cmd = std::make_unique<ChangeParentCommand>(draggedTf, oldParent, newParent);
-                HistoryManager::Instance().Do(std::move(cmd));
-            }
-        }
-
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
-        {
-            const char* filePath = (const char*)payload->Data;
-            OnDropFile(filePath); 
-        }
-
-        ImGui::EndDragDropTarget();
-    }
 
 
     if (scene_node_open)
@@ -423,6 +400,43 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
         }
         ImGui::TreePop(); 
     }
+
+    ImVec2 avail = ImGui::GetContentRegionAvail();
+
+    if (avail.x < 1.0f) avail.x = 1.0f;
+
+    if (avail.y < 50.0f) avail.y = 50.0f;
+
+    if (ImGui::InvisibleButton("##HierarchyVoid", avail))
+    {
+        m_selectedGameObject = nullptr;
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+            Transform* oldParent = (draggedTf) ? draggedTf->GetParent() : nullptr;
+            Transform* newParent = nullptr;
+
+            if (draggedTf && oldParent != newParent)
+            {
+                auto cmd = std::make_unique<ChangeParentCommand>(draggedTf, oldParent, newParent);
+                HistoryManager::Instance().Do(std::move(cmd));
+            }
+        }
+
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+        {
+            const char* filePath = (const char*)payload->Data;
+            OnDropFile(filePath);
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
     ImGui::End();
 }
 
@@ -938,26 +952,10 @@ void EditorUI::OnDropFile(const std::string& rawPath)
 
     if (ext == ".fbx" || ext == ".obj" || ext == ".x")
     {
-        fs::path relativePath = fs::relative(path, "Assets");
-        std::string resourcePath = relativePath.string();
 
-        Scene* scene = SceneManager::Instance().GetActiveScene();
-        if (!scene) return;
+		ResourceManager::Instance().LoadModel(path.string());
 
-        std::string goName = path.stem().string(); 
-        GameObject* go = scene->CreateGameObject(goName);
-
-        MeshRenderer* mr = go->AddComponent<MeshRenderer>();
-
-        Mesh* mesh = ResourceManager::Instance().Load<Mesh>(resourcePath);
-        Material* mat = ResourceManager::Instance().Load<Material>("Shaders/Default"); 
-
-        if (mesh) mr->SetMesh(mesh);
-        if (mat) mr->SetMaterial(mat);
-
-        m_selectedGameObject = go;
-
-        std::cout << "[Editor] Created Model from: " << resourcePath << std::endl;
+        //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
     }
 }
 
