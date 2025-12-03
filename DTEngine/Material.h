@@ -1,7 +1,7 @@
 #pragma once
 #include "IResource.h"
 #include <wrl/client.h>
-#include <map>
+#include <vector>
 #include <string>
 #include <SimpleMath.h>
 
@@ -53,11 +53,12 @@ private:
 
     Shader* m_shader = nullptr;
 
-    std::map<int, Texture*> m_textures;
+    std::vector<Texture*> m_textures;
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_object;
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_material;
 
 	MaterialData m_data;
+
 };

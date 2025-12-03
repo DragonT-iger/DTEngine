@@ -25,7 +25,9 @@ struct CBuffer_Object_Data
     Matrix WorldInverseTransposeTM;
 };
 
-Material::Material() = default;
+Material::Material() {
+    m_textures.resize(5, nullptr);
+}
 Material::~Material() { Unload(); }
 
 bool Material::LoadFile(const std::string& fullPath)
@@ -143,11 +145,11 @@ bool Material::SaveFile(const std::string& fullPath)
     }
 
     json texData;
-    for (auto const& [slot, texture] : m_textures)
+    for (int slot = 0; slot < m_textures.size(); ++slot)
     {
-        if (texture)
+        if (m_textures[slot])
         {
-            uint64_t id = texture->GetMeta().guid;
+            uint64_t id = m_textures[slot]->GetMeta().guid;
             texData[std::to_string(slot)] = id;
         }
     }
@@ -169,14 +171,23 @@ void Material::Unload()
     m_cbuffer_object.Reset();
     m_shader = nullptr;
     m_textures.clear();
+    m_textures.resize(5, nullptr);
 }
 
 void Material::SetTexture(int slot, Texture* texture)
 {
     if (texture) m_textures[slot] = texture;
-    else m_textures.erase(slot);
+    else {
+		m_textures[slot] = nullptr;
+    }
+    if (slot >= m_textures.size())
+    {
+        m_textures.resize(slot + 1, nullptr);
+    }
 
-    if (m_textures.find(0) != m_textures.end() && m_textures[0] != nullptr)
+    m_textures[slot] = texture;
+
+    if (!m_textures.empty() && m_textures[0] != nullptr)
     {
         m_data.UseTexture = 1;
     }
@@ -190,10 +201,10 @@ void Material::SetTexture(int slot, Texture* texture)
 
 Texture* Material::GetTexture(int slot) const
 {
-    auto it = m_textures.find(slot);
-    if (it != m_textures.end())
-        return it->second;
-    return nullptr;
+    if (slot < 0 || slot >= m_textures.size())
+        return nullptr;
+
+    return m_textures[slot];
 }
 
 void Material::SetColor(const Vector4& color)
@@ -253,12 +264,16 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
     context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
 
-    for (auto const& [slot, tex] : m_textures)
+    constexpr int MAX_TEXTURE_SLOTS = 5;
+
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
     {
-        if (tex)
+        ID3D11ShaderResourceView* srv = nullptr;
+        if (m_textures[i])
         {
-            ID3D11ShaderResourceView* srv = tex->GetSRV();
-            context->PSSetShaderResources(slot, 1, &srv);
+            srv = m_textures[i]->GetSRV();
         }
+
+        context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
     }
 }
