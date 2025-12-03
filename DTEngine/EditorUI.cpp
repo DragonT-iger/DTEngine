@@ -1043,10 +1043,11 @@ void EditorUI::DrawProjectWindow()
         {
             const auto& path = directoryEntry.path();
             std::string filename = path.filename().string();
+			std::string ext = path.extension().string();
 
-            if (path.extension() == ".meta") continue;
-			if (path.extension() == ".cso") continue;
-			if (path.extension() == ".vso") continue;
+            if (ext == ".meta") continue;
+			if (ext == ".cso") continue;
+			if (ext == ".vso") continue;
 			if (filename == "PlayMode_Backup.scene") continue;
 
             ImGui::PushID(filename.c_str());
@@ -1067,6 +1068,14 @@ void EditorUI::DrawProjectWindow()
                 else
                 {
                     std::cout << "Selected File: " << filename << std::endl;
+
+                    if (ext == ".scene")
+                    {
+
+                        std::string sceneName = filename.substr(0, filename.find_last_of('.'));
+
+                        //SceneManager::Instance().LoadScene(sceneName);
+                    }
                 }
             }
             ImGui::PopStyleColor();

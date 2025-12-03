@@ -62,9 +62,8 @@ public:
 
 private:
 
-
-	const Vector3& GetRotationEuler(); // 사용하지 말고 EditorEuler 사용하셈 이걸 사용하면 값이 뒤집히는데
-									   // 원인을 모르겠음
+	const Vector3& GetRotationEuler(); // 웬만하면 EditorEuler 사용하셈 좌표계가 틀린 문제를 해결하긴 했는데
+									   // 이건 변환해서 주는거라 정확한 값이 아니기도 해서
 
 
 	// 순환 참조 예외처리 안했음 public으로 끌고오지 말것

@@ -1,12 +1,20 @@
 #pragma once
 #include "IResource.h"
-#include <d3d11.h>
 #include <wrl/client.h>
-#include <SimpleMath.h> // Matrix 용
+#include <map>
+#include <string>
 
+namespace DirectX {
+    namespace SimpleMath {
+        struct Matrix;
+    }
+}
 using Matrix = DirectX::SimpleMath::Matrix;
 
-class Shader; // 전방 선언
+struct ID3D11Buffer;
+
+class Shader;
+class Texture;
 
 class Material : public IResource
 {
@@ -20,18 +28,14 @@ public:
 
     void Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM);
 
+    void SetTexture(int slot, Texture* texture);
+
     Shader* GetShader() const { return m_shader; }
 
-
 private:
-    __declspec(align(16))
-        struct CBuffer_Object_Data
-    {
-        Matrix WorldTM;
-        Matrix WorldInverseTransposeTM;
-    };
-
     Shader* m_shader = nullptr;
+
+    std::map<int, Texture*> m_textures;
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_object;
 };

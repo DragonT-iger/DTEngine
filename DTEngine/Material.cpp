@@ -1,24 +1,89 @@
 #include "pch.h"
-
-#include <iostream>
-
 #include "Material.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "ResourceManager.h" 
 #include "DX11Renderer.h"    
 #include "DXHelper.h"
-#include "SimpleMathHelper.h"
+#include "AssetDatabase.h" 
+
+#include <d3d11.h>
+#include <SimpleMath.h>
+#include <fstream>
+#include <iostream>
+
+#include "../ThirdParty/nlohmann/json.hpp"
+using json = nlohmann::json;
+
+using Microsoft::WRL::ComPtr;
+
+__declspec(align(16))
+struct CBuffer_Object_Data
+{
+    Matrix WorldTM;
+    Matrix WorldInverseTransposeTM;
+};
 
 Material::Material() = default;
 Material::~Material() { Unload(); }
 
 bool Material::LoadFile(const std::string& fullPath)
 {
-    m_shader = ResourceManager::Instance().Load<Shader>("../" +fullPath);
-    if (!m_shader)
+    std::ifstream file(fullPath);
+    if (!file.is_open())
     {
-        std::cerr << "Error: Material failed to load shader: " << fullPath << std::endl;
+        std::cerr << "Failed to open material file: " << fullPath << std::endl;
         return false;
+    }
+
+    json data;
+    try
+    {
+        file >> data;
+    }
+    catch (const json::parse_error& e)
+    {
+        std::cerr << "JSON Parse Error in " << fullPath << ": " << e.what() << std::endl;
+        return false;
+    }
+
+    if (data.contains("ShaderID"))
+    {
+        uint64_t shaderID = data["ShaderID"];
+        std::string shaderPath = AssetDatabase::Instance().GetPathFromID(shaderID);
+
+        if (!shaderPath.empty())
+        {
+            m_shader = ResourceManager::Instance().Load<Shader>(shaderPath);
+        }
+        else
+        {
+            std::cerr << "Warning: Shader ID " << shaderID << " not found in AssetDatabase." << std::endl;
+        }
+    }
+
+    if (data.contains("Textures"))
+    {
+        for (auto& [key, value] : data["Textures"].items())
+        {
+            int slot = std::stoi(key);
+            uint64_t texID = value;
+
+            std::string texPath = AssetDatabase::Instance().GetPathFromID(texID);
+
+            if (!texPath.empty())
+            {
+                Texture* tex = ResourceManager::Instance().Load<Texture>(texPath);
+                if (tex)
+                {
+                    SetTexture(slot, tex);
+                }
+            }
+            else
+            {
+                std::cerr << "Warning: Texture ID " << texID << " at slot " << slot << " not found." << std::endl;
+            }
+        }
     }
 
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
@@ -38,13 +103,47 @@ bool Material::LoadFile(const std::string& fullPath)
 
 bool Material::SaveFile(const std::string& fullPath)
 {
-    return false;
+    json data;
+
+    if (m_shader)
+    {
+        uint64_t id = m_shader->GetMeta().guid;
+        data["ShaderID"] = id;
+    }
+    else
+    {
+        data["ShaderID"] = 0;
+    }
+
+    json texData;
+    for (auto const& [slot, tex] : m_textures)
+    {
+        if (tex)
+        {
+            uint64_t id = tex->GetMeta().guid;
+            texData[std::to_string(slot)] = id;
+        }
+    }
+    data["Textures"] = texData;
+
+    std::ofstream file(fullPath);
+    if (!file.is_open()) return false;
+
+    file << data.dump(4); 
+    return true;
 }
 
 void Material::Unload()
 {
     m_cbuffer_object.Reset();
-    m_shader = nullptr; // 참조만 하므로 delete하지 않음
+    m_shader = nullptr;
+    m_textures.clear();
+}
+
+void Material::SetTexture(int slot, Texture* texture)
+{
+    if (texture) m_textures[slot] = texture;
+    else m_textures.erase(slot);
 }
 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
@@ -61,13 +160,20 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     DXHelper::ThrowIfFailed(hr);
 
     CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
-
     dataPtr->WorldTM = worldTM.Transpose();
-
     dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
 
     context->Unmap(m_cbuffer_object.Get(), 0);
 
     context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
     context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
+
+    for (auto const& [slot, tex] : m_textures)
+    {
+        if (tex)
+        {
+            ID3D11ShaderResourceView* srv = tex->GetSRV();
+            context->PSSetShaderResources(slot, 1, &srv);
+        }
+    }
 }

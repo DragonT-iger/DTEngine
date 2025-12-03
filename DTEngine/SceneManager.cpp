@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include <cassert>
 #include <iostream>
 #include "SceneManager.h"
@@ -18,11 +18,13 @@ void SceneManager::RegisterScene(const std::string& name, Scene* scene)
 void SceneManager::LoadScene(const std::string& name)
 {
     m_nextName = name;
+	std::cout << "[SceneManager] Scene change requested: " << name << std::endl;
 }
 
 void SceneManager::ProcessSceneChange()
 {
     if (m_nextName.empty()) return;
+
 
     // 현재 씬 정리 필요.
 
