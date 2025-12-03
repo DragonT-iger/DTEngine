@@ -78,10 +78,10 @@ bool Material::LoadFile(const std::string& fullPath)
         std::vector<float> colorVec = data["Color"];
         if (colorVec.size() == 4)
         {
-            m_data.Color[0] = colorVec[0];
-            m_data.Color[1] = colorVec[1];
-            m_data.Color[2] = colorVec[2];
-            m_data.Color[3] = colorVec[3];
+            m_data.Color.x = colorVec[0];
+            m_data.Color.y = colorVec[1];
+            m_data.Color.z = colorVec[2];
+            m_data.Color.w = colorVec[3];
         }
     }
     if (data.contains("Textures"))
@@ -141,7 +141,7 @@ bool Material::SaveFile(const std::string& fullPath)
         // 0이면 난리난다
     }
 
-    data["Color"] = { m_data.Color[0], m_data.Color[1], m_data.Color[2], m_data.Color[3] };
+    data["Color"] = { m_data.Color.x, m_data.Color.y, m_data.Color.z, m_data.Color.w };
     json texData;
     for (int slot = 0; slot < m_textures.size(); ++slot)
     {
@@ -205,10 +205,10 @@ Texture* Material::GetTexture(int slot) const
 
 void Material::SetColor(const Vector4& color)
 {
-    m_data.Color[0] = color.x;
-    m_data.Color[1] = color.y;
-    m_data.Color[2] = color.z;
-    m_data.Color[3] = color.w;
+    m_data.Color.x = color.x;
+    m_data.Color.y = color.y;
+    m_data.Color.z = color.z;
+    m_data.Color.w = color.w;
 
     UpdateMaterialBuffer();
 }
@@ -229,11 +229,22 @@ void Material::UpdateMaterialBuffer()
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
     // D3D11_MAP_WRITE_DISCARD: 이전 내용을 버리고 새로 씀 (빠름)
     HRESULT hr = context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    if (SUCCEEDED(hr))
-    {
-        memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
-        context->Unmap(m_cbuffer_material.Get(), 0);
-    }
+
+	DXHelper::ThrowIfFailed(hr);
+
+    MaterialData* dataPtr = static_cast<MaterialData*>(mappedData.pData);
+
+	dataPtr->Color = m_data.Color;
+	dataPtr->UseTexture = m_data.UseTexture;
+
+
+    //memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
+    context->Unmap(m_cbuffer_material.Get(), 0);
+
+
+    context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+
 
     for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
     {
@@ -290,6 +301,9 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     DXHelper::ThrowIfFailed(hr);
 
     CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
+
+    
+
     dataPtr->WorldTM = worldTM.Transpose();
     dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
 
@@ -298,7 +312,6 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
     context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
 
-    context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
     //constexpr int MAX_TEXTURE_SLOTS = 5;
 
     //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)

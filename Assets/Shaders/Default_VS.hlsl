@@ -10,6 +10,13 @@ cbuffer CBuffer_Object : register(b1)
     matrix WorldInverseTransposeTM;
 };
 
+cbuffer CBuffer_Material : register(b3)
+{
+    float4 MaterialColor;       // Material.Color
+    int UseTexture;             // Material.UseTexture
+    int3 Padding2;
+};
+
 
 struct VS_INPUT
 {
@@ -34,12 +41,17 @@ PS_INPUT VS(VS_INPUT input)
 {
     PS_INPUT output = (PS_INPUT) 0;
 
+    
     float4 worldPos = mul(float4(input.Pos, 1.0f), WorldTM);
     float4 viewPos  = mul(worldPos, ViewTM);
     float4 projPos  = mul(viewPos, ProjectionTM);
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
 
+    if (UseTexture == 0)
+    {
+        output.Color = float4(1, 1, 1, 1);
+    }
 
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
@@ -47,6 +59,8 @@ PS_INPUT VS(VS_INPUT input)
     output.UV = input.UV;
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;
+    
+    
     
     return output;
 }

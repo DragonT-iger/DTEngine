@@ -19,9 +19,10 @@ struct ID3D11Buffer;
 class Shader;
 class Texture;
 
+__declspec(align(16))
 struct MaterialData
 {
-    float Color[4] = { 1,1,1,1 };
+    Vector4 Color = { 1,1,1,1 };
     int UseTexture;    
     int Padding[3];    
 };
