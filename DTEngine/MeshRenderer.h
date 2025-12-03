@@ -14,28 +14,28 @@ class MeshRenderer : public MonoBehaviour
 public:
     MeshRenderer() = default;
 
-	void Awake() override;
+    void Awake() override;
 
-    void SetModelPath(const std::string& path);
-    std::string GetModelPath() const { return m_modelPath; }
+    void SetModelID(uint64_t id);
+    uint64_t GetModelID() const { return m_modelID; }
 
     void SetMeshIndex(int index);
     int GetMeshIndex() const { return m_meshIndex; }
 
-    void SetMesh(Mesh* mesh) { m_mesh = mesh; } // 런타임 수동 할당용
+    void SetMesh(Mesh* mesh) { m_mesh = mesh; }
     Mesh* GetMesh() const { return m_mesh; }
 
     void SetMaterial(Material* material) { m_material = material; }
     Material* GetMaterial() const { return m_material; }
 
-    void SetMaterialPath(const std::string& path);
-    std::string GetMaterialPath() const { return m_materialPath; }
+    void SetMaterialID(uint64_t id);
+    uint64_t GetMaterialID() const { return m_materialID; }
 
 private:
     Mesh* m_mesh = nullptr;
     Material* m_material = nullptr;
 
-    std::string m_modelPath = "";
-    std::string m_materialPath = "";
+    uint64_t m_modelID = 0;
+    uint64_t m_materialID = 0;
     int m_meshIndex = 0;
 };

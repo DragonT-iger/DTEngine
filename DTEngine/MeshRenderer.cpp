@@ -3,31 +3,42 @@
 #include "ResourceManager.h"
 #include "Model.h"
 #include "Material.h"
+#include "AssetDatabase.h" 
 
 BEGINPROPERTY(MeshRenderer)
-DTPROPERTY_SETTER(MeshRenderer, m_modelPath, SetModelPath)
+DTPROPERTY_SETTER(MeshRenderer, m_modelID, SetModelID)
 DTPROPERTY_SETTER(MeshRenderer, m_meshIndex, SetMeshIndex)
-DTPROPERTY_SETTER(MeshRenderer, m_materialPath, SetMaterialPath)
+DTPROPERTY_SETTER(MeshRenderer, m_materialID, SetMaterialID)
 ENDPROPERTY()
 
 void MeshRenderer::Awake()
 {
-    if (m_mesh == nullptr && !m_modelPath.empty())
+    if (m_mesh == nullptr && m_modelID != 0)
     {
-        SetModelPath(m_modelPath);
+        SetModelID(m_modelID);
+    }
+
+    if (m_material == nullptr && m_materialID != 0)
+    {
+        SetMaterialID(m_materialID);
     }
 }
 
-void MeshRenderer::SetModelPath(const std::string& path)
+void MeshRenderer::SetModelID(uint64_t id)
 {
-    m_modelPath = path;
+    m_modelID = id;
+    m_mesh = nullptr; 
 
-    if (!m_modelPath.empty())
+    if (m_modelID != 0)
     {
-        Model* model = ResourceManager::Instance().Load<Model>(m_modelPath);
-        if (model)
+        std::string path = AssetDatabase::Instance().GetPathFromID(m_modelID);
+        if (!path.empty())
         {
-            m_mesh = model->GetMesh(m_meshIndex);
+            Model* model = ResourceManager::Instance().Load<Model>(path);
+            if (model)
+            {
+                m_mesh = model->GetMesh(m_meshIndex);
+            }
         }
     }
 }
@@ -36,26 +47,27 @@ void MeshRenderer::SetMeshIndex(int index)
 {
     m_meshIndex = index;
 
-    if (!m_modelPath.empty())
+    if (m_modelID != 0)
     {
-        SetModelPath(m_modelPath);
+        SetModelID(m_modelID);
     }
 }
 
-void MeshRenderer::SetMaterialPath(const std::string& path)
+void MeshRenderer::SetMaterialID(uint64_t id)
 {
-    m_materialPath = path;
+    m_materialID = id;
+    m_material = nullptr;
 
-    if (!m_materialPath.empty())
+    if (m_materialID != 0)
     {
-        Material* mat = ResourceManager::Instance().Load<Material>(m_materialPath);
-        if (mat)
+        std::string path = AssetDatabase::Instance().GetPathFromID(m_materialID);
+        if (!path.empty())
         {
-            SetMaterial(mat);
+            Material* mat = ResourceManager::Instance().Load<Material>(path);
+            if (mat)
+            {
+                SetMaterial(mat);
+            }
         }
-    }
-    else
-    {
-        SetMaterial(nullptr);
     }
 }

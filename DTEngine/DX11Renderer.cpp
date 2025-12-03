@@ -221,6 +221,12 @@ void DX11Renderer::ResetRenderState()
         m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
         m_context->RSSetState(m_defaultRasterizerState.Get());
         
+        if (m_defaultSamplerState)
+        {
+            ID3D11SamplerState* samplers[] = { m_defaultSamplerState.Get() };
+            m_context->PSSetSamplers(0, 1, samplers);
+        }
+
         //// 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
         //float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
         //m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
@@ -269,6 +275,19 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     rsDesc.DepthClipEnable = TRUE;
 
     hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+
+    D3D11_SAMPLER_DESC sampDesc = {};
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;   
+    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    sampDesc.MinLOD = 0;
+    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+    hr = dev->CreateSamplerState(&sampDesc, m_defaultSamplerState.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
 

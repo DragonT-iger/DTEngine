@@ -223,7 +223,7 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         {
             MeshRenderer* renderer = currentGO->AddComponent<MeshRenderer>();
 
-            renderer->SetModelPath(modelPath);
+            renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
             renderer->SetMeshIndex(meshIndex);
 
         }
@@ -234,7 +234,7 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
             subGO->GetTransform()->SetParent(currentGO->GetTransform());
 
             MeshRenderer* renderer = subGO->AddComponent<MeshRenderer>();
-            renderer->SetModelPath(modelPath);
+            renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
             renderer->SetMeshIndex(meshIndex);
         }
     }

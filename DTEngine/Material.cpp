@@ -95,14 +95,34 @@ bool Material::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
-    D3D11_BUFFER_DESC cbDesc = {};
-    cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
-    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    {
+        D3D11_BUFFER_DESC cbDesc = {};
+        cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
+        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
+        DXHelper::ThrowIfFailed(hr);
+    }
 
-    HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    {
+        D3D11_BUFFER_DESC cbDesc = {};
+        cbDesc.ByteWidth = sizeof(MaterialData); 
+        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_material.GetAddressOf());
+        DXHelper::ThrowIfFailed(hr);
+    }
+
+    if (!m_textures.empty() && m_textures[0] != nullptr)
+    {
+        m_data.UseTexture = 1;
+    }
+
+
+    UpdateMaterialBuffer();
 
     return true;
 }
@@ -155,6 +175,58 @@ void Material::SetTexture(int slot, Texture* texture)
 {
     if (texture) m_textures[slot] = texture;
     else m_textures.erase(slot);
+
+    if (m_textures.find(0) != m_textures.end() && m_textures[0] != nullptr)
+    {
+        m_data.UseTexture = 1;
+    }
+    else
+    {
+        m_data.UseTexture = 0;
+    }
+
+    UpdateMaterialBuffer();
+}
+
+Texture* Material::GetTexture(int slot) const
+{
+    auto it = m_textures.find(slot);
+    if (it != m_textures.end())
+        return it->second;
+    return nullptr;
+}
+
+void Material::SetColor(const Vector4& color)
+{
+    m_data.Color[0] = color.x;
+    m_data.Color[1] = color.y;
+    m_data.Color[2] = color.z;
+    m_data.Color[3] = color.w;
+
+    UpdateMaterialBuffer();
+}
+
+Vector4 Material::GetColor() const
+{
+    return Vector4(m_data.Color);
+}
+
+void Material::UpdateMaterialBuffer()
+{
+    
+    if (!m_cbuffer_material) return;
+
+    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
+    if (!context) return;
+
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    // D3D11_MAP_WRITE_DISCARD: 이전 내용을 버리고 새로 씀 (빠름)
+    HRESULT hr = context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    if (SUCCEEDED(hr))
+    {
+        memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
+        context->Unmap(m_cbuffer_material.Get(), 0);
+    }
 }
 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
@@ -178,6 +250,8 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
     context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
     context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
+
+    context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
 
     for (auto const& [slot, tex] : m_textures)
     {

@@ -37,6 +37,8 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Texture.h"
+#include "Shader.h"
+#include "AssetDatabase.h"
 
 namespace fs = std::filesystem;
 
@@ -766,12 +768,76 @@ void EditorUI::DrawComponentProperties(Component* comp)
             // uint64_t (ID 등)
             else if (type == typeid(uint64_t))
             {
-                // DragInt는 uint64_t를 지원하지 않으므로 InputScalar 사용
-                uint64_t temp = *static_cast<uint64_t*>(data);
-                if (ImGui::InputScalar(name, ImGuiDataType_U64, &temp, nullptr, nullptr, "%llu", ImGuiInputTextFlags_ReadOnly))
+                uint64_t currentID = *static_cast<uint64_t*>(data);
+
+                std::string displayStr = "None";
+                if (currentID != 0)
                 {
-                    // (읽기 전용이므로 Setter 호출 안 함)
+                    std::string path = AssetDatabase::Instance().GetPathFromID(currentID);
+                    if (!path.empty())
+                        displayStr = std::filesystem::path(path).filename().string();
+                    else
+                        displayStr = "Unknown ID (" + std::to_string(currentID) + ")";
                 }
+
+                float width = ImGui::CalcItemWidth();
+
+                ImGui::Button(displayStr.c_str(), ImVec2(width, 0));
+
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::filesystem::path fpath(droppedPath);
+                        std::string ext = fpath.extension().string();
+
+                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                        std::string propCheck = prettyName;
+                        std::transform(propCheck.begin(), propCheck.end(), propCheck.begin(), ::tolower);
+
+                        bool isFormatValid = false;
+
+                        if (propCheck.find("model") != std::string::npos || propCheck.find("mesh") != std::string::npos)
+                        {
+                            if (ext == ".fbx" || ext == ".obj" || ext == ".x" || ext == ".blend") isFormatValid = true;
+                        }
+                        else if (propCheck.find("material") != std::string::npos)
+                        {
+                            if (ext == ".mat") isFormatValid = true;
+                        }
+                        else if (propCheck.find("texture") != std::string::npos || propCheck.find("image") != std::string::npos)
+                        {
+                            if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga") isFormatValid = true;
+                        }
+                        else if (propCheck.find("shader") != std::string::npos)
+                        {
+                            if (ext == ".hlsl" || ext == ".fx") isFormatValid = true;
+                        }
+                        else
+                        {
+                            isFormatValid = true;
+                        }
+
+                        if (isFormatValid)
+                        {
+                            uint64_t newID = AssetDatabase::Instance().GetIDFromPath(droppedPath);
+                            if (newID != 0)
+                            {
+                                uint64_t oldVal = currentID;
+                                prop.m_setter(comp, &newID);
+                                auto cmd = std::make_unique<ChangePropertyCommand<uint64_t>>(
+                                    comp, prop.m_setter, oldVal, newID
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
             }
             // std::string
             else if (type == typeid(std::string))
@@ -906,6 +972,9 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
+
+            
+
             else {
                 std::cout << "타입 미구현: " << type.name() << std::endl;
             }
@@ -972,41 +1041,105 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             ImGui::Text("Material: %s", filePath.filename().string().c_str());
             ImGui::Separator();
 
+            Shader* currentShader = material->GetShader();
+            std::string shaderName = "None (Missing)";
 
-            ImGui::Spacing();
+            if (currentShader)
+            {
+                uint64_t shaderID = currentShader->GetMeta().guid;
+                std::string shaderPath = AssetDatabase::Instance().GetPathFromID(shaderID);
+                if (!shaderPath.empty())
+                {
+                    shaderName = fs::path(shaderPath).filename().string();
+                }
+            }
 
-            ImGui::Text("Diffuse Texture (Slot 0)");
-
-            // 현재 할당된 텍스처 가져오기 (Material 클래스에 GetTexture 추가 필요 가정)
-            // Texture* currentTex = material->GetTexture(0); 
-            // 편의상 리플렉션이나 map 접근이 필요하지만, 여기서는 개념적으로 작성합니다.
-
-            ImGui::Button("Drop Texture Here", ImVec2(100, 100));
+            ImGui::Text("Shader:");
+            ImGui::SameLine();
+            ImGui::Button(shaderName.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0));
 
             if (ImGui::BeginDragDropTarget())
             {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
                 {
                     const char* droppedPath = (const char*)payload->Data;
-                    std::string droppedExt = fs::path(droppedPath).extension().string();
+                    // 확장자 체크 (.hlsl 등 셰이더 확장자)
+                    // 현재 프로젝트 설정상 .hlsl이 리소스화 되는지 확인 필요. 
+                    // 보통 셰이더도 임포트되어 ID가 있어야 함.
 
-                    if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds")
+                    // 여기서는 셰이더 파일 자체를 로드 시도
+                    Shader* newShader = ResourceManager::Instance().Load<Shader>(droppedPath);
+                    if (newShader)
                     {
-                        Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
-                        if (newTex)
-                        {
-                            material->SetTexture(0, newTex);
-                            material->SaveFile(path);       
-                        }
+                        material->SetShader(newShader);
+                        material->SaveFile(path);
                     }
                 }
                 ImGui::EndDragDropTarget();
             }
 
-            if (ImGui::Button("Clear Texture"))
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            const int MAX_TEXTURE_SLOTS = 5;
+
+            for (int i = 0; i < MAX_TEXTURE_SLOTS; ++i)
             {
-                material->SetTexture(0, nullptr);
-                material->SaveFile(path);
+                ImGui::PushID(i);
+
+                ImGui::Text("Texture Slot %d", i);
+
+                Texture* currentTex = material->GetTexture(i);
+                std::string texName = "Empty";
+
+                // [수정] 텍스처 이름 가져오기
+                if (currentTex)
+                {
+                    uint64_t texID = currentTex->GetMeta().guid;
+                    std::string texPath = AssetDatabase::Instance().GetPathFromID(texID);
+                    if (!texPath.empty())
+                    {
+                        texName = fs::path(texPath).filename().string();
+                    }
+                }
+
+                if (ImGui::Button(texName.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 30, 0)))
+                {
+                    // 클릭 시 동작 (옵션)
+                }
+
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::string droppedExt = fs::path(droppedPath).extension().string();
+                        std::transform(droppedExt.begin(), droppedExt.end(), droppedExt.begin(), ::tolower);
+
+                        if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds" || droppedExt == ".tga")
+                        {
+                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+                            if (newTex)
+                            {
+                                material->SetTexture(i, newTex);
+                                material->SaveFile(path);
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine();
+
+                if (ImGui::Button("X", ImVec2(22, 0)))
+                {
+                    material->SetTexture(i, nullptr);
+                    material->SaveFile(path);
+                }
+
+                ImGui::PopID();
+                ImGui::Spacing();
             }
         }
     }
@@ -1015,6 +1148,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
     }
 }
+
 
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
 {

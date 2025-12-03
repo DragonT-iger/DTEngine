@@ -21,6 +21,7 @@ struct ID3D11DepthStencilView;
 struct ID3D11Buffer;
 struct ID3D11DepthStencilState;
 struct ID3D11RasterizerState;
+struct ID3D11SamplerState;
 
 class DX11Renderer : public Singleton<DX11Renderer>
 {
@@ -121,6 +122,8 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
+
+    Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
     // State
     int   m_width = 0;

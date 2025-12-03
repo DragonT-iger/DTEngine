@@ -23,6 +23,17 @@ cbuffer CBuffer_GlobalLight : register(b2)
     float3 Padding;
 };
 
+cbuffer CBuffer_Material : register(b3)
+{
+    float4 MaterialColor; // Material.Color
+    int UseTexture;       // Material.UseTexture
+    int3 Padding2;
+};
+
+
+Texture2D g_Texture : register(t0);
+SamplerState g_Sampler : register(s0);
+
 float4 PS(PS_INPUT input) : SV_Target
 {
     float3 normal = normalize(input.Normal);
@@ -30,6 +41,9 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float3 totalDiffuse = float3(0, 0, 0);
     float3 ambient = float3(0.3, 0.3, 0.3); // 기본 환경광
+    
+    
+       
 
     for (int i = 0; i < ActiveCount; ++i)
     {
@@ -74,6 +88,20 @@ float4 PS(PS_INPUT input) : SV_Target
         totalDiffuse += NdotL * lightColor * intensity * attenuation;
     }
 
-    float3 finalColor = input.Color.rgb * (ambient + totalDiffuse);
+    float3 finalColor;
+    
+    if (UseTexture)
+    {
+        float4 texColor = g_Texture.Sample(g_Sampler, input.UV);
+        
+        
+        finalColor = texColor.rgb * (ambient + totalDiffuse);
+    }
+    else
+    {
+        finalColor = MaterialColor.rgb * (ambient + totalDiffuse);
+    }
+
+    
     return float4(finalColor, 1.0f);
 }
