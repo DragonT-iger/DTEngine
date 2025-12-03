@@ -6,6 +6,7 @@
 #include "DX11Renderer.h"    
 #include "DXHelper.h"
 #include "AssetDatabase.h" 
+#include "IDManager.h"
 
 #include <d3d11.h>
 #include <SimpleMath.h>
@@ -29,7 +30,12 @@ Material::~Material() { Unload(); }
 
 bool Material::LoadFile(const std::string& fullPath)
 {
-    std::ifstream file(fullPath);
+    std::filesystem::path path(fullPath);
+    path.replace_extension(".mat");
+    std::string finalPath = path.string();
+
+    std::ifstream file(finalPath);
+
     if (!file.is_open())
     {
         std::cerr << "Failed to open material file: " << fullPath << std::endl;
@@ -113,23 +119,28 @@ bool Material::SaveFile(const std::string& fullPath)
     else
     {
         data["ShaderID"] = 0;
+        // 0이면 난리난다
     }
 
     json texData;
-    for (auto const& [slot, tex] : m_textures)
+    for (auto const& [slot, texture] : m_textures)
     {
-        if (tex)
+        if (texture)
         {
-            uint64_t id = tex->GetMeta().guid;
+            uint64_t id = texture->GetMeta().guid;
             texData[std::to_string(slot)] = id;
         }
     }
     data["Textures"] = texData;
 
     std::ofstream file(fullPath);
-    if (!file.is_open()) return false;
+    if (!file.is_open())
+    {
+        std::cerr << "Error: Failed to save material file: " << fullPath << std::endl;
+        return false;
+    }
 
-    file << data.dump(4); 
+    file << data.dump(4);
     return true;
 }
 

@@ -54,6 +54,8 @@ private:
 
     void OnDropFile(const std::string& filePath);
 
+	void DrawAssetInspector(const std::string& path);
+
 
     std::any m_dragStartValue;
     bool m_isGizmoUsing = false;
@@ -72,4 +74,5 @@ private:
     Vector3 m_cachedEulerRotation;
 
     std::filesystem::path m_currentProjectDirectory = "Assets";
+    std::string m_selectedAssetPath;
 };

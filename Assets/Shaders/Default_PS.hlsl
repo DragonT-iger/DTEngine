@@ -53,14 +53,13 @@ float4 PS(PS_INPUT input) : SV_Target
             float dist = length(toLight);
             L = normalize(toLight);
 
-            // 거리 감쇠 (유니티 스타일: 1 / (1 + dist^2) )
-            // 범위(Range)를 넘어가면 0이 되도록 처리하는 것이 좋음
             float range = Lights[i].PositionRange.w;
             
             attenuation = 1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range); 
             
             // 일단 간단하게 dist / range 비율로 감쇠
             // attenuation 파라미터는 일단 적용하지 않았음
+            // 원한다면 당연히 수정도 가능하긴 함
             
             //if (dist > range)
             //    attenuation = 0.0f;

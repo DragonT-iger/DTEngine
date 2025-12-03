@@ -1,13 +1,11 @@
 #include "pch.h"
-
+#include "Texture.h"
+#include "DX11Renderer.h"
+#include "DXHelper.h"
 
 #include <d3d11.h> 
 #include <WICTextureLoader.h> 
 #include <DDSTextureLoader.h> 
-
-#include "Texture.h"
-#include "DX11Renderer.h"
-#include "DXHelper.h"
 
 using Microsoft::WRL::ComPtr;
 

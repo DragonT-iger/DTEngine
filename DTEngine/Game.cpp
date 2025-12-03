@@ -134,12 +134,6 @@ bool Game::Initialize()
 	SceneManager::Instance().LoadScene("SampleScene");
 
 
-
-	
-
-	
-
-
 	//Scene testScene("TestScene");
 
 	//GameObject* parentGO = testScene.CreateGameObject("Parent");
@@ -546,7 +540,8 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		//Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
 
 		Mesh* mesh = meshRenderer->GetMesh();
-		Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
+		//Material* material = meshRenderer->GetMaterial();
+		Material* material = ResourceManager::Instance().Load<Material>("Materials/Default");
 
 		if (!mesh || !material) continue;
 

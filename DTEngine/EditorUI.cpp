@@ -5,6 +5,7 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
+#include <fstream>
 
 #include "EditorUI.h"
 #include "Scene.h"
@@ -35,6 +36,7 @@
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Texture.h"
 
 namespace fs = std::filesystem;
 
@@ -445,102 +447,99 @@ void EditorUI::DrawInspectorWindow()
 {
     ImGui::Begin("Inspector");
 
-    if (!m_selectedGameObject)
+    if (m_selectedGameObject)
     {
-        ImGui::Text("No object selected.");
-        ImGui::End();
-        return;
-    }
+        bool oldState = m_selectedGameObject->IsActive();
+        bool newState = oldState;
 
-    bool oldState = m_selectedGameObject->IsActive(); 
-    bool newState = oldState;
-
-    if (ImGui::Checkbox("##ActiveCheckbox", &newState))
-    {
-        auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(m_selectedGameObject, oldState, newState);
-        HistoryManager::Instance().Do(std::move(cmd));
-    }
-
-    ImGui::SameLine();
-
-    char nameBuffer[128];
-    strncpy_s(nameBuffer, m_selectedGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
-    nameBuffer[sizeof(nameBuffer) - 1] = '\0'; 
-
-    ImGui::SetNextItemWidth(150); 
-    if (ImGui::InputText("##NameInput", nameBuffer, sizeof(nameBuffer)))
-    {
-        m_selectedGameObject->SetName(nameBuffer);
-    }
-
-    ImGui::SameLine();
-    ImGui::Spacing();
-    ImGui::SameLine();
-
-    char tagBuffer[128];
-    strncpy_s(tagBuffer, m_selectedGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
-    tagBuffer[sizeof(tagBuffer) - 1] = '\0';
-
-    ImGui::SetNextItemWidth(80);
-    if (ImGui::InputText("Tag", tagBuffer, sizeof(tagBuffer)))
-    {
-        m_selectedGameObject->SetTag(tagBuffer);
-    }
-
-    ImGui::Separator();
-    
-    DrawComponentProperties(m_selectedGameObject->GetTransform());
-
-    for (const auto& comp : m_selectedGameObject->_GetComponents())
-    {
-        if (comp) DrawComponentProperties(comp.get());
-    }
-
-    float totalWidth = ImGui::GetContentRegionAvail().x;
-
-    float buttonWidth = totalWidth * 0.6f;
-
-    float padding = totalWidth * 0.20f;
-
-    ImGui::Separator();
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    ImGui::SetCursorPosX(padding);
-
-    if (ImGui::Button("Add Component", ImVec2(buttonWidth, 0)))
-    {
-        ImGui::OpenPopup("AddComponentPopup");
-    }
-
-    if (ImGui::BeginPopup("AddComponentPopup"))
-    {
-        ImGui::Text("Component Type:");
-        ImGui::Separator();
-
-        auto& factory = ComponentFactory::Instance();
-        std::vector<std::string> componentNames = factory.GetAllRegisteredTypeNames();
-
-        std::sort(componentNames.begin(), componentNames.end());
-
-        for (const std::string& typeName : componentNames)
+        if (ImGui::Checkbox("##ActiveCheckbox", &newState))
         {
-            if (typeName == "Transform")
-            {
-                continue;
-            }
-
-            if (ImGui::Selectable(typeName.c_str()))
-            {
-                auto cmd = std::make_unique<AddComponentCommand>(m_selectedGameObject, typeName);
-                HistoryManager::Instance().Do(std::move(cmd));
-                ImGui::CloseCurrentPopup();
-            }
+            auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(m_selectedGameObject, oldState, newState);
+            HistoryManager::Instance().Do(std::move(cmd));
         }
 
-        ImGui::EndPopup();
+        ImGui::SameLine();
+
+        char nameBuffer[128];
+        strncpy_s(nameBuffer, m_selectedGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
+        nameBuffer[sizeof(nameBuffer) - 1] = '\0';
+
+        ImGui::SetNextItemWidth(150);
+        if (ImGui::InputText("##NameInput", nameBuffer, sizeof(nameBuffer)))
+        {
+            m_selectedGameObject->SetName(nameBuffer);
+        }
+
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+
+        char tagBuffer[128];
+        strncpy_s(tagBuffer, m_selectedGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
+        tagBuffer[sizeof(tagBuffer) - 1] = '\0';
+
+        ImGui::SetNextItemWidth(80);
+        if (ImGui::InputText("Tag", tagBuffer, sizeof(tagBuffer)))
+        {
+            m_selectedGameObject->SetTag(tagBuffer);
+        }
+
+        ImGui::Separator();
+
+        DrawComponentProperties(m_selectedGameObject->GetTransform());
+
+        for (const auto& comp : m_selectedGameObject->_GetComponents())
+        {
+            if (comp) DrawComponentProperties(comp.get());
+        }
+
+        float totalWidth = ImGui::GetContentRegionAvail().x;
+        float buttonWidth = totalWidth * 0.6f;
+        float padding = totalWidth * 0.20f;
+
+        ImGui::Separator();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Spacing();
+
+        ImGui::SetCursorPosX(padding);
+
+        if (ImGui::Button("Add Component", ImVec2(buttonWidth, 0)))
+        {
+            ImGui::OpenPopup("AddComponentPopup");
+        }
+
+        if (ImGui::BeginPopup("AddComponentPopup"))
+        {
+            ImGui::Text("Component Type:");
+            ImGui::Separator();
+
+            auto& factory = ComponentFactory::Instance();
+            std::vector<std::string> componentNames = factory.GetAllRegisteredTypeNames();
+
+            std::sort(componentNames.begin(), componentNames.end());
+
+            for (const std::string& typeName : componentNames)
+            {
+                if (typeName == "Transform") continue;
+
+                if (ImGui::Selectable(typeName.c_str()))
+                {
+                    auto cmd = std::make_unique<AddComponentCommand>(m_selectedGameObject, typeName);
+                    HistoryManager::Instance().Do(std::move(cmd));
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+            ImGui::EndPopup();
+        }
+    }
+    else if (!m_selectedAssetPath.empty())
+    {
+        DrawAssetInspector(m_selectedAssetPath);
+    }
+    else
+    {
+        ImGui::Text("No object or asset selected.");
     }
 
     ImGui::End();
@@ -959,6 +958,64 @@ void EditorUI::OnDropFile(const std::string& rawPath)
     }
 }
 
+void EditorUI::DrawAssetInspector(const std::string& path)
+{
+    fs::path filePath(path);
+    std::string ext = filePath.extension().string();
+
+    if (ext == ".mat")
+    {
+        Material* material = ResourceManager::Instance().Load<Material>(path);
+
+        if (material)
+        {
+            ImGui::Text("Material: %s", filePath.filename().string().c_str());
+            ImGui::Separator();
+
+
+            ImGui::Spacing();
+
+            ImGui::Text("Diffuse Texture (Slot 0)");
+
+            // 현재 할당된 텍스처 가져오기 (Material 클래스에 GetTexture 추가 필요 가정)
+            // Texture* currentTex = material->GetTexture(0); 
+            // 편의상 리플렉션이나 map 접근이 필요하지만, 여기서는 개념적으로 작성합니다.
+
+            ImGui::Button("Drop Texture Here", ImVec2(100, 100));
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                {
+                    const char* droppedPath = (const char*)payload->Data;
+                    std::string droppedExt = fs::path(droppedPath).extension().string();
+
+                    if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds")
+                    {
+                        Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+                        if (newTex)
+                        {
+                            material->SetTexture(0, newTex);
+                            material->SaveFile(path);       
+                        }
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
+
+            if (ImGui::Button("Clear Texture"))
+            {
+                material->SetTexture(0, nullptr);
+                material->SaveFile(path);
+            }
+        }
+    }
+    else
+    {
+        ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
+    }
+}
+
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
 {
     m_sceneCamera = camera;
@@ -1065,6 +1122,7 @@ void EditorUI::DrawProjectWindow()
                 {
                     m_currentProjectDirectory /= path.filename();
                 }
+
                 else
                 {
                     std::cout << "Selected File: " << filename << std::endl;
@@ -1076,6 +1134,9 @@ void EditorUI::DrawProjectWindow()
 
                         //SceneManager::Instance().LoadScene(sceneName);
                     }
+
+                    m_selectedAssetPath = path.string();
+                    m_selectedGameObject = nullptr;
                 }
             }
             ImGui::PopStyleColor();
@@ -1096,6 +1157,51 @@ void EditorUI::DrawProjectWindow()
     }
 
     ImGui::Columns(1);
+
+
+    if (ImGui::BeginPopupContextWindow("ProjectContext", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
+    {
+        if (ImGui::BeginMenu("Create"))
+        {
+            if (ImGui::MenuItem("Material"))
+            {
+                std::string baseName = "New Material";
+                std::string ext = ".mat";
+                fs::path newPath = m_currentProjectDirectory / (baseName + ext);
+
+                int counter = 1;
+                while (fs::exists(newPath))
+                {
+                    newPath = m_currentProjectDirectory / (baseName + " " + std::to_string(counter) + ext);
+                    counter++;
+                }
+
+                fs::path shaderPath = fs::path("Assets") / "Shaders" / "Default_VS.hlsl";
+                uint64_t defaultShaderID = AssetDatabase::Instance().GetIDFromPath(shaderPath.string());
+
+                if (defaultShaderID == 0)
+                {
+                    std::cout << "[Editor] Warning: Could not find default shader at " << shaderPath.string() << std::endl;
+                }
+
+                std::ofstream file(newPath);
+                if (file.is_open())
+                {
+                    file << "{\n";
+                    file << "    \"ShaderID\": " << defaultShaderID << ",\n";
+                    file << "    \"Textures\": {}\n";
+                    file << "}";
+                    file.close();
+
+                    std::cout << "[Editor] Created new material: " << newPath.string() << " (ShaderID: " << defaultShaderID << ")" << std::endl;
+
+                }
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
+    }
+
     ImGui::End();
 }
 
