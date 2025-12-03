@@ -1081,6 +1081,15 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             ImGui::Spacing();
             ImGui::Separator();
             ImGui::Spacing();
+            ImGui::Separator();
+
+            Vector4 color = material->GetColor();
+            if (ImGui::ColorEdit4("Material Color", &color.x))
+            {
+                material->SetColor(color); // 값 변경 및 상수 버퍼 업데이트 트리거
+                material->SaveFile(path);  // 변경 사항 저장
+            }
+            ImGui::Separator();
 
             const int MAX_TEXTURE_SLOTS = 5;
 

@@ -649,7 +649,7 @@
         {
           "Active": true,
           "id": 9326112590983376398,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 0,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
@@ -690,7 +690,7 @@
         {
           "Active": true,
           "id": 8187816134469892162,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 1,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
@@ -731,7 +731,7 @@
         {
           "Active": true,
           "id": 4829818442114676912,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 2,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
@@ -772,7 +772,7 @@
         {
           "Active": true,
           "id": 15877950767564859269,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 3,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
@@ -813,7 +813,7 @@
         {
           "Active": true,
           "id": 3157723264814315174,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 4,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
@@ -854,7 +854,7 @@
         {
           "Active": true,
           "id": 1147917338329733514,
-          "m_materialID": 0,
+          "m_materialID": 14785535731479647299,
           "m_meshIndex": 5,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"

@@ -18,6 +18,8 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
+constexpr int MAX_TEXTURE_SLOTS = 5;
+
 __declspec(align(16))
 struct CBuffer_Object_Data
 {
@@ -26,7 +28,7 @@ struct CBuffer_Object_Data
 };
 
 Material::Material() {
-    m_textures.resize(5, nullptr);
+    m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
 
     CreateBuffers();
 }
@@ -71,7 +73,17 @@ bool Material::LoadFile(const std::string& fullPath)
             std::cerr << "Warning: Shader ID " << shaderID << " not found in AssetDatabase." << std::endl;
         }
     }
-
+    if (data.contains("Color"))
+    {
+        std::vector<float> colorVec = data["Color"];
+        if (colorVec.size() == 4)
+        {
+            m_data.Color[0] = colorVec[0];
+            m_data.Color[1] = colorVec[1];
+            m_data.Color[2] = colorVec[2];
+            m_data.Color[3] = colorVec[3];
+        }
+    }
     if (data.contains("Textures"))
     {
         for (auto& [key, value] : data["Textures"].items())
@@ -129,6 +141,7 @@ bool Material::SaveFile(const std::string& fullPath)
         // 0이면 난리난다
     }
 
+    data["Color"] = { m_data.Color[0], m_data.Color[1], m_data.Color[2], m_data.Color[3] };
     json texData;
     for (int slot = 0; slot < m_textures.size(); ++slot)
     {
@@ -156,7 +169,7 @@ void Material::Unload()
     m_cbuffer_object.Reset();
     m_shader = nullptr;
     m_textures.clear();
-    m_textures.resize(5, nullptr);
+    m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
 }
 
 void Material::SetTexture(int slot, Texture* texture)
@@ -167,6 +180,7 @@ void Material::SetTexture(int slot, Texture* texture)
     }
 
     if (texture) m_textures[slot] = texture;
+    
     m_textures[slot] = texture;
 
     if (!m_textures.empty() && m_textures[0] != nullptr)
@@ -220,6 +234,18 @@ void Material::UpdateMaterialBuffer()
         memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
         context->Unmap(m_cbuffer_material.Get(), 0);
     }
+
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    {
+        ID3D11ShaderResourceView* srv = nullptr;
+        if (m_textures[i])
+        {
+            srv = m_textures[i]->GetSRV();
+        }
+
+        context->PSSetShaderResources(i, 1, &srv);
+    }
+
 }
 
 void Material::CreateBuffers()
@@ -273,19 +299,18 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
 
     context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    //constexpr int MAX_TEXTURE_SLOTS = 5;
 
-    constexpr int MAX_TEXTURE_SLOTS = 5;
+    //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    //{
+    //    ID3D11ShaderResourceView* srv = nullptr;
+    //    if (m_textures[i])
+    //    {
+    //        srv = m_textures[i]->GetSRV();
+    //    }
 
-    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    {
-        ID3D11ShaderResourceView* srv = nullptr;
-        if (m_textures[i])
-        {
-            srv = m_textures[i]->GetSRV();
-        }
-
-        context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
-    }
+    //    context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
+    //}
 
     //UpdateMaterialBuffer();
 }
