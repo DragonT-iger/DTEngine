@@ -93,8 +93,6 @@ float4 PS(PS_INPUT input) : SV_Target
     if (UseTexture)
     {
         float4 texColor = g_Texture.Sample(g_Sampler, input.UV);
-        
-        
         finalColor = texColor.rgb * (ambient + totalDiffuse);
     }
     else

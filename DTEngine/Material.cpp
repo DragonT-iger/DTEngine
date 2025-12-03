@@ -27,6 +27,8 @@ struct CBuffer_Object_Data
 
 Material::Material() {
     m_textures.resize(5, nullptr);
+
+    CreateBuffers();
 }
 Material::~Material() { Unload(); }
 
@@ -97,31 +99,14 @@ bool Material::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
-
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(MaterialData); 
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_material.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
+    CreateBuffers();
 
     if (!m_textures.empty() && m_textures[0] != nullptr)
     {
         m_data.UseTexture = 1;
     }
+    else
+        m_data.UseTexture = 0;
 
 
     UpdateMaterialBuffer();
@@ -176,15 +161,12 @@ void Material::Unload()
 
 void Material::SetTexture(int slot, Texture* texture)
 {
-    if (texture) m_textures[slot] = texture;
-    else {
-		m_textures[slot] = nullptr;
-    }
     if (slot >= m_textures.size())
     {
         m_textures.resize(slot + 1, nullptr);
     }
 
+    if (texture) m_textures[slot] = texture;
     m_textures[slot] = texture;
 
     if (!m_textures.empty() && m_textures[0] != nullptr)
@@ -240,6 +222,34 @@ void Material::UpdateMaterialBuffer()
     }
 }
 
+void Material::CreateBuffers()
+{
+    ID3D11Device* device = DX11Renderer::Instance().GetDevice();
+    if (!device) return;
+
+    if (!m_cbuffer_object)
+    {
+        D3D11_BUFFER_DESC cbDesc = {};
+        cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
+        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
+        DXHelper::ThrowIfFailed(hr);
+    }
+
+    if (!m_cbuffer_material)
+    {
+        D3D11_BUFFER_DESC cbDesc = {};
+        cbDesc.ByteWidth = sizeof(MaterialData);
+        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_material.GetAddressOf());
+        DXHelper::ThrowIfFailed(hr);
+    }
+}
+
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
     if (!m_shader || !m_cbuffer_object) return;
@@ -276,4 +286,6 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
         context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
     }
+
+    //UpdateMaterialBuffer();
 }
