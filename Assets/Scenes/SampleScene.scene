@@ -256,10 +256,10 @@
           "Active": true,
           "id": 405847514673205467,
           "m_moveSpeed": 10.0,
-          "m_pitch": 18.298980712890625,
+          "m_pitch": 23.69898223876953,
           "m_rotationSpeed": 0.10000000149011612,
           "m_turboScale": 3.0,
-          "m_yaw": -1053.4481201171875,
+          "m_yaw": -1053.7447509765625,
           "typeName": "FreeCamera"
         }
       ],
@@ -269,21 +269,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": 18.298980712890625,
-          "y": -1053.4481201171875,
+          "x": 23.69898223876953,
+          "y": -1053.7447509765625,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -1.9382736682891846,
-          "y": 2.4872164726257324,
-          "z": -5.095138072967529
+          "x": -4.7007036209106445,
+          "y": 3.0148322582244873,
+          "z": -5.997424602508545
         },
         "m_rotation": {
-          "w": -0.9608923196792603,
-          "x": -0.154761403799057,
-          "y": -0.2267191857099533,
-          "z": 0.03651541471481323
+          "w": -0.9531137943267822,
+          "x": -0.19997522234916687,
+          "y": -0.22228121757507324,
+          "z": 0.046637386083602905
         },
         "m_scale": {
           "x": 1.0,
@@ -329,17 +329,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              0.9558823704719543,
-              0.346741646528244,
-              0.346741646528244,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 5139786516551200656,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 1,
@@ -381,15 +370,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 17875408763873535612,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 2,
@@ -431,15 +411,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 16688594924006208386,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 3,
@@ -481,15 +452,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 13069875241099395018,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 4,
@@ -531,15 +493,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 6082678719645424686,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 5,
@@ -581,15 +534,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 2333471954803062219,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 6,
@@ -631,15 +575,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 2760112470945644174,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 7,
@@ -713,17 +648,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 9326112590983376398,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 0,
@@ -765,17 +689,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 8187816134469892162,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 1,
@@ -817,17 +730,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 4829818442114676912,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 2,
@@ -869,17 +771,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 15877950767564859269,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 3,
@@ -921,17 +812,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 3157723264814315174,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 4,
@@ -973,17 +853,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
           "id": 1147917338329733514,
           "m_materialID": 14785535731479647299,
           "m_meshIndex": 5,
@@ -1025,15 +894,6 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {}
-          },
           "id": 10831997054700675100,
           "m_materialID": 9502032413765604939,
           "m_meshIndex": 0,

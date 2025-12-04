@@ -55,57 +55,45 @@ void MeshRenderer::SetMaterial(Material* material)
 
 void MeshRenderer::SaveInstanceData(JsonWriter& writer)
 {
-    // 인스턴싱된 상태가 아니면 저장 안 함
     if (!m_isMaterialInstanced || m_material == nullptr)
         return;
 
-    // "MaterialInstance": { ... } 시작
     writer.BeginObject("MaterialInstance");
     {
-        // 1. 색상 저장 (Write 함수 오버로딩 활용)
         Vector4 color = m_material->GetColor();
         writer.Write("Color", color.x, color.y, color.z, color.w);
 
-        // 2. 텍스처 저장
-        // "Textures": { "0": guid, "1": guid ... }
         writer.BeginObject("Textures");
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
             Texture* tex = m_material->GetTexture(i);
             if (tex)
             {
                 uint64_t guid = tex->GetMeta().guid;
-                // 슬롯 인덱스를 키(key)로 변환하여 저장
                 writer.Write(std::to_string(i).c_str(), guid);
             }
         }
-        writer.EndObject(); // End Textures
+        writer.EndObject();
     }
-    writer.EndObject(); // End MaterialInstance
+    writer.EndObject();
 }
 
 void MeshRenderer::LoadInstanceData(JsonReader& reader)
 {
-    // "MaterialInstance" 객체가 있는지 확인하고 진입
     if (reader.BeginObject("MaterialInstance"))
     {
-        // 강제 인스턴싱 수행
         Material* mat = GetMaterial();
         if (mat)
         {
-            // 1. 색상 로드 (ReadVec4 활용)
-            // 기본값은 현재 색상으로 설정
             std::array<float, 4> defaultColor = { mat->GetColor().x, mat->GetColor().y, mat->GetColor().z, mat->GetColor().w };
             std::array<float, 4> c = reader.ReadVec4("Color", defaultColor);
             mat->SetColor(Vector4(c[0], c[1], c[2], c[3]));
 
-            // 2. 텍스처 로드
             if (reader.BeginObject("Textures"))
             {
-                for (int i = 0; i < 5; ++i)
+                for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
                 {
                     std::string key = std::to_string(i);
-                    // 해당 슬롯(키)에 데이터가 있는지 확인
                     if (reader.Has(key.c_str()))
                     {
                         uint64_t texID = reader.ReadUInt64(key.c_str());
@@ -118,10 +106,10 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
                         }
                     }
                 }
-                reader.EndObject(); // End Textures
+                reader.EndObject();
             }
         }
-        reader.EndObject(); // End MaterialInstance
+        reader.EndObject(); 
     }
 }
 

@@ -540,7 +540,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		//Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
 
 		Mesh* mesh = meshRenderer->GetMesh();
-		Material* material = meshRenderer->GetMaterial();
+		Material* material = meshRenderer->GetSharedMaterial();
 
 		if (material == nullptr) {
 			material = ResourceManager::Instance().Load<Material>("Materials/Default");
