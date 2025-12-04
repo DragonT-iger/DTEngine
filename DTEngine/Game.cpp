@@ -540,8 +540,14 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		//Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
 
 		Mesh* mesh = meshRenderer->GetMesh();
-		//Material* material = meshRenderer->GetMaterial();
-		Material* material = ResourceManager::Instance().Load<Material>("Materials/Default");
+		Material* material = meshRenderer->GetMaterial();
+
+		if (material == nullptr) {
+			material = ResourceManager::Instance().Load<Material>("Materials/Default");
+			// 잠재적으로 버그 발생 가능 왜냐면 머터리얼을 에디터에서 수정한다고 리소스 매니저 캐시는 안바뀌거든.
+			// 즉 파일과 메모리는 데이터가 다르다는 것
+		}
+		//Material* material = ResourceManager::Instance().Load<Material>("Materials/Default");
 
 		if (!mesh || !material) continue;
 

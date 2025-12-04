@@ -137,8 +137,8 @@ bool Material::SaveFile(const std::string& fullPath)
     }
     else
     {
-        data["ShaderID"] = 0;
-        // 0이면 난리난다
+        std::cerr << "Error: Failed to save material file: " << fullPath << std::endl;
+		return false;
     }
 
     data["Color"] = { m_data.Color.x, m_data.Color.y, m_data.Color.z, m_data.Color.w };
@@ -242,21 +242,19 @@ void Material::UpdateMaterialBuffer()
     context->Unmap(m_cbuffer_material.Get(), 0);
 
 
-    context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
     context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
 
 
-    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    {
-        ID3D11ShaderResourceView* srv = nullptr;
-        if (m_textures[i])
-        {
-            srv = m_textures[i]->GetSRV();
-        }
+    //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    //{
+    //    ID3D11ShaderResourceView* srv = nullptr;
+    //    if (m_textures[i])
+    //    {
+    //        srv = m_textures[i]->GetSRV();
+    //    }
 
-        context->PSSetShaderResources(i, 1, &srv);
-    }
-
+    //    context->PSSetShaderResources(i, 1, &srv);
+    //}
 }
 
 void Material::CreateBuffers()
@@ -301,9 +299,6 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     DXHelper::ThrowIfFailed(hr);
 
     CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
-
-    
-
     dataPtr->WorldTM = worldTM.Transpose();
     dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
 
@@ -312,18 +307,22 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
     context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
 
-    //constexpr int MAX_TEXTURE_SLOTS = 5;
+    if (m_cbuffer_material)
+    {
+        context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+        context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    }
 
-    //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    //{
-    //    ID3D11ShaderResourceView* srv = nullptr;
-    //    if (m_textures[i])
-    //    {
-    //        srv = m_textures[i]->GetSRV();
-    //    }
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    {
+        ID3D11ShaderResourceView* srv = nullptr;
+        if (m_textures[i])
+        {
+            srv = m_textures[i]->GetSRV();
+        }
 
-    //    context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
-    //}
+        context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
+    }
 
     //UpdateMaterialBuffer();
 }
