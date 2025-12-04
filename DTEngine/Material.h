@@ -44,10 +44,14 @@ public:
     Shader* GetShader() const { return m_shader; }
 	void SetShader(Shader* shader) { m_shader = shader; }
 
+    Material* Clone();
+
     Texture* GetTexture(int slot) const;
 
     void SetColor(const Vector4& color);
     Vector4 GetColor() const;
+
+	static constexpr int MAX_TEXTURE_SLOTS = 5;
 
 private:
     void UpdateMaterialBuffer();

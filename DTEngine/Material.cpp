@@ -18,8 +18,6 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
-constexpr int MAX_TEXTURE_SLOTS = 5;
-
 __declspec(align(16))
 struct CBuffer_Object_Data
 {
@@ -195,6 +193,19 @@ void Material::SetTexture(int slot, Texture* texture)
     UpdateMaterialBuffer();
 }
 
+Material* Material::Clone()
+{
+    Material* newMat = new Material();
+
+    newMat->m_shader = m_shader;
+    newMat->m_textures = m_textures; 
+    newMat->m_data = m_data;         
+
+    newMat->UpdateMaterialBuffer();
+
+    return newMat;
+}
+
 Texture* Material::GetTexture(int slot) const
 {
     if (slot < 0 || slot >= m_textures.size())
@@ -242,7 +253,7 @@ void Material::UpdateMaterialBuffer()
     context->Unmap(m_cbuffer_material.Get(), 0);
 
 
-    context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    //context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
 
 
     //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)

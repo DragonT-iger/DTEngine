@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 #include "ReflectionMacros.h"
 #include <string>
+#include "JsonIO.h"
 
 class Mesh;
 class Material;
@@ -12,7 +13,8 @@ class MeshRenderer : public MonoBehaviour
     DTGENERATED_BODY(MeshRenderer);
 
 public:
-    MeshRenderer() = default;
+    MeshRenderer();
+    virtual ~MeshRenderer();
 
     void Awake() override;
 
@@ -25,11 +27,20 @@ public:
     void SetMesh(Mesh* mesh) { m_mesh = mesh; }
     Mesh* GetMesh() const { return m_mesh; }
 
-    void SetMaterial(Material* material) { m_material = material; }
-    Material* GetMaterial() const { return m_material; }
 
     void SetMaterialID(uint64_t id);
     uint64_t GetMaterialID() const { return m_materialID; }
+
+
+    Material* GetMaterial();
+    void SetMaterial(Material* material);
+
+    Material* GetSharedMaterial() const { return m_material; }
+
+    bool IsMaterialInstanced() const { return m_isMaterialInstanced; }
+
+    void SaveInstanceData(JsonWriter& writer);
+    void LoadInstanceData(JsonReader& reader);
 
 private:
     Mesh* m_mesh = nullptr;
@@ -38,4 +49,6 @@ private:
     uint64_t m_modelID = 0;
     uint64_t m_materialID = 0;
     int m_meshIndex = 0;
+
+    bool m_isMaterialInstanced = false;
 };

@@ -66,6 +66,7 @@ bool SceneManager::RestoreActiveScene()
     if (m_active->LoadFile(fullPath))
     {
         m_active->SetName(m_originalSceneName);
+
         std::cout << "[SceneManager] Scene Restored from Backup." << std::endl;
         return true;
     }

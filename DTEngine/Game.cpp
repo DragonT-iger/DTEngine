@@ -193,7 +193,7 @@ void Game::Run()
 			break;
 
 		m_timer->Tick();
-		LifeCycle(m_timer->DeltaTime());
+ 		LifeCycle(m_timer->DeltaTime());
 	}
 }
 

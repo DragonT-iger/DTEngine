@@ -979,6 +979,132 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 std::cout << "타입 미구현: " << type.name() << std::endl;
             }
         }
+
+        if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
+        {
+            Material* currentMat = renderer->GetSharedMaterial();
+
+            if (currentMat)
+            {
+                ImGui::Spacing();
+                ImGui::Separator();
+
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)); 
+                bool nodeOpen = ImGui::TreeNodeEx("Material Instance Properties", ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_Framed);
+                ImGui::PopStyleColor();
+
+                if (nodeOpen)
+                {
+                    ImGui::TextDisabled("(Modifying this creates a unique instance)");
+                    ImGui::Spacing();
+
+                    // -----------------------------------------------------
+                    // 1. 머터리얼 색상 편집 (Color)
+                    // -----------------------------------------------------
+                    Vector4 color = currentMat->GetColor();
+                    ImGui::Text("Base Color");
+                    ImGui::SameLine();
+
+                    if (ImGui::ColorEdit4("##MaterialColor", &color.x))
+                    {
+                        renderer->GetMaterial()->SetColor(color);
+                    }
+
+                    if (ImGui::IsItemActivated())
+                    {
+                        m_dragStartValue = currentMat->GetColor();
+                    }
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        Vector4 oldVal = std::any_cast<Vector4>(m_dragStartValue);
+                        Vector4 newVal = color;
+
+                        // [중요] 지난번 수정 사항 적용 (void* 캐스팅)
+                        auto setter = [](void* targetObj, void* val) {
+                            MeshRenderer* mr = static_cast<MeshRenderer*>(static_cast<Component*>(targetObj));
+                            Vector4* v = static_cast<Vector4*>(val);
+                            mr->GetMaterial()->SetColor(*v);
+                            };
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<Vector4>>(
+                            renderer, setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
+                    }
+
+                    ImGui::Spacing();
+
+                    // -----------------------------------------------------
+                    // 2. 텍스처 슬롯 편집 (Textures)
+                    // -----------------------------------------------------
+                    const int MAX_TEXTURE_SLOTS = 5;
+
+                    // 텍스처 섹션도 별도로 접을 수 있게 유지 (혹은 위 섹션에 포함시켜도 됨)
+                    if (ImGui::TreeNodeEx("Textures", ImGuiTreeNodeFlags_DefaultOpen))
+                    {
+                        for (int i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+                        {
+                            ImGui::PushID(i);
+
+                            Texture* tex = currentMat->GetTexture(i);
+                            std::string texName = "None";
+
+                            if (tex)
+                            {
+                                uint64_t texID = tex->GetMeta().guid;
+                                std::string path = AssetDatabase::Instance().GetPathFromID(texID);
+                                if (!path.empty())
+                                    texName = std::filesystem::path(path).filename().string();
+                                else
+                                    texName = "Texture Loaded";
+                            }
+
+                            ImGui::AlignTextToFramePadding();
+                            ImGui::Text("Slot %d", i);
+                            ImGui::SameLine();
+
+                            float availWidth = ImGui::GetContentRegionAvail().x;
+                            if (ImGui::Button(texName.c_str(), ImVec2(availWidth - 25, 0)))
+                            {
+                                // 텍스처 선택 로직 (필요시 구현)
+                            }
+
+                            if (ImGui::BeginDragDropTarget())
+                            {
+                                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                                {
+                                    const char* droppedPath = (const char*)payload->Data;
+                                    std::string ext = std::filesystem::path(droppedPath).extension().string();
+                                    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                                    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+                                    {
+                                        Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+                                        if (newTex)
+                                        {
+                                            renderer->GetMaterial()->SetTexture(i, newTex);
+                                        }
+                                    }
+                                }
+                                ImGui::EndDragDropTarget();
+                            }
+
+                            ImGui::SameLine();
+
+                            if (ImGui::Button("X", ImVec2(20, 0)))
+                            {
+                                renderer->GetMaterial()->SetTexture(i, nullptr);
+                            }
+
+                            ImGui::PopID();
+                        }
+                        ImGui::TreePop(); // Textures TreePop
+                    }
+
+                    ImGui::TreePop(); // [중요] Material Instance Properties TreePop
+                }
+            }
+        }
     }
 
     ImGui::PopID();

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SerializationUtils.h"
 #include "Transform.h"
+#include "MeshRenderer.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -61,5 +62,11 @@ void DeserializeComponentProperties(JsonReader& reader, Component* comp, std::ve
     for (const PropertyInfo& prop : info->m_properties)
     {
         ReadPropertyRecursive(reader, prop, comp, fixupList);
+    }
+
+
+    if (MeshRenderer* mr = dynamic_cast<MeshRenderer*>(comp))
+    {
+        mr->LoadInstanceData(reader);
     }
 }

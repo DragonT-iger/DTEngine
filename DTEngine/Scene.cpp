@@ -13,6 +13,7 @@
 #include "Light.h"
 #include "Behaviour.h"
 #include "SerializationUtils.h"
+#include "MeshRenderer.h"
 
 
 
@@ -239,6 +240,11 @@ bool Scene::SaveFile(const std::string& solutionPath)
             writer.Write("id", comp->_GetID());
 
             comp->Serialize(writer);
+
+            if (auto* mr = dynamic_cast<MeshRenderer*>(comp.get()))
+            {
+                mr->SaveInstanceData(writer);
+            }
 
             writer.EndArrayItem();
         }
