@@ -170,8 +170,12 @@ void Material::Unload()
     m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
 }
 
-void Material::SetTexture(int slot, Texture* texture)
+bool Material::SetTexture(int slot, Texture* texture)
 {
+    if (m_textures[slot] == texture) {
+        return false;
+    }
+
     if (slot >= m_textures.size())
     {
         m_textures.resize(slot + 1, nullptr);
@@ -191,6 +195,8 @@ void Material::SetTexture(int slot, Texture* texture)
     }
 
     UpdateMaterialBuffer();
+
+	return true;
 }
 
 Material* Material::Clone()

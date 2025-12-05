@@ -1056,13 +1056,15 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     ImGui::Spacing();
 
                     Vector4 color = currentMat->GetColor();
-                    ImGui::Text("Base Color");
-                    ImGui::SameLine();
 
                     if (ImGui::ColorEdit4("##MaterialColor", &color.x))
                     {
                         renderer->GetMaterial()->SetColor(color);
                     }
+
+                    ImGui::SameLine();
+
+                    ImGui::Text("Base Color");
 
                     if (ImGui::IsItemActivated())
                     {
@@ -1087,70 +1089,87 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                     ImGui::Spacing();
 
-                    const int MAX_TEXTURE_SLOTS = 5;
 
                     if (ImGui::TreeNodeEx("Textures", ImGuiTreeNodeFlags_DefaultOpen))
                     {
-                        for (int i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+                        if (ImGui::BeginTable("TextureSlotTable", 3, ImGuiTableFlags_SizingStretchProp))
                         {
-                            ImGui::PushID(i);
+                            ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthStretch , 100.f); // 초기값 안넣어주면 깜빡거림
+                            ImGui::TableSetupColumn("Close", ImGuiTableColumnFlags_WidthFixed, 25.0f);
+                            ImGui::TableSetupColumn("SlotLabel", ImGuiTableColumnFlags_WidthFixed, 60.0f);
 
-                            Texture* tex = currentMat->GetTexture(i);
-                            std::string texName = "None";
-
-                            if (tex)
+                            for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
                             {
-                                uint64_t texID = tex->GetMeta().guid;
-                                std::string path = AssetDatabase::Instance().GetPathFromID(texID);
-                                if (!path.empty())
-                                    texName = std::filesystem::path(path).filename().string();
-                                else
-                                    texName = "Texture Loaded";
-                            }
+                                ImGui::PushID(i);
 
-                            ImGui::AlignTextToFramePadding();
-                            ImGui::Text("Slot %d", i);
-                            ImGui::SameLine();
-
-                            float availWidth = ImGui::GetContentRegionAvail().x;
-                            if (ImGui::Button(texName.c_str(), ImVec2(availWidth - 25, 0)))
-                            {
-                                // 텍스처 선택 로직 (필요시 구현)
-                            }
-
-                            if (ImGui::BeginDragDropTarget())
-                            {
-                                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                                Texture* tex = currentMat->GetTexture(i);
+                                std::string texName = "None";
+                                if (tex)
                                 {
-                                    const char* droppedPath = (const char*)payload->Data;
-                                    std::string ext = std::filesystem::path(droppedPath).extension().string();
-                                    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                                    uint64_t texID = tex->GetMeta().guid;
+                                    std::string path = AssetDatabase::Instance().GetPathFromID(texID);
+                                    if (!path.empty())
+                                        texName = std::filesystem::path(path).filename().string();
+                                    else
+                                        texName = "Texture Loaded";
+                                }
+                                // -------------------
 
-                                    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+                                ImGui::TableNextRow();
+                                ImGui::TableNextColumn();
+
+                                if (ImGui::Button(texName.c_str(), ImVec2(-FLT_MIN, 0.0f)))
+                                {
+                                    // 텍스처 선택 로직
+                                }
+
+                                if (ImGui::BeginDragDropTarget())
+                                {
+                                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
                                     {
-                                        Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
-                                        if (newTex)
+                                        const char* droppedPath = (const char*)payload->Data;
+                                        std::string ext = std::filesystem::path(droppedPath).extension().string();
+                                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
                                         {
-                                            renderer->GetMaterial()->SetTexture(i, newTex);
+                                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+                                            if (newTex)
+                                            {
+                                                renderer->GetMaterial()->SetTexture(i, newTex);
+                                            }
                                         }
                                     }
+                                    ImGui::EndDragDropTarget();
                                 }
-                                ImGui::EndDragDropTarget();
+
+                                ImGui::TableNextColumn();
+                                if (ImGui::Button("X", ImVec2(-FLT_MIN, 0.0f)))
+                                {
+                                    Material* matToCheck = nullptr;
+                                    if (renderer->IsMaterialInstanced())
+                                        matToCheck = renderer->GetMaterial();
+                                    else
+                                        matToCheck = renderer->GetSharedMaterial();
+
+                                    if (matToCheck && matToCheck->GetTexture(i) != nullptr)
+                                    {
+                                        renderer->GetMaterial()->SetTexture(i, nullptr);
+                                    }
+                                }
+
+                                ImGui::TableNextColumn();
+                                ImGui::AlignTextToFramePadding(); 
+                                ImGui::Text("Slot %d", i);
+
+                                ImGui::PopID();
                             }
-
-                            ImGui::SameLine();
-
-                            if (ImGui::Button("X", ImVec2(20, 0)))
-                            {
-                                renderer->GetMaterial()->SetTexture(i, nullptr);
-                            }
-
-                            ImGui::PopID();
+                            ImGui::EndTable();
                         }
-                        ImGui::TreePop(); // Textures TreePop
+                        ImGui::TreePop();
                     }
 
-                    ImGui::TreePop(); // [중요] Material Instance Properties TreePop
+                    ImGui::TreePop(); 
                 }
             }
         }
@@ -1290,6 +1309,8 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
                 ImGui::Text("Texture Slot %d", i);
 
+				ImGui::SameLine();
+
                 Texture* currentTex = material->GetTexture(i);
                 std::string texName = "Empty";
 
@@ -1298,10 +1319,16 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                     uint64_t id = currentTex->GetMeta().guid;
                     std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
                     if (!pathStr.empty())
-                    {
+                    {    
+
+						texName = fs::path(pathStr).filename().string();
+
                         //std::filesystem::path path(pathStr);
                         //m_currentProjectDirectory = path.parent_path();
                         //m_selectedAssetPath = pathStr;
+                    }
+                    else {
+                        texName = "Missing (Path Not Found)";
                     }
                 }
 
@@ -1335,8 +1362,9 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
                 if (ImGui::Button("X", ImVec2(22, 0)))
                 {
-                    material->SetTexture(i, nullptr);
-                    material->SaveFile(path);
+                    if (material->SetTexture(i, nullptr)) {
+                        material->SaveFile(path);
+                    }
                 }
 
                 ImGui::PopID();

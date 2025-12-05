@@ -49,7 +49,6 @@ void ImGuiLayer::NewFrame()
     ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 
 
-
     if (ImGui::DockBuilderGetNode(dockspace_id) == NULL)
     {
         ImGui::DockBuilderRemoveNode(dockspace_id);

@@ -42,9 +42,12 @@ bool Shader::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
+    wchar_t buffer[MAX_PATH] = { 0 };
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    fs::path exePath = fs::path(buffer).parent_path(); 
+
     fs::path sourcePath(fullPath);
-    std::string directory = sourcePath.parent_path().string();
-    std::string filename = sourcePath.stem().string(); 
+    std::string filename = sourcePath.stem().string();
 
     if (filename.size() >= 3)
     {
@@ -55,15 +58,9 @@ bool Shader::LoadFile(const std::string& fullPath)
         }
     }
 
-    fs::path basePath;
-    if (!directory.empty())
-        basePath = fs::path(directory) / filename;
-    else
-        basePath = filename;
-
-    std::string vsPath = basePath.string() + "_VS.cso";
-    std::string psPath = basePath.string() + "_PS.cso";
-    // ---------------------------------------------------------
+    fs::path shaderDir = exePath / "Shaders";
+    std::string vsPath = (shaderDir / (filename + "_VS.cso")).string();
+    std::string psPath = (shaderDir / (filename + "_PS.cso")).string();
 
     HRESULT hr;
 

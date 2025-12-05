@@ -4,6 +4,7 @@
 class GameObject;
 class JsonWriter;
 class Transform;
+
 #include "ReflectionMacros.h"
 
 class Component {

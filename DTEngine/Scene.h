@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include <vector>
@@ -27,6 +27,11 @@ public:
     GameObject* FindGameObject(std::string name);
     void Destroy(GameObject* object);
 
+    GameObject* FindGameObjectByID(uint64_t id);
+
+
+
+
     // 엔진 전용 public 함수들
 
     GameObject* CreateGameObject(const std::string& name = "GameObject");
@@ -54,7 +59,6 @@ public:
 
     void Clear();
 
-    GameObject* FindGameObjectByID(uint64_t id);
 
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;

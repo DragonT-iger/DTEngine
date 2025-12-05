@@ -1,0 +1,20 @@
+<Project>
+  <ItemDefinitionGroup>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)', '.*_VS'))">
+    <FxCompile>
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VS</EntryPointName> </FxCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)', '.*_PS'))">
+    <FxCompile>
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PS</EntryPointName> </FxCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -27,11 +27,11 @@ public:
     void SetMesh(Mesh* mesh) { m_mesh = mesh; }
     Mesh* GetMesh() const { return m_mesh; }
 
-
+    // 이걸로 머터리얼 인스턴스 상태 초기화 가능함
     void SetMaterialID(uint64_t id);
     uint64_t GetMaterialID() const { return m_materialID; }
 
-
+	// 이 함수는 주의해서 사용하셈 이게 호출되면 머터리얼 인스턴스화 시킴
     Material* GetMaterial();
     void SetMaterial(Material* material);
 

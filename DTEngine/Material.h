@@ -39,7 +39,7 @@ public:
 
     void Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM);
 
-    void SetTexture(int slot, Texture* texture);
+    bool SetTexture(int slot, Texture* texture);
 
     Shader* GetShader() const { return m_shader; }
 	void SetShader(Shader* shader) { m_shader = shader; }

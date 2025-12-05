@@ -14,7 +14,7 @@ struct LightData
     float4 ColorIntensity;              // rgb=Color, w=Intensity
 };
 
-#define MAX_LIGHTS 4
+#define MAX_LIGHTS 4 // 수정할꺼면 두개 바꿔줘야 함
 
 cbuffer CBuffer_GlobalLight : register(b2)
 {
