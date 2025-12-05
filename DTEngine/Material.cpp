@@ -65,6 +65,13 @@ bool Material::LoadFile(const std::string& fullPath)
         if (!shaderPath.empty())
         {
             m_shader = ResourceManager::Instance().Load<Shader>(shaderPath);
+
+            if(m_shader == nullptr)
+            {
+                std::cerr << "Failed to Load Shader Path  " << shaderPath << std::endl; 
+				// 만약 경로가 Shader가 아니라 다른 타입이면 댕글링 나면서 이거 뜰거임 즉 어디선가 ID 꼬인거
+                return false;
+			}
         }
         else
         {

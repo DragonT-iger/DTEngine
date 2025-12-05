@@ -1274,16 +1274,17 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
                 {
                     const char* droppedPath = (const char*)payload->Data;
-                    // 확장자 체크 (.hlsl 등 셰이더 확장자)
-                    // 현재 프로젝트 설정상 .hlsl이 리소스화 되는지 확인 필요. 
-                    // 보통 셰이더도 임포트되어 ID가 있어야 함.
+                    fs::path droppedFilePath(droppedPath);
+                    std::string ext = droppedFilePath.extension().string();
 
-                    // 여기서는 셰이더 파일 자체를 로드 시도
-                    Shader* newShader = ResourceManager::Instance().Load<Shader>(droppedPath);
-                    if (newShader)
+                    if (ext == ".hlsl" || ext == ".fx")
                     {
-                        material->SetShader(newShader);
-                        material->SaveFile(path);
+                        Shader* newShader = ResourceManager::Instance().Load<Shader>(droppedPath);
+                        if (newShader)
+                        {
+                            material->SetShader(newShader);
+                            material->SaveFile(path);
+                        }
                     }
                 }
                 ImGui::EndDragDropTarget();
