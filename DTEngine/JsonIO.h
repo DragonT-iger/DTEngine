@@ -76,8 +76,15 @@ public:
     void EndArrayItem();
     void EndArray();
 
+
+    JsonReader(JsonReader&&) noexcept;
+    JsonReader& operator=(JsonReader&&) noexcept;
+
+    JsonReader(const JsonReader&) = delete;
+    JsonReader& operator=(const JsonReader&) = delete;
+
 private:
-    nlohmann::json* m_root{};
+    std::unique_ptr<nlohmann::json> m_root;
     nlohmann::json* m_cursor{};
     std::vector<ArrayState> m_arrayStack;
     std::vector<nlohmann::json*> m_stack;

@@ -56,15 +56,12 @@ void ResourceManager::UnloadAll()
 	m_cache.clear();
 }
 
-std::string ResourceManager::ResolveFullPath(const std::string& id) const
+std::string ResourceManager::ResolveFullPath(const std::string& path) const
 {
-    if (m_resourceRootPath.empty()) return id;
+    if (m_resourceRootPath.empty()) return path;
 
     fs::path pRoot(m_resourceRootPath); 
-    fs::path pId(id);                   
-
-    if (pId.is_absolute())
-        return id;
+    fs::path pId(path);
 
     auto itRoot = pRoot.begin();
     auto itId = pId.begin();
@@ -73,7 +70,7 @@ std::string ResourceManager::ResolveFullPath(const std::string& id) const
     {
         if (*itRoot == *itId)
         {
-            return id;
+            return path;
 			// Assets/Assets 경로 방지
         }
     }
@@ -183,15 +180,41 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
         return nullptr;
     }
 
+
+    std::vector<Texture*> extractedTextures;
+    extractedTextures.resize(scene->mNumMaterials, nullptr);
+
+    fs::path modelParentPath = fs::path(fullPath).parent_path();
+
+    for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+    {
+        const aiMaterial* srcMat = scene->mMaterials[i];
+
+        if (srcMat->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+        {
+            aiString texPath;
+            if (srcMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == aiReturn_SUCCESS)
+            {
+                fs::path texFullPath = modelParentPath / texPath.C_Str();
+
+                Texture* pTexture = Load<Texture>(texFullPath.string());
+                if (pTexture)
+                {
+                    extractedTextures[i] = pTexture;
+                }
+            }
+        }
+    }
+
     std::string fileName = std::filesystem::path(fullPath).stem().string();
     GameObject* rootObject = SceneManager::Instance().GetActiveScene()->CreateGameObject(fileName);
 
-    ProcessNode(scene->mRootNode, scene, rootObject, fullPath);
+    ProcessNode(scene->mRootNode, scene, rootObject, fullPath, extractedTextures);
 
     return rootObject;
 }
 
-void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath)
+void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures)
 {
     GameObject* currentGO = nullptr;
 
@@ -218,46 +241,56 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
     currentGO->GetTransform()->SetRotationQuat(rot);
     currentGO->GetTransform()->SetScale(scale);
 
+    static const std::string defaultMatPath = "Assets/Materials/Default.mat";
+    static uint64_t defaultMatID = AssetDatabase::Instance().GetIDFromPath(defaultMatPath);
+
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         unsigned int meshIndex = node->mMeshes[i];
-        aiMesh* mesh = scene->mMeshes[meshIndex];
-        uint64_t matID = ProcessMaterial(scene, mesh->mMaterialIndex, modelPath);
+        unsigned int matIndex = scene->mMeshes[meshIndex]->mMaterialIndex;
 
-        if (i == 0)
+        Texture* assignedTexture = nullptr;
+        if (matIndex < textures.size())
         {
-            MeshRenderer* renderer = currentGO->AddComponent<MeshRenderer>();
-
-            renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
-            renderer->SetMeshIndex(meshIndex);
-            if (matID != 0)
-            {
-                renderer->SetMaterialID(matID);
-            }
+            assignedTexture = textures[matIndex];
         }
-        else
+
+        GameObject* targetGO = currentGO;
+        if (i > 0)
         {
-            // 한 노드에 여러 메쉬가 있는 경우 서브 오브젝트 생성
-            GameObject* subGO = SceneManager::Instance().GetActiveScene()->CreateGameObject(currentGO->GetName() + "_Sub_" + std::to_string(i));
-            subGO->GetTransform()->SetParent(currentGO->GetTransform());
+            targetGO = SceneManager::Instance().GetActiveScene()->CreateGameObject(currentGO->GetName() + "_Sub_" + std::to_string(i));
+            targetGO->GetTransform()->SetParent(currentGO->GetTransform());
+        }
 
-            MeshRenderer* renderer = subGO->AddComponent<MeshRenderer>();
-            renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
-            renderer->SetMeshIndex(meshIndex);
+        MeshRenderer* renderer = targetGO->AddComponent<MeshRenderer>();
+        renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
+        renderer->SetMeshIndex(meshIndex);
 
-            uint64_t matID = ProcessMaterial(scene, mesh->mMaterialIndex, modelPath);
-            if (matID != 0)
+        if (defaultMatID != 0)
+        {
+            renderer->SetMaterialID(defaultMatID);
+
+            if (assignedTexture != nullptr)
             {
-                renderer->SetMaterialID(matID);
+                Material* instancedMat = renderer->GetMaterial();
+
+                if (instancedMat)
+                {
+                    instancedMat->SetTexture(0, assignedTexture);
+                }
             }
+            // else:
+            // 모델에 텍스처가 없다면? -> 아무것도 하지 않음.
+            // 인스턴싱을 굳이 하지 않고 공유 머터리얼(Default)의 텍스처를 그대로 사용.
         }
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene, currentGO , modelPath);
+        ProcessNode(node->mChildren[i], scene, currentGO, modelPath, textures);
     }
 }
+
 
 Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
 {
@@ -308,8 +341,6 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
         }
     }
 
-    // Mesh 객체 생성 (리소스 매니저에 등록하거나 반환)
-    // Mesh 클래스에 CreateBuffers 같은 함수가 있다고 가정
     auto mesh = std::make_shared<Mesh>();
     mesh->CreateBuffers(vertices, indices);
 
@@ -321,66 +352,67 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
     // 여기서는 개념 설명을 위해 new를 사용하지만, 프로젝트 구조에 맞게 shared_ptr 등을 사용하세요.
 
     Mesh* rawMesh = new Mesh();
-    rawMesh->CreateBuffers(vertices, indices); // Mesh.cpp에 이 함수 구현 필요
+    rawMesh->CreateBuffers(vertices, indices);
+
     return rawMesh;
 }
 
-uint64_t ResourceManager::ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath)
-{
-    if (materialIndex >= scene->mNumMaterials) return 0;
-
-    aiMaterial* aiMat = scene->mMaterials[materialIndex];
-    aiString matName;
-    aiMat->Get(AI_MATKEY_NAME, matName);
-
-    std::string strMatName = matName.C_Str();
-    if (strMatName.empty()) strMatName = "DefaultMaterial";
-
-    fs::path modelFilePath(modelPath);
-    fs::path matDir = modelFilePath.parent_path(); 
-    std::string matFileName = modelFilePath.stem().string() + "_" + strMatName + ".mat";
-    fs::path fullMatPath = matDir / matFileName;
-
-    if (fs::exists(fullMatPath))
-    {
-        return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
-    }
-
-    std::unique_ptr<Material> newMat = std::make_unique<Material>();
-
-    aiString texPath;
-    if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-    {
-        std::string rawTexPath = texPath.C_Str();
-        fs::path tPath(rawTexPath);
-        std::string texFileName = tPath.filename().string();
-
-        fs::path actualTexPath = matDir / texFileName;
-
-        Texture* tex = Load<Texture>(actualTexPath.string());
-        if (tex)
-        {
-            newMat->SetTexture(0, tex); 
-        }
-    }
-
-	// 추가적인 텍스쳐 로드 필요시 여기서 구현하면 될듯 지금은 Diffuse만 처리
-
-    std::string defaultShaderPath = "Shaders/Default_VS.hlsl";
-    Shader* defaultShader = Load<Shader>(defaultShaderPath);
-    if (defaultShader)
-    {
-        newMat->SetShader(defaultShader);
-    }
-
-    newMat->SaveFile(fullMatPath.string());
-
-    AssetDatabase::Instance().ProcessAssetFile(fullMatPath.string());
-
-    m_cache[fullMatPath.string()] = std::move(newMat);
-
-    return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
-}
+//uint64_t ResourceManager::ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath)
+//{
+//    if (materialIndex >= scene->mNumMaterials) return 0;
+//
+//    aiMaterial* aiMat = scene->mMaterials[materialIndex];
+//    aiString matName;
+//    aiMat->Get(AI_MATKEY_NAME, matName);
+//
+//    std::string strMatName = matName.C_Str();
+//    if (strMatName.empty()) strMatName = "DefaultMaterial";
+//
+//    fs::path modelFilePath(modelPath);
+//    fs::path matDir = modelFilePath.parent_path(); 
+//    std::string matFileName = modelFilePath.stem().string() + "_" + strMatName + ".mat";
+//    fs::path fullMatPath = matDir / matFileName;
+//
+//    if (fs::exists(fullMatPath))
+//    {
+//        return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
+//    }
+//
+//    std::unique_ptr<Material> newMat = std::make_unique<Material>();
+//
+//    aiString texPath;
+//    if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+//    {
+//        std::string rawTexPath = texPath.C_Str();
+//        fs::path tPath(rawTexPath);
+//        std::string texFileName = tPath.filename().string();
+//
+//        fs::path actualTexPath = matDir / texFileName;
+//
+//        Texture* tex = Load<Texture>(actualTexPath.string());
+//        if (tex)
+//        {
+//            newMat->SetTexture(0, tex); 
+//        }
+//    }
+//
+//	// 추가적인 텍스쳐 로드 필요시 여기서 구현하면 될듯 지금은 Diffuse만 처리
+//
+//    std::string defaultShaderPath = "Shaders/Default_VS.hlsl";
+//    Shader* defaultShader = Load<Shader>(defaultShaderPath);
+//    if (defaultShader)
+//    {
+//        newMat->SetShader(defaultShader);
+//    }
+//
+//    newMat->SaveFile(fullMatPath.string());
+//
+//    AssetDatabase::Instance().ProcessAssetFile(fullMatPath.string());
+//
+//    m_cache[fullMatPath.string()] = std::move(newMat);
+//
+//    return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
+//}
 
 GameObject* ResourceManager::InstantiatePrefab(const std::string& fullPath)
 {

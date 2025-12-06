@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <wrl/client.h>
-#include "IResource.h"
 #include "Vertex.h"
 
 struct ID3D11Buffer;
@@ -10,15 +9,11 @@ struct aiScene;
 struct aiNode;
 struct aiMesh;
 
-class Mesh : public IResource
+class Mesh
 {
 public:
     Mesh();
     virtual ~Mesh() = default;
-
-    bool LoadFile(const std::string& fullPath) override { return false; }
-    bool SaveFile(const std::string& fullPath) override { return false; }
-	void Unload() override {};
 
     bool CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 

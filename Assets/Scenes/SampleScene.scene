@@ -256,10 +256,10 @@
           "Active": true,
           "id": 405847514673205467,
           "m_moveSpeed": 10.0,
-          "m_pitch": 25.498926162719727,
+          "m_pitch": 26.199180603027344,
           "m_rotationSpeed": 0.10000000149011612,
           "m_turboScale": 3.0,
-          "m_yaw": -1061.150634765625,
+          "m_yaw": -1084.271240234375,
           "typeName": "FreeCamera"
         }
       ],
@@ -269,21 +269,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": 25.498926162719727,
-          "y": -1061.150634765625,
+          "x": 26.199180603027344,
+          "y": -1084.271240234375,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -13.78203010559082,
-          "y": 20.502857208251953,
-          "z": -39.49566650390625
+          "x": 0.5283645987510681,
+          "y": 4.987322807312012,
+          "z": -8.181958198547363
         },
         "m_rotation": {
-          "w": -0.9621789455413818,
-          "x": -0.21770939230918884,
-          "y": -0.15971346199512482,
-          "z": 0.0361378937959671
+          "w": -0.9733010530471802,
+          "x": -0.2264869213104248,
+          "y": 0.036295078694820404,
+          "z": -0.008445855230093002
         },
         "m_scale": {
           "x": 1.0,
@@ -601,350 +601,6 @@
         "m_rotation": {
           "w": 1.0,
           "x": 0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [],
-      "id": 15679930033595148986,
-      "name": "Dwarf",
-      "tag": "Untagged",
-      "transform": {
-        "id": 14932941984225989272,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": -6.608712673187256,
-          "y": 0.0,
-          "z": 1.536440134048462
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 9326112590983376398,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 14549318974706204370,
-      "name": "Sword1",
-      "tag": "Untagged",
-      "transform": {
-        "id": 15357180944925294899,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 8187816134469892162,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 1,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 6829586058830595074,
-      "name": "Pack",
-      "tag": "Untagged",
-      "transform": {
-        "id": 7157422069093815013,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 4829818442114676912,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 2,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 7573179208336738907,
-      "name": "Body",
-      "tag": "Untagged",
-      "transform": {
-        "id": 17594016028028362786,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 15877950767564859269,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 3,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 12356567933789944066,
-      "name": "Armor",
-      "tag": "Untagged",
-      "transform": {
-        "id": 15038896653655363083,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 3157723264814315174,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 4,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 16058146582101736745,
-      "name": "Beard",
-      "tag": "Untagged",
-      "transform": {
-        "id": 6966666549358875098,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "Textures": {
-              "0": 15242554197649490269
-            }
-          },
-          "id": 1147917338329733514,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 5,
-          "m_modelID": 3705473775997473345,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 8107097205795350292,
-      "name": "Head",
-      "tag": "Untagged",
-      "transform": {
-        "id": 7578146082806130925,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 14932941984225989272,
-        "m_position": {
-          "x": -0.0022690000478178263,
-          "y": 0.0,
-          "z": -0.027086999267339706
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
@@ -1341,11 +997,11 @@
     {
       "active": true,
       "components": [],
-      "id": 14830588675976796117,
+      "id": 7559849371788455222,
       "name": "Dwarf",
       "tag": "Untagged",
       "transform": {
-        "id": 14140086120126122333,
+        "id": 16787885815876487987,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
@@ -1353,7 +1009,7 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 0.0,
+          "x": -5.227343559265137,
           "y": 0.0,
           "z": 0.0
         },
@@ -1375,24 +1031,24 @@
       "components": [
         {
           "Active": true,
-          "id": 11257390635050317331,
-          "m_materialID": 12351659833044501125,
+          "id": 3383065094874758085,
+          "m_materialID": 0,
           "m_meshIndex": 0,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 6269711252656768956,
+      "id": 512037040785181909,
       "name": "Sword1",
       "tag": "Untagged",
       "transform": {
-        "id": 7359177967707707035,
+        "id": 6983192049178689298,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,
@@ -1416,24 +1072,24 @@
       "components": [
         {
           "Active": true,
-          "id": 15855393145275641614,
-          "m_materialID": 18411485002568433275,
+          "id": 13732394082103511567,
+          "m_materialID": 0,
           "m_meshIndex": 1,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 5813031994474100918,
+      "id": 2207280043606979398,
       "name": "Pack",
       "tag": "Untagged",
       "transform": {
-        "id": 11782751494248138060,
+        "id": 3880221222879954026,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,
@@ -1457,24 +1113,24 @@
       "components": [
         {
           "Active": true,
-          "id": 1256263142511021945,
-          "m_materialID": 16364465359908298138,
+          "id": 9623297856448285234,
+          "m_materialID": 0,
           "m_meshIndex": 2,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 6930942086110495397,
+      "id": 7003492222066553935,
       "name": "Body",
       "tag": "Untagged",
       "transform": {
-        "id": 485483532224543202,
+        "id": 2001559693138338082,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,
@@ -1498,24 +1154,24 @@
       "components": [
         {
           "Active": true,
-          "id": 10986091430466421767,
-          "m_materialID": 4432707343238320750,
+          "id": 12281776345438912917,
+          "m_materialID": 0,
           "m_meshIndex": 3,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 11014665589121789444,
+      "id": 7026372629175202724,
       "name": "Armor",
       "tag": "Untagged",
       "transform": {
-        "id": 16343249492578524044,
+        "id": 12138464299669678655,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,
@@ -1539,24 +1195,24 @@
       "components": [
         {
           "Active": true,
-          "id": 13372497023542738453,
-          "m_materialID": 13358556463881484172,
+          "id": 10350332145979642860,
+          "m_materialID": 0,
           "m_meshIndex": 4,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 3126189088293833262,
+      "id": 6255307981498227094,
       "name": "Beard",
       "tag": "Untagged",
       "transform": {
-        "id": 15478339566884087754,
+        "id": 8685605928894617644,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,
@@ -1580,24 +1236,368 @@
       "components": [
         {
           "Active": true,
-          "id": 7548331621293831520,
-          "m_materialID": 15764850419807861179,
+          "id": 1363212825736107881,
+          "m_materialID": 0,
           "m_meshIndex": 5,
           "m_modelID": 3705473775997473345,
           "typeName": "MeshRenderer"
         }
       ],
-      "id": 727255757423305245,
+      "id": 2915890279667514887,
       "name": "Head",
       "tag": "Untagged",
       "transform": {
-        "id": 1870672907709690221,
+        "id": 11096663397099082429,
         "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
         },
-        "m_parent": 14140086120126122333,
+        "m_parent": 16787885815876487987,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 10123314516751543070,
+      "name": "Dwarf",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2923096471846033419,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 3.3242342472076416,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 14517609020265579564
+            }
+          },
+          "id": 3988007899471875131,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 15856825175224770401,
+      "name": "Sword1",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1052215798145424795,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 10044491076313611466
+            }
+          },
+          "id": 2031361846191905826,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 1,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 13566214792274417733,
+      "name": "Pack",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3565097319315771804,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 15242554197649490269
+            }
+          },
+          "id": 9851654389538674465,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 2,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 5259618107476104992,
+      "name": "Body",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4310131116852772309,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 1087623756073597206
+            }
+          },
+          "id": 5033711429083927802,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 3,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 2062833625597478017,
+      "name": "Armor",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10631637172242006653,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 14024167665931700996
+            }
+          },
+          "id": 13662056947835183737,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 4,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 8393927363893407329,
+      "name": "Beard",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4817245731177898574,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
+        "m_position": {
+          "x": -0.0022690000478178263,
+          "y": 0.0,
+          "z": -0.027086999267339706
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Textures": {
+              "0": 4216741984347389165
+            }
+          },
+          "id": 3599155130968170028,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 5,
+          "m_modelID": 3705473775997473345,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 17833117028370735131,
+      "name": "Head",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12424676023950536430,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2923096471846033419,
         "m_position": {
           "x": -0.0022690000478178263,
           "y": 0.0,

@@ -130,7 +130,7 @@ bool Game::Initialize()
 	
 
 
-	SceneManager::Instance().RegisterScene("SampleScene", scene);
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
 	SceneManager::Instance().LoadScene("SampleScene");
 
 
@@ -206,6 +206,7 @@ void Game::Release()
 #endif
 	DX11Renderer::Instance().Destroy();
 	__super::Destroy();
+	ReflectionDatabase::Instance().Clear();
 }
 
 

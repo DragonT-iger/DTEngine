@@ -40,6 +40,9 @@ public:
         const std::vector<std::string>& enumNames = {});
     const ClassInfo* GetClassInfomation(const std::string& className) const;
 
+    void Clear() {
+        m_classes.clear(); 
+    }
 private:
     ReflectionDatabase();
     ~ReflectionDatabase();

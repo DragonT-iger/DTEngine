@@ -13,6 +13,8 @@ class aiNode;
 class aiScene;
 class aiMesh;
 class Mesh;
+class Material;
+class Texture;
 
 // 한번 로드된 리소스는 캐싱된다.
 
@@ -27,7 +29,7 @@ public:
 	void Unload(const std::string& id);
 	void UnloadAll();
 
-    std::string ResolveFullPath(const std::string& id) const;
+    std::string ResolveFullPath(const std::string& path) const;
 
 	std::string GetResourceRootPath() const { return m_resourceRootPath; }
 
@@ -37,10 +39,10 @@ public:
     GameObject* LoadModel(const std::string& fullPath);
 
 private:
-    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parent, const std::string& modelPath);
+    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures);
     Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
-    uint64_t ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath);
+    //uint64_t ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath);
 
     void CollectDescendants(GameObject* target, std::vector<GameObject*>& outList);
 

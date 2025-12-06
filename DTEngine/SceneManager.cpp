@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <cassert>
 #include <iostream>
+#include <filesystem>
 #include "SceneManager.h"
 #include "Scene.h"
 #include "ResourceManager.h"
@@ -10,9 +11,20 @@ Scene* SceneManager::GetActiveScene() const
     return m_active;
 }
 
-void SceneManager::RegisterScene(const std::string& name, Scene* scene)
-{ 
-    m_scenes.emplace(name, scene);
+void SceneManager::RegisterScene(const std::string& filePath)
+{
+    std::string name = std::filesystem::path(filePath).stem().string();
+
+	std::string newFilePath = ResourceManager::Instance().ResolveFullPath(filePath);
+
+    auto newScene = std::make_unique<Scene>();
+
+    newScene->SetName(name);
+
+    if (newScene->LoadFile(newFilePath))
+    {
+        m_scenes[name] = std::move(newScene);
+    }
 }
 
 void SceneManager::LoadScene(const std::string& name)
@@ -30,7 +42,7 @@ void SceneManager::ProcessSceneChange()
 
     auto it = m_scenes.find(m_nextName);
     assert(it != m_scenes.end());
-    m_active = it->second;
+    m_active = it->second.get();
 
     if (m_active)
     {
@@ -74,3 +86,4 @@ bool SceneManager::RestoreActiveScene()
     std::cerr << "[SceneManager] Failed to restore scene! Path was: " << fullPath << std::endl;
     return false;
 }
+

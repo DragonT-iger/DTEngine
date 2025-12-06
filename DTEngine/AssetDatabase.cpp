@@ -70,21 +70,23 @@ void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
     std::string metaPath = assetPath + ".meta";
     uint64_t id = 0;
 
+	std::string normalizedAssetPath = NormalizePath(assetPath);
+
     if (fs::exists(metaPath))
     {
         id = ReadMetaFile(metaPath);
 
-		std::cout << "Loaded .meta for " << assetPath << " with ID: " << id << std::endl;
+		std::cout << "Loaded .meta for " << normalizedAssetPath << " with ID: " << id << std::endl;
     }
     else
     {
-        id = CreateMetaFile(assetPath);
+        id = CreateMetaFile(normalizedAssetPath);
     }
 
     if (id != 0)
     {
-        m_idToPathMap[id] = assetPath;
-        m_pathToIdMap[assetPath] = id;
+        m_idToPathMap[id] = normalizedAssetPath;
+        m_pathToIdMap[normalizedAssetPath] = id;
     }
 }
 
@@ -118,10 +120,19 @@ uint64_t AssetDatabase::CreateMetaFile(const std::string& assetPath)
     return 0; // false
 }
 
+std::string AssetDatabase::NormalizePath(const std::string& path) const
+{
+	std::string pathCopy = path;
+    std::replace(pathCopy.begin(), pathCopy.end(), '\\', '/');
+    return pathCopy;
+}
+
 
 uint64_t AssetDatabase::GetIDFromPath(const std::string& path) const
 {
-    auto it = m_pathToIdMap.find(path);
+    std::string normalizedAssetPath = NormalizePath(path);
+
+    auto it = m_pathToIdMap.find(normalizedAssetPath);
     if (it != m_pathToIdMap.end())
     {
         return it->second;

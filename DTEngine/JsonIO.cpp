@@ -31,6 +31,9 @@ void JsonReader::EndArray() {
     }
 }
 
+JsonReader::JsonReader(JsonReader&&) noexcept = default;
+JsonReader& JsonReader::operator=(JsonReader&&) noexcept = default;
+
 void JsonWriter::Write(const char* name, const std::string& v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, const char* v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, bool v) { Current()[name] = v; }
@@ -76,19 +79,17 @@ JsonReader::JsonReader(const char* jsonText) {
 
     try
     {
-        m_root = new json(json::parse(jsonText));
-        m_cursor = m_root;
+        m_root = std::make_unique<json>(json::parse(jsonText)); 
+        m_cursor = m_root.get(); 
     }
     catch (const nlohmann::json::parse_error& e)
     {
-
-        if (jsonText[0] == '\0' ) {
-			std::cout << "씬 파일이 비어있습니다. 기본값으로 초기화합니다." << std::endl;
-            m_root = new json(json::object());
-            m_cursor = m_root;
+        if (jsonText[0] == '\0') {
+            std::cout << "씬 파일이 비어있습니다. 기본값으로 초기화합니다." << std::endl;
+            m_root = std::make_unique<json>(json::object()); 
+            m_cursor = m_root.get();
         }
         std::cerr << "[JsonReader] Parse Error: " << e.what() << std::endl;
-
     }
 }
 JsonReader::JsonReader(const std::string& jsonText) : JsonReader(jsonText.c_str()) {}
