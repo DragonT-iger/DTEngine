@@ -32,6 +32,13 @@ Material::Material() {
 }
 Material::~Material() { Unload(); }
 
+
+void Material::SetDefaultShader()
+{
+    std::string defaultShaderPath = "Assets/Shaders/Error_VS.hlsl";
+    m_shader = ResourceManager::Instance().Load<Shader>(defaultShaderPath);
+}
+
 bool Material::LoadFile(const std::string& fullPath)
 {
     std::filesystem::path path(fullPath);
@@ -64,20 +71,27 @@ bool Material::LoadFile(const std::string& fullPath)
 
         if (!shaderPath.empty())
         {
-            m_shader = ResourceManager::Instance().Load<Shader>(shaderPath);
-
-            if(m_shader == nullptr)
+            std::string shaderPath = AssetDatabase::Instance().GetPathFromID(shaderID);
+            if (!shaderPath.empty())
             {
-                std::cerr << "Failed to Load Shader Path  " << shaderPath << std::endl; 
-				// 만약 경로가 Shader가 아니라 다른 타입이면 댕글링 나면서 이거 뜰거임 즉 어디선가 ID 꼬인거
-                return false;
-			}
+                m_shader = ResourceManager::Instance().Load<Shader>(shaderPath);
+            }
+            else
+            {
+                std::cerr << "Warning: Shader ID " << shaderID << " path not found. Using default." << std::endl;
+                SetDefaultShader();
+            }
         }
         else
         {
             std::cerr << "Warning: Shader ID " << shaderID << " not found in AssetDatabase." << std::endl;
+            SetDefaultShader();
         }
     }
+    else {
+		std::cerr << "Shader File Shit" << std::endl;
+    }
+
     if (data.contains("Color"))
     {
         std::vector<float> colorVec = data["Color"];
@@ -143,7 +157,8 @@ bool Material::SaveFile(const std::string& fullPath)
     else
     {
         std::cerr << "Error: Failed to save material file: " << fullPath << std::endl;
-		return false;
+
+        data["ShaderID"] = 0;
     }
 
     data["Color"] = { m_data.Color.x, m_data.Color.y, m_data.Color.z, m_data.Color.w };

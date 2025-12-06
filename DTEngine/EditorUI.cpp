@@ -122,7 +122,6 @@ void EditorUI::Render(Scene* activeScene)
     }
 
 
-
     if (ctrlPressed && shiftPressed && InputManager::Instance().GetKeyDown(KeyCode::F))
     {
         AlignWithView();

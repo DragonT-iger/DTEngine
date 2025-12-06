@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "ICommand.h"
 #include "Transform.h"
 
@@ -33,7 +33,7 @@ public:
     }
 
 private:
-	bool isSuccess = true;
+	bool isSuccess = true; // 전단 변환의 경우 성공 여부를 저장
     Transform* m_target;
     Transform* m_oldParent;
     Transform* m_newParent;

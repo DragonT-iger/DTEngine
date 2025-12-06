@@ -56,6 +56,7 @@ public:
 private:
     void UpdateMaterialBuffer();
     void CreateBuffers();
+    void SetDefaultShader();
 
     Shader* m_shader = nullptr;
 
