@@ -4,8 +4,8 @@
 #include "DXHelper.h"
 
 #include <d3d11.h> 
-#include <WICTextureLoader.h> 
-#include <DDSTextureLoader.h> 
+#include <DirectXTK/WICTextureLoader.h> 
+#include <DirectXTK/DDSTextureLoader.h> 
 
 using Microsoft::WRL::ComPtr;
 

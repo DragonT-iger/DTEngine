@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 #include <vector>
 
 #include "MonoBehaviour.h"

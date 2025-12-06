@@ -3,7 +3,7 @@
 #include <wrl/client.h>
 #include <vector>
 #include <string>
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 
 namespace DirectX {
     namespace SimpleMath {

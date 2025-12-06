@@ -1,13 +1,16 @@
 #include "pch.h"
+
+
+#include <fstream>
+#include <vector>
+#include <iostream>
+#include <filesystem>
+
 #include "Shader.h"
 #include "DX11Renderer.h"
 #include "DXHelper.h"
 #include "Vertex.h" 
-#include <fstream>
-#include <vector>
-#include <iostream>
 #include "MeshRenderer.h"
-#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -42,9 +45,11 @@ bool Shader::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
+    
+
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileName(NULL, buffer, MAX_PATH);
-    fs::path exePath = fs::path(buffer).parent_path(); 
+    fs::path exePath = fs::path(buffer).parent_path();
 
     fs::path sourcePath(fullPath);
     std::string filename = sourcePath.stem().string();

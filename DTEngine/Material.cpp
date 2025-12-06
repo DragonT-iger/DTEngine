@@ -9,7 +9,7 @@
 #include "IDManager.h"
 
 #include <d3d11.h>
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 #include <fstream>
 #include <iostream>
 

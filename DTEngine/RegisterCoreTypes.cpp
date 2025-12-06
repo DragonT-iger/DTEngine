@@ -2,7 +2,7 @@
 #include "RegisterCoreTypes.h"
 #include "ReflectionMacros.h" 
 #include "ReflectionDatabase.h"
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 
 using Vector3 = DirectX::SimpleMath::Vector3;
 using Vector4 = DirectX::SimpleMath::Vector4;

@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 #include "MonoBehaviour.h"
-#include <SimpleMath.h> 
+#include <DirectXTK/SimpleMath.h> 
 
 using namespace DirectX::SimpleMath;
 

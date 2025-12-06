@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 #include <algorithm>
 #include <iostream>
 
@@ -59,6 +59,7 @@ namespace SimpleMathHelper {
         }
         else
         {
+			// 짐벌락 발생
             y = std::atan2(-m._13, m._11);
             z = 0.0f;
         }

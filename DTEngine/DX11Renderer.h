@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <wrl/client.h> 
 #include "Singleton.h"
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 
 using Matrix = DirectX::SimpleMath::Matrix;
 

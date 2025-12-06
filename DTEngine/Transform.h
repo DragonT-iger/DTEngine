@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SimpleMath.h>
+#include <DirectXTK/SimpleMath.h>
 #include <vector>
 
 #include "Component.h"
@@ -83,8 +83,6 @@ private:
 
 
 	// 직렬화 해야 하는 값들
-
-	//Vector4 kkkl;
 
 	Vector3 m_editorEulerAngles; // 에디터용 저장 변수
 

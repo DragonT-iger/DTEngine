@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <memory>
@@ -7,7 +7,7 @@
 
 
 #include "Component.h"
-#include "Transform.h";
+#include "Transform.h"
 #include "IDManager.h"
 
 

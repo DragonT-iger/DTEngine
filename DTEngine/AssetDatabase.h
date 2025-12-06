@@ -17,12 +17,13 @@ public:
 
     std::string GetPathFromID(uint64_t id) const;
 
+	void ProcessAssetFile(const std::string& assetPath); // 새로운 에셋 파일이 추가되었을 때 호출
+
 private:
     AssetDatabase() = default;
     ~AssetDatabase() = default;
 
     void ScanDirectory(const std::string& directoryPath);
-    void ProcessAssetFile(const std::string& assetPath);
 
     uint64_t ReadMetaFile(const std::string& metaPath);
     uint64_t CreateMetaFile(const std::string& assetPath); // 이것도 매크로 먹네 근데 실행은 됨

@@ -40,6 +40,8 @@ private:
     void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parent, const std::string& modelPath);
     Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
+    uint64_t ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath);
+
     void CollectDescendants(GameObject* target, std::vector<GameObject*>& outList);
 
 	std::string m_resourceRootPath;
