@@ -1,0 +1,15 @@
+﻿<Project>
+  <ItemGroup>
+    <FxCompile Update="**\*_VS.hlsl;..\**\*_VS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VS</EntryPointName>
+      <ObjectFileOutput>$(OutDir)Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+
+    <FxCompile Update="**\*_PS.hlsl;..\**\*_PS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PS</EntryPointName>
+      <ObjectFileOutput>$(OutDir)Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemGroup>
+</Project>

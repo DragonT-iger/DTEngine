@@ -1,3 +1,9 @@
+// 기본적인 Lambert Lighting 모델이고 간이 환경광이 적용되어 있음.
+// 텍스쳐가 있으면 텍스쳐 색상, 없으면 머티리얼 색상을 사용함.
+// Forward 방식임.
+
+
+
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION; 
@@ -26,6 +32,7 @@ cbuffer CBuffer_GlobalLight : register(b2)
 cbuffer CBuffer_Material : register(b3)
 {
     float4 MaterialColor; // Material.Color
+    float4 UVTransform;   // xy=Tiling, zw=Offset
     int UseTexture;       // Material.UseTexture
     int3 Padding2;
 };
@@ -79,7 +86,7 @@ float4 PS(PS_INPUT input) : SV_Target
             //    attenuation = 0.0f;
             
         }
-        float3 skyColor = float3(0.3f, 0.3f, 0.3f); 
+        float3 skyColor = float3(0.35f, 0.35f, 0.35f); 
         float3 groundColor = float3(0.1f, 0.1f, 0.1f); 
         float up = normal.y * 0.5 + 0.5;
         
@@ -92,7 +99,9 @@ float4 PS(PS_INPUT input) : SV_Target
     
     if (UseTexture)
     {
-        float4 texColor = g_Texture.Sample(g_Sampler, input.UV);
+        float2 transformedUV = input.UV * UVTransform.xy + UVTransform.zw;
+        
+        float4 texColor = g_Texture.Sample(g_Sampler, transformedUV);
         finalColor = texColor.rgb * (ambient + totalDiffuse);
     }
     else

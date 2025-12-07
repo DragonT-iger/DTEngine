@@ -6,15 +6,16 @@
     </FxCompile>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)', '.*_VS'))">
-    <FxCompile>
+  <ItemGroup>
+    <FxCompile Update="**\*_VS.hlsl">
       <ShaderType>Vertex</ShaderType>
-      <EntryPointName>VS</EntryPointName> </FxCompile>
-  </ItemDefinitionGroup>
+      <EntryPointName>VS</EntryPointName>
+    </FxCompile>
 
-  <ItemDefinitionGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)', '.*_PS'))">
-    <FxCompile>
+    <FxCompile Update="**\*_PS.hlsl">
       <ShaderType>Pixel</ShaderType>
-      <EntryPointName>PS</EntryPointName> </FxCompile>
-  </ItemDefinitionGroup>
+      <EntryPointName>PS</EntryPointName>
+    </FxCompile>
+    
+    </ItemGroup>
 </Project>

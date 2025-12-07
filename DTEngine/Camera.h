@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
 
@@ -63,6 +63,6 @@ private:
     bool m_dirtyView = true;
     bool m_dirtyProj = true;
 
-    Vector4 m_clearColor = { 0.2,0.2,0.2,0.2 };
+    Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
 
 };

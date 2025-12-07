@@ -1,11 +1,17 @@
 #include "pch.h"
-#include "Texture.h"
-#include "DX11Renderer.h"
-#include "DXHelper.h"
 
 #include <d3d11.h> 
 #include <DirectXTK/WICTextureLoader.h> 
 #include <DirectXTK/DDSTextureLoader.h> 
+#include <fstream>
+
+#include "Texture.h"
+#include "DX11Renderer.h"
+#include "DXHelper.h"
+#include "../ThirdParty/nlohmann/json.hpp"
+
+
+using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
@@ -48,6 +54,9 @@ bool Texture::LoadFile(const std::string& fullPath)
         }
     }
 
+    LoadMetaData(fullPath);
+    UpdateSampler();
+
     return true;
 }
 
@@ -57,4 +66,57 @@ void Texture::Unload()
 {
     m_srv.Reset();
     m_textureResource.Reset();
+    m_currentSampler = nullptr;
 }
+
+void Texture::SaveImportSettings(const std::string& fullPath)
+{
+    std::string metaPath = fullPath + ".meta";
+    json data;
+
+    std::ifstream inFile(metaPath);
+    if (inFile.is_open()) { try { inFile >> data; } catch (...) {} inFile.close(); }
+
+    data["FilterMode"] = (int)m_filterMode;
+    data["WrapMode"] = (int)m_wrapMode;
+
+    std::ofstream outFile(metaPath);
+    if (outFile.is_open()) outFile << data.dump(4);
+}
+
+
+void Texture::SetFilterMode(FilterMode mode)
+{
+    if (m_filterMode == mode) return;
+    m_filterMode = mode;
+    UpdateSampler(); 
+}
+
+void Texture::SetWrapMode(WrapMode mode)
+{
+    if (m_wrapMode == mode) return;
+    m_wrapMode = mode;
+    UpdateSampler(); 
+}
+
+void Texture::UpdateSampler()
+{
+    m_currentSampler = DX11Renderer::Instance().GetSampler(m_filterMode, m_wrapMode);
+}
+
+void Texture::LoadMetaData(const std::string& fullPath)
+{
+    std::string metaPath = fullPath + ".meta";
+    std::ifstream file(metaPath);
+    if (file.is_open())
+    {
+        try {
+            json data;
+            file >> data;
+            if (data.contains("FilterMode")) m_filterMode = (FilterMode)data["FilterMode"];
+            if (data.contains("WrapMode")) m_wrapMode = (WrapMode)data["WrapMode"];
+        }
+        catch (...) {}
+    }
+}
+

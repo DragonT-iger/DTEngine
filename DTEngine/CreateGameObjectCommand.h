@@ -26,6 +26,11 @@ public:
         m_gameObject = m_scene->_Internal_RemoveGameObject(m_rawPtr);
     }
 
+    GameObject* GetCreatedGameObject() const
+    {
+        return m_rawPtr;
+	}
+
 private:
     Scene* m_scene;
     std::unique_ptr<GameObject> m_gameObject;

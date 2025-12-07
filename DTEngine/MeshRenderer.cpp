@@ -63,6 +63,12 @@ void MeshRenderer::SaveInstanceData(JsonWriter& writer)
         Vector4 color = m_material->GetColor();
         writer.Write("Color", color.x, color.y, color.z, color.w);
 
+        Vector2 tiling = m_material->GetTiling();
+        writer.Write("Tiling", tiling.x, tiling.y);
+
+        Vector2 offset = m_material->GetOffset();
+        writer.Write("Offset", offset.x, offset.y);
+
         writer.BeginObject("Textures");
         for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
@@ -88,6 +94,9 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
             std::array<float, 4> defaultColor = { mat->GetColor().x, mat->GetColor().y, mat->GetColor().z, mat->GetColor().w };
             std::array<float, 4> c = reader.ReadVec4("Color", defaultColor);
             mat->SetColor(Vector4(c[0], c[1], c[2], c[3]));
+
+			reader.ReadVec2("Tiling", { mat->GetTiling().x,  mat->GetTiling().y });
+			reader.ReadVec2("Offset", { mat->GetOffset().x,  mat->GetOffset().y });
 
             if (reader.BeginObject("Textures"))
             {

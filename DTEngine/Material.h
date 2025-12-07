@@ -3,16 +3,8 @@
 #include <wrl/client.h>
 #include <vector>
 #include <string>
-#include <DirectXTK/SimpleMath.h>
+#include "SimpleMathHelper.h"
 
-namespace DirectX {
-    namespace SimpleMath {
-        struct Matrix;
-        struct Vector4;
-    }
-}
-using Matrix = DirectX::SimpleMath::Matrix;
-using Vector4 = DirectX::SimpleMath::Vector4;
 
 struct ID3D11Buffer;
 
@@ -23,7 +15,8 @@ __declspec(align(16))
 struct MaterialData
 {
     Vector4 Color = { 1,1,1,1 };
-    int UseTexture;    
+    Vector4 UVTransform = { 1, 1, 0, 0 }; 
+    int UseTexture;
     int Padding[3];    
 };
 
@@ -48,8 +41,14 @@ public:
 
     Texture* GetTexture(int slot) const;
 
-    void SetColor(const Vector4& color);
+    bool SetColor(const Vector4& color);
     Vector4 GetColor() const;
+
+    Vector2 GetTiling() const { return Vector2(m_data.UVTransform.x, m_data.UVTransform.y); }
+    Vector2 GetOffset() const { return Vector2(m_data.UVTransform.z, m_data.UVTransform.w); }
+
+    void SetTiling(float x, float y) { m_data.UVTransform.x = x; m_data.UVTransform.y = y; UpdateMaterialBuffer(); }
+    void SetOffset(float x, float y) { m_data.UVTransform.z = x; m_data.UVTransform.w = y; UpdateMaterialBuffer(); }
 
 	static constexpr int MAX_TEXTURE_SLOTS = 5;
 

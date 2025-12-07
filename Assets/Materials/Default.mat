@@ -6,5 +6,11 @@
         1.0
     ],
     "ShaderID": 15873368529725626212,
-    "Textures": null
+    "Textures": null,
+    "UVTransform": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+    ]
 }

@@ -9,9 +9,9 @@
 
 class DX11Renderer;
 class GameObject;
-class aiNode;
-class aiScene;
-class aiMesh;
+struct aiNode;
+struct aiScene;
+struct aiMesh;
 class Mesh;
 class Material;
 class Texture;

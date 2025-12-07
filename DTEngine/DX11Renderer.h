@@ -5,6 +5,8 @@
 #include "Singleton.h"
 #include <DirectXTK/SimpleMath.h>
 
+#include "Texture.h"
+
 using Matrix = DirectX::SimpleMath::Matrix;
 
 
@@ -71,11 +73,13 @@ public:
 
     void ResetRenderState();
 
+    ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
+
 private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
     void ReleaseBackbuffers();
-
+    void CreateSamplers();
 
     __declspec(align(16))
         struct CBuffer_Frame_Data
@@ -96,9 +100,9 @@ private:
     __declspec(align(16))
         struct CBuffer_GlobalLight
     {
-        LightData Lights[MAX_LIGHTS];           // 배열로 선언
-        int ActiveCount;                        // 현재 활성화된 조명 개수
-        DirectX::SimpleMath::Vector3 Padding;   // 16바이트 정렬 맞춤
+        LightData Lights[MAX_LIGHTS];                // 배열로 선언
+        int ActiveCount;                             // 현재 활성화된 조명 개수
+        DirectX::SimpleMath::Vector3 Padding;        // 16바이트 정렬 맞춤
     };
 
 
@@ -123,7 +127,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
-    Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
+    //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
+
+    Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];
+
 
     // State
     int   m_width = 0;

@@ -103,6 +103,21 @@ bool Material::LoadFile(const std::string& fullPath)
             m_data.Color.w = colorVec[3];
         }
     }
+    if (data.contains("UVTransform"))
+    {
+        std::vector<float> uvVec = data["UVTransform"];
+        if (uvVec.size() == 4)
+        {
+            m_data.UVTransform.x = uvVec[0]; 
+            m_data.UVTransform.y = uvVec[1]; 
+            m_data.UVTransform.z = uvVec[2]; 
+            m_data.UVTransform.w = uvVec[3]; 
+        }
+    }
+    else
+    {
+        m_data.UVTransform = Vector4(1.0f, 1.0f, 0.0f, 0.0f);
+    }
     if (data.contains("Textures"))
     {
         for (auto& [key, value] : data["Textures"].items())
@@ -162,6 +177,12 @@ bool Material::SaveFile(const std::string& fullPath)
     }
 
     data["Color"] = { m_data.Color.x, m_data.Color.y, m_data.Color.z, m_data.Color.w };
+
+    data["UVTransform"] = {
+        m_data.UVTransform.x, m_data.UVTransform.y,
+        m_data.UVTransform.z, m_data.UVTransform.w
+    };
+
     json texData;
     for (int slot = 0; slot < m_textures.size(); ++slot)
     {
@@ -242,14 +263,17 @@ Texture* Material::GetTexture(int slot) const
     return m_textures[slot];
 }
 
-void Material::SetColor(const Vector4& color)
+bool Material::SetColor(const Vector4& color)
 {
-    m_data.Color.x = color.x;
-    m_data.Color.y = color.y;
-    m_data.Color.z = color.z;
-    m_data.Color.w = color.w;
+    if (m_data.Color == color)
+    {
+        return false;
+    }
+
+    m_data.Color = color;
 
     UpdateMaterialBuffer();
+    return true;
 }
 
 Vector4 Material::GetColor() const
@@ -275,6 +299,7 @@ void Material::UpdateMaterialBuffer()
 
 	dataPtr->Color = m_data.Color;
 	dataPtr->UseTexture = m_data.UseTexture;
+	dataPtr->UVTransform = m_data.UVTransform;
 
 
     //memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
@@ -355,12 +380,18 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
     {
         ID3D11ShaderResourceView* srv = nullptr;
+		ID3D11SamplerState* sampler = nullptr;
+
         if (m_textures[i])
         {
             srv = m_textures[i]->GetSRV();
+            sampler = m_textures[i]->GetSampler();
         }
 
         context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
+
+        if (sampler)
+            context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
     }
 
     //UpdateMaterialBuffer();

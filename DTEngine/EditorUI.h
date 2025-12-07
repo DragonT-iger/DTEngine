@@ -56,6 +56,8 @@ private:
 
 	void DrawAssetInspector(const std::string& path);
 
+    void CreatePrimitive(const std::string& name, const std::string& assetPath);
+
 
     std::any m_dragStartValue;
     bool m_isGizmoUsing = false;

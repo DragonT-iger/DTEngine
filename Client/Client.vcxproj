@@ -131,7 +131,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Rotator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -140,6 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="ForwardMover.h" />
+    <ClInclude Include="Rotator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

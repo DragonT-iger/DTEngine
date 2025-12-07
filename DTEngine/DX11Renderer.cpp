@@ -55,6 +55,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
 
     CreateBackbuffers(width, height);
+    CreateSamplers();
     return true;
 }
 
@@ -220,17 +221,17 @@ void DX11Renderer::ResetRenderState()
     {
         m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
         m_context->RSSetState(m_defaultRasterizerState.Get());
-        
-        if (m_defaultSamplerState)
-        {
-            ID3D11SamplerState* samplers[] = { m_defaultSamplerState.Get() };
-            m_context->PSSetSamplers(0, 1, samplers);
-        }
-
         //// 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
         //float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
         //m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
     }
+}
+
+ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
+{
+    int index = (int)filter * 2 + (int)wrap;
+    if (index < 0 || index >= 6) return m_samplers[1].Get(); 
+    return m_samplers[index].Get();
 }
 
 bool DX11Renderer::CreateDeviceAndSwapchain()
@@ -275,19 +276,6 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     rsDesc.DepthClipEnable = TRUE;
 
     hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
-
-
-    D3D11_SAMPLER_DESC sampDesc = {};
-    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;   
-    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    sampDesc.MinLOD = 0;
-    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    hr = dev->CreateSamplerState(&sampDesc, m_defaultSamplerState.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
 
@@ -364,4 +352,34 @@ void DX11Renderer::ReleaseBackbuffers()
     m_depthTex.Reset();
     m_rtv.Reset();
     m_backbufferTex.Reset();
+}
+
+void DX11Renderer::CreateSamplers()
+{
+    if (!m_device) return;
+
+    for (int f = 0; f < 3; ++f) // Point, Bilinear, Trilinear
+    {
+        for (int w = 0; w < 2; ++w) // Repeat, Clamp
+        {
+            D3D11_SAMPLER_DESC desc = {};
+
+            switch ((FilterMode)f)
+            {
+            case FilterMode::Point:     desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; break;
+            case FilterMode::Bilinear:  desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT; break;
+            case FilterMode::Trilinear: desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; break;
+            }
+
+            D3D11_TEXTURE_ADDRESS_MODE addr = (w == 0) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
+            desc.AddressU = desc.AddressV = desc.AddressW = addr;
+
+            desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+            desc.MinLOD = 0;
+            desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+            int index = f * 2 + w;
+            m_device->CreateSamplerState(&desc, m_samplers[index].GetAddressOf());
+        }
+    }
 }

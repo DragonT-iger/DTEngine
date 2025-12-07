@@ -41,6 +41,11 @@ void JsonWriter::Write(const char* name, float v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, int v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, uint64_t v) { Current()[name] = v; }
 
+void JsonWriter::Write(const char* name, float x, float y)
+{
+    Current()[name] = { x, y};
+}
+
 void JsonWriter::Write(const char* name, float x, float y, float z) {
     Current()[name] = { x, y, z };
 }
@@ -129,6 +134,16 @@ uint64_t JsonReader::ReadUInt64(const char* name, uint64_t def) const {
         return v.get<uint64_t>();
     }
     return def;
+}
+
+std::array<float, 2> JsonReader::ReadVec2(const char* name, std::array<float, 2> def) const
+{
+    if (!Has(name)) return def;
+    const auto& a = (*m_cursor)[name];
+    if (a.is_array() && a.size() == 2 && a[0].is_number()) {
+        return { a[0].get<float>(), a[1].get<float>() };
+    }
+	return def;
 }
 
 

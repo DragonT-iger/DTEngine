@@ -29,6 +29,7 @@ public:
     void Write(const char* name, float v);
     void Write(const char* name, int v);
     void Write(const char* name, uint64_t v);
+    void Write(const char* name, float x, float y);
     void Write(const char* name, float x, float y, float z);
     void Write(const char* name, float x, float y, float z, float w);
 
@@ -62,6 +63,7 @@ public:
     float       ReadFloat(const char* name, float def = 0.f) const;
     int         ReadInt(const char* name, int def = 0) const;
     uint64_t    ReadUInt64(const char* name, uint64_t def = 0) const;
+	std::array<float, 2> ReadVec2(const char* name, std::array<float, 2> def = { 0,0 }) const;
     std::array<float, 3> ReadVec3(const char* name, std::array<float, 3> def = { 0,0,0 }) const;
     std::array<float, 4> ReadVec4(const char* name, std::array<float, 4> def = { 0,0,0,1 }) const;
 

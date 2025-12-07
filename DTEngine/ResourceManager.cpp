@@ -249,6 +249,9 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         unsigned int meshIndex = node->mMeshes[i];
         unsigned int matIndex = scene->mMeshes[meshIndex]->mMaterialIndex;
 
+        aiMesh* aiMesh = scene->mMeshes[meshIndex];
+        aiMaterial* aiMat = scene->mMaterials[aiMesh->mMaterialIndex];
+
         Texture* assignedTexture = nullptr;
         if (matIndex < textures.size())
         {
@@ -270,13 +273,26 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         {
             renderer->SetMaterialID(defaultMatID);
 
-            if (assignedTexture != nullptr)
+            Material* mat = renderer->GetMaterial();
+            if (mat)
             {
-                Material* instancedMat = renderer->GetMaterial();
-
-                if (instancedMat)
+                aiColor3D color(1.f, 1.f, 1.f);
+                if (aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
                 {
-                    instancedMat->SetTexture(0, assignedTexture);
+                    mat->SetColor(Vector4(color.r, color.g, color.b, 1.0f));
+                }
+
+                aiString texPath;
+                if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+                {
+                    std::filesystem::path modelDir = std::filesystem::path(modelPath).parent_path();
+                    std::string fullTexPath = (modelDir / texPath.C_Str()).string();
+
+                    Texture* texture = ResourceManager::Instance().Load<Texture>(fullTexPath);
+                    if (texture)
+                    {
+                        mat->SetTexture(0, texture);
+                    }
                 }
             }
             // else:

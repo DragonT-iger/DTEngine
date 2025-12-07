@@ -374,9 +374,44 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
         if (ImGui::MenuItem("Create Empty"))
         {
             auto cmd = std::make_unique<CreateGameObjectCommand>(activeScene, "GameObject");
+            CreateGameObjectCommand* pCmd = cmd.get();
+
             HistoryManager::Instance().Do(std::move(cmd));
+
+            if (pCmd)
+            {
+                m_selectedGameObject = pCmd->GetCreatedGameObject();
+            }
         }
+
+        if (ImGui::BeginMenu("3D Object"))
+        {
+            if (ImGui::MenuItem("Cube"))
+            {
+                CreatePrimitive("Cube", "Assets/Models/Primitives/Cube.fbx");
+            }
+            if (ImGui::MenuItem("Sphere"))
+            {
+                CreatePrimitive("Sphere", "Assets/Models/Primitives/Sphere.fbx");
+            }
+            if (ImGui::MenuItem("Plane"))
+            {
+                CreatePrimitive("Plane", "Assets/Models/Primitives/Plane.fbx");
+            }
+            if(ImGui::MenuItem("Cylinder"))
+            {
+                CreatePrimitive("Cylinder", "Assets/Models/Primitives/Cylinder.fbx");
+			}
+            if(ImGui::MenuItem("Cone"))
+            {
+                CreatePrimitive("Cone", "Assets/Models/Primitives/Cone.fbx");
+			}
+            ImGui::EndMenu();
+        }
+
         ImGui::EndPopup();
+
+
     }
 
 
@@ -1089,6 +1124,65 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     ImGui::Spacing();
 
 
+                    ImGui::Text("UV Settings");
+
+                    // 1. Tiling UI
+                    Vector2 tiling = currentMat->GetTiling();
+                    if (ImGui::DragFloat2("Tiling", &tiling.x, 0.05f))
+                    {
+                        renderer->GetMaterial()->SetTiling(tiling.x, tiling.y);
+                    }
+
+                    // Tiling Undo/Redo
+                    if (ImGui::IsItemActivated()) m_dragStartValue = currentMat->GetTiling();
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        Vector2 oldVal = std::any_cast<Vector2>(m_dragStartValue);
+                        Vector2 newVal = tiling;
+
+                        auto setter = [](void* targetObj, void* val) {
+                            MeshRenderer* mr = static_cast<MeshRenderer*>(static_cast<Component*>(targetObj));
+                            Vector2* v = static_cast<Vector2*>(val);
+                            mr->GetMaterial()->SetTiling(v->x, v->y);
+                            };
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<Vector2>>(
+                            renderer, setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
+                    }
+
+                    // 2. Offset UI
+                    Vector2 offset = currentMat->GetOffset();
+                    if (ImGui::DragFloat2("Offset", &offset.x, 0.05f))
+                    {
+                        renderer->GetMaterial()->SetOffset(offset.x, offset.y);
+                    }
+
+                    // Offset Undo/Redo
+                    if (ImGui::IsItemActivated()) m_dragStartValue = currentMat->GetOffset();
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        Vector2 oldVal = std::any_cast<Vector2>(m_dragStartValue);
+                        Vector2 newVal = offset;
+
+                        auto setter = [](void* targetObj, void* val) {
+                            MeshRenderer* mr = static_cast<MeshRenderer*>(static_cast<Component*>(targetObj));
+                            Vector2* v = static_cast<Vector2*>(val);
+                            mr->GetMaterial()->SetOffset(v->x, v->y);
+                            };
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<Vector2>>(
+                            renderer, setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
+                    }
+
+                    ImGui::Spacing();
+                    ImGui::Separator();
+
+
+
                     if (ImGui::TreeNodeEx("Textures", ImGuiTreeNodeFlags_DefaultOpen))
                     {
                         if (ImGui::BeginTable("TextureSlotTable", 3, ImGuiTableFlags_SizingStretchProp))
@@ -1214,8 +1308,18 @@ void EditorUI::OnDropFile(const std::string& rawPath)
     if (ext == ".fbx" || ext == ".obj" || ext == ".x")
     {
 
-		ResourceManager::Instance().LoadModel(path.string());
+        GameObject* go = ResourceManager::Instance().LoadModel(path.string());
+        if (go && m_sceneCamera)
+        {
+            Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
+            if (camTf)
+            {
+                float spawnDistance = 8.0f;
+                Vector3 spawnPos = camTf->GetPosition() + (camTf->Forward() * spawnDistance);
 
+                go->GetTransform()->SetPosition(spawnPos);
+            }
+        }
         //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
     }
 }
@@ -1302,6 +1406,19 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
             ImGui::Separator();
 
+            float tiling[2] = { material->GetTiling().x, material->GetTiling().y };
+            if (ImGui::DragFloat2("Tiling", tiling, 0.1f))
+            {
+                material->SetTiling(tiling[0], tiling[1]);
+                material->SaveFile(path); 
+            }
+
+            float offset[2] = { material->GetOffset().x, material->GetOffset().y };
+            if (ImGui::DragFloat2("Offset", offset, 0.01f))
+            {
+                material->SetOffset(offset[0], offset[1]);
+                material->SaveFile(path); 
+            }
 
             for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
             {
@@ -1372,10 +1489,79 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
         }
     }
+
+    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+    {
+        Texture* tex = ResourceManager::Instance().Load<Texture>(path);
+        if (tex)
+        {
+            ImGui::Text("Texture Settings");
+            ImGui::Separator();
+
+            bool changed = false;
+
+            const char* filters[] = { "Point", "Bilinear", "Trilinear" };
+            int f = (int)tex->GetFilterMode();
+            if (ImGui::Combo("Filter Mode", &f, filters, 3))
+            {
+                tex->SetFilterMode((FilterMode)f);
+                changed = true;
+            }
+
+            const char* wraps[] = { "Repeat", "Clamp" };
+            int w = (int)tex->GetWrapMode();
+            if (ImGui::Combo("Wrap Mode", &w, wraps, 2))
+            {
+                tex->SetWrapMode((WrapMode)w);
+                changed = true;
+            }
+
+            if (changed)
+            {
+                tex->SaveImportSettings(path);
+            }
+
+            ImGui::Separator();
+            //ImGui::Text("Preview");
+            // ... (이미지 프리뷰 코드) ...
+        }
+    }
+
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
     }
+}
+
+void EditorUI::CreatePrimitive(const std::string& name, const std::string& assetPath)
+{
+    uint64_t modelID = AssetDatabase::Instance().GetIDFromPath(assetPath);
+
+    if (modelID == 0)
+    {
+        std::cout << "[Editor] Error: Primitive asset not found at " << assetPath << std::endl;
+        return;
+    }
+
+    auto scene = SceneManager::Instance().GetActiveScene();
+    auto cmd = std::make_unique<CreateGameObjectCommand>(scene, name);
+    CreateGameObjectCommand* pCmd = cmd.get();
+    HistoryManager::Instance().Do(std::move(cmd));
+
+    GameObject* newGO = pCmd->GetCreatedGameObject();
+
+    MeshRenderer* mr = newGO->AddComponent<MeshRenderer>();
+
+    mr->SetModelID(modelID);
+    mr->SetMeshIndex(0);
+
+    uint64_t defaultMatID = AssetDatabase::Instance().GetIDFromPath("Assets/Materials/Default.mat");
+    if (defaultMatID != 0)
+    {
+        mr->SetMaterialID(defaultMatID);
+    }
+
+    m_selectedGameObject = newGO;
 }
 
 
