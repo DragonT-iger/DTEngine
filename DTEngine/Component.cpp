@@ -22,6 +22,10 @@ Transform* Component::GetTransform() {
     return this->_GetOwner()->GetTransform();
 }
 
+std::string Component::GetName() const {
+    return this->_GetOwner()->GetName();
+}
+
 static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& type, const char* name, void* data)
 {
 

@@ -55,6 +55,9 @@ Client/imgui.ini
 
 /Assets/Scenes/PlayMode_Backup.scene
 
+
+/Assets/Models/*
+
 *.ini
 *.aps
 *.rc

@@ -24,6 +24,8 @@ public:
 
     Transform* GetTransform();
 
+	std::string GetName() const;
+
 
     // ----------------- 엔진 전용 -------------------
 

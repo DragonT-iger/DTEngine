@@ -99,6 +99,8 @@ void EditorUI::Render(Scene* activeScene)
     DrawInspectorWindow();
     DrawProjectWindow();
     //DrawGizmo(activeScene);
+    
+    DrawOverlay();
 
     // Redo Undo
 
@@ -127,8 +129,6 @@ void EditorUI::Render(Scene* activeScene)
         AlignWithView();
     }
 
-    
-    //DrawOverlay();
 }
 
 void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {

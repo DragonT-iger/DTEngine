@@ -60,7 +60,7 @@ void Camera::SetThisCameraToMain()
 {
     Scene* scene = SceneManager::Instance().GetActiveScene();
 
-    if (scene->GetMainCamera() == nullptr) {
+    if (scene->GetMainCamera() == nullptr && this->GetName() != "EditorCamera55") {
         scene->SetMainCamera(this);
     }
     else {

@@ -95,8 +95,11 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
             std::array<float, 4> c = reader.ReadVec4("Color", defaultColor);
             mat->SetColor(Vector4(c[0], c[1], c[2], c[3]));
 
-			reader.ReadVec2("Tiling", { mat->GetTiling().x,  mat->GetTiling().y });
-			reader.ReadVec2("Offset", { mat->GetOffset().x,  mat->GetOffset().y });
+            std::array<float, 2> tiling = reader.ReadVec2("Tiling", { mat->GetTiling().x,  mat->GetTiling().y });
+            mat->SetTiling(tiling[0], tiling[1]);
+
+            std::array<float, 2> offset = reader.ReadVec2("Offset", { mat->GetOffset().x,  mat->GetOffset().y });
+            mat->SetOffset(offset[0], offset[1]);
 
             if (reader.BeginObject("Textures"))
             {

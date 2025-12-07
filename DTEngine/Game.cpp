@@ -90,28 +90,28 @@ bool Game::Initialize()
 	InputManager::Instance().Initialize();
 
 
-	Scene* scene = ResourceManager::Instance().Load<Scene>("Scenes/SampleScene.scene");
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
+	SceneManager::Instance().ProcessSceneChange();
 
-	if(scene == nullptr)
+	Scene* scene = SceneManager::Instance().GetActiveScene();
+	if (scene == nullptr)
 	{
 		assert(false && "기본 씬 로드 실패");
 		return false;
 	}
 
-
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
 	m_sceneRT->Initialize(1280, 720);
-	
+
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1280, 720);
 
-
 	m_editorCameraObject = scene->FindGameObject("EditorCamera55");
 
-	if(m_editorCameraObject)
+	if (m_editorCameraObject)
 	{
-		//std::cout << "EditorCamera 게임 오브젝트를 씬에서 찾았습니다." << std::endl;
 		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
 	}
 	else
@@ -122,7 +122,7 @@ bool Game::Initialize()
 		m_editorCameraObject->AddComponent<FreeCamera>();
 		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
 	}
-	
+
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1080);
@@ -130,8 +130,6 @@ bool Game::Initialize()
 	
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
 
 
 	//Scene testScene("TestScene");
@@ -431,14 +429,30 @@ void Game::SetPlayState(bool isPlay)
 	else
 	{
 		m_engineMode = EngineMode::Edit;
-		
+		Vector3 lastPos = Vector3(0, 0, 0);
+		Vector3 lastRot = Vector3(0, 0, 0);
+		bool hasLastState = false;
+
+		if (m_editorCameraObject && m_editorCameraObject->GetTransform())
+		{
+			lastPos = m_editorCameraObject->GetTransform()->GetPosition();
+			lastRot = m_editorCameraObject->GetTransform()->GetEditorEuler(); 
+			hasLastState = true;
+		}
 
 		SceneManager::Instance().RestoreActiveScene();
 
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
 		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		if (hasLastState)
+		{
+			Transform* camTf = m_editorCameraObject->GetTransform();
+			camTf->SetPosition(lastPos);
+			camTf->SetRotationEuler(lastRot);
 
+			m_editorCameraObject->Awake(); // 이거 두번 호출되긴 한데 이걸 안하면 깜빡거림 
+		}
 
 
 
