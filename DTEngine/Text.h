@@ -1,10 +1,8 @@
 #pragma once
 
 #include <string>
-
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
-
 
 class Text : public MonoBehaviour
 {
@@ -24,8 +22,12 @@ public:
 
     void SetLocalOffset(const Vector2& offset) { m_localOffset = offset; }
 
+	void SetFontSize(float size) { m_fontSize = size; }
+	float GetFontSize() const { return m_fontSize; }
+
 private:
-    std::wstring m_text = L"New 3D Text";
-    Vector4 m_color = Vector4(0.f, 0.f, 0.f, 1.f);
+    std::wstring m_text = L"New Text";
+    Vector4 m_color = Vector4(1.f, 1.f, 1.f, 1.f);
     Vector2 m_localOffset = Vector2(0.f, 0.f);
+	float m_fontSize = 1.0f;
 };

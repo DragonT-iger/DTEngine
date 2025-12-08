@@ -239,6 +239,9 @@
     <ClInclude Include="Texture.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Text3D.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -383,6 +386,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Text3D.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">

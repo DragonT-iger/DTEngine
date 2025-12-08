@@ -91,6 +91,9 @@ void DX11Renderer::Resize(int width, int height)
  
 void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM)
 {
+    m_viewTM = viewTM;
+    m_projTM = projectionTM;
+
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
     HRESULT hr = m_context->Map(m_cbuffer_frame.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
     DXHelper::ThrowIfFailed(hr);
@@ -140,7 +143,7 @@ void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vecto
     m_spriteBatch->Draw(texture->GetSRV(), position, color);
 }
 
-void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const Vector4& color)
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
 {
     if (!m_spriteBatch || !m_font) return;
 
@@ -151,44 +154,8 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
         color,
         0.0f,                    
         DirectX::XMFLOAT2(0, 0), 
-        1.0f                     
+        m_fontSize
     );
-}
-
-void DX11Renderer::DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix)
-{
-    if (!m_spriteBatch || !m_font) return;
-
-    Matrix wvp = worldMatrix * m_viewTM * m_projTM;
-
-    m_spriteBatch->Begin(
-        DirectX::DX11::SpriteSortMode_Deferred,
-        m_states->NonPremultiplied(), // BlendState
-        nullptr,                      // SamplerState        (여기가 nullptr이거나 Sampler여야 함)
-        m_states->DepthRead(),        // DepthStencilState   (깊이 읽기 전용)
-        m_states->CullNone(),         // RasterizerState     (양면 렌더링)
-        nullptr,                      // CustomShader
-        wvp                           // Transform Matrix
-    );
-
-    float fontScale = 0.02f;
-
-    DirectX::SimpleMath::Vector2 textSize = m_font->MeasureString(text.c_str());
-    DirectX::SimpleMath::Vector2 origin = textSize / 2.f;
-
-    m_font->DrawString(
-        m_spriteBatch.get(),
-        text.c_str(),
-        DirectX::SimpleMath::Vector2(localPos.x, localPos.y),
-        color,
-        0.f,
-        origin,
-        fontScale
-    );
-
-    m_spriteBatch->End();
-
-    ResetRenderState();
 }
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
@@ -214,12 +181,11 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
-    BeginUIRender();
 }
 
 void DX11Renderer::EndFrame()
 {
-    EndUIRender();
+    //EndUIRender();
 
     //std::cout << m_width << " " << m_height << std::endl;
     // 필요 시 파이프라인 언바인드/커맨드 종료 등

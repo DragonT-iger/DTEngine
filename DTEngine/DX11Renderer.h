@@ -51,9 +51,9 @@ public:
 
     void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1));
 
-    void DrawString(const std::wstring& text, const Vector2& position, const Vector4& color = Vector4(0, 0, 0, 1));
+    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
 
-    void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
+    //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
 
 
@@ -95,6 +95,9 @@ public:
     void ResetRenderState();
 
     ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
+
+    const Matrix& GetViewMatrix() const { return m_viewTM; }
+    const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
 private:
     bool CreateDeviceAndSwapchain();
