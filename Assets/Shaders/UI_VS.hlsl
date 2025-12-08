@@ -21,7 +21,6 @@ struct VS_INPUT
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
 };
 
@@ -34,7 +33,6 @@ PS_INPUT VS(VS_INPUT input)
     float4 projPos = mul(viewPos, ProjectionTM);
     
     output.Pos = projPos;
-    output.Color = input.Color;
     output.UV = input.UV;
     
     return output;

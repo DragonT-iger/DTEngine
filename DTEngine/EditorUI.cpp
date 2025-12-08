@@ -1324,6 +1324,32 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         HistoryManager::Instance().Do(std::move(cmd));
                     }
 
+                    const char* modes[] = { "Opaque", "Transparent" };
+                    int currentMode = (int)renderer->GetMaterial()->GetRenderMode();
+
+                    if (ImGui::Combo("Render Mode", &currentMode, modes, IM_ARRAYSIZE(modes)))
+                    {
+                        renderer->GetMaterial()->SetRenderMode((RenderMode)currentMode);
+                    }
+
+                    if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetRenderMode();
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        int oldVal = std::any_cast<int>(m_dragStartValue);
+                        int newVal = currentMode;
+
+                        auto setter = [](void* targetObj, void* val) {
+                            MeshRenderer* mr = static_cast<MeshRenderer*>(static_cast<Component*>(targetObj));
+                            int* v = static_cast<int*>(val);
+                            mr->GetMaterial()->SetRenderMode((RenderMode)*v);
+                            };
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<int>>(
+                            renderer, setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
+                    }
+
                     ImGui::Spacing();
                     ImGui::Separator();
 
@@ -1563,6 +1589,15 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             if (ImGui::DragFloat2("Offset", offset, 0.01f))
             {
                 material->SetOffset(offset[0], offset[1]);
+                material->SaveFile(path); 
+            }
+
+            const char* modes[] = { "Opaque", "Transparent" };
+            int currentMode = (int)material->GetRenderMode();
+
+            if (ImGui::Combo("Render Mode", &currentMode, modes, IM_ARRAYSIZE(modes)))
+            {
+                material->SetRenderMode((RenderMode)currentMode);
                 material->SaveFile(path); 
             }
 

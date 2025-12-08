@@ -35,6 +35,7 @@ namespace DirectX {
     }
 }
 
+enum class BlendMode { Opaque, AlphaBlend };
 
 class DX11Renderer : public Singleton<DX11Renderer>
 {
@@ -56,7 +57,7 @@ public:
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
-
+    void SetBlendMode(BlendMode mode);
 
     void BeginFrame(const float clearColor[4]);
     void EndFrame();

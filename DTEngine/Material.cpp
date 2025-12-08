@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "../ThirdParty/nlohmann/json.hpp"
+#include "Image.h"
 using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
@@ -118,6 +119,14 @@ bool Material::LoadFile(const std::string& fullPath)
     {
         m_data.UVTransform = Vector4(1.0f, 1.0f, 0.0f, 0.0f);
     }
+    if (data.contains("RenderMode"))
+    {
+        m_renderMode = (RenderMode)data["RenderMode"];
+    }
+    else
+    {
+        m_renderMode = RenderMode::Opaque;
+    }
     if (data.contains("Textures"))
     {
         for (auto& [key, value] : data["Textures"].items())
@@ -182,6 +191,8 @@ bool Material::SaveFile(const std::string& fullPath)
         m_data.UVTransform.x, m_data.UVTransform.y,
         m_data.UVTransform.z, m_data.UVTransform.w
     };
+
+    data["RenderMode"] = (int)m_renderMode;
 
     json texData;
     for (int slot = 0; slot < m_textures.size(); ++slot)
@@ -392,6 +403,15 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
+    }
+
+    if (m_renderMode == RenderMode::Transparent)
+    {
+        DX11Renderer::Instance().SetBlendMode(BlendMode::AlphaBlend);
+    }
+    else
+    {
+        DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
     }
 
     //UpdateMaterialBuffer();

@@ -69,6 +69,8 @@ void MeshRenderer::SaveInstanceData(JsonWriter& writer)
         Vector2 offset = m_material->GetOffset();
         writer.Write("Offset", offset.x, offset.y);
 
+        writer.Write("RenderMode", (int)m_material->GetRenderMode());
+
         writer.BeginObject("Textures");
         for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
@@ -100,6 +102,9 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
 
             std::array<float, 2> offset = reader.ReadVec2("Offset", { mat->GetOffset().x,  mat->GetOffset().y });
             mat->SetOffset(offset[0], offset[1]);
+
+            int renderModeInt = reader.ReadInt("RenderMode", 0);
+            mat->SetRenderMode((RenderMode)renderModeInt);
 
             if (reader.BeginObject("Textures"))
             {

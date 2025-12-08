@@ -20,6 +20,8 @@ struct MaterialData
     int Padding[3];    
 };
 
+enum class RenderMode { Opaque, Transparent };
+
 class Material : public IResource
 {
 public:
@@ -50,6 +52,9 @@ public:
     void SetTiling(float x, float y) { m_data.UVTransform.x = x; m_data.UVTransform.y = y; UpdateMaterialBuffer(); }
     void SetOffset(float x, float y) { m_data.UVTransform.z = x; m_data.UVTransform.w = y; UpdateMaterialBuffer(); }
 
+    void SetRenderMode(RenderMode mode) { m_renderMode = mode; }
+    RenderMode GetRenderMode() const { return m_renderMode; }
+
 	static constexpr int MAX_TEXTURE_SLOTS = 5;
 
 private:
@@ -67,4 +72,5 @@ private:
 
 	MaterialData m_data;
 
+    RenderMode m_renderMode = RenderMode::Opaque;
 };

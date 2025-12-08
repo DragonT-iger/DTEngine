@@ -158,6 +158,20 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
     );
 }
 
+void DX11Renderer::SetBlendMode(BlendMode mode)
+{
+    float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+
+    if (mode == BlendMode::AlphaBlend)
+    {
+        m_context->OMSetBlendState(m_alphaBlendState.Get(), blendFactor, 0xffffffff);
+    }
+    else
+    {
+        m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+    }
+}
+
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
     assert(m_context && m_rtv);
