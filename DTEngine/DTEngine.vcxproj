@@ -194,6 +194,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMathHelper.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SerializationUtils.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex.cpp" />

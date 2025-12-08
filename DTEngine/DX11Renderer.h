@@ -49,11 +49,11 @@ public:
     void BeginUIRender();
     void EndUIRender();
 
-    // 텍스처 그리기 (Image 컴포넌트용)
     void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1));
 
-    // 글자 그리기 (Text 컴포넌트용)
     void DrawString(const std::wstring& text, const Vector2& position, const Vector4& color = Vector4(0, 0, 0, 1));
+
+    void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
 
 
@@ -153,13 +153,13 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];
 
-
     // State
     int   m_width = 0;
     int   m_height = 0;
     bool  m_vsync = false;
 
-
+    Matrix m_viewTM;
+    Matrix m_projTM;
 
     // UI 렌더링
     std::unique_ptr<DirectX::DX11::SpriteBatch>  m_spriteBatch;

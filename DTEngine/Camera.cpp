@@ -75,9 +75,9 @@ void Camera::SetThisCameraToMain()
     if (scene->GetMainCamera() == nullptr && this->GetName() != "EditorCamera55") {
         scene->SetMainCamera(this);
     }
-    else {
-        std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
-    }
+    //else {
+    //    std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
+    //}
 
 }
 

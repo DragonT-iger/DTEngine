@@ -1,8 +1,22 @@
 #pragma once
-#include <d3d11.h>
 #include <wrl.h>
 
 using Microsoft::WRL::ComPtr;
+
+struct RenderViewport
+{
+    float TopLeftX;
+    float TopLeftY;
+    float Width;
+    float Height;
+    float MinDepth;
+    float MaxDepth;
+};
+
+struct ID3D11Texture2D;
+struct ID3D11RenderTargetView;
+struct ID3D11ShaderResourceView;
+struct ID3D11DepthStencilView;
 
 class RenderTexture
 {
@@ -36,5 +50,5 @@ private:
     ComPtr<ID3D11Texture2D>          m_depthStencilTexture;
     ComPtr<ID3D11DepthStencilView>   m_dsv;
 
-    D3D11_VIEWPORT m_viewport = {};
+    RenderViewport m_viewport = {};
 };

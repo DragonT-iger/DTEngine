@@ -30,6 +30,7 @@
 #include "RenderTexture.h"
 #include "move.h"
 #include "Light.h"
+#include "Text.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -360,6 +361,8 @@ void Game::LifeCycle(float deltaTime)
 	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
 
 
+
+
 	//ImGuizmo::SetRect(
 	//	0, 0,
 	//	(float)DX11Renderer::Instance().GetWidth(), 
@@ -471,6 +474,9 @@ void Game::SetPlayState(bool isPlay)
 
 		scene->SetMainCamera(newMainCam);
 
+
+		
+
 	}
 
 	if (lastSelectedID != 0 && m_editorUI)
@@ -572,5 +578,18 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		material->Bind(worldTM, worldInvT_TM);
 		mesh->Bind();
 		mesh->Draw();
+	}
+
+	for (const auto& go : scene->GetGameObjects())
+	{
+		if (!go || !go->IsActiveInHierarchy()) continue;
+
+		if (Text* text = go->GetComponent<Text>())
+		{
+			if (text->IsActive())
+			{
+				text->Render();
+			}
+		}
 	}
 }

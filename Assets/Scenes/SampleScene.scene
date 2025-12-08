@@ -202,7 +202,9 @@
           },
           "m_editorFovY": 60.0,
           "m_farZ": 1000.0,
+          "m_isOrthographic": false,
           "m_nearZ": 0.5,
+          "m_orthographicSize": 5.0,
           "typeName": "Camera"
         }
       ],
@@ -249,17 +251,19 @@
           },
           "m_editorFovY": 60.0,
           "m_farZ": 1000.0,
+          "m_isOrthographic": false,
           "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
           "typeName": "Camera"
         },
         {
           "Active": true,
           "id": 405847514673205467,
           "m_moveSpeed": 10.0,
-          "m_pitch": 32.20058822631836,
+          "m_pitch": 28.80065155029297,
           "m_rotationSpeed": 0.10000000149011612,
           "m_turboScale": 3.0,
-          "m_yaw": -1108.61181640625,
+          "m_yaw": -1073.2108154296875,
           "typeName": "FreeCamera"
         }
       ],
@@ -269,21 +273,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": 32.20058822631836,
-          "y": -1108.61181640625,
+          "x": 28.80065155029297,
+          "y": -1073.2108154296875,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 7.85886287689209,
-          "y": 9.501914024353027,
-          "z": -14.830890655517578
+          "x": -0.725155234336853,
+          "y": 3.372345447540283,
+          "z": -6.091094970703125
         },
         "m_rotation": {
-          "w": -0.9309842586517334,
-          "x": -0.26871997117996216,
-          "y": 0.23740726709365845,
-          "z": -0.06852540373802185
+          "w": -0.9668822884559631,
+          "x": -0.248259037733078,
+          "y": -0.057351987808942795,
+          "z": 0.01472583506256342
         },
         "m_scale": {
           "x": 1.0,
@@ -2098,6 +2102,563 @@
           "x": -0.0,
           "y": 0.0,
           "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 10736932505785004776,
+      "name": "airplane02",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4715360025541760060,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.5722781419754028,
+          "y": 13.281707763671875,
+          "z": -12.738876342773438
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 11123396540851510778
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 17181993892028833468,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 7596435145358630318,
+      "name": "airplane_b",
+      "tag": "Untagged",
+      "transform": {
+        "id": 186165977893448591,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 11123396540851510778
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 5980739197133653045,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 1,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 5140037009563099148,
+      "name": "wing_poles",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1815145240032141150,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 9457747258358249227
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 16704481642266695628,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 2,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 13238084643986618712,
+      "name": "wings",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8901337764052435609,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 11123396540851510778
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 17368627427969926780,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 3,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 15264600360839656745,
+      "name": "elevator",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18067506898903033670,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 11123396540851510778
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 12080430843474988395,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 4,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 15210410095139193018,
+      "name": "landing_ge",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14593402222248134695,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.5992159843444824,
+              0.4015690088272095,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 9695552860153788676,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 5,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 7178196621831100161,
+      "name": "propeller",
+      "tag": "Untagged",
+      "transform": {
+        "id": 11797232972093154126,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {
+              "0": 11123396540851510778
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 11726228025061723069,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 6,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 17120501553145030736,
+      "name": "rudder",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3765565637993999481,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 16470755545180208881,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 7,
+          "m_modelID": 4267312905231149495,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 3625915663150580373,
+      "name": "wheels",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10139763545172375441,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 4715360025541760060,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17892441821045809046,
+          "m_color": {
+            "w": 1.0,
+            "x": 3.200000047683716,
+            "y": 3.0999999046325684,
+            "z": 0.0
+          },
+          "m_localOffset": {
+            "x": 40.400001525878906,
+            "y": -11.300000190734863
+          },
+          "m_text": "New 3D Text asdasd",
+          "typeName": "Text"
+        }
+      ],
+      "id": 2181378497606059647,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18057591101173381632,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "m_scale": {
           "x": 1.0,

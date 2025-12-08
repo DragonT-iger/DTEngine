@@ -622,8 +622,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 if (m_sceneCamera && comp->_GetOwner())
                 {
-                    Transform* targetTf = comp->_GetOwner()->GetTransform();
-                    Transform* camTf = m_sceneCamera->_GetOwner()->GetTransform();
+                    Transform* targetTf = comp->GetTransform();
+                    Transform* camTf = m_sceneCamera->GetTransform();
 
                     if (targetTf && camTf)
                     {
@@ -921,7 +921,88 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     HistoryManager::Instance().Do(std::move(cmd));
                 }
             }
+            // wchar_t
+            else if (type == typeid(std::wstring))
+            {
+                ImGui::PushID(data);
 
+                std::wstring temp = *static_cast<std::wstring*>(data);
+
+                std::string strUtf8;
+                if (!temp.empty())
+                {
+                    int size_needed = WideCharToMultiByte(CP_UTF8, 0, &temp[0], (int)temp.size(), NULL, 0, NULL, NULL);
+                    strUtf8.resize(size_needed);
+                    WideCharToMultiByte(CP_UTF8, 0, &temp[0], (int)temp.size(), &strUtf8[0], size_needed, NULL, NULL);
+                }
+
+                char buffer[256];
+                strncpy_s(buffer, strUtf8.c_str(), sizeof(buffer) - 1);
+                buffer[sizeof(buffer) - 1] = '\0';
+
+                if (ImGui::InputText(name, buffer, sizeof(buffer)))
+                {
+                    std::string newUtf8 = buffer;
+                    std::wstring wNew;
+                    if (!newUtf8.empty())
+                    {
+                        int wsize_needed = MultiByteToWideChar(CP_UTF8, 0, &newUtf8[0], (int)newUtf8.size(), NULL, 0);
+                        wNew.resize(wsize_needed);
+                        MultiByteToWideChar(CP_UTF8, 0, &newUtf8[0], (int)newUtf8.size(), &wNew[0], wsize_needed);
+                    }
+
+                    temp = wNew;
+                    prop.m_setter(comp, &temp);
+                }
+
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<std::wstring*>(data);
+                }
+
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    std::wstring oldVal = std::any_cast<std::wstring>(m_dragStartValue);
+
+                    std::string newUtf8 = buffer;
+                    std::wstring newVal;
+                    if (!newUtf8.empty())
+                    {
+                        int wsize_needed = MultiByteToWideChar(CP_UTF8, 0, &newUtf8[0], (int)newUtf8.size(), NULL, 0);
+                        newVal.resize(wsize_needed);
+                        MultiByteToWideChar(CP_UTF8, 0, &newUtf8[0], (int)newUtf8.size(), &newVal[0], wsize_needed);
+                    }
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<std::wstring>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+                ImGui::PopID();
+            }   
+            // Vector3
+            else if (type == typeid(Vector2))
+            {
+                Vector2 temp = *static_cast<Vector2*>(data);
+                if (ImGui::DragFloat2(name, &temp.x, 0.1f))
+                {
+                    prop.m_setter(comp, &temp);
+                }
+                if (ImGui::IsItemActivated())
+                {
+                    m_dragStartValue = *static_cast<Vector2*>(data);
+                }
+                if (ImGui::IsItemDeactivatedAfterEdit())
+                {
+                    Vector2 oldVal = std::any_cast<Vector2>(m_dragStartValue);
+                    Vector2 newVal = temp;
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<Vector2>>(
+                        comp, prop.m_setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+            }
 
             // Vector3
             else if (type == typeid(Vector3))
@@ -1030,7 +1111,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
             
 
             else {
-                std::cout << "타입 미구현: " << type.name() << std::endl;
+                std::cout << "type not Registered: " << type.name() << std::endl;
             }
         }
 
@@ -1489,8 +1570,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
         }
     }
-
-    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp")
+    else if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp")
     {
         Texture* tex = ResourceManager::Instance().Load<Texture>(path);
         if (tex)
@@ -1523,10 +1603,8 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
             ImGui::Separator();
             //ImGui::Text("Preview");
-            // ... (이미지 프리뷰 코드) ...
         }
     }
-
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
@@ -1613,6 +1691,8 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     }
 
     ImGui::Image((void*)rt->GetSRV(), size);
+
+	//DX11Renderer::Instance().DrawString(10, 10, "Game Viewport", 1.0f, Vector4(1, 1, 1, 1));
 
     ImGui::End();
     ImGui::PopStyleVar();

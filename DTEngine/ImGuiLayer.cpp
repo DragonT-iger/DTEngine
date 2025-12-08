@@ -9,6 +9,7 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_internal.h>
+#include "Text.h"
 
 ImGuiLayer::ImGuiLayer() = default;
 ImGuiLayer::~ImGuiLayer() { Shutdown(); }
@@ -81,6 +82,8 @@ void ImGuiLayer::NewFrame()
     ImGui::DockSpaceOverViewport(dockspace_id, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
 }
+
+
 
 void ImGuiLayer::Render()
 {

@@ -44,6 +44,32 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
     else if (type == typeid(bool)) {
         writer.Write(name, *static_cast<bool*>(data));
 	}
+    else if(type == typeid(double))
+    {
+        writer.Write(name, *static_cast<double*>(data));
+	}
+    else if(type == typeid(wchar_t))
+    {
+        writer.Write(name, *static_cast<wchar_t*>(data));
+	}
+    else if (type == typeid(std::wstring))
+    {
+        std::wstring temp = *static_cast<std::wstring*>(data);
+
+        if (temp.empty())
+        {
+            writer.Write(name, std::string(""));
+        }
+        else
+        {
+            int size_needed = WideCharToMultiByte(CP_UTF8, 0, &temp[0], (int)temp.size(), NULL, 0, NULL, NULL);
+
+            std::string strToSave(size_needed, 0);
+            WideCharToMultiByte(CP_UTF8, 0, &temp[0], (int)temp.size(), &strToSave[0], size_needed, NULL, NULL);
+
+            writer.Write(name, strToSave);
+        }
+    }
 
     
 

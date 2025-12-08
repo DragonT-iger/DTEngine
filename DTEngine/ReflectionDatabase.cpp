@@ -9,7 +9,7 @@ void ReflectionDatabase::RegisterDTGENERATED_BODY(const char* className)
 {
 	m_classes.emplace(className, ClassInfo{ className });
 
-	std::cout << "Registered class: " << className << std::endl;
+	//std::cout << "Registered class: " << className << std::endl;
 }
 
 void ReflectionDatabase::RegisterDTPROPERTY(const char* className, const char* propName,

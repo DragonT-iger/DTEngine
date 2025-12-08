@@ -34,6 +34,21 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
+    else if (type == typeid(std::wstring))
+    {
+        std::string utf8Str = reader.ReadString(prop.m_name.c_str(), "");
+
+        if (!utf8Str.empty())
+        {
+            int size_needed = MultiByteToWideChar(CP_UTF8, 0, &utf8Str[0], (int)utf8Str.size(), NULL, 0);
+
+            std::wstring wStr;
+            wStr.resize(size_needed);
+            MultiByteToWideChar(CP_UTF8, 0, &utf8Str[0], (int)utf8Str.size(), &wStr[0], size_needed);
+
+            prop.m_setter(base, &wStr);
+        }
+    }
     else
     {
         const ClassInfo* structInfo = ReflectionDatabase::Instance().GetClassInfomation(type.name());

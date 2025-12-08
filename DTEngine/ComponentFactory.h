@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Singleton.h"
 #include <string>
 #include <unordered_map>
@@ -20,7 +20,7 @@ class ComponentFactory : public Singleton<ComponentFactory>
 public:
     void Register(const std::string& typeName, ComponentCreator creator) {
         m_creators[typeName] = creator;
-        std::cout << typeName << " register ComponentFactory" << std::endl;
+        //std::cout << typeName << " register ComponentFactory" << std::endl;
     }
 
     std::unique_ptr<Component> Create(const std::string& typeName) {

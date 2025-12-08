@@ -28,6 +28,7 @@ public:
     void Write(const char* name, bool v);
     void Write(const char* name, float v);
     void Write(const char* name, int v);
+	void Write(const char* name, double v);
     void Write(const char* name, uint64_t v);
     void Write(const char* name, float x, float y);
     void Write(const char* name, float x, float y, float z);

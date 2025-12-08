@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RenderTexture.h"
+#include <d3d11.h>
 #include "DX11Renderer.h" 
 
 RenderTexture::RenderTexture() = default;
@@ -30,6 +31,7 @@ bool RenderTexture::Initialize(int width, int height)
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.Format = textureDesc.Format;
     rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	//rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS; // AA
 
     if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, m_rtv.GetAddressOf())))
         return false;
@@ -88,7 +90,7 @@ void RenderTexture::Bind()
 
     ID3D11RenderTargetView* rtv = m_rtv.Get();
     context->OMSetRenderTargets(1, &rtv, m_dsv.Get());
-    context->RSSetViewports(1, &m_viewport);
+    context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_viewport));
 }
 
 void RenderTexture::Unbind()

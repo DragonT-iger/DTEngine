@@ -67,10 +67,10 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_spriteBatch = std::make_unique<DirectX::DX11::SpriteBatch>(m_context.Get());
 
     try {
-        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/arial.spritefont");
+        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/The Jamsil 2 Light.spritefont");
     }
     catch (...) {
-        std::cout << "[Warning] Failed to load font: Assets/Fonts/arial.spritefont\n";
+        std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
     return true;
@@ -155,6 +155,42 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
     );
 }
 
+void DX11Renderer::DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix)
+{
+    if (!m_spriteBatch || !m_font) return;
+
+    Matrix wvp = worldMatrix * m_viewTM * m_projTM;
+
+    m_spriteBatch->Begin(
+        DirectX::DX11::SpriteSortMode_Deferred,
+        m_states->NonPremultiplied(), // BlendState
+        nullptr,                      // SamplerState        (여기가 nullptr이거나 Sampler여야 함)
+        m_states->DepthRead(),        // DepthStencilState   (깊이 읽기 전용)
+        m_states->CullNone(),         // RasterizerState     (양면 렌더링)
+        nullptr,                      // CustomShader
+        wvp                           // Transform Matrix
+    );
+
+    float fontScale = 0.02f;
+
+    DirectX::SimpleMath::Vector2 textSize = m_font->MeasureString(text.c_str());
+    DirectX::SimpleMath::Vector2 origin = textSize / 2.f;
+
+    m_font->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        DirectX::SimpleMath::Vector2(localPos.x, localPos.y),
+        color,
+        0.f,
+        origin,
+        fontScale
+    );
+
+    m_spriteBatch->End();
+
+    ResetRenderState();
+}
+
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
     assert(m_context && m_rtv);
@@ -177,10 +213,13 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.Height = static_cast<float>(m_height);
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
+
+    BeginUIRender();
 }
 
 void DX11Renderer::EndFrame()
 {
+    EndUIRender();
 
     //std::cout << m_width << " " << m_height << std::endl;
     // 필요 시 파이프라인 언바인드/커맨드 종료 등
@@ -215,25 +254,10 @@ void DX11Renderer::Destroy()
 
 void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
-    if (rtv == nullptr)
-    {
-        ID3D11RenderTargetView* rtvs[1] = { m_rtv.Get() };
-        m_context->OMSetRenderTargets(1, rtvs, m_dsv.Get());
+	assert(rtv != nullptr && "RTV cannot be null");
 
-        D3D11_VIEWPORT vp{};
-        vp.Width = static_cast<float>(m_width);
-        vp.Height = static_cast<float>(m_height);
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        m_context->RSSetViewports(1, &vp);
-    }
-    else
-    {
-        ID3D11RenderTargetView* rtvs[1] = { rtv };
-        m_context->OMSetRenderTargets(1, rtvs, dsv);
-    }
+    ID3D11RenderTargetView* rtvs[1] = { rtv };
+    m_context->OMSetRenderTargets(1, rtvs, dsv);
 }
 
 HWND DX11Renderer::GetHwnd()

@@ -39,6 +39,7 @@ void JsonWriter::Write(const char* name, const char* v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, bool v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, float v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, int v) { Current()[name] = v; }
+void JsonWriter::Write(const char* name, double v) { Current()[name] = v; }
 void JsonWriter::Write(const char* name, uint64_t v) { Current()[name] = v; }
 
 void JsonWriter::Write(const char* name, float x, float y)
@@ -189,7 +190,7 @@ std::optional<JsonReader> JsonReader::LoadJson(const std::string& fullPath)
 {
     std::ifstream ifs(fullPath, std::ios::binary);
     
-    std::cout << fullPath << std::endl;
+    //std::cout << fullPath << std::endl;
 
     if (!ifs) {
 		std::cout << "Failed to open JSON file: " << fullPath << std::endl;
