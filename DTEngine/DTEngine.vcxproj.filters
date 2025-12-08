@@ -417,5 +417,11 @@
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\UI_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -16,11 +16,11 @@ Image::Image() = default;
 
 void Image::Render()
 {
-    if (m_texture != nullptr)
+    if (m_texture != nullptr && this->IsActive())
     {
 		Transform* tf = GetTransform();
 
 		Vector2 position = Vector2(tf->GetPosition().x, -tf->GetPosition().y);
-        DX11Renderer::Instance().DrawUI(m_texture, position, m_color);
+        //DX11Renderer::Instance().DrawUI(m_texture, position, m_color);
     }
 }

@@ -136,12 +136,12 @@ void DX11Renderer::EndUIRender()
 }
 
 
-void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector4& color)
-{
-    if (!m_spriteBatch || !texture) return;
-
-    m_spriteBatch->Draw(texture->GetSRV(), position, color);
-}
+//void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector4& color)
+//{
+//    if (!m_spriteBatch || !texture) return;
+//
+//    m_spriteBatch->Draw(texture->GetSRV(), position, color);
+//}
 
 void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
 {
@@ -336,6 +336,19 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     rsDesc.DepthClipEnable = TRUE;
 
     hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    D3D11_BLEND_DESC blendDesc = {};
+    blendDesc.RenderTarget[0].BlendEnable = TRUE;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    hr = dev->CreateBlendState(&blendDesc, m_alphaBlendState.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
 
