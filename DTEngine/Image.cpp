@@ -9,7 +9,7 @@
 
 // 리플렉션: 텍스처와 컬러를 에디터에 노출
 BEGINPROPERTY(Image)
-DTPROPERTY_ACCESSOR(Image, m_textureID, GetTexture, SetTexture)
+DTPROPERTY_ACCESSOR(Image, m_textureID, GetTextureID, SetTextureID)
 DTPROPERTY_ACCESSOR(Image, m_color, GetColor, SetColor)
 ENDPROPERTY()
 
@@ -86,9 +86,25 @@ void Image::SetColor(const Vector4& color)
     }
 }
 
-Vector4 Image::GetColor() const
+const Vector4& Image::GetColor() const
 {
     return m_color;
+}
+
+void Image::SetTextureID(uint64_t id)
+{
+    m_textureID = id; 
+
+    if (id != 0)
+    {
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+        Texture* tex = ResourceManager::Instance().Load<Texture>(path);
+        SetTexture(tex); 
+    }
+    else
+    {
+        SetTexture(nullptr);
+    }
 }
 
 void Image::SetNativeSize()

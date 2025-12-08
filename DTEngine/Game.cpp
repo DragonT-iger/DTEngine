@@ -552,57 +552,57 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 	const Matrix& projTM = camera->GetProjectionMatrix();
 	DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
 
+	std::vector<GameObject*> opaqueQueue;
+	std::vector<GameObject*> transparentQueue;
+
 	for (const auto& go : scene->GetGameObjects())
 	{
 		if (!go || !go->IsActiveInHierarchy()) continue;
+		MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+		if (!mr || !mr->IsActive()) continue;
 
-		MeshRenderer* meshRenderer = go->GetComponent<MeshRenderer>();
-		Transform* transform = go->GetTransform();
+		Material* mat = mr->GetSharedMaterial();
+		if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+		if (!mat) continue;
 
-		if (!meshRenderer || !transform || !meshRenderer->IsActive()) continue;
-
-		//Mesh* mesh = ResourceManager::Instance().Load<Mesh>("Models/Dwarf.x");
-		//Material* material = ResourceManager::Instance().Load<Material>("Shaders/Default");
-
-		Mesh* mesh = meshRenderer->GetMesh();
-		Material* material = meshRenderer->GetSharedMaterial();
-
-		if (material == nullptr) {
-			material = ResourceManager::Instance().Load<Material>("Materials/Error");
-			// 잠재적으로 버그 발생 가능 왜냐면 머터리얼을 에디터에서 수정한다고 리소스 매니저 캐시는 안바뀌거든.
-			// 즉 파일과 메모리는 데이터가 다르다는 것
+		if (mat->GetRenderMode() == RenderMode::Transparent)
+		{
+			transparentQueue.push_back(go.get());
 		}
-		//Material* material = ResourceManager::Instance().Load<Material>("Materials/Default");
+		else
+		{
+			opaqueQueue.push_back(go.get());
+		}
+	}
 
-		if (!mesh || !material) continue;
+	auto DrawObject = [&](GameObject* go) {
+		MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+		Transform* tf = go->GetTransform();
 
-		const Matrix& worldTM = transform->GetWorldMatrix();
-		Matrix worldInvT_TM = transform->GetWorldInverseTransposeMatrix();
+		Material* mat = mr->IsMaterialInstanced() ? mr->GetMaterial() : mr->GetSharedMaterial();
+		if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
 
-		material->Bind(worldTM, worldInvT_TM);
+		Mesh* mesh = mr->GetMesh();
+		if (!mesh || !mat) return;
+
+		const Matrix& worldTM = tf->GetWorldMatrix();
+		Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+		mat->Bind(worldTM, worldInvT); 
 		mesh->Bind();
 		mesh->Draw();
-	}
-	
+		};
+
 	DX11Renderer::Instance().BeginUIRender();
 
-	for (const auto& go : scene->GetGameObjects())
+	for (auto* go : opaqueQueue)
 	{
-		if (!go || !go->IsActiveInHierarchy()) continue;
+		DrawObject(go);
+	}
 
-		if (Text* text = go->GetComponent<Text>())
-		{
-			if (text->IsActive())
-			{
-				text->Render();
-			}
-		}
-
-		auto imageUI = go->GetComponent<Image>();
-		if (imageUI)
-		{
-			imageUI->Render();
-		}
+	for (auto* go : transparentQueue)
+	{
+		DrawObject(go);
 	}
 
 	DX11Renderer::Instance().EndUIRender();
