@@ -32,6 +32,8 @@
 #include "Light.h"
 //#include "Text3D.h"
 #include "Text.h"
+#include "Image.h"
+
 
 
 Game::Game() = default;
@@ -581,6 +583,8 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		mesh->Bind();
 		mesh->Draw();
 	}
+	
+	DX11Renderer::Instance().BeginUIRender();
 
 	for (const auto& go : scene->GetGameObjects())
 	{
@@ -593,5 +597,13 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 				text->Render();
 			}
 		}
+
+		auto imageUI = go->GetComponent<Image>();
+		if (imageUI)
+		{
+			imageUI->Render();
+		}
 	}
+
+	DX11Renderer::Instance().EndUIRender();
 }

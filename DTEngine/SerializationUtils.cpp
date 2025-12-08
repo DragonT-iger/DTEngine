@@ -2,6 +2,7 @@
 #include "SerializationUtils.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
+#include "Texture.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -34,6 +35,12 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
+    else if(type == typeid(Texture*)){
+        uint64_t id = reader.ReadUInt64(name);
+        fixupList.push_back({ base, prop, id });
+	}
+
+
     else if (type == typeid(std::wstring))
     {
         std::string utf8Str = reader.ReadString(prop.m_name.c_str(), "");

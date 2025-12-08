@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "Behaviour.h"
+#include "Texture.h"
 
 void Component::Destroy(GameObject* gameobject) {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
@@ -80,6 +81,11 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
         uint64_t id = (ptr) ? ptr->_GetID() : 0;
         writer.Write(name, id);
     }
+    else if(type == typeid(Texture*)){
+        Texture* tex = *static_cast<Texture**>(data);
+        uint64_t id = (tex) ? tex->GetMeta().guid : 0;
+        writer.Write(name, id);
+	}
 
 
 

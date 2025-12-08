@@ -167,6 +167,7 @@
     <ClInclude Include="HistoryManager.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="ImGuiLayer.h" />
     <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="InputManager.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="IDManager.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImGuiLayer.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="InputManager.cpp" />

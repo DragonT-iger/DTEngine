@@ -1108,6 +1108,71 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
 
+            // Texture*
+            else if (type == typeid(Texture*))
+            {
+                // 데이터 포인터를 Texture**로 캐스팅하여 현재 값 가져오기
+                Texture** texPtr = static_cast<Texture**>(data);
+                Texture* currentTex = *texPtr;
+
+                // 텍스처 이름 또는 "None" 표시용 문자열 생성
+                std::string displayStr = "None";
+                if (currentTex)
+                {
+                    uint64_t id = currentTex->GetMeta().guid;
+                    std::string path = AssetDatabase::Instance().GetPathFromID(id);
+                    if (!path.empty())
+                        displayStr = std::filesystem::path(path).filename().string();
+                    else
+                        displayStr = "Loaded Texture";
+                }
+
+                float width = ImGui::CalcItemWidth();
+
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    if (currentTex)
+                    {
+                        uint64_t id = currentTex->GetMeta().guid;
+                        std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
+                        if (!pathStr.empty())
+                        {
+                            m_currentProjectDirectory = std::filesystem::path(pathStr).parent_path();
+                        }
+                    }
+                }
+
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::string ext = std::filesystem::path(droppedPath).extension().string();
+                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+                        {
+                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+                            if (newTex)
+                            {
+                                Texture* oldVal = currentTex;
+
+                                prop.m_setter(comp, &newTex);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<Texture*>>(
+                                    comp, prop.m_setter, oldVal, newTex
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
+                }
+
             
 
             else {

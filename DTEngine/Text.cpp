@@ -29,11 +29,5 @@ void Text::SetText(const std::wstring& text)
 void Text::Render()
 {
     if (m_text.empty()) return;
-
-
-    DX11Renderer& renderer = DX11Renderer::Instance();
-
-    renderer.BeginUIRender();
-    renderer.DrawString(m_text, m_localOffset, m_fontSize, m_color);
-    renderer.EndUIRender();
+    DX11Renderer::Instance().DrawString(m_text, m_localOffset, m_fontSize, m_color);
 }
