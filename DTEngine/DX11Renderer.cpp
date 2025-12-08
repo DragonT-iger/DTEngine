@@ -11,6 +11,11 @@
 #include <stdexcept>
 #include <iostream>
 
+#include <DirectXTK/SpriteBatch.h>
+#include <DirectXTK/SpriteFont.h>
+#include <DirectXTK/CommonStates.h>
+
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 
@@ -56,6 +61,18 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     CreateBackbuffers(width, height);
     CreateSamplers();
+
+
+    m_states = std::make_unique<DirectX::DX11::CommonStates>(m_device.Get());
+    m_spriteBatch = std::make_unique<DirectX::DX11::SpriteBatch>(m_context.Get());
+
+    try {
+        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/arial.spritefont");
+    }
+    catch (...) {
+        std::cout << "[Warning] Failed to load font: Assets/Fonts/arial.spritefont\n";
+    }
+
     return true;
 }
 
@@ -87,6 +104,55 @@ void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projec
 
     m_context->VSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
     m_context->PSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
+}
+
+void DX11Renderer::BeginUIRender()
+{
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->Begin(
+            DirectX::DX11::SpriteSortMode_Deferred,
+            m_states->NonPremultiplied(),
+            nullptr,                                    // SamplerState
+            nullptr,                                    // DepthStencilState
+            nullptr,                                    // RasterizerState
+            nullptr,                                    // setCustomShaders
+            DirectX::XMMatrixIdentity() 
+        );
+    }
+}
+
+void DX11Renderer::EndUIRender()
+{
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->End();
+    }
+
+    ResetRenderState();
+}
+
+
+void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector4& color)
+{
+    if (!m_spriteBatch || !texture) return;
+
+    m_spriteBatch->Draw(texture->GetSRV(), position, color);
+}
+
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const Vector4& color)
+{
+    if (!m_spriteBatch || !m_font) return;
+
+    m_font->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        0.0f,                    
+        DirectX::XMFLOAT2(0, 0), 
+        1.0f                     
+    );
 }
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
@@ -139,6 +205,11 @@ void DX11Renderer::Destroy()
     m_swapchain.Reset();
     m_context.Reset();
     m_device.Reset();
+
+    m_spriteBatch.reset();
+    m_font.reset();
+    m_states.reset();
+
     m_hwnd = nullptr;
 }
 
@@ -219,11 +290,10 @@ void DX11Renderer::ResetRenderState()
 {
     if (m_context)
     {
-        m_context->OMSetDepthStencilState(m_defaultDepthStencilState.Get(), 0);
-        m_context->RSSetState(m_defaultRasterizerState.Get());
-        //// 블렌드 스테이트도 ImGui가 변경하므로 필요하다면 기본값(Null)으로 초기화
-        //float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
-        //m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+        m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+        m_context->OMSetDepthStencilState(nullptr, 0);
+        m_context->RSSetState(nullptr);
     }
 }
 

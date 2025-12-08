@@ -9,10 +9,12 @@
 
 BEGINPROPERTY(Camera)
 
-DTPROPERTY_ACCESSOR(Camera, m_editorFovY , GetEditorFovY , SetEditorFovY)
-DTPROPERTY_ACCESSOR(Camera, m_nearZ, GetNearZ , SetNearZ)
-DTPROPERTY_ACCESSOR(Camera, m_farZ , GetFarZ , SetFarZ)
+DTPROPERTY_ACCESSOR(Camera, m_editorFovY, GetEditorFovY, SetEditorFovY)
+DTPROPERTY_ACCESSOR(Camera, m_nearZ, GetNearZ, SetNearZ)
+DTPROPERTY_ACCESSOR(Camera, m_farZ, GetFarZ, SetFarZ)
 DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
+DTPROPERTY_ACCESSOR(Camera, m_isOrthographic, IsOrthographic, SetIsOrthographic)
+DTPROPERTY_ACCESSOR(Camera, m_orthographicSize, GetOrthographicSize, SetOrthographicSize)
 
 ENDPROPERTY()
 
@@ -31,7 +33,12 @@ void Camera::Awake()
     m_editorFovY = SimpleMathHelper::Rad2Deg(m_fovY);
 
     UpdateViewMatrix();
-    UpdateProjectionMatrix();
+    if (m_isOrthographic) {
+        SetProjectionOrthographic();
+    }
+    else {
+        UpdateProjectionMatrix();
+    }
 
 }
 
@@ -41,19 +48,24 @@ void Camera::LateUpdate(float deltaTime)
     UpdateProjectionMatrix();
 }
 
-void Camera::SetProjectionPerspective(float fovY, float aspectRatio, float nearZ, float farZ)
+void Camera::SetProjectionPerspective()
 {
-    m_fovY = fovY;
-    m_nearZ = nearZ;
-    m_farZ = farZ;
+
+    if (m_nearZ < 0.01f) m_nearZ = 0.01f;
+    if (m_farZ < m_nearZ + 0.1f) m_farZ = m_nearZ + 0.1f;
     m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
 }
 
-void Camera::SetProjectionOrthographic(float viewWidth, float viewHeight, float nearZ, float farZ)
+void Camera::SetProjectionOrthographic()
 {
     //m_projection = Matrix::CreateOrthographic(viewWidth, viewHeight, nearZ, farZ); 이것도 RH임
+    if (m_orthographicSize <= 0.01f) {
+        m_orthographicSize = 0.01f;
+    }
 
-	m_projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, nearZ, farZ);
+    float orthoHeight = 10 * m_orthographicSize;    
+
+    m_projection = DirectX::XMMatrixOrthographicLH(orthoHeight * m_aspectRatio, orthoHeight, m_nearZ, m_farZ);
 }
 
 void Camera::SetThisCameraToMain()
@@ -101,20 +113,16 @@ void Camera::UpdateProjectionMatrix()
     // 이건 전체 화면의 해상비임 
 
 
-    if (m_nearZ < 0.01f)
-    {
-        m_nearZ = 0.01f;
-    }
-    if (m_farZ < m_nearZ + 0.1f)
-    {
-        m_farZ = m_nearZ + 0.1f;
-    }
 
     // 얘없음  0보다 작은거 들어가서 튕김
 
 
-    m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovY, m_aspectRatio, m_nearZ, m_farZ);
-
+    if(m_isOrthographic) {
+        SetProjectionOrthographic();
+	}
+    else {
+        SetProjectionPerspective();
+    }
 
     m_dirtyProj = false;
    

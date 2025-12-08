@@ -3,11 +3,12 @@
 #include <cstdint>
 #include <wrl/client.h> 
 #include "Singleton.h"
-#include <DirectXTK/SimpleMath.h>
+#include "SimpleMathHelper.h"
 
+#include <memory>
+#include <vector>
 #include "Texture.h"
 
-using Matrix = DirectX::SimpleMath::Matrix;
 
 
 struct HWND__;
@@ -25,6 +26,15 @@ struct ID3D11DepthStencilState;
 struct ID3D11RasterizerState;
 struct ID3D11SamplerState;
 
+namespace DirectX {
+	inline namespace DX11 {
+        class SpriteBatch;
+        class SpriteFont;
+        class CommonStates;
+    }
+}
+
+
 class DX11Renderer : public Singleton<DX11Renderer>
 {
 public:
@@ -35,6 +45,17 @@ public:
     void Resize(int width, int height);
 
     void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);
+
+    void BeginUIRender();
+    void EndUIRender();
+
+    // 텍스처 그리기 (Image 컴포넌트용)
+    void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1));
+
+    // 글자 그리기 (Text 컴포넌트용)
+    void DrawString(const std::wstring& text, const Vector2& position, const Vector4& color = Vector4(0, 0, 0, 1));
+
+
 
     void BeginFrame(const float clearColor[4]);
     void EndFrame();
@@ -97,8 +118,9 @@ private:
 
 	constexpr static int MAX_LIGHTS = 4;
 
+
     __declspec(align(16))
-        struct CBuffer_GlobalLight
+    struct CBuffer_GlobalLight
     {
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
@@ -136,5 +158,12 @@ private:
     int   m_width = 0;
     int   m_height = 0;
     bool  m_vsync = false;
+
+
+
+    // UI 렌더링
+    std::unique_ptr<DirectX::DX11::SpriteBatch>  m_spriteBatch;
+    std::unique_ptr<DirectX::DX11::SpriteFont>   m_font;
+    std::unique_ptr<DirectX::DX11::CommonStates> m_states;
 
 };

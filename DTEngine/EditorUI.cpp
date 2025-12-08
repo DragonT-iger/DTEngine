@@ -859,7 +859,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         }
                         else if (propCheck.find("texture") != std::string::npos || propCheck.find("image") != std::string::npos)
                         {
-                            if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga") isFormatValid = true;
+                            if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp") isFormatValid = true;
                         }
                         else if (propCheck.find("shader") != std::string::npos)
                         {
@@ -1224,7 +1224,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                         std::string ext = std::filesystem::path(droppedPath).extension().string();
                                         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-                                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+                                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp")
                                         {
                                             Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
                                             if (newTex)
@@ -1462,7 +1462,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                         std::string droppedExt = fs::path(droppedPath).extension().string();
                         std::transform(droppedExt.begin(), droppedExt.end(), droppedExt.begin(), ::tolower);
 
-                        if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds" || droppedExt == ".tga")
+                        if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds" || droppedExt == ".tga" || droppedExt == ".bmp")
                         {
                             Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
                             if (newTex)
@@ -1490,7 +1490,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
         }
     }
 
-    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
+    if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp")
     {
         Texture* tex = ResourceManager::Instance().Load<Texture>(path);
         if (tex)

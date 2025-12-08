@@ -2,7 +2,7 @@
 #include <string>
 #include <array>
 #include <vector>
-#include <nlohmann/json_fwd.hpp>
+#include "../ThirdParty/nlohmann/json_fwd.hpp"
 #include <unordered_map>
 #include <optional>
 

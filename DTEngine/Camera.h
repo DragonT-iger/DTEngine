@@ -13,8 +13,8 @@ public:
     void Awake() override;
     void LateUpdate(float deltaTime) override;
 
-    void SetProjectionPerspective(float fovY, float aspectRatio, float nearZ, float farZ);
-    void SetProjectionOrthographic(float viewWidth, float viewHeight, float nearZ, float farZ);
+    void SetProjectionPerspective();
+    void SetProjectionOrthographic();
 
     const Matrix& GetViewMatrix() const { return m_view; }
     const Matrix& GetProjectionMatrix() const { return m_projection; }
@@ -44,6 +44,12 @@ public:
     void SetViewDirty() { m_dirtyView = true; }
     void SetAspectRatio(float ratio) { m_aspectRatio = ratio; m_dirtyProj = true; }
 
+	const bool& IsOrthographic() const { return m_isOrthographic; }
+	void SetIsOrthographic(bool isOrtho) { m_isOrthographic = isOrtho; m_dirtyProj = true; }
+
+	const float& GetOrthographicSize() const { return m_orthographicSize; }
+	void SetOrthographicSize(float size) { m_orthographicSize = size; m_dirtyProj = true; }
+
 
 private:
     void UpdateViewMatrix();
@@ -62,6 +68,9 @@ private:
 
     bool m_dirtyView = true;
     bool m_dirtyProj = true;
+
+	bool m_isOrthographic = false;
+    float m_orthographicSize = 5.0f;
 
     Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
 
