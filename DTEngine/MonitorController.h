@@ -20,4 +20,5 @@ public:
 private:
     std::unique_ptr<RenderTexture> m_renderTexture = nullptr;
     Camera* m_sourceCamera = nullptr;
+    int materialSlot = 0;
 };

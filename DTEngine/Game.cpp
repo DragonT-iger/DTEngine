@@ -653,6 +653,10 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool ren
 	if (renderUI) {
 		DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
 
+		std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
+			return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
+		});
+
 		for (auto* go : uiQueue)
 		{
 			DrawObject(go);

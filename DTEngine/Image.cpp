@@ -11,6 +11,7 @@
 BEGINPROPERTY(Image)
 DTPROPERTY_ACCESSOR(Image, m_textureID, GetTextureID, SetTextureID)
 DTPROPERTY_ACCESSOR(Image, m_color, GetColor, SetColor)
+DTPROPERTY_ACCESSOR(Image, m_orderInLayer, GetOrderInLayer, SetOrderInLayer)
 ENDPROPERTY()
 
 void Image::Awake()

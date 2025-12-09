@@ -65,6 +65,18 @@ void GameObject::Awake() {
     m_isIterating = false;
     FlushPending();
     m_awakeCalled = true;
+
+    if (m_transform)
+    {
+        const auto& children = m_transform->GetChildren();
+        for (Transform* childTf : children)
+        {
+            if (childTf && childTf->_GetOwner())
+            {
+                childTf->_GetOwner()->Awake();
+            }
+        }
+    }
 }
 
 void GameObject::Start() {
@@ -77,6 +89,18 @@ void GameObject::Start() {
     m_isIterating = false;
     FlushPending();
     m_startCalled = true;
+
+    if (m_transform)
+    {
+        const auto& children = m_transform->GetChildren();
+        for (Transform* childTf : children)
+        {
+            if (childTf && childTf->_GetOwner())
+            {
+                childTf->_GetOwner()->Start();
+            }
+        }
+    }
 }
 
 void GameObject::Update(float deltaTime) {
