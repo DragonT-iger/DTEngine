@@ -76,7 +76,7 @@ void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
     {
         id = ReadMetaFile(metaPath);
 
-		//std::cout << "Loaded .meta for " << normalizedAssetPath << " with ID: " << id << std::endl;
+		std::cout << "Loaded .meta for " << normalizedAssetPath << " with ID: " << id << std::endl;
     }
     else
     {

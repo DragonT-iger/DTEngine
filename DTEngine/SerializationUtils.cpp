@@ -35,7 +35,7 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
-    else if(type == typeid(Texture*)){
+    else if (type == typeid(Texture*)) {
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
 	}
@@ -72,6 +72,9 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
                 }
                 reader.EndObject();
             }
+        }
+        else {
+			std::cout << "Warning: Unknown property type during deserialization: " << type.name() << std::endl;
         }
     }
 }
