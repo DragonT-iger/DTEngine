@@ -19,24 +19,43 @@ MonitorController::~MonitorController() = default;
 
 void MonitorController::Awake()
 {
-    m_renderTexture = std::make_unique<RenderTexture>(); // 귀찮아서 awake만 초기화해줬음 에디터에선 그니까 play stop 한번 해야 초기화 됨 
-    m_renderTexture->Initialize(256, 256);
-
-    MeshRenderer* renderer = GetComponent<MeshRenderer>();
-    if (renderer)
+    if (m_sourceCamera)
     {
-        renderer->GetMaterial()->SetTexture(materialSlot, m_renderTexture.get());
-    }
-    if (m_sourceCamera) {
-        m_sourceCamera->SetTargetTexture(m_renderTexture.get());
+        SetSourceCamera(m_sourceCamera);
     }
 }
 
 void MonitorController::SetSourceCamera(Camera* cam)
 {
+    m_sourceCamera = cam;
+
     if (cam == nullptr) {
-        m_sourceCamera = nullptr;
         return;
     }
-    m_sourceCamera = cam; cam->SetTargetTexture(m_renderTexture.get()); 
+
+    MeshRenderer* renderer = GetComponent<MeshRenderer>();
+    RenderTexture* textureToUse = nullptr;
+
+    if (cam->GetTargetTexture() != nullptr)
+    {
+        textureToUse = cam->GetTargetTexture();
+
+    }
+    else
+    {
+        if (m_renderTexture == nullptr)
+        {
+            m_renderTexture = std::make_unique<RenderTexture>();
+            m_renderTexture->Initialize(256, 256);
+        }
+
+        textureToUse = m_renderTexture.get();
+
+        cam->SetTargetTexture(textureToUse);
+    }
+
+    if (renderer && textureToUse)
+    {
+        renderer->GetMaterial()->SetTexture(materialSlot, textureToUse);
+    }
 }
