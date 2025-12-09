@@ -59,9 +59,12 @@ void Camera::SetProjectionPerspective()
 void Camera::SetProjectionOrthographic()
 {
     //m_projection = Matrix::CreateOrthographic(viewWidth, viewHeight, nearZ, farZ); 이것도 RH임
-    if (m_orthographicSize <= 0.01f) {
+    if (m_orthographicSize < 0.01f) {
         m_orthographicSize = 0.01f;
     }
+    if(m_nearZ > -20.f) {
+        m_nearZ = -20.f;
+	}
 
     float orthoHeight = 10 * m_orthographicSize;    
 

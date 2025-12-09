@@ -554,18 +554,23 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 
 	std::vector<GameObject*> opaqueQueue;
 	std::vector<GameObject*> transparentQueue;
+	std::vector<GameObject*> uiQueue;
 
 	for (const auto& go : scene->GetGameObjects())
 	{
 		if (!go || !go->IsActiveInHierarchy()) continue;
 		MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+		Image* img = go->GetComponent<Image>();
 		if (!mr || !mr->IsActive()) continue;
 
 		Material* mat = mr->GetSharedMaterial();
 		if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
 		if (!mat) continue;
 
-		if (mat->GetRenderMode() == RenderMode::Transparent)
+		if (img) {
+			uiQueue.push_back(go.get());
+		}
+		else if (mat->GetRenderMode() == RenderMode::Transparent)
 		{
 			transparentQueue.push_back(go.get());
 		}
@@ -593,7 +598,6 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		mesh->Draw();
 		};
 
-	DX11Renderer::Instance().BeginUIRender();
 
 	for (auto* go : opaqueQueue)
 	{
@@ -601,6 +605,14 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 	}
 
 	for (auto* go : transparentQueue)
+	{
+		DrawObject(go);
+	}
+
+
+	DX11Renderer::Instance().BeginUIRender();
+
+	for (auto* go : uiQueue)
 	{
 		DrawObject(go);
 	}

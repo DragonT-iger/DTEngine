@@ -81,11 +81,17 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
         uint64_t id = (ptr) ? ptr->_GetID() : 0;
         writer.Write(name, id);
     }
-    else if(type == typeid(Texture*)){
+    else if (type == typeid(GameObject*)) {
+        GameObject* go = *static_cast<GameObject**>(data);
+        uint64_t id = (go) ? go->_GetID() : 0;
+        writer.Write(name, id);
+    }
+	else if (type == typeid(Texture*)) { // IResource 는 Meta가 id를 가지고 있음
         Texture* tex = *static_cast<Texture**>(data);
         uint64_t id = (tex) ? tex->GetMeta().guid : 0;
         writer.Write(name, id);
 	}
+    
 
 
 

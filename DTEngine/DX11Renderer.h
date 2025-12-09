@@ -167,6 +167,8 @@ private:
     Matrix m_viewTM;
     Matrix m_projTM;
 
+    bool m_isOrthoBackup;
+
     // UI 렌더링
     std::unique_ptr<DirectX::DX11::SpriteBatch>  m_spriteBatch;
     std::unique_ptr<DirectX::DX11::SpriteFont>   m_font;

@@ -23,6 +23,9 @@
 #include "Simplemathhelper.h"
 #include "Transform.h"
 #include "Light.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "Camera.h"
 
 #include "DXHelper.h"
 
@@ -123,6 +126,18 @@ void DX11Renderer::BeginUIRender()
             DirectX::XMMatrixIdentity() 
         );
     }
+
+    m_isOrthoBackup = SceneManager::Instance().GetActiveScene()->GetMainCamera()->IsOrthographic();
+
+    SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetIsOrthographic(true);
+
+    UpdateFrameCBuffer(
+        SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetViewMatrix(),
+        SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
+	);
+
+    m_context->OMSetDepthStencilState(m_states->DepthNone(), 0);
+
 }
 
 void DX11Renderer::EndUIRender()
@@ -131,6 +146,9 @@ void DX11Renderer::EndUIRender()
     {
         m_spriteBatch->End();
     }
+
+    SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetIsOrthographic(m_isOrthoBackup);
+    
 
     ResetRenderState();
 }

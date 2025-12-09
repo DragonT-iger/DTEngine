@@ -37,6 +37,10 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
+    else if (type == typeid(GameObject*)) {
+        uint64_t id = reader.ReadUInt64(name);
+        fixupList.push_back({ base, prop, id });
+    }
     else if (type == typeid(Texture*)) {
         uint64_t id = reader.ReadUInt64(name);
 
@@ -52,7 +56,6 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
             prop.m_setter(base, &nullTex);
         }
     }
-
 
     else if (type == typeid(std::wstring))
     {
