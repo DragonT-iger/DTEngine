@@ -68,6 +68,8 @@ public:
 
     void SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr);
 
+    void SetViewport(float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f, float topLeftX = 0.0f, float topLeftY = 0.0f);
+
     HWND GetHwnd();
     ID3D11Device* GetDevice()  const;
     ID3D11DeviceContext* GetContext() const;

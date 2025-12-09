@@ -45,7 +45,7 @@ protected:
     int m_width = 0;
     int m_height = 0;
 
-    ID3D11SamplerState* m_currentSampler = nullptr; // DXRenderer에서 만들어 놓은거 참조만 함
+    ID3D11SamplerState* m_currentSampler = nullptr; // DX11Renderer에서 미리 6개 만들어 놓은거 참조만 함
 
     FilterMode m_filterMode = FilterMode::Bilinear;
     WrapMode m_wrapMode = WrapMode::Repeat;

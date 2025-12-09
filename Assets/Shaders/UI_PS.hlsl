@@ -21,7 +21,10 @@ float4 PS(PS_INPUT input) : SV_Target
     
     clip(color.a < 0.01f ? -1 : 1);
     
-    color *= g_Texture.Sample(g_Sampler, input.UV);
+    if (UseTexture) // 나는 베이징의 if문을 사랑해
+    {
+        color *= g_Texture.Sample(g_Sampler, input.UV); 
+    }
     
     return color;
 }

@@ -546,22 +546,23 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 {
 	if (!scene || !camera) return;
 
-	float ratio = 1.777f;
+	float width = (float)DX11Renderer::Instance().GetWidth();
+	float height = (float)DX11Renderer::Instance().GetHeight();
 
 	if (rt != nullptr)
 	{
-		ratio = (float)rt->GetWidth() / (float)rt->GetHeight();
+		width = (float)rt->GetWidth();
+		height = (float)rt->GetHeight();
 	}
-	else
-	{
-		ratio = DX11Renderer::Instance().GetAspectRatio();
-	}
-	
+
+	float ratio = width / height;
 	camera->SetAspectRatio(ratio);
 
 
 
 	DX11Renderer::Instance().ResetRenderState();
+
+	DX11Renderer::Instance().SetViewport(width, height);
 
 
 	//if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
@@ -628,7 +629,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 	}
 
 
-	DX11Renderer::Instance().BeginUIRender();
+	DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
 
 	for (auto* go : uiQueue)
 	{

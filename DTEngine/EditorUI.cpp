@@ -274,7 +274,7 @@ void EditorUI::DrawHierarchyNode(Transform* tf)
         ImGui::EndDragDropTarget();
     }
 
-    if (ImGui::IsItemClicked())
+    if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
     {
         m_selectedGameObject = go;
     }
@@ -1115,11 +1115,57 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 std::string goName = (go) ? go->GetName() : "None";
                 ImGui::Text("%s: %s", name, goName.c_str());
             }
-            else if (type == typeid(Camera*)) {
-                Camera* go = *static_cast<Camera**>(data);
-                std::string goName = (go) ? go->GetName() : "None";
-                ImGui::Text("%s: %s", name, goName.c_str());
-            }
+            else if (type == typeid(Camera*))
+            {
+                Camera* cam = *static_cast<Camera**>(data);
+
+                std::string displayStr = "None (Camera)";
+                if (cam && cam->_GetOwner())
+                {
+                    displayStr = cam->_GetOwner()->GetName();
+                }
+
+                float width = ImGui::CalcItemWidth();
+
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    if (cam && cam->_GetOwner())
+                    {
+                        m_selectedGameObject = cam->_GetOwner(); 
+                    }
+                }
+
+                // 드래그 앤 드롭 타겟 설정
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+                    {
+                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
+                        Transform* draggedTf = *(Transform**)payload->Data;
+
+                        if (draggedTf)
+                        {
+                            Camera* newCam = draggedTf->_GetOwner()->GetComponent<Camera>();
+
+                            if (newCam)
+                            {
+                                Camera* oldVal = cam;
+
+                                prop.m_setter(comp, &newCam);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<Camera*>>(
+                                    comp, prop.m_setter, oldVal, newCam
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
+                }
 
             // Texture*
             else if (type == typeid(Texture*))

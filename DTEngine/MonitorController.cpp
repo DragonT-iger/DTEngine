@@ -28,24 +28,11 @@ void MonitorController::Awake()
     }
 }
 
-void MonitorController::Update(float deltaTime)
+void MonitorController::SetSourceCamera(Camera* cam)
 {
-    if (m_sourceCamera && m_renderTexture)
-    {
-        m_renderTexture->Bind();
-        m_renderTexture->Clear(0, 0, 0, 1); 
-
-        // (2) 카메라 위치 기준으로 렌더링
-        // 주의: 현재 엔진 구조상 Scene::Render()가 전체를 그리므로,
-        // 특정 카메라 시점으로 그리는 별도 함수가 필요할 수 있습니다.
-        // 여기서는 예시로 RenderScene(camera) 같은 함수가 있다고 가정합니다.
-
-        // 간단하게 구현하려면:
-        // DX11Renderer::UpdateFrameCBuffer(cam->View, cam->Proj)
-        // SceneManager::GetActiveScene()->RenderGameObjects(); 
-
-        //SceneManager::Instance().GetActiveScene()->RenderFromCamera(m_sourceCamera);
-
-        m_renderTexture->Unbind();
+    if (cam == nullptr) {
+        m_sourceCamera = nullptr;
+        return;
     }
+    m_sourceCamera = cam; cam->SetTargetTexture(m_renderTexture.get()); 
 }

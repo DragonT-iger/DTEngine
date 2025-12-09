@@ -13,9 +13,8 @@ public:
     virtual ~MonitorController();
 
     void Awake() override;
-    void Update(float deltaTime) override;
 
-    void SetSourceCamera(Camera* cam) { m_sourceCamera = cam; } 
+    void SetSourceCamera(Camera* cam);
     Camera* GetSourceCamera() const { return m_sourceCamera; }
 
 private:
