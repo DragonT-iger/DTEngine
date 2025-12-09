@@ -25,6 +25,7 @@ struct ID3D11Buffer;
 struct ID3D11DepthStencilState;
 struct ID3D11RasterizerState;
 struct ID3D11SamplerState;
+struct ID3D11BlendState;
 
 namespace DirectX {
 	inline namespace DX11 {
@@ -34,6 +35,7 @@ namespace DirectX {
     }
 }
 
+enum class BlendMode { Opaque, AlphaBlend };
 
 class DX11Renderer : public Singleton<DX11Renderer>
 {
@@ -49,13 +51,13 @@ public:
     void BeginUIRender();
     void EndUIRender();
 
-    void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1));
+    //void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1)); // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
 
     void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
-
+    void SetBlendMode(BlendMode mode);
 
     void BeginFrame(const float clearColor[4]);
     void EndFrame();
@@ -152,6 +154,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
+    Microsoft::WRL::ComPtr<ID3D11BlendState>        m_alphaBlendState;
     //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];

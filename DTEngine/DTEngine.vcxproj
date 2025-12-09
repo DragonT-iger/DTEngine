@@ -275,6 +275,8 @@
     <FxCompile Include="..\Assets\Shaders\Default_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\UI_VS.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

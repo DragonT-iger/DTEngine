@@ -12,8 +12,9 @@ cbuffer CBuffer_Object : register(b1)
 
 cbuffer CBuffer_Material : register(b3)
 {
-    float4 MaterialColor;       // Material.Color
-    int UseTexture;             // Material.UseTexture
+    float4 MaterialColor; // Material.Color
+    float4 UVTransform; // xy=Tiling, zw=Offset
+    int UseTexture; // Material.UseTexture
     int3 Padding2;
 };
 

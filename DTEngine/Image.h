@@ -8,20 +8,25 @@ class Image : public MonoBehaviour
     DTGENERATED_BODY(Image);
 
 public:
-    Image();
+    Image() = default;
     virtual ~Image() = default;
 
-    //void Awake() override;
-    //void Start() override;
+    void Awake() override;
 
-    //void LateUpdate(float deltaTime) override;
+    void SetTexture(Texture* texture);
+    Texture* GetTexture() const;
 
-    void Render();
+    void SetColor(const Vector4& color);
+    const Vector4& GetColor() const;
 
-    void SetTexture(Texture* texture) { m_texture = texture; }
-    void SetColor(const Vector4& color) { m_color = color; }
+    void SetTextureID(uint64_t id);
+    const uint64_t& GetTextureID() const { return m_textureID; }
+
+    void SetNativeSize();
 
 private:
-    Texture* m_texture = nullptr;   
-    Vector4  m_color = { 1.f, 1.f, 1.f, 1.f };
+    void SetupRenderer();
+
+    uint64_t m_textureID = 0;
+    Vector4 m_color = { 1.f, 1.f, 1.f, 1.f };
 };

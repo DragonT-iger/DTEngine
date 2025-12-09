@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Texture.h"
+#include "AssetDatabase.h"
+#include "ResourceManager.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -37,8 +39,19 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
     }
     else if (type == typeid(Texture*)) {
         uint64_t id = reader.ReadUInt64(name);
-        fixupList.push_back({ base, prop, id });
-	}
+
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+
+        if (!path.empty()) {
+            Texture* tex = ResourceManager::Instance().Load<Texture>(path);
+
+            prop.m_setter(base, &tex);
+        }
+        else {
+            Texture* nullTex = nullptr;
+            prop.m_setter(base, &nullTex);
+        }
+    }
 
 
     else if (type == typeid(std::wstring))
