@@ -19,12 +19,15 @@ MonitorController::~MonitorController() = default;
 void MonitorController::Awake()
 {
     m_renderTexture = std::make_unique<RenderTexture>();
-    m_renderTexture->Initialize(512, 512);
+    m_renderTexture->Initialize(256, 256);
 
     MeshRenderer* renderer = GetComponent<MeshRenderer>();
     if (renderer)
     {
         renderer->GetMaterial()->SetTexture(0, m_renderTexture.get());
+    }
+    if (m_sourceCamera) {
+        m_sourceCamera->SetTargetTexture(m_renderTexture.get());
     }
 }
 

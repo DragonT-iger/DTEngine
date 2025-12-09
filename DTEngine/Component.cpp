@@ -89,7 +89,7 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
     }
     else if (type == typeid(Camera*)) {
         Camera* cam = *static_cast<Camera**>(data);
-        uint64_t id = (cam) ? cam->_GetOwner()->_GetID() : 0;
+        uint64_t id = (cam) ? cam->_GetID() : 0;
         writer.Write(name, id);
     }
 	else if (type == typeid(Texture*)) { // IResource 는 Meta가 id를 가지고 있음

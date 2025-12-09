@@ -266,8 +266,26 @@ void Game::LifeCycle(float deltaTime)
 			DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
 
 
-			if (SceneManager::Instance().GetActiveScene()->GetMainCamera() != nullptr) {
-				SceneManager::Instance().GetActiveScene()->GetMainCamera()->LateUpdate(deltaTime);
+			Scene* activeScene = SceneManager::Instance().GetActiveScene();
+
+			if (activeScene)
+			{
+				const auto& gameObjects = activeScene->GetGameObjects();
+
+				for (const auto& go : gameObjects)
+				{
+					if (!go->IsActiveInHierarchy()) continue;
+
+					Camera* cam = go->GetComponent<Camera>();
+
+					if (cam)
+					{
+						if (go.get() != m_editorCameraObject)
+						{
+							cam->LateUpdate(deltaTime);
+						}
+					}
+				}
 			}
 
 		}
@@ -327,7 +345,7 @@ void Game::LifeCycle(float deltaTime)
 
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	RenderScene(scene, editorCam, m_sceneRT.get());
+	RenderScene(scene, editorCam, m_sceneRT.get() , true);
 
 
 	const auto& gameObjects = scene->GetGameObjects();
@@ -347,7 +365,7 @@ void Game::LifeCycle(float deltaTime)
 			const auto& col = cam->GetClearColor();
 			targetRT->Clear(col.x, col.y, col.z, 1.0f);
 
-			RenderScene(scene, cam, targetRT);
+			RenderScene(scene, cam, targetRT , false);
 
 		}
 		else
@@ -356,7 +374,7 @@ void Game::LifeCycle(float deltaTime)
 			const auto& col = cam->GetClearColor();
 			m_gameRT->Clear(col.x, col.y, col.z, 1.0f);
 
-			RenderScene(scene, cam, m_gameRT.get());
+			RenderScene(scene, cam, m_gameRT.get() , true);
 		}
 	}
 
@@ -476,7 +494,11 @@ void Game::SetPlayState(bool isPlay)
 			camTf->SetPosition(lastPos);
 			camTf->SetRotationEuler(lastRot);
 
-			m_editorCameraObject->Awake(); // 이거 두번 호출되긴 한데 이걸 안하면 깜빡거림 
+			if (scene)
+			{
+				scene->Awake();
+				scene->Start();
+			}
 		}
 
 
@@ -542,7 +564,7 @@ void Game::OnClose()
 {
 }
 
-void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
+void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool renderUI)
 {
 	if (!scene || !camera) return;
 
@@ -615,7 +637,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		mat->Bind(worldTM, worldInvT); 
 		mesh->Bind();
 		mesh->Draw();
-		};
+	};
 
 
 	for (auto* go : opaqueQueue)
@@ -628,13 +650,16 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 		DrawObject(go);
 	}
 
+	if (renderUI) {
+		DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
 
-	DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
+		for (auto* go : uiQueue)
+		{
+			DrawObject(go);
+		}
 
-	for (auto* go : uiQueue)
-	{
-		DrawObject(go);
+		DX11Renderer::Instance().EndUIRender();
 	}
 
-	DX11Renderer::Instance().EndUIRender();
+	
 }
