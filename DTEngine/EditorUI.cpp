@@ -39,6 +39,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "AssetDatabase.h"
+#include "Camera.h"
 
 namespace fs = std::filesystem;
 
@@ -1107,9 +1108,15 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
+            // GameObject*
             else if (type == typeid(GameObject*))
             {
                 GameObject* go = *static_cast<GameObject**>(data);
+                std::string goName = (go) ? go->GetName() : "None";
+                ImGui::Text("%s: %s", name, goName.c_str());
+            }
+            else if (type == typeid(Camera*)) {
+                Camera* go = *static_cast<Camera**>(data);
                 std::string goName = (go) ? go->GetName() : "None";
                 ImGui::Text("%s: %s", name, goName.c_str());
             }

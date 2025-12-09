@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "AssetDatabase.h"
 #include "ResourceManager.h"
+#include "Camera.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -38,6 +39,10 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         fixupList.push_back({ base, prop, id });
     }
     else if (type == typeid(GameObject*)) {
+        uint64_t id = reader.ReadUInt64(name);
+        fixupList.push_back({ base, prop, id });
+    }
+    else if (type == typeid(Camera*)) {
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }

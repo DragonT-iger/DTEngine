@@ -1,5 +1,7 @@
 #pragma once
 #include <wrl.h>
+#include "Texture.h"
+
 
 using Microsoft::WRL::ComPtr;
 
@@ -18,7 +20,7 @@ struct ID3D11RenderTargetView;
 struct ID3D11ShaderResourceView;
 struct ID3D11DepthStencilView;
 
-class RenderTexture
+class RenderTexture : public Texture
 {
 public:
     RenderTexture();
@@ -45,7 +47,7 @@ private:
 
     ComPtr<ID3D11Texture2D>          m_renderTargetTexture;
     ComPtr<ID3D11RenderTargetView>   m_rtv;
-    ComPtr<ID3D11ShaderResourceView> m_srv;
+    //ComPtr<ID3D11ShaderResourceView> m_srv;
 
     ComPtr<ID3D11Texture2D>          m_depthStencilTexture;
     ComPtr<ID3D11DepthStencilView>   m_dsv;

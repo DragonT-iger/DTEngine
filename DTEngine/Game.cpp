@@ -330,16 +330,34 @@ void Game::LifeCycle(float deltaTime)
 	RenderScene(scene, editorCam, m_sceneRT.get());
 
 
-	m_gameRT->Bind();
-
-	Camera* mainCamera = scene->GetMainCamera();
-
-	if (mainCamera)
+	const auto& gameObjects = scene->GetGameObjects();
+	for (const auto& go : gameObjects)
 	{
-		const auto& col = mainCamera->GetClearColor();
-		m_gameRT->Clear(col.x, col.y, col.z, 1.0f);
+		if (!go || !go->IsActiveInHierarchy()) continue;
 
-		RenderScene(scene, mainCamera, m_gameRT.get());
+		Camera* cam = go->GetComponent<Camera>();
+		// 에디터 카메라는 위에서 이미 그렸으므로 패스
+		if (!cam || !cam->IsActive() || cam == editorCam) continue;
+
+		RenderTexture* targetRT = cam->GetTargetTexture();
+
+		if (targetRT != nullptr)
+		{
+			targetRT->Bind();
+			const auto& col = cam->GetClearColor();
+			targetRT->Clear(col.x, col.y, col.z, 1.0f);
+
+			RenderScene(scene, cam, targetRT);
+
+		}
+		else
+		{
+			m_gameRT->Bind();
+			const auto& col = cam->GetClearColor();
+			m_gameRT->Clear(col.x, col.y, col.z, 1.0f);
+
+			RenderScene(scene, cam, m_gameRT.get());
+		}
 	}
 
 

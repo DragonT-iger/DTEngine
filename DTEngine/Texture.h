@@ -3,7 +3,6 @@
 #include <wrl/client.h> 
 #include <string>
 
-
 enum class FilterMode { Point, Bilinear, Trilinear };
 enum class WrapMode { Repeat, Clamp };
 
@@ -21,12 +20,10 @@ public:
     bool SaveFile(const std::string& fullPath) override;
     void Unload() override;
 
-
     ID3D11ShaderResourceView* GetSRV() const { return m_srv.Get(); }
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
-
 
     ID3D11SamplerState* GetSampler() const { return m_currentSampler; }
 
@@ -38,7 +35,7 @@ public:
 
     void SaveImportSettings(const std::string& fullPath);
 
-private:
+protected:
     void UpdateSampler();
     void LoadMetaData(const std::string& fullPath);
 

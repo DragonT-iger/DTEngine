@@ -1,6 +1,7 @@
 #pragma once
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
+#include "RenderTexture.h"
 
 class Camera : public MonoBehaviour
 {
@@ -50,6 +51,8 @@ public:
 	const float& GetOrthographicSize() const { return m_orthographicSize; }
 	void SetOrthographicSize(float size) { m_orthographicSize = size; m_dirtyProj = true; }
 
+    void SetTargetTexture(RenderTexture* rt) { m_targetTexture = rt; }
+    RenderTexture* GetTargetTexture() const { return m_targetTexture; }
 
 private:
     void UpdateViewMatrix();
@@ -58,6 +61,16 @@ private:
     Matrix m_view;
     Matrix m_projection;
 
+
+
+    bool m_dirtyView = true;
+    bool m_dirtyProj = true;
+
+
+    RenderTexture* m_targetTexture = nullptr;
+
+	// 아래는 직렬화와 관련된 값들 
+    // fovY는 const &로 만들수가 없어서 따로 저장
     float m_aspectRatio = -1;
 
     float m_fovY = SimpleMathHelper::Deg2Rad(60.0f);
@@ -66,12 +79,11 @@ private:
     float m_nearZ = 0.1f;
     float m_farZ = 1000.0f;
 
-    bool m_dirtyView = true;
-    bool m_dirtyProj = true;
 
 	bool m_isOrthographic = false;
     float m_orthographicSize = 5.0f;
 
     Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
+
 
 };

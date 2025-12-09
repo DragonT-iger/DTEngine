@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Behaviour.h"
 #include "Texture.h"
+#include "Camera.h"
 
 void Component::Destroy(GameObject* gameobject) {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
@@ -84,6 +85,11 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
     else if (type == typeid(GameObject*)) {
         GameObject* go = *static_cast<GameObject**>(data);
         uint64_t id = (go) ? go->_GetID() : 0;
+        writer.Write(name, id);
+    }
+    else if (type == typeid(Camera*)) {
+        Camera* cam = *static_cast<Camera**>(data);
+        uint64_t id = (cam) ? cam->_GetOwner()->_GetID() : 0;
         writer.Write(name, id);
     }
 	else if (type == typeid(Texture*)) { // IResource 는 Meta가 id를 가지고 있음

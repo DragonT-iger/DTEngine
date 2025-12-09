@@ -6,6 +6,7 @@
 #include "DX11Renderer.h"
 #include "SceneManager.h"
 #include "SimpleMathHelper.h"
+#include "MonitorController.h"
 
 BEGINPROPERTY(Camera)
 

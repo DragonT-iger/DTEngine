@@ -28,6 +28,8 @@ bool RenderTexture::Initialize(int width, int height)
     if (FAILED(device->CreateTexture2D(&textureDesc, nullptr, m_renderTargetTexture.GetAddressOf())))
         return false;
 
+    m_renderTargetTexture.As(&m_textureResource);
+
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.Format = textureDesc.Format;
     rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
@@ -78,6 +80,7 @@ void RenderTexture::Resize(int width, int height)
     m_renderTargetTexture.Reset();
     m_rtv.Reset();
     m_srv.Reset();
+    m_textureResource.Reset();
     m_depthStencilTexture.Reset();
     m_dsv.Reset();
 

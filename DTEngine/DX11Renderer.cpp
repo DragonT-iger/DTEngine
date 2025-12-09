@@ -129,7 +129,11 @@ void DX11Renderer::BeginUIRender()
 
     m_isOrthoBackup = SceneManager::Instance().GetActiveScene()->GetMainCamera()->IsOrthographic();
 
-    SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetIsOrthographic(true);
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    mainCam->SetIsOrthographic(true);
+
+    mainCam->SetProjectionOrthographic();
 
     UpdateFrameCBuffer(
         SimpleMathHelper::IdentityMatrix(),
@@ -147,7 +151,12 @@ void DX11Renderer::EndUIRender()
         m_spriteBatch->End();
     }
 
-    SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetIsOrthographic(m_isOrthoBackup);
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    mainCam->SetIsOrthographic(m_isOrthoBackup);
+
+	mainCam->SetProjectionPerspective();
+    
     
 
     ResetRenderState();

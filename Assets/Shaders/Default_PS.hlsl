@@ -91,8 +91,11 @@ float4 PS(PS_INPUT input) : SV_Target
         float up = normal.y * 0.5 + 0.5;
         
         ambient = lerp(groundColor, skyColor, up);
+        // 임시 환경광 같은 느낌 왜냐면 뒷면이 색이 다 검은색이면 너무 어색함
+        
         float NdotL = max(dot(normal, L), 0.0f);
         totalDiffuse += NdotL * lightColor * intensity * attenuation;
+        
     }
 
     float3 finalColor;
