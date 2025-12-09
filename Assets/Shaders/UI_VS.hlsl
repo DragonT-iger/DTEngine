@@ -32,7 +32,7 @@ PS_INPUT VS(VS_INPUT input)
     float4 viewPos = mul(worldPos, ViewTM);
     float4 projPos = mul(viewPos, ProjectionTM);
     
-    output.Pos = viewPos;
+    output.Pos = projPos;
     output.UV = input.UV;
     
     return output;

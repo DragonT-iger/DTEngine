@@ -132,7 +132,7 @@ void DX11Renderer::BeginUIRender()
     SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetIsOrthographic(true);
 
     UpdateFrameCBuffer(
-        SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetViewMatrix(),
+        SimpleMathHelper::IdentityMatrix(),
         SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
 	);
 
