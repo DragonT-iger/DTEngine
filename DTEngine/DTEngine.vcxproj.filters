@@ -251,6 +251,9 @@
     <ClInclude Include="MonitorController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PasteGameObjectCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -406,6 +409,9 @@
     <ClCompile Include="MonitorController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PasteGameObjectCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -433,6 +439,12 @@
       <Filter>Shader\Default</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>

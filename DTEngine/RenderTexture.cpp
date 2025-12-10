@@ -87,12 +87,24 @@ void RenderTexture::Resize(int width, int height)
     Initialize(width, height);
 }
 
+void RenderTexture::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
+{
+    m_viewport.TopLeftX = x;
+    m_viewport.TopLeftY = y;
+    m_viewport.Width = width;
+    m_viewport.Height = height;
+    m_viewport.MinDepth = minDepth;
+    m_viewport.MaxDepth = maxDepth;
+}
+
 void RenderTexture::Bind()
 {
     ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
 
     ID3D11RenderTargetView* rtv = m_rtv.Get();
+
     context->OMSetRenderTargets(1, &rtv, m_dsv.Get());
+
     context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_viewport));
 }
 

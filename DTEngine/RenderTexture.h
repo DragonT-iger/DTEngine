@@ -36,6 +36,8 @@ public:
 
     void Clear(float r, float g, float b, float a);
 
+    void SetViewport(float x, float y, float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f);
+
     ID3D11ShaderResourceView* GetSRV() const { return m_srv.Get(); }
 
     int GetWidth() const { return m_width; }

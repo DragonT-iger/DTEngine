@@ -91,7 +91,7 @@ public:
 
     bool IsActiveInHierarchy() const;
 
-
+    std::unique_ptr<GameObject> Clone();
 
 private:
 

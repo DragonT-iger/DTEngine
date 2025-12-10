@@ -40,6 +40,7 @@
 #include "Shader.h"
 #include "AssetDatabase.h"
 #include "Camera.h"
+#include "PasteGameObjectCommand.h"
 
 namespace fs = std::filesystem;
 
@@ -109,6 +110,8 @@ void EditorUI::Render(Scene* activeScene)
     bool shiftPressed = InputManager::Instance().GetKey(KeyCode::Shift);
     bool zPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Z);
     bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
+    bool cPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::C);
+    bool vPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::V);
 
     // Undo (Ctrl + Z)
     if (ctrlPressed && !shiftPressed && zPressed_Down)
@@ -129,6 +132,38 @@ void EditorUI::Render(Scene* activeScene)
     {
         AlignWithView();
     }
+
+    if (ctrlPressed && cPressed_Down)
+    {
+        if (m_selectedGameObject)
+        {
+            m_clipboardObject = m_selectedGameObject->Clone();
+            std::cout << "[Editor] Copied: " << m_selectedGameObject->GetName() << std::endl;
+        }
+    }
+
+    if (ctrlPressed && vPressed_Down)
+    {
+        if (m_clipboardObject && activeScene)
+        {
+            auto cmd = std::make_unique<PasteGameObjectCommand>(activeScene, m_clipboardObject.get());
+            PasteGameObjectCommand* pCmd = cmd.get();
+
+            HistoryManager::Instance().Do(std::move(cmd));
+
+            if (pCmd->GetPastedObject())
+            {
+                m_selectedGameObject = pCmd->GetPastedObject();
+
+                // (선택 사항) 같은 위치에 겹치지 않게 약간 이동?
+                // Transform* tf = m_selectedGameObject->GetTransform();
+                // tf->SetPosition(tf->GetPosition() + Vector3(1, 1, 0)); 
+            }
+
+            std::cout << "[Editor] Pasted" << std::endl;
+        }
+    }
+
 
 }
 

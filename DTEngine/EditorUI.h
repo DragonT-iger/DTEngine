@@ -70,6 +70,9 @@ private:
 
 
     GameObject* m_selectedGameObject = nullptr;
+
+    std::unique_ptr<GameObject> m_clipboardObject;
+
     Camera* m_sceneCamera = nullptr;
 
     GameObject* m_lastSelectedGameObject = nullptr;

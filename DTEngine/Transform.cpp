@@ -99,6 +99,21 @@ Transform::Transform()
 	ResetValue();
 }
 
+Transform::~Transform()
+{
+	if (m_parent)
+	{
+		m_parent->RemoveChild(this);
+	}
+	for (Transform* child : m_children)
+	{
+		if (child)
+		{
+			child->m_parent = nullptr;
+		}
+	}
+}
+
 const Vector3& Transform::GetEditorEuler() const
 {
 	return m_editorEulerAngles;

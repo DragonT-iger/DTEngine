@@ -363,7 +363,7 @@ void Game::LifeCycle(float deltaTime)
 		{
 			targetRT->Bind();
 			const auto& col = cam->GetClearColor();
-			targetRT->Clear(col.x, col.y, col.z, 1.0f);
+			targetRT->Clear(col.x, col.y, col.z, col.w);
 
 			RenderScene(scene, cam, targetRT , false);
 
@@ -372,7 +372,7 @@ void Game::LifeCycle(float deltaTime)
 		{
 			m_gameRT->Bind();
 			const auto& col = cam->GetClearColor();
-			m_gameRT->Clear(col.x, col.y, col.z, 1.0f);
+			m_gameRT->Clear(col.x, col.y, col.z, col.w);
 
 			RenderScene(scene, cam, m_gameRT.get() , true);
 		}
@@ -417,12 +417,29 @@ void Game::LifeCycle(float deltaTime)
 #else
 
 
-	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
-	DX11Renderer::Instance().BeginFrame(black);
+	const auto& gameObjects = scene->GetGameObjects();
+	for (const auto& go : gameObjects)
+	{
+		if (!go || !go->IsActiveInHierarchy()) continue;
+
+		Camera* cam = go->GetComponent<Camera>();
+		if (!cam || !cam->IsActive()) continue;
+
+		RenderTexture* targetRT = cam->GetTargetTexture();
+		if (targetRT != nullptr)
+		{
+			targetRT->Bind();
+			const auto& col = cam->GetClearColor();
+			targetRT->Clear(col.x, col.y, col.z, col.w);
+
+			RenderScene(scene, cam, targetRT, false);
+		}
+	}
 
 	Camera* mainCam = scene->GetMainCamera();
 
-	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0, 0, 0, 1};
+	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0.1f, 0.1f, 0.1f, 1.0f};
+
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
 	if (mainCam)
@@ -430,7 +447,7 @@ void Game::LifeCycle(float deltaTime)
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
-		RenderScene(scene, mainCam, nullptr);
+		RenderScene(scene, mainCam, nullptr, true);
 	}
 
 
@@ -568,6 +585,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool ren
 {
 	if (!scene || !camera) return;
 
+
 	float width = (float)DX11Renderer::Instance().GetWidth();
 	float height = (float)DX11Renderer::Instance().GetHeight();
 
@@ -580,11 +598,10 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool ren
 	float ratio = width / height;
 	camera->SetAspectRatio(ratio);
 
-
-
 	DX11Renderer::Instance().ResetRenderState();
 
-	DX11Renderer::Instance().SetViewport(width, height);
+	camera->Bind();
+	//DX11Renderer::Instance().SetViewport(width, height);
 
 
 	//if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;

@@ -19,12 +19,21 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     float4 color = MaterialColor;
     
-    clip(color.a < 0.01f ? -1 : 1);
+    //clip(color.a < 0.01f ? -1 : 1);
+    
+    
+    float4 textureColor;
     
     if (UseTexture) // 나는 베이징의 if문을 사랑해
     {
-        color *= g_Texture.Sample(g_Sampler, input.UV); 
+        textureColor = g_Texture.Sample(g_Sampler, input.UV);
     }
+    
+    clip(textureColor.g == 0.0f ? -1 : 1);
+    // YENA와 호환성을 위해서
+    //clip(textureColor.g < 0.009f ? -1 : 1);
+    
+    color *= textureColor;
     
     return color;
 }

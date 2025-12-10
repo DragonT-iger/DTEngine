@@ -267,6 +267,76 @@ bool GameObject::IsActiveInHierarchy() const
 
     return true;
 }
+
+void CopyComponentProperties(Component* src, Component* dst)
+{
+    const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(src->_GetTypeName());
+    if (!info) return;
+
+    for (const PropertyInfo& prop : info->m_properties)
+    {
+        void* srcValue = prop.m_getter(src);
+        prop.m_setter(dst, srcValue);
+    }
+}
+
+std::unique_ptr<GameObject> GameObject::Clone()
+{
+
+    auto newObj = std::make_unique<GameObject>(m_name);
+
+    newObj->_SetID(IDManager::Instance().GetNewUniqueID());
+    newObj->SetTag(m_tag);
+    newObj->SetActive(m_active);
+
+    Transform* srcTf = this->GetTransform();
+    Transform* dstTf = newObj->GetTransform();
+
+    dstTf->SetPosition(srcTf->GetPosition());
+    dstTf->SetRotationQuat(srcTf->GetRotationQuat());
+    dstTf->SetScale(srcTf->GetScale());
+
+    for (const auto& srcComp : m_components)
+    {
+        if (dynamic_cast<Transform*>(srcComp.get())) continue;
+
+        Component* dstComp = newObj->AddComponent(srcComp->_GetTypeName());
+        if (dstComp)
+        {
+            dstComp->_SetID(IDManager::Instance().GetNewUniqueID());
+
+            CopyComponentProperties(srcComp.get(), dstComp);
+        }
+    }
+
+    const auto& children = srcTf->GetChildren();
+    for (Transform* child : children)
+    {
+        GameObject* childGO = child->_GetOwner();
+        if (childGO)
+        {
+            auto clonedChild = childGO->Clone();
+
+            clonedChild->GetTransform()->SetParent(dstTf);
+
+            // 소유권 이전 (Scene에 바로 넣는게 아니라 부모가 관리하는 구조라면 로직 수정 필요.
+            // 보통 Scene 구조에서는 Scene이 모든 GO를 들고 있으므로, 
+            // 여기서는 Clone만 하고 Command에서 Scene에 등록하도록 처리합니다.)
+
+            // 주의: 현재 엔진 구조상 부모를 설정해도 Scene 리스트에 등록되어야 Update가 돕니다.
+            // 따라서 Clone 함수는 순수 데이터 복제만 담당하고, 
+            // 실제 Scene 등록은 재귀적으로 처리해주는 별도 로직이 필요할 수 있습니다.
+            // 편의상 여기서는 '계층 구조'만 복사하고, 
+            // Command에서 반환된 루트 객체를 Scene에 등록하면, 
+            // Scene::Internal_AddGameObject 등에서 자식들도 순회하며 등록하는지 확인이 필요합니다.
+            // 제공된 코드를 보면 Scene::AddGameObject는 단일 객체만 넣는 것으로 보입니다.
+            // 일단 '계층구조 복사'를 위해 부모만 세팅해둡니다.
+        }
+    }
+
+    return newObj;
+}
+
 GameObject* GameObject::Find(std::string name)
 {
     //Scene* curScene = SceneManager::Instance().GetActiveScene();

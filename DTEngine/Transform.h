@@ -18,6 +18,7 @@ class Transform : public Component
 
 public:
 	Transform();
+	virtual ~Transform();
 
 	// Getter Setter
 	const Vector3& GetPosition();

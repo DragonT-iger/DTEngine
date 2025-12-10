@@ -267,19 +267,7 @@ void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStenc
     m_context->OMSetRenderTargets(1, rtvs, dsv);
 }
 
-void DX11Renderer::SetViewport(float width, float height, float minDepth, float maxDepth, float topLeftX, float topLeftY)
-{
 
-    D3D11_VIEWPORT viewport = {};
-    viewport.Width = width;
-    viewport.Height = height;
-    viewport.MinDepth = minDepth;
-    viewport.MaxDepth = maxDepth;
-    viewport.TopLeftX = topLeftX;
-    viewport.TopLeftY = topLeftY;
-
-    m_context->RSSetViewports(1, &viewport);
-}
 
 HWND DX11Renderer::GetHwnd()
 {
@@ -510,4 +498,15 @@ void DX11Renderer::CreateSamplers()
             m_device->CreateSamplerState(&desc, m_samplers[index].GetAddressOf());
         }
     }
+
+    D3D11_SAMPLER_DESC uiDesc = {};
+    uiDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; 
+    uiDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+    uiDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+    uiDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    uiDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    uiDesc.MinLOD = 0;
+    uiDesc.MaxLOD = 0;
+
+    m_device->CreateSamplerState(&uiDesc, m_uiSampler.GetAddressOf());
 }

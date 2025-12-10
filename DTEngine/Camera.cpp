@@ -16,6 +16,7 @@ DTPROPERTY_ACCESSOR(Camera, m_farZ, GetFarZ, SetFarZ)
 DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
 DTPROPERTY_ACCESSOR(Camera, m_isOrthographic, IsOrthographic, SetIsOrthographic)
 DTPROPERTY_ACCESSOR(Camera, m_orthographicSize, GetOrthographicSize, SetOrthographicSize)
+DTPROPERTY_ACCESSOR(Camera, m_viewportRect, GetViewportRect, SetViewportRect)
 
 ENDPROPERTY()
 
@@ -83,6 +84,36 @@ void Camera::SetThisCameraToMain()
     //    std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
     //}
 
+}
+
+void Camera::Bind()
+{
+    float targetWidth = 0.0f;
+    float targetHeight = 0.0f;
+
+    if (m_targetTexture)
+    {
+        m_targetTexture->Bind();
+
+        targetWidth = static_cast<float>(m_targetTexture->GetWidth());
+        targetHeight = static_cast<float>(m_targetTexture->GetHeight());
+
+        float x = targetWidth * m_viewportRect.x;
+        float y = targetHeight * m_viewportRect.y;
+        float w = targetWidth * m_viewportRect.z;
+        float h = targetHeight * m_viewportRect.w;
+
+        m_targetTexture->SetViewport(x, y, w, h);
+    }
+    else
+    {
+
+        targetWidth = static_cast<float>(DX11Renderer::Instance().Width());
+        targetHeight = static_cast<float>(DX11Renderer::Instance().Height());
+    }
+
+    
+    
 }
 
 

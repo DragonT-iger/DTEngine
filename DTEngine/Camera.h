@@ -22,6 +22,8 @@ public:
 
     void SetThisCameraToMain();
 
+    void Bind();
+
     const float& GetNearZ() { return m_nearZ; }
     void SetNearZ(float nearZ) {
         m_nearZ = nearZ;
@@ -54,6 +56,8 @@ public:
     void SetTargetTexture(RenderTexture* rt) { m_targetTexture = rt; }
     RenderTexture* GetTargetTexture() const { return m_targetTexture; }
 
+    const Vector4& GetViewportRect() const { return m_viewportRect; }
+    void SetViewportRect(const Vector4& rect) { m_viewportRect = rect; }
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -86,4 +90,5 @@ private:
     Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
 
 
+    Vector4 m_viewportRect = { 0.0f, 0.0f, 1.0f, 1.0f };
 };
