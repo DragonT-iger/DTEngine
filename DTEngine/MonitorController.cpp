@@ -56,6 +56,6 @@ void MonitorController::SetSourceCamera(Camera* cam)
 
     if (renderer && textureToUse)
     {
-        renderer->GetMaterial()->SetTexture(materialSlot, textureToUse);
+        renderer->GetSharedMaterial()->SetTexture(materialSlot, textureToUse);
     }
 }

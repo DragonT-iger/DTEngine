@@ -33,6 +33,8 @@ public:
         }
     }
 
+    Component* GetCreatedComponent() const { return m_rawPtr; }
+
 private:
     GameObject* m_targetGO;
     std::unique_ptr<Component> m_component;

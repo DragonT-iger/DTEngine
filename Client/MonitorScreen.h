@@ -29,6 +29,7 @@ private:
     float m_noiseTimer = 0.0f;
     int m_currentNoiseIndex = 0;
 
+    float m_RTrenderTimer = 0;
 
     bool allPlayed = false;
 

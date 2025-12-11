@@ -116,3 +116,17 @@ void DeserializeComponentProperties(JsonReader& reader, Component* comp, std::ve
         mr->LoadInstanceData(reader);
     }
 }
+
+void CopyComponentValues(Component* src, Component* dst)
+{
+    if (!src || !dst || std::string(src->_GetTypeName()) != dst->_GetTypeName()) return;
+
+    const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(src->_GetTypeName());
+    if (!info) return;
+
+    for (const PropertyInfo& prop : info->m_properties)
+    {
+        void* srcValuePtr = prop.m_getter(src);
+        prop.m_setter(dst, srcValuePtr);
+    }
+}

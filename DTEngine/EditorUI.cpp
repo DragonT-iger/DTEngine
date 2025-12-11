@@ -41,6 +41,7 @@
 #include "AssetDatabase.h"
 #include "Camera.h"
 #include "PasteGameObjectCommand.h"
+#include "SerializationUtils.h"
 
 namespace fs = std::filesystem;
 
@@ -766,6 +767,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
         }
         else
         {
+
             if (ImGui::MenuItem("Remove Component"))
             {
                 if (m_selectedGameObject)
@@ -779,6 +781,25 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
             }
         }
+        if (ImGui::MenuItem("Copy Component"))
+        {
+            m_clipboardComponent = ComponentFactory::Instance().Create(comp->_GetTypeName());
+
+            if (m_clipboardComponent)
+            {
+                CopyComponentValues(comp, m_clipboardComponent.get());
+            }
+        }
+
+        bool canPaste = (m_clipboardComponent != nullptr) &&
+            (std::string(m_clipboardComponent->_GetTypeName()) == comp->_GetTypeName());
+
+        if (ImGui::MenuItem("Paste Component Values", NULL, false, canPaste))
+        {
+            CopyComponentValues(m_clipboardComponent.get(), comp);
+        }
+
+
         ImGui::EndPopup();
     }
 

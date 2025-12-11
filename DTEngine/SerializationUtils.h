@@ -11,3 +11,4 @@ struct FixupTask
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList);
 void DeserializeComponentProperties(JsonReader& reader, Component* comp, std::vector<FixupTask>& fixupList);
+void CopyComponentValues(Component* src, Component* dst);

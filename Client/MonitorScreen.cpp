@@ -45,20 +45,17 @@ void MonitorScreen::Awake()
 
 void MonitorScreen::Update(float deltaTime)
 {
-    static float RTrenderTimer = 0;
-
-
     if (allPlayed) {
 
-        RTrenderTimer += deltaTime;
+        m_RTrenderTimer += deltaTime;
 
         m_monitorController->SetSourceCamera(m_monitorController->GetSourceCamera()); // 이거 최적화 안되긴 했음
 
-        if (RTrenderTimer >= 3.0f) {
+        if (m_RTrenderTimer >= 3.0f) {
             
 
             allPlayed = false;
-            RTrenderTimer = 0;
+            m_RTrenderTimer -= 3.0f;
         }
         
     }
