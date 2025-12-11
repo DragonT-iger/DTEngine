@@ -24,7 +24,7 @@ void Image::Awake()
         Texture* tex = ResourceManager::Instance().Load<Texture>(path);
         SetTexture(tex);
     }
-    SetColor(m_color);
+    //SetColor(m_color);
 }
 
 void Image::SetupRenderer()

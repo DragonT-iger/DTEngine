@@ -98,6 +98,22 @@ Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
         {
             vertex.Color = { 1.0f, 1.0f, 1.0f, 1.0f };
         }
+
+        if (aiMesh->HasTangentsAndBitangents())
+        {
+            vertex.Tangent.x = aiMesh->mTangents[i].x;
+            vertex.Tangent.y = aiMesh->mTangents[i].y;
+            vertex.Tangent.z = aiMesh->mTangents[i].z;
+
+            vertex.Bitangent.x = aiMesh->mBitangents[i].x;
+            vertex.Bitangent.y = aiMesh->mBitangents[i].y;
+            vertex.Bitangent.z = aiMesh->mBitangents[i].z;
+        }
+        else
+        {
+            vertex.Tangent = { 0.0f, 0.0f, 0.0f };
+            vertex.Bitangent = { 0.0f, 0.0f, 0.0f };
+        }
         
         vertices.push_back(vertex);
     }

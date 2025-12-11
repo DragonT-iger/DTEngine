@@ -342,6 +342,23 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Texcoord = { 0.0f, 0.0f };
         }
 
+        if (aiMesh->HasTangentsAndBitangents())
+        {
+            vertex.Tangent.x = aiMesh->mTangents[i].x;
+            vertex.Tangent.y = aiMesh->mTangents[i].y;
+            vertex.Tangent.z = aiMesh->mTangents[i].z;
+
+            // 바이탄젠트 데이터 저장
+            vertex.Bitangent.x = aiMesh->mBitangents[i].x;
+            vertex.Bitangent.y = aiMesh->mBitangents[i].y;
+            vertex.Bitangent.z = aiMesh->mBitangents[i].z;
+        }
+        else
+        {
+            vertex.Tangent = { 0.0f, 0.0f, 0.0f };
+            vertex.Bitangent = { 0.0f, 0.0f, 0.0f };
+        }
+
         // (필요 시 컬러, 탄젠트 등 추가 추출)
 
         vertices.push_back(vertex);

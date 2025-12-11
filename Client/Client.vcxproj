@@ -131,9 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="MonitorScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -141,9 +143,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="Rotator.h" />
+    <ClInclude Include="MonitorScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

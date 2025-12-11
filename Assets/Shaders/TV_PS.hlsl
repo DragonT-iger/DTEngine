@@ -20,9 +20,11 @@ float4 PS(PS_INPUT input) : SV_Target
 {    
     
     float4 diffuse = Diffuse.Sample(g_Sampler, input.UV);
-    float4 renderTaget = RenderTarget.Sample(g_Sampler, input.UV);
+    float4 rendertarget = RenderTarget.Sample(g_Sampler, input.UV);
     
-    float4 finalColor = (1 - diffuse.a) * renderTaget + diffuse.a * diffuse;
+    rendertarget.rgb += MaterialColor;
+    
+    float4 finalColor = (1 - diffuse.a) * rendertarget + diffuse.a * diffuse;
     
     clip(finalColor.a - 0.01);
     

@@ -16,6 +16,8 @@ public:
 
     void SetSourceCamera(Camera* cam);
     Camera* GetSourceCamera() const { return m_sourceCamera; }
+    
+    RenderTexture* GetRenderTexture() const { return m_renderTexture.get(); }
 
 private:
 

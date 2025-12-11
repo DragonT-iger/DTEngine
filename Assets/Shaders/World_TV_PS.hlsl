@@ -51,6 +51,8 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 ambient = float3(0.3, 0.3, 0.3); // 기본 환경광
     
     
+    clip(input.UV.x > 0.01 && input.UV.x < 0.99 ? 1 : -1);
+    clip(input.UV.y > 0.04 && input.UV.y < 0.88 ? 1 : -1);
        
 
     for (int i = 0; i < ActiveCount; ++i)
@@ -87,11 +89,13 @@ float4 PS(PS_INPUT input) : SV_Target
             //    attenuation = 0.0f;
             
         }
-        float3 skyColor = float3(0.35f, 0.35f, 0.35f);
-        float3 groundColor = float3(0.1f, 0.1f, 0.1f);
-        float up = normal.y * 0.5 + 0.5;
+        //float3 skyColor = float3(0.35f, 0.35f, 0.35f);
+        //float3 groundColor = float3(0.1f, 0.1f, 0.1f);
+        //float up = normal.y * 0.5 + 0.5;
         
-        ambient = lerp(groundColor, skyColor, up);
+        //ambient = lerp(groundColor, skyColor, up);
+        
+        ambient = float3(0.6, 0.6, 0.6);
         // 임시 환경광 같은 느낌 왜냐면 뒷면이 색이 다 검은색이면 너무 어색함
         
         float NdotL = max(dot(normal, L), 0.0f);
@@ -108,9 +112,10 @@ float4 PS(PS_INPUT input) : SV_Target
         float4 diffuse = Diffuse.Sample(g_Sampler, input.UV);
         float4 rendertarget = RenderTarget.Sample(g_Sampler, input.UV);
     
-        rendertarget.rgb += 0.5;
+        rendertarget.rgb += MaterialColor;
         
         float4 texColor = (1 - diffuse.a) * rendertarget + diffuse.a * diffuse;
+        
         
         
         clip(texColor.a - 0.01);
