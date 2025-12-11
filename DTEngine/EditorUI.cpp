@@ -94,7 +94,7 @@ void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Ga
     ImGui::PopStyleVar(1); 
 }
 
-void EditorUI::Render(Scene* activeScene)
+void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 {
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
@@ -112,6 +112,7 @@ void EditorUI::Render(Scene* activeScene)
     bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
     bool cPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::C);
     bool vPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::V);
+    bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
 
     // Undo (Ctrl + Z)
     if (ctrlPressed && !shiftPressed && zPressed_Down)
@@ -164,6 +165,63 @@ void EditorUI::Render(Scene* activeScene)
         }
     }
 
+    //Scene Save (CTAL + S), 
+
+
+    if (ctrlPressed && sPressed_Down)
+    {
+        if (activeScene)
+        {
+            if (engineMode == Game::EngineMode::Edit)
+            {
+                std::string sceneName = activeScene->GetName();
+                if (!sceneName.empty())
+                {
+                    std::string relativePath = "Scenes/" + sceneName + ".scene";
+
+                    std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
+
+                    if (activeScene->SaveFile(relativePath))
+                    {
+                        std::cout << "Scene save successful." << std::endl;
+                        HistoryManager::Instance().MarkAsSaved();
+                    }
+                    else
+                    {
+                        std::cout << "Scene save FAILED." << std::endl;
+                    }
+                }
+                else
+                {
+                    std::cout << "Cannot save: Scene name is empty." << std::endl;
+                }
+            }
+            else {
+                ImGui::OpenPopup("Save Warning");
+                std::cout << "Cannot Save In PlayMode." << std::endl;
+            }
+        }
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Save Warning", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Cannot Save In PlayMode.");
+        ImGui::Separator();
+
+        float availableWidth = ImGui::GetContentRegionAvail().x;
+        float buttonWidth = 120.0f;
+        ImGui::SetCursorPosX((availableWidth - buttonWidth) * 0.5f);
+
+        if (ImGui::Button("OK", ImVec2(buttonWidth, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::EndPopup();
+    }
 
 }
 
@@ -1419,11 +1477,37 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     }
 
                     const char* modes[] = { "Opaque", "Transparent" };
-                    int currentMode = (int)renderer->GetMaterial()->GetRenderMode();
+                    int currentMode = (int)renderer->GetSharedMaterial()->GetRenderMode();
 
                     if (ImGui::Combo("Render Mode", &currentMode, modes, IM_ARRAYSIZE(modes)))
                     {
                         renderer->GetMaterial()->SetRenderMode((RenderMode)currentMode);
+                    }
+                    const char* cullModes[] = { "Back", "Front", "None" };
+                    int currentCull = (int)renderer->GetSharedMaterial()->GetCullMode();
+
+                    if (ImGui::Combo("Cull Mode", &currentCull, cullModes, IM_ARRAYSIZE(cullModes)))
+                    {
+                        renderer->GetMaterial()->SetCullMode((CullMode)currentCull);
+                    }
+
+                    if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetCullMode();
+                    if (ImGui::IsItemDeactivatedAfterEdit())
+                    {
+                        int oldVal = std::any_cast<int>(m_dragStartValue);
+                        int newVal = currentCull;
+
+                        auto setter = [](void* targetObj, void* val) {
+                            MeshRenderer* mr = static_cast<MeshRenderer*>(static_cast<Component*>(targetObj));
+                            int* v = static_cast<int*>(val);
+                            // int를 CullMode로 캐스팅하여 설정
+                            mr->GetMaterial()->SetCullMode((CullMode)*v);
+                            };
+
+                        auto cmd = std::make_unique<ChangePropertyCommand<int>>(
+                            renderer, setter, oldVal, newVal
+                        );
+                        HistoryManager::Instance().Do(std::move(cmd));
                     }
 
                     if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetRenderMode();
@@ -1693,6 +1777,15 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             {
                 material->SetRenderMode((RenderMode)currentMode);
                 material->SaveFile(path); 
+            }
+
+            const char* cullModes[] = { "Back", "Front", "None" };
+            int currentCull = (int)material->GetCullMode();
+
+            if (ImGui::Combo("Cull Mode", &currentCull, cullModes, IM_ARRAYSIZE(cullModes)))
+            {
+                material->SetCullMode((CullMode)currentCull);
+                material->SaveFile(path); // 변경 즉시 파일 저장
             }
 
             for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)

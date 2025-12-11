@@ -71,6 +71,8 @@ void MeshRenderer::SaveInstanceData(JsonWriter& writer)
 
         writer.Write("RenderMode", (int)m_material->GetRenderMode());
 
+        writer.Write("CullMode", (int)m_material->GetCullMode());
+
         writer.BeginObject("Textures");
         for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
@@ -105,6 +107,9 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
 
             int renderModeInt = reader.ReadInt("RenderMode", 0);
             mat->SetRenderMode((RenderMode)renderModeInt);
+
+            int cullModeInt = reader.ReadInt("CullMode", 0); // 기본값 0 (Back)
+            mat->SetCullMode((CullMode)cullModeInt);
 
             if (reader.BeginObject("Textures"))
             {

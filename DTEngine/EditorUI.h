@@ -25,7 +25,7 @@ public:
 
     void RenderToolbar(Game::EngineMode currentMode, std::function<void(Game::EngineMode)> onModeChanged);
 
-    void Render(Scene* activeScene);
+    void Render(Scene* activeScene , Game::EngineMode engineMode);
 
     void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
     void RenderGameWindow(RenderTexture* rt, Scene* scene);

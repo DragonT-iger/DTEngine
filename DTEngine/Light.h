@@ -1,12 +1,9 @@
 #pragma once
 
-#include <DirectXTK/SimpleMath.h>
+#include "SimpleMathHelper.h"
 #include <vector>
 
 #include "MonoBehaviour.h"
-
-
-using Vector3 = DirectX::SimpleMath::Vector3;
 
 enum LightType
 {

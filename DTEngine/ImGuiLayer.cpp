@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <d3d11.h>
 
+#include <filesystem>
+
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
@@ -33,6 +35,20 @@ bool ImGuiLayer::Initialize(DX11Renderer* renderer)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         
 
+
+    //const char* fontPath = "C:/Windows/Fonts/malgun.ttf"; // 기본 파일 경로
+
+    const char* fontPath = "Assets/Fonts/NotoSansKR-ExtraBold.ttf";
+
+    if (std::filesystem::exists(fontPath))
+    {
+        io.Fonts->AddFontFromFileTTF(fontPath, 17.0f, nullptr, io.Fonts->GetGlyphRangesKorean());
+    }
+    else
+    {
+        io.Fonts->AddFontDefault();
+        std::cout << "[ImGui] Warning: Korean font not found at " << fontPath << std::endl;
+    }
 
     // 백엔드 초기화
     ImGui_ImplWin32_Init(m_hwnd);

@@ -199,6 +199,21 @@ void DX11Renderer::SetBlendMode(BlendMode mode)
     }
 }
 
+void DX11Renderer::SetCullMode(CullMode mode)
+{
+    if (!m_context) return;
+
+    ID3D11RasterizerState* state = nullptr;
+    switch (mode)
+    {
+        case CullMode::Back:  state = m_rsCullBack.Get(); break;
+        case CullMode::Front: state = m_rsCullFront.Get(); break;
+        case CullMode::None:  state = m_rsCullNone.Get(); break;
+    }
+
+    m_context->RSSetState(state);
+}
+
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
     assert(m_context && m_rtv);
@@ -321,13 +336,11 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
 
 void DX11Renderer::ResetRenderState()
 {
-    if (m_context)
-    {
-        float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
-        m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
-        m_context->OMSetDepthStencilState(nullptr, 0);
-        m_context->RSSetState(nullptr);
-    }
+    float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+    m_context->OMSetBlendState(nullptr, blendFactor, 0xffffffff);
+    m_context->OMSetDepthStencilState(nullptr, 0);
+    m_context->RSSetState(nullptr);
+    m_context->RSSetState(m_rsCullBack.Get());
 }
 
 ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
@@ -372,13 +385,25 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     hr = dev->CreateDepthStencilState(&dsDesc, m_defaultDepthStencilState.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+
     D3D11_RASTERIZER_DESC rsDesc = {};
     rsDesc.FillMode = D3D11_FILL_SOLID;
-    rsDesc.CullMode = D3D11_CULL_BACK;
     rsDesc.FrontCounterClockwise = FALSE;
     rsDesc.DepthClipEnable = TRUE;
 
-    hr = dev->CreateRasterizerState(&rsDesc, m_defaultRasterizerState.GetAddressOf());
+    // Cull Back 
+    rsDesc.CullMode = D3D11_CULL_BACK;
+    hr = dev->CreateRasterizerState(&rsDesc, m_rsCullBack.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    // Cull Front 
+    rsDesc.CullMode = D3D11_CULL_FRONT;
+    hr = dev->CreateRasterizerState(&rsDesc, m_rsCullFront.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    // Cull None 
+    rsDesc.CullMode = D3D11_CULL_NONE;
+    hr = dev->CreateRasterizerState(&rsDesc, m_rsCullNone.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
     D3D11_BLEND_DESC blendDesc = {};

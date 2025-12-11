@@ -294,44 +294,7 @@ void Game::LifeCycle(float deltaTime)
 	// 렌더링
 
 
-	//Scene Save (CTAL + S), 
-
-	bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
-	bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
-
-	if (ctrlPressed && sPressed_Down)
-	{
-		if (scene)
-		{
-			if (m_engineMode == EngineMode::Edit)
-			{
-				std::string sceneName = scene->GetName();
-				if (!sceneName.empty())
-				{
-					std::string relativePath = "Scenes/" + sceneName + ".scene";
-
-					std::cout << "Saving scene (" << sceneName << ") to: " << relativePath << std::endl;
-
-					if (scene->SaveFile(relativePath))
-					{
-						std::cout << "Scene save successful." << std::endl;
-						HistoryManager::Instance().MarkAsSaved();
-					}
-					else
-					{
-						std::cout << "Scene save FAILED." << std::endl;
-					}
-				}
-				else
-				{
-					std::cout << "Cannot save: Scene name is empty." << std::endl;
-				}
-			}
-			else {
-				std::cout << "Cannot Save In PlayMode." << std::endl;
-			}
-		}
-	}
+	
 
 
 #endif
@@ -409,7 +372,7 @@ void Game::LifeCycle(float deltaTime)
 	//	(float)DX11Renderer::Instance().GetHeight() 
 	//);
 
-	m_editorUI->Render(scene);
+	m_editorUI->Render(scene , m_engineMode);
 
 	m_imgui->Render();
 
@@ -642,7 +605,7 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool ren
 		MeshRenderer* mr = go->GetComponent<MeshRenderer>();
 		Transform* tf = go->GetTransform();
 
-		Material* mat = mr->IsMaterialInstanced() ? mr->GetMaterial() : mr->GetSharedMaterial();
+		Material* mat = mr->GetSharedMaterial();
 		if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
 
 		Mesh* mesh = mr->GetMesh();

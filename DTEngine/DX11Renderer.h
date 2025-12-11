@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include "Texture.h"
+#include "Material.h" // CULLMODE 때문에 나중에 뺴도 됨 따로
 
 
 
@@ -37,6 +38,7 @@ namespace DirectX {
 
 enum class BlendMode { Opaque, AlphaBlend };
 
+
 class DX11Renderer : public Singleton<DX11Renderer>
 {
 public:
@@ -58,6 +60,7 @@ public:
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
     void SetBlendMode(BlendMode mode);
+    void SetCullMode(CullMode mode);
 
     void BeginFrame(const float clearColor[4]);
     void EndFrame();
@@ -176,5 +179,11 @@ private:
     std::unique_ptr<DirectX::DX11::SpriteBatch>  m_spriteBatch;
     std::unique_ptr<DirectX::DX11::SpriteFont>   m_font;
     std::unique_ptr<DirectX::DX11::CommonStates> m_states;
+
+
+    // 컬링
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullBack; 
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullFront;
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullNone; 
 
 };

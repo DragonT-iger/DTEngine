@@ -86,12 +86,15 @@ float4 PS(PS_INPUT input) : SV_Target
             //    attenuation = 0.0f;
             
         }
-        float3 skyColor = float3(0.35f, 0.35f, 0.35f); 
-        float3 groundColor = float3(0.1f, 0.1f, 0.1f); 
+        float3 skyColor = float3(0.35f, 0.35f, 0.35f);
+        float3 groundColor = float3(0.1f, 0.1f, 0.1f);
         float up = normal.y * 0.5 + 0.5;
         
         ambient = lerp(groundColor, skyColor, up);
         // 임시 환경광 같은 느낌 왜냐면 뒷면이 색이 다 검은색이면 너무 어색함
+        
+        //ambient = float3(0.25, 0.25, 0.25);
+        // 이렇게 하면 기본 amb
         
         float NdotL = max(dot(normal, L), 0.0f);
         totalDiffuse += NdotL * lightColor * intensity * attenuation;

@@ -1,6 +1,6 @@
 #pragma once
 #include "MonoBehaviour.h"
-#include <DirectXTK/SimpleMath.h>
+#include "SimpleMathHelper.h"
 #include "ReflectionMacros.h"
 
 using Vector3 = DirectX::SimpleMath::Vector3;

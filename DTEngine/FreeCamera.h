@@ -1,8 +1,6 @@
 #pragma once
 #include "MonoBehaviour.h"
-#include <DirectXTK/SimpleMath.h> 
-
-using namespace DirectX::SimpleMath;
+#include "SimpleMathHelper.h"
 
 class FreeCamera : public MonoBehaviour
 {

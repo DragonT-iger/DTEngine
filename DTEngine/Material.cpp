@@ -9,10 +9,10 @@
 #include "IDManager.h"
 
 #include <d3d11.h>
-#include <DirectXTK/SimpleMath.h>
 #include <fstream>
 #include <iostream>
 
+#include "SimpleMathHelper.h"
 #include "../ThirdParty/nlohmann/json.hpp"
 #include "Image.h"
 using json = nlohmann::json;
@@ -127,6 +127,16 @@ bool Material::LoadFile(const std::string& fullPath)
     {
         m_renderMode = RenderMode::Opaque;
     }
+
+    if (data.contains("CullMode"))
+    {
+        m_cullMode = (CullMode)data["CullMode"];
+    }
+    else
+    {
+        m_cullMode = CullMode::Back;
+    }
+
     if (data.contains("Textures"))
     {
         for (auto& [key, value] : data["Textures"].items())
@@ -193,6 +203,7 @@ bool Material::SaveFile(const std::string& fullPath)
     };
 
     data["RenderMode"] = (int)m_renderMode;
+    data["CullMode"] = (int)m_cullMode;
 
     json texData;
     for (int slot = 0; slot < m_textures.size(); ++slot)
@@ -259,7 +270,9 @@ Material* Material::Clone()
 
     newMat->m_shader = m_shader;
     newMat->m_textures = m_textures; 
-    newMat->m_data = m_data;         
+    newMat->m_data = m_data;        
+    newMat->m_cullMode = m_cullMode;
+    newMat->m_renderMode = m_renderMode;
 
     newMat->UpdateMaterialBuffer();
 
@@ -413,6 +426,8 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     {
         DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
     }
+
+    DX11Renderer::Instance().SetCullMode(m_cullMode);
 
     //UpdateMaterialBuffer();
 }

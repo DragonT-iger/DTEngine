@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DirectXTK/SimpleMath.h>
+#include "SimpleMathHelper.h"
 #include <vector>
 
 #include "Component.h"

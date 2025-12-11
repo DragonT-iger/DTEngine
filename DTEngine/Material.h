@@ -21,6 +21,7 @@ struct MaterialData
 };
 
 enum class RenderMode { Opaque, Transparent };
+enum class CullMode { Back, Front, None };
 
 class Material : public IResource
 {
@@ -55,6 +56,9 @@ public:
     void SetRenderMode(RenderMode mode) { m_renderMode = mode; }
     RenderMode GetRenderMode() const { return m_renderMode; }
 
+    void SetCullMode(CullMode mode) { m_cullMode = mode; }
+    CullMode GetCullMode() const { return m_cullMode; }
+
 	static constexpr int MAX_TEXTURE_SLOTS = 5;
 
 private:
@@ -73,4 +77,6 @@ private:
 	MaterialData m_data;
 
     RenderMode m_renderMode = RenderMode::Opaque;
+
+    CullMode m_cullMode = CullMode::Back;
 };

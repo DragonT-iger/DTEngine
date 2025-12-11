@@ -38,7 +38,8 @@ cbuffer CBuffer_Material : register(b3)
 };
 
 
-Texture2D g_Texture : register(t0);
+Texture2D Diffuse : register(t0);
+Texture2D RenderTarget : register(t1);
 SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
@@ -98,20 +99,28 @@ float4 PS(PS_INPUT input) : SV_Target
         
     }
 
-    float3 finalColor;
+    float4 finalColor;
     
     if (UseTexture)
     {
         float2 transformedUV = input.UV * UVTransform.xy + UVTransform.zw;
         
-        float4 texColor = g_Texture.Sample(g_Sampler, transformedUV);
-        finalColor = texColor.rgb * (ambient + totalDiffuse);
+        float4 diffuse = Diffuse.Sample(g_Sampler, input.UV);
+        float4 rendertarget = RenderTarget.Sample(g_Sampler, input.UV);
+    
+        rendertarget.rgb += 0.5;
+        
+        float4 texColor = (1 - diffuse.a) * rendertarget + diffuse.a * diffuse;
+        
+        
+        clip(texColor.a - 0.01);
+    
+        finalColor = texColor * (float4(ambient, 1) + float4(totalDiffuse, 1));
     }
     else
     {
-        finalColor = MaterialColor.rgb * (ambient + totalDiffuse);
+        finalColor = MaterialColor * (float4(ambient, 1) + float4(totalDiffuse, 1));
     }
-
     
-    return float4(finalColor, 1.0f);
+    return finalColor;
 }
