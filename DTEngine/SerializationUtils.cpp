@@ -6,6 +6,7 @@
 #include "AssetDatabase.h"
 #include "ResourceManager.h"
 #include "Camera.h"
+#include "Material.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -110,7 +111,6 @@ void DeserializeComponentProperties(JsonReader& reader, Component* comp, std::ve
         ReadPropertyRecursive(reader, prop, comp, fixupList);
     }
 
-
     if (MeshRenderer* mr = dynamic_cast<MeshRenderer*>(comp))
     {
         mr->LoadInstanceData(reader);
@@ -128,5 +128,23 @@ void CopyComponentValues(Component* src, Component* dst)
     {
         void* srcValuePtr = prop.m_getter(src);
         prop.m_setter(dst, srcValuePtr);
+    }
+
+    MeshRenderer* srcMR = dynamic_cast<MeshRenderer*>(src);
+    MeshRenderer* dstMR = dynamic_cast<MeshRenderer*>(dst);
+
+    if (srcMR && dstMR)
+    {
+        if (srcMR->IsMaterialInstanced())
+        {
+            Material* srcMat = srcMR->GetSharedMaterial();
+
+            if (srcMat)
+            {
+                Material* newMat = srcMat->Clone();
+
+                dstMR->SetMaterial(newMat);
+            }
+        }
     }
 }

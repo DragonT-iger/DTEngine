@@ -53,6 +53,7 @@ void MeshRenderer::SetMaterial(Material* material)
     m_isMaterialInstanced = false; 
 }
 
+
 void MeshRenderer::SaveInstanceData(JsonWriter& writer)
 {
     if (!m_isMaterialInstanced || m_material == nullptr)

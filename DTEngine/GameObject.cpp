@@ -3,6 +3,9 @@
 #include "GameObject.h"
 #include "MonoBehaviour.h"
 #include "ComponentFactory.h"
+#include "SerializationUtils.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 GameObject::GameObject(const std::string& name , bool isUI)
     : m_name{ name }, m_active{ true } {
@@ -280,61 +283,57 @@ void CopyComponentProperties(Component* src, Component* dst)
     }
 }
 
-std::unique_ptr<GameObject> GameObject::Clone()
+std::vector<std::unique_ptr<GameObject>> GameObject::Clone()
 {
+    std::vector<std::unique_ptr<GameObject>> clonedObjects;
 
-    auto newObj = std::make_unique<GameObject>(m_name);
-
+    auto newObj = std::make_unique<GameObject>(this->GetName());
     newObj->_SetID(IDManager::Instance().GetNewUniqueID());
-    newObj->SetTag(m_tag);
-    newObj->SetActive(m_active);
+    newObj->SetActive(this->IsActive());
+    newObj->SetTag(this->GetTag());
 
-    Transform* srcTf = this->GetTransform();
-    Transform* dstTf = newObj->GetTransform();
-
-    dstTf->SetPosition(srcTf->GetPosition());
-    dstTf->SetRotationQuat(srcTf->GetRotationQuat());
-    dstTf->SetScale(srcTf->GetScale());
-
-    for (const auto& srcComp : m_components)
+    for (const auto& srcComp : this->_GetComponents())
     {
-        if (dynamic_cast<Transform*>(srcComp.get())) continue;
+        if (!srcComp) continue;
 
-        Component* dstComp = newObj->AddComponent(srcComp->_GetTypeName());
-        if (dstComp)
+        if (std::string(srcComp->_GetTypeName()) == "Transform")
         {
-            dstComp->_SetID(IDManager::Instance().GetNewUniqueID());
+            CopyComponentValues(srcComp.get(), newObj->GetTransform());
+            continue;
+        }
 
-            CopyComponentProperties(srcComp.get(), dstComp);
+        auto newComp = ComponentFactory::Instance().Create(srcComp->_GetTypeName());
+        if (newComp)
+        {
+            newComp->_SetOwner(newObj.get());
+            CopyComponentValues(srcComp.get(), newComp.get());
+            newObj->_Internal_AddComponent(std::move(newComp));
         }
     }
 
-    const auto& children = srcTf->GetChildren();
-    for (Transform* child : children)
+    GameObject* rootPtr = newObj.get();
+
+    clonedObjects.push_back(std::move(newObj));
+
+    for (auto* childTf : this->GetComponent<Transform>()->GetChildren())
     {
-        GameObject* childGO = child->_GetOwner();
-        if (childGO)
+        if (!childTf) continue;
+
+        std::vector<std::unique_ptr<GameObject>> childList = childTf->_GetOwner()->Clone();
+
+        if (!childList.empty())
         {
-            auto clonedChild = childGO->Clone();
+            GameObject* childRoot = childList[0].get();
+            childRoot->GetComponent<Transform>()->SetParent(rootPtr->GetComponent<Transform>());
 
-            clonedChild->GetTransform()->SetParent(dstTf);
-
-            // 소유권 이전 (Scene에 바로 넣는게 아니라 부모가 관리하는 구조라면 로직 수정 필요.
-            // 보통 Scene 구조에서는 Scene이 모든 GO를 들고 있으므로, 
-            // 여기서는 Clone만 하고 Command에서 Scene에 등록하도록 처리합니다.)
-
-            // 주의: 현재 엔진 구조상 부모를 설정해도 Scene 리스트에 등록되어야 Update가 돕니다.
-            // 따라서 Clone 함수는 순수 데이터 복제만 담당하고, 
-            // 실제 Scene 등록은 재귀적으로 처리해주는 별도 로직이 필요할 수 있습니다.
-            // 편의상 여기서는 '계층 구조'만 복사하고, 
-            // Command에서 반환된 루트 객체를 Scene에 등록하면, 
-            // Scene::Internal_AddGameObject 등에서 자식들도 순회하며 등록하는지 확인이 필요합니다.
-            // 제공된 코드를 보면 Scene::AddGameObject는 단일 객체만 넣는 것으로 보입니다.
-            // 일단 '계층구조 복사'를 위해 부모만 세팅해둡니다.
+            for (auto& childObj : childList)
+            {
+                clonedObjects.push_back(std::move(childObj));
+            }
         }
     }
 
-    return newObj;
+    return clonedObjects;
 }
 
 GameObject* GameObject::Find(std::string name)

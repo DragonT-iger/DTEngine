@@ -40,7 +40,7 @@
 #include "Shader.h"
 #include "AssetDatabase.h"
 #include "Camera.h"
-#include "PasteGameObjectCommand.h"
+//#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
 
 namespace fs = std::filesystem;
@@ -139,30 +139,31 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     {
         if (m_selectedGameObject)
         {
-            m_clipboardObject = m_selectedGameObject->Clone();
-            std::cout << "[Editor] Copied: " << m_selectedGameObject->GetName() << std::endl;
+            m_clipboardGameObjects = m_selectedGameObject->Clone();
         }
     }
 
     if (ctrlPressed && vPressed_Down)
     {
-        if (m_clipboardObject && activeScene)
+        GameObject* prototype = m_clipboardGameObjects[0].get();
+        std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
+
+        if (!newObjects.empty())
         {
-            auto cmd = std::make_unique<PasteGameObjectCommand>(activeScene, m_clipboardObject.get());
-            PasteGameObjectCommand* pCmd = cmd.get();
+            GameObject* rootInstance = newObjects[0].get();
 
-            HistoryManager::Instance().Do(std::move(cmd));
-
-            if (pCmd->GetPastedObject())
+            //if (m_selectedGameObject)
+            //{
+            //    rootInstance->GetTransform()->SetParent(m_selectedGameObject->GetTransform());
+            //}
+            for (auto& obj : newObjects)
             {
-                m_selectedGameObject = pCmd->GetPastedObject();
-
-                // (선택 사항) 같은 위치에 겹치지 않게 약간 이동?
-                // Transform* tf = m_selectedGameObject->GetTransform();
-                // tf->SetPosition(tf->GetPosition() + Vector3(1, 1, 0)); 
+                activeScene->AddGameObject(std::move(obj));
             }
 
-            std::cout << "[Editor] Pasted" << std::endl;
+            m_selectedGameObject = rootInstance;
+
+            std::cout << "[Editor] Pasted GameObject: " << rootInstance->GetName() << std::endl;
         }
     }
 

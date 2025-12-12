@@ -31,6 +31,14 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     return raw;
 }
 
+void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject)
+{
+    if (m_isIterating)
+        m_pendingAdd.emplace_back(std::move(gameObject));
+    else
+        m_gameObjects.emplace_back(std::move(gameObject));
+}
+
 void Scene::_Internal_AddGameObject(std::unique_ptr<GameObject> go)
 {
     GameObject* raw = go.get();

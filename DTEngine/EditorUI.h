@@ -72,7 +72,7 @@ private:
 
     GameObject* m_selectedGameObject = nullptr;
 
-    std::unique_ptr<GameObject> m_clipboardObject;
+    std::vector<std::unique_ptr<GameObject>> m_clipboardGameObjects;
     std::unique_ptr<Component> m_clipboardComponent = nullptr;
 
     Camera* m_sceneCamera = nullptr;
