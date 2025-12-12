@@ -16,6 +16,7 @@ BEGINPROPERTY(MeshRenderer)
 DTPROPERTY_SETTER(MeshRenderer, m_modelID, SetModelID)
 DTPROPERTY_SETTER(MeshRenderer, m_meshIndex, SetMeshIndex)
 DTPROPERTY_SETTER(MeshRenderer, m_materialID, SetMaterialID)
+//DTPROPERTY(MeshRenderer, m_isMaterialInstanced)
 ENDPROPERTY()
 
 void MeshRenderer::Awake()
@@ -51,6 +52,17 @@ void MeshRenderer::SetMaterial(Material* material)
 
     m_material = material;
     m_isMaterialInstanced = false; 
+}
+
+void MeshRenderer::SetMaterialInstance(Material* material)
+{
+    if (m_isMaterialInstanced && m_material != nullptr)
+    {
+        delete m_material;
+    }
+
+    m_material = material;
+    m_isMaterialInstanced = true;
 }
 
 

@@ -35,6 +35,7 @@ public:
     Material* GetMaterial();
     void SetMaterial(Material* material);
 
+    void SetMaterialInstance(Material* material);
 
     Material* GetSharedMaterial() const { return m_material; }
 

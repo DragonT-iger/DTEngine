@@ -6,6 +6,9 @@
 #include "SerializationUtils.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "MeshRenderer.h"
+#include "Material.h"
+#include "Component.h"
 
 GameObject::GameObject(const std::string& name , bool isUI)
     : m_name{ name }, m_active{ true } {
@@ -292,21 +295,25 @@ std::vector<std::unique_ptr<GameObject>> GameObject::Clone()
     newObj->SetActive(this->IsActive());
     newObj->SetTag(this->GetTag());
 
+
+    Transform* newObjTransform = newObj->GetTransform();
+
+    newObjTransform->SetPosition(m_transform->GetPosition());
+    newObjTransform->SetRotationQuat(m_transform->GetRotationQuat());
+    newObjTransform->SetScale(m_transform->GetScale());
+
+
+
     for (const auto& srcComp : this->_GetComponents())
     {
-        if (!srcComp) continue;
-
-        if (std::string(srcComp->_GetTypeName()) == "Transform")
-        {
-            CopyComponentValues(srcComp.get(), newObj->GetTransform());
-            continue;
-        }
+        if (!srcComp) continue;        
 
         auto newComp = ComponentFactory::Instance().Create(srcComp->_GetTypeName());
         if (newComp)
         {
             newComp->_SetOwner(newObj.get());
             CopyComponentValues(srcComp.get(), newComp.get());
+
             newObj->_Internal_AddComponent(std::move(newComp));
         }
     }

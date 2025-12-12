@@ -121,6 +121,20 @@ void CopyComponentValues(Component* src, Component* dst)
 {
     if (!src || !dst || std::string(src->_GetTypeName()) != dst->_GetTypeName()) return;
 
+
+    if (auto* srcTf = dynamic_cast<Transform*>(src))
+    {
+        auto* dstTf = dynamic_cast<Transform*>(dst);
+
+        dstTf->SetPosition(srcTf->GetPosition());
+        dstTf->SetRotationQuat(srcTf->GetRotationQuat());
+        dstTf->SetScale(srcTf->GetScale());
+        return;
+    }
+
+
+
+
     const ClassInfo* info = ReflectionDatabase::Instance().GetClassInfomation(src->_GetTypeName());
     if (!info) return;
 
@@ -130,21 +144,20 @@ void CopyComponentValues(Component* src, Component* dst)
         prop.m_setter(dst, srcValuePtr);
     }
 
-    MeshRenderer* srcMR = dynamic_cast<MeshRenderer*>(src);
-    MeshRenderer* dstMR = dynamic_cast<MeshRenderer*>(dst);
 
-    if (srcMR && dstMR)
+    if (MeshRenderer* srcMR = dynamic_cast<MeshRenderer*>(src))
     {
-        if (srcMR->IsMaterialInstanced())
-        {
-            Material* srcMat = srcMR->GetSharedMaterial();
+        MeshRenderer* dstMR = dynamic_cast<MeshRenderer*>(dst);
 
-            if (srcMat)
+        if (dstMR) {
+            if (srcMR->IsMaterialInstanced())
             {
-                Material* newMat = srcMat->Clone();
+                Material* clonedMat = srcMR->GetSharedMaterial()->Clone();
 
-                dstMR->SetMaterial(newMat);
+                dstMR->SetMaterialInstance(clonedMat);
             }
         }
+        
+        
     }
 }
