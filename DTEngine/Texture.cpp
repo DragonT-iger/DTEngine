@@ -25,19 +25,57 @@ bool Texture::LoadFile(const std::string& fullPath)
     auto context = DX11Renderer::Instance().GetContext();
     if (!device) return false;
 
+    LoadMetaData(fullPath);
+
     std::wstring widestr = std::wstring(fullPath.begin(), fullPath.end());
     HRESULT hr = S_OK;
 
     std::string ext = fullPath.substr(fullPath.find_last_of(".") + 1);
+
     if (ext == "dds" || ext == "DDS")
     {
-        hr = DirectX::CreateDDSTextureFromFile(device, context, widestr.c_str(),
-            m_textureResource.GetAddressOf(), m_srv.GetAddressOf());
+        DirectX::DDS_LOADER_FLAGS ddsFlags = DirectX::DDS_LOADER_DEFAULT; // 이것도 SRGB데이터를 IGNORE하는데도 잘 작동함 어디선가 보간되고 있는듯
+        //if (m_bSRGB)
+        //    ddsFlags = DirectX::DDS_LOADER_FORCE_SRGB;
+        //else
+        //    ddsFlags = DirectX::DDS_LOADER_IGNORE_SRGB;
+
+        hr = DirectX::CreateDDSTextureFromFileEx(
+            device,
+            context,
+            widestr.c_str(),
+            0, 
+            D3D11_USAGE_DEFAULT,
+            D3D11_BIND_SHADER_RESOURCE,
+            0, 
+            0, 
+            ddsFlags, 
+            m_textureResource.GetAddressOf(),
+            m_srv.GetAddressOf()
+        );
     }
     else
     {
-        hr = DirectX::CreateWICTextureFromFile(device, context, widestr.c_str(),
-            m_textureResource.GetAddressOf(), m_srv.GetAddressOf());
+        DirectX::WIC_LOADER_FLAGS loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB;
+        //if (m_bSRGB)
+        //    loadFlags = DirectX::WIC_LOADER_FORCE_SRGB;
+        //else
+        //    loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB; 
+        //    이게 왜 false 여야 되는거지 Yena는 그냥 Default 여도 되는데 뭔가 꼬여있다. 
+        //    이 말은 지금 무시 했지만 어디선가 보간이 되고 있다는건데 UI만 이해할수가 없네?
+
+        hr = DirectX::CreateWICTextureFromFileEx(
+            device, context,
+            widestr.c_str(),
+            0, 
+            D3D11_USAGE_DEFAULT,
+            D3D11_BIND_SHADER_RESOURCE,
+            0, 
+            0, 
+            loadFlags,
+            m_textureResource.GetAddressOf(),
+            m_srv.GetAddressOf()
+        );
     }
 
     if (FAILED(hr)) return false;
@@ -54,7 +92,6 @@ bool Texture::LoadFile(const std::string& fullPath)
         }
     }
 
-    LoadMetaData(fullPath);
     UpdateSampler();
 
     return true;
@@ -79,6 +116,7 @@ void Texture::SaveImportSettings(const std::string& fullPath)
 
     data["FilterMode"] = (int)m_filterMode;
     data["WrapMode"] = (int)m_wrapMode;
+    data["SRGB"] = m_bSRGB;
 
     std::ofstream outFile(metaPath);
     if (outFile.is_open()) outFile << data.dump(4);
@@ -115,8 +153,11 @@ void Texture::LoadMetaData(const std::string& fullPath)
             file >> data;
             if (data.contains("FilterMode")) m_filterMode = (FilterMode)data["FilterMode"];
             if (data.contains("WrapMode")) m_wrapMode = (WrapMode)data["WrapMode"];
+            if (data.contains("SRGB")) m_bSRGB = data["SRGB"];
         }
-        catch (...) {}
+        catch (...) {
+            std::cout << "Cannot Load Metadata" << std::endl;
+        }
     }
 }
 

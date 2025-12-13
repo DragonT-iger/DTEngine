@@ -462,6 +462,14 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};       
+    //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
+    //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;  
+    //rtvViewDesc.Texture2D.MipSlice = 0;
+
+    //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
+
     D3D11_TEXTURE2D_DESC rtvDesc;
     m_backbufferTex->GetDesc(&rtvDesc);
 
@@ -507,9 +515,9 @@ void DX11Renderer::CreateSamplers()
 
             switch ((FilterMode)f)
             {
-            case FilterMode::Point:     desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; break;
-            case FilterMode::Bilinear:  desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT; break;
-            case FilterMode::Trilinear: desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; break;
+                case FilterMode::Point:     desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; break;
+                case FilterMode::Bilinear:  desc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT; break;
+                case FilterMode::Trilinear: desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; break;
             }
 
             D3D11_TEXTURE_ADDRESS_MODE addr = (w == 0) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -524,14 +532,14 @@ void DX11Renderer::CreateSamplers()
         }
     }
 
-    D3D11_SAMPLER_DESC uiDesc = {};
-    uiDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; 
-    uiDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    uiDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-    uiDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    uiDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    uiDesc.MinLOD = 0;
-    uiDesc.MaxLOD = 0;
+    //D3D11_SAMPLER_DESC uiDesc = {};
+    //uiDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; 
+    //uiDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+    //uiDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+    //uiDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    //uiDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    //uiDesc.MinLOD = 0;
+    //uiDesc.MaxLOD = 0;
 
-    m_device->CreateSamplerState(&uiDesc, m_uiSampler.GetAddressOf());
+    //m_device->CreateSamplerState(&uiDesc, m_uiSampler.GetAddressOf());
 }

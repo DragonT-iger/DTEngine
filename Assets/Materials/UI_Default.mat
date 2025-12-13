@@ -5,7 +5,8 @@
         1.0,
         1.0
     ],
-    "RenderMode": 1,
+    "CullMode": 0,
+    "RenderMode": 0,
     "ShaderID": 10736154177616132876,
     "Textures": null,
     "UVTransform": [

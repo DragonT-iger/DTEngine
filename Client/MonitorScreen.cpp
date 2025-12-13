@@ -51,11 +51,11 @@ void MonitorScreen::Update(float deltaTime)
 
         m_monitorController->SetSourceCamera(m_monitorController->GetSourceCamera()); // 이거 최적화 안되긴 했음
 
-        if (m_RTrenderTimer >= 3.0f) {
+        if (m_RTrenderTimer >= 2.0f) {
             
 
             allPlayed = false;
-            m_RTrenderTimer -= 3.0f;
+            m_RTrenderTimer -= 2.0f;
         }
         
     }
