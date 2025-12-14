@@ -276,7 +276,7 @@ void DX11Renderer::Destroy()
 
 void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
-	assert(rtv != nullptr && "RTV cannot be null");
+	//assert(rtv != nullptr && "RTV cannot be null");
 
     ID3D11RenderTargetView* rtvs[1] = { rtv };
     m_context->OMSetRenderTargets(1, rtvs, dsv);

@@ -6,7 +6,11 @@
 
 using Microsoft::WRL::ComPtr;
 
-
+enum class RenderTextureType
+{
+    Tex2D,
+    CubeMap
+};
 
 struct ID3D11Texture2D;
 struct ID3D11RenderTargetView;
@@ -19,15 +23,15 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    bool Initialize(int width, int height);
+    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D);
 
     void Resize(int width, int height);
 
-    void Bind();
+    void Bind(int faceIndex = 0);
 
     void Unbind();
 
-    void Clear(float r, float g, float b, float a);
+    void Clear(float r, float g, float b, float a, int faceIndex = 0);
 
     void SetViewport(float x, float y, float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f);
 
@@ -47,6 +51,10 @@ private:
 
     ComPtr<ID3D11Texture2D>          m_depthStencilTexture;
     ComPtr<ID3D11DepthStencilView>   m_dsv;
+
+    RenderTextureType m_type = RenderTextureType::Tex2D;
+    std::vector<ComPtr<ID3D11RenderTargetView>> m_faceRTVs;
+
 
     RenderViewport m_viewport = {};
 };

@@ -155,7 +155,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="CreateGameObjectCommand.h" />
-    <ClInclude Include="CubeRenderTexture.h" />
     <ClInclude Include="DestroyGameObjectCommand.h" />
     <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="DXHelper.h" />
@@ -186,6 +185,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReflectionDatabase.h" />
     <ClInclude Include="ReflectionMacros.h" />
+    <ClInclude Include="ReflectionProbe.h" />
     <ClInclude Include="RegisterCoreTypes.h" />
     <ClInclude Include="RemoveComponentCommand.h" />
     <ClInclude Include="RenderTexture.h" />
@@ -218,7 +218,6 @@
     <ClCompile Include="ChangeTransformCommand.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CreateGameObjectCommand.cpp" />
-    <ClCompile Include="CubeRenderTexture.cpp" />
     <ClCompile Include="DestroyGameObjectCommand.cpp" />
     <ClCompile Include="DTEngine.cpp" />
     <ClCompile Include="DX11Renderer.cpp" />
@@ -249,6 +248,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ReflectionDatabase.cpp" />
+    <ClCompile Include="ReflectionProbe.cpp" />
     <ClCompile Include="RegisterCoreTypes.cpp" />
     <ClCompile Include="RemoveComponentCommand.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
@@ -276,6 +276,8 @@
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\CubeMap_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl" />

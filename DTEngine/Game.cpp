@@ -33,7 +33,7 @@
 //#include "Text3D.h"
 #include "Text.h"
 #include "Image.h"
-
+#include "ReflectionProbe.h"
 
 
 Game::Game() = default;
@@ -255,6 +255,9 @@ void Game::LifeCycle(float deltaTime)
 #ifdef _DEBUG
 	}
 
+
+	
+
 	if (m_engineMode == EngineMode::Edit || m_engineMode == EngineMode::Pause) {
 
 		if (m_editorCameraObject != nullptr) {
@@ -298,6 +301,21 @@ void Game::LifeCycle(float deltaTime)
 
 
 #endif
+
+	if (scene)
+	{
+		const auto& gameObjects = scene->GetGameObjects();
+		for (const auto& go : gameObjects)
+		{
+			if (!go || !go->IsActiveInHierarchy()) continue;
+
+			if (auto probe = go->GetComponent<ReflectionProbe>())
+			{
+				probe->Render();
+			}
+		}
+	}
+
 
 #ifdef _DEBUG
 	m_sceneRT->Bind();

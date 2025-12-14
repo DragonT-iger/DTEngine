@@ -35,6 +35,8 @@ public:
 	void SetRotationEuler(const Vector3& rotation);
 	void SetScale(const Vector3& scale);
 
+	void LookAt(const Vector3& target, const Vector3& worldUp = Vector3::Up);
+
 
 	bool SetParent(Transform* parent, bool worldPositionStays = false);
 	Transform* GetParent() const { return m_parent; } // 에디터에서 이거 private 접근함 수정주의

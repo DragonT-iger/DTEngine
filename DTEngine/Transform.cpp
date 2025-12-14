@@ -203,6 +203,20 @@ void Transform::SetScale(const Vector3& scale)
 	MarkDirtyRecursive();
 }
 
+void Transform::LookAt(const Vector3& target, const Vector3& worldUp)
+{
+	Vector3 direction = target - GetPosition();
+
+	Vector3 forward = direction;
+	forward.Normalize();
+
+	Matrix targetWorldMatrix = Matrix::CreateWorld(Vector3(0, 0, 0), -forward, worldUp); // RH이니까 그냥 -넣어줬음
+
+	Quaternion targetRotation = Quaternion::CreateFromRotationMatrix(targetWorldMatrix);
+
+	SetRotationQuat(targetRotation);
+}
+
 bool Transform::SetParent(Transform* newParent, bool worldPositionStays)
 {
 	if (newParent == m_parent) return true;

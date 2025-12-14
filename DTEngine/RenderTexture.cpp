@@ -6,42 +6,92 @@
 RenderTexture::RenderTexture() = default;
 RenderTexture::~RenderTexture() = default;
 
-bool RenderTexture::Initialize(int width, int height)
+bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
 {
     m_width = width;
     m_height = height;
+    m_type = type;
 
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
 
+    // 1. 텍스처 생성 설정
     D3D11_TEXTURE2D_DESC textureDesc = {};
     textureDesc.Width = width;
     textureDesc.Height = height;
     textureDesc.MipLevels = 1;
-    textureDesc.ArraySize = 1;
-    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     textureDesc.SampleDesc.Count = 1;
     textureDesc.Usage = D3D11_USAGE_DEFAULT;
-    textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; 
+    textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
     textureDesc.CPUAccessFlags = 0;
-    textureDesc.MiscFlags = 0;
+
+    // 큐브맵인 경우 ArraySize 6, MiscFlags 설정
+    if (m_type == RenderTextureType::CubeMap)
+    {
+        textureDesc.ArraySize = 6;
+        textureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+    }
+    else
+    {
+        textureDesc.ArraySize = 1;
+        textureDesc.MiscFlags = 0;
+    }
 
     if (FAILED(device->CreateTexture2D(&textureDesc, nullptr, m_renderTargetTexture.GetAddressOf())))
         return false;
 
+    // Texture 부모 클래스의 리소스 설정 (SRV 관리 등을 위해)
     m_renderTargetTexture.As(&m_textureResource);
+
+    // 2. RTV (Render Target View) 생성
+    m_faceRTVs.clear();
 
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
     rtvDesc.Format = textureDesc.Format;
-    rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	//rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS; // AA
 
-    if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, m_rtv.GetAddressOf())))
-        return false;
+    if (m_type == RenderTextureType::CubeMap)
+    {
+        // 큐브맵은 Texture2DArray 뷰로 각 면을 생성
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+        rtvDesc.Texture2DArray.MipSlice = 0;
+        rtvDesc.Texture2DArray.ArraySize = 1;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            rtvDesc.Texture2DArray.FirstArraySlice = i; // i번째 면
+            ComPtr<ID3D11RenderTargetView> rtv;
+            if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, rtv.GetAddressOf())))
+                return false;
+            m_faceRTVs.push_back(rtv);
+        }
+    }
+    else
+    {
+        // 기존 2D 텍스처
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ComPtr<ID3D11RenderTargetView> rtv;
+        if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, rtv.GetAddressOf())))
+            return false;
+        m_faceRTVs.push_back(rtv);
+    }
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
     srvDesc.Format = textureDesc.Format;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels = 1;
+
+    if (m_type == RenderTextureType::CubeMap)
+    {
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+        srvDesc.TextureCube.MipLevels = 1;
+        srvDesc.TextureCube.MostDetailedMip = 0;
+    }
+    else
+    {
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels = 1;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+    }
 
     if (FAILED(device->CreateShaderResourceView(m_renderTargetTexture.Get(), &srvDesc, m_srv.GetAddressOf())))
         return false;
@@ -62,6 +112,7 @@ bool RenderTexture::Initialize(int width, int height)
     if (FAILED(device->CreateDepthStencilView(m_depthStencilTexture.Get(), nullptr, m_dsv.GetAddressOf())))
         return false;
 
+    // Viewport 설정
     m_viewport.TopLeftX = 0.0f;
     m_viewport.TopLeftY = 0.0f;
     m_viewport.Width = static_cast<float>(width);
@@ -97,15 +148,16 @@ void RenderTexture::SetViewport(float x, float y, float width, float height, flo
     m_viewport.MaxDepth = maxDepth;
 }
 
-void RenderTexture::Bind()
+void RenderTexture::Bind(int faceIndex)
 {
     ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
 
-    ID3D11RenderTargetView* rtv = m_rtv.Get();
-
-    context->OMSetRenderTargets(1, &rtv, m_dsv.Get());
-
-    context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_viewport));
+    if (faceIndex >= 0 && faceIndex < m_faceRTVs.size())
+    {
+        ID3D11RenderTargetView* rtv = m_faceRTVs[faceIndex].Get();
+        context->OMSetRenderTargets(1, &rtv, m_dsv.Get());
+        context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_viewport));
+    }
 }
 
 void RenderTexture::Unbind()
@@ -113,11 +165,14 @@ void RenderTexture::Unbind()
     DX11Renderer::Instance().SetRenderTarget(nullptr);
 }
 
-void RenderTexture::Clear(float r, float g, float b, float a)
+void RenderTexture::Clear(float r, float g, float b, float a, int faceIndex)
 {
     ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
     const float color[4] = { r, g, b, a };
 
-    context->ClearRenderTargetView(m_rtv.Get(), color);
-    context->ClearDepthStencilView(m_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    if (faceIndex >= 0 && faceIndex < m_faceRTVs.size())
+    {
+        context->ClearRenderTargetView(m_faceRTVs[faceIndex].Get(), color);
+        context->ClearDepthStencilView(m_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    }
 }
