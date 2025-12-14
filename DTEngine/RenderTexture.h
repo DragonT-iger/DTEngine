@@ -1,19 +1,12 @@
 #pragma once
 #include <wrl.h>
 #include "Texture.h"
+#include "RenderViewport.h"
 
 
 using Microsoft::WRL::ComPtr;
 
-struct RenderViewport
-{
-    float TopLeftX;
-    float TopLeftY;
-    float Width;
-    float Height;
-    float MinDepth;
-    float MaxDepth;
-};
+
 
 struct ID3D11Texture2D;
 struct ID3D11RenderTargetView;
@@ -42,6 +35,7 @@ public:
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
+
 
 private:
     int m_width = 0;

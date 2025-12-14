@@ -11,6 +11,8 @@
 
 class GameObject;
 class Camera;
+class Texture;
+class RenderTexture;
 
 class Scene : public IResource
 {
@@ -29,7 +31,7 @@ public:
 
     GameObject* FindGameObjectByID(uint64_t id);
 
-
+    void Render(Camera* camera, RenderTexture* renderTarget = nullptr, bool renderUI = false);
 
 
     // 엔진 전용 public 함수들

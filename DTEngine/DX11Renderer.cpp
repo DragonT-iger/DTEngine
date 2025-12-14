@@ -282,7 +282,21 @@ void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStenc
     m_context->OMSetRenderTargets(1, rtvs, dsv);
 }
 
+void DX11Renderer::SetViewport(float width, float height, float minDepth, float maxDepth, float topLeftX, float topLeftY)
+{
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = width;
+    viewport.Height = height;
+    viewport.MinDepth = minDepth;
+    viewport.MaxDepth = maxDepth;
+    viewport.TopLeftX = topLeftX;
+    viewport.TopLeftY = topLeftY;
 
+    if (m_context)
+    {
+        m_context->RSSetViewports(1, &viewport);
+    }
+}
 
 HWND DX11Renderer::GetHwnd()
 {

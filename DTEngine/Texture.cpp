@@ -34,7 +34,7 @@ bool Texture::LoadFile(const std::string& fullPath)
 
     if (ext == "dds" || ext == "DDS")
     {
-        DirectX::DDS_LOADER_FLAGS ddsFlags = DirectX::DDS_LOADER_DEFAULT; // 이것도 SRGB데이터를 IGNORE하는데도 잘 작동함 
+        DirectX::DDS_LOADER_FLAGS ddsFlags = DirectX::DDS_LOADER_IGNORE_SRGB; // 이것도 SRGB데이터를 IGNORE하는데도 잘 작동함 
         //if (m_bSRGB)
         //    ddsFlags = DirectX::DDS_LOADER_FORCE_SRGB;
         //else

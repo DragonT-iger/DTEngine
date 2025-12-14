@@ -15,6 +15,8 @@
 #include "SerializationUtils.h"
 #include "MeshRenderer.h"
 #include "Camera.h"
+#include "Image.h"
+#include "Mesh.h"
 
 
 
@@ -396,6 +398,108 @@ GameObject* Scene::FindGameObjectByID(uint64_t id)
             return go.get();
     }
     return nullptr;
+}
+
+void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
+{
+    if (!camera) return;
+
+
+    float width = (float)DX11Renderer::Instance().GetWidth();
+    float height = (float)DX11Renderer::Instance().GetHeight();
+
+    if (renderTarget != nullptr)
+    {
+        width = (float)renderTarget->GetWidth();
+        height = (float)renderTarget->GetHeight();
+    }
+
+    float ratio = width / height;
+    camera->SetAspectRatio(ratio);
+
+    DX11Renderer::Instance().ResetRenderState();
+
+    camera->Bind();
+    //DX11Renderer::Instance().SetViewport(width, height);
+
+
+    //if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
+
+    const Matrix& viewTM = camera->GetViewMatrix();
+    const Matrix& projTM = camera->GetProjectionMatrix();
+    DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
+
+    std::vector<GameObject*> opaqueQueue;
+    std::vector<GameObject*> transparentQueue;
+    std::vector<GameObject*> uiQueue;
+
+    for (const auto& go : GetGameObjects())
+    {
+        if (!go || !go->IsActiveInHierarchy()) continue;
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        Image* img = go->GetComponent<Image>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Material* mat = mr->GetSharedMaterial();
+        if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+        if (!mat) continue;
+
+        if (img) {
+            uiQueue.push_back(go.get());
+        }
+        else if (mat->GetRenderMode() == RenderMode::Transparent)
+        {
+            transparentQueue.push_back(go.get());
+        }
+        else
+        {
+            opaqueQueue.push_back(go.get());
+        }
+    }
+
+    auto DrawObject = [&](GameObject* go) {
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        Transform* tf = go->GetTransform();
+
+        Material* mat = mr->GetSharedMaterial();
+        if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh || !mat) return;
+
+        const Matrix& worldTM = tf->GetWorldMatrix();
+        Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+        mat->Bind(worldTM, worldInvT);
+        mesh->Bind();
+        mesh->Draw();
+        };
+
+
+    for (auto* go : opaqueQueue)
+    {
+        DrawObject(go);
+    }
+
+    for (auto* go : transparentQueue)
+    {
+        DrawObject(go);
+    }
+
+    if (renderUI) {
+        DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
+
+        std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
+            return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
+            });
+
+        for (auto* go : uiQueue)
+        {
+            DrawObject(go);
+        }
+
+        DX11Renderer::Instance().EndUIRender();
+    }
 }
 
 void Scene::FlushPending()

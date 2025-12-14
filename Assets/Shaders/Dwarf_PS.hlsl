@@ -47,7 +47,7 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float3 totalDiffuse = float3(0, 0, 0);
     float3 totalSpecular = float3(0, 0, 0);
-    float specularPower = 64.0f;
+    float specularPower = 20.0f;
 
     for (int i = 0; i < ActiveCount; ++i)
     {
