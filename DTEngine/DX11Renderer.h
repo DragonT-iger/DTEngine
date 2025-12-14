@@ -97,7 +97,7 @@ public:
     void SetWidth(int width) { m_width = width; }
     void SetHeight(int height) { m_height = height; }
 
-    void UpdateLights(const std::vector<class Light*>& lights);
+    void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
 
     void ResetRenderState();
 
@@ -134,7 +134,7 @@ private:
     {
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
-        DirectX::SimpleMath::Vector3 Padding;        // 16바이트 정렬 맞춤
+        Vector3 CameraPos;                    
     };
 
 

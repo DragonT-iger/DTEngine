@@ -50,5 +50,5 @@ protected:
     FilterMode m_filterMode = FilterMode::Bilinear;
     WrapMode m_wrapMode = WrapMode::Repeat;
 
-    bool m_bSRGB = false;
+    bool m_bSRGB = true;
 };

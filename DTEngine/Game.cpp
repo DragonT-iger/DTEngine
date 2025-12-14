@@ -263,7 +263,7 @@ void Game::LifeCycle(float deltaTime)
 
 			m_editorCameraObject->LateUpdate(deltaTime);
 
-			DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+			DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_editorCameraObject->GetTransform()->GetPosition());
 
 
 			Scene* activeScene = SceneManager::Instance().GetActiveScene();

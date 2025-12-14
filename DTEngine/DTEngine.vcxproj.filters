@@ -441,5 +441,11 @@
     <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

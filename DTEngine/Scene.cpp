@@ -14,6 +14,7 @@
 #include "Behaviour.h"
 #include "SerializationUtils.h"
 #include "MeshRenderer.h"
+#include "Camera.h"
 
 
 
@@ -363,7 +364,7 @@ void Scene::LateUpdate(float deltaTime)
 
 
     // 빛 업데이트
-    DX11Renderer::Instance().UpdateLights(Light::GetAllLights());
+    DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
 
     // 물리 업데이트
 }

@@ -293,7 +293,7 @@ ID3D11Device* DX11Renderer::GetDevice() const { return m_device.Get(); }
 ID3D11DeviceContext* DX11Renderer::GetContext() const { return m_context.Get(); }
 ID3D11RenderTargetView* DX11Renderer::GetBackbufferRTV() const { return m_rtv.Get(); }
 
-void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
+void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3& cameraPos)
 {
     if (!m_cbuffer_lights) return;
 
@@ -307,6 +307,8 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights)
 
     int count = std::min((int)lights.size(), MAX_LIGHTS);
     data->ActiveCount = count;
+
+    data->CameraPos = cameraPos;
 
     for (int i = 0; i < count; ++i)
     {
@@ -466,7 +468,6 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
     //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;  
     //rtvViewDesc.Texture2D.MipSlice = 0;
-
     //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
     //DXHelper::ThrowIfFailed(hr);
 
