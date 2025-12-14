@@ -311,7 +311,9 @@ void Game::LifeCycle(float deltaTime)
 
 			if (auto probe = go->GetComponent<ReflectionProbe>())
 			{
-				probe->Render();
+				if (probe->IsActive()) {
+					probe->Render();
+				}
 			}
 		}
 	}

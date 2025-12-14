@@ -1,5 +1,3 @@
-// Assets/Shaders/Reflection_PS.hlsl
-
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
@@ -18,6 +16,7 @@ struct LightData
     float4 DirectionType;
     float4 ColorIntensity;
 };
+
 #define MAX_LIGHTS 4
 
 cbuffer CBuffer_GlobalLight : register(b2)

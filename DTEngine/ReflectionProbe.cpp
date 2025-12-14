@@ -28,6 +28,7 @@ void ReflectionProbe::Awake()
     m_captureCamera = m_cameraObject->AddComponent<Camera>();
     m_captureCamera->SetEditorFovY(90.0f);
     m_captureCamera->SetAspectRatio(1.0f);
+    m_captureCamera->SetNearZ(0.01f);
 
     if (auto renderer = _GetOwner()->GetComponent<MeshRenderer>())
     {
@@ -42,6 +43,9 @@ void ReflectionProbe::Render()
 {
     Scene* currentScene = SceneManager::Instance().GetActiveScene();
     if (!currentScene) return;
+    GameObject* owner = _GetOwner();
+    bool wasActive = owner->IsActive();
+    owner->SetActive(false);
 
     Transform* myTrans = GetTransform();
     Transform* camTrans = m_cameraObject->GetTransform();
@@ -64,11 +68,15 @@ void ReflectionProbe::Render()
     {
         camTrans->LookAt(myTrans->GetPosition() + targets[i], ups[i]);
 
+        m_captureCamera->LateUpdate(0.0f);
+
         m_cubeMap->Bind(i);
-        m_cubeMap->Clear(0.0f, 0.0f, 0.0f, 1.0f, i); 
+        m_cubeMap->Clear(0.2f, 0.2f, 0.2f, 1.0f, i); 
 
         currentScene->Render(m_captureCamera, m_cubeMap.get(), false);
     }
 
     m_cubeMap->Unbind();
+
+    owner->SetActive(wasActive);
 }
