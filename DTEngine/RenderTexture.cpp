@@ -14,7 +14,6 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
 
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
 
-    // 1. 텍스처 생성 설정
     D3D11_TEXTURE2D_DESC textureDesc = {};
     textureDesc.Width = width;
     textureDesc.Height = height;
@@ -25,7 +24,6 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
     textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
     textureDesc.CPUAccessFlags = 0;
 
-    // 큐브맵인 경우 ArraySize 6, MiscFlags 설정
     if (m_type == RenderTextureType::CubeMap)
     {
         textureDesc.ArraySize = 6;
@@ -40,10 +38,8 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
     if (FAILED(device->CreateTexture2D(&textureDesc, nullptr, m_renderTargetTexture.GetAddressOf())))
         return false;
 
-    // Texture 부모 클래스의 리소스 설정 (SRV 관리 등을 위해)
     m_renderTargetTexture.As(&m_textureResource);
 
-    // 2. RTV (Render Target View) 생성
     m_faceRTVs.clear();
 
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
@@ -51,7 +47,6 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
 
     if (m_type == RenderTextureType::CubeMap)
     {
-        // 큐브맵은 Texture2DArray 뷰로 각 면을 생성
         rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
         rtvDesc.Texture2DArray.MipSlice = 0;
         rtvDesc.Texture2DArray.ArraySize = 1;

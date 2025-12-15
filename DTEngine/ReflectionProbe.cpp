@@ -24,6 +24,7 @@ void ReflectionProbe::Awake()
     m_cubeMap->Initialize(512, 512, RenderTextureType::CubeMap);
 
     m_cameraObject = std::make_unique<GameObject>("Probe_Internal_Cam");
+    // 씬에는 없어서 돌거나 저장되진 않는데 카메라 오브젝트가 렌더하기 위해서 필요하므로 임시 생성
 
     m_captureCamera = m_cameraObject->AddComponent<Camera>();
     m_captureCamera->SetEditorFovY(90.0f);
@@ -68,7 +69,7 @@ void ReflectionProbe::Render()
     {
         camTrans->LookAt(myTrans->GetPosition() + targets[i], ups[i]);
 
-        m_captureCamera->LateUpdate(0.0f);
+        m_captureCamera->LateUpdate(0.0f); // 행렬 갱신
 
         m_cubeMap->Bind(i);
         m_cubeMap->Clear(0.2f, 0.2f, 0.2f, 1.0f, i); 

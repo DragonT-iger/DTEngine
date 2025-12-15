@@ -5,6 +5,8 @@ struct PS_INPUT
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
+    float3 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
     float3 ViewNormal : TEXCOORD1;
 };
 
@@ -26,13 +28,23 @@ cbuffer CBuffer_GlobalLight : register(b2)
 
 Texture2D g_DiffuseMap : register(t0);  
 Texture2D g_SpecMap : register(t1);     
-Texture2D g_SphereMap : register(t2);   
+Texture2D g_SphereMap : register(t2);
+Texture2D g_NormalMap : register(t3);
 
 SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-    float3 normal = normalize(input.Normal);
+    float3 worldNormal = normalize(input.Normal);
+    float3 worldTangent = normalize(input.Tangent);
+    float3 worldBitangent = normalize(input.Bitangent);
+    
+    float3 normalSample = g_NormalMap.Sample(g_Sampler, input.UV).rgb;
+    float3 localNormal = normalSample * 2.0f - 1.0f;
+    
+    float3x3 TBN = float3x3(worldTangent, worldBitangent, worldNormal);
+    float3 normal = normalize(mul(localNormal, TBN));
+    
     float3 viewDir = normalize(CameraPos - input.WorldPos);
 
     float4 diffuseTex = g_DiffuseMap.Sample(g_Sampler, input.UV);
