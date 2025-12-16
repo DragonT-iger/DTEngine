@@ -26,7 +26,8 @@ cbuffer CBuffer_GlobalLight : register(b2)
 {
     LightData Lights[MAX_LIGHTS];
     int ActiveCount;
-    float3 Padding;
+    float3 CameraPos;
+    matrix LightViewProjScale;
 };
 
 cbuffer CBuffer_Material : register(b3)

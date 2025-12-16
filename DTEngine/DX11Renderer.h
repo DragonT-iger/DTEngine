@@ -9,6 +9,7 @@
 #include <vector>
 #include "Texture.h"
 #include "Material.h" // CULLMODE 때문에 나중에 뺴도 됨 따로
+#include "RenderViewport.h"
 
 
 
@@ -52,6 +53,15 @@ public:
 
     void BeginUIRender();
     void EndUIRender();
+
+
+    void CreateShadowMap(int width, int height);
+
+    void BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional = true, float size = 30.0f);
+
+    ID3D11ShaderResourceView* GetShadowMapSRV() const { return m_shadowSRV.Get(); }
+
+    const Matrix& GetLightViewProjScaleMatrix() const { return m_lightViewProjScale; }
 
     //void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1)); // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
 
@@ -134,7 +144,8 @@ private:
     {
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
-        Vector3 CameraPos;                    
+        Vector3 CameraPos;
+        Matrix LightViewProjScale;
     };
 
 
@@ -185,5 +196,13 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullBack; 
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullFront;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullNone; 
+
+
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>          m_shadowMapTex;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>   m_shadowDSV;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_shadowSRV;
+    RenderViewport                                   m_shadowViewport;
+
+    Matrix m_lightViewProjScale;
 
 };

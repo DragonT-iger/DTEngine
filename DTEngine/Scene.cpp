@@ -17,6 +17,7 @@
 #include "Camera.h"
 #include "Image.h"
 #include "Mesh.h"
+#include "ShadowMap.h"
 
 
 
@@ -499,6 +500,53 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         }
 
         DX11Renderer::Instance().EndUIRender();
+    }
+}
+
+void Scene::RenderShadows()
+{
+    ShadowMap* shadow = nullptr;
+    for (const auto& go : m_gameObjects)
+    {
+        if (go->IsActiveInHierarchy())
+        {
+            if (auto s = go->GetComponent<ShadowMap>())
+            {
+                shadow = s;
+                break;
+            }
+        }
+    }
+
+    if (!shadow) return;
+
+    Transform* tf = shadow->GetTransform();
+    DX11Renderer::Instance().BeginShadowPass(
+        tf->GetPosition(),
+        tf->Forward(),
+        true,           
+        shadow->m_size  
+    );
+
+
+    for (const auto& go : m_gameObjects)
+    {
+        if (!go || !go->IsActiveInHierarchy()) continue;
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Material* mat = mr->GetSharedMaterial();
+
+        if (!mat || mat->GetRenderMode() == RenderMode::Transparent) continue;
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh) continue;
+
+        Transform* transform = go->GetTransform();
+        mat->Bind(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
+        mesh->Bind();
+        mesh->Draw();
     }
 }
 

@@ -31,8 +31,7 @@ public:
 
     GameObject* FindGameObjectByID(uint64_t id);
 
-    void Render(Camera* camera, RenderTexture* renderTarget = nullptr, bool renderUI = false);
-
+    
 
     // 엔진 전용 public 함수들
 
@@ -45,7 +44,9 @@ public:
     void _Internal_AddGameObject(std::unique_ptr<GameObject> go);
     std::unique_ptr<GameObject> _Internal_RemoveGameObject(GameObject* go);
 
-        
+    void Render(Camera* camera, RenderTexture* renderTarget = nullptr, bool renderUI = false);
+    void RenderShadows();
+
     void Awake();
     void Start();
     void Update(float deltaTime);

@@ -2,7 +2,7 @@
 // 텍스쳐가 있으면 텍스쳐 색상, 없으면 머티리얼 색상을 사용함.
 // Forward 방식임.
 
-
+#include "Lighting.hlsli"
 
 struct PS_INPUT
 {
@@ -11,22 +11,6 @@ struct PS_INPUT
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
-};
-
-struct LightData
-{
-    float4 PositionRange;               // xyz=Pos, w=Range
-    float4 DirectionType;               // xyz=Dir, w=Type (0:Dir, 1:Point)
-    float4 ColorIntensity;              // rgb=Color, w=Intensity
-};
-
-#define MAX_LIGHTS 4 // 수정할꺼면 두개 바꿔줘야 함
-
-cbuffer CBuffer_GlobalLight : register(b2)
-{
-    LightData Lights[MAX_LIGHTS];
-    int ActiveCount;
-    float3 Padding;
 };
 
 cbuffer CBuffer_Material : register(b3)
@@ -46,73 +30,69 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 normal = normalize(input.Normal);
     //float3 viewDir = normalize(float3(0, 0, -10) - input.WorldPos);
 
-    float3 totalDiffuse = float3(0, 0, 0);
-    float3 ambient = float3(0.3, 0.3, 0.3); // 기본 환경광
-    
-    
-       
+    //float3 totalDiffuse = float3(0, 0, 0);
+    //float3 ambient = float3(0.3, 0.3, 0.3); // 기본 환경광     
+    //for (int i = 0; i < ActiveCount; ++i)
+    //{
+    //    float3 lightColor = Lights[i].ColorIntensity.rgb;
+    //    float intensity = Lights[i].ColorIntensity.w;
+    //    float type = Lights[i].DirectionType.w;
 
-    for (int i = 0; i < ActiveCount; ++i)
-    {
-        float3 lightColor = Lights[i].ColorIntensity.rgb;
-        float intensity = Lights[i].ColorIntensity.w;
-        float type = Lights[i].DirectionType.w;
+    //    float3 L;               
+    //    float attenuation;      
 
-        float3 L;               
-        float attenuation;      
+    //    // 0: Directional Light
+    //    if (type < 0.5f)
+    //    {
+    //        L = normalize(Lights[i].DirectionType.xyz);
+    //        attenuation = 1.0f;
+    //    }
+    //    // 1: Point Light
+    //    else
+    //    {
+    //        float3 toLight = Lights[i].PositionRange.xyz - input.WorldPos;
+    //        float dist = length(toLight);
+    //        L = normalize(toLight);
 
-        // 0: Directional Light
-        if (type < 0.5f)
-        {
-            L = normalize(Lights[i].DirectionType.xyz);
-            attenuation = 1.0f;
-        }
-        // 1: Point Light
-        else
-        {
-            float3 toLight = Lights[i].PositionRange.xyz - input.WorldPos;
-            float dist = length(toLight);
-            L = normalize(toLight);
-
-            float range = Lights[i].PositionRange.w;
+    //        float range = Lights[i].PositionRange.w;
             
-            attenuation = 1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range); 
+    //        attenuation = 1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range); 
             
-            // 일단 간단하게 dist / range 비율로 감쇠
-            // attenuation 파라미터는 일단 적용하지 않았음
-            // 원한다면 당연히 수정도 가능하긴 함
+    //        // 일단 간단하게 dist / range 비율로 감쇠
+    //        // attenuation 파라미터는 일단 적용하지 않았음
+    //        // 원한다면 당연히 수정도 가능하긴 함
             
-            //if (dist > range)
-            //    attenuation = 0.0f;
+    //        //if (dist > range)
+    //        //    attenuation = 0.0f;
             
-        }
-        float3 skyColor = float3(0.35f, 0.35f, 0.35f);
-        float3 groundColor = float3(0.1f, 0.1f, 0.1f);
-        float up = normal.y * 0.5 + 0.5;
+    //    }
+    //    float3 skyColor = float3(0.35f, 0.35f, 0.35f);
+    //    float3 groundColor = float3(0.1f, 0.1f, 0.1f);
+    //    float up = normal.y * 0.5 + 0.5;
         
-        ambient = lerp(groundColor, skyColor, up);
-        // 임시 환경광 같은 느낌 왜냐면 뒷면이 색이 다 검은색이면 너무 어색함
+    //    ambient = lerp(groundColor, skyColor, up);
+    //    // 임시 환경광 같은 느낌 왜냐면 뒷면이 색이 다 검은색이면 너무 어색함
         
-        //ambient = float3(0.25, 0.25, 0.25);
-        // 이렇게 하면 기본 amb
+    //    //ambient = float3(0.25, 0.25, 0.25);
+    //    // 이렇게 하면 기본 amb
         
-        float NdotL = max(dot(normal, L), 0.0f);
-        totalDiffuse += NdotL * lightColor * intensity * attenuation;
+    //    float NdotL = max(dot(normal, L), 0.0f);
+    //    totalDiffuse += NdotL * lightColor * intensity * attenuation;
         
-    }
+    //}
 
-    float3 finalColor;
+    float3 finalColor = ComputeLambertLighting(input.WorldPos, normal);
     
     if (UseTexture)
     {
         float2 transformedUV = input.UV * UVTransform.xy + UVTransform.zw;
         
         float4 texColor = g_Texture.Sample(g_Sampler, transformedUV);
-        finalColor = texColor.rgb * (ambient + totalDiffuse);
+        finalColor *= texColor.rgb;
     }
     else
     {
-        finalColor = MaterialColor.rgb * (ambient + totalDiffuse);
+        finalColor *= MaterialColor.rgb;
     }
 
     

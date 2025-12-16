@@ -76,6 +76,8 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
+    CreateShadowMap(2048, 2048);
+
     return true;
 }
 
@@ -160,6 +162,79 @@ void DX11Renderer::EndUIRender()
     
 
     ResetRenderState();
+}
+
+void DX11Renderer::CreateShadowMap(int width, int height)
+{
+    D3D11_TEXTURE2D_DESC texDesc = {};
+    texDesc.Width = width;
+    texDesc.Height = height;
+    texDesc.MipLevels = 1;
+    texDesc.ArraySize = 1;
+    texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+    texDesc.SampleDesc.Count = 1;
+    texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+    texDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    DXHelper::ThrowIfFailed(m_device->CreateTexture2D(&texDesc, nullptr, m_shadowMapTex.GetAddressOf()));
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+    dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+    DXHelper::ThrowIfFailed(m_device->CreateDepthStencilView(m_shadowMapTex.Get(), &dsvDesc, m_shadowDSV.GetAddressOf()));
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = 1;
+
+    DXHelper::ThrowIfFailed(m_device->CreateShaderResourceView(m_shadowMapTex.Get(), &srvDesc, m_shadowSRV.GetAddressOf()));
+
+    m_shadowViewport.TopLeftX = 0.0f;
+    m_shadowViewport.TopLeftY = 0.0f;
+    m_shadowViewport.Width = static_cast<float>(width);
+    m_shadowViewport.Height = static_cast<float>(height);
+    m_shadowViewport.MinDepth = 0.0f;
+    m_shadowViewport.MaxDepth = 1.0f;
+}
+
+void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional, float size)
+{
+    ID3D11ShaderResourceView* nullSRV = nullptr;
+    m_context->PSSetShaderResources(5, 1, &nullSRV);
+
+    ID3D11RenderTargetView* nullRTV = nullptr;
+    m_context->OMSetRenderTargets(0, &nullRTV, m_shadowDSV.Get());
+    m_context->ClearDepthStencilView(m_shadowDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+    m_context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_shadowViewport));
+
+    Vector3 target = lightPos + lightDir;
+    Vector3 up = Vector3(0, 1, 0);
+
+    Matrix lightView = XMMatrixLookAtLH(lightPos, target, up);
+    Matrix lightProj;
+
+    if (isDirectional)
+    {
+        lightProj = DirectX::XMMatrixOrthographicLH(size, size, 0.1f, 100.0f);
+    }
+    else
+    {
+        lightProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1.0f, 0.1f, 100.0f);
+    }
+
+    Matrix textureScaleBias = Matrix(
+        0.5f, 0.0f, 0.0f, 0.0f,
+        0.0f, -0.5f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f
+    );
+
+    m_lightViewProjScale = lightView * lightProj * textureScaleBias;
+
+    UpdateFrameCBuffer(lightView, lightProj);
 }
 
 
@@ -323,6 +398,7 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3
     data->ActiveCount = count;
 
     data->CameraPos = cameraPos;
+    data->LightViewProjScale = m_lightViewProjScale.Transpose();
 
     for (int i = 0; i < count; ++i)
     {

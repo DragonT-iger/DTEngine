@@ -46,7 +46,7 @@ private:
     int m_height = 0;
 
     ComPtr<ID3D11Texture2D>          m_renderTargetTexture;
-    ComPtr<ID3D11RenderTargetView>   m_rtv;
+    //ComPtr<ID3D11RenderTargetView>   m_rtv; // 큐브맵 호환을 위해 삭제
     //ComPtr<ID3D11ShaderResourceView> m_srv;
 
     ComPtr<ID3D11Texture2D>          m_depthStencilTexture;

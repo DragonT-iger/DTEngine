@@ -124,7 +124,6 @@ void RenderTexture::Resize(int width, int height)
     if (m_width == width && m_height == height) return;
 
     m_renderTargetTexture.Reset();
-    m_rtv.Reset();
     m_srv.Reset();
     m_textureResource.Reset();
     m_depthStencilTexture.Reset();

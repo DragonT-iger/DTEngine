@@ -196,6 +196,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SerializationUtils.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SimpleMathHelper.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Text.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SerializationUtils.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -273,6 +275,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Assets\Shaders\Lighting.hlsli" />
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
