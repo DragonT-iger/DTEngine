@@ -33,7 +33,7 @@ float CalculateShadow(float3 worldPos)
     float currentDepth = shadowCoord.z;
     float bias = 0.002f;
 
-    //return currentDepth;
+    //return shadowDepth;
     return (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
 }
 

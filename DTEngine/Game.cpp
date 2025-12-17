@@ -320,6 +320,9 @@ void Game::LifeCycle(float deltaTime)
 
 
 #ifdef _DEBUG
+
+	if (scene) scene->RenderShadows();
+
 	m_sceneRT->Bind();
 
 
@@ -401,7 +404,7 @@ void Game::LifeCycle(float deltaTime)
 
 
 #else
-
+	if (scene) scene->RenderShadows();
 
 	const auto& gameObjects = scene->GetGameObjects();
 	for (const auto& go : gameObjects)

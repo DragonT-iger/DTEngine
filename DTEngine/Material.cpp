@@ -429,5 +429,10 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
     DX11Renderer::Instance().SetCullMode(m_cullMode);
 
+    if (ID3D11ShaderResourceView* shadowSRV = DX11Renderer::Instance().GetShadowMapSRV())
+    {
+        context->PSSetShaderResources(5, 1, &shadowSRV);
+    }
+
     //UpdateMaterialBuffer();
 }
