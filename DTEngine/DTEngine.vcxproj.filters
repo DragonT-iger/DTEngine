@@ -69,6 +69,9 @@
     <Filter Include="ImGUI\Undo">
       <UniqueIdentifier>{b806074d-46d1-45fc-9369-a0297909c5f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Common">
+      <UniqueIdentifier>{ebcb31fd-d497-43eb-92c6-64d15b740b91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -425,7 +428,7 @@
   <ItemGroup>
     <None Include="..\vcpkg.json" />
     <None Include="..\Assets\Shaders\Lighting.hlsli">
-      <Filter>Shader\Default</Filter>
+      <Filter>Shader\Common</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +472,12 @@
       <Filter>Shader\Default</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\CubeMap_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Skybox_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Skybox_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>

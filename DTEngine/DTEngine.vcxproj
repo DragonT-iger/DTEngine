@@ -287,6 +287,8 @@
     <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Skybox_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Skybox_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\TV_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl" />

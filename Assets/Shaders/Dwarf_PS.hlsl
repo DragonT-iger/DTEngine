@@ -10,22 +10,13 @@ struct PS_INPUT
     float3 ViewNormal : TEXCOORD1;
 };
 
-struct LightData
+cbuffer CBuffer_Frame : register(b0)
 {
-    float4 PositionRange;
-    float4 DirectionType;
-    float4 ColorIntensity;
+    matrix ViewTM;
+    matrix ProjectionTM;
 };
 
-#define MAX_LIGHTS 4
-
-cbuffer CBuffer_GlobalLight : register(b2)
-{
-    LightData Lights[MAX_LIGHTS];
-    int ActiveCount;
-    float3 CameraPos;
-    matrix LightViewProjScale;
-};
+#include "Lighting.hlsli"
 
 Texture2D g_DiffuseMap : register(t0);  
 Texture2D g_SpecMap : register(t1);     
@@ -53,7 +44,7 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float specMask = g_SpecMap.Sample(g_Sampler, input.UV).r;
 
-    float3 viewNormal = normalize(input.ViewNormal);
+    float3 viewNormal = normalize(mul(normal, (float3x3)ViewTM));
     float2 sphereUV = viewNormal.xy * 0.5 + 0.5;
     sphereUV.y = 1.0 - sphereUV.y;
     
@@ -86,7 +77,7 @@ float4 PS(PS_INPUT input) : SV_Target
         }
 
         float NdotL = max(dot(normal, L), 0.0f);
-        totalDiffuse += NdotL * lightColor * intensity * attenuation;
+        totalDiffuse += NdotL * lightColor * intensity * attenuation * CalculateShadow(input.WorldPos);
 
         if (NdotL > 0.0f)
         {
@@ -99,7 +90,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     
-    float3 finalColor = (ambientLight * diffuseTex.rgb * specMask) + (totalDiffuse * diffuseTex.rgb) + totalSpecular;
+    float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
     return float4(finalColor, diffuseTex.a);
 }

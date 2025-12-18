@@ -68,15 +68,15 @@ void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Ga
         float startPosX = (ImGui::GetContentRegionAvail().x * 0.5f) - (groupWidth * 0.5f);
         ImGui::SetCursorPosX(startPosX);
 
-        bool isPlay = (currentMode == Game::EngineMode::Play);
-        if (isPlay) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.7f, 1.0f, 1.0f));
+        bool isPlayPause = (currentMode == Game::EngineMode::Play || currentMode == Game::EngineMode::Pause);
+        if (isPlayPause) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.7f, 1.0f, 1.0f));
 
-        if (ImGui::Button(isPlay ? "Stop" : "Play", ImVec2(buttonWidth, 0)))
+        if (ImGui::Button(isPlayPause ? "Stop" : "Play", ImVec2(buttonWidth, 0)))
         {
             onModeChanged(Game::EngineMode::Play);
         }
 
-        if (isPlay) ImGui::PopStyleColor();
+        if (isPlayPause) ImGui::PopStyleColor();
 
         ImGui::SameLine();
 

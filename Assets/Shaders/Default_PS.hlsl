@@ -83,18 +83,19 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float3 finalColor = ComputeLambertLighting(input.WorldPos, normal);
     
-    if (UseTexture)
-    {
+    //if (UseTexture)
+    //{
         float2 transformedUV = input.UV * UVTransform.xy + UVTransform.zw;
         
         float4 texColor = g_Texture.Sample(g_Sampler, transformedUV);
         finalColor *= texColor.rgb;
-    }
-    else
-    {
-        finalColor *= MaterialColor.rgb;
-    }
+    //}
+    //else
+    //{
+    //    finalColor *= MaterialColor.rgb;
+    //}
 
+    clip(texColor.a < 0.2 ? -1 : 1);
     
     return float4(finalColor, 1.0f);
 }

@@ -205,4 +205,7 @@ private:
 
     Matrix m_lightViewProjScale;
 
+
+    int m_msaa = 4;
+
 };

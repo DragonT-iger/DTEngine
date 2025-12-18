@@ -167,11 +167,13 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
     // aiProcess_ConvertToLeftHanded: DirectX 좌표계(왼손)로 변환 (필수)
     // aiProcess_GenSmoothNormals: 노말 벡터가 없으면 생성
     // aiProcess_CalcTangentSpace: 탄젠트/비탄젠트 생성 (노말맵용)
+    // aiProcess_GlobalScale cm미터 단위로 저장되는걸 1m로 변환해줌
     const aiScene* scene = importer.ReadFile(fullPath,
         aiProcess_Triangulate |
         aiProcess_ConvertToLeftHanded |
         aiProcess_GenSmoothNormals |
-        aiProcess_CalcTangentSpace
+        aiProcess_CalcTangentSpace |
+        aiProcess_GlobalScale
     );
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

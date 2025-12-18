@@ -10,22 +10,7 @@ struct PS_INPUT
 TextureCube g_CubeMap : register(t0);
 SamplerState g_Sampler : register(s0);
 
-struct LightData
-{
-    float4 PositionRange;
-    float4 DirectionType;
-    float4 ColorIntensity;
-};
-
-#define MAX_LIGHTS 4
-
-cbuffer CBuffer_GlobalLight : register(b2)
-{
-    LightData Lights[MAX_LIGHTS];
-    int ActiveCount;
-    float3 CameraPos;
-    matrix LightViewProjScale;    
-};
+#include "Lighting.hlsli"
 
 cbuffer CBuffer_Material : register(b3)
 {
@@ -44,5 +29,5 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float4 envColor = g_CubeMap.Sample(g_Sampler, reflectDir);
 
-    return envColor;
+    return envColor * CalculateShadow(input.WorldPos);
 }

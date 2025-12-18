@@ -533,12 +533,15 @@ void Scene::RenderShadows()
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
 
+        if (go->GetComponent<Image>()) continue; // UI는 렌더링 할필요 없으니까
+
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+
         if (!mr || !mr->IsActive()) continue;
 
         Material* mat = mr->GetSharedMaterial();
 
-        if (!mat || mat->GetRenderMode() == RenderMode::Transparent) continue;
+        if (!mat || mat->GetRenderMode() == RenderMode::Transparent) continue; // 임시로 그냥 pass 시킴 
 
         Mesh* mesh = mr->GetMesh();
         if (!mesh) continue;

@@ -20,7 +20,7 @@ cbuffer CBuffer_GlobalLight : register(b2)
 };
 
 Texture2D g_ShadowMap : register(t5);
-SamplerState g_ShadowSampler : register(s5); // clamp 샘플러 (아직 안넣음)
+SamplerState g_ShadowSampler : register(s5);
 
 float CalculateShadow(float3 worldPos)
 {
@@ -53,6 +53,7 @@ float3 ComputeLambertLighting(float3 worldPos, float3 normal)
 
     for (int i = 0; i < ActiveCount; ++i)
     {
+        
         float3 lightColor = Lights[i].ColorIntensity.rgb;
         float intensity =   Lights[i].ColorIntensity.w;
         float type =        Lights[i].DirectionType.w;

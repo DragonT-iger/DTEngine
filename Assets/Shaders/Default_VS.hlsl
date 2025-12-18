@@ -49,11 +49,6 @@ PS_INPUT VS(VS_INPUT input)
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
 
-    if (UseTexture == 0)
-    {
-        output.Color = float4(1, 1, 1, 1);
-    }
-
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
     output.Color = input.Color;
