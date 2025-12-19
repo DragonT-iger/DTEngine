@@ -76,8 +76,11 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
-    CreateShadowMap(16376, 16376);
+    //CreateShadowMap(16376, 16376); max
 
+
+    CreateShadowMap(2048, 2048);
+    
     return true;
 }
 
@@ -401,6 +404,9 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3
 
     data->CameraPos = cameraPos;
     data->LightViewProjScale = m_lightViewProjScale.Transpose();
+    float w = m_shadowViewport.Width;
+    float h = m_shadowViewport.Height;
+    data->ShadowMapInfo = Vector4(1.0f / w, 1.0f / h, w, h);
 
     for (int i = 0; i < count; ++i)
     {

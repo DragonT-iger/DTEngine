@@ -185,7 +185,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
                     if (activeScene->SaveFile(relativePath))
                     {
-                        std::cout << "Scene save successful." << std::endl;
+                        std::cout << "Scene save successful. 권용범 바보ㅋㅋ" << std::endl;
                         HistoryManager::Instance().MarkAsSaved();
                     }
                     else

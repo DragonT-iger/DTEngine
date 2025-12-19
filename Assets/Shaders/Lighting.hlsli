@@ -11,12 +11,18 @@ struct LightData
 
 #define MAX_LIGHTS 4
 
+
+#define PCF_LOOP 1
+#define PCF_DEVISOR 9
+//(PCF_LOOP * 2 + 1) / PCF_LOOP 최적화를 위해
+
 cbuffer CBuffer_GlobalLight : register(b2)
 {
     LightData Lights[MAX_LIGHTS];
     int ActiveCount;
     float3 CameraPos;
     matrix LightViewProjScale;
+    float4 ShadowMapInfo;       // xy: 1/w 1/h , zw W, H
 };
 
 Texture2D g_ShadowMap : register(t5);
@@ -28,13 +34,34 @@ float CalculateShadow(float3 worldPos)
     
     shadowCoord.xyz /= shadowCoord.w;
 
-
-    float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy).r;
+    // 화면(NDC) 밖이면 그림자 없음 처리
+    // 딱 봐도 부하가 심할꺼 같아서 주석처리
+    //if (shadowCoord.x < 0.0f || shadowCoord.x > 1.0f ||
+    //    shadowCoord.y < 0.0f || shadowCoord.y > 1.0f ||
+    //    shadowCoord.z < 0.0f || shadowCoord.z > 1.0f)
+    //{
+    //    return 1.0f;
+    //}
+   
+    
     float currentDepth = shadowCoord.z;
-    float bias = 0.002f;
-
-    //return shadowDepth;
-    return (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
+    float bias = 0.0005f;
+    
+    float totalShadow = 0;
+    
+    for (int i = -PCF_LOOP; i <= PCF_LOOP; i++)
+    {
+        for (int j = -PCF_LOOP; j <= PCF_LOOP; j++)
+        {
+            float2 offset = ShadowMapInfo.xy * float2(i, j);
+            
+            float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy - offset).r;
+            totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
+        }
+    }
+    
+    return totalShadow / PCF_DEVISOR;
+    
 }
 
 float3 ComputeLambertLighting(float3 worldPos, float3 normal)

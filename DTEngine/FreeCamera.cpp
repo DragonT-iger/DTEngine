@@ -55,6 +55,7 @@ void FreeCamera::HandleInput(float deltaTime)
         m_isControlling = false;
     }
 
+
     if (m_isControlling && input.GetKey(KeyCode::MouseRight))
     {
         auto delta = input.GetMouseDelta();
@@ -79,6 +80,7 @@ void FreeCamera::HandleInput(float deltaTime)
             moveDir.Normalize();
             float currentSpeed = m_moveSpeed;
             if (input.GetKey(KeyCode::Shift)) currentSpeed *= m_turboScale;
+            if (input.GetKey(KeyCode::Control)) currentSpeed /= m_turboScale * 2;
 
             Vector3 forward = transform->Forward();
             Vector3 right = transform->Right();

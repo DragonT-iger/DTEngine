@@ -146,6 +146,7 @@ private:
         int ActiveCount;                             // 현재 활성화된 조명 개수
         Vector3 CameraPos;
         Matrix LightViewProjScale;
+        Vector4 ShadowMapInfo; // 텍셀 크기
     };
 
 

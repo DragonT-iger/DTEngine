@@ -77,7 +77,7 @@ float4 PS(PS_INPUT input) : SV_Target
         }
 
         float NdotL = max(dot(normal, L), 0.0f);
-        totalDiffuse += NdotL * lightColor * intensity * attenuation * CalculateShadow(input.WorldPos);
+        totalDiffuse += NdotL * lightColor * intensity * attenuation * saturate(CalculateShadow(input.WorldPos) * 1.5f);
 
         if (NdotL > 0.0f)
         {
@@ -92,5 +92,5 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
-    return float4(finalColor, diffuseTex.a);
+    return float4(normal, diffuseTex.a);
 }
