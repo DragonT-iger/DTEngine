@@ -13,6 +13,7 @@ class Component;
 class Transform;
 class RenderTexture;
 class Camera;
+class Texture;
 
 
 
@@ -82,4 +83,12 @@ private:
 
     std::filesystem::path m_currentProjectDirectory = "Assets";
     std::string m_selectedAssetPath;
+
+
+    Texture* m_iconFolder = nullptr;
+    Texture* m_iconFile = nullptr;
+    Texture* m_iconModel = nullptr;
+    Texture* m_iconMaterial = nullptr;
+    Texture* m_iconTexture = nullptr;
+    Texture* m_iconAudio = nullptr;
 };

@@ -1,4 +1,3 @@
-
 #pragma once
 
 enum class KeyCode
@@ -6,12 +5,12 @@ enum class KeyCode
 
     None = 0,
 
-    // ¸¶¿ì½º
+    // ë§ˆìš°ìŠ¤
     MouseLeft = 1,
     MouseRight = 2,
     MouseMiddle = 3,
 
-    // Á¦¾î Å°
+    // ì œì–´ í‚¤
     Control,
     Shift,
     Alt,
@@ -22,7 +21,7 @@ enum class KeyCode
     Backspace,
     Delete,
 
-    // ¹®ÀÚ
+    // ë¬¸ì
     A = 'A',
     B = 'B',
     C = 'C',
@@ -50,7 +49,7 @@ enum class KeyCode
     Y = 'Y',
     Z = 'Z',
 
-    // ¼ıÀÚ
+    // ìˆ«ì
     Num0 = '0',
     Num1 = '1',
     Num2 = '2',
@@ -62,6 +61,6 @@ enum class KeyCode
     Num8 = '8',
     Num9 = '9',
 
-    // F Å° (F1 ~ F12)
+    // F í‚¤ (F1 ~ F12)
     F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12
 };

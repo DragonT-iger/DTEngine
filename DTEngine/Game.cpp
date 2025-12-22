@@ -42,11 +42,10 @@ Game::~Game() = default;
 
 bool Game::Initialize()
 {
-	SetConsoleOutputCP(65001);
-	SetConsoleCP(65001);
+	SetConsoleOutputCP(CP_UTF8);
 
 	m_timer = std::make_unique<GameTimer>();
-	m_timer->Reset();
+	m_timer->Reset(); 
 
 	constexpr int initW = 1920, initH = 1080;
 	if (!WindowBase::Create(L"DTEngine", initW, initH)) {

@@ -29,8 +29,8 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     float3 worldNormal = normalize(input.Normal);
     float3 worldTangent = normalize(input.Tangent);
-    //float3 worldBitangent = normalize(input.Bitangent);
-    float3 worldBitangent = cross(input.Normal, input.Tangent);
+    float3 worldBitangent = normalize(input.Bitangent);
+    //float3 worldBitangent = cross(input.Normal, input.Tangent);
     
     float3 normalSample = g_NormalMap.Sample(g_Sampler, input.UV).rgb;
     float3 localNormal = normalSample * 2.0f - 1.0f;
@@ -77,7 +77,7 @@ float4 PS(PS_INPUT input) : SV_Target
         }
 
         float NdotL = max(dot(normal, L), 0.0f);
-        totalDiffuse += NdotL * lightColor * intensity * attenuation * saturate(CalculateShadow(input.WorldPos) * 1.5f);
+        totalDiffuse += NdotL * lightColor * intensity * attenuation * saturate(CalculateShadow(input.WorldPos) + 0.5);
 
         if (NdotL > 0.0f)
         {
@@ -92,5 +92,5 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
-    return float4(normal, diffuseTex.a);
+    return float4(finalColor, diffuseTex.a);
 }

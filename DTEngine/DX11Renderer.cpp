@@ -78,8 +78,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     //CreateShadowMap(16376, 16376); max
 
-
-    CreateShadowMap(2048, 2048);
+    CreateShadowMap(4096, 4096);
     
     return true;
 }

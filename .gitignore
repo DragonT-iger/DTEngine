@@ -54,8 +54,11 @@ Client/imgui.ini
 /vcpkg_installed
 
 /Assets/Scenes/PlayMode_Backup.scene
+/Assets/Editor
+
 
 !Assets/Shaders/
+
 
 /Assets/Models/*
 

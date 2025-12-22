@@ -48,7 +48,17 @@ namespace fs = std::filesystem;
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
-EditorUI::EditorUI() = default;
+EditorUI::EditorUI() {
+
+    auto& res = ResourceManager::Instance();
+
+    m_iconFolder =      res.Load<Texture>("Assets/Editor/Icons/Folder.png");
+    m_iconFile =        res.Load<Texture>("Assets/Editor/Icons/File.png");
+    m_iconModel =       res.Load<Texture>("Assets/Editor/Icons/Model.png"); 
+    m_iconMaterial =    res.Load<Texture>("Assets/Editor/Icons/Material.png"); 
+    m_iconTexture =     res.Load<Texture>("Assets/Editor/Icons/Image.png");
+    m_iconAudio =       res.Load<Texture>("Assets/Editor/Icons/Audio.png");
+}
 EditorUI::~EditorUI() = default;
 
 void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Game::EngineMode)> onModeChanged)
@@ -2040,6 +2050,9 @@ void EditorUI::DrawProjectWindow()
             std::string filename = path.filename().string();
 			std::string ext = path.extension().string();
 
+            std::string lowerCaseExt = ext;
+            std::transform(lowerCaseExt.begin(), lowerCaseExt.end(), lowerCaseExt.begin(), ::tolower);
+
             if (ext == ".meta") continue;
 			if (ext == ".cso") continue;
 			if (ext == ".vso") continue;
@@ -2049,12 +2062,41 @@ void EditorUI::DrawProjectWindow()
 
             bool isDirectory = directoryEntry.is_directory();
 
-            if (isDirectory)
-                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.7f, 0.2f, 1.0f));
-            else
-                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+            Texture* iconToUse = isDirectory ? m_iconFolder : m_iconFile; 
 
-            if (ImGui::Button(isDirectory ? "[Dir]" : "[File]", ImVec2(thumbnailSize, thumbnailSize)))
+            if (!isDirectory)
+            {
+                if (lowerCaseExt == ".fbx" || lowerCaseExt == ".obj" || lowerCaseExt == ".x")
+                {
+                    iconToUse = m_iconModel ? m_iconModel : m_iconFile;
+                }
+                else if (lowerCaseExt == ".mat")
+                {
+                    iconToUse = m_iconMaterial ? m_iconMaterial : m_iconFile;
+                }
+                else if (lowerCaseExt == ".png" || lowerCaseExt == ".jpg" || lowerCaseExt == ".dds" || lowerCaseExt == ".tga")
+                {
+                    iconToUse = m_iconTexture ? m_iconTexture : m_iconFile;
+                }
+                else if (lowerCaseExt == ".mp3" || lowerCaseExt == ".wav" || lowerCaseExt == ".ogg")
+                {
+                    iconToUse = m_iconAudio ? m_iconAudio : m_iconFile;
+                }
+            }
+
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+            if (iconToUse && iconToUse->GetSRV())
+            {
+                ImGui::ImageButton("##image", (ImTextureID)iconToUse->GetSRV(), ImVec2(thumbnailSize, thumbnailSize));
+            }
+            else
+            {
+                // 아이콘 로드 실패 시 텍스트 버튼으로 대체
+                ImGui::Button(isDirectory ? "[Dir]" : "[File]", ImVec2(thumbnailSize, thumbnailSize));
+            }
+
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
             {
                 if (isDirectory)
                 {

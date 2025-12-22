@@ -35,17 +35,17 @@ float CalculateShadow(float3 worldPos)
     shadowCoord.xyz /= shadowCoord.w;
 
     // 화면(NDC) 밖이면 그림자 없음 처리
-    // 딱 봐도 부하가 심할꺼 같아서 주석처리
-    //if (shadowCoord.x < 0.0f || shadowCoord.x > 1.0f ||
-    //    shadowCoord.y < 0.0f || shadowCoord.y > 1.0f ||
-    //    shadowCoord.z < 0.0f || shadowCoord.z > 1.0f)
-    //{
-    //    return 1.0f;
-    //}
+    // 아래 코드보다 이게 부하 더 적음
+    if (shadowCoord.x < 0.0f || shadowCoord.x > 1.0f ||
+        shadowCoord.y < 0.0f || shadowCoord.y > 1.0f ||
+        shadowCoord.z < 0.0f || shadowCoord.z > 1.0f)
+    {
+        return 1.0f;
+    }
    
     
     float currentDepth = shadowCoord.z;
-    float bias = 0.0005f;
+    float bias = 0.001f;
     
     float totalShadow = 0;
     
