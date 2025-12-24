@@ -55,7 +55,7 @@ float CalculateShadow(float3 worldPos)
         {
             float2 offset = ShadowMapInfo.xy * float2(i, j);
             
-            float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy - offset).r;
+            float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
             totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
         }
     }

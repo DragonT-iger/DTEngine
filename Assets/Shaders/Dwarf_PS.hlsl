@@ -54,6 +54,9 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 totalSpecular = float3(0, 0, 0);
     float specularPower = 20.0f;
 
+    
+    float shadowFactor = CalculateShadow(input.WorldPos);
+    
     for (int i = 0; i < ActiveCount; ++i)
     {
         float3 lightColor = Lights[i].ColorIntensity.rgb;
@@ -76,8 +79,9 @@ float4 PS(PS_INPUT input) : SV_Target
             attenuation = 1.0 / (1.0 + 0.1 * dist / range + 0.01 * (dist * dist) / (range * range));
         }
 
+        
         float NdotL = max(dot(normal, L), 0.0f);
-        totalDiffuse += NdotL * lightColor * intensity * attenuation * saturate(CalculateShadow(input.WorldPos) + 0.5);
+        totalDiffuse += NdotL * lightColor * intensity * attenuation * saturate(shadowFactor + 0.5);
 
         if (NdotL > 0.0f)
         {
@@ -85,7 +89,7 @@ float4 PS(PS_INPUT input) : SV_Target
             float NdotH = max(dot(normal, H), 0.0f);
             float specularTerm = pow(NdotH, specularPower);
             
-            totalSpecular += specularTerm * lightColor * intensity * attenuation * specMask;
+            totalSpecular += specularTerm * lightColor * intensity * attenuation * specMask * shadowFactor;
         }
     }
 

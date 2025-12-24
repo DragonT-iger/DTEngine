@@ -117,13 +117,16 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     // Redo Undo
 
-    bool ctrlPressed = InputManager::Instance().GetKey(KeyCode::Control);
-    bool shiftPressed = InputManager::Instance().GetKey(KeyCode::Shift);
+    bool ctrlPressed =      InputManager::Instance().GetKey(KeyCode::Control);
+    bool shiftPressed =     InputManager::Instance().GetKey(KeyCode::Shift);
+    bool mouseRightPressed =InputManager::Instance().GetKey(KeyCode::MouseRight);
+
     bool zPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Z);
     bool yPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::Y);
     bool cPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::C);
     bool vPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::V);
     bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
+   
 
     // Undo (Ctrl + Z)
     if (ctrlPressed && !shiftPressed && zPressed_Down)
@@ -180,7 +183,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     //Scene Save (CTAL + S), 
 
 
-    if (ctrlPressed && sPressed_Down)
+    if (ctrlPressed && sPressed_Down && !mouseRightPressed)
     {
         if (activeScene)
         {
@@ -2074,7 +2077,7 @@ void EditorUI::DrawProjectWindow()
                 {
                     iconToUse = m_iconMaterial ? m_iconMaterial : m_iconFile;
                 }
-                else if (lowerCaseExt == ".png" || lowerCaseExt == ".jpg" || lowerCaseExt == ".dds" || lowerCaseExt == ".tga")
+                else if (lowerCaseExt == ".png" || lowerCaseExt == ".jpg" || lowerCaseExt == ".dds" || lowerCaseExt == ".tga" || lowerCaseExt == ".bmp")
                 {
                     iconToUse = m_iconTexture ? m_iconTexture : m_iconFile;
                 }

@@ -3,7 +3,6 @@ git submodule add https://github.com/microsoft/vcpkg.git ThirdParty/vcpkg
 
 vcpkg를 설치한다
 
-
 ThirdParty\vcpkg 들어가서
 
 bootstrap-vcpkg.bat 실행후 터미널 열어서

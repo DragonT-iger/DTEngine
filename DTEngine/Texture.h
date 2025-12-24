@@ -47,7 +47,7 @@ protected:
 
     ID3D11SamplerState* m_currentSampler = nullptr; // DX11Renderer에서 미리 만들어 놓은거 참조만 함
 
-    FilterMode m_filterMode = FilterMode::Bilinear;
+    FilterMode m_filterMode = FilterMode::Trilinear;
     WrapMode m_wrapMode = WrapMode::Repeat;
 
     bool m_bSRGB = true;

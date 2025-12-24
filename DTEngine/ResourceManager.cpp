@@ -172,8 +172,7 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
         aiProcess_Triangulate |
         aiProcess_ConvertToLeftHanded |
         aiProcess_GenSmoothNormals |
-        aiProcess_CalcTangentSpace |
-        aiProcess_GlobalScale
+        aiProcess_CalcTangentSpace 
     );
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
