@@ -59,7 +59,7 @@ public:
     void SetCullMode(CullMode mode) { m_cullMode = mode; }
     CullMode GetCullMode() const { return m_cullMode; }
 
-	static constexpr int MAX_TEXTURE_SLOTS = 5;
+	static constexpr int MAX_TEXTURE_SLOTS = 8;
 
 private:
     void UpdateMaterialBuffer();

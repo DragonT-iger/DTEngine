@@ -221,9 +221,6 @@
     <ClInclude Include="RemoveComponentCommand.h">
       <Filter>ImGUI\Undo</Filter>
     </ClInclude>
-    <ClInclude Include="RenderTexture.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="FreeCamera.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -236,32 +233,35 @@
     <ClInclude Include="SerializationUtils.h">
       <Filter>Reflection\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Text3D.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Image.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="MonitorController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderViewport.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="ReflectionProbe.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMap.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Text3D.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderViewport.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -382,9 +382,6 @@
     <ClCompile Include="RemoveComponentCommand.cpp">
       <Filter>ImGUI\Undo</Filter>
     </ClCompile>
-    <ClCompile Include="RenderTexture.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Behaviour.cpp">
       <Filter>Component\ComponentBase</Filter>
     </ClCompile>
@@ -400,29 +397,32 @@
     <ClCompile Include="SerializationUtils.cpp">
       <Filter>Reflection\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Text3D.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Image.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="MonitorController.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="ReflectionProbe.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="ShadowMap.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Text3D.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
