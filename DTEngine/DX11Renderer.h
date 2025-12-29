@@ -176,6 +176,7 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_uiSampler;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_shadowSampler;
 
     // State
     int   m_width = 0;
