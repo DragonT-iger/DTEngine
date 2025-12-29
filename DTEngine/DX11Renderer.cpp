@@ -206,7 +206,7 @@ void DX11Renderer::CreateShadowMap(int width, int height)
 void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional, float size)
 {
     ID3D11ShaderResourceView* nullSRV = nullptr;
-    m_context->PSSetShaderResources(5, 1, &nullSRV);
+    m_context->PSSetShaderResources(10, 1, &nullSRV);
 
     ID3D11RenderTargetView* nullRTV = nullptr;
     m_context->OMSetRenderTargets(0, &nullRTV, m_shadowDSV.Get());
@@ -629,6 +629,24 @@ void DX11Renderer::CreateSamplers()
             m_device->CreateSamplerState(&desc, m_samplers[index].GetAddressOf());
         }
     }
+
+    D3D11_SAMPLER_DESC shadowDesc = {};
+    shadowDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+    shadowDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+    shadowDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+    shadowDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+    shadowDesc.ComparisonFunc = D3D11_COMPARISON_LESS; 
+    shadowDesc.MinLOD = 0;
+    shadowDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+    shadowDesc.BorderColor[0] = 1.0f;
+    shadowDesc.BorderColor[1] = 1.0f;
+    shadowDesc.BorderColor[2] = 1.0f;
+    shadowDesc.BorderColor[3] = 1.0f;
+
+    DXHelper::ThrowIfFailed(m_device->CreateSamplerState(&shadowDesc, m_shadowSampler.GetAddressOf()));
+
+    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
 
     //D3D11_SAMPLER_DESC uiDesc = {};
     //uiDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; 

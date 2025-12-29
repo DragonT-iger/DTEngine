@@ -431,8 +431,9 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
     if (ID3D11ShaderResourceView* shadowSRV = DX11Renderer::Instance().GetShadowMapSRV())
     {
-        context->PSSetShaderResources(5, 1, &shadowSRV);
+        context->PSSetShaderResources(10, 1, &shadowSRV);
     }
+     //어짜피 beginshadowpass에서 set 해줌 생각해보니까
 
     //UpdateMaterialBuffer();
 }
