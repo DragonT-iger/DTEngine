@@ -24,7 +24,7 @@ struct VS_OUTPUT
     float4 Color : COLOR;
     float2 UV : TEXCOORD0;
     float3 WorldPos : POSITION;
-    float3 Normal : NORMAL;
+    float3 WorldNormal : NORMAL;
 };
 
 VS_OUTPUT VS(VS_INPUT input)
@@ -37,7 +37,7 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(worldPos, View);
     output.Pos = mul(output.Pos, Projection);
 
-    output.Normal = mul(input.Normal, (float3x3) WorldInverseTranspose);
+    output.WorldNormal = mul(input.Normal, (float3x3) WorldInverseTranspose);
 
     output.Color = input.Color;
     output.UV = input.UV;

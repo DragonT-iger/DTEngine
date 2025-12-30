@@ -1,4 +1,18 @@
 {
-    "ShaderID": 18085630096319238961,
-    "Textures": {}
+    "Color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "CullMode": 0,
+    "RenderMode": 0,
+    "ShaderID": 12764901974671524338,
+    "Textures": null,
+    "UVTransform": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+    ]
 }
