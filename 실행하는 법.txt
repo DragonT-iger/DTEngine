@@ -1,5 +1,5 @@
-DTEngine.sln 파일이 있는 경로에서 우클릭 -> 터미널 열기
-git submodule add https://github.com/microsoft/vcpkg.git ThirdParty/vcpkg
+DTEngine.sln 파일이 있는 경로 안 ThirdParty 폴더로 들어간 뒤,  우클릭 -> 터미널 열기
+git submodule add https://github.com/microsoft/vcpkg.git vcpkg
 
 vcpkg를 설치한다
 
@@ -7,7 +7,64 @@ ThirdParty\vcpkg 들어가서
 
 bootstrap-vcpkg.bat 실행후 터미널 열어서
 
-.\vcpkg.exe integrate install 연동한다 <-- 이건 그냥 vcpkg.exe 실행만 해도 상관 없는거 같음
+.\vcpkg.exe integrate install 연동한다 // 터미널 경로 ThirdParty\vcpkg
 
 cmake 에러가 뜰때가 있는데 3.31.6 버전 쓰고 있으면 (이득우의 게임수학 호환버전) 안될꺼임
 
+
++++
+
+--------------
+25_12_28 
+
+vcpkg/ports/pugixml/portfile.cmake
+
+경로의 txt를 수정한다. 
+
+# 1. 소스 코드가 들어갈 경로 설정 및 청소
+set(SOURCE_PATH "${CURRENT_BUILDTREES_DIR}/src/${PORT}")
+file(REMOVE_RECURSE "${SOURCE_PATH}")
+file(MAKE_DIRECTORY "${SOURCE_PATH}")
+
+# 2. 시스템 Git 찾기
+find_program(GIT NAMES git git.cmd)
+
+# 3. [핵심] Raw Git Clone 실행 (압축 해제 X, Fetch 제한 우회)
+message(STATUS "Executing Raw Git Clone...")
+execute_process(
+    COMMAND "${GIT}" clone https://github.com/zeux/pugixml.git "${SOURCE_PATH}"
+    RESULT_VARIABLE GIT_CLONE_RESULT
+)
+
+if(NOT GIT_CLONE_RESULT EQUAL 0)
+    message(FATAL_ERROR "Git Clone Failed!")
+endif()
+
+# 4. 특정 버전(v1.15)으로 체크아웃
+message(STATUS "Checking out v1.15...")
+execute_process(
+    COMMAND "${GIT}" checkout v1.15
+    WORKING_DIRECTORY "${SOURCE_PATH}"
+)
+
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        compact PUGIXML_COMPACT
+)
+
+vcpkg_cmake_configure(
+    SOURCE_PATH "${SOURCE_PATH}"
+    OPTIONS
+        -DPUGIXML_BUILD_TESTS=OFF
+        ${FEATURE_OPTIONS}
+)
+
+vcpkg_cmake_install()
+vcpkg_copy_pdbs()
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/${PORT})
+vcpkg_fixup_pkgconfig()
+
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
+
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE.md")

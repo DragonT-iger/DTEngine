@@ -87,17 +87,7 @@ Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Texcoord = { 0.0f, 0.0f };
         }
 
-        if (aiMesh->HasVertexColors(0))
-        {
-            vertex.Color.x = aiMesh->mColors[0][i].r;
-            vertex.Color.y = aiMesh->mColors[0][i].g;
-            vertex.Color.z = aiMesh->mColors[0][i].b;
-            vertex.Color.w = aiMesh->mColors[0][i].a;
-        }
-        else
-        {
-            vertex.Color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        }
+    
 
         if (aiMesh->HasTangentsAndBitangents())
         {
@@ -105,14 +95,12 @@ Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Tangent.y = aiMesh->mTangents[i].y;
             vertex.Tangent.z = aiMesh->mTangents[i].z;
 
-            vertex.Bitangent.x = aiMesh->mBitangents[i].x;
-            vertex.Bitangent.y = aiMesh->mBitangents[i].y;
-            vertex.Bitangent.z = aiMesh->mBitangents[i].z;
+        //★ binormal 검사만 하고 tan.z 에 값 넣어줄 생각. 
         }
         else
         {
             vertex.Tangent = { 0.0f, 0.0f, 0.0f };
-            vertex.Bitangent = { 0.0f, 0.0f, 0.0f };
+            
         }
         
         vertices.push_back(vertex);

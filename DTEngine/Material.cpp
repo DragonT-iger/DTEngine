@@ -65,6 +65,7 @@ bool Material::LoadFile(const std::string& fullPath)
         return false;
     }
 
+    //★ 음... Texture로 Shader를 판별해주는 느낌... 
     if (data.contains("ShaderID"))
     {
         uint64_t shaderID = data["ShaderID"];

@@ -422,7 +422,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     camera->Bind();
     //DX11Renderer::Instance().SetViewport(width, height);
-
+    
+    //★ Sorting 
 
     //if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
 
@@ -432,6 +433,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     std::vector<GameObject*> opaqueQueue;
     std::vector<GameObject*> transparentQueue;
+
+    //
+
     std::vector<GameObject*> uiQueue;
 
     for (const auto& go : GetGameObjects())

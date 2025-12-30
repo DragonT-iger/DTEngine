@@ -25,8 +25,8 @@ cbuffer CBuffer_GlobalLight : register(b2)
     float4 ShadowMapInfo;       // xy: 1/w 1/h , zw W, H
 };
 
-Texture2D g_ShadowMap : register(t10);
-SamplerComparisonState g_ShadowSampler : register(s10);
+Texture2D g_ShadowMap : register(t5);
+SamplerState g_ShadowSampler : register(s5);
 
 float CalculateShadow(float3 worldPos)
 {
@@ -55,10 +55,8 @@ float CalculateShadow(float3 worldPos)
         {
             float2 offset = ShadowMapInfo.xy * float2(i, j);
             
-            //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
-            //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
-            
-            totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy + offset, currentDepth - bias);
+            float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
+            totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
         }
     }
     

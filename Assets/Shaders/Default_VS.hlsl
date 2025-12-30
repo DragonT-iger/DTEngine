@@ -22,7 +22,6 @@ cbuffer CBuffer_Material : register(b3)
 struct VS_INPUT
 {
     float3 Pos : POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
 };
@@ -31,7 +30,6 @@ struct VS_INPUT
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR; 
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
@@ -51,7 +49,6 @@ PS_INPUT VS(VS_INPUT input)
 
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
-    output.Color = input.Color;
     output.UV = input.UV;
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;

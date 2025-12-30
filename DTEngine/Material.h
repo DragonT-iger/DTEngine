@@ -12,7 +12,7 @@ class Shader;
 class Texture;
 
 __declspec(align(16))
-struct MaterialData
+struct MaterialData 
 {
     Vector4 Color = { 1,1,1,1 };
     Vector4 UVTransform = { 1, 1, 0, 0 }; 

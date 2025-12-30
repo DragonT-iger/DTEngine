@@ -12,9 +12,9 @@ cbuffer CBuffer_Object : register(b1)
 struct VS_INPUT
 {
     float3 Pos : POSITION;
-    float4 Color : COLOR;
-    float2 UV : TEXCOORD0;
+    float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
 };
 
 struct VS_OUTPUT

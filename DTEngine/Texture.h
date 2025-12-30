@@ -51,4 +51,6 @@ protected:
     WrapMode m_wrapMode = WrapMode::Repeat;
 
     bool m_bSRGB = true;
+
+
 };

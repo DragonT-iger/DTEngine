@@ -3,10 +3,8 @@
 
 struct Vertex
 {
-    Vector3 Pos;     
-    Vector4 Color;   
+    Vector4 Pos;     
     Vector2 Texcoord;
     Vector3 Normal;
-    Vector3 Tangent;
-    Vector3 Bitangent;
+    Vector4 Tangent; // ★
 };

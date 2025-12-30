@@ -13,11 +13,9 @@ cbuffer CBuffer_Object : register(b1)
 struct VS_INPUT
 {
     float3 Pos : POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
     float3 Tangent : TANGENT;
-    float3 Bitangent : BITANGENT;
 };
 
 struct PS_INPUT
@@ -42,17 +40,13 @@ PS_INPUT VS(VS_INPUT input)
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
     float3 worldTangent = mul(float4(input.Tangent, 0.0f), WorldInverseTransposeTM).xyz;
-    float3 worldBitangent = mul(float4(input.Bitangent, 0.0f), WorldInverseTransposeTM).xyz;
-
     float3 viewNormal = mul(worldNormal, (float3x3) ViewTM);
 
     output.Pos = projPos;
-    output.Color = input.Color;
     output.UV = input.UV;
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;
     output.Tangent = worldTangent;
-    output.Bitangent = worldBitangent;
     output.ViewNormal = viewNormal;
     
     return output;

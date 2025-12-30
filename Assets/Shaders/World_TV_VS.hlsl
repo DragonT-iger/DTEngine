@@ -22,7 +22,6 @@ cbuffer CBuffer_Material : register(b3)
 struct VS_INPUT
 {
     float3 Pos : POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
 };
@@ -31,7 +30,6 @@ struct VS_INPUT
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
@@ -49,14 +47,9 @@ PS_INPUT VS(VS_INPUT input)
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
 
-    if (UseTexture == 0)
-    {
-        output.Color = float4(1, 1, 1, 1);
-    }
-
+   
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
-    output.Color = input.Color;
     output.UV = input.UV;
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;
