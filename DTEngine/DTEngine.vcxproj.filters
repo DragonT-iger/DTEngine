@@ -263,6 +263,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="RenderKey.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -423,6 +426,9 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderKey.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,8 @@
 
 namespace fs = std::filesystem;
 
+uint16_t Shader::g_ShaderID = 0;
+
 // .cso 파일을 바이너리로 읽어오는 헬퍼 함수
 static std::vector<char> ReadFileBlob(const std::string& filePath)
 {
@@ -104,6 +106,9 @@ bool Shader::LoadFile(const std::string& fullPath)
 
     hr = device->CreatePixelShader(psBlob.data(), psBlob.size(), nullptr, m_pixelShader.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
+
+
+    m_Shader_ID = ++g_ShaderID;
 
     return true;
 }

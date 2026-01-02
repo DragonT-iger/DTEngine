@@ -35,6 +35,12 @@ public:
 
     void SaveImportSettings(const std::string& fullPath);
 
+
+
+    uint16_t GetID() const { return m_TextureID; }
+
+    static uint16_t g_TextureID;
+
 protected:
     void UpdateSampler();
     void LoadMetaData(const std::string& fullPath);
@@ -52,5 +58,5 @@ protected:
 
     bool m_bSRGB = true;
 
-
+    uint16_t m_TextureID =0;
 };

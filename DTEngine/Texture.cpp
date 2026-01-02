@@ -15,6 +15,9 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
+
+uint16_t Texture::g_TextureID = 0;
+
 Texture::Texture() = default;
 
 Texture::~Texture() { Unload(); }
@@ -95,6 +98,9 @@ bool Texture::LoadFile(const std::string& fullPath)
 
     UpdateSampler();
 
+
+
+    m_TextureID = ++g_TextureID;
     return true;
 }
 

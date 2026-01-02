@@ -167,7 +167,7 @@ bool Material::LoadFile(const std::string& fullPath)
 
     CreateBuffers();
 
-    if (!m_textures.empty() && m_textures[0] != nullptr)
+    if (!m_textures.empty() && m_textures[0] != nullptr) //5장이 모두 있는 경우 pbr else default shader 
     {
         m_data.UseTexture = 1;
     }

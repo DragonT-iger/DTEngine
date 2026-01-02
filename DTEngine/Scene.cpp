@@ -433,9 +433,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     std::vector<GameObject*> opaqueQueue;
     std::vector<GameObject*> transparentQueue;
-
-    //
-
     std::vector<GameObject*> uiQueue;
 
     for (const auto& go : GetGameObjects())
@@ -452,6 +449,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         if (img) {
             uiQueue.push_back(go.get());
         }
+
         else if (mat->GetRenderMode() == RenderMode::Transparent)
         {
             transparentQueue.push_back(go.get());
@@ -462,6 +460,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         }
     }
 
+   
+    //
     auto DrawObject = [&](GameObject* go) {
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         Transform* tf = go->GetTransform();
@@ -490,6 +490,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     {
         DrawObject(go);
     }
+
+    //
+
 
     if (renderUI) {
         DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 

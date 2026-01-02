@@ -190,6 +190,7 @@
     <ClInclude Include="ReflectionProbe.h" />
     <ClInclude Include="RegisterCoreTypes.h" />
     <ClInclude Include="RemoveComponentCommand.h" />
+    <ClInclude Include="RenderKey.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="RenderViewport.h" />
     <ClInclude Include="resource.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="ReflectionProbe.cpp" />
     <ClCompile Include="RegisterCoreTypes.cpp" />
     <ClCompile Include="RemoveComponentCommand.cpp" />
+    <ClCompile Include="RenderKey.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
