@@ -5,6 +5,7 @@ struct PS_INPUT
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
     float3 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
     float3 ViewNormal : TEXCOORD1;
 };
 
@@ -27,8 +28,8 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     float3 worldNormal = normalize(input.Normal);
     float3 worldTangent = normalize(input.Tangent);
-    
-    float3 worldBitangent = cross(input.Normal, input.Tangent);
+    float3 worldBitangent = normalize(input.Bitangent);
+    //float3 worldBitangent = cross(input.Normal, input.Tangent);
     
     float3 normalSample = g_NormalMap.Sample(g_Sampler, input.UV).rgb;
     float3 localNormal = normalSample * 2.0f - 1.0f;

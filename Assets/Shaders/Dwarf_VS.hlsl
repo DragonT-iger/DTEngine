@@ -15,13 +15,12 @@ struct VS_INPUT
     float3 Pos : POSITION;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
-    float3 Tangent : TANGENT;
+    float4 Tangent : TANGENT;
 };
 
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;         // 월드 공간 법선 (라이팅 계산용)
@@ -39,7 +38,9 @@ PS_INPUT VS(VS_INPUT input)
     float4 projPos = mul(viewPos, ProjectionTM);
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
-    float3 worldTangent = mul(float4(input.Tangent, 0.0f), WorldInverseTransposeTM).xyz;
+    float3 worldTangent = mul((input.Tangent), WorldInverseTransposeTM).xyz;
+    float3 worldBitangent = 1;
+
     float3 viewNormal = mul(worldNormal, (float3x3) ViewTM);
 
     output.Pos = projPos;
@@ -47,6 +48,7 @@ PS_INPUT VS(VS_INPUT input)
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;
     output.Tangent = worldTangent;
+    output.Bitangent = worldBitangent;
     output.ViewNormal = viewNormal;
     
     return output;

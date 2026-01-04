@@ -5,20 +5,14 @@
 #include <string>
 #include "SimpleMathHelper.h"
 
+#include "ConstantBuffers.h"
+
 
 struct ID3D11Buffer;
 
 class Shader;
 class Texture;
 
-__declspec(align(16))
-struct MaterialData 
-{
-    Vector4 Color = { 1,1,1,1 };
-    Vector4 UVTransform = { 1, 1, 0, 0 }; 
-    int UseTexture;
-    int Padding[3];    
-};
 
 enum class RenderMode { Opaque, Transparent };
 enum class CullMode { Back, Front, None };
@@ -35,6 +29,9 @@ public:
 
     void Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM);
 
+    void BindPipeLine();
+    void BindPerObject(const Matrix& worldTM, const Matrix& WorldINVTM);
+    
     bool SetTexture(int slot, Texture* texture);
 
     Shader* GetShader() const { return m_shader; }
@@ -61,7 +58,10 @@ public:
 
 	static constexpr int MAX_TEXTURE_SLOTS = 8;
 
+    int GetShaderID();
+    int GetTextureID();
 private:
+    void UpdateTextureBatchID();
     void UpdateMaterialBuffer();
     void CreateBuffers();
     void SetDefaultShader();
@@ -79,4 +79,6 @@ private:
     RenderMode m_renderMode = RenderMode::Opaque;
 
     CullMode m_cullMode = CullMode::Back;
+
+    uint64_t m_textureBatchID = 0;
 };

@@ -29,6 +29,7 @@
 
 #include "DXHelper.h"
 
+#include "Shader.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -316,6 +317,38 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
+    //상수 버퍼 Binding 
+
+
+
+
+}
+
+void DX11Renderer::InitializeGlobalResources()
+{
+}
+
+void DX11Renderer::CreateConstantBuffers()
+{
+
+    D3D11_BUFFER_DESC bd = {};
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+
+    //해당 자료형에서 16 byte 정렬 되어있음. 
+
+
+    bd.ByteWidth = sizeof(CBuffer_Frame_Data);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_p_VP_MatBuffer.GetAddressOf()));
+
+    bd.ByteWidth = sizeof(CBuffer_Object_Data);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_pTransformW_Buffer.GetAddressOf()));
+
+    bd.ByteWidth = sizeof(MaterialData);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_pMaterial_Buffer.GetAddressOf()));
+
 }
 
 void DX11Renderer::EndFrame()
@@ -433,6 +466,12 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
 }
 
+void DX11Renderer::ClearCache()
+{
+    m_currentShaderID = 0;
+    for (int i = 0; i < 8; ++i) m_currentSRVs[i] = nullptr;
+}
+
 void DX11Renderer::ResetRenderState()
 {
     float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
@@ -440,6 +479,35 @@ void DX11Renderer::ResetRenderState()
     m_context->OMSetDepthStencilState(nullptr, 0);
     m_context->RSSetState(nullptr);
     m_context->RSSetState(m_rsCullBack.Get());
+}
+
+//  ★
+void DX11Renderer::BindShader(Shader* shader)
+{
+    if (!shader) return;
+
+   
+    if (m_currentShaderID == shader->GetID())
+    {
+        return;
+    }
+
+    shader->Bind(); 
+    m_currentShaderID = shader->GetID(); 
+}
+
+//Slot 하드코딩은 좀 그렇긴 한데 일단 16개 정도로 맞춰놓음 
+void DX11Renderer::BindTexture(int slot, ID3D11ShaderResourceView* srv)
+{
+    if (slot < 0 || slot >= 16) return;
+
+    if (m_currentSRVs[slot] == srv)
+    {
+        return;
+    }
+
+    m_context->PSSetShaderResources(slot, 1, &srv);
+    m_currentSRVs[slot] = srv; 
 }
 
 ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)

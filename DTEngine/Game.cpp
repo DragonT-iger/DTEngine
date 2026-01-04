@@ -48,6 +48,9 @@ bool Game::Initialize()
 	m_timer->Reset(); 
 
 	constexpr int initW = 1920, initH = 1080;
+
+
+
 	if (!WindowBase::Create(L"DTEngine", initW, initH)) {
 		assert(false && "윈도우 창 만들기 실패");
 		return false;

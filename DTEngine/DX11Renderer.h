@@ -11,6 +11,7 @@
 #include "Material.h" // CULLMODE 때문에 나중에 뺴도 됨 따로
 #include "RenderViewport.h"
 
+#include "ConstantBuffers.h"
 
 
 struct HWND__;
@@ -73,6 +74,10 @@ public:
     void SetCullMode(CullMode mode);
 
     void BeginFrame(const float clearColor[4]);
+    void InitializeGlobalResources(); // CB, SAMPLER , 기본 STATE 
+
+    void CreateConstantBuffers();
+
     void EndFrame();
     void Present();
 
@@ -109,8 +114,10 @@ public:
 
     void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
 
+    void ClearCache();
     void ResetRenderState();
-
+    void BindShader(Shader* shader);
+    void BindTexture(int slot, ID3D11ShaderResourceView* srv);
     ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
 
     const Matrix& GetViewMatrix() const { return m_viewTM; }
@@ -122,13 +129,7 @@ private:
     void ReleaseBackbuffers();
     void CreateSamplers();
 
-    __declspec(align(16))
-        struct CBuffer_Frame_Data
-    {
-        Matrix ViewTM;
-        Matrix ProjectionTM;
-    };
-
+   
     struct LightData
     {
         DirectX::SimpleMath::Vector4 PositionRange;  // xyz: 위치, w: 범위(Range)
@@ -136,11 +137,11 @@ private:
         DirectX::SimpleMath::Vector4 ColorIntensity; // xyz: 색상, w: 강도(Intensity)
     };
 
-	constexpr static int MAX_LIGHTS = 4;
 
+    constexpr static int MAX_LIGHTS = 4;
 
     __declspec(align(16))
-    struct CBuffer_GlobalLight
+        struct CBuffer_GlobalLight
     {
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
@@ -148,7 +149,7 @@ private:
         Matrix LightViewProjScale;
         Vector4 ShadowMapInfo; // 텍셀 크기
     };
-
+ 
 
 private:
     // Platform
@@ -210,4 +211,37 @@ private:
 
     int m_msaa = 4;
 
+
+
+    //cacching  ★ 
+    private:
+      uint16_t m_currentShaderID = 0; 
+      ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };
+
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBoolBuffer = nullptr;		    // 상수 버퍼. 2 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLightBuffer = nullptr;		// 상수 버퍼. 3 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_p_VP_MatBuffer = nullptr;		    // 상수 버퍼. 1 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIBL_Buffer = nullptr;			// 상수 버퍼.
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pPointLight_Buffer = nullptr;	// 상수 버퍼. 4 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformW_Buffer = nullptr;	// 상수 버퍼. 5 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pMaterial_Buffer = nullptr;	// 상수 버퍼. 5 
+
+      //일단 여기 밑은 나중에 
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformVP_Buffer = nullptr;	// 상수 버퍼.
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pUIAnimation_Buffer = nullptr;	// 상수 버퍼.
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pParticleBuffer = nullptr;		// 상수 버퍼.
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pParticleDataBuffer = nullptr;	// 상수 버퍼.
+
+      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pUIMeshBuffer = nullptr;		// 상수 버퍼.
 };

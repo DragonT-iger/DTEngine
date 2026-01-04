@@ -98,8 +98,6 @@ bool Texture::LoadFile(const std::string& fullPath)
 
     UpdateSampler();
 
-
-
     m_TextureID = ++g_TextureID;
     return true;
 }

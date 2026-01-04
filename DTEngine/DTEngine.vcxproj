@@ -156,6 +156,7 @@
     <ClInclude Include="ChangeTransformCommand.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
+    <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="CreateGameObjectCommand.h" />
     <ClInclude Include="DestroyGameObjectCommand.h" />
     <ClInclude Include="DX11Renderer.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Text.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Texture_ID_Manager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowBase.h" />

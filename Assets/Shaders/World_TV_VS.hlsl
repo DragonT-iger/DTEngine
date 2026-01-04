@@ -24,6 +24,7 @@ struct VS_INPUT
     float3 Pos : POSITION;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
 };
 
 
@@ -47,7 +48,6 @@ PS_INPUT VS(VS_INPUT input)
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTransposeTM).xyz;
 
-   
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;
     output.UV = input.UV;

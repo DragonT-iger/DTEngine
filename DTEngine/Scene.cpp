@@ -19,6 +19,7 @@
 #include "Mesh.h"
 #include "ShadowMap.h"
 
+#include "RenderKey.h"
 
 
 
@@ -405,6 +406,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 {
     if (!camera) return;
 
+    Sorter::Instance().SetCamParameters(camera); 
+
 
     float width = (float)DX11Renderer::Instance().GetWidth();
     float height = (float)DX11Renderer::Instance().GetHeight();
@@ -419,6 +422,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     camera->SetAspectRatio(ratio);
 
     DX11Renderer::Instance().ResetRenderState();
+    DX11Renderer::Instance().ClearCache();
 
     camera->Bind();
     //DX11Renderer::Instance().SetViewport(width, height);
@@ -461,7 +465,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     }
 
    
-    //
     auto DrawObject = [&](GameObject* go) {
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         Transform* tf = go->GetTransform();
@@ -481,17 +484,61 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         };
 
 
-    for (auto* go : opaqueQueue)
+
+
     {
-        DrawObject(go);
+        Sorter::Instance().CreateKey(opaqueQueue);
+        const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
+
+        uint64_t lastPipelineKey = UINT64_MAX;
+
+        for (const auto& val : SortedVector)
+        {
+            uint64_t currentPipelineKey = val.key << 30; //Depth 빼고 Shader 16; Texture 16; cull에 해당
+
+            MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
+            Transform* tf = val.obj->GetTransform();
+
+            Material* mat = mr->GetSharedMaterial();
+            if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+            Mesh* mesh = mr->GetMesh();
+            if (!mesh || !mat) return;
+
+
+            if (currentPipelineKey != lastPipelineKey)
+            {
+                mat->BindPipeLine();
+
+                lastPipelineKey = currentPipelineKey;
+            }
+
+
+            const Matrix& worldTM = tf->GetWorldMatrix();
+            Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+            mat->BindPerObject(worldTM, worldInvT);
+            mesh->Bind();
+            mesh->Draw();
+
+        }
+
     }
+
+
+
+//
+//    for (auto* obj : opaqueQueue)
+//{
+//    DrawObject(obj);
+//}
 
     for (auto* go : transparentQueue)
     {
         DrawObject(go);
     }
 
-    //
+    
 
 
     if (renderUI) {
@@ -534,6 +581,64 @@ void Scene::RenderShadows()
         true,           
         shadow->m_size  
     );
+
+    //std::vector<GameObject*> opaqueQueue; opaqueQueue.reserve(m_gameObjects.size());
+
+
+
+    //for (const auto& go : m_gameObjects)
+    //{
+    //    if (!go || !go->IsActiveInHierarchy()) continue;
+
+    //        if (go->GetComponent<Image>()) continue; // UI는 렌더링 할필요 없으니까
+
+    //        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+    //        if (!mr || !mr->IsActive()) continue;
+    //        if (!go || !go->IsActiveInHierarchy()) continue;
+
+    //            Material* mat = mr->GetSharedMaterial();
+
+    //            if (!mat || mat->GetRenderMode() == RenderMode::Transparent) continue; // 임시로 그냥 pass 시킴 
+
+    //        opaqueQueue.push_back(go.get());
+
+    //}
+
+   /* Sorter::Instance().CreateKey(opaqueQueue);
+    const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
+
+    uint64_t lastPipelineKey = 0;
+
+
+    for (const auto& val : SortedVector)
+   {
+      uint64_t currentPipelineKey = val.key >> 30; 
+
+      MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
+      Transform* tf = val.obj->GetTransform();
+
+      Material* mat = mr->GetSharedMaterial();
+      if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+      Mesh* mesh = mr->GetMesh();
+      if (!mesh || !mat) return;
+
+    
+      if (currentPipelineKey != lastPipelineKey)
+      {
+          mat->BindPipeLine();
+
+          lastPipelineKey = currentPipelineKey; 
+      }
+
+
+      Transform* transform = val.obj->GetTransform();
+      mat->BindPerObject(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
+      mesh->Bind();
+      mesh->Draw();
+
+   }*/
+
 
 
     for (const auto& go : m_gameObjects)

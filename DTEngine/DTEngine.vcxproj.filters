@@ -266,6 +266,12 @@
     <ClInclude Include="RenderKey.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Texture_ID_Manager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffers.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -428,7 +434,7 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="RenderKey.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

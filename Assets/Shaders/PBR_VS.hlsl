@@ -15,6 +15,7 @@ struct VS_INPUT
     float3 Pos : POSITION;
     float2 UV : TEXCOORD0;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
 };
 
 struct VS_OUTPUT
@@ -22,7 +23,7 @@ struct VS_OUTPUT
     float4 Pos : SV_POSITION;
     float2 UV : TEXCOORD0;
     float3 WorldPos : POSITION;
-    float3 Normal : NORMAL;
+    float3 WorldNormal : NORMAL;
 };
 
 VS_OUTPUT VS(VS_INPUT input)
@@ -35,7 +36,7 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(worldPos, View);
     output.Pos = mul(output.Pos, Projection);
 
-    output.Normal = mul(input.Normal, (float3x3) WorldInverseTranspose);
+    output.WorldNormal = mul(input.Normal, (float3x3) WorldInverseTranspose);
 
     output.UV = input.UV;
 

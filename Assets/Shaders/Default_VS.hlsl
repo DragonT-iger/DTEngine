@@ -24,6 +24,7 @@ struct VS_INPUT
     float3 Pos : POSITION;
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
 };
 
 
@@ -33,6 +34,8 @@ struct PS_INPUT
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
+
 };
 
 
@@ -52,7 +55,7 @@ PS_INPUT VS(VS_INPUT input)
     output.UV = input.UV;
     output.WorldPos = worldPos.xyz;
     output.Normal = worldNormal;
-    
+    output.Tangent = input.Tangent;
     
     
     return output;
