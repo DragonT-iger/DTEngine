@@ -28,8 +28,6 @@ using Microsoft::WRL::ComPtr;
 
 Material::Material() {
     m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
-
-    CreateBuffers();
 }
 Material::~Material() { Unload(); }
 
@@ -165,17 +163,12 @@ bool Material::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
-    CreateBuffers();
-
     if (!m_textures.empty() && m_textures[0] != nullptr) //5장이 모두 있는 경우 pbr else default shader 
     {
         m_data.UseTexture = 1;
     }
     else
         m_data.UseTexture = 0;
-
-
-    UpdateMaterialBuffer();
 
     return true;
 }
@@ -230,7 +223,6 @@ bool Material::SaveFile(const std::string& fullPath)
 
 void Material::Unload()
 {
-    m_cbuffer_object.Reset();
     m_shader = nullptr;
     m_textures.clear();
     m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
@@ -260,7 +252,6 @@ bool Material::SetTexture(int slot, Texture* texture)
         m_data.UseTexture = 0;
     }
     UpdateTextureBatchID();
-    UpdateMaterialBuffer();
 
 	return true;
 }
@@ -274,8 +265,6 @@ Material* Material::Clone()
     newMat->m_data = m_data;        
     newMat->m_cullMode = m_cullMode;
     newMat->m_renderMode = m_renderMode;
-
-    newMat->UpdateMaterialBuffer();
 
     return newMat;
 }
@@ -297,7 +286,6 @@ bool Material::SetColor(const Vector4& color)
 
     m_data.Color = color;
 
-    UpdateMaterialBuffer();
     return true;
 }
 
@@ -336,151 +324,12 @@ void Material::UpdateTextureBatchID()
 
 }
 
-void Material::UpdateMaterialBuffer()
-{
-    
-    if (!m_cbuffer_material) return;
 
-    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
-    if (!context) return;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    // D3D11_MAP_WRITE_DISCARD: 이전 내용을 버리고 새로 씀 (빠름)
-    HRESULT hr = context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-
-	DXHelper::ThrowIfFailed(hr);
-
-    MaterialData* dataPtr = static_cast<MaterialData*>(mappedData.pData);
-
-	dataPtr->Color = m_data.Color;
-	dataPtr->UseTexture = m_data.UseTexture;
-	dataPtr->UVTransform = m_data.UVTransform;
-
-
-    //memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
-    context->Unmap(m_cbuffer_material.Get(), 0);
-
-
-    //context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-
-
-    //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    //{
-    //    ID3D11ShaderResourceView* srv = nullptr;
-    //    if (m_textures[i])
-    //    {
-    //        srv = m_textures[i]->GetSRV();
-    //    }
-
-    //    context->PSSetShaderResources(i, 1, &srv);
-    //}
-}
-
-void Material::CreateBuffers()
-{
-    ID3D11Device* device = DX11Renderer::Instance().GetDevice();
-    if (!device) return;
-
-    if (!m_cbuffer_object)
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
-
-    if (!m_cbuffer_material)
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(MaterialData);
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_material.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
-}
-
+//일단 기존 LEGACY랑 호환 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
-    if (!m_shader) return;
-
-    if (!m_cbuffer_object) return;
-
-    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
-    if (!context) return;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = context->Map(m_cbuffer_object.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    DXHelper::ThrowIfFailed(hr);
-
-    CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
-    dataPtr->WorldTM = worldTM.Transpose();
-    dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
-
-    context->Unmap(m_cbuffer_object.Get(), 0);
-
-    context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-    context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-
-    if (m_cbuffer_material)
-    {
-        context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-        context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-    }
-
-
-    //DX11Renderer::Instance().BindShader(m_shader);
-
-    m_shader->Bind();
-
-  
-
-    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    {
-        ID3D11ShaderResourceView* srv = nullptr;
-		ID3D11SamplerState* sampler = nullptr;
-
-        if (m_textures[i])
-        {
-
-
-            srv = m_textures[i]->GetSRV();
-            sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
-
-            DX11Renderer::Instance().BindTexture((int)i, srv);
-
-
-        }
-
-        context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
-
-        if (sampler)
-            context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
-    }
-
-    if (m_renderMode == RenderMode::Transparent)
-    {
-        DX11Renderer::Instance().SetBlendMode(BlendMode::AlphaBlend);
-    }
-    else
-    {
-        DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
-    }
-
-    DX11Renderer::Instance().SetCullMode(m_cullMode);
-
-    if (ID3D11ShaderResourceView* shadowSRV = DX11Renderer::Instance().GetShadowMapSRV())
-    {
-        context->PSSetShaderResources(10, 1, &shadowSRV);
-    }
-     //어짜피 beginshadowpass에서 set 해줌 생각해보니까
-    // 그냥 Render pass 만들면서 고정으로 박아버릴게, 
-
-    //UpdateMaterialBuffer();
+    BindPipeLine();
+    BindPerObject(worldTM, worldInverseTransposeTM);
 }
 
 // ★ 기존 bind를 분리; Bind 폐기 예정 
@@ -525,41 +374,15 @@ void Material::BindPipeLine()
 
     DX11Renderer::Instance().SetCullMode(m_cullMode);
 
-    if (ID3D11ShaderResourceView* shadowSRV = DX11Renderer::Instance().GetShadowMapSRV())
-    {
-        context->PSSetShaderResources(10, 1, &shadowSRV);
-    }
-    //어짜피 beginshadowpass에서 set 해줌 생각해보니까
-   // 그럼 -> 그냥 Render pass 만들면서 고정으로 박아버릴게, 
+   
 
 }
 
 void Material::BindPerObject(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
 
-   if(!m_cbuffer_object) return;
+    DX11Renderer::Instance().UpdateObject_CBBUFFER(worldTM, worldInverseTransposeTM);
+    DX11Renderer::Instance().UpdateMaterial_CBBUFFER(m_data);
 
-    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
-    if (!context) return;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = context->Map(m_cbuffer_object.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    DXHelper::ThrowIfFailed(hr);
-
-    CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
-    dataPtr->WorldTM = worldTM.Transpose();
-    dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
-
-    context->Unmap(m_cbuffer_object.Get(), 0);
-
-    //하단 부분 삭제 예정 -> DX RENDERER
-
-    context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-    context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-
-    if (m_cbuffer_material)
-    {
-        context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-        context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-    }
+    //Material 정보는 오브젝트 단위로 업데이트 되는 게 맞으니깐. ㅇㅇ 
 }

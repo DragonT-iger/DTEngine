@@ -1,4 +1,4 @@
-TextureCube g_CubeMap : register(t0);
+TextureCube g_CubeMap : register(t0); //넌 거기서 살아! 
 SamplerState g_Sampler : register(s0);
 
 struct PS_INPUT

@@ -8,8 +8,6 @@
 #include "ConstantBuffers.h"
 
 
-struct ID3D11Buffer;
-
 class Shader;
 class Texture;
 
@@ -47,8 +45,8 @@ public:
     Vector2 GetTiling() const { return Vector2(m_data.UVTransform.x, m_data.UVTransform.y); }
     Vector2 GetOffset() const { return Vector2(m_data.UVTransform.z, m_data.UVTransform.w); }
 
-    void SetTiling(float x, float y) { m_data.UVTransform.x = x; m_data.UVTransform.y = y; UpdateMaterialBuffer(); }
-    void SetOffset(float x, float y) { m_data.UVTransform.z = x; m_data.UVTransform.w = y; UpdateMaterialBuffer(); }
+    void SetTiling(float x, float y) { m_data.UVTransform.x = x; m_data.UVTransform.y = y; }
+    void SetOffset(float x, float y) { m_data.UVTransform.z = x; m_data.UVTransform.w = y; }
 
     void SetRenderMode(RenderMode mode) { m_renderMode = mode; }
     RenderMode GetRenderMode() const { return m_renderMode; }
@@ -57,22 +55,17 @@ public:
     CullMode GetCullMode() const { return m_cullMode; }
 
 	static constexpr int MAX_TEXTURE_SLOTS = 8;
+   
 
     int GetShaderID();
     int GetTextureID();
 private:
     void UpdateTextureBatchID();
-    void UpdateMaterialBuffer();
-    void CreateBuffers();
     void SetDefaultShader();
 
     Shader* m_shader = nullptr;
 
     std::vector<Texture*> m_textures;
-
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_object;
-
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_material;
 
 	MaterialData m_data;
 

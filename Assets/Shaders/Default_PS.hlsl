@@ -3,6 +3,7 @@
 // Forward 방식임.
 
 #include "Lighting.hlsli"
+#include "Resource.hlsli"
 
 struct PS_INPUT
 {
@@ -10,14 +11,6 @@ struct PS_INPUT
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
-};
-
-cbuffer CBuffer_Material : register(b3)
-{
-    float4 MaterialColor; // Material.Color
-    float4 UVTransform;   // xy=Tiling, zw=Offset
-    int UseTexture;       // Material.UseTexture
-    int3 Padding2;
 };
 
 

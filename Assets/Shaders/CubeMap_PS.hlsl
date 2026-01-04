@@ -12,13 +12,6 @@ SamplerState g_Sampler : register(s0);
 
 #include "Lighting.hlsli"
 
-cbuffer CBuffer_Material : register(b3)
-{
-    float4 MaterialColor;
-    float4 UVTransform;
-    int     UseTexture;
-    float2 Padding2;
-};
 
 float4 PS(PS_INPUT input) : SV_Target
 {

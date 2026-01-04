@@ -14,6 +14,7 @@ Texture2D g_texMetal : register(t1);
 Texture2D g_texRough : register(t2);
 Texture2D g_texNormal : register(t3);
 Texture2D g_texAO : register(t4);
+
 TextureCube g_texEnv : register(t5);
 
 SamplerState g_Sampler : register(s0);

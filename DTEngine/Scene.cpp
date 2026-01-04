@@ -406,6 +406,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 {
     if (!camera) return;
 
+    //★ Sorting 
     Sorter::Instance().SetCamParameters(camera); 
 
 
@@ -425,12 +426,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     DX11Renderer::Instance().ClearCache();
 
     camera->Bind();
-    //DX11Renderer::Instance().SetViewport(width, height);
     
-    //★ Sorting 
-
-    //if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
-
     const Matrix& viewTM = camera->GetViewMatrix();
     const Matrix& projTM = camera->GetProjectionMatrix();
     DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
@@ -512,8 +508,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
                 lastPipelineKey = currentPipelineKey;
             }
-
-
             const Matrix& worldTM = tf->GetWorldMatrix();
             Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
 
@@ -525,21 +519,12 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     }
 
-
-
-//
-//    for (auto* obj : opaqueQueue)
-//{
-//    DrawObject(obj);
-//}
-
-    for (auto* go : transparentQueue)
+  /*  for (auto* go : transparentQueue)
     {
         DrawObject(go);
-    }
+    }*/
 
     
-
 
     if (renderUI) {
         DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 

@@ -22,6 +22,7 @@ struct CBuffer_Frame_Data
     Matrix ProjectionTM;
 };
 
+//Use Texture 빼고, Metal 이랑 Roughness값 넣을 생각.....
 __declspec(align(16))
 struct MaterialData
 {

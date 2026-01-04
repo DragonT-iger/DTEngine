@@ -15,12 +15,8 @@ cbuffer CBuffer_Frame : register(b0)
     matrix ProjectionTM;
 };
 
+#include "Resource.hlsli"
 #include "Lighting.hlsli"
-
-Texture2D g_DiffuseMap : register(t0);  
-Texture2D g_SpecMap : register(t1);     
-Texture2D g_SphereMap : register(t2);
-Texture2D g_NormalMap : register(t3);
 
 SamplerState g_Sampler : register(s0);
 

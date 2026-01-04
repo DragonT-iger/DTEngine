@@ -50,7 +50,6 @@ public:
     bool Initialize(HWND hwnd, int width, int height, bool vsync = false);
     void Resize(int width, int height);
 
-    void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);
 
     void BeginUIRender();
     void EndUIRender();
@@ -112,7 +111,11 @@ public:
     void SetWidth(int width) { m_width = width; }
     void SetHeight(int height) { m_height = height; }
 
-    void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
+    //CB Buffer Data map/unmap ; 외부에서 call 
+    void UpdateObject_CBBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
+    void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);    // r0
+    void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
+    void UpdateMaterial_CBBUFFER(const MaterialData& M_Data); //r3
 
     void ClearCache();
     void ResetRenderState();
@@ -166,8 +169,21 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights;
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBoolBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLightBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_p_VP_MatBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIBL_Buffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pPointLight_Buffer = nullptr;
+
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;  //r0
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr; //r1
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr; //r2
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr; //r3
+
+
 
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
@@ -175,6 +191,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11BlendState>        m_alphaBlendState;
     //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
+
+    static constexpr int SamplerCnt = 6;
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_uiSampler;
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_shadowSampler;
@@ -217,31 +235,4 @@ private:
     private:
       uint16_t m_currentShaderID = 0; 
       ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };
-
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBoolBuffer = nullptr;		    // 상수 버퍼. 2 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLightBuffer = nullptr;		// 상수 버퍼. 3 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_p_VP_MatBuffer = nullptr;		    // 상수 버퍼. 1 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIBL_Buffer = nullptr;			// 상수 버퍼.
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pPointLight_Buffer = nullptr;	// 상수 버퍼. 4 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformW_Buffer = nullptr;	// 상수 버퍼. 5 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pMaterial_Buffer = nullptr;	// 상수 버퍼. 5 
-
-      //일단 여기 밑은 나중에 
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformVP_Buffer = nullptr;	// 상수 버퍼.
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pUIAnimation_Buffer = nullptr;	// 상수 버퍼.
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pParticleBuffer = nullptr;		// 상수 버퍼.
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pParticleDataBuffer = nullptr;	// 상수 버퍼.
-
-      Microsoft::WRL::ComPtr<ID3D11Buffer> m_pUIMeshBuffer = nullptr;		// 상수 버퍼.
 };

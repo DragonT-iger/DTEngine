@@ -442,6 +442,9 @@
     <None Include="..\Assets\Shaders\Lighting.hlsli">
       <Filter>Shader\Common</Filter>
     </None>
+    <None Include="..\Assets\Shaders\Resource.hlsli">
+      <Filter>Shader\Common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl">

@@ -3,6 +3,8 @@
 // Forward 방식임.
 
 
+#include "Resource.hlsli"
+#include "Lighting.hlsli"
 
 struct PS_INPUT
 {
@@ -11,17 +13,6 @@ struct PS_INPUT
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
 };
-
-#include "Lighting.hlsli"
-
-cbuffer CBuffer_Material : register(b3)
-{
-    float4 MaterialColor; // Material.Color
-    float4 UVTransform; // xy=Tiling, zw=Offset
-    int UseTexture; // Material.UseTexture
-    int3 Padding2;
-};
-
 
 Texture2D Diffuse : register(t0);
 Texture2D RenderTarget : register(t1);

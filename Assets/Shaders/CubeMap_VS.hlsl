@@ -1,22 +1,5 @@
-cbuffer CBuffer_Frame : register(b0)
-{
-    matrix View;
-    matrix Projection;
-};
+#include "Resource.hlsli"
 
-cbuffer CBuffer_Object : register(b1)
-{
-    matrix World;
-    matrix WorldInverseTranspose;
-};
-
-struct VS_INPUT
-{
-    float3 Pos : POSITION;
-    float2 UV : TEXCOORD0;
-    float3 Normal : NORMAL;
-    float4 Tangent : TANGENT;
-};
 
 struct VS_OUTPUT
 {
@@ -30,13 +13,13 @@ VS_OUTPUT VS(VS_INPUT input)
 {
     VS_OUTPUT output;
 
-    float4 worldPos = mul(float4(input.Pos, 1.0f), World);
+    float4 worldPos = mul(float4(input.Pos, 1.0f), World_TM);
     output.WorldPos = worldPos.xyz;
 
-    output.Pos = mul(worldPos, View);
-    output.Pos = mul(output.Pos, Projection);
+    output.Pos = mul(worldPos, View_TM);
+    output.Pos = mul(output.Pos, Projection_TM);
 
-    output.Normal = mul(input.Normal, (float3x3) WorldInverseTranspose);
+    output.Normal = mul(input.Normal, (float3x3) WorldInverseTranspose_TM);
 
     output.UV = input.UV;
 

@@ -16,7 +16,7 @@ public:
     void Awake() override;
     void Render();
 
-    void SetTargetTextureSlot(int slot) { m_targetSlot = slot; }
+  //  void SetTargetTextureSlot(int slot) { m_targetSlot = slot; }
 
 private:
     std::unique_ptr<RenderTexture> m_cubeMap;
@@ -24,5 +24,6 @@ private:
 
     Camera* m_captureCamera = nullptr;
 
-    int m_targetSlot = 0;
+     int m_targetSlot = 0; //보류 
+ 
 };
