@@ -46,10 +46,6 @@ private: \
                     *static_cast<decltype(CLASS_NAME::MEMBER_NAME)*>(value); \
             });
 
-
-
-// 직접 접근도 가능하지만 당연히 캡슐화가 팁?
-
 #define DTPROPERTY_ACCESSOR(CLASS_NAME, MEMBER_NAME, GETTER_FUNC, SETTER_FUNC) \
     ReflectionDatabase::Instance().RegisterDTPROPERTY(#CLASS_NAME, #MEMBER_NAME, \
         typeid(decltype(CLASS_NAME::MEMBER_NAME)), \
@@ -82,17 +78,17 @@ private: \
 
 
 
-#define DTPROPERTY_ENUM(CLASS_NAME, MEMBER_NAME, ...) \
-    ReflectionDatabase::Instance().RegisterDTPROPERTY(#CLASS_NAME, #MEMBER_NAME, \
-        typeid(decltype(CLASS_NAME::MEMBER_NAME)), \
-        [](void* base) -> void* { \
-            return &(static_cast<CLASS_NAME*>(base)->MEMBER_NAME); \
-        }, \
-        [](void* base, void* value) { \
-            static_cast<CLASS_NAME*>(base)->MEMBER_NAME = \
-                *static_cast<decltype(CLASS_NAME::MEMBER_NAME)*>(value); \
-        }, \
-        std::vector<std::string>{__VA_ARGS__});
+//#define DTPROPERTY_ENUM(CLASS_NAME, MEMBER_NAME, ...) \
+//    ReflectionDatabase::Instance().RegisterDTPROPERTY(#CLASS_NAME, #MEMBER_NAME, \
+//        typeid(decltype(CLASS_NAME::MEMBER_NAME)), \
+//        [](void* base) -> void* { \
+//            return &(static_cast<CLASS_NAME*>(base)->MEMBER_NAME); \
+//        }, \
+//        [](void* base, void* value) { \
+//            static_cast<CLASS_NAME*>(base)->MEMBER_NAME = \
+//                *static_cast<decltype(CLASS_NAME::MEMBER_NAME)*>(value); \
+//        }, \
+//        std::vector<std::string>{__VA_ARGS__});
 
 
 

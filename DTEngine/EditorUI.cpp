@@ -845,30 +845,30 @@ void EditorUI::DrawComponentProperties(Component* comp)
             }
 
             const char* name = prettyName.c_str();
-            if (!prop.m_enumNames.empty() && type == typeid(int))
-            {
-                int* valPtr = static_cast<int*>(data);
-                int currentItem = *valPtr;
+            //if (!prop.m_enumNames.empty() && type == typeid(int))
+            //{
+            //    int* valPtr = static_cast<int*>(data);
+            //    int currentItem = *valPtr;
 
-                std::vector<const char*> items;
-                for (const auto& enumName : prop.m_enumNames)
-                    items.push_back(enumName.c_str());
+            //    std::vector<const char*> items;
+            //    for (const auto& enumName : prop.m_enumNames)
+            //        items.push_back(enumName.c_str());
 
-                if (ImGui::Combo(name, &currentItem, items.data(), (int)items.size()))
-                {
-                    prop.m_setter(comp, &currentItem);
-                }
+            //    if (ImGui::Combo(name, &currentItem, items.data(), (int)items.size()))
+            //    {
+            //        prop.m_setter(comp, &currentItem);
+            //    }
 
-                if (ImGui::IsItemActivated()) m_dragStartValue = *valPtr;
-                if (ImGui::IsItemDeactivatedAfterEdit())
-                {
-                    int oldVal = std::any_cast<int>(m_dragStartValue);
-                    auto cmd = std::make_unique<ChangePropertyCommand<int>>(comp, prop.m_setter, oldVal, currentItem);
-                    HistoryManager::Instance().Do(std::move(cmd));
-                }
-            }
+            //    if (ImGui::IsItemActivated()) m_dragStartValue = *valPtr;
+            //    if (ImGui::IsItemDeactivatedAfterEdit())
+            //    {
+            //        int oldVal = std::any_cast<int>(m_dragStartValue);
+            //        auto cmd = std::make_unique<ChangePropertyCommand<int>>(comp, prop.m_setter, oldVal, currentItem);
+            //        HistoryManager::Instance().Do(std::move(cmd));
+            //    }
+            //}
             // float
-            else if (type == typeid(float))
+            if (type == typeid(float))
             {
                 float temp = *static_cast<float*>(data);
                 if (ImGui::DragFloat(name, &temp, 0.1f))

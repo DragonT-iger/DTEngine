@@ -85,7 +85,11 @@ void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
 
     if (id != 0)
     {
+        assert(m_idToPathMap.find(id) == m_idToPathMap.end() && "Duplicate asset ID detected!");
+
         m_idToPathMap[id] = normalizedAssetPath;
+     
+        
         m_pathToIdMap[normalizedAssetPath] = id;
     }
 }

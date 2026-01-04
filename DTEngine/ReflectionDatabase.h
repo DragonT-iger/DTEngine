@@ -16,8 +16,8 @@ struct PropertyInfo
     std::function<void(void*, void*)> m_setter;
 
 
-    //enum 인 경우 특수처리
-    std::vector<std::string> m_enumNames;
+    ////enum 인 경우 특수처리
+    //std::vector<std::string> m_enumNames;
 };
 
 struct ClassInfo
