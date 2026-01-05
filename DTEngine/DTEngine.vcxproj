@@ -278,6 +278,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\Lighting.hlsli" />
+    <None Include="..\Assets\Shaders\Lighting_PBR.hlsli" />
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
