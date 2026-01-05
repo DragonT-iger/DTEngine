@@ -79,3 +79,4 @@ Client/imgui.ini
 *x64
 enc_temp_folder/
 Assets/Fonts/NotoSansKR-ExtraBold.ttf.meta
+*.orig

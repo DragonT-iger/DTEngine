@@ -6,6 +6,7 @@ struct PS_INPUT
     float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
+<<<<<<< .merge_file_lwKyAr
     float3 Normal : NORMAL;
     float3 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
@@ -18,6 +19,12 @@ cbuffer CBuffer_Material : register(b3)
     int UseTexture;
     int3 Padding2;
 };
+=======
+    float3 WorldNormal : NORMAL;
+};
+
+#define PI 3.1415926535
+>>>>>>> .merge_file_oJalNe
 
 Texture2D t_Albedo : register(t0);
 Texture2D t_Metallic : register(t1);
@@ -42,8 +49,11 @@ float3 CalculateNormal(PS_INPUT input, float2 uv)
     return normalize(mul(tangentNormal, TBN));
 }
 
+
+
 float4 PS(PS_INPUT input) : SV_Target
 {
+<<<<<<< .merge_file_lwKyAr
     float2 uv = input.UV * UVTransform.xy + UVTransform.zw;
 
     float4 albedoSample = t_Albedo.Sample(g_Sampler, uv);
@@ -72,4 +82,24 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 finalColor = ComputePBRLighting(input.WorldPos, normal, viewDir, albedo, metallic, roughness, ao);
 
     return float4(finalColor, alpha);
+=======
+    float3 N = input.WorldNormal;
+    float3 L = Lights[0].DirectionType.xyz;
+    
+    float4 texBase = g_texBase.Sample(g_Sampler, input.UV);     //sRGB8_A8
+    float4 texMetal = g_texMetal.Sample(g_Sampler, input.UV).r; //R8
+    float4 texRough = g_texRough.Sample(g_Sampler, input.UV).r; //R8
+    float4 texNormal = g_texNormal.Sample(g_Sampler, input.UV); //RGBA8
+    float4 texAO = g_texAO.Sample(g_Sampler, input.UV).r;       //R8
+    //float4 texEnv = g_texEnv.Sample(smpAniso, uvw);           //RGBA
+    
+    float4 albedo = texBase * texAO;
+    
+    float4 diff = Lights[0].ColorIntensity.w * max(dot(N, L), 0) / PI * albedo;
+    
+    
+    float4 amb = albedo;
+
+    return amb + diff;
+>>>>>>> .merge_file_oJalNe
 }
