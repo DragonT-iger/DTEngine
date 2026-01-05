@@ -130,8 +130,12 @@ void DX11Renderer::BeginUIRender()
             DirectX::XMMatrixIdentity() 
         );
     }
+    Camera* mainCamera = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
-    m_isOrthoBackup = SceneManager::Instance().GetActiveScene()->GetMainCamera()->IsOrthographic();
+
+    if (mainCamera == nullptr) return;
+
+    m_isOrthoBackup = mainCamera->IsOrthographic();
 
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
@@ -155,7 +159,8 @@ void DX11Renderer::EndUIRender()
         m_spriteBatch->End();
     }
 
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
+    if (mainCam == nullptr) return;
 
     mainCam->SetIsOrthographic(m_isOrthoBackup);
 

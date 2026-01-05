@@ -30,7 +30,9 @@ Camera::Camera()
 
 void Camera::Awake()
 {
-    SetThisCameraToMain();
+    if (this->GetName() == "MainCamera") {
+        SetThisCameraToMain();
+    }
 
     m_editorFovY = SimpleMathHelper::Rad2Deg(m_fovY);
 

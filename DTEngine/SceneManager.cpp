@@ -33,9 +33,9 @@ void SceneManager::LoadScene(const std::string& name)
 	std::cout << "[SceneManager] Scene change requested: " << name << std::endl;
 }
 
-void SceneManager::ProcessSceneChange()
+bool SceneManager::ProcessSceneChange()
 {
-    if (m_nextName.empty()) return;
+    if (m_nextName.empty()) return false;
 
 
     // 현재 씬 정리 필요.
@@ -51,6 +51,8 @@ void SceneManager::ProcessSceneChange()
     }
 
     m_nextName.clear();
+
+    return true;
 }
 
 bool SceneManager::BackupActiveScene()

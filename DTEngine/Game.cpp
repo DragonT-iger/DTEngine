@@ -112,20 +112,7 @@ bool Game::Initialize()
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1280, 720);
 
-	m_editorCameraObject = scene->FindGameObject("EditorCamera55");
-
-	if (m_editorCameraObject)
-	{
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
-	}
-	else
-	{
-		std::cout << "EditorCamera 게임 오브젝트가 씬에 없음. 새로 생성합니다." << std::endl;
-		m_editorCameraObject = scene->CreateGameObject("EditorCamera55");
-		m_editorCameraObject->AddComponent<Camera>();
-		m_editorCameraObject->AddComponent<FreeCamera>();
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
-	}
+	SetEditorCamera(scene);
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
@@ -214,7 +201,17 @@ void Game::Release()
 
 void Game::LifeCycle(float deltaTime)
 {
-	SceneManager::Instance().ProcessSceneChange(); // Awake Start
+	if (SceneManager::Instance().ProcessSceneChange()) {
+	
+
+#ifdef _DEBUG
+
+		Scene* curScene = SceneManager::Instance().GetActiveScene();
+		SetEditorCamera(curScene);
+	
+#endif
+	
+	}; // Awake Start
 
 
 
@@ -542,6 +539,23 @@ void Game::SetPlayState(bool isPlay)
 		}
 	}
 
+}
+void Game::SetEditorCamera(Scene* curScene)
+{
+	m_editorCameraObject = curScene->FindGameObject("EditorCamera55");
+
+	if (m_editorCameraObject)
+	{
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+	}
+	else
+	{
+		std::cout << "EditorCamera 게임 오브젝트가 씬에 없음. 새로 생성합니다." << std::endl;
+		m_editorCameraObject = curScene->CreateGameObject("EditorCamera55");
+		m_editorCameraObject->AddComponent<Camera>();
+		m_editorCameraObject->AddComponent<FreeCamera>();
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+	}
 }
 #endif
 

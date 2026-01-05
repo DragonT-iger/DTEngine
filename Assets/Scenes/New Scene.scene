@@ -1,0 +1,124 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4165646931332818619,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 15314524109520449054,
+          "m_moveSpeed": 10.0,
+          "m_pitch": 22.800010681152344,
+          "m_rotationSpeed": 0.10000000149011612,
+          "m_turboScale": 3.0,
+          "m_yaw": 24.800018310546875,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 12825142833824655231,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8662867275804278932,
+        "m_editorEulerAngles": {
+          "x": 22.800010681152344,
+          "y": 24.800018310546875,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -3.2177679538726807,
+          "y": 2.8401639461517334,
+          "z": -5.6446919441223145
+        },
+        "m_rotation": {
+          "w": 0.9574036002159119,
+          "x": 0.19304651021957397,
+          "y": 0.21049900352954865,
+          "z": -0.04244406148791313
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1933221024265715584,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.009999999776482582,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        }
+      ],
+      "id": 2869041225417710730,
+      "name": "MainCamera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18445531253212585071,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}

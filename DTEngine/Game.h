@@ -34,6 +34,9 @@ public:
 	void SetEngineMode(EngineMode mode) { m_engineMode = mode; }
 
 	void SetPlayState(bool isPlay);
+
+	void SetEditorCamera(Scene* curScene);
+
 #endif
 
 protected:

@@ -2105,17 +2105,17 @@ void EditorUI::DrawProjectWindow()
                 {
                     m_currentProjectDirectory /= path.filename();
                 }
-
                 else
                 {
                     std::cout << "Selected File: " << filename << std::endl;
 
-                    if (ext == ".scene")
+                    if (lowerCaseExt == ".scene")
                     {
+                        std::string sceneName = path.stem().string();
 
-                        std::string sceneName = filename.substr(0, filename.find_last_of('.'));
+                        SceneManager::Instance().RegisterScene(path.string());
 
-                        //SceneManager::Instance().LoadScene(sceneName);
+                        SceneManager::Instance().LoadScene(sceneName);
                     }
 
                     m_selectedAssetPath = path.string();
@@ -2178,6 +2178,97 @@ void EditorUI::DrawProjectWindow()
 
                     std::cout << "[Editor] Created new material: " << newPath.string() << " (ShaderID: " << defaultShaderID << ")" << std::endl;
 
+                }
+            }
+
+            if (ImGui::MenuItem("Scene"))
+            {
+                std::string baseName = "New Scene";
+                std::string ext = ".scene";
+                fs::path newPath = m_currentProjectDirectory / (baseName + ext);
+
+                // 파일 이름 중복 방지
+                int counter = 1;
+                while (fs::exists(newPath))
+                {
+                    newPath = m_currentProjectDirectory / (baseName + " " + std::to_string(counter) + ext);
+                    counter++;
+                }
+
+                uint64_t goID = IDManager::Instance().GetNewUniqueID();
+                uint64_t tfID = IDManager::Instance().GetNewUniqueID();
+                uint64_t camID = IDManager::Instance().GetNewUniqueID();
+
+                std::ofstream file(newPath);
+                if (file.is_open())
+                {
+                    file << "{\n";
+                    file << "  \"gameObjects\": [\n";
+                    file << "    {\n";
+                    file << "      \"active\": true,\n";
+                    file << "      \"components\": [\n";
+                    file << "        {\n";
+                    file << "          \"Active\": true,\n";
+                    file << "          \"id\": " << camID << ",\n";
+                    file << "          \"m_clearColor\": {\n";
+                    file << "            \"w\": 0.20000000298023224,\n";
+                    file << "            \"x\": 0.20000000298023224,\n";
+                    file << "            \"y\": 0.20000000298023224,\n";
+                    file << "            \"z\": 0.20000000298023224\n";
+                    file << "          },\n";
+                    file << "          \"m_editorFovY\": 60.0,\n";
+                    file << "          \"m_farZ\": 1000.0,\n";
+                    file << "          \"m_isOrthographic\": false,\n";
+                    file << "          \"m_nearZ\": 0.009999999776482582,\n";
+                    file << "          \"m_orthographicSize\": 5.0,\n";
+                    file << "          \"m_viewportRect\": {\n";
+                    file << "            \"w\": 1.0,\n";
+                    file << "            \"x\": 0.0,\n";
+                    file << "            \"y\": 0.0,\n";
+                    file << "            \"z\": 1.0\n";
+                    file << "          },\n";
+                    file << "          \"typeName\": \"Camera\"\n";
+                    file << "        }\n";
+                    file << "      ],\n";
+                    file << "      \"id\": " << goID << ",\n";
+                    file << "      \"name\": \"MainCamera\",\n";
+                    file << "      \"tag\": \"Untagged\",\n";
+                    file << "      \"transform\": {\n";
+                    file << "        \"id\": " << tfID << ",\n";
+                    file << "        \"m_editorEulerAngles\": {\n";
+                    file << "          \"x\": 0.0,\n";
+                    file << "          \"y\": 0.0,\n";
+                    file << "          \"z\": 0.0\n";
+                    file << "        },\n";
+                    file << "        \"m_parent\": 0,\n";
+                    file << "        \"m_position\": {\n";
+                    file << "          \"x\": 0.0,\n";
+                    file << "          \"y\": 0.0,\n";
+                    file << "          \"z\": 0.0\n";
+                    file << "        },\n";
+                    file << "        \"m_rotation\": {\n";
+                    file << "          \"w\": 1.0,\n";
+                    file << "          \"x\": 0.0,\n";
+                    file << "          \"y\": 0.0,\n";
+                    file << "          \"z\": 0.0\n";
+                    file << "        },\n";
+                    file << "        \"m_scale\": {\n";
+                    file << "          \"x\": 1.0,\n";
+                    file << "          \"y\": 1.0,\n";
+                    file << "          \"z\": 1.0\n";
+                    file << "        }\n";
+                    file << "      }\n";
+                    file << "    }\n";
+                    file << "  ]\n";
+                    file << "}";
+                    file.close();
+
+                    AssetDatabase::Instance().ProcessAssetFile(newPath.string());
+                    std::cout << "[Editor] Created new scene with JSON template: " << newPath.string() << std::endl;
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to write scene file." << std::endl;
                 }
             }
             ImGui::EndMenu();

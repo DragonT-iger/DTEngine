@@ -3,36 +3,31 @@
     {
       "active": true,
       "components": [],
-      "id": 1655472799516409961,
-      "name": "Parent",
+      "id": 15841634715320173431,
+      "name": "GameObject",
       "tag": "Untagged",
       "transform": {
-        "a": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "id": 18348320039252977380,
+        "id": 6567152259527900090,
         "m_editorEulerAngles": {
           "x": 0.0,
-          "y": 45.0,
+          "y": 0.0,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 1.0,
+          "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
         "m_rotation": {
-          "w": 0.9238795042037964,
+          "w": 1.0,
           "x": 0.0,
-          "y": 0.3826834261417389,
+          "y": 0.0,
           "z": 0.0
         },
         "m_scale": {
           "x": 1.0,
-          "y": 2.0,
+          "y": 1.0,
           "z": 1.0
         }
       }
@@ -40,36 +35,211 @@
     {
       "active": true,
       "components": [],
-      "id": 11761275548905433851,
-      "name": "Child",
+      "id": 12471175517931051610,
+      "name": "rubber_duck_toy_4k",
       "tag": "Untagged",
       "transform": {
-        "a": {
+        "id": 14802872181193688464,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 1.0897960662841797,
+          "y": 0.2186567187309265,
+          "z": 2.0311436653137207
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 10399390763750206250,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 3747038728215135899,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 9684073097486756799,
+      "name": "rubber_duck_toy",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12956636969035752887,
+        "m_editorEulerAngles": {
+          "x": 89.97201538085938,
+          "y": 180.0,
+          "z": 180.0
+        },
+        "m_parent": 14802872181193688464,
+        "m_position": {
           "x": 0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
-        "id": 10625793240585951135,
+        "m_rotation": {
+          "w": 0.7071066498756409,
+          "x": 0.7071068286895752,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 15155064325765794188,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 4024615723925604375,
+          "m_moveSpeed": 10.0,
+          "m_pitch": 0.0,
+          "m_rotationSpeed": 0.10000000149011612,
+          "m_turboScale": 3.0,
+          "m_yaw": 0.0,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 10827023441436047089,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18088322420902159967,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 18348320039252977380,
+        "m_parent": 0,
         "m_position": {
-          "x": -0.7071068286895752,
-          "y": 1.0,
-          "z": -0.7071067690849304
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "m_rotation": {
-          "w": 0.9238795042037964,
-          "x": -0.0,
-          "y": -0.3826834261417389,
-          "z": -0.0
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "m_scale": {
           "x": 1.0,
-          "y": 0.5,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 13986400965772073441,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.009999999776482582,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        }
+      ],
+      "id": 6342239287820373273,
+      "name": "Camera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7701808393455047419,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
           "z": 1.0
         }
       }

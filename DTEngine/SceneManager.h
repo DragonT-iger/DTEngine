@@ -16,7 +16,7 @@ public:
 
     void    LoadScene(const std::string& name);
 
-    void    ProcessSceneChange();
+    bool    ProcessSceneChange();
 
     bool    BackupActiveScene();   
     bool    RestoreActiveScene();  
