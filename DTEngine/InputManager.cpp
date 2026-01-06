@@ -138,7 +138,7 @@ int InputManager::MapKeyCodeToVKey(KeyCode key) const
     case KeyCode::F9:           return VK_F9;
     case KeyCode::F10:          return VK_F10;
     case KeyCode::F11:          return VK_F11;
-    case KeyCode::F12:          return VK_F12;
+    case KeyCode::F12:          return VK_F12; // 왠진 모르겠지만 실제로 해보면 F12는 뭔가 안됨
     default:                    return 0;
     }
 }

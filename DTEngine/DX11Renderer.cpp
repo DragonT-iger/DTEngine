@@ -76,7 +76,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
-    //CreateShadowMap(16376, 16376); max
+    //CreateShadowMap(16376, 16376); max 왜 이러지
 
     CreateShadowMap(4096, 4096);
     
@@ -118,18 +118,18 @@ void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projec
 
 void DX11Renderer::BeginUIRender()
 {
-    if (m_spriteBatch)
-    {
-        m_spriteBatch->Begin(
-            DirectX::DX11::SpriteSortMode_Deferred,
-            m_states->NonPremultiplied(),
-            nullptr,                                    // SamplerState
-            nullptr,                                    // DepthStencilState
-            nullptr,                                    // RasterizerState
-            nullptr,                                    // setCustomShaders
-            DirectX::XMMatrixIdentity() 
-        );
-    }
+    //if (m_spriteBatch)
+    //{
+    //    m_spriteBatch->Begin(
+    //        DirectX::DX11::SpriteSortMode_Deferred,
+    //        m_states->NonPremultiplied(),
+    //        nullptr,                                    // SamplerState
+    //        nullptr,                                    // DepthStencilState
+    //        nullptr,                                    // RasterizerState
+    //        nullptr,                                    // setCustomShaders
+    //        DirectX::XMMatrixIdentity() 
+    //    );
+    //}
     Camera* mainCamera = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
 
@@ -154,10 +154,10 @@ void DX11Renderer::BeginUIRender()
 
 void DX11Renderer::EndUIRender()
 {
-    if (m_spriteBatch)
-    {
-        m_spriteBatch->End();
-    }
+    //if (m_spriteBatch)
+    //{
+    //    m_spriteBatch->End();
+    //}
 
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
     if (mainCam == nullptr) return;
@@ -179,7 +179,7 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     texDesc.MipLevels = 1;
     texDesc.ArraySize = 1;
     texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-    texDesc.SampleDesc.Count = m_msaa;
+    texDesc.SampleDesc.Count = 1;
     texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
     texDesc.Usage = D3D11_USAGE_DEFAULT;
 
@@ -187,15 +187,15 @@ void DX11Renderer::CreateShadowMap(int width, int height)
 
     D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
     dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    //dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    //dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 
     DXHelper::ThrowIfFailed(m_device->CreateDepthStencilView(m_shadowMapTex.Get(), &dsvDesc, m_shadowDSV.GetAddressOf()));
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
     srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    //srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    //srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
     srvDesc.Texture2D.MipLevels = 1;
 
     DXHelper::ThrowIfFailed(m_device->CreateShaderResourceView(m_shadowMapTex.Get(), &srvDesc, m_shadowSRV.GetAddressOf()));
@@ -623,17 +623,25 @@ void DX11Renderer::CreateSamplers()
                 case FilterMode::Trilinear: desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; break;
             }
 
+
+            //desc.Filter = D3D11_FILTER_ANISOTROPIC;
+            //desc.MaxAnisotropy = 8;
+
+
+
             D3D11_TEXTURE_ADDRESS_MODE addr = (w == 0) ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
             desc.AddressU = desc.AddressV = desc.AddressW = addr;
 
             desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
             desc.MinLOD = 0;
             desc.MaxLOD = D3D11_FLOAT32_MAX;
+            desc.MipLODBias = 0;
 
             int index = f * 2 + w;
             m_device->CreateSamplerState(&desc, m_samplers[index].GetAddressOf());
         }
     }
+
 
     D3D11_SAMPLER_DESC shadowDesc = {};
     shadowDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;

@@ -113,7 +113,6 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     DrawProjectWindow(engineMode);
     //DrawGizmo(activeScene);
     
-    DrawOverlay();
 
     // Redo Undo
 
@@ -127,6 +126,17 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     bool vPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::V);
     bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
    
+
+    static bool showOverlay = false;
+    
+    showOverlay ^= InputManager::Instance().GetKeyDown(KeyCode::Delete);
+
+    if (showOverlay) {
+        DrawOverlay();
+    }
+
+    
+
 
     // Undo (Ctrl + Z)
     if (ctrlPressed && !shiftPressed && zPressed_Down)

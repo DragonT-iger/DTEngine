@@ -48,7 +48,7 @@ bool Texture::LoadFile(const std::string& fullPath)
             D3D11_USAGE_DEFAULT,
             D3D11_BIND_SHADER_RESOURCE,
             0, 
-            0, 
+            0,
             ddsFlags, 
             m_textureResource.GetAddressOf(),
             m_srv.GetAddressOf()
@@ -72,7 +72,7 @@ bool Texture::LoadFile(const std::string& fullPath)
             D3D11_USAGE_DEFAULT,
             D3D11_BIND_SHADER_RESOURCE,
             0, 
-            0, 
+            D3D11_RESOURCE_MISC_GENERATE_MIPS, 
             loadFlags,
             m_textureResource.GetAddressOf(),
             m_srv.GetAddressOf()
