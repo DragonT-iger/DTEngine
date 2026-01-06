@@ -334,7 +334,21 @@ void DX11Renderer::EndFrame()
 void DX11Renderer::Present()
 {
     if (!m_swapchain) return;
-    m_swapchain->Present(GetVsync(), 0);
+
+
+    //m_swapchain->Present(GetVsync(), 0); // BitBlt 모델인 경우.
+
+
+    UINT interval = GetVsync() ? 1 : 0;
+
+    UINT flags = 0;
+    if (!GetVsync())
+    {
+        flags |= DXGI_PRESENT_ALLOW_TEARING;
+    }
+
+    m_swapchain->Present(interval, flags); // 최신 플립 모델에서 티어링을 허용
+
 }
 
 void DX11Renderer::SetFullscreen(bool enable)
@@ -532,8 +546,12 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     scd.BufferCount = 2;
     scd.Scaling = DXGI_SCALING_STRETCH;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 최신 플립 모델 - 창모드 시 Vsync가 자동으로 켜짐
+    //scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;      // Bitblt방식 직접 복사 - 창모드 시 Vsync 안켜짐
     scd.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
+    scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+
+
 
     DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsd{};
     fsd.Windowed = TRUE;
