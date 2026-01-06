@@ -110,7 +110,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     if (!activeScene) return;
     DrawHierarchyWindow(activeScene);
     DrawInspectorWindow();
-    DrawProjectWindow();
+    DrawProjectWindow(engineMode);
     //DrawGizmo(activeScene);
     
     DrawOverlay();
@@ -2020,7 +2020,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     ImGui::PopStyleVar();
 }
 
-void EditorUI::DrawProjectWindow()
+void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
 {
     ImGui::Begin("Project");
 
@@ -2111,11 +2111,19 @@ void EditorUI::DrawProjectWindow()
 
                     if (lowerCaseExt == ".scene")
                     {
-                        std::string sceneName = path.stem().string();
+                        if (engineMode == Game::EngineMode::Edit) {
+                        
+                            std::string sceneName = path.stem().string();
 
-                        SceneManager::Instance().RegisterScene(path.string());
+                            SceneManager::Instance().RegisterScene(path.string());
 
-                        SceneManager::Instance().LoadScene(sceneName);
+                            SceneManager::Instance().LoadScene(sceneName);
+
+                        }
+
+                        else {
+                            std::cout << "플레이 중에 씬 전환 불가능" << std::endl;
+                        }
                     }
 
                     m_selectedAssetPath = path.string();

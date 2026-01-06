@@ -31,7 +31,7 @@ public:
     void RenderSceneWindow(RenderTexture* rt, Scene* scene , Camera* camera);
     void RenderGameWindow(RenderTexture* rt, Scene* scene);
 
-    void DrawProjectWindow();
+    void DrawProjectWindow(Game::EngineMode engineMode);
 
     void DrawOverlay();
 
