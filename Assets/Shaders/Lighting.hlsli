@@ -49,20 +49,22 @@ float CalculateShadow(float3 worldPos)
     
     float totalShadow = 0;
     
-    for (int i = -PCF_LOOP; i <= PCF_LOOP; i++)
-    {
-        for (int j = -PCF_LOOP; j <= PCF_LOOP; j++)
-        {
-            float2 offset = ShadowMapInfo.xy * float2(i, j);
+    //for (int i = -PCF_LOOP; i <= PCF_LOOP; i++)
+    //{
+    //    for (int j = -PCF_LOOP; j <= PCF_LOOP; j++)
+    //    {
+    //        float2 offset = ShadowMapInfo.xy * float2(i, j);
             
-            //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
-            //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
+    //        //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
+    //        //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
             
-            totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy + offset, currentDepth - bias);
-        }
-    }
+            
+    //    }
+    //}
     
-    return totalShadow / PCF_DEVISOR;
+    totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy, currentDepth - bias);
+    
+    return totalShadow;
     
 }
 
