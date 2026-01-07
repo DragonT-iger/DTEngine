@@ -188,6 +188,7 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     texDesc.ArraySize = 1;
     texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
     texDesc.SampleDesc.Count = 1;
+    texDesc.SampleDesc.Quality = 0;
     texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
     texDesc.Usage = D3D11_USAGE_DEFAULT;
 
@@ -308,7 +309,7 @@ void DX11Renderer::SetCullMode(CullMode mode)
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
-    assert(m_context && m_rtv);
+    assert(m_context && m_msaaTargetRTV);
 
     if (m_defaultDepthStencilState)
     {
@@ -317,9 +318,9 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
     bool clearDepth = true;
 
-    ID3D11RenderTargetView* rtvs[1] = { m_rtv.Get() };
+    ID3D11RenderTargetView* rtvs[1] = { m_msaaTargetRTV.Get() };
     m_context->OMSetRenderTargets(1, rtvs, clearDepth ? m_dsv.Get() : nullptr);
-    m_context->ClearRenderTargetView(m_rtv.Get(), clearColor);
+    m_context->ClearRenderTargetView(m_msaaTargetRTV.Get(), clearColor);
     if (clearDepth && m_dsv)
         m_context->ClearDepthStencilView(m_dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -333,6 +334,15 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
 void DX11Renderer::EndFrame()
 {
+    if (m_msaaTargetTex && m_backbufferTex)
+    {
+        m_context->ResolveSubresource(
+            m_backbufferTex.Get(), 0,      
+            m_msaaTargetTex.Get(), 0,      
+            DXGI_FORMAT_R8G8B8A8_UNORM     
+        );
+    }
+
     //EndUIRender();
 
     //std::cout << m_width << " " << m_height << std::endl;
@@ -498,12 +508,9 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
 
     DXHelper::ThrowIfFailed(hr);
 
-    
-
     ComPtr<IDXGIDevice>   dxgiDev;  dev.As(&dxgiDev);
     ComPtr<IDXGIAdapter>  adapter;  dxgiDev->GetAdapter(&adapter);
     ComPtr<IDXGIFactory2> factory;  adapter->GetParent(__uuidof(IDXGIFactory2), &factory);
-
 
     D3D11_DEPTH_STENCIL_DESC dsDesc = {};
     dsDesc.DepthEnable = TRUE;
@@ -519,6 +526,9 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     rsDesc.FillMode = D3D11_FILL_SOLID;
     rsDesc.FrontCounterClockwise = FALSE;
     rsDesc.DepthClipEnable = TRUE;
+
+    rsDesc.MultisampleEnable = TRUE;       // MSAA 활성화 (필수)
+    rsDesc.AntialiasedLineEnable = TRUE;
 
     // Cull Back 
     rsDesc.CullMode = D3D11_CULL_BACK;
@@ -557,8 +567,8 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     scd.BufferCount = 2;
     scd.Scaling = DXGI_SCALING_STRETCH;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 최신 플립 모델 - 창모드 시 Vsync가 자동으로 켜짐
-    //scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;      // Bitblt방식 직접 복사 - 창모드 시 Vsync 안켜짐
+    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;     // 최신 플립 모델 - 창모드 시 Vsync가 자동으로 켜짐
+    //scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;        // Bitblt방식 직접 복사 - 창모드 시 Vsync 안켜짐
     scd.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
     scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
@@ -577,6 +587,14 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     m_device = std::move(dev);
     m_context = std::move(ctx);
     m_swapchain = std::move(sc1);
+
+    //if (m_device)
+    //{
+    //    m_device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, m_msaa, &m_msaaQuality);
+    //    // 품질 레벨이 0이면 해당 샘플 수를 지원하지 않는 것이므로 1(No AA)로 강제하거나 예외 처리 필요
+    //    if (m_msaaQuality == 0) m_msaa = 1;
+    //} // 그냥 에러 띄우는게 낫지
+
     return true;
 }
 
@@ -602,6 +620,20 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
     //DXHelper::ThrowIfFailed(hr);
 
+
+    D3D11_TEXTURE2D_DESC msaaDesc = {};
+    m_backbufferTex->GetDesc(&msaaDesc);                    // 백버퍼 설정 복사
+    msaaDesc.SampleDesc.Count = m_msaa;                     // 샘플 수 (예: 4)
+    msaaDesc.SampleDesc.Quality = m_msaaQuality - 1;        // 품질
+    msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;          // 렌더 타겟
+
+    hr = m_device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTargetTex.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), nullptr, m_msaaTargetRTV.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+
     D3D11_TEXTURE2D_DESC rtvDesc;
     m_backbufferTex->GetDesc(&rtvDesc);
 
@@ -610,7 +642,8 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     D3D11_TEXTURE2D_DESC ds{};
     ds.Width = rtvDesc.Width; ds.Height = rtvDesc.Height; ds.MipLevels = 1; ds.ArraySize = 1;
     ds.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    ds.SampleDesc = { 1, 0 };
+    ds.SampleDesc.Count = m_msaa;              
+    ds.SampleDesc.Quality = m_msaaQuality - 1; 
     ds.Usage = D3D11_USAGE_DEFAULT;
     ds.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
@@ -633,6 +666,9 @@ void DX11Renderer::ReleaseBackbuffers()
     m_depthTex.Reset();
     m_rtv.Reset();
     m_backbufferTex.Reset();
+
+    m_msaaTargetRTV.Reset();
+    m_msaaTargetTex.Reset();
 }
 
 void DX11Renderer::CreateSamplers()
@@ -673,7 +709,7 @@ void DX11Renderer::CreateSamplers()
 
 
     D3D11_SAMPLER_DESC shadowDesc = {};
-    shadowDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+    shadowDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
     shadowDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
     shadowDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
     shadowDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;

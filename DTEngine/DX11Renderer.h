@@ -54,7 +54,6 @@ public:
     void BeginUIRender();
     void EndUIRender();
 
-
     void CreateShadowMap(int width, int height);
 
     void BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional = true, float size = 30.0f);
@@ -138,7 +137,6 @@ private:
 
 	constexpr static int MAX_LIGHTS = 4;
 
-
     __declspec(align(16))
     struct CBuffer_GlobalLight
     {
@@ -205,9 +203,15 @@ private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_shadowSRV;
     RenderViewport                                   m_shadowViewport;
 
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_msaaTargetTex; 
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_msaaTargetRTV;
+    UINT m_msaaQuality = 0;
+    int m_msaa = 8;
+
+
+
     Matrix m_lightViewProjScale;
 
 
-    int m_msaa = 4;
 
 };
