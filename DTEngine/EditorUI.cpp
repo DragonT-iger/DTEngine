@@ -127,11 +127,11 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     bool sPressed_Down = InputManager::Instance().GetKeyDown(KeyCode::S);
    
 
-    static bool showOverlay = false;
+    static bool showFPSCounter = true;
     
-    showOverlay ^= InputManager::Instance().GetKeyDown(KeyCode::Home);
+    showFPSCounter ^= InputManager::Instance().GetKeyDown(KeyCode::Home);
 
-    if (showOverlay) {
+    if (showFPSCounter) {
         DrawOverlay();
     }
 

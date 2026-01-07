@@ -90,7 +90,7 @@ void DX11Renderer::Resize(int width, int height)
 
     ReleaseBackbuffers();
 
-    static UINT swapChainFlags = 0;
+    UINT swapChainFlags = 0;
 
     if (!GetVsync())
     {
@@ -343,19 +343,22 @@ void DX11Renderer::Present()
 {
     if (!m_swapchain) return;
 
-
-    //m_swapchain->Present(GetVsync(), 0); // BitBlt 모델인 경우.
-
-
     UINT interval = GetVsync() ? 1 : 0;
 
     UINT flags = 0;
-    if (!GetVsync())
+
+    BOOL isFullscreen = FALSE;
+    if (m_swapchain)
     {
-        flags |= DXGI_PRESENT_ALLOW_TEARING;
+        m_swapchain->GetFullscreenState(&isFullscreen, nullptr);
     }
 
-    m_swapchain->Present(interval, flags); // 최신 플립 모델에서 티어링을 허용
+    if (!GetVsync() && !isFullscreen)
+    {
+        flags |= DXGI_PRESENT_ALLOW_TEARING; // 창모드에서만 켜줘야함
+    }
+
+    HRESULT hr = m_swapchain->Present(interval, flags);
 
 }
 
