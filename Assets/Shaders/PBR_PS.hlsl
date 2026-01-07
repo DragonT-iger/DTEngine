@@ -56,6 +56,8 @@ float4 PS(PS_INPUT input) : SV_Target
    
     float3 normal = CalculateNormal(input, uv);
     
+    //float3 normal = input.Normal;
+    
     // 노멀맵 이따가 적용
 
     // UseTexture 비트 플래그를 활용해 제어한다고 가정 (예: 1=Albedo, 4=Metallic...)

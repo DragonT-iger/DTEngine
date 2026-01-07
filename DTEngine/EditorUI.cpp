@@ -129,7 +129,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     static bool showOverlay = false;
     
-    showOverlay ^= InputManager::Instance().GetKeyDown(KeyCode::Delete);
+    showOverlay ^= InputManager::Instance().GetKeyDown(KeyCode::Home);
 
     if (showOverlay) {
         DrawOverlay();

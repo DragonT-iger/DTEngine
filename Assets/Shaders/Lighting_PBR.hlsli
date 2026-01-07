@@ -54,11 +54,14 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
     float3 N = normalize(normal);
     float3 V = normalize(viewDir);
     
-    float3 F0 = 0.03;
+    //roughness = 0.5; Yena 반사광 만드려면 roughness를 고정해야 함.
+    //Yena는 0에 가까운 부분만 spec이 나오는게 아니라 모든 부분이 spec이 균등하게 나옴
+    
+    float3 F0 = 0.08;
     F0 = lerp(F0, albedo, metallic);
 
     float3 Lo = 0;
-
+    
     float shadowFactor = CalculateShadow(worldPos);
 
     for (int i = 0; i < ActiveCount; ++i)
@@ -104,8 +107,10 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
 
         float currentShadow = (i == 0) ? shadowFactor : 1.0f;
 
-        //Lo += (kD * albedo / PI  + specular) * lightColor * NdotL * attenuation * currentShadow; // PI 나누기 버전 (어두움)
-        Lo += (kD * albedo + specular) * lightColor * NdotL * attenuation * currentShadow;
+        Lo += (kD * albedo / PI + specular) * (lightColor * 3.14) * NdotL * attenuation * currentShadow; // PI 나누기 버전 (어두움)
+        //Lo += (kD * albedo + specular) * lightColor * NdotL * attenuation * currentShadow;
+        
+        //Lo += (kD * albedo) * lightColor * NdotL * attenuation * currentShadow + specular * lightColor * NdotL * attenuation;
     }
 
     float3 ambient = 0.03f * albedo * ao;

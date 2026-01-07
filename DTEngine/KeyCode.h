@@ -20,6 +20,7 @@ enum class KeyCode
     Tab,
     Backspace,
     Delete,
+    Home,
 
     // 문자
     A = 'A',

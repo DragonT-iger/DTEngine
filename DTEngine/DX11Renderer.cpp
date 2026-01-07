@@ -89,7 +89,15 @@ void DX11Renderer::Resize(int width, int height)
     if (width == m_width && height == m_height)    return;
 
     ReleaseBackbuffers();
-    const HRESULT hr = m_swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+
+    static UINT swapChainFlags = 0;
+
+    if (!GetVsync())
+    {
+        swapChainFlags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+    }
+
+    const HRESULT hr = m_swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, swapChainFlags);
     DXHelper::ThrowIfFailed(hr);
 
     CreateBackbuffers(width, height);
