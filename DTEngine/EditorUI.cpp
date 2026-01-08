@@ -1721,7 +1721,12 @@ void EditorUI::OnDropFile(const std::string& rawPath)
 
 void EditorUI::DrawAssetInspector(const std::string& path)
 {
-    fs::path filePath(path);
+
+    std::string newPath = path;
+    std::replace(newPath.begin(), newPath.end(), '\\', '/');
+
+
+    fs::path filePath(newPath);
     std::string ext = filePath.extension().string();
 
     if (ext == ".mat")
@@ -2109,6 +2114,19 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                 ImGui::Button(isDirectory ? "[Dir]" : "[File]", ImVec2(thumbnailSize, thumbnailSize));
             }
 
+            if (ImGui::BeginPopupContextItem("##RenameContext"))
+            {
+                if (ImGui::MenuItem("Rename"))
+                {
+                    m_renameTargetFile = path.string();
+                    strcpy_s(m_renameBuffer, filename.c_str());
+                    m_showRenamePopup = true;
+                }
+
+                ImGui::EndPopup();
+            }
+
+
             if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
             {
                 if (isDirectory)
@@ -2136,7 +2154,7 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                         }
                     }
 
-                    m_selectedAssetPath = path.string();
+                    m_selectedAssetPath = path.generic_string();
                     m_selectedGameObject = nullptr;
                 }
             }
@@ -2144,7 +2162,7 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
 
             if (ImGui::BeginDragDropSource())
             {
-                std::string itemPath = path.string();
+                std::string itemPath = path.generic_string();
                 ImGui::SetDragDropPayload("PROJECT_FILE", itemPath.c_str(), itemPath.size() + 1);
                 ImGui::Text("%s", filename.c_str());
                 ImGui::EndDragDropSource();
@@ -2197,6 +2215,8 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                     std::cout << "[Editor] Created new material: " << newPath.string() << " (ShaderID: " << defaultShaderID << ")" << std::endl;
 
                 }
+
+                AssetDatabase::Instance().ProcessAssetFile(newPath.string());
             }
 
             if (ImGui::MenuItem("Scene"))
@@ -2291,6 +2311,57 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
             }
             ImGui::EndMenu();
         }
+        ImGui::EndPopup();
+    }
+
+    if (m_showRenamePopup)
+    {
+        ImGui::OpenPopup("Rename Asset");
+        m_showRenamePopup = false;
+    }
+
+    if (ImGui::BeginPopupModal("Rename Asset", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Enter new name:");
+
+        if (ImGui::IsWindowAppearing())
+            ImGui::SetKeyboardFocusHere();
+
+        bool enterPressed = ImGui::InputText("##rename", m_renameBuffer, sizeof(m_renameBuffer), ImGuiInputTextFlags_EnterReturnsTrue);
+
+        if (ImGui::Button("OK") || enterPressed)
+        {
+            std::string newName = m_renameBuffer;
+            if (!newName.empty())
+            {
+
+                std::filesystem::path oldPath(m_renameTargetFile);
+                std::string ext = oldPath.extension().string(); 
+
+                // 입력된 새 이름에 확장자가 없거나 다르면 원래 확장자를 붙여줌
+                if (std::filesystem::path(newName).extension().string() != ext)
+                {
+                    newName += ext;
+                }
+
+                if (AssetDatabase::Instance().RenameAsset(m_renameTargetFile, newName))
+                {
+                    std::filesystem::path pOld(m_renameTargetFile);
+                    std::filesystem::path pNew = pOld.parent_path() / newName;
+
+                    ResourceManager::Instance().MoveResource(m_renameTargetFile, pNew.string());
+                }
+            }
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Cancel"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+
         ImGui::EndPopup();
     }
 

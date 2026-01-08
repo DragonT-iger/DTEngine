@@ -19,6 +19,8 @@ public:
 
 	void ProcessAssetFile(const std::string& assetPath); // 새로운 에셋 파일이 추가되었을 때 호출
 
+    bool RenameAsset(const std::string& oldPath, const std::string& newName);
+
 private:
     AssetDatabase() = default;
     ~AssetDatabase() = default;

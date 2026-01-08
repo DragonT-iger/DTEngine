@@ -215,6 +215,21 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
     return rootObject;
 }
 
+void ResourceManager::MoveResource(const std::string& oldPath, const std::string& newPath)
+{
+    auto it = m_cache.find(oldPath);
+    if (it != m_cache.end())
+    {
+        std::unique_ptr<IResource> res = std::move(it->second);
+
+        m_cache.erase(it);
+
+        m_cache[newPath] = std::move(res);
+
+        std::cout << "[ResourceManager] Moved cache entry: " << oldPath << " -> " << newPath << std::endl;
+    }
+}
+
 void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures)
 {
     GameObject* currentGO = nullptr;

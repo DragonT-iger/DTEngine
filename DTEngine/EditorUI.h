@@ -91,4 +91,12 @@ private:
     Texture* m_iconMaterial = nullptr;
     Texture* m_iconTexture = nullptr;
     Texture* m_iconAudio = nullptr;
+
+
+
+
+    bool m_showRenamePopup = false;
+    std::string m_renameTargetFile; 
+    char m_renameBuffer[256] = "";  
+
 };

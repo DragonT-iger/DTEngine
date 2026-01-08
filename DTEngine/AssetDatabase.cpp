@@ -92,6 +92,51 @@ void AssetDatabase::ProcessAssetFile(const std::string& assetPath)
         
         m_pathToIdMap[normalizedAssetPath] = id;
     }
+
+    else {
+        std::cout << "말도 안되는 레전드 상황 발생" << std::endl;
+    }
+}
+
+bool AssetDatabase::RenameAsset(const std::string& oldPath, const std::string& newName)
+{
+    fs::path pOld(oldPath);
+    fs::path pNew = pOld.parent_path() / newName;
+
+    if (oldPath == pNew.string()) return false;
+    if (fs::exists(pNew))
+    {
+        std::cerr << "[AssetDatabase] Rename Failed: Target already exists." << std::endl;
+        return false;
+    }
+
+    try {
+        fs::rename(pOld, pNew);
+    }
+    catch (std::filesystem::filesystem_error& e) {
+        std::cerr << "[AssetDatabase] FS Error: " << e.what() << std::endl;
+        return false;
+    }
+
+    fs::path pOldMeta = pOld.string() + ".meta";
+    fs::path pNewMeta = pNew.string() + ".meta";
+    if (fs::exists(pOldMeta))
+    {
+        fs::rename(pOldMeta, pNewMeta);
+    }
+
+    uint64_t id = GetIDFromPath(oldPath);
+    if (id != 0)
+    {
+        std::string normalizedOld = NormalizePath(oldPath);
+        m_pathToIdMap.erase(normalizedOld);
+
+        std::string normalizedNew = NormalizePath(pNew.string());
+        m_idToPathMap[id] = normalizedNew;
+        m_pathToIdMap[normalizedNew] = id;
+    }
+
+    return true;
 }
 
 uint64_t AssetDatabase::ReadMetaFile(const std::string& metaPath)
