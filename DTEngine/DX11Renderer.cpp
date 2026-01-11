@@ -31,6 +31,8 @@
 
 #include "Shader.h"
 
+
+
 using Microsoft::WRL::ComPtr;
 
 DX11Renderer::DX11Renderer() = default;
@@ -80,7 +82,7 @@ void DX11Renderer::Resize(int width, int height)
 //이거 상수버퍼 인터페이스 만든 다음에, 템플릿으로 처리해도 깔끔할듯 함 
 // ㅇㅇ dx renderer가 무거워 진다면 따로 처리 해도 될듯?
 // 구조 예쁘게 할 시간 있으면 이건 해도 될듯. 
-void DX11Renderer::UpdateObject_CBBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose)
+void DX11Renderer::UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose)
 {
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
     HRESULT hr = m_context->Map(m_cbuffer_world_M.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
@@ -94,7 +96,7 @@ void DX11Renderer::UpdateObject_CBBUFFER(const Matrix& Worrld, const Matrix& Wor
     //binding은 되어있으니 걱정말라구!
 }
 
-void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM)
+void DX11Renderer::UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM)
 {
     m_viewTM = viewTM;
     m_projTM = projectionTM;
@@ -111,7 +113,7 @@ void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projec
     m_context->Unmap(m_cbuffer_frame.Get(), 0);
 
 }
-void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3& cameraPos)
+void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const Vector3& cameraPos)
 {
     if (!m_cbuffer_lights) return;
 
@@ -157,20 +159,38 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3
 
 }
 
-void DX11Renderer::UpdateMaterial_CBBUFFER(const MaterialData& M_Data)
+void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
 {
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
     HRESULT hr = m_context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
     DXHelper::ThrowIfFailed(hr);
 
     MaterialData* dataPtr = static_cast<MaterialData*>(mappedData.pData);
-
     dataPtr->Color = M_Data.Color;
-    //dataPtr->Padding = M_Data.Padding;
-    dataPtr->UseTexture = M_Data.UseTexture;
+    
     dataPtr->UVTransform = M_Data.UVTransform;
+    dataPtr->UseTexture = M_Data.UseTexture;
+    dataPtr->metallicFactor = M_Data.metallicFactor;
+    dataPtr->roughnessFactor = M_Data.roughnessFactor;
 
     m_context->Unmap(m_cbuffer_material.Get(), 0);
+}
+
+void DX11Renderer::UpdateTextureFlag_CBUFFER(uint32_t Flags)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_Texture_flags.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    TextureFlag* dataPtr = static_cast<TextureFlag*>(mappedData.pData);
+    dataPtr->Use_Texture_flags = Flags;
+ 
+    m_context->Unmap(m_cbuffer_Texture_flags.Get(), 0);
+
+}
+
+void DX11Renderer::UpdateMatrixPallette_CBUFFER()
+{
 }
 
 void DX11Renderer::BeginUIRender()
@@ -196,7 +216,7 @@ void DX11Renderer::BeginUIRender()
 
     mainCam->SetProjectionOrthographic();
 
-    UpdateFrameCBuffer(
+    UpdateFrame_CBUFFER(
         SimpleMathHelper::IdentityMatrix(),
         SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
 	);
@@ -257,13 +277,14 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     m_shadowViewport.Width = static_cast<float>(width);
     m_shadowViewport.Height = static_cast<float>(height);
     m_shadowViewport.MinDepth = 0.0f;
-    m_shadowViewport.MaxDepth = 1.0f;
+    m_shadowViewport.MaxDepth = 1.0f;                                             
 }
 
 void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional, float size)
 {
     ID3D11ShaderResourceView* nullSRV = nullptr;
-    m_context->PSSetShaderResources(10, 1, &nullSRV);
+    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
+    m_context->PSSetShaderResources(10, 1, &nullSRV); // 얘는 바깥으로 빼버릴까 싶어 
 
     ID3D11RenderTargetView* nullRTV = nullptr;
     m_context->OMSetRenderTargets(0, &nullRTV, m_shadowDSV.Get());
@@ -295,7 +316,7 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
 
     m_lightViewProjScale = lightView * lightProj * textureScaleBias;
 
-    UpdateFrameCBuffer(lightView, lightProj);
+    UpdateFrame_CBUFFER(lightView, lightProj);
 }
 
 
@@ -376,6 +397,14 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     InitializeGlobalResources(); //상수 버퍼 Sampler etc 
 
 
+    // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
+    // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
+    const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+    Texture* temp = ResourceManager::Instance().Load<Texture>(path);
+    ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
+    m_context->PSSetShaderResources(9, 1, &CubeMap);
+
+
 }
 //  ★
 void DX11Renderer::InitializeGlobalResources()
@@ -385,21 +414,28 @@ void DX11Renderer::InitializeGlobalResources()
     //Sampler는 더 봐야 할 듯 
     m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
-  
-
-   
+ 
     //VS
-    m_context->VSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
-    m_context->VSSetConstantBuffers(1, 1, m_cbuffer_world_M.GetAddressOf());
-    m_context->VSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
-    m_context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    m_context->VSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
+    m_context->VSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
+
+    m_context->VSSetConstantBuffers(3, 1, m_cbuffer_lights.GetAddressOf());
+    m_context->VSSetConstantBuffers(4, 1, m_cbuffer_material.GetAddressOf());
+
+    m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
+    m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
+
+
 
     //PS
-    m_context->PSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
-    m_context->PSSetConstantBuffers(1, 1, m_cbuffer_world_M.GetAddressOf());
-    m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
-    m_context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
+    m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
+    m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(3, 1, m_cbuffer_lights.GetAddressOf());
+    m_context->PSSetConstantBuffers(4, 1, m_cbuffer_material.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
+    m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
 }
 //  ★
@@ -414,18 +450,24 @@ void DX11Renderer::CreateConstantBuffers()
 
     //해당 자료형에서 16 byte 정렬 되어있음. 
 
-    //r0
+    //b0
     bd.ByteWidth = sizeof(CBuffer_Frame_Data);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_frame.GetAddressOf()));
-    //r1
+    //b1
     bd.ByteWidth = sizeof(CBuffer_Object_Data);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_world_M.GetAddressOf()));
-    //r2
+    //b2
     bd.ByteWidth = sizeof(CBuffer_GlobalLight);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_lights.GetAddressOf()));
-    //r3
+    //b3
     bd.ByteWidth = sizeof(MaterialData);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_material.GetAddressOf()));
+    //b4
+    bd.ByteWidth = sizeof(TextureFlag);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Texture_flags.GetAddressOf()));
+    //b5
+    bd.ByteWidth = sizeof(Matrix_Pallette);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
 
 }
 
@@ -452,7 +494,8 @@ void DX11Renderer::SetFullscreen(bool enable)
 void DX11Renderer::Destroy()
 {
     ReleaseBackbuffers();
-    m_cbuffer_frame.Reset();
+    ReleaseCB();
+
     m_swapchain.Reset();
     m_context.Reset();
     m_device.Reset();
@@ -701,6 +744,20 @@ void DX11Renderer::ReleaseBackbuffers()
     m_rtv.Reset();
     m_backbufferTex.Reset();
 }
+
+void DX11Renderer::ReleaseCB()
+{
+    m_cbuffer_frame.Reset(); 
+    m_cbuffer_world_M.Reset(); 
+    m_cbuffer_lights.Reset();
+    m_cbuffer_material.Reset();
+
+    m_cbuffer_Texture_flags.Reset();
+    m_cbuffer_matrix_pallette.Reset();
+    m_cbuffer_IBL.Reset();
+
+}
+
 
 void DX11Renderer::CreateSamplers()
 {

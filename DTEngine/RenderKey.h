@@ -11,7 +11,6 @@ union RenderKey
     uint64_t value;
     struct {
         
-
         uint64_t CullMode : 2; // back front, node  
         uint64_t shaderID : 16;
         uint64_t TextureID : 16;

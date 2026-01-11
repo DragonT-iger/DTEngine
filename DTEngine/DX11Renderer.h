@@ -13,6 +13,7 @@
 
 #include "ConstantBuffers.h"
 
+#include "ResourceManager.h"
 
 struct HWND__;
 using HWND = HWND__*;
@@ -112,11 +113,15 @@ public:
     void SetHeight(int height) { m_height = height; }
 
     //CB Buffer Data map/unmap ; 외부에서 call 
-    void UpdateObject_CBBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
-    void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);    // r0
-    void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
-    void UpdateMaterial_CBBUFFER(const MaterialData& M_Data); //r3
+    void UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
+    void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
+    void UpdateLights_CBUFFER(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
+    void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
 
+    void UpdateTextureFlag_CBUFFER(uint32_t Flags);
+    void UpdateMatrixPallette_CBUFFER();
+
+    //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
     void ClearCache();
     void ResetRenderState();
     void BindShader(Shader* shader);
@@ -130,6 +135,7 @@ private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
     void ReleaseBackbuffers();
+    void ReleaseCB();
     void CreateSamplers();
 
    
@@ -177,11 +183,23 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pPointLight_Buffer = nullptr;
 
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;  //r0
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr; //r1
+#pragma region CB
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr; //r2
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr; //r3
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;  
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr; 
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr; 
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
+
+    //01_10 일단 넌 후순위 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_IBL = nullptr; // 
+
+#pragma endregion 
+
+
 
 
 

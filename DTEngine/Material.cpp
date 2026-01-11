@@ -343,25 +343,36 @@ void Material::BindPipeLine()
 
     DX11Renderer::Instance().BindShader(m_shader);
 
+    uint32_t currentFlags = 0; //Texture bit flag 처리 
 
-    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i) //0 1 2 3 4 5 장의 기본 Texture에 대한 연산 
     {
         ID3D11ShaderResourceView* srv = nullptr;
         ID3D11SamplerState* sampler = nullptr;
 
         if (m_textures[i])
         {
-            srv = m_textures[i]->GetSRV();
-            sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
+            currentFlags |= (1 << i);
 
-            DX11Renderer::Instance().BindTexture((int)i, srv);
+           srv = m_textures[i]->GetSRV();
+           sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
+
+           DX11Renderer::Instance().BindTexture((int)i, srv);
         }
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
     }
 
-    //이 밑부분 최적화 예정 01_04 기준 
+
+    if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
+
+
+    currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 
+
+    DX11Renderer::Instance().UpdateTextureFlag_CBUFFER(currentFlags);
+
+    //이 밑부분 최적화 예정 Caching; 일단 이게 문제가 아닌 거 같아. 
 
     if (m_renderMode == RenderMode::Transparent)
     {
@@ -381,8 +392,8 @@ void Material::BindPipeLine()
 void Material::BindPerObject(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
 
-    DX11Renderer::Instance().UpdateObject_CBBUFFER(worldTM, worldInverseTransposeTM);
-    DX11Renderer::Instance().UpdateMaterial_CBBUFFER(m_data);
+    DX11Renderer::Instance().UpdateObject_CBUFFER(worldTM, worldInverseTransposeTM);
+    DX11Renderer::Instance().UpdateMaterial_CBUFFER(m_data);
 
     //Material 정보는 오브젝트 단위로 업데이트 되는 게 맞으니깐. ㅇㅇ 
 }

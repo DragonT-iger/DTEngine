@@ -14,11 +14,12 @@ struct LightData
 //(PCF_LOOP * 2 + 1) / PCF_LOOP 최적화를 위해
 
 #define MAX_LIGHTS 4
-cbuffer CBuffer_GlobalLight : register(b2)
+cbuffer CBuffer_GlobalLight : register(b3)
 {
     LightData Lights[MAX_LIGHTS];
     int ActiveCount;
     float3 CameraPos;
+    
     matrix LightViewProjScale;
     float4 ShadowMapInfo; // xy: 1/w 1/h , zw W, H
 };
@@ -110,8 +111,13 @@ float3 ComputeLambertLighting(float3 worldPos, float3 normal)
         float currentShadow = (i == 0) ? shadowFactor : 1.0f;
 
         totalDiffuse += NdotL * lightColor * intensity * attenuation * currentShadow;
+        
     }
 
+    
+    
+   
+    
     return (ambient + totalDiffuse);
 }
 

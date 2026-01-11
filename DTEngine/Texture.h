@@ -35,9 +35,8 @@ public:
 
     void SaveImportSettings(const std::string& fullPath);
 
-
-
-    uint16_t GetID() const { return m_TextureID; }
+    const bool Get_SRGB() const { return m_bSRGB; }
+    const uint16_t GetID() const { return m_TextureID; }
 
     static uint16_t g_TextureID;
 

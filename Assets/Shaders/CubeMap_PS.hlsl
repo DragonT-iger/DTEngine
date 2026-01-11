@@ -22,5 +22,7 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float4 envColor = g_CubeMap.Sample(g_Sampler, reflectDir);
 
+    
+    
     return envColor * CalculateShadow(input.WorldPos);
 }

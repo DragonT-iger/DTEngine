@@ -368,7 +368,7 @@ void Scene::LateUpdate(float deltaTime)
 
 
     // 빛 업데이트
-    DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
 
     // 물리 업데이트
 }
@@ -409,6 +409,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     //★ Sorting 
     Sorter::Instance().SetCamParameters(camera); 
 
+   
+
+
 
     float width = (float)DX11Renderer::Instance().GetWidth();
     float height = (float)DX11Renderer::Instance().GetHeight();
@@ -429,7 +432,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     
     const Matrix& viewTM = camera->GetViewMatrix();
     const Matrix& projTM = camera->GetProjectionMatrix();
-    DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
+
+    DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
 
     std::vector<GameObject*> opaqueQueue;
     std::vector<GameObject*> transparentQueue;
@@ -566,64 +570,6 @@ void Scene::RenderShadows()
         true,           
         shadow->m_size  
     );
-
-    //std::vector<GameObject*> opaqueQueue; opaqueQueue.reserve(m_gameObjects.size());
-
-
-
-    //for (const auto& go : m_gameObjects)
-    //{
-    //    if (!go || !go->IsActiveInHierarchy()) continue;
-
-    //        if (go->GetComponent<Image>()) continue; // UI는 렌더링 할필요 없으니까
-
-    //        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
-    //        if (!mr || !mr->IsActive()) continue;
-    //        if (!go || !go->IsActiveInHierarchy()) continue;
-
-    //            Material* mat = mr->GetSharedMaterial();
-
-    //            if (!mat || mat->GetRenderMode() == RenderMode::Transparent) continue; // 임시로 그냥 pass 시킴 
-
-    //        opaqueQueue.push_back(go.get());
-
-    //}
-
-   /* Sorter::Instance().CreateKey(opaqueQueue);
-    const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
-
-    uint64_t lastPipelineKey = 0;
-
-
-    for (const auto& val : SortedVector)
-   {
-      uint64_t currentPipelineKey = val.key >> 30; 
-
-      MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
-      Transform* tf = val.obj->GetTransform();
-
-      Material* mat = mr->GetSharedMaterial();
-      if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
-
-      Mesh* mesh = mr->GetMesh();
-      if (!mesh || !mat) return;
-
-    
-      if (currentPipelineKey != lastPipelineKey)
-      {
-          mat->BindPipeLine();
-
-          lastPipelineKey = currentPipelineKey; 
-      }
-
-
-      Transform* transform = val.obj->GetTransform();
-      mat->BindPerObject(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
-      mesh->Bind();
-      mesh->Draw();
-
-   }*/
-
 
 
     for (const auto& go : m_gameObjects)

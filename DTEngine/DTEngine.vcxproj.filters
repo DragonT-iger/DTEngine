@@ -72,6 +72,9 @@
     <Filter Include="Shader\Common">
       <UniqueIdentifier>{ebcb31fd-d497-43eb-92c6-64d15b740b91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Specific">
+      <UniqueIdentifier>{0d1bc80d-ef06-47a3-83d4-ca294f0584bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -445,6 +448,9 @@
     <None Include="..\Assets\Shaders\Resource.hlsli">
       <Filter>Shader\Common</Filter>
     </None>
+    <None Include="..\Assets\Shaders\PBR_Shared.hlsli">
+      <Filter>Shader\Common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl">
@@ -453,34 +459,10 @@
     <FxCompile Include="..\Assets\Shaders\Default_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\UI_VS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\TV_PS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl">
-      <Filter>Shader\Default</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl">
@@ -500,6 +482,30 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl">
       <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\TV_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -282,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\Lighting.hlsli" />
+    <None Include="..\Assets\Shaders\PBR_Shared.hlsli" />
     <None Include="..\Assets\Shaders\Resource.hlsli" />
     <None Include="..\vcpkg.json" />
   </ItemGroup>

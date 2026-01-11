@@ -7,10 +7,12 @@
 
 struct PS_INPUT
 {
-    float4 Pos : SV_POSITION; 
+    float4 Pos : SV_POSITION;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
+    float4 Tangent : TANGENT;
+
 };
 
 
@@ -22,7 +24,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 normal = normalize(input.Normal);
 
     float3 finalColor = ComputeLambertLighting(input.WorldPos, normal);
-    
+        
     if (UseTexture)
     {
         float2 transformedUV = input.UV * UVTransform.xy + UVTransform.zw;
@@ -42,6 +44,11 @@ float4 PS(PS_INPUT input) : SV_Target
         finalColor *= MaterialColor.rgb;
     }
 
+    
+    if (NEED_ON_GAMMA)
+    {
+        finalColor = pow(finalColor, 1.0f / 2.2f); // 
+    }
     
     return float4(finalColor, 1.0f);
 }

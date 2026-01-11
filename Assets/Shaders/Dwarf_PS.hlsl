@@ -9,11 +9,7 @@ struct PS_INPUT
     float3 ViewNormal : TEXCOORD1;
 };
 
-cbuffer CBuffer_Frame : register(b0)
-{
-    matrix ViewTM;
-    matrix ProjectionTM;
-};
+
 
 #include "Resource.hlsli"
 #include "Lighting.hlsli"
@@ -39,7 +35,7 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float specMask = g_SpecMap.Sample(g_Sampler, input.UV).r;
 
-    float3 viewNormal = normalize(mul(normal, (float3x3)ViewTM));
+    float3 viewNormal = normalize(mul(normal, (float3x3)View_TM));
     float2 sphereUV = viewNormal.xy * 0.5 + 0.5;
     sphereUV.y = 1.0 - sphereUV.y;
     
@@ -91,5 +87,11 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
+    if (NEED_ON_GAMMA)
+    {
+        finalColor = pow(finalColor, 1.0f / 2.2f); // 
+    }
+    
+    
     return float4(finalColor, diffuseTex.a);
 }
