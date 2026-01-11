@@ -53,19 +53,19 @@ PS_INPUT VS(VS_INPUT input)
     PS_INPUT output = (PS_INPUT) 0;
 
     
-    matrix boneTransform =
-        input.Weights.x * BoneTransforms[input.BoneIDs.x] +
-        input.Weights.y * BoneTransforms[input.BoneIDs.y] +
-        input.Weights.z * BoneTransforms[input.BoneIDs.z] +
-        input.Weights.w * BoneTransforms[input.BoneIDs.w];
-    
     //matrix boneTransform =
-    //{
-    //    1, 0, 0, 0,
-    //    0, 1, 0, 0,
-    //    0, 0, 1, 0,
-    //    0, 0, 0, 1
-    //};
+    //    input.Weights.x * BoneTransforms[input.BoneIDs.x] +
+    //    input.Weights.y * BoneTransforms[input.BoneIDs.y] +
+    //    input.Weights.z * BoneTransforms[input.BoneIDs.z] +
+    //    input.Weights.w * BoneTransforms[input.BoneIDs.w];
+    
+    matrix boneTransform =
+    {
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    };
     
     
     float4 localPos = float4(input.Pos, 1.0f);

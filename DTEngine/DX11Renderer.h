@@ -108,6 +108,8 @@ public:
 
     void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
 
+    void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
+
     void ResetRenderState();
 
     ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
