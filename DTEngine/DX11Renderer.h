@@ -212,6 +212,15 @@ private:
 
     Matrix m_lightViewProjScale;
 
+    static constexpr int MAX_BONES = 128;
+
+    __declspec(align(16))
+        struct CBuffer_BoneData
+    {
+        Matrix BoneTransforms[MAX_BONES];
+    };
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
 
 
 };
