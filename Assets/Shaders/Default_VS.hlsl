@@ -16,30 +16,11 @@ PS_INPUT VS(VS_INPUT input)
     PS_INPUT output = (PS_INPUT) 0;
 
     
-    //matrix boneTransform =
-    //    input.Weights.x * BoneTransforms[input.BoneIDs.x] +
-    //    input.Weights.y * BoneTransforms[input.BoneIDs.y] +
-    //    input.Weights.z * BoneTransforms[input.BoneIDs.z] +
-    //    input.Weights.w * BoneTransforms[input.BoneIDs.w];
+    float4 worldPos = mul(float4(input.Pos, 1.0f), World_TM);
+    float4 viewPos = mul(worldPos, View_TM);
+    float4 projPos = mul(viewPos, Projection_TM);
     
-    matrix boneTransform =
-    {
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    };
-    
-    
-    float4 localPos = float4(input.Pos, 1.0f);
-    float4 animatedLocalPos = mul(localPos, boneTransform);
-    float4 worldPos = mul(animatedLocalPos, WorldTM);
-    float4 viewPos  = mul(worldPos, ViewTM);
-    float4 projPos  = mul(viewPos, ProjectionTM);
-    
-    float4 localNormal = float4(input.Normal, 0.0f);
-    float4 animatedLocalNormal = mul(localNormal, boneTransform);
-    float3 worldNormal = mul(animatedLocalNormal, WorldInverseTransposeTM).xyz;
+    float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTranspose_TM).xyz;
 
     //output.Pos = float4(input.Pos, 1.0);
     output.Pos = projPos;

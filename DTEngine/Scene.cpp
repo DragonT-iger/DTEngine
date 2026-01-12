@@ -366,14 +366,8 @@ void Scene::LateUpdate(float deltaTime)
     FlushPending();
 
 
-
-    // 빛 업데이트
-<<<<<<< HEAD
     if (m_mainCamera == nullptr) return;
-    DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
-=======
     DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
->>>>>>> origin/BJ
 
     // 물리 업데이트
 }

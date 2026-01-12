@@ -19,20 +19,6 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(worldPos, View_TM);
     output.Pos = mul(output.Pos, Projection_TM);
 
-    // float3 worldNormal      = mul(input.Normal,    (float3x3) WorldInverseTranspose);
-    // float3 worldTangent     = mul(input.Tangent,   (float3x3) WorldInverseTranspose);
-    // float3 worldBitangent   = mul(input.Bitangent, (float3x3) WorldInverseTranspose);
-
-    
-    // output.Normal = normalize(worldNormal);
-    // output.Tangent = normalize(worldTangent);
-    // output.Bitangent = normalize(worldBitangent);
-    
-    // //output.Normal       = (worldNormal);
-    // //output.Tangent      = (worldTangent);
-    // //output.Bitangent    = (worldBitangent);
-    
-    output.Color = input.Color;
     output.WorldNormal = mul(input.Normal, (float3x3) WorldInverseTranspose_TM);
     output.Tangent = input.Tangent;
     output.UV = input.UV;

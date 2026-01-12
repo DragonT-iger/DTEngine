@@ -82,7 +82,7 @@ Texture2D g_SphereMap : register(t7);
 //SamplerComparisonState g_ShadowSampler : register(s10);
 
 
-#pragma region Flag_Macros
+//#pragma region Flag_Macros
 
 #define HAS_ALBEDO   (1 << 0)
 #define HAS_NORMAL   (1 << 1)
@@ -104,4 +104,4 @@ Texture2D g_SphereMap : register(t7);
 #define USE_IBL     (g_Flags & HAS_IBL)
 #define NEED_ON_GAMMA    (g_Flags & ON_GAMMA)
 
-#pragma endregion
+//#pragma endregion

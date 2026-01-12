@@ -9,12 +9,12 @@ cbuffer CBuffer_Frame : register(b0)
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
+    //float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
-    float3 Tangent : TANGENT;
-    float3 Bitangent : BITANGENT;
+    float4 Tangent : TANGENT;
+    //float3 Bitangent : BITANGENT;
 };
 
 cbuffer CBuffer_Material : register(b3)
@@ -40,7 +40,7 @@ float3 CalculateNormal(PS_INPUT input, float2 uv)
 
     float3 N = normalize(input.Normal);
     float3 T = normalize(input.Tangent);
-    float3 B = normalize(input.Bitangent);
+    float3 B = cross(N, T);
 
     float3x3 TBN = float3x3(T, B, N);
 
@@ -88,10 +88,7 @@ float4 PS(PS_INPUT input) : SV_Target
         sphereEnvLight = 0;
     }
     
-    
-    
-    
     float3 finalColor = ComputePBRLighting(input.WorldPos, normal, viewDir, albedo, metallic, roughness, 1, sphereEnvLight);
 
-    return float4(finalColor, alpha);
+    return 1;
 }
