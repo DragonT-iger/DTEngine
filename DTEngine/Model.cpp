@@ -20,16 +20,6 @@ struct ModelImpl
     int m_BoneCounter = 0;
 };
 
-Matrix ConvertToDXMatrix(const aiMatrix4x4& from)
-{
-    Matrix to;
-    to._11 = from.a1; to._12 = from.b1; to._13 = from.c1; to._14 = from.d1;
-    to._21 = from.a2; to._22 = from.b2; to._23 = from.c2; to._24 = from.d2;
-    to._31 = from.a3; to._32 = from.b3; to._33 = from.c3; to._34 = from.d3;
-    to._41 = from.a4; to._42 = from.b4; to._43 = from.c4; to._44 = from.d4;
-    return to.Transpose();
-}
-
 Model::Model() {
     m_impl = std::make_unique<ModelImpl>();
 }
@@ -41,10 +31,10 @@ Model::~Model()
 
 void Model::Unload()
 {
-    for (Mesh* mesh : m_meshes)
-    {
-        delete mesh;
-    }
+    //for (Mesh* mesh : m_meshes)
+    //{
+    //    delete mesh;
+    //}
     m_meshes.clear();
 }
 
@@ -68,7 +58,7 @@ bool Model::LoadFile(const std::string& fullPath)
 Mesh* Model::GetMesh(size_t index) const
 {
     if (index >= m_meshes.size()) return nullptr;
-    return m_meshes[index];
+    return m_meshes[index].get();
 }
 
 void Model::ProcessNode(aiNode* node, const aiScene* scene)
@@ -85,7 +75,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     }
 }
 
-Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
+std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
 {
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -149,29 +139,28 @@ Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
         vertices.push_back(vertex);
     }
 
-
     ExtractBoneWeightForVertices(vertices, aiMesh, scene);
 
     for (auto& v : vertices)
     {
         float totalWeight = v.Weights[0] + v.Weights[1] + v.Weights[2] + v.Weights[3];
 
-        if (totalWeight <= 0.001f)
-        {
-            v.BoneIDs[0] = 0;      
-            v.Weights[0] = 1.0f;   
-            v.Weights[1] = 0.0f;
-            v.Weights[2] = 0.0f;
-            v.Weights[3] = 0.0f;
-        }
-        else
-        {
+        //if (totalWeight <= 0.001f)
+        //{
+        //    v.BoneIDs[0] = 0;      
+        //    v.Weights[0] = 1.0f;   
+        //    v.Weights[1] = 0.0f;
+        //    v.Weights[2] = 0.0f;
+        //    v.Weights[3] = 0.0f;
+        //}
+        //else
+        //{
             float scale = 1.0f / totalWeight;
             v.Weights[0] *= scale;
             v.Weights[1] *= scale;
             v.Weights[2] *= scale;
             v.Weights[3] *= scale;
-        }
+        //}
     }
 
     for (unsigned int i = 0; i < aiMesh->mNumFaces; i++)
@@ -181,7 +170,7 @@ Mesh* Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    Mesh* mesh = new Mesh();
+    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
     mesh->CreateBuffers(vertices, indices);
     return mesh;
 }

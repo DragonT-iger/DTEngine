@@ -25,12 +25,12 @@ public:
 
 private:
     void ProcessNode(aiNode* node, const aiScene* scene);
-    Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+    std::unique_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
     void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
     void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
 
-    std::vector<Mesh*> m_meshes;
+    std::vector<std::unique_ptr<Mesh>> m_meshes;
 
     std::unique_ptr<ModelImpl> m_impl;
     int m_BoneCounter = 0;
