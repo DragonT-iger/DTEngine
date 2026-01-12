@@ -108,6 +108,8 @@ public:
 
     void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
 
+    void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
+
     void ResetRenderState();
 
     ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
@@ -212,6 +214,15 @@ private:
 
     Matrix m_lightViewProjScale;
 
+    static constexpr int MAX_BONES = 128;
+
+    __declspec(align(16))
+        struct CBuffer_BoneData
+    {
+        Matrix BoneTransforms[MAX_BONES];
+    };
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
 
 
 };

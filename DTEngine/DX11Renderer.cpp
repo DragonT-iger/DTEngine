@@ -62,6 +62,17 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     DXHelper::ThrowIfFailed(hr);
 
 
+
+    D3D11_BUFFER_DESC boneDesc = {};
+    boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
+    boneDesc.Usage = D3D11_USAGE_DYNAMIC;
+    boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+
     CreateBackbuffers(width, height);
     CreateSamplers();
 
@@ -471,6 +482,34 @@ void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3
     m_context->Unmap(m_cbuffer_lights.Get(), 0);
 
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
+}
+
+void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
+{
+    if (!m_cbuffer_bones || !m_context) return;
+
+    size_t copyCount = bones.size();
+    if (copyCount > MAX_BONES) copyCount = MAX_BONES;
+
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_bones.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    if (FAILED(hr)) return;
+
+    CBuffer_BoneData* dataPtr = static_cast<CBuffer_BoneData*>(mappedData.pData);
+
+    for (size_t i = 0; i < copyCount; ++i)
+    {
+        dataPtr->BoneTransforms[i] = bones[i].Transpose(); 
+    }
+
+    for (size_t i = copyCount; i < MAX_BONES; ++i)
+    {
+        dataPtr->BoneTransforms[i] = Matrix::Identity;
+    }
+
+    m_context->Unmap(m_cbuffer_bones.Get(), 0);
+
+    m_context->VSSetConstantBuffers(4, 1, m_cbuffer_bones.GetAddressOf());
 }
 
 void DX11Renderer::ResetRenderState()
