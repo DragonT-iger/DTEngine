@@ -1584,8 +1584,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         if (ImGui::BeginTable("TextureSlotTable", 3, ImGuiTableFlags_SizingStretchProp))
                         {
                             ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthStretch , 100.f); // 초기값 안넣어주면 깜빡거림
-                            ImGui::TableSetupColumn("Close", ImGuiTableColumnFlags_WidthFixed, 25.0f);
-                            ImGui::TableSetupColumn("SlotLabel", ImGuiTableColumnFlags_WidthFixed, 60.0f);
+                            ImGui::TableSetupColumn("Close", ImGuiTableColumnFlags_WidthFixed, 30.0f);
+                            ImGui::TableSetupColumn("SlotLabel", ImGuiTableColumnFlags_WidthFixed, 100.0f);
 
                             for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
                             {
@@ -1648,8 +1648,27 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                 }
 
                                 ImGui::TableNextColumn();
-                                ImGui::AlignTextToFramePadding(); 
-                                ImGui::Text("Slot %d", i);
+
+                                ImGui::AlignTextToFramePadding();
+
+                                const char* slotLabel = nullptr;
+                                switch (i)
+                                {
+                                case 0: slotLabel = "Albedo";    break; // t0
+                                case 1: slotLabel = "Normal";    break; // t1
+                                case 2: slotLabel = "Specular";  break; // t2
+                                case 3: slotLabel = "Metallic";  break; // t3
+                                case 4: slotLabel = "Roughness"; break; // t4
+                                case 5: slotLabel = "AO";        break; // t5
+                                //case 6: slotLabel = "IBL";       break; // t7
+                                //case 7: slotLabel = "Gamma";     break; // t7 ?? 감마는 뭐야
+                                default: break;
+                                }
+
+                                if (slotLabel)
+                                    ImGui::Text("%s", slotLabel);
+                                else
+                                    ImGui::Text("Slot %d", i);
 
                                 ImGui::PopID();
                             }

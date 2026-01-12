@@ -7,6 +7,7 @@ struct PS_INPUT
     float3 WorldPos : POSITION;
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
 };
 
 SamplerState g_Sampler : register(s0);
@@ -29,7 +30,7 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_NORMAL)
     {
         float4 texNormal = g_NormalMap.Sample(g_Sampler, input.UV);
-        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent);
+        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent , input.Bitangent);
     }
 
     // PBR 속성 적용

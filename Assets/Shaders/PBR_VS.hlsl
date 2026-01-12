@@ -7,6 +7,7 @@ struct VS_OUTPUT
     float3 WorldPos : POSITION;
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
 };
 
 VS_OUTPUT VS(VS_INPUT input)

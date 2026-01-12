@@ -419,6 +419,8 @@ void DX11Renderer::SetCullMode(CullMode mode)
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
+
+
     assert(m_context && m_msaaTargetRTV);
 
     if (m_defaultDepthStencilState)
@@ -440,7 +442,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
-    BindGlobalResources(); //상수 버퍼 Sampler etc 
+    //BindGlobalResources(); //상수 버퍼 Sampler etc 
 
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
@@ -458,9 +460,8 @@ void DX11Renderer::BindGlobalResources()
     //상수 버퍼 Binding
 
     //Sampler는 더 봐야 할 듯 
-    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
- 
     //VS
     m_context->VSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->VSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -470,8 +471,6 @@ void DX11Renderer::BindGlobalResources()
 
     m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
-
-
 
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());

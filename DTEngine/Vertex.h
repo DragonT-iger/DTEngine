@@ -9,7 +9,7 @@ struct Vertex
     Vector2 Texcoord;
     Vector3 Normal;
     Vector4 Tangent;
-    //Vector3 Bitangent;
+    Vector3 Bitangent;
     int BoneIDs[4];
     float Weights[4];
 };
