@@ -326,7 +326,6 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
     }
 }
 
-
 Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
 {
     // 정점 데이터 추출
@@ -361,24 +360,50 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Texcoord = { 0.0f, 0.0f };
         }
 
-        if (aiMesh->HasTangentsAndBitangents())
+        if (aiMesh->HasTangentsAndBitangents()&& aiMesh->HasNormals())
         {
-            vertex.Tangent.x = aiMesh->mTangents[i].x;
-            vertex.Tangent.y = aiMesh->mTangents[i].y;
-            vertex.Tangent.z = aiMesh->mTangents[i].z;
+            DirectX::XMFLOAT3 N = {
+               aiMesh->mNormals[i].x,
+               aiMesh->mNormals[i].y,
+               aiMesh->mNormals[i].z
+            };
+            DirectX::XMFLOAT3 T = {
+                aiMesh->mTangents[i].x,
+                aiMesh->mTangents[i].y,
+                aiMesh->mTangents[i].z
+            };
+            DirectX::XMFLOAT3 B = {
+                aiMesh->mBitangents[i].x,
+                aiMesh->mBitangents[i].y,
+                aiMesh->mBitangents[i].z
+            };
 
-            // 바이탄젠트 데이터 저장
-            vertex.Bitangent.x = aiMesh->mBitangents[i].x;
-            vertex.Bitangent.y = aiMesh->mBitangents[i].y;
-            vertex.Bitangent.z = aiMesh->mBitangents[i].z;
+            auto norm3 = [](DirectX::XMFLOAT3 v) //Normalize
+                {
+                    float len = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+                    if (len > 1e-8f) { v.x /= len; v.y /= len; v.z /= len; }
+                    return v;
+                };
+            N = norm3(N); T = norm3(T); B = norm3(B);
+
+            DirectX::XMFLOAT3 c = {
+                N.y * T.z - N.z * T.y,
+                N.z * T.x - N.x * T.z,
+                N.x * T.y - N.y * T.x
+            };
+            float d = c.x * B.x + c.y * B.y + c.z * B.z;
+
+            float w = (d < 0.0f) ? 1.0f : -1.0f;
+
+            vertex.Tangent = { T.x, T.y, T.z, w };
         }
         else
         {
-            vertex.Tangent = { 0.0f, 0.0f, 0.0f };
-            vertex.Bitangent = { 0.0f, 0.0f, 0.0f };
-        }
+            vertex.Tangent = { 0.0f, 0.0f, 0.0f, 1.0f };
+           
+        } 
 
-        // (필요 시 컬러, 탄젠트 등 추가 추출)
+       
 
         vertices.push_back(vertex);
     }
@@ -409,62 +434,6 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
     return rawMesh;
 }
 
-//uint64_t ResourceManager::ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath)
-//{
-//    if (materialIndex >= scene->mNumMaterials) return 0;
-//
-//    aiMaterial* aiMat = scene->mMaterials[materialIndex];
-//    aiString matName;
-//    aiMat->Get(AI_MATKEY_NAME, matName);
-//
-//    std::string strMatName = matName.C_Str();
-//    if (strMatName.empty()) strMatName = "DefaultMaterial";
-//
-//    fs::path modelFilePath(modelPath);
-//    fs::path matDir = modelFilePath.parent_path(); 
-//    std::string matFileName = modelFilePath.stem().string() + "_" + strMatName + ".mat";
-//    fs::path fullMatPath = matDir / matFileName;
-//
-//    if (fs::exists(fullMatPath))
-//    {
-//        return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
-//    }
-//
-//    std::unique_ptr<Material> newMat = std::make_unique<Material>();
-//
-//    aiString texPath;
-//    if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-//    {
-//        std::string rawTexPath = texPath.C_Str();
-//        fs::path tPath(rawTexPath);
-//        std::string texFileName = tPath.filename().string();
-//
-//        fs::path actualTexPath = matDir / texFileName;
-//
-//        Texture* tex = Load<Texture>(actualTexPath.string());
-//        if (tex)
-//        {
-//            newMat->SetTexture(0, tex); 
-//        }
-//    }
-//
-//	// 추가적인 텍스쳐 로드 필요시 여기서 구현하면 될듯 지금은 Diffuse만 처리
-//
-//    std::string defaultShaderPath = "Shaders/Default_VS.hlsl";
-//    Shader* defaultShader = Load<Shader>(defaultShaderPath);
-//    if (defaultShader)
-//    {
-//        newMat->SetShader(defaultShader);
-//    }
-//
-//    newMat->SaveFile(fullMatPath.string());
-//
-//    AssetDatabase::Instance().ProcessAssetFile(fullMatPath.string());
-//
-//    m_cache[fullMatPath.string()] = std::move(newMat);
-//
-//    return AssetDatabase::Instance().GetIDFromPath(fullMatPath.string());
-//}
 
 GameObject* ResourceManager::InstantiatePrefab(const std::string& fullPath)
 {

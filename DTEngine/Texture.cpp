@@ -15,6 +15,9 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
+
+uint16_t Texture::g_TextureID = 0;
+
 Texture::Texture() = default;
 
 Texture::~Texture() { Unload(); }
@@ -35,10 +38,10 @@ bool Texture::LoadFile(const std::string& fullPath)
     if (ext == "dds" || ext == "DDS")
     {
         DirectX::DDS_LOADER_FLAGS ddsFlags = DirectX::DDS_LOADER_IGNORE_SRGB; // 이것도 SRGB데이터를 IGNORE하는데도 잘 작동함 
-        //if (m_bSRGB)
-        //    ddsFlags = DirectX::DDS_LOADER_FORCE_SRGB;
-        //else
-        //    ddsFlags = DirectX::DDS_LOADER_IGNORE_SRGB;
+        if (m_bSRGB)
+            ddsFlags = DirectX::DDS_LOADER_FORCE_SRGB;
+        else
+            ddsFlags = DirectX::DDS_LOADER_IGNORE_SRGB;
 
         hr = DirectX::CreateDDSTextureFromFileEx(
             device,
@@ -58,10 +61,12 @@ bool Texture::LoadFile(const std::string& fullPath)
     {
         //DirectX::WIC_LOADER_FLAGS loadFlags = DirectX::WIC_LOADER_DEFAULT;
         DirectX::WIC_LOADER_FLAGS loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB;
-        //if (m_bSRGB)
-        //    loadFlags = DirectX::WIC_LOADER_FORCE_SRGB;
-        //else
-        //    loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB; 
+
+        if (m_bSRGB)
+            loadFlags = DirectX::WIC_LOADER_FORCE_SRGB;
+        else
+            loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB; 
+
         //    이게 왜 false 여야 되는거지 Yena는 그냥 Default 여도 되는데 뭔가 꼬여있다. 
         //    이 말은 지금 무시 했지만 어디선가 보간이 되고 있다는건데 UI만 이해할수가 없네? 나중에 노말맵도 보간되는거 아니야 이러면? 일단 무시하고 하자.
 
@@ -95,6 +100,7 @@ bool Texture::LoadFile(const std::string& fullPath)
 
     UpdateSampler();
 
+    m_TextureID = ++g_TextureID;
     return true;
 }
 

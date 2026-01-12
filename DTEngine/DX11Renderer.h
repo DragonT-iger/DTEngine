@@ -11,7 +11,9 @@
 #include "Material.h" // CULLMODE 때문에 나중에 뺴도 됨 따로
 #include "RenderViewport.h"
 
+#include "ConstantBuffers.h"
 
+#include "ResourceManager.h"
 
 struct HWND__;
 using HWND = HWND__*;
@@ -49,7 +51,6 @@ public:
     bool Initialize(HWND hwnd, int width, int height, bool vsync = false);
     void Resize(int width, int height);
 
-    void UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM);
 
     void BeginUIRender();
     void EndUIRender();
@@ -72,6 +73,10 @@ public:
     void SetCullMode(CullMode mode);
 
     void BeginFrame(const float clearColor[4]);
+    void InitializeGlobalResources(); // CB, SAMPLER , 기본 STATE 
+
+    void CreateConstantBuffers();
+
     void EndFrame();
     void Present();
 
@@ -106,12 +111,22 @@ public:
     void SetWidth(int width) { m_width = width; }
     void SetHeight(int height) { m_height = height; }
 
-    void UpdateLights(const std::vector<class Light*>& lights, const Vector3& cameraPos);
+    //CB Buffer Data map/unmap ; 외부에서 call 
+    void UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
+    void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
+    void UpdateLights_CBUFFER(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
+    void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
 
     void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
 
-    void ResetRenderState();
+    void UpdateTextureFlag_CBUFFER(uint32_t Flags);
+    void UpdateMatrixPallette_CBUFFER();
 
+    //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
+    void ClearCache();
+    void ResetRenderState();
+    void BindShader(Shader* shader);
+    void BindTexture(int slot, ID3D11ShaderResourceView* srv);
     ID3D11SamplerState* GetSampler(FilterMode filter, WrapMode wrap);
 
     const Matrix& GetViewMatrix() const { return m_viewTM; }
@@ -121,15 +136,10 @@ private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
     void ReleaseBackbuffers();
+    void ReleaseCB();
     void CreateSamplers();
 
-    __declspec(align(16))
-        struct CBuffer_Frame_Data
-    {
-        Matrix ViewTM;
-        Matrix ProjectionTM;
-    };
-
+   
     struct LightData
     {
         DirectX::SimpleMath::Vector4 PositionRange;  // xyz: 위치, w: 범위(Range)
@@ -137,10 +147,11 @@ private:
         DirectX::SimpleMath::Vector4 ColorIntensity; // xyz: 색상, w: 강도(Intensity)
     };
 
-	constexpr static int MAX_LIGHTS = 4;
+
+    constexpr static int MAX_LIGHTS = 4;
 
     __declspec(align(16))
-    struct CBuffer_GlobalLight
+        struct CBuffer_GlobalLight
     {
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
@@ -148,7 +159,7 @@ private:
         Matrix LightViewProjScale;
         Vector4 ShadowMapInfo; // 텍셀 크기
     };
-
+ 
 
 private:
     // Platform
@@ -165,8 +176,33 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights;
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBoolBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLightBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_p_VP_MatBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIBL_Buffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pPointLight_Buffer = nullptr;
+
+
+#pragma region CB
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;  
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr; 
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr; 
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
+
+    //01_10 일단 넌 후순위 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_IBL = nullptr; // 
+
+#pragma endregion 
+
+
+
+
 
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
@@ -174,6 +210,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11BlendState>        m_alphaBlendState;
     //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
+
+    static constexpr int SamplerCnt = 6;
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplers[6];
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_uiSampler;
     Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_shadowSampler;
@@ -225,4 +263,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
 
 
+
+
+    //cacching  ★ 
+    private:
+      uint16_t m_currentShaderID = 0; 
+      ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };
 };

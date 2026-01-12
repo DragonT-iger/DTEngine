@@ -12,24 +12,22 @@
 #include <fstream>
 #include <iostream>
 
+
 #include "SimpleMathHelper.h"
 #include "../ThirdParty/nlohmann/json.hpp"
 #include "Image.h"
+
+#include "Texture_ID_Manager.h"
+
+
 using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
-__declspec(align(16))
-struct CBuffer_Object_Data
-{
-    Matrix WorldTM;
-    Matrix WorldInverseTransposeTM;
-};
+
 
 Material::Material() {
     m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
-
-    CreateBuffers();
 }
 Material::~Material() { Unload(); }
 
@@ -65,6 +63,7 @@ bool Material::LoadFile(const std::string& fullPath)
         return false;
     }
 
+    //★ 음... Texture로 Shader를 판별해주는 느낌... 
     if (data.contains("ShaderID"))
     {
         uint64_t shaderID = data["ShaderID"];
@@ -164,17 +163,12 @@ bool Material::LoadFile(const std::string& fullPath)
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
-    CreateBuffers();
-
-    if (!m_textures.empty() && m_textures[0] != nullptr)
+    if (!m_textures.empty() && m_textures[0] != nullptr) //5장이 모두 있는 경우 pbr else default shader 
     {
         m_data.UseTexture = 1;
     }
     else
         m_data.UseTexture = 0;
-
-
-    UpdateMaterialBuffer();
 
     return true;
 }
@@ -229,7 +223,6 @@ bool Material::SaveFile(const std::string& fullPath)
 
 void Material::Unload()
 {
-    m_cbuffer_object.Reset();
     m_shader = nullptr;
     m_textures.clear();
     m_textures.resize(MAX_TEXTURE_SLOTS, nullptr);
@@ -258,8 +251,7 @@ bool Material::SetTexture(int slot, Texture* texture)
     {
         m_data.UseTexture = 0;
     }
-
-    UpdateMaterialBuffer();
+    UpdateTextureBatchID();
 
 	return true;
 }
@@ -273,8 +265,6 @@ Material* Material::Clone()
     newMat->m_data = m_data;        
     newMat->m_cullMode = m_cullMode;
     newMat->m_renderMode = m_renderMode;
-
-    newMat->UpdateMaterialBuffer();
 
     return newMat;
 }
@@ -296,7 +286,6 @@ bool Material::SetColor(const Vector4& color)
 
     m_data.Color = color;
 
-    UpdateMaterialBuffer();
     return true;
 }
 
@@ -305,118 +294,85 @@ Vector4 Material::GetColor() const
     return Vector4(m_data.Color);
 }
 
-void Material::UpdateMaterialBuffer()
+int Material::GetShaderID()
 {
-    
-    if (!m_cbuffer_material) return;
-
-    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
-    if (!context) return;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    // D3D11_MAP_WRITE_DISCARD: 이전 내용을 버리고 새로 씀 (빠름)
-    HRESULT hr = context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-
-	DXHelper::ThrowIfFailed(hr);
-
-    MaterialData* dataPtr = static_cast<MaterialData*>(mappedData.pData);
-
-	dataPtr->Color = m_data.Color;
-	dataPtr->UseTexture = m_data.UseTexture;
-	dataPtr->UVTransform = m_data.UVTransform;
-
-
-    //memcpy(mappedData.pData, &m_data, sizeof(MaterialData));
-    context->Unmap(m_cbuffer_material.Get(), 0);
-
-
-    //context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-
-
-    //for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
-    //{
-    //    ID3D11ShaderResourceView* srv = nullptr;
-    //    if (m_textures[i])
-    //    {
-    //        srv = m_textures[i]->GetSRV();
-    //    }
-
-    //    context->PSSetShaderResources(i, 1, &srv);
-    //}
+    return m_shader->GetID();
 }
 
-void Material::CreateBuffers()
+//Texture는 여러 장이니깐. 조합한 ID를 반환.
+int Material::GetTextureID()
 {
-    ID3D11Device* device = DX11Renderer::Instance().GetDevice();
-    if (!device) return;
+    return m_textureBatchID;
 
-    if (!m_cbuffer_object)
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(CBuffer_Object_Data);
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_object.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
-
-    if (!m_cbuffer_material)
-    {
-        D3D11_BUFFER_DESC cbDesc = {};
-        cbDesc.ByteWidth = sizeof(MaterialData);
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        HRESULT hr = device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_material.GetAddressOf());
-        DXHelper::ThrowIfFailed(hr);
-    }
 }
 
+void Material::UpdateTextureBatchID()
+{
+    std::vector<uint64_t> textureAddresses;
+    textureAddresses.reserve(m_textures.size());
+
+    for (const auto& tex : m_textures)
+    {
+        //주소값으로 판단. 
+        if (tex) textureAddresses.push_back(reinterpret_cast<uint64_t>(tex));
+        
+        else  textureAddresses.push_back(0); // 텍스쳐 없어도 0으로
+       
+    }
+
+    m_textureBatchID = TextureCombinationManager::GetID(textureAddresses);
+
+}
+
+
+//일단 기존 LEGACY랑 호환 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
-    if (!m_shader || !m_cbuffer_object) return;
+    BindPipeLine();
+    BindPerObject(worldTM, worldInverseTransposeTM);
+}
+
+// ★ 기존 bind를 분리; Bind 폐기 예정 
+// RenderKey에서 Depth를 제외한 Shader Texture의 값이 변동된 순간에만 gpu bind를 명령하도록 설계 
+void Material::BindPipeLine()
+{
+    if (!m_shader) return;
 
     ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
     if (!context) return;
 
-    m_shader->Bind();
+    DX11Renderer::Instance().BindShader(m_shader);
 
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = context->Map(m_cbuffer_object.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    DXHelper::ThrowIfFailed(hr);
+    uint32_t currentFlags = 0; //Texture bit flag 처리 
 
-    CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
-    dataPtr->WorldTM = worldTM.Transpose();
-    dataPtr->WorldInverseTransposeTM = worldInverseTransposeTM.Transpose();
-
-    context->Unmap(m_cbuffer_object.Get(), 0);
-
-    context->VSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-    context->PSSetConstantBuffers(1, 1, m_cbuffer_object.GetAddressOf());
-
-    if (m_cbuffer_material)
-    {
-        context->VSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-        context->PSSetConstantBuffers(3, 1, m_cbuffer_material.GetAddressOf());
-    }
-
-    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i)
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i) //0 1 2 3 4 5 장의 기본 Texture에 대한 연산 
     {
         ID3D11ShaderResourceView* srv = nullptr;
-		ID3D11SamplerState* sampler = nullptr;
+        ID3D11SamplerState* sampler = nullptr;
 
         if (m_textures[i])
         {
-            srv = m_textures[i]->GetSRV();
-            sampler = m_textures[i]->GetSampler();
-        }
+            currentFlags |= (1 << i);
 
-        context->PSSetShaderResources(static_cast<UINT>(i), 1, &srv);
+           srv = m_textures[i]->GetSRV();
+           sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
+
+           DX11Renderer::Instance().BindTexture((int)i, srv);
+        }
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
     }
+
+
+    if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
+
+
+    currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 
+
+    DX11Renderer::Instance().UpdateTextureFlag_CBUFFER(currentFlags);
+
+    //이 밑부분 최적화 예정 Caching; 일단 이게 문제가 아닌 거 같아. 
 
     if (m_renderMode == RenderMode::Transparent)
     {
@@ -429,11 +385,15 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
 
     DX11Renderer::Instance().SetCullMode(m_cullMode);
 
-    if (ID3D11ShaderResourceView* shadowSRV = DX11Renderer::Instance().GetShadowMapSRV())
-    {
-        context->PSSetShaderResources(10, 1, &shadowSRV);
-    }
-     //어짜피 beginshadowpass에서 set 해줌 생각해보니까
+   
 
-    //UpdateMaterialBuffer();
+}
+
+void Material::BindPerObject(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
+{
+
+    DX11Renderer::Instance().UpdateObject_CBUFFER(worldTM, worldInverseTransposeTM);
+    DX11Renderer::Instance().UpdateMaterial_CBUFFER(m_data);
+
+    //Material 정보는 오브젝트 단위로 업데이트 되는 게 맞으니깐. ㅇㅇ 
 }

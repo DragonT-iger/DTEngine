@@ -1,7 +1,6 @@
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
     float2 UV : TEXCOORD;
     float3 WorldPos : POSITION;
     float3 Normal : NORMAL;
@@ -10,18 +9,10 @@ struct PS_INPUT
     float3 ViewNormal : TEXCOORD1;
 };
 
-cbuffer CBuffer_Frame : register(b0)
-{
-    matrix ViewTM;
-    matrix ProjectionTM;
-};
 
+
+#include "Resource.hlsli"
 #include "Lighting.hlsli"
-
-Texture2D g_DiffuseMap : register(t0);  
-Texture2D g_SpecMap : register(t1);     
-Texture2D g_SphereMap : register(t2);
-Texture2D g_NormalMap : register(t3);
 
 SamplerState g_Sampler : register(s0);
 
@@ -44,7 +35,7 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float specMask = g_SpecMap.Sample(g_Sampler, input.UV).r;
 
-    float3 viewNormal = normalize(mul(normal, (float3x3)ViewTM));
+    float3 viewNormal = normalize(mul(normal, (float3x3)View_TM));
     float2 sphereUV = viewNormal.xy * 0.5 + 0.5;
     sphereUV.y = 1.0 - sphereUV.y;
     
@@ -96,5 +87,11 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
+    if (NEED_ON_GAMMA)
+    {
+        finalColor = pow(finalColor, 1.0f / 2.2f); // 
+    }
+    
+    
     return float4(finalColor, diffuseTex.a);
 }

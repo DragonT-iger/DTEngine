@@ -48,6 +48,9 @@ bool Game::Initialize()
 	m_timer->Reset(); 
 
 	constexpr int initW = 1920, initH = 1080;
+
+
+
 	if (!WindowBase::Create(L"DTEngine", initW, initH)) {
 		assert(false && "윈도우 창 만들기 실패");
 		return false;
@@ -262,7 +265,7 @@ void Game::LifeCycle(float deltaTime)
 
 			m_editorCameraObject->LateUpdate(deltaTime);
 
-			DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_editorCameraObject->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_editorCameraObject->GetTransform()->GetPosition());
 
 
 			Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -293,7 +296,8 @@ void Game::LifeCycle(float deltaTime)
 	// 렌더링
 
 
-	
+	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	DX11Renderer::Instance().BeginFrame(black);
 
 
 #endif
@@ -327,7 +331,7 @@ void Game::LifeCycle(float deltaTime)
 
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	DX11Renderer::Instance().UpdateLights(Light::GetAllLights(), m_editorCameraObject->GetTransform()->GetPosition());
+	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetTransform()->GetPosition());
 	scene->Render(editorCam, m_sceneRT.get(), true);
 
 
@@ -357,14 +361,14 @@ void Game::LifeCycle(float deltaTime)
 			const auto& col = cam->GetClearColor();
 			m_gameRT->Clear(col.x, col.y, col.z, col.w);
 
-			DX11Renderer::Instance().UpdateLights(Light::GetAllLights(), cam->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetTransform()->GetPosition());
 
 			scene->Render(cam, m_gameRT.get(), true);
 		}
 	}
 
 
-	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	//static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 	DX11Renderer::Instance().BeginFrame(black);
 
 	m_imgui->NewFrame();

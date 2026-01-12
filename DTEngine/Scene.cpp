@@ -19,6 +19,7 @@
 #include "Mesh.h"
 #include "ShadowMap.h"
 
+#include "RenderKey.h"
 
 
 
@@ -367,8 +368,12 @@ void Scene::LateUpdate(float deltaTime)
 
 
     // 빛 업데이트
+<<<<<<< HEAD
     if (m_mainCamera == nullptr) return;
     DX11Renderer::Instance().UpdateLights(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+=======
+    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+>>>>>>> origin/BJ
 
     // 물리 업데이트
 }
@@ -406,6 +411,12 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 {
     if (!camera) return;
 
+    //★ Sorting 
+    Sorter::Instance().SetCamParameters(camera); 
+
+   
+
+
 
     float width = (float)DX11Renderer::Instance().GetWidth();
     float height = (float)DX11Renderer::Instance().GetHeight();
@@ -420,16 +431,14 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     camera->SetAspectRatio(ratio);
 
     DX11Renderer::Instance().ResetRenderState();
+    DX11Renderer::Instance().ClearCache();
 
     camera->Bind();
-    //DX11Renderer::Instance().SetViewport(width, height);
-
-
-    //if(rt != nullptr) std::cout << camera->_GetTypeName() << "화면비" << rt->GetWidth() << " " << rt->GetHeight() << std::endl;
-
+    
     const Matrix& viewTM = camera->GetViewMatrix();
     const Matrix& projTM = camera->GetProjectionMatrix();
-    DX11Renderer::Instance().UpdateFrameCBuffer(viewTM, projTM);
+
+    DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
 
     std::vector<GameObject*> opaqueQueue;
     std::vector<GameObject*> transparentQueue;
@@ -449,6 +458,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         if (img) {
             uiQueue.push_back(go.get());
         }
+
         else if (mat->GetRenderMode() == RenderMode::Transparent)
         {
             transparentQueue.push_back(go.get());
@@ -459,6 +469,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         }
     }
 
+   
     auto DrawObject = [&](GameObject* go) {
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         Transform* tf = go->GetTransform();
@@ -478,15 +489,51 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         };
 
 
-    for (auto* go : opaqueQueue)
+
+
     {
-        DrawObject(go);
+        Sorter::Instance().CreateKey(opaqueQueue);
+        const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
+
+        uint64_t lastPipelineKey = UINT64_MAX;
+
+        for (const auto& val : SortedVector)
+        {
+            uint64_t currentPipelineKey = val.key << 30; //Depth 빼고 Shader 16; Texture 16; cull에 해당
+
+            MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
+            Transform* tf = val.obj->GetTransform();
+
+            Material* mat = mr->GetSharedMaterial();
+            if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+            Mesh* mesh = mr->GetMesh();
+            if (!mesh || !mat) return;
+
+
+            if (currentPipelineKey != lastPipelineKey)
+            {
+                mat->BindPipeLine();
+
+                lastPipelineKey = currentPipelineKey;
+            }
+            const Matrix& worldTM = tf->GetWorldMatrix();
+            Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+            mat->BindPerObject(worldTM, worldInvT);
+            mesh->Bind();
+            mesh->Draw();
+
+        }
+
     }
 
-    for (auto* go : transparentQueue)
+  /*  for (auto* go : transparentQueue)
     {
         DrawObject(go);
-    }
+    }*/
+
+    
 
     if (renderUI) {
         DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 

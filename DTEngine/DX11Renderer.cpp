@@ -29,6 +29,9 @@
 
 #include "DXHelper.h"
 
+#include "Shader.h"
+
+
 
 using Microsoft::WRL::ComPtr;
 
@@ -42,37 +45,38 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     if (!CreateDeviceAndSwapchain()) return false;
 
 
-    D3D11_BUFFER_DESC cbDesc = {};
-    cbDesc.ByteWidth = sizeof(CBuffer_Frame_Data);
-    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    // D3D11_BUFFER_DESC cbDesc = {};
+    // cbDesc.ByteWidth = sizeof(CBuffer_Frame_Data);
+    // cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-    HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
-
-
-    D3D11_BUFFER_DESC lbDesc = {};
-    lbDesc.ByteWidth = sizeof(CBuffer_GlobalLight);
-    lbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    lbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    lbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    hr = m_device->CreateBuffer(&lbDesc, nullptr, m_cbuffer_lights.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    // HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
 
 
+    // D3D11_BUFFER_DESC lbDesc = {};
+    // lbDesc.ByteWidth = sizeof(CBuffer_GlobalLight);
+    // lbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // lbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // lbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-    D3D11_BUFFER_DESC boneDesc = {};
-    boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
-    boneDesc.Usage = D3D11_USAGE_DYNAMIC;
-    boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    // hr = m_device->CreateBuffer(&lbDesc, nullptr, m_cbuffer_lights.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
 
 
+
+    // D3D11_BUFFER_DESC boneDesc = {};
+    // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
+    // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    // hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
+
+
+    CreateConstantBuffers();
     CreateBackbuffers(width, height);
     CreateSamplers();
 
@@ -115,7 +119,24 @@ void DX11Renderer::Resize(int width, int height)
     m_width = width; m_height = height;
 }
  
-void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projectionTM)
+//이거 상수버퍼 인터페이스 만든 다음에, 템플릿으로 처리해도 깔끔할듯 함 
+// ㅇㅇ dx renderer가 무거워 진다면 따로 처리 해도 될듯?
+// 구조 예쁘게 할 시간 있으면 이건 해도 될듯. 
+void DX11Renderer::UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_world_M.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    CBuffer_Object_Data* dataPtr = static_cast<CBuffer_Object_Data*>(mappedData.pData);
+    dataPtr->WorldTM = Worrld.Transpose();
+    dataPtr->WorldInverseTransposeTM = WorldTranspose.Transpose();
+    m_context->Unmap(m_cbuffer_world_M.Get(), 0);
+    
+    //binding은 되어있으니 걱정말라구!
+}
+
+void DX11Renderer::UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM)
 {
     m_viewTM = viewTM;
     m_projTM = projectionTM;
@@ -131,8 +152,85 @@ void DX11Renderer::UpdateFrameCBuffer(const Matrix& viewTM, const Matrix& projec
 
     m_context->Unmap(m_cbuffer_frame.Get(), 0);
 
-    m_context->VSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
-    m_context->PSSetConstantBuffers(0, 1, m_cbuffer_frame.GetAddressOf());
+}
+void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const Vector3& cameraPos)
+{
+    if (!m_cbuffer_lights) return;
+
+    if (!m_context) return;
+
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_lights.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    if (FAILED(hr)) return;
+
+    CBuffer_GlobalLight* data = static_cast<CBuffer_GlobalLight*>(mappedData.pData);
+
+    int count = std::min((int)lights.size(), MAX_LIGHTS);
+    data->ActiveCount = count;
+
+    data->CameraPos = cameraPos;
+    data->LightViewProjScale = m_lightViewProjScale.Transpose();
+    float w = m_shadowViewport.Width;
+    float h = m_shadowViewport.Height;
+    data->ShadowMapInfo = Vector4(1.0f / w, 1.0f / h, w, h);
+
+    for (int i = 0; i < count; ++i)
+    {
+        Light* light = lights[i];
+        Transform* tf = light->GetTransform();
+
+        Vector3 pos = tf->GetPosition();
+        data->Lights[i].PositionRange = Vector4(pos.x, pos.y, pos.z, light->m_range);
+
+        Vector3 dir = -tf->Forward();
+        data->Lights[i].DirectionType = Vector4(dir.x, dir.y, dir.z, (float)light->m_type);
+
+        data->Lights[i].ColorIntensity = Vector4(light->m_color.x, light->m_color.y, light->m_color.z, light->m_intensity);
+    }
+
+    for (int i = count; i < MAX_LIGHTS; ++i)
+    {
+        data->Lights[i].PositionRange = Vector4(0, 0, 0, 0);
+        data->Lights[i].DirectionType = Vector4(0, 0, 0, 0);
+        data->Lights[i].ColorIntensity = Vector4(0, 0, 0, 0);
+    }
+
+    m_context->Unmap(m_cbuffer_lights.Get(), 0);
+
+}
+
+void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_material.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    MaterialData* dataPtr = static_cast<MaterialData*>(mappedData.pData);
+    dataPtr->Color = M_Data.Color;
+    
+    dataPtr->UVTransform = M_Data.UVTransform;
+    dataPtr->UseTexture = M_Data.UseTexture;
+    dataPtr->metallicFactor = M_Data.metallicFactor;
+    dataPtr->roughnessFactor = M_Data.roughnessFactor;
+
+    m_context->Unmap(m_cbuffer_material.Get(), 0);
+}
+
+void DX11Renderer::UpdateTextureFlag_CBUFFER(uint32_t Flags)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_Texture_flags.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    TextureFlag* dataPtr = static_cast<TextureFlag*>(mappedData.pData);
+    dataPtr->Use_Texture_flags = Flags;
+ 
+    m_context->Unmap(m_cbuffer_Texture_flags.Get(), 0);
+
+}
+
+void DX11Renderer::UpdateMatrixPallette_CBUFFER()
+{
 }
 
 void DX11Renderer::BeginUIRender()
@@ -162,7 +260,7 @@ void DX11Renderer::BeginUIRender()
 
     mainCam->SetProjectionOrthographic();
 
-    UpdateFrameCBuffer(
+    UpdateFrame_CBUFFER(
         SimpleMathHelper::IdentityMatrix(),
         SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
 	);
@@ -197,7 +295,7 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     texDesc.Height = height;
     texDesc.MipLevels = 1;
     texDesc.ArraySize = 1;
-    texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+    texDesc.Format = DXGI_FORMAT_R32_TYPELESS;
     texDesc.SampleDesc.Count = 1;
     texDesc.SampleDesc.Quality = 0;
     texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
@@ -206,16 +304,16 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     DXHelper::ThrowIfFailed(m_device->CreateTexture2D(&texDesc, nullptr, m_shadowMapTex.GetAddressOf()));
 
     D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-    dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
     dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    //dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+    // dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 
     DXHelper::ThrowIfFailed(m_device->CreateDepthStencilView(m_shadowMapTex.Get(), &dsvDesc, m_shadowDSV.GetAddressOf()));
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    //srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+    // srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
     srvDesc.Texture2D.MipLevels = 1;
 
     DXHelper::ThrowIfFailed(m_device->CreateShaderResourceView(m_shadowMapTex.Get(), &srvDesc, m_shadowSRV.GetAddressOf()));
@@ -225,13 +323,14 @@ void DX11Renderer::CreateShadowMap(int width, int height)
     m_shadowViewport.Width = static_cast<float>(width);
     m_shadowViewport.Height = static_cast<float>(height);
     m_shadowViewport.MinDepth = 0.0f;
-    m_shadowViewport.MaxDepth = 1.0f;
+    m_shadowViewport.MaxDepth = 1.0f;                                             
 }
 
 void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& lightDir, bool isDirectional, float size)
 {
     ID3D11ShaderResourceView* nullSRV = nullptr;
-    m_context->PSSetShaderResources(10, 1, &nullSRV);
+    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
+    m_context->PSSetShaderResources(10, 1, &nullSRV); // 얘는 바깥으로 빼버릴까 싶어 
 
     ID3D11RenderTargetView* nullRTV = nullptr;
     m_context->OMSetRenderTargets(0, &nullRTV, m_shadowDSV.Get());
@@ -263,7 +362,7 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
 
     m_lightViewProjScale = lightView * lightProj * textureScaleBias;
 
-    UpdateFrameCBuffer(lightView, lightProj);
+    UpdateFrame_CBUFFER(lightView, lightProj);
 }
 
 
@@ -341,6 +440,91 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
+    InitializeGlobalResources(); //상수 버퍼 Sampler etc 
+
+
+    // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
+    // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
+    const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+    Texture* temp = ResourceManager::Instance().Load<Texture>(path);
+    ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
+    m_context->PSSetShaderResources(9, 1, &CubeMap);
+
+
+}
+//  ★
+void DX11Renderer::InitializeGlobalResources()
+{
+    //상수 버퍼 Binding
+
+    //Sampler는 더 봐야 할 듯 
+    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+ 
+    //VS
+    m_context->VSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
+    m_context->VSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
+
+    m_context->VSSetConstantBuffers(3, 1, m_cbuffer_lights.GetAddressOf());
+    m_context->VSSetConstantBuffers(4, 1, m_cbuffer_material.GetAddressOf());
+
+    m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
+    m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
+
+
+
+    //PS
+    m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
+    m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(3, 1, m_cbuffer_lights.GetAddressOf());
+    m_context->PSSetConstantBuffers(4, 1, m_cbuffer_material.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
+    m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
+
+}
+//  ★
+void DX11Renderer::CreateConstantBuffers()
+{
+
+    D3D11_BUFFER_DESC bd = {};
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+
+    //해당 자료형에서 16 byte 정렬 되어있음. 
+
+    //b0
+    bd.ByteWidth = sizeof(CBuffer_Frame_Data);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_frame.GetAddressOf()));
+    //b1
+    bd.ByteWidth = sizeof(CBuffer_Object_Data);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_world_M.GetAddressOf()));
+    //b2
+    bd.ByteWidth = sizeof(CBuffer_GlobalLight);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_lights.GetAddressOf()));
+    //b3
+    bd.ByteWidth = sizeof(MaterialData);
+    DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_material.GetAddressOf()));
+    //b4
+    bd.ByteWidth = sizeof(TextureFlag);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Texture_flags.GetAddressOf()));
+    //b5
+    bd.ByteWidth = sizeof(Matrix_Pallette);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
+
+
+      // D3D11_BUFFER_DESC boneDesc = {};
+    // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
+    // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    // hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
+
 }
 
 void DX11Renderer::EndFrame()
@@ -392,7 +576,8 @@ void DX11Renderer::SetFullscreen(bool enable)
 void DX11Renderer::Destroy()
 {
     ReleaseBackbuffers();
-    m_cbuffer_frame.Reset();
+    ReleaseCB();
+
     m_swapchain.Reset();
     m_context.Reset();
     m_device.Reset();
@@ -437,51 +622,12 @@ ID3D11Device* DX11Renderer::GetDevice() const { return m_device.Get(); }
 ID3D11DeviceContext* DX11Renderer::GetContext() const { return m_context.Get(); }
 ID3D11RenderTargetView* DX11Renderer::GetBackbufferRTV() const { return m_rtv.Get(); }
 
-void DX11Renderer::UpdateLights(const std::vector<Light*>& lights, const Vector3& cameraPos)
+
+
+void DX11Renderer::ClearCache()
 {
-    if (!m_cbuffer_lights) return;
-
-    if (!m_context) return;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = m_context->Map(m_cbuffer_lights.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    if (FAILED(hr)) return;
-
-    CBuffer_GlobalLight* data = static_cast<CBuffer_GlobalLight*>(mappedData.pData);
-
-    int count = std::min((int)lights.size(), MAX_LIGHTS);
-    data->ActiveCount = count;
-
-    data->CameraPos = cameraPos;
-    data->LightViewProjScale = m_lightViewProjScale.Transpose();
-    float w = m_shadowViewport.Width;
-    float h = m_shadowViewport.Height;
-    data->ShadowMapInfo = Vector4(1.0f / w, 1.0f / h, w, h);
-
-    for (int i = 0; i < count; ++i)
-    {
-        Light* light = lights[i];
-        Transform* tf = light->GetTransform();
-
-        Vector3 pos = tf->GetPosition();
-        data->Lights[i].PositionRange = Vector4(pos.x, pos.y, pos.z, light->m_range);
-
-        Vector3 dir = -tf->Forward();
-        data->Lights[i].DirectionType = Vector4(dir.x, dir.y, dir.z, (float)light->m_type);
-
-        data->Lights[i].ColorIntensity = Vector4(light->m_color.x, light->m_color.y, light->m_color.z, light->m_intensity);
-    }
-
-    for (int i = count; i < MAX_LIGHTS; ++i)
-    {
-        data->Lights[i].PositionRange = Vector4(0, 0, 0, 0);
-        data->Lights[i].DirectionType = Vector4(0, 0, 0, 0);
-        data->Lights[i].ColorIntensity = Vector4(0, 0, 0, 0);
-    }
-
-    m_context->Unmap(m_cbuffer_lights.Get(), 0);
-
-    m_context->PSSetConstantBuffers(2, 1, m_cbuffer_lights.GetAddressOf());
+    m_currentShaderID = 0;
+    for (int i = 0; i < 8; ++i) m_currentSRVs[i] = nullptr;
 }
 
 void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
@@ -519,6 +665,35 @@ void DX11Renderer::ResetRenderState()
     m_context->OMSetDepthStencilState(nullptr, 0);
     m_context->RSSetState(nullptr);
     m_context->RSSetState(m_rsCullBack.Get());
+}
+
+//  ★
+void DX11Renderer::BindShader(Shader* shader)
+{
+    if (!shader) return;
+
+   
+    if (m_currentShaderID == shader->GetID())
+    {
+        return;
+    }
+
+    shader->Bind(); 
+    m_currentShaderID = shader->GetID(); 
+}
+
+//Slot 하드코딩은 좀 그렇긴 한데 일단 16개 정도로 맞춰놓음 
+void DX11Renderer::BindTexture(int slot, ID3D11ShaderResourceView* srv)
+{
+    if (slot < 0 || slot >= 16) return;
+
+    if (m_currentSRVs[slot] == srv)
+    {
+        return;
+    }
+
+    m_context->PSSetShaderResources(slot, 1, &srv);
+    m_currentSRVs[slot] = srv; 
 }
 
 ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
@@ -710,6 +885,20 @@ void DX11Renderer::ReleaseBackbuffers()
     m_msaaTargetTex.Reset();
 }
 
+void DX11Renderer::ReleaseCB()
+{
+    m_cbuffer_frame.Reset(); 
+    m_cbuffer_world_M.Reset(); 
+    m_cbuffer_lights.Reset();
+    m_cbuffer_material.Reset();
+
+    m_cbuffer_Texture_flags.Reset();
+    m_cbuffer_matrix_pallette.Reset();
+    m_cbuffer_IBL.Reset();
+
+}
+
+
 void DX11Renderer::CreateSamplers()
 {
     if (!m_device) return;
@@ -763,16 +952,5 @@ void DX11Renderer::CreateSamplers()
 
     DXHelper::ThrowIfFailed(m_device->CreateSamplerState(&shadowDesc, m_shadowSampler.GetAddressOf()));
 
-    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
 
-    //D3D11_SAMPLER_DESC uiDesc = {};
-    //uiDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; 
-    //uiDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    //uiDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-    //uiDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    //uiDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    //uiDesc.MinLOD = 0;
-    //uiDesc.MaxLOD = 0;
-
-    //m_device->CreateSamplerState(&uiDesc, m_uiSampler.GetAddressOf());
 }

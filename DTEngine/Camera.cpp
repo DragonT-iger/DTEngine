@@ -118,6 +118,21 @@ void Camera::Bind()
     
 }
 
+const Vector3& Camera::GetCamPos()
+{
+    Transform* tf = GetComponent<Transform>();
+
+    return tf->GetWorldPosition();
+
+}
+
+const Vector3& Camera::GetCamFor()
+{
+    Transform* tf = GetComponent<Transform>();
+    return tf->Forward();
+}
+
+
 
 
 void Camera::UpdateViewMatrix()
