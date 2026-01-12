@@ -357,8 +357,10 @@ void Material::BindPipeLine()
            srv = m_textures[i]->GetSRV();
            sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
 
-           DX11Renderer::Instance().BindTexture((int)i, srv);
         }
+
+        DX11Renderer::Instance().BindTexture((int)i, srv);
+
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
