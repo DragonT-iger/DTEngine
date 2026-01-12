@@ -1,5 +1,11 @@
 #include "Lighting_PBR.hlsli"
 
+cbuffer CBuffer_Frame : register(b0)
+{
+    matrix ViewTM;
+    matrix ProjectionTM;
+};
+
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
@@ -20,10 +26,9 @@ cbuffer CBuffer_Material : register(b3)
 };
 
 Texture2D t_Albedo : register(t0);
-Texture2D t_Metallic : register(t1);
-Texture2D t_Roughness : register(t2);
-Texture2D t_Normal : register(t3);
-Texture2D t_AO : register(t4);
+Texture2D t_MetallicRoughness : register(t1);
+Texture2D t_Normal : register(t2);
+Texture2D t_sphereMap : register(t3);
 
 SamplerState g_Sampler : register(s0);
 
@@ -44,17 +49,18 @@ float3 CalculateNormal(PS_INPUT input, float2 uv)
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-    float2 uv = input.UV * UVTransform.xy + UVTransform.zw;
-
-    float4 albedoSample = t_Albedo.Sample(g_Sampler, uv);
-    float3 albedo = (UseTexture & 1) ? albedoSample.rgb : MaterialColor.rgb;
-    float alpha = (UseTexture & 1) ? albedoSample.a : MaterialColor.a;
+    float4 albedoSample = t_Albedo.Sample(g_Sampler, input.UV);
+    float3 albedo = albedoSample.rgb;
+    float alpha = albedoSample.a;
 
     // Alpha Clipping
     //clip(alpha < 0.1f ? -1 : 1);
 
    
-    float3 normal = CalculateNormal(input, uv);
+    float3 normal = CalculateNormal(input, input.UV);
+    
+    
+    
     
     //float3 normal = input.Normal;
     
@@ -65,13 +71,27 @@ float4 PS(PS_INPUT input) : SV_Target
     //float roughness = (UseTexture & 8) ? t_Roughness.Sample(g_Sampler, uv).r : 0.5f;
     //float ao = (UseTexture & 16) ? t_AO.Sample(g_Sampler, uv).r : 1.0f;
     
-    float metallic = t_Metallic.Sample(g_Sampler, uv).r;
-    float roughness = t_Roughness.Sample(g_Sampler, uv).r;
-    float ao = t_AO.Sample(g_Sampler, uv).r;
+    float metallic = t_MetallicRoughness.Sample(g_Sampler, input.UV).b;
+    float roughness = t_MetallicRoughness.Sample(g_Sampler, input.UV).g;
+    //float ao = t_AO.Sample(g_Sampler, uv).r;
 
     float3 viewDir = normalize(CameraPos - input.WorldPos);
 
-    float3 finalColor = ComputePBRLighting(input.WorldPos, normal, viewDir, albedo, metallic, roughness, ao , 0);
+    float3 viewNormal = normalize(mul(normal, (float3x3) ViewTM));
+    float2 sphereUV = viewNormal.xy * 0.5 + 0.5;
+    sphereUV.y = 1.0 - sphereUV.y;
+    
+    float3 sphereEnvLight = t_sphereMap.Sample(g_Sampler, sphereUV).rgb;
+    
+    if (metallic < 0.99)
+    {
+        sphereEnvLight = 0;
+    }
+    
+    
+    
+    
+    float3 finalColor = ComputePBRLighting(input.WorldPos, normal, viewDir, albedo, metallic, roughness, 1, sphereEnvLight);
 
     return float4(finalColor, alpha);
 }

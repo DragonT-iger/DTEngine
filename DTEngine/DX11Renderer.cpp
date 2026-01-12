@@ -76,9 +76,9 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
-    //CreateShadowMap(16376, 16376); max 왜 이러지
+    CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    CreateShadowMap(4096, 4096);
+    //CreateShadowMap(4096, 4096);
     
     return true;
 }

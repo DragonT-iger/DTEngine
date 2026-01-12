@@ -208,7 +208,8 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
                     if (activeScene->SaveFile(relativePath))
                     {
-                        std::cout << "Scene save successful. 권용범 바보ㅋㅋ" << std::endl;
+                        //std::cout << "Scene save successful. 권용범 바보ㅋㅋ" << std::endl;
+                        std::cout << "Scene save successful." << std::endl;
                         HistoryManager::Instance().MarkAsSaved();
                     }
                     else
@@ -990,7 +991,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                         if (propCheck.find("model") != std::string::npos || propCheck.find("mesh") != std::string::npos)
                         {
-                            if (ext == ".fbx" || ext == ".obj" || ext == ".x" || ext == ".blend") isFormatValid = true;
+                            if (ext == ".fbx" || ext == ".obj" || ext == ".x" || ext == ".glb") isFormatValid = true;
                         }
                         else if (propCheck.find("material") != std::string::npos)
                         {
@@ -1700,7 +1701,7 @@ void EditorUI::OnDropFile(const std::string& rawPath)
 
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-    if (ext == ".fbx" || ext == ".obj" || ext == ".x")
+    if (ext == ".fbx" || ext == ".obj" || ext == ".x" || ext == ".glb")
     {
 
         GameObject* go = ResourceManager::Instance().LoadModel(path.string());
@@ -1838,73 +1839,75 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 material->SaveFile(path); // 변경 즉시 파일 저장
             }
 
-            for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
-            {
-                ImGui::PushID(i);
+    //        for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
+    //        {
+    //            ImGui::PushID(i);
 
-                ImGui::Text("Texture Slot %d", i);
+    //            ImGui::Text("Texture Slot %d", i);
 
-				ImGui::SameLine();
+				//ImGui::SameLine();
 
-                Texture* currentTex = material->GetTexture(i);
-                std::string texName = "Empty";
+    //            Texture* currentTex = material->GetTexture(i);
+    //            std::string texName = "Empty";
 
-                if (currentTex)
-                {
-                    uint64_t id = currentTex->GetMeta().guid;
-                    std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
-                    if (!pathStr.empty())
-                    {    
+    //            if (currentTex)
+    //            {
+    //                uint64_t id = currentTex->GetMeta().guid;
+    //                std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
+    //                if (!pathStr.empty())
+    //                {    
 
-						texName = fs::path(pathStr).filename().string();
+				//		texName = fs::path(pathStr).filename().string();
 
-                        //std::filesystem::path path(pathStr);
-                        //m_currentProjectDirectory = path.parent_path();
-                        //m_selectedAssetPath = pathStr;
-                    }
-                    else {
-                        texName = "Missing (Path Not Found)";
-                    }
-                }
+    //                    //std::filesystem::path path(pathStr);
+    //                    //m_currentProjectDirectory = path.parent_path();
+    //                    //m_selectedAssetPath = pathStr;
+    //                }
+    //                else {
+    //                    texName = "Missing (Path Not Found)";
+    //                }
+    //            }
 
-                if (ImGui::Button(texName.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 30, 0)))
-                {
-                    // 클릭 시 동작 (옵션)
-                }
+    //            if (ImGui::Button(texName.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 30, 0)))
+    //            {
+    //                // 클릭 시 동작 (옵션)
+    //            }
 
-                if (ImGui::BeginDragDropTarget())
-                {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
-                    {
-                        const char* droppedPath = (const char*)payload->Data;
-                        std::string droppedExt = fs::path(droppedPath).extension().string();
-                        std::transform(droppedExt.begin(), droppedExt.end(), droppedExt.begin(), ::tolower);
+    //            if (ImGui::BeginDragDropTarget())
+    //            {
+    //                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+    //                {
+    //                    const char* droppedPath = (const char*)payload->Data;
+    //                    std::string droppedExt = fs::path(droppedPath).extension().string();
+    //                    std::transform(droppedExt.begin(), droppedExt.end(), droppedExt.begin(), ::tolower);
 
-                        if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds" || droppedExt == ".tga" || droppedExt == ".bmp")
-                        {
-                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
-                            if (newTex)
-                            {
-                                material->SetTexture(i, newTex);
-                                material->SaveFile(path);
-                            }
-                        }
-                    }
-                    ImGui::EndDragDropTarget();
-                }
+    //                    if (droppedExt == ".png" || droppedExt == ".jpg" || droppedExt == ".dds" || droppedExt == ".tga" || droppedExt == ".bmp")
+    //                    {
+    //                        Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
+    //                        if (newTex)
+    //                        {
+    //                            material->SetTexture(i, newTex);
+    //                            material->SaveFile(path);
+    //                        }
+    //                    }
+    //                }
+    //                ImGui::EndDragDropTarget();
+    //            }
 
-                ImGui::SameLine();
+    //            ImGui::SameLine();
 
-                if (ImGui::Button("X", ImVec2(22, 0)))
-                {
-                    if (material->SetTexture(i, nullptr)) {
-                        material->SaveFile(path);
-                    }
-                }
+    //            if (ImGui::Button("X", ImVec2(22, 0)))
+    //            {
+    //                if (material->SetTexture(i, nullptr)) {
+    //                    material->SaveFile(path);
+    //                }
+    //            }
 
-                ImGui::PopID();
-                ImGui::Spacing();
-            }
+            //    ImGui::PopID();
+            //    ImGui::Spacing();
+            //}
+
+            // 텍스쳐는 그냥 머터리얼 인스턴스에서 넣어주기 이 값으로 로딩하면 게속 초기화되니까 그냥
         }
     }
     else if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga" || ext == ".bmp")
@@ -2084,7 +2087,7 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
 
             if (!isDirectory)
             {
-                if (lowerCaseExt == ".fbx" || lowerCaseExt == ".obj" || lowerCaseExt == ".x")
+                if (lowerCaseExt == ".fbx" || lowerCaseExt == ".obj" || lowerCaseExt == ".x" || lowerCaseExt == ".glb")
                 {
                     iconToUse = m_iconModel ? m_iconModel : m_iconFile;
                 }

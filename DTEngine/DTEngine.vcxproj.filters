@@ -489,5 +489,11 @@
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\MasterChief_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

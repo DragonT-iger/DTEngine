@@ -49,7 +49,7 @@ float3 FresnelSchlick(float cosTheta, float3 F0)
 }
 
 float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
-                          float3 albedo, float metallic, float roughness, float ao)
+                          float3 albedo, float metallic, float roughness, float ao, float3 sphereEnvLight)
 {
     float3 N = normalize(normal);
     float3 V = normalize(viewDir);
@@ -99,7 +99,15 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
         
         float3 nominator = NDF * G * F;
         float denominator = 4 * max(dot(N, V), 0.0) * NdotL + 0.001;
-        float3 specular = nominator / denominator;
+        
+        
+        //float3 add = 0;
+        //if (metallic > 0.99)
+        //{
+        //    add = sphereEnvLight;
+        //}
+        
+        float3 specular = nominator / denominator + sphereEnvLight;
         
         float3 kS = F;
         float3 kD = 1 - kS;

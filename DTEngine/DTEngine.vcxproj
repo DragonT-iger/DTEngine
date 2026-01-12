@@ -290,6 +290,8 @@
     <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\MasterChief_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Skybox_PS.hlsl" />

@@ -93,69 +93,72 @@ void ResourceManager::CollectDescendants(GameObject* target, std::vector<GameObj
 
 bool ResourceManager::SavePrefab(GameObject* root, const std::string& fullPath)
 {
-    if (!root) return false;
+    //if (!root) return false;
 
-    JsonWriter writer;
-    std::string assetPath = ResolveFullPath(fullPath);
+    //JsonWriter writer;
+    //std::string assetPath = ResolveFullPath(fullPath);
 
-    std::vector<GameObject*> targets;
-    CollectDescendants(root, targets);
+    //std::vector<GameObject*> targets;
+    //CollectDescendants(root, targets);
 
-    std::unordered_map<uint64_t, bool> prefabIDs;
-    for (auto* go : targets)
-    {
-        prefabIDs[go->_GetID()] = true;
-    }
+    //std::unordered_map<uint64_t, bool> prefabIDs;
+    //for (auto* go : targets)
+    //{
+    //    prefabIDs[go->_GetID()] = true;
+    //}
 
-    writer.BeginArray("gameObjects");
+    //writer.BeginArray("gameObjects");
 
-    for (auto& go : targets)
-    {
-        writer.NextArrayItem();
+    //for (auto& go : targets)
+    //{
+    //    writer.NextArrayItem();
 
-        writer.Write("id", go->_GetID());
-        writer.Write("name", go->GetName());
-        writer.Write("tag", go->GetTag());
-        writer.Write("active", go->IsActive());
+    //    writer.Write("id", go->_GetID());
+    //    writer.Write("name", go->GetName());
+    //    writer.Write("tag", go->GetTag());
+    //    writer.Write("active", go->IsActive());
 
-        uint64_t parentID = 0;
-        Transform* parentTF = go->GetTransform()->GetParent();
-        if (parentTF)
-        {
-            uint64_t pid = parentTF->_GetOwner()->_GetID();
-            if (prefabIDs.find(pid) != prefabIDs.end())
-            {
-                parentID = pid;
-            }
-        }
-        writer.Write("parentID", parentID);
+    //    uint64_t parentID = 0;
+    //    Transform* parentTF = go->GetTransform()->GetParent();
+    //    if (parentTF)
+    //    {
+    //        uint64_t pid = parentTF->_GetOwner()->_GetID();
+    //        if (prefabIDs.find(pid) != prefabIDs.end())
+    //        {
+    //            parentID = pid;
+    //        }
+    //    }
+    //    writer.Write("parentID", parentID);
 
-        if (auto* tf = go->GetTransform())
-        {
-            writer.BeginObject("transform");
-            writer.Write("id", tf->_GetID());
-            tf->Serialize(writer);
-            writer.EndObject();
-        }
+    //    if (auto* tf = go->GetTransform())
+    //    {
+    //        writer.BeginObject("transform");
+    //        writer.Write("id", tf->_GetID());
+    //        tf->Serialize(writer);
+    //        writer.EndObject();
+    //    }
 
-        writer.BeginArray("components");
-        for (auto& comp : go->_GetComponents())
-        {
-            if (!comp) continue;
-            writer.NextArrayItem();
+    //    writer.BeginArray("components");
+    //    for (auto& comp : go->_GetComponents())
+    //    {
+    //        if (!comp) continue;
+    //        writer.NextArrayItem();
 
-            writer.Write("typeName", comp->_GetTypeName());
-            writer.Write("id", comp->_GetID());
-            comp->Serialize(writer);
+    //        writer.Write("typeName", comp->_GetTypeName());
+    //        writer.Write("id", comp->_GetID());
+    //        comp->Serialize(writer);
 
-            writer.EndArrayItem();
-        }
-        writer.EndArray();
-        writer.EndArrayItem();
-    }
-    writer.EndArray();
+    //        writer.EndArrayItem();
+    //    }
+    //    writer.EndArray();
+    //    writer.EndArrayItem();
+    //}
+    //writer.EndArray();
 
-    return writer.SaveFile(assetPath);
+    //return writer.SaveFile(assetPath);
+	
+    
+    return false;
 }
 
 GameObject* ResourceManager::LoadModel(const std::string& fullPath)
