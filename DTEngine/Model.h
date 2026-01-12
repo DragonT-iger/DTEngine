@@ -32,6 +32,6 @@ private:
 
     std::vector<Mesh*> m_meshes;
 
-    ModelImpl* m_impl;
+    std::unique_ptr<ModelImpl> m_impl;
     int m_BoneCounter = 0;
 };

@@ -30,7 +30,9 @@ Matrix ConvertToDXMatrix(const aiMatrix4x4& from)
     return to.Transpose();
 }
 
-Model::Model() {}
+Model::Model() {
+    m_impl = std::make_unique<ModelImpl>();
+}
 
 Model::~Model()
 {

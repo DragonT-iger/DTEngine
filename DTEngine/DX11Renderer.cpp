@@ -504,7 +504,7 @@ void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
 
     for (size_t i = copyCount; i < MAX_BONES; ++i)
     {
-        dataPtr->BoneTransforms[i] = Matrix::Identity;
+        dataPtr->BoneTransforms[i] = SimpleMathHelper::IdentityMatrix();
     }
 
     m_context->Unmap(m_cbuffer_bones.Get(), 0);
