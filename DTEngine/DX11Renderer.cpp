@@ -440,7 +440,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
-    InitializeGlobalResources(); //상수 버퍼 Sampler etc 
+    BindGlobalResources(); //상수 버퍼 Sampler etc 
 
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
@@ -453,7 +453,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
 }
 //  ★
-void DX11Renderer::InitializeGlobalResources()
+void DX11Renderer::BindGlobalResources()
 {
     //상수 버퍼 Binding
 
@@ -483,6 +483,9 @@ void DX11Renderer::InitializeGlobalResources()
     m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
+
+    m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
+    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
 }
 //  ★
 void DX11Renderer::CreateConstantBuffers()

@@ -73,7 +73,7 @@ public:
     void SetCullMode(CullMode mode);
 
     void BeginFrame(const float clearColor[4]);
-    void InitializeGlobalResources(); // CB, SAMPLER , 기본 STATE 
+    void BindGlobalResources(); // CB, SAMPLER , 기본 STATE 
 
     void CreateConstantBuffers();
 

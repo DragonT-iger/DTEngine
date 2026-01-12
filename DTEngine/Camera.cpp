@@ -118,7 +118,7 @@ void Camera::Bind()
     
 }
 
-const Vector3& Camera::GetCamPos()
+const Vector3& Camera::GetCamPos() const 
 {
     Transform* tf = GetComponent<Transform>();
 
@@ -126,7 +126,7 @@ const Vector3& Camera::GetCamPos()
 
 }
 
-const Vector3& Camera::GetCamFor()
+const Vector3& Camera::GetCamFor() const
 {
     Transform* tf = GetComponent<Transform>();
     return tf->Forward();
