@@ -35,33 +35,33 @@ float CalculateShadow(float3 worldPos)
 
     // 화면(NDC) 밖이면 그림자 없음 처리
     // 아래 코드보다 이게 부하 더 적음
-    if (shadowCoord.x < 0.0f || shadowCoord.x > 1.0f ||
-        shadowCoord.y < 0.0f || shadowCoord.y > 1.0f ||
-        shadowCoord.z < 0.0f || shadowCoord.z > 1.0f)
-    {
-        return 1.0f;
-    }
+    //if (shadowCoord.x < 0.0f || shadowCoord.x > 1.0f ||
+    //    shadowCoord.y < 0.0f || shadowCoord.y > 1.0f ||
+    //    shadowCoord.z < 0.0f || shadowCoord.z > 1.0f)
+    //{
+    //    return 1.0f;
+    //}
    
     
     float currentDepth = shadowCoord.z;
-    float bias = 0.001f;
+    float bias = 0.005f;
     
     float totalShadow = 0;
     
-    for (int i = -PCF_LOOP; i <= PCF_LOOP; i++)
-    {
-        for (int j = -PCF_LOOP; j <= PCF_LOOP; j++)
-        {
-            float2 offset = ShadowMapInfo.xy * float2(i, j);
+    //for (int i = -PCF_LOOP; i <= PCF_LOOP; i++)
+    //{
+    //    for (int j = -PCF_LOOP; j <= PCF_LOOP; j++)
+    //    {
+    //        float2 offset = ShadowMapInfo.xy * float2(i, j);
             
-            //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
-            //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
+    //        //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
+    //        //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
             
-            totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy + offset, currentDepth - bias);
-        }
-    }
+    totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy, currentDepth - bias);
+    //    }
+    //}
     
-    return totalShadow / PCF_DEVISOR;
+    return totalShadow;
     
 }
 
