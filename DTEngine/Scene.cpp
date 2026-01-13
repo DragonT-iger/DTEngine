@@ -401,6 +401,46 @@ GameObject* Scene::FindGameObjectByID(uint64_t id)
     return nullptr;
 }
 
+void Scene::Enter()
+{
+    for (const auto& go : m_gameObjects)
+    {
+        if (go->IsActive())
+        {
+            for (const auto& comp : go->_GetComponents())
+            {
+                if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get()))
+                {
+                    if (mb->IsActive())
+                    {
+                        mb->OnEnable();
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Scene::Exit()
+{
+    for (const auto& go : m_gameObjects)
+    {
+        if (go->IsActive())
+        {
+            for (const auto& comp : go->_GetComponents())
+            {
+                if (auto* mb = dynamic_cast<MonoBehaviour*>(comp.get()))
+                {
+                    if (mb->IsActive())
+                    {
+                        mb->OnDisable();
+                    }
+                }
+            }
+        }
+    }
+}
+
 void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 {
     if (!camera) return;

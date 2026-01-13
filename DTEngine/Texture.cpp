@@ -15,18 +15,57 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
-
 uint16_t Texture::g_TextureID = 0;
 
 Texture::Texture() = default;
 
 Texture::~Texture() { Unload(); }
 
+
+bool Texture::CheckIsLinearTexture(std::string fileName)
+{
+    std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
+
+    static const std::vector<std::string> linearKeywords = {
+        "normal", "_n",      // 노말 맵
+        "mask",              // 마스크 맵
+        "roughness", "_r",   // 거칠기
+        "metallic", "_m",    // 금속성
+        //"arm",               // AO + Roughness + Metallic 패킹
+        "ao", "_o",          // 앰비언트 오클루전
+        "height", "disp",    // 높이/변위 맵
+        "linear",            // 명시적 리니어 태그
+        //"data"               // 기타 데이터 텍스처
+    };
+
+    for (const auto& keyword : linearKeywords)
+    {
+        if (fileName.find(keyword) != std::string::npos)
+        {
+            return true; // 리니어 텍스처
+        }
+    }
+
+    return false; // 알베도, 디퓨즈 텍스처임 (SRGB 켜기)
+}
+
+
 bool Texture::LoadFile(const std::string& fullPath)
 {
     auto device = DX11Renderer::Instance().GetDevice();
     auto context = DX11Renderer::Instance().GetContext();
     if (!device) return false;
+
+    std::string fileName = std::filesystem::path(fullPath).stem().string();
+
+    if (CheckIsLinearTexture(fileName))
+    {
+        m_bSRGB = false;
+    }
+    else
+    {
+        m_bSRGB = true;
+    }
 
     LoadMetaData(fullPath);
 
@@ -160,7 +199,7 @@ void Texture::LoadMetaData(const std::string& fullPath)
             file >> data;
             if (data.contains("FilterMode")) m_filterMode = (FilterMode)data["FilterMode"];
             if (data.contains("WrapMode")) m_wrapMode = (WrapMode)data["WrapMode"];
-            if (data.contains("SRGB")) m_bSRGB = data["SRGB"];
+            //if (data.contains("SRGB")) m_bSRGB = data["SRGB"];
         }
         catch (...) {
             std::cout << "Cannot Load Metadata" << std::endl;

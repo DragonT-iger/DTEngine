@@ -105,6 +105,9 @@ float4 PS(PS_INPUT input) : SV_Target
     }
     
     float3 finalColor = ComputePBRLighting(input.WorldPos, normal, viewDir, albedo, metallic, roughness, 1, sphereEnvLight);
-
+    
+    finalColor = pow(finalColor, 1.0f / 2.2f);
+    
+    //return finalColor;
     return float4(finalColor, 1.0f);
 }
