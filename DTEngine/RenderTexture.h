@@ -23,7 +23,7 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D);
+    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false);
 
     void Resize(int width, int height);
 

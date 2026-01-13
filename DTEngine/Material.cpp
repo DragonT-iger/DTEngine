@@ -367,7 +367,7 @@ void Material::BindPipeLine()
     }
 
 
-    if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
+    //if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
 
 
     currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 

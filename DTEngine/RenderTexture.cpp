@@ -6,7 +6,7 @@
 RenderTexture::RenderTexture() = default;
 RenderTexture::~RenderTexture() = default;
 
-bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
+bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bool isSRGB)
 {
     m_width = width;
     m_height = height;
@@ -18,11 +18,12 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
     textureDesc.Width = width;
     textureDesc.Height = height;
     textureDesc.MipLevels = 1;
-    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    //textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
     textureDesc.SampleDesc.Count = 1;
     textureDesc.Usage = D3D11_USAGE_DEFAULT;
     textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    textureDesc.CPUAccessFlags = 0;
+    textureDesc.CPUAccessFlags = 0; 
+    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
 
     if (m_type == RenderTextureType::CubeMap)
     {
@@ -43,7 +44,13 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
     m_faceRTVs.clear();
 
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-    rtvDesc.Format = textureDesc.Format;
+
+    if (isSRGB) {
+        rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    }
+    else {
+        rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    }
 
     if (m_type == RenderTextureType::CubeMap)
     {
@@ -73,7 +80,7 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type)
     }
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    srvDesc.Format = textureDesc.Format;
+    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
     if (m_type == RenderTextureType::CubeMap)
     {

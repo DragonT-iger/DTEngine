@@ -536,7 +536,7 @@ void DX11Renderer::EndFrame()
         m_context->ResolveSubresource(
             m_backbufferTex.Get(), 0,      
             m_msaaTargetTex.Get(), 0,      
-            DXGI_FORMAT_R8G8B8A8_UNORM     
+            DXGI_FORMAT_R8G8B8A8_UNORM
         );
     }
 
@@ -829,31 +829,49 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};       
+    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
     //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
     //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;  
     //rtvViewDesc.Texture2D.MipSlice = 0;
+    //
     //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
     //DXHelper::ThrowIfFailed(hr);
-
 
     D3D11_TEXTURE2D_DESC msaaDesc = {};
     m_backbufferTex->GetDesc(&msaaDesc);                    // 백버퍼 설정 복사
     msaaDesc.SampleDesc.Count = m_msaa;                     // 샘플 수 (예: 4)
     msaaDesc.SampleDesc.Quality = m_msaaQuality - 1;        // 품질
     msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;          // 렌더 타겟
+    //msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
 
     hr = m_device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTargetTex.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+    
+
+
+    //D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
+    //msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
+
+    //if (m_msaa > 1)
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+    //}
+    //else
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    //    msaaRtvDesc.Texture2D.MipSlice = 0;
+    //}
+
+    //hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
+
+
     hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), nullptr, m_msaaTargetRTV.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-
     D3D11_TEXTURE2D_DESC rtvDesc;
     m_backbufferTex->GetDesc(&rtvDesc);
-
-
     // Depth/Stencil
     D3D11_TEXTURE2D_DESC ds{};
     ds.Width = rtvDesc.Width; ds.Height = rtvDesc.Height; ds.MipLevels = 1; ds.ArraySize = 1;
