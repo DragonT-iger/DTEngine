@@ -113,12 +113,6 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 finalColor = directLighting + ambientLighting *0.5f;
 
     finalColor = ACESToneMapping(finalColor);
-
-// 3. 감마 보정 적용 (LDR 상태에서 모니터 출력용 변환)
-    if (NEED_ON_GAMMA)
-    {
-        finalColor = pow(finalColor, 1.0f / 2.2f); // 
-    }
     
     return float4(finalColor, 1.0f);
 }

@@ -54,7 +54,7 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
     float3 N = normalize(normal);
     float3 V = normalize(viewDir);
     
-    //roughness = 0.5; Yena 반사광 만드려면 roughness를 고정해야 함.
+    //roughness = 0.5; //Yena 반사광 만드려면 roughness를 고정해야 함.
     //Yena는 0에 가까운 부분만 spec이 나오는게 아니라 모든 부분이 spec이 균등하게 나옴
     
     float3 F0 = 0.08;

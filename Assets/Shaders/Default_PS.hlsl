@@ -43,12 +43,7 @@ float4 PS(PS_INPUT input) : SV_Target
     {
         finalColor *= MaterialColor.rgb;
     }
-
-    
-    if (NEED_ON_GAMMA)
-    {
-        finalColor = pow(finalColor, 1.0f / 2.2f); // 
-    }
+  
     
     return float4(finalColor, 1.0f);
 }

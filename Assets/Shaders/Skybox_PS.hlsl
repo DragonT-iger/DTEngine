@@ -14,9 +14,5 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     float4 finalColor =  g_CubeMap.Sample(g_Sampler, input.TexCoord);
     
-    if (NEED_ON_GAMMA)
-    {
-        finalColor = pow(finalColor, 1.0f / 2.2f); // 
-    }
     return finalColor;
 }

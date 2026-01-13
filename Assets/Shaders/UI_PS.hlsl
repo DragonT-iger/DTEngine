@@ -34,11 +34,6 @@ float4 PS(PS_INPUT input) : SV_Target
     
     color *= textureColor;
     
-    if (NEED_ON_GAMMA)
-    {
-        color = pow(color, 1.0f / 2.2f); // 
-    }
-    
     
     
     return color;

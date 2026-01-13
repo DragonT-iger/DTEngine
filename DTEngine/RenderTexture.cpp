@@ -11,6 +11,7 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bo
     m_width = width;
     m_height = height;
     m_type = type;
+    m_isSRGB = isSRGB;
 
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
 
@@ -136,7 +137,7 @@ void RenderTexture::Resize(int width, int height)
     m_depthStencilTexture.Reset();
     m_dsv.Reset();
 
-    Initialize(width, height);
+    Initialize(width, height, m_type, m_isSRGB);
 }
 
 void RenderTexture::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
