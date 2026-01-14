@@ -21,7 +21,7 @@ PS_INPUT VS(VS_INPUT input)
     
     float3 worldNormal = mul(float4(input.Normal, 0.0f), WorldInverseTranspose_TM).xyz;
     float3 worldTangent = mul((input.Tangent), WorldInverseTranspose_TM).xyz;
-    float3 worldBitangent = 1;
+    float3 worldBitangent = mul(input.Bitangent, (float3x3) WorldInverseTranspose_TM);
 
     float3 viewNormal = mul(worldNormal, (float3x3) View_TM);
 
