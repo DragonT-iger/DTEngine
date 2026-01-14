@@ -116,7 +116,7 @@ bool Scene::LoadFile(const std::string& fullPath)
 
 
     std::unordered_map<uint64_t, Component*> idToComponentMap;
-
+    std::unordered_map<uint64_t, GameObject*> idToGameObjectMap;
 
     std::vector<FixupTask> fixupList;
 
@@ -130,6 +130,11 @@ bool Scene::LoadFile(const std::string& fullPath)
 
         uint64_t go_id = reader.ReadUInt64("id", 0);
         go->_SetID(go_id);
+
+
+        idToGameObjectMap[go_id] = go;
+
+
         go->SetTag(reader.ReadString("tag", "Untagged"));
         go->SetActive(reader.ReadBool("active", true));
 
@@ -183,26 +188,32 @@ bool Scene::LoadFile(const std::string& fullPath)
     for (const auto& task : fixupList)
     {
         uint64_t targetID = task.targetID;
-        Component* targetPtr = nullptr; 
+        if (targetID == 0) continue; 
 
-        if (targetID != 0)
+        if (task.property.m_type == typeid(GameObject*))
         {
-            auto it = idToComponentMap.find(targetID);
-            if (it != idToComponentMap.end())
-            {
-                targetPtr = it->second; 
-				//std::cout << "Fixup: Resolved targetID " << targetID << std::endl;
+            auto it = idToGameObjectMap.find(targetID);
+            GameObject* foundGO = (it != idToGameObjectMap.end()) ? it->second : nullptr;
+
+            if (foundGO) {
+                task.property.m_setter(task.targetObject, &foundGO);
             }
-            else
-            {
-                std::cout << "Warning: Failed to find targetID " << targetID << std::endl;
+            else {
+                std::cout << "Warning: Failed to find GameObject ID " << targetID << std::endl;
             }
         }
-   //     else {
-			//std::cout << "Fixup: targetID is 0, setting to nullptr" << std::endl;
-   //     }
-        
-        task.property.m_setter(task.targetObject, &targetPtr);
+        else
+        {
+            auto it = idToComponentMap.find(targetID);
+            Component* foundComp = (it != idToComponentMap.end()) ? it->second : nullptr;
+
+            if (foundComp) {
+                task.property.m_setter(task.targetObject, &foundComp);
+            }
+            else {
+                std::cout << "Warning: Failed to find Component ID " << targetID << std::endl;
+            }
+        }
     }
 
     return true;

@@ -5,6 +5,7 @@
 #include <typeindex>
 #include <vector>
 #include <functional>
+#include <unordered_set>
 
 class Component;
 
@@ -43,9 +44,20 @@ public:
     void Clear() {
         m_classes.clear(); 
     }
+
+    bool IsComponentPointer(std::type_index type) const {
+        return m_componentPtrTypes.find(type) != m_componentPtrTypes.end();
+    }
+
+    void RegisterComponentPointerType(std::type_index type) {
+        m_componentPtrTypes.insert(type);
+    }
+
 private:
+
     ReflectionDatabase();
     ~ReflectionDatabase();
 
     std::unordered_map<std::string, ClassInfo> m_classes;
+    std::unordered_set<std::type_index> m_componentPtrTypes;
 };

@@ -35,15 +35,14 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         std::string v = reader.ReadString(name);
         prop.m_setter(base, &v);
     }
-    else if (type == typeid(Transform*)) {
+
+    // ---------- Component ----------//
+    else if (ReflectionDatabase::Instance().IsComponentPointer(type))
+    {
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
     else if (type == typeid(GameObject*)) {
-        uint64_t id = reader.ReadUInt64(name);
-        fixupList.push_back({ base, prop, id });
-    }
-    else if (type == typeid(Camera*)) {
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }

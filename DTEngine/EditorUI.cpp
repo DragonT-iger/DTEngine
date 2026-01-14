@@ -48,6 +48,119 @@ namespace fs = std::filesystem;
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
+
+
+template<typename T>
+void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
+    const std::function<void(void*, void*)>& setter,
+    std::function<std::string(T*)> nameGetter,
+    std::function<T* (Transform*)> dropConverter)
+{
+    std::string displayStr = "None";
+    if (currentVal) displayStr = nameGetter(currentVal);
+
+    float width = ImGui::CalcItemWidth();
+    if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+    {
+        if (currentVal)
+        {
+            if constexpr (std::is_same_v<T, GameObject>) editor->SetSelectedGameObject(currentVal);
+            else if constexpr (std::is_base_of_v<Component, T>) editor->SetSelectedGameObject(currentVal->_GetOwner());
+        }
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+
+            if (draggedTf)
+            {
+                T* newVal = dropConverter(draggedTf);
+                if (newVal)
+                {
+                    T* oldVal = currentVal;
+                    setter(targetComp, &newVal);
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
+                        targetComp, setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+    ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+    ImGui::Text("%s", label);
+}
+
+// 파일 에셋(Texture, Material 등)을 드래그 앤 드롭으로 할당하는 헬퍼
+template<typename T>
+void DrawAssetReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
+    const std::function<void(void*, void*)>& setter,
+    const std::vector<std::string>& validExtensions)
+{
+    std::string displayStr = "None";
+    if (currentVal)
+    {
+        uint64_t id = currentVal->GetMeta().guid;
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+        if (!path.empty()) displayStr = std::filesystem::path(path).filename().string();
+        else displayStr = "Loaded Asset";
+    }
+
+    float width = ImGui::CalcItemWidth();
+    if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+    {
+        if (currentVal)
+        {
+            uint64_t id = currentVal->GetMeta().guid;
+            std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
+        }
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+        {
+            const char* droppedPath = (const char*)payload->Data;
+            std::string ext = std::filesystem::path(droppedPath).extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+            bool isValid = false;
+            for (const auto& validExt : validExtensions) {
+                if (ext == validExt) { isValid = true; break; }
+            }
+
+            if (isValid)
+            {
+                T* newVal = ResourceManager::Instance().Load<T>(droppedPath);
+                if (newVal)
+                {
+                    T* oldVal = currentVal;
+                    setter(targetComp, &newVal);
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
+                        targetComp, setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+    ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+    ImGui::Text("%s", label);
+}
+
+
+
+
+
+
 EditorUI::EditorUI() {
 
     auto& res = ResourceManager::Instance();
@@ -1247,129 +1360,44 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
+
+
             // GameObject*
             else if (type == typeid(GameObject*))
             {
-                GameObject* go = *static_cast<GameObject**>(data);
-                std::string goName = (go) ? go->GetName() : "None";
-                ImGui::Text("%s: %s", name, goName.c_str());
+                GameObject* currentGO = *static_cast<GameObject**>(data);
+
+                DrawSceneReference<GameObject>(this, name, currentGO, comp, prop.m_setter,
+                    [](GameObject* go) { return go->GetName(); },
+                    [](Transform* tf) { return tf->_GetOwner(); }
+                );
             }
-            else if (type == typeid(Camera*))
-            {
-                Camera* cam = *static_cast<Camera**>(data);
+            // Camera* (Component)
+            //else if (type == typeid(Camera*))
+            //{
+            //    Camera* currentCam = *static_cast<Camera**>(data);
 
-                std::string displayStr = "None (Camera)";
-                if (cam && cam->_GetOwner())
-                {
-                    displayStr = cam->_GetOwner()->GetName();
-                }
+            //    DrawSceneReference<Camera>(this, name, currentCam, comp, prop.m_setter,
+            //        [](Camera* cam) { return cam->_GetOwner()->GetName(); },
+            //        [](Transform* tf) { return tf->_GetOwner()->GetComponent<Camera>(); }
+            //    );
+            //}
 
-                float width = ImGui::CalcItemWidth();
-
-                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
-                {
-                    if (cam && cam->_GetOwner())
-                    {
-                        m_selectedGameObject = cam->_GetOwner(); 
-                    }
-                }
-
-                // 드래그 앤 드롭 타겟 설정
-                if (ImGui::BeginDragDropTarget())
-                {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
-                    {
-                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
-                        Transform* draggedTf = *(Transform**)payload->Data;
-
-                        if (draggedTf)
-                        {
-                            Camera* newCam = draggedTf->_GetOwner()->GetComponent<Camera>();
-
-                            if (newCam)
-                            {
-                                Camera* oldVal = cam;
-
-                                prop.m_setter(comp, &newCam);
-
-                                auto cmd = std::make_unique<ChangePropertyCommand<Camera*>>(
-                                    comp, prop.m_setter, oldVal, newCam
-                                );
-                                HistoryManager::Instance().Do(std::move(cmd));
-                            }
-                        }
-                    }
-                    ImGui::EndDragDropTarget();
-                }
-
-                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-                ImGui::Text("%s", name);
-                }
-
-            // Texture*
+                // Texture* (Asset)
             else if (type == typeid(Texture*))
             {
-                // 데이터 포인터를 Texture**로 캐스팅하여 현재 값 가져오기
-                Texture** texPtr = static_cast<Texture**>(data);
-                Texture* currentTex = *texPtr;
+                Texture* currentTex = *static_cast<Texture**>(data);
 
-                // 텍스처 이름 또는 "None" 표시용 문자열 생성
-                std::string displayStr = "None";
-                if (currentTex)
-                {
-                    uint64_t id = currentTex->GetMeta().guid;
-                    std::string path = AssetDatabase::Instance().GetPathFromID(id);
-                    if (!path.empty())
-                        displayStr = std::filesystem::path(path).filename().string();
-                    else
-                        displayStr = "Loaded Texture";
-                }
+                std::vector<std::string> exts = { ".png", ".jpg", ".dds", ".tga", ".bmp" };
+                DrawAssetReference<Texture>(this, name, currentTex, comp, prop.m_setter, exts);
+            }
 
-                float width = ImGui::CalcItemWidth();
-
-                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
-                {
-                    if (currentTex)
-                    {
-                        uint64_t id = currentTex->GetMeta().guid;
-                        std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
-                        if (!pathStr.empty())
-                        {
-                            m_currentProjectDirectory = std::filesystem::path(pathStr).parent_path();
-                        }
-                    }
-                }
-
-                if (ImGui::BeginDragDropTarget())
-                {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
-                    {
-                        const char* droppedPath = (const char*)payload->Data;
-                        std::string ext = std::filesystem::path(droppedPath).extension().string();
-                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
-                        {
-                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
-                            if (newTex)
-                            {
-                                Texture* oldVal = currentTex;
-
-                                prop.m_setter(comp, &newTex);
-
-                                auto cmd = std::make_unique<ChangePropertyCommand<Texture*>>(
-                                    comp, prop.m_setter, oldVal, newTex
-                                );
-                                HistoryManager::Instance().Do(std::move(cmd));
-                            }
-                        }
-                    }
-                    ImGui::EndDragDropTarget();
-                }
-
-                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-                ImGui::Text("%s", name);
-                }
+            //else if (type == typeid(Material*))
+            //{
+            //    Material* currentMat = *static_cast<Material**>(data);
+            //    std::vector<std::string> exts = { ".mat" };
+            //    DrawAssetReference<Material>(this, name, currentMat, comp, prop.m_setter, exts);
+            //}
 
             
 

@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Camera.h"
 
+
 void Component::Destroy(GameObject* gameobject) {
 	Scene* curScene = SceneManager::Instance().GetActiveScene();
 	curScene->Destroy(gameobject);
@@ -75,29 +76,42 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
 
     
 
-    //component 타입
+    //------------ COMPONENT ----------//
 
-    else if (type == typeid(Transform*)) { 
+    
+    else if (ReflectionDatabase::Instance().IsComponentPointer(type))
+    {
         Component* ptr = *static_cast<Component**>(data);
         uint64_t id = (ptr) ? ptr->_GetID() : 0;
         writer.Write(name, id);
     }
-    else if (type == typeid(GameObject*)) {
+    else if (type == typeid(GameObject*)) { // 이건 컴포넌트가 아니라 해줘야돼
         GameObject* go = *static_cast<GameObject**>(data);
         uint64_t id = (go) ? go->_GetID() : 0;
         writer.Write(name, id);
     }
-    else if (type == typeid(Camera*)) {
-        Camera* cam = *static_cast<Camera**>(data);
-        uint64_t id = (cam) ? cam->_GetID() : 0;
-        writer.Write(name, id);
-    }
+    //else if (type == typeid(Transform*)) { 
+    //    Component* ptr = *static_cast<Component**>(data);
+    //    uint64_t id = (ptr) ? ptr->_GetID() : 0;
+    //    writer.Write(name, id);
+    //}
+    
+    //else if (type == typeid(Camera*)) {
+    //    Camera* cam = *static_cast<Camera**>(data);
+    //    uint64_t id = (cam) ? cam->_GetID() : 0;
+    //    writer.Write(name, id);
+    //}
+
+
+    //--------------- IRESOURCE -----------------// IResource는 엔진 단이므로 그냥 노가다 하셈 아쉬운거임
+
 	else if (type == typeid(Texture*)) { // IResource 는 Meta가 id를 가지고 있음
         Texture* tex = *static_cast<Texture**>(data);
         uint64_t id = (tex) ? tex->GetMeta().guid : 0;
         writer.Write(name, id);
 	}
-    
+
+    //크아아아아아악
 
 
 
