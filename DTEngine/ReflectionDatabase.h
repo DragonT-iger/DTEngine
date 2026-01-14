@@ -16,7 +16,7 @@ struct PropertyInfo
     std::function<void* (void*)> m_getter;
     std::function<void(void*, void*)> m_setter;
 
-    std::function<void* (void*)> m_componentFinder;
+    std::function<void* (GameObject*)> m_componentFinder;
     ////enum 인 경우 특수처리
     //std::vector<std::string> m_enumNames;
 };
@@ -38,7 +38,7 @@ public:
 
     void RegisterDTPROPERTY(const char* className, const char* propName,
         const std::type_info& type, std::function<void* (void*)> getter , std::function<void(void*, void*)> setter, 
-        const std::vector<std::string>& enumNames = {});
+        const std::vector<std::string>& enumNames = {}, std::function<void* (GameObject*)> componentSearcher = nullptr);
     const ClassInfo* GetClassInfomation(const std::string& className) const;
 
     void Clear() {

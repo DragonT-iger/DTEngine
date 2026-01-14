@@ -1,6 +1,5 @@
 #pragma once
 #include "MonoBehaviour.h"
-#include "ReflectionMacros.h"
 #include "SimpleMathHelper.h" 
 
 class ColorToggler : public MonoBehaviour

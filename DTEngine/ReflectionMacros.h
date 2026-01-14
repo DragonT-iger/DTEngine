@@ -34,7 +34,7 @@ void RegisterDTPropertyHelper(const char* className, const char* propName,
         }
     }
 
-    ReflectionDatabase::Instance().RegisterDTPROPERTY(className, propName, typeInfo, getter, setter, enumNames);
+    ReflectionDatabase::Instance().RegisterDTPROPERTY(className, propName, typeInfo, getter, setter, enumNames, componentFinder);
 }
 
 #define DTGENERATED_BODY(CLASS_NAME) \

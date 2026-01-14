@@ -950,7 +950,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 continue;
             }
-
+            ImGui::PushID(&prop);
             void* data = prop.m_getter(comp);
             const auto& type = prop.m_type;
             //const char* name = prop.m_name.c_str();
@@ -1422,7 +1422,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
                 ImGui::SameLine();
                 ImGui::Text("%s", prop.m_name.c_str());
-                }
+            }
 
                 // Texture* (Asset)
             else if (type == typeid(Texture*))
@@ -1445,6 +1445,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
             else {
                 std::cout << "type not Registered: " << type.name() << std::endl;
             }
+			ImGui::PopID();
         }
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
