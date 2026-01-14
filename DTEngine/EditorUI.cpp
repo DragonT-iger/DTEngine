@@ -1372,16 +1372,57 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     [](Transform* tf) { return tf->_GetOwner(); }
                 );
             }
-            // Camera* (Component)
-            //else if (type == typeid(Camera*))
-            //{
-            //    Camera* currentCam = *static_cast<Camera**>(data);
+            // component 인 경우 
+            else if (ReflectionDatabase::Instance().IsComponentPointer(type))
+            {
+                Component* currentComp = *static_cast<Component**>(data);
 
-            //    DrawSceneReference<Camera>(this, name, currentCam, comp, prop.m_setter,
-            //        [](Camera* cam) { return cam->_GetOwner()->GetName(); },
-            //        [](Transform* tf) { return tf->_GetOwner()->GetComponent<Camera>(); }
-            //    );
-            //}
+                std::string displayStr = "None";
+                if (currentComp)
+                {
+                    displayStr = currentComp->_GetTypeName();
+                    if (currentComp->_GetOwner())
+                        displayStr += " (" + currentComp->_GetOwner()->GetName() + ")";
+                }
+
+                float width = ImGui::CalcItemWidth();
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    if (currentComp && currentComp->_GetOwner()) {
+                        m_selectedGameObject = currentComp->_GetOwner();
+                    }
+                }
+
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+                    {
+                        Transform* draggedTf = *(Transform**)payload->Data;
+                        GameObject* draggedGO = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+                        if (draggedGO && prop.m_componentFinder)
+                        {
+                            void* targetComponent = prop.m_componentFinder(draggedGO);
+
+                            if (targetComponent)
+                            {
+                                Component* oldVal = currentComp;
+                                Component* newVal = static_cast<Component*>(targetComponent);
+
+                                prop.m_setter(comp, &newVal);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<Component*>>(
+                                    comp, prop.m_setter, oldVal, newVal
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+                ImGui::SameLine();
+                ImGui::Text("%s", prop.m_name.c_str());
+                }
 
                 // Texture* (Asset)
             else if (type == typeid(Texture*))

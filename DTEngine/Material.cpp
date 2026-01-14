@@ -294,16 +294,15 @@ Vector4 Material::GetColor() const
     return Vector4(m_data.Color);
 }
 
-int Material::GetShaderID()
+uint16_t Material::GetShaderID()
 {
     return m_shader->GetID();
 }
 
 //Texture는 여러 장이니깐. 조합한 ID를 반환.
-int Material::GetTextureID()
+uint64_t Material::GetTextureID()
 {
     return m_textureBatchID;
-
 }
 
 void Material::UpdateTextureBatchID()

@@ -7,6 +7,8 @@
 #include "ComponentFactory.h"
 #include "ReflectionDatabase.h"
 
+class GameObject;
+
 template <typename T>
 void RegisterDTPropertyHelper(const char* className, const char* propName,
     const std::type_info& typeInfo,
@@ -14,17 +16,24 @@ void RegisterDTPropertyHelper(const char* className, const char* propName,
     std::function<void(void*, void*)> setter,
     const std::vector<std::string>& enumNames = {})
 {
+
+    std::function<void* (GameObject*)> componentFinder = nullptr;
+
     if constexpr (std::is_pointer_v<T>)
     {
         using PointeeType = std::remove_pointer_t<T>;
-
         if constexpr (std::is_base_of_v<Component, PointeeType>)
         {
             ReflectionDatabase::Instance().RegisterComponentPointerType(typeid(T));
+
+            componentFinder = [](auto* go) -> void* {
+                if (!go) return nullptr;
+
+                return (void*)go->template GetComponent<PointeeType>();
+            };
         }
     }
 
-    // 4. 기존 속성 등록 수행
     ReflectionDatabase::Instance().RegisterDTPROPERTY(className, propName, typeInfo, getter, setter, enumNames);
 }
 

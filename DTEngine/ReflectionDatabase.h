@@ -16,7 +16,7 @@ struct PropertyInfo
     std::function<void* (void*)> m_getter;
     std::function<void(void*, void*)> m_setter;
 
-
+    std::function<void* (void*)> m_componentFinder;
     ////enum 인 경우 특수처리
     //std::vector<std::string> m_enumNames;
 };
