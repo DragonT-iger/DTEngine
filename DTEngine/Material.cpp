@@ -350,15 +350,22 @@ void Material::BindPipeLine()
         ID3D11ShaderResourceView* srv = nullptr;
         ID3D11SamplerState* sampler = nullptr;
 
+        //SLOT 
+
+
+        //
+
         if (m_textures[i])
         {
             currentFlags |= (1 << i);
 
            srv = m_textures[i]->GetSRV();
-           sampler = m_textures[i]->GetSampler(); //이거는 그냥 고정으로 박아버릴 거임. 
+           sampler = m_textures[i]->GetSampler(); 
 
-           DX11Renderer::Instance().BindTexture((int)i, srv);
+          
         }
+
+        DX11Renderer::Instance().BindTexture((int)i, srv); //TO DO
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);

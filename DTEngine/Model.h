@@ -8,7 +8,7 @@ struct aiNode;
 struct aiScene;
 struct aiMesh;
 
-struct ModelImpl;
+struct BoneResource;
 
 class Model : public IResource
 {
@@ -22,16 +22,19 @@ public:
 
     size_t GetMeshCount() const { return m_meshes.size(); }
     Mesh* GetMesh(size_t index) const;
-
+    BoneResource* GetBone() { return m_impl.get(); }
 private:
     void ProcessNode(aiNode* node, const aiScene* scene);
     std::unique_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
+    void ProcessBonesMap(const aiScene* scene);
+    void CreateSkeleton(const aiNode* node, int parentIndex);
+
 
     void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
     void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
 
     std::vector<std::unique_ptr<Mesh>> m_meshes;
 
-    std::unique_ptr<ModelImpl> m_impl;
+    std::unique_ptr<BoneResource> m_impl;
     int m_BoneCounter = 0;
 };

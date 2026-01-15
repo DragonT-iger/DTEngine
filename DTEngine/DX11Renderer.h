@@ -132,6 +132,8 @@ public:
     const Matrix& GetViewMatrix() const { return m_viewTM; }
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
+    void OffPS();
+
 private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);

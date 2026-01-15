@@ -237,6 +237,16 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
 {
     GameObject* currentGO = nullptr;
 
+
+    std::string nodeName = node->mName.C_Str();
+
+    if (nodeName == "Armature") // GameObject 생성만 금지. -> 실질적인 Model "Data"는 Load<Model>에서 파싱; 
+    {
+        return;
+    }
+
+
+
     if (node == scene->mRootNode)
     {
         currentGO = parentGO;
@@ -246,6 +256,10 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         currentGO = SceneManager::Instance().GetActiveScene()->CreateGameObject(node->mName.C_Str());
         currentGO->GetTransform()->SetParent(parentGO->GetTransform());
     }
+
+
+
+
 
     Matrix transformMatrix = ConvertMatrix(node->mTransformation);
 
@@ -319,6 +333,9 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
             // 인스턴싱을 굳이 하지 않고 공유 머터리얼(Default)의 텍스처를 그대로 사용.
         }
     }
+
+
+
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {

@@ -166,7 +166,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
         }
     }
 
-    if (ctrlPressed && vPressed_Down)
+    if (ctrlPressed && vPressed_Down && false)
     {
         GameObject* prototype = m_clipboardGameObjects[0].get();
         std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
