@@ -95,7 +95,7 @@ private:
     Texture* m_iconAudio = nullptr;
 
 
-
+    bool m_isHierarchyFocused = false;
 
     bool m_showRenamePopup = false;
     std::string m_renameTargetFile; 

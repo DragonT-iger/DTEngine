@@ -281,25 +281,28 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     if (ctrlPressed && vPressed_Down)
     {
-        GameObject* prototype = m_clipboardGameObjects[0].get();
-        std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
-
-        if (!newObjects.empty())
+        if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
         {
-            GameObject* rootInstance = newObjects[0].get();
+            GameObject* prototype = m_clipboardGameObjects[0].get();
+            std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
 
-            //if (m_selectedGameObject)
-            //{
-            //    rootInstance->GetTransform()->SetParent(m_selectedGameObject->GetTransform());
-            //}
-            for (auto& obj : newObjects)
+            if (!newObjects.empty())
             {
-                activeScene->AddGameObject(std::move(obj));
+                GameObject* rootInstance = newObjects[0].get();
+
+                //if (m_selectedGameObject)
+                //{
+                //    rootInstance->GetTransform()->SetParent(m_selectedGameObject->GetTransform());
+                //}
+                for (auto& obj : newObjects)
+                {
+                    activeScene->AddGameObject(std::move(obj));
+                }
+
+                m_selectedGameObject = rootInstance;
+
+                std::cout << "[Editor] Pasted GameObject: " << rootInstance->GetName() << std::endl;
             }
-
-            m_selectedGameObject = rootInstance;
-
-            std::cout << "[Editor] Pasted GameObject: " << rootInstance->GetName() << std::endl;
         }
     }
 
@@ -525,6 +528,7 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
+    m_isHierarchyFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
     if (!activeScene) return;
 

@@ -1,5 +1,4 @@
 #include "ForwardMover.h"
-#include "GameObject.h"
 #include "Transform.h"
 
 BEGINPROPERTY(ForwardMover)
