@@ -68,7 +68,9 @@ private:
 
     Vector3 m_editorDragStartRotation;
 
-
+    bool m_isInspectorLocked = false;
+    GameObject* m_lockedGameObject = nullptr;
+    std::string m_lockedAssetPath;
 
 
     GameObject* m_selectedGameObject = nullptr;

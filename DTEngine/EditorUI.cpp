@@ -579,6 +579,11 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
                     }
                 }
             }
+            if (m_lockedGameObject == m_selectedGameObject)
+            {
+                m_lockedGameObject = nullptr;
+                m_isInspectorLocked = false;
+            }
 
             auto cmd = std::make_unique<DestroyGameObjectCommand>(activeScene, m_selectedGameObject);
             HistoryManager::Instance().Do(std::move(cmd));
@@ -716,27 +721,43 @@ void EditorUI::DrawInspectorWindow()
 {
     ImGui::Begin("Inspector");
 
-    if (m_selectedGameObject)
+    GameObject* targetGameObject = m_selectedGameObject;
+    std::string targetAssetPath = m_selectedAssetPath;
+
+    if (m_isInspectorLocked)
     {
-        bool oldState = m_selectedGameObject->IsActive();
+        if (m_lockedGameObject)
+        {
+            targetGameObject = m_lockedGameObject;
+        }
+        else if (!m_lockedAssetPath.empty())
+        {
+            targetAssetPath = m_lockedAssetPath;
+            targetGameObject = nullptr;
+        }
+    }
+
+    if (targetGameObject)
+    {
+        bool oldState = targetGameObject->IsActive();
         bool newState = oldState;
 
         if (ImGui::Checkbox("##ActiveCheckbox", &newState))
         {
-            auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(m_selectedGameObject, oldState, newState);
+            auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(targetGameObject, oldState, newState);
             HistoryManager::Instance().Do(std::move(cmd));
         }
 
         ImGui::SameLine();
 
         char nameBuffer[128];
-        strncpy_s(nameBuffer, m_selectedGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
+        strncpy_s(nameBuffer, targetGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
         nameBuffer[sizeof(nameBuffer) - 1] = '\0';
 
         ImGui::SetNextItemWidth(150);
         if (ImGui::InputText("##NameInput", nameBuffer, sizeof(nameBuffer)))
         {
-            m_selectedGameObject->SetName(nameBuffer);
+            targetGameObject->SetName(nameBuffer);
         }
 
         ImGui::SameLine();
@@ -744,20 +765,38 @@ void EditorUI::DrawInspectorWindow()
         ImGui::SameLine();
 
         char tagBuffer[128];
-        strncpy_s(tagBuffer, m_selectedGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
+        strncpy_s(tagBuffer, targetGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
         tagBuffer[sizeof(tagBuffer) - 1] = '\0';
 
         ImGui::SetNextItemWidth(80);
         if (ImGui::InputText("Tag", tagBuffer, sizeof(tagBuffer)))
         {
-            m_selectedGameObject->SetTag(tagBuffer);
+            targetGameObject->SetTag(tagBuffer);
         }
+
+        ImGui::SameLine();
+
+        if (ImGui::Checkbox("Lock", &m_isInspectorLocked))
+        {
+            if (m_isInspectorLocked)
+            {
+                m_lockedGameObject = targetGameObject;
+                m_lockedAssetPath = targetAssetPath;
+            }
+            else
+            {
+                m_lockedGameObject = nullptr;
+                m_lockedAssetPath.clear();
+
+            }
+        }
+
 
         ImGui::Separator();
 
-        DrawComponentProperties(m_selectedGameObject->GetTransform());
+        DrawComponentProperties(targetGameObject->GetTransform());
 
-        for (const auto& comp : m_selectedGameObject->_GetComponents())
+        for (const auto& comp : targetGameObject->_GetComponents())
         {
             if (comp) DrawComponentProperties(comp.get());
         }
@@ -794,7 +833,7 @@ void EditorUI::DrawInspectorWindow()
 
                 if (ImGui::Selectable(typeName.c_str()))
                 {
-                    auto cmd = std::make_unique<AddComponentCommand>(m_selectedGameObject, typeName);
+                    auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
                     HistoryManager::Instance().Do(std::move(cmd));
                     ImGui::CloseCurrentPopup();
                 }
@@ -802,9 +841,9 @@ void EditorUI::DrawInspectorWindow()
             ImGui::EndPopup();
         }
     }
-    else if (!m_selectedAssetPath.empty())
+    else if (!targetAssetPath.empty())
     {
-        DrawAssetInspector(m_selectedAssetPath);
+        DrawAssetInspector(targetAssetPath);
     }
     else
     {
