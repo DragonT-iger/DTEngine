@@ -7,9 +7,9 @@ struct PS_INPUT
     float3 Normal : NORMAL;
 };
 
-TextureCube g_CubeMap : register(t0);
+//TextureCube g_CubeMap : register(t0);
 SamplerState g_Sampler : register(s0);
-
+#include "Resource.hlsli"
 #include "Lighting.hlsli"
 
 

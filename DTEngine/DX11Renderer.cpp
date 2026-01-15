@@ -633,7 +633,7 @@ ID3D11RenderTargetView* DX11Renderer::GetBackbufferRTV() const { return m_rtv.Ge
 void DX11Renderer::ClearCache()
 {
     m_currentShaderID = 0;
-    for (int i = 0; i < 8; ++i) m_currentSRVs[i] = nullptr;
+    for (int i = 0; i < 16; ++i) m_currentSRVs[i] = nullptr;
 }
 
 void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
@@ -707,6 +707,11 @@ ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
     int index = (int)filter * 2 + (int)wrap;
     if (index < 0 || index >= 6) return m_samplers[1].Get(); 
     return m_samplers[index].Get();
+}
+
+void DX11Renderer::OffPS()
+{
+    m_context->PSSetShader(nullptr, nullptr, 0);
 }
 
 bool DX11Renderer::CreateDeviceAndSwapchain()

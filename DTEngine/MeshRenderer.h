@@ -18,6 +18,7 @@ public:
 
     void Awake() override;
 
+
     void SetModelID(uint64_t id);
     uint64_t GetModelID() const { return m_modelID; }
 

@@ -148,6 +148,11 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
     }
 }
 
+// Animation & 해당 Component의 Skeleta의 Update 기능을 여기서 구현. 
+// 
+
+
+
 void MeshRenderer::SetModelID(uint64_t id)
 {
     m_modelID = id;

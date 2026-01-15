@@ -203,6 +203,8 @@
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SimpleMathHelper.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Skeletal.h" />
+    <ClInclude Include="SkeletalRsource.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="Texture.h" />
@@ -265,6 +267,7 @@
     <ClCompile Include="SerializationUtils.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
+    <ClCompile Include="Skeletal.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="Texture.cpp" />

@@ -275,6 +275,12 @@
     <ClInclude Include="ConstantBuffers.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Skeletal.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletalRsource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -439,6 +445,9 @@
     <ClCompile Include="RenderKey.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Skeletal.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -491,7 +500,7 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl">
       <Filter>Shader\Default</Filter>
-      </FxCompile>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl">
       <Filter>Shader\Specific</Filter>
     </FxCompile>

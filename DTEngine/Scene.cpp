@@ -21,6 +21,7 @@
 
 #include "RenderKey.h"
 
+#include "Skeletal.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
@@ -459,9 +460,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     //★ Sorting 
     Sorter::Instance().SetCamParameters(camera); 
 
-   
-
-
 
     float width = (float)DX11Renderer::Instance().GetWidth();
     float height = (float)DX11Renderer::Instance().GetHeight();
@@ -643,6 +641,9 @@ void Scene::RenderShadows()
 
         Transform* transform = go->GetTransform();
         mat->Bind(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
+
+
+
         mesh->Bind();
         mesh->Draw();
     }

@@ -232,7 +232,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
         }
     }
 
-    if (ctrlPressed && vPressed_Down)
+    if (ctrlPressed && vPressed_Down && false)
     {
         if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
         {
