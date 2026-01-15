@@ -32,11 +32,16 @@ public:
 
 	void SetSkeletal(std::string filename);
 	std::string GetSkeletal() { return m_FbxName; }
+
+	std::vector<Matrix>& GetFinalMatrix() { return m_finalTransforms; }
+
+
 private:
 
     uint64_t m_modelID = 0; // Awkae 순회하면서 중복 업데이트 확인; 중복 체크는 SubMesh들이 동일 Skeletal을 참조하기 때문임. 
 
     std::vector<Matrix> m_finalTransforms; //CB에 Binding할 Vector [ ] 
+
 	std::vector<Matrix> m_globalTransforms;
 	BoneResource* m_BoneResource = nullptr; //Model한테 받는 Raw Resource Pointer 
 

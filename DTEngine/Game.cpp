@@ -579,8 +579,11 @@ void Game::OnResize(int width, int height)
 {
 	if (width <= 0 || height <= 0) return;
 	DX11Renderer::Instance().Resize(width, height);
-	
-	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
+	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
+	if (mainCam) {
+		mainCam->SetViewDirty();
+	}
+	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 
 void Game::OnClose()

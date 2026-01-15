@@ -45,6 +45,10 @@ struct VS_INPUT
     float3 Normal : NORMAL;
     float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
+    
+    //
+    int4 BoneIDs : BLENDINDICES; 
+    float4 Weights : BLENDWEIGHT; 
 };
 
 
@@ -63,7 +67,7 @@ Texture2D g_RoughMap   : register(t4);
 Texture2D g_AoMap      : register(t5);
 
 TextureCube g_CubeMap : register(t9);
-//Texture2D Empty : register(t6);
+//Texture2D Empty : register(t6);`
 //Texture2D Empty : register(t7);
 
 //-------------------------------------------- 일단 Editor에서 작업할 수 있는 Texture들 , Object 단위의 Texture slot이라고 생각하면 됨. 

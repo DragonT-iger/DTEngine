@@ -556,6 +556,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
             if (!mesh || !mat) return;
 
 
+            if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
+            {
+                DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+                
+            }
+
+
             if (currentPipelineKey != lastPipelineKey)
             {
                 mat->BindPipeLine();

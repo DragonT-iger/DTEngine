@@ -17,7 +17,7 @@ float4 PS(PS_INPUT input) : SV_Target
     //clip(color.a < 0.01f ? -1 : 1);
     //color.rgb = pow(color.rgb, 2.2f); SRGB 사용
     
-    float4 textureColor;
+    float4 textureColor = 1;
     
     if (UseTexture) // 나는 베이징의 if문을 사랑해
     {

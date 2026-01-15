@@ -229,8 +229,20 @@ void DX11Renderer::UpdateTextureFlag_CBUFFER(uint32_t Flags)
 
 }
 
-void DX11Renderer::UpdateMatrixPallette_CBUFFER()
+void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
 {
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+    HRESULT hr = m_context->Map(m_cbuffer_matrix_pallette.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    Matrix_Pallette* dataPtr = static_cast<Matrix_Pallette*>(mappedData.pData);
+
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        dataPtr->Matrix_Pallette[i] = matrix[i];
+    }
+
+    m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
 }
 
 void DX11Renderer::BeginUIRender()
