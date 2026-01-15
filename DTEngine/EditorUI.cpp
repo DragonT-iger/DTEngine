@@ -988,7 +988,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-            if (prop.m_name == "m_editorEulerAngles")
+            if (prop.m_name == "m_editorEulerAngles" || prop.m_name == "m_parent")
             {
                 continue;
             }
@@ -1396,12 +1396,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
             }
             // Transform* (포인터)
-            else if (type == typeid(Transform*))
-            {
-                //Transform* parentTf = *static_cast<Transform**>(data);
-                //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
-                //ImGui::Text("%s: %s", name, parentName.c_str());
-            }
+            //else if (type == typeid(Transform*))
+            //{
+            //    //Transform* parentTf = *static_cast<Transform**>(data);
+            //    //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
+            //    //ImGui::Text("%s: %s", name, parentName.c_str());
+            //}
 
 
             // GameObject*
