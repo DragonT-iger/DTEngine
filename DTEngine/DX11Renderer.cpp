@@ -91,9 +91,9 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
-    CreateShadowMap(16376, 16376); // max 왜 이러지
+    //CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    //CreateShadowMap(4096, 4096);
+    CreateShadowMap(4096, 4096);
     
     return true;
 }
@@ -693,10 +693,10 @@ void DX11Renderer::BindTexture(int slot, ID3D11ShaderResourceView* srv)
 {
     if (slot < 0 || slot >= 16) return;
 
-    if (m_currentSRVs[slot] == srv)
+  /*  if (m_currentSRVs[slot] == srv)
     {
         return;
-    }
+    }*/
 
     m_context->PSSetShaderResources(slot, 1, &srv);
     m_currentSRVs[slot] = srv; 

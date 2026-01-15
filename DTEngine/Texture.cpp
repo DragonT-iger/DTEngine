@@ -91,7 +91,7 @@ bool Texture::LoadFile(const std::string& fullPath)
             D3D11_USAGE_DEFAULT,
             D3D11_BIND_SHADER_RESOURCE,
             0, 
-            0,
+            0,//D3D11_RESOURCE_MISC_GENERATE_MIPS, 이 플래그를 넣으면 흰색으로 나옴 왜인진 모르겠지만 DDS는 밈맵이 제대로 적용이 안됨
             ddsFlags, 
             m_textureResource.GetAddressOf(),
             m_srv.GetAddressOf()

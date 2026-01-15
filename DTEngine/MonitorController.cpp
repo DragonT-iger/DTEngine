@@ -15,7 +15,15 @@ ENDPROPERTY()
 
 
 MonitorController::MonitorController() = default;
-MonitorController::~MonitorController() = default;
+MonitorController::~MonitorController() {
+    if (m_sourceCamera && m_renderTexture)
+    {
+        if (m_sourceCamera->GetTargetTexture() == m_renderTexture.get())
+        {
+            m_sourceCamera->SetTargetTexture(nullptr);
+        }
+    }
+}
 
 void MonitorController::Awake()
 {
@@ -24,6 +32,7 @@ void MonitorController::Awake()
         SetSourceCamera(m_sourceCamera);
     }
 }
+
 
 void MonitorController::SetSourceCamera(Camera* cam)
 {

@@ -21,7 +21,8 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(output.Pos, Projection_TM);
 
     output.WorldNormal = mul(input.Normal, (float3x3) WorldInverseTranspose_TM);
-    output.Tangent = input.Tangent;
+    output.Tangent = mul(input.Tangent, WorldInverseTranspose_TM);
+    output.Bitangent = mul(input.Bitangent, (float3x3) WorldInverseTranspose_TM);
     output.UV = input.UV;
 
     return output;
