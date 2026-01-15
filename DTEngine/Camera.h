@@ -42,8 +42,8 @@ public:
     void SetClearColor(const Vector4& color) { m_clearColor = color; }
 
 
-    const Vector3& GetCamPos(); const
-    const Vector3& GetCamFor(); const 
+    const Vector3& GetCamPos() const;
+    const Vector3& GetCamFor() const;
 
     const float& GetEditorFovY() const { return m_editorFovY; }
     void SetEditorFovY(float editorFovY) { m_editorFovY = editorFovY; m_fovY = SimpleMathHelper::Deg2Rad(editorFovY);  m_dirtyProj = true; }

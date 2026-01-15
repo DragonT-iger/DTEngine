@@ -377,46 +377,55 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Texcoord = { 0.0f, 0.0f };
         }
 
-        if (aiMesh->HasTangentsAndBitangents()&& aiMesh->HasNormals())
+        if (aiMesh->HasTangentsAndBitangents())//&& aiMesh->HasNormals())
         {
-            DirectX::XMFLOAT3 N = {
-               aiMesh->mNormals[i].x,
-               aiMesh->mNormals[i].y,
-               aiMesh->mNormals[i].z
-            };
-            DirectX::XMFLOAT3 T = {
-                aiMesh->mTangents[i].x,
-                aiMesh->mTangents[i].y,
-                aiMesh->mTangents[i].z
-            };
-            DirectX::XMFLOAT3 B = {
-                aiMesh->mBitangents[i].x,
-                aiMesh->mBitangents[i].y,
-                aiMesh->mBitangents[i].z
-            };
+            vertex.Tangent.x = aiMesh->mTangents[i].x;
+            vertex.Tangent.y = aiMesh->mTangents[i].y;
+            vertex.Tangent.z = aiMesh->mTangents[i].z;
+            vertex.Tangent.w = 1.0f;
 
-            auto norm3 = [](DirectX::XMFLOAT3 v) //Normalize
-                {
-                    float len = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-                    if (len > 1e-8f) { v.x /= len; v.y /= len; v.z /= len; }
-                    return v;
-                };
-            N = norm3(N); T = norm3(T); B = norm3(B);
+            vertex.Bitangent.x = aiMesh->mBitangents[i].x;
+            vertex.Bitangent.y = aiMesh->mBitangents[i].y;
+            vertex.Bitangent.z = aiMesh->mBitangents[i].z;
+            //DirectX::XMFLOAT3 N = {
+            //   aiMesh->mNormals[i].x,
+            //   aiMesh->mNormals[i].y,
+            //   aiMesh->mNormals[i].z
+            //};
+            //DirectX::XMFLOAT3 T = {
+            //    aiMesh->mTangents[i].x,
+            //    aiMesh->mTangents[i].y,
+            //    aiMesh->mTangents[i].z
+            //};
+            //DirectX::XMFLOAT3 B = {
+            //    aiMesh->mBitangents[i].x,
+            //    aiMesh->mBitangents[i].y,
+            //    aiMesh->mBitangents[i].z
+            //};
 
-            DirectX::XMFLOAT3 c = {
-                N.y * T.z - N.z * T.y,
-                N.z * T.x - N.x * T.z,
-                N.x * T.y - N.y * T.x
-            };
-            float d = c.x * B.x + c.y * B.y + c.z * B.z;
+            //auto norm3 = [](DirectX::XMFLOAT3 v) //Normalize
+            //    {
+            //        float len = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+            //        if (len > 1e-8f) { v.x /= len; v.y /= len; v.z /= len; }
+            //        return v;
+            //    };
+            //N = norm3(N); T = norm3(T); B = norm3(B);
 
-            float w = (d < 0.0f) ? 1.0f : -1.0f;
+            //DirectX::XMFLOAT3 c = {
+            //    N.y * T.z - N.z * T.y,
+            //    N.z * T.x - N.x * T.z,
+            //    N.x * T.y - N.y * T.x
+            //};
+            //float d = c.x * B.x + c.y * B.y + c.z * B.z;
 
-            vertex.Tangent = { T.x, T.y, T.z, w };
+            //float w = (d < 0.0f) ? 1.0f : -1.0f;
+
+            //vertex.Tangent = { T.x, T.y, T.z, w };
         }
         else
         {
             vertex.Tangent = { 0.0f, 0.0f, 0.0f, 1.0f };
+            vertex.Bitangent = { 0.0f, 0.0f, 0.0f };
            
         } 
 

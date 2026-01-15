@@ -35,3 +35,8 @@ void Light::OnDisable()
 		//std::cout << "Light disabled. Total lights: " << s_allLights.size() << std::endl;
     }
 }
+
+void Light::Clear()
+{
+    s_allLights.clear();
+}

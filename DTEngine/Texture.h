@@ -43,6 +43,7 @@ public:
 protected:
     void UpdateSampler();
     void LoadMetaData(const std::string& fullPath);
+    bool CheckIsLinearTexture(std::string fileName);
 
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_srv;
     Microsoft::WRL::ComPtr<ID3D11Resource> m_textureResource;
@@ -55,7 +56,7 @@ protected:
     FilterMode m_filterMode = FilterMode::Trilinear;
     WrapMode m_wrapMode = WrapMode::Repeat;
 
-    bool m_bSRGB = true;
+    bool m_bSRGB;
 
-    uint16_t m_TextureID =0;
+    uint16_t m_TextureID = 0;
 };

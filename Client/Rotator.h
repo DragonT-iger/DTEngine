@@ -1,8 +1,8 @@
 #pragma once
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
-#include "ReflectionMacros.h"
 
+#include "ColorToggler.h"
 
 
 class Rotator : public MonoBehaviour
@@ -19,4 +19,7 @@ public:
 
 private:
     Vector3 m_rotationSpeed = Vector3(0.0f, 20.0f, 0.0f);
+    GameObject* m_go = nullptr;
+    Rotator* m_rotator = nullptr;
+    ColorToggler* col = nullptr;
 };

@@ -87,10 +87,6 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 finalColor = ((ambientLight * specMask) + (totalDiffuse)) * diffuseTex.rgb + totalSpecular;
 
-    if (NEED_ON_GAMMA)
-    {
-        finalColor = pow(finalColor, 1.0f / 2.2f); // 
-    }
     
     
     return float4(finalColor, diffuseTex.a);

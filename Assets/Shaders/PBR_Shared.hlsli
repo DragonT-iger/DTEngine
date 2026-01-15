@@ -31,14 +31,15 @@ float smithG_GGX(float NdotV, float alphaG)
 }
 
 // Tangent-space normal map -> World normal
-float3 GetWorldNormalFromNormalMap(float4 texNormal, float3 N, float4 tangent)
+float3 GetWorldNormalFromNormalMap(float4 texNormal, float3 N, float4 tangent , float3 Bitangent)
 {
     float3 nTS = texNormal.xyz * 2.0f - 1.0f;
 
     float3 T = tangent.xyz;
+    float3 B = Bitangent;
     
-    T = normalize(T - dot(T, N) * N);
-    float3 B = normalize(cross(N, T)) * tangent.w;
+    //T = normalize(T - dot(T, N) * N);
+    //float3 B = normalize(cross(N, T)) * tangent.w;
 
     float3x3 TBN = float3x3(T, B, N);
     return normalize(mul(nTS, TBN));

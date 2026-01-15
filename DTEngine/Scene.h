@@ -31,7 +31,8 @@ public:
 
     GameObject* FindGameObjectByID(uint64_t id);
 
-    
+    void Enter();
+    void Exit();
 
     // 엔진 전용 public 함수들
 

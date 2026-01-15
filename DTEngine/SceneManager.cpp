@@ -38,6 +38,12 @@ bool SceneManager::ProcessSceneChange()
     if (m_nextName.empty()) return false;
 
 
+    GetActiveScene();
+
+    if (m_active)
+    {
+        m_active->Exit();
+    }
     // 현재 씬 정리 필요.
 
     auto it = m_scenes.find(m_nextName);
@@ -48,6 +54,9 @@ bool SceneManager::ProcessSceneChange()
     {
         m_active->Awake();
         m_active->Start();
+
+        //m_active->Enter(); addcomponent 할때 OnEnable 호출 됨
+        
     }
 
     m_nextName.clear();

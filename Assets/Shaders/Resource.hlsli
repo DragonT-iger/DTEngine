@@ -44,6 +44,7 @@ struct VS_INPUT
     float2 UV : TEXCOORD;
     float3 Normal : NORMAL;
     float4 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
 };
 
 
@@ -93,7 +94,7 @@ Texture2D g_SphereMap : register(t7);
 #define HAS_AO       (1 << 5)
 
 #define HAS_IBL      (1 << 6)
-#define ON_GAMMA     (1 << 7)
+//#define ON_GAMMA     (1 << 7) 
 
 #define USE_ALBEDO  (g_Flags & HAS_ALBEDO)
 #define USE_NORMAL  (g_Flags & HAS_NORMAL)
@@ -102,6 +103,6 @@ Texture2D g_SphereMap : register(t7);
 #define USE_ROUGH   (g_Flags & HAS_ROUGH)
 #define USE_AO      (g_Flags & HAS_AO)
 #define USE_IBL     (g_Flags & HAS_IBL)
-#define NEED_ON_GAMMA    (g_Flags & ON_GAMMA)
+//#define NEED_ON_GAMMA    (g_Flags & ON_GAMMA)
 
 //#pragma endregion

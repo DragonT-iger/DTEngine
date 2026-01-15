@@ -23,7 +23,7 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D);
+    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false);
 
     void Resize(int width, int height);
 
@@ -45,6 +45,8 @@ private:
     int m_width = 0;
     int m_height = 0;
 
+    bool m_isSRGB;
+
     ComPtr<ID3D11Texture2D>          m_renderTargetTexture;
     //ComPtr<ID3D11RenderTargetView>   m_rtv; // 큐브맵 호환을 위해 삭제
     //ComPtr<ID3D11ShaderResourceView> m_srv;
@@ -54,7 +56,6 @@ private:
 
     RenderTextureType m_type = RenderTextureType::Tex2D;
     std::vector<ComPtr<ID3D11RenderTargetView>> m_faceRTVs;
-
 
     RenderViewport m_viewport = {};
 };

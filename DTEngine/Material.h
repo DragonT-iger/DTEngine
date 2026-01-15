@@ -57,8 +57,8 @@ public:
 	static constexpr int MAX_TEXTURE_SLOTS = 8;
    
 
-    int GetShaderID();
-    int GetTextureID();
+    uint16_t GetShaderID();
+    uint64_t GetTextureID();
 private:
     void UpdateTextureBatchID();
     void SetDefaultShader();

@@ -23,7 +23,11 @@ public:
     void OnEnable() override;
     void OnDisable() override;
 
+    static void Clear();
+
     static const std::vector<Light*>& GetAllLights() { return s_allLights; }
+
+
 
 
 public:

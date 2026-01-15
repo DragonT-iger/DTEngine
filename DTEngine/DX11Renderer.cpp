@@ -91,9 +91,9 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
         std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
     }
 
-    CreateShadowMap(16376, 16376); // max 왜 이러지
+    //CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    //CreateShadowMap(4096, 4096);
+    CreateShadowMap(4096, 4096);
     
     return true;
 }
@@ -419,6 +419,8 @@ void DX11Renderer::SetCullMode(CullMode mode)
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
+
+
     assert(m_context && m_msaaTargetRTV);
 
     if (m_defaultDepthStencilState)
@@ -440,7 +442,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     m_context->RSSetViewports(1, &vp);
 
-    InitializeGlobalResources(); //상수 버퍼 Sampler etc 
+    //BindGlobalResources(); //상수 버퍼 Sampler etc 
 
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
@@ -453,14 +455,13 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
 }
 //  ★
-void DX11Renderer::InitializeGlobalResources()
+void DX11Renderer::BindGlobalResources()
 {
     //상수 버퍼 Binding
 
     //Sampler는 더 봐야 할 듯 
-    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
- 
     //VS
     m_context->VSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->VSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -470,8 +471,6 @@ void DX11Renderer::InitializeGlobalResources()
 
     m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
-
-
 
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
@@ -483,6 +482,9 @@ void DX11Renderer::InitializeGlobalResources()
     m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
+
+    m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
+    m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
 }
 //  ★
 void DX11Renderer::CreateConstantBuffers()
@@ -534,7 +536,11 @@ void DX11Renderer::EndFrame()
         m_context->ResolveSubresource(
             m_backbufferTex.Get(), 0,      
             m_msaaTargetTex.Get(), 0,      
-            DXGI_FORMAT_R8G8B8A8_UNORM     
+#ifdef _DEBUG
+            DXGI_FORMAT_R8G8B8A8_UNORM
+#else
+            DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+#endif
         );
     }
 
@@ -687,10 +693,10 @@ void DX11Renderer::BindTexture(int slot, ID3D11ShaderResourceView* srv)
 {
     if (slot < 0 || slot >= 16) return;
 
-    if (m_currentSRVs[slot] == srv)
+  /*  if (m_currentSRVs[slot] == srv)
     {
         return;
-    }
+    }*/
 
     m_context->PSSetShaderResources(slot, 1, &srv);
     m_currentSRVs[slot] = srv; 
@@ -829,34 +835,63 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
     DXHelper::ThrowIfFailed(hr);
 
     m_backbufferTex = std::move(backTex);
+
+#ifdef _DEBUG
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};       
-    //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
-    //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;  
-    //rtvViewDesc.Texture2D.MipSlice = 0;
-    //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
-    //DXHelper::ThrowIfFailed(hr);
+#else
+    D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
+    rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
+    rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    rtvViewDesc.Texture2D.MipSlice = 0;
 
+    hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
 
+    
+
+   
+
+#endif // _DEBUG
+    
     D3D11_TEXTURE2D_DESC msaaDesc = {};
     m_backbufferTex->GetDesc(&msaaDesc);                    // 백버퍼 설정 복사
     msaaDesc.SampleDesc.Count = m_msaa;                     // 샘플 수 (예: 4)
     msaaDesc.SampleDesc.Quality = m_msaaQuality - 1;        // 품질
     msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;          // 렌더 타겟
-
+#ifndef _DEBUG
+    msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+#endif
     hr = m_device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTargetTex.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+#ifdef _DEBUG
+
     hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), nullptr, m_msaaTargetRTV.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
+#else
+    D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
+    msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
 
+    if (m_msaa > 1)
+    {
+        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+    }
+    else
+    {
+        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        msaaRtvDesc.Texture2D.MipSlice = 0;
+    }
+
+    hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+#endif
+    
 
     D3D11_TEXTURE2D_DESC rtvDesc;
     m_backbufferTex->GetDesc(&rtvDesc);
-
-
     // Depth/Stencil
     D3D11_TEXTURE2D_DESC ds{};
     ds.Width = rtvDesc.Width; ds.Height = rtvDesc.Height; ds.MipLevels = 1; ds.ArraySize = 1;

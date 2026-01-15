@@ -68,7 +68,9 @@ private:
 
     Vector3 m_editorDragStartRotation;
 
-
+    bool m_isInspectorLocked = false;
+    GameObject* m_lockedGameObject = nullptr;
+    std::string m_lockedAssetPath;
 
 
     GameObject* m_selectedGameObject = nullptr;
@@ -93,7 +95,7 @@ private:
     Texture* m_iconAudio = nullptr;
 
 
-
+    bool m_isHierarchyFocused = false;
 
     bool m_showRenamePopup = false;
     std::string m_renameTargetFile; 

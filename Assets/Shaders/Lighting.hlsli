@@ -57,7 +57,7 @@ float CalculateShadow(float3 worldPos)
     //        //float shadowDepth = g_ShadowMap.Sample(g_ShadowSampler, shadowCoord.xy + offset).r;
     //        //totalShadow += (currentDepth - bias > shadowDepth) ? 0.0f : 1.0f;
             
-    totalShadow += g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy, currentDepth - bias);
+    totalShadow = g_ShadowMap.SampleCmpLevelZero(g_ShadowSampler, shadowCoord.xy, currentDepth - bias);
     //    }
     //}
     

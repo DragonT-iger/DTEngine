@@ -294,16 +294,15 @@ Vector4 Material::GetColor() const
     return Vector4(m_data.Color);
 }
 
-int Material::GetShaderID()
+uint16_t Material::GetShaderID()
 {
     return m_shader->GetID();
 }
 
 //Texture는 여러 장이니깐. 조합한 ID를 반환.
-int Material::GetTextureID()
+uint64_t Material::GetTextureID()
 {
     return m_textureBatchID;
-
 }
 
 void Material::UpdateTextureBatchID()
@@ -361,18 +360,17 @@ void Material::BindPipeLine()
 
            srv = m_textures[i]->GetSRV();
            sampler = m_textures[i]->GetSampler(); 
-
-          
         }
 
-        DX11Renderer::Instance().BindTexture((int)i, srv); //TO DO
+        DX11Renderer::Instance().BindTexture((int)i, srv);
+
 
         if (sampler)
             context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);
     }
 
 
-    if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
+    //if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
 
 
     currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 

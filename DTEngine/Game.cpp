@@ -110,16 +110,16 @@ bool Game::Initialize()
 
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1280, 720);
+	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1280, 720);
+	m_gameRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
 
 	SetEditorCamera(scene);
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1080);
+	m_gameRT->Initialize(1920, 1080, RenderTextureType::Tex2D, true);
 #endif
 	
 

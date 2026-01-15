@@ -15,18 +15,58 @@ using json = nlohmann::json;
 
 using Microsoft::WRL::ComPtr;
 
-
 uint16_t Texture::g_TextureID = 0;
 
 Texture::Texture() = default;
 
 Texture::~Texture() { Unload(); }
 
+
+bool Texture::CheckIsLinearTexture(std::string fileName)
+{
+    std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
+
+    static const std::vector<std::string> linearKeywords = {
+        "normal",      // 노말 맵
+        "mask",              // 마스크 맵
+        "roughness",   // 거칠기
+        "metallic",    // 금속성
+        //"arm",               // AO + Roughness + Metallic 패킹
+        "ao",          // 앰비언트 오클루전
+        "height", "bump",    // 높이/변위 맵
+        "spec",
+        //"linear",            // 명시적 리니어 태그
+        //"data"               // 기타 데이터 텍스처
+    };
+
+    for (const auto& keyword : linearKeywords)
+    {
+        if (fileName.find(keyword) != std::string::npos)
+        {
+            return true; // 리니어 텍스처
+        }
+    }
+
+    return false; // 알베도, 디퓨즈 텍스처임 (SRGB 켜기)
+}
+
+
 bool Texture::LoadFile(const std::string& fullPath)
 {
     auto device = DX11Renderer::Instance().GetDevice();
     auto context = DX11Renderer::Instance().GetContext();
     if (!device) return false;
+
+    std::string fileName = std::filesystem::path(fullPath).stem().string();
+
+    if (CheckIsLinearTexture(fileName))
+    {
+        m_bSRGB = false;
+    }
+    else
+    {
+        m_bSRGB = true;
+    }
 
     LoadMetaData(fullPath);
 
@@ -51,7 +91,7 @@ bool Texture::LoadFile(const std::string& fullPath)
             D3D11_USAGE_DEFAULT,
             D3D11_BIND_SHADER_RESOURCE,
             0, 
-            0,
+            0,//D3D11_RESOURCE_MISC_GENERATE_MIPS, 이 플래그를 넣으면 흰색으로 나옴 왜인진 모르겠지만 DDS는 밈맵이 제대로 적용이 안됨
             ddsFlags, 
             m_textureResource.GetAddressOf(),
             m_srv.GetAddressOf()
@@ -160,7 +200,7 @@ void Texture::LoadMetaData(const std::string& fullPath)
             file >> data;
             if (data.contains("FilterMode")) m_filterMode = (FilterMode)data["FilterMode"];
             if (data.contains("WrapMode")) m_wrapMode = (WrapMode)data["WrapMode"];
-            if (data.contains("SRGB")) m_bSRGB = data["SRGB"];
+            //if (data.contains("SRGB")) m_bSRGB = data["SRGB"];
         }
         catch (...) {
             std::cout << "Cannot Load Metadata" << std::endl;

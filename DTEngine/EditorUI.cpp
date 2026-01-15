@@ -48,6 +48,119 @@ namespace fs = std::filesystem;
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
+
+
+template<typename T>
+void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
+    const std::function<void(void*, void*)>& setter,
+    std::function<std::string(T*)> nameGetter,
+    std::function<T* (Transform*)> dropConverter)
+{
+    std::string displayStr = "None";
+    if (currentVal) displayStr = nameGetter(currentVal);
+
+    float width = ImGui::CalcItemWidth();
+    if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+    {
+        if (currentVal)
+        {
+            if constexpr (std::is_same_v<T, GameObject>) editor->SetSelectedGameObject(currentVal);
+            else if constexpr (std::is_base_of_v<Component, T>) editor->SetSelectedGameObject(currentVal->_GetOwner());
+        }
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+
+            if (draggedTf)
+            {
+                T* newVal = dropConverter(draggedTf);
+                if (newVal)
+                {
+                    T* oldVal = currentVal;
+                    setter(targetComp, &newVal);
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
+                        targetComp, setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+    ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+    ImGui::Text("%s", label);
+}
+
+// 파일 에셋(Texture, Material 등)을 드래그 앤 드롭으로 할당하는 헬퍼
+template<typename T>
+void DrawAssetReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
+    const std::function<void(void*, void*)>& setter,
+    const std::vector<std::string>& validExtensions)
+{
+    std::string displayStr = "None";
+    if (currentVal)
+    {
+        uint64_t id = currentVal->GetMeta().guid;
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+        if (!path.empty()) displayStr = std::filesystem::path(path).filename().string();
+        else displayStr = "Loaded Asset";
+    }
+
+    float width = ImGui::CalcItemWidth();
+    if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+    {
+        if (currentVal)
+        {
+            uint64_t id = currentVal->GetMeta().guid;
+            std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
+        }
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+        {
+            const char* droppedPath = (const char*)payload->Data;
+            std::string ext = std::filesystem::path(droppedPath).extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+            bool isValid = false;
+            for (const auto& validExt : validExtensions) {
+                if (ext == validExt) { isValid = true; break; }
+            }
+
+            if (isValid)
+            {
+                T* newVal = ResourceManager::Instance().Load<T>(droppedPath);
+                if (newVal)
+                {
+                    T* oldVal = currentVal;
+                    setter(targetComp, &newVal);
+
+                    auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
+                        targetComp, setter, oldVal, newVal
+                    );
+                    HistoryManager::Instance().Do(std::move(cmd));
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+    ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+    ImGui::Text("%s", label);
+}
+
+
+
+
+
+
 EditorUI::EditorUI() {
 
     auto& res = ResourceManager::Instance();
@@ -168,25 +281,28 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     if (ctrlPressed && vPressed_Down && false)
     {
-        GameObject* prototype = m_clipboardGameObjects[0].get();
-        std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
-
-        if (!newObjects.empty())
+        if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
         {
-            GameObject* rootInstance = newObjects[0].get();
+            GameObject* prototype = m_clipboardGameObjects[0].get();
+            std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
 
-            //if (m_selectedGameObject)
-            //{
-            //    rootInstance->GetTransform()->SetParent(m_selectedGameObject->GetTransform());
-            //}
-            for (auto& obj : newObjects)
+            if (!newObjects.empty())
             {
-                activeScene->AddGameObject(std::move(obj));
+                GameObject* rootInstance = newObjects[0].get();
+
+                //if (m_selectedGameObject)
+                //{
+                //    rootInstance->GetTransform()->SetParent(m_selectedGameObject->GetTransform());
+                //}
+                for (auto& obj : newObjects)
+                {
+                    activeScene->AddGameObject(std::move(obj));
+                }
+
+                m_selectedGameObject = rootInstance;
+
+                std::cout << "[Editor] Pasted GameObject: " << rootInstance->GetName() << std::endl;
             }
-
-            m_selectedGameObject = rootInstance;
-
-            std::cout << "[Editor] Pasted GameObject: " << rootInstance->GetName() << std::endl;
         }
     }
 
@@ -412,6 +528,7 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
+    m_isHierarchyFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
     if (!activeScene) return;
 
@@ -465,6 +582,11 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
                         }
                     }
                 }
+            }
+            if (m_lockedGameObject == m_selectedGameObject)
+            {
+                m_lockedGameObject = nullptr;
+                m_isInspectorLocked = false;
             }
 
             auto cmd = std::make_unique<DestroyGameObjectCommand>(activeScene, m_selectedGameObject);
@@ -603,27 +725,43 @@ void EditorUI::DrawInspectorWindow()
 {
     ImGui::Begin("Inspector");
 
-    if (m_selectedGameObject)
+    GameObject* targetGameObject = m_selectedGameObject;
+    std::string targetAssetPath = m_selectedAssetPath;
+
+    if (m_isInspectorLocked)
     {
-        bool oldState = m_selectedGameObject->IsActive();
+        if (m_lockedGameObject)
+        {
+            targetGameObject = m_lockedGameObject;
+        }
+        else if (!m_lockedAssetPath.empty())
+        {
+            targetAssetPath = m_lockedAssetPath;
+            targetGameObject = nullptr;
+        }
+    }
+
+    if (targetGameObject)
+    {
+        bool oldState = targetGameObject->IsActive();
         bool newState = oldState;
 
         if (ImGui::Checkbox("##ActiveCheckbox", &newState))
         {
-            auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(m_selectedGameObject, oldState, newState);
+            auto cmd = std::make_unique<ChangeGameObjectActiveCommand>(targetGameObject, oldState, newState);
             HistoryManager::Instance().Do(std::move(cmd));
         }
 
         ImGui::SameLine();
 
         char nameBuffer[128];
-        strncpy_s(nameBuffer, m_selectedGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
+        strncpy_s(nameBuffer, targetGameObject->GetName().c_str(), sizeof(nameBuffer) - 1);
         nameBuffer[sizeof(nameBuffer) - 1] = '\0';
 
         ImGui::SetNextItemWidth(150);
         if (ImGui::InputText("##NameInput", nameBuffer, sizeof(nameBuffer)))
         {
-            m_selectedGameObject->SetName(nameBuffer);
+            targetGameObject->SetName(nameBuffer);
         }
 
         ImGui::SameLine();
@@ -631,20 +769,38 @@ void EditorUI::DrawInspectorWindow()
         ImGui::SameLine();
 
         char tagBuffer[128];
-        strncpy_s(tagBuffer, m_selectedGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
+        strncpy_s(tagBuffer, targetGameObject->GetTag().c_str(), sizeof(tagBuffer) - 1);
         tagBuffer[sizeof(tagBuffer) - 1] = '\0';
 
         ImGui::SetNextItemWidth(80);
         if (ImGui::InputText("Tag", tagBuffer, sizeof(tagBuffer)))
         {
-            m_selectedGameObject->SetTag(tagBuffer);
+            targetGameObject->SetTag(tagBuffer);
         }
+
+        ImGui::SameLine();
+
+        if (ImGui::Checkbox("Lock", &m_isInspectorLocked))
+        {
+            if (m_isInspectorLocked)
+            {
+                m_lockedGameObject = targetGameObject;
+                m_lockedAssetPath = targetAssetPath;
+            }
+            else
+            {
+                m_lockedGameObject = nullptr;
+                m_lockedAssetPath.clear();
+
+            }
+        }
+
 
         ImGui::Separator();
 
-        DrawComponentProperties(m_selectedGameObject->GetTransform());
+        DrawComponentProperties(targetGameObject->GetTransform());
 
-        for (const auto& comp : m_selectedGameObject->_GetComponents())
+        for (const auto& comp : targetGameObject->_GetComponents())
         {
             if (comp) DrawComponentProperties(comp.get());
         }
@@ -681,7 +837,7 @@ void EditorUI::DrawInspectorWindow()
 
                 if (ImGui::Selectable(typeName.c_str()))
                 {
-                    auto cmd = std::make_unique<AddComponentCommand>(m_selectedGameObject, typeName);
+                    auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
                     HistoryManager::Instance().Do(std::move(cmd));
                     ImGui::CloseCurrentPopup();
                 }
@@ -689,9 +845,9 @@ void EditorUI::DrawInspectorWindow()
             ImGui::EndPopup();
         }
     }
-    else if (!m_selectedAssetPath.empty())
+    else if (!targetAssetPath.empty())
     {
-        DrawAssetInspector(m_selectedAssetPath);
+        DrawAssetInspector(targetAssetPath);
     }
     else
     {
@@ -837,7 +993,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 continue;
             }
-
+            ImGui::PushID(&prop);
             void* data = prop.m_getter(comp);
             const auto& type = prop.m_type;
             //const char* name = prop.m_name.c_str();
@@ -1247,53 +1403,59 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
                 //ImGui::Text("%s: %s", name, parentName.c_str());
             }
+
+
             // GameObject*
             else if (type == typeid(GameObject*))
             {
-                GameObject* go = *static_cast<GameObject**>(data);
-                std::string goName = (go) ? go->GetName() : "None";
-                ImGui::Text("%s: %s", name, goName.c_str());
-            }
-            else if (type == typeid(Camera*))
-            {
-                Camera* cam = *static_cast<Camera**>(data);
+                GameObject* currentGO = *static_cast<GameObject**>(data);
 
-                std::string displayStr = "None (Camera)";
-                if (cam && cam->_GetOwner())
+                DrawSceneReference<GameObject>(this, name, currentGO, comp, prop.m_setter,
+                    [](GameObject* go) { return go->GetName(); },
+                    [](Transform* tf) { return tf->_GetOwner(); }
+                );
+            }
+            // component 인 경우 
+            else if (ReflectionDatabase::Instance().IsComponentPointer(type))
+            {
+                Component* currentComp = *static_cast<Component**>(data);
+
+                std::string displayStr = "None";
+                if (currentComp)
                 {
-                    displayStr = cam->_GetOwner()->GetName();
+                    displayStr = currentComp->_GetTypeName();
+                    if (currentComp->_GetOwner())
+                        displayStr += " (" + currentComp->_GetOwner()->GetName() + ")";
                 }
 
                 float width = ImGui::CalcItemWidth();
-
                 if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
                 {
-                    if (cam && cam->_GetOwner())
-                    {
-                        m_selectedGameObject = cam->_GetOwner(); 
+                    if (currentComp && currentComp->_GetOwner()) {
+                        m_selectedGameObject = currentComp->_GetOwner();
                     }
                 }
 
-                // 드래그 앤 드롭 타겟 설정
                 if (ImGui::BeginDragDropTarget())
                 {
                     if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
                     {
-                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
                         Transform* draggedTf = *(Transform**)payload->Data;
+                        GameObject* draggedGO = draggedTf ? draggedTf->_GetOwner() : nullptr;
 
-                        if (draggedTf)
+                        if (draggedGO && prop.m_componentFinder)
                         {
-                            Camera* newCam = draggedTf->_GetOwner()->GetComponent<Camera>();
+                            void* targetComponent = prop.m_componentFinder(draggedGO);
 
-                            if (newCam)
+                            if (targetComponent)
                             {
-                                Camera* oldVal = cam;
+                                Component* oldVal = currentComp;
+                                Component* newVal = static_cast<Component*>(targetComponent);
 
-                                prop.m_setter(comp, &newCam);
+                                prop.m_setter(comp, &newVal);
 
-                                auto cmd = std::make_unique<ChangePropertyCommand<Camera*>>(
-                                    comp, prop.m_setter, oldVal, newCam
+                                auto cmd = std::make_unique<ChangePropertyCommand<Component*>>(
+                                    comp, prop.m_setter, oldVal, newVal
                                 );
                                 HistoryManager::Instance().Do(std::move(cmd));
                             }
@@ -1301,81 +1463,32 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     }
                     ImGui::EndDragDropTarget();
                 }
+                ImGui::SameLine();
+                ImGui::Text("%s", prop.m_name.c_str());
+            }
 
-                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-                ImGui::Text("%s", name);
-                }
-
-            // Texture*
+                // Texture* (Asset)
             else if (type == typeid(Texture*))
             {
-                // 데이터 포인터를 Texture**로 캐스팅하여 현재 값 가져오기
-                Texture** texPtr = static_cast<Texture**>(data);
-                Texture* currentTex = *texPtr;
+                Texture* currentTex = *static_cast<Texture**>(data);
 
-                // 텍스처 이름 또는 "None" 표시용 문자열 생성
-                std::string displayStr = "None";
-                if (currentTex)
-                {
-                    uint64_t id = currentTex->GetMeta().guid;
-                    std::string path = AssetDatabase::Instance().GetPathFromID(id);
-                    if (!path.empty())
-                        displayStr = std::filesystem::path(path).filename().string();
-                    else
-                        displayStr = "Loaded Texture";
-                }
+                std::vector<std::string> exts = { ".png", ".jpg", ".dds", ".tga", ".bmp" };
+                DrawAssetReference<Texture>(this, name, currentTex, comp, prop.m_setter, exts);
+            }
 
-                float width = ImGui::CalcItemWidth();
-
-                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
-                {
-                    if (currentTex)
-                    {
-                        uint64_t id = currentTex->GetMeta().guid;
-                        std::string pathStr = AssetDatabase::Instance().GetPathFromID(id);
-                        if (!pathStr.empty())
-                        {
-                            m_currentProjectDirectory = std::filesystem::path(pathStr).parent_path();
-                        }
-                    }
-                }
-
-                if (ImGui::BeginDragDropTarget())
-                {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
-                    {
-                        const char* droppedPath = (const char*)payload->Data;
-                        std::string ext = std::filesystem::path(droppedPath).extension().string();
-                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-                        if (ext == ".png" || ext == ".jpg" || ext == ".dds" || ext == ".tga")
-                        {
-                            Texture* newTex = ResourceManager::Instance().Load<Texture>(droppedPath);
-                            if (newTex)
-                            {
-                                Texture* oldVal = currentTex;
-
-                                prop.m_setter(comp, &newTex);
-
-                                auto cmd = std::make_unique<ChangePropertyCommand<Texture*>>(
-                                    comp, prop.m_setter, oldVal, newTex
-                                );
-                                HistoryManager::Instance().Do(std::move(cmd));
-                            }
-                        }
-                    }
-                    ImGui::EndDragDropTarget();
-                }
-
-                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-                ImGui::Text("%s", name);
-                }
+            //else if (type == typeid(Material*))
+            //{
+            //    Material* currentMat = *static_cast<Material**>(data);
+            //    std::vector<std::string> exts = { ".mat" };
+            //    DrawAssetReference<Material>(this, name, currentMat, comp, prop.m_setter, exts);
+            //}
 
             
 
             else {
                 std::cout << "type not Registered: " << type.name() << std::endl;
             }
+			ImGui::PopID();
         }
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
@@ -1584,8 +1697,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         if (ImGui::BeginTable("TextureSlotTable", 3, ImGuiTableFlags_SizingStretchProp))
                         {
                             ImGui::TableSetupColumn("Texture", ImGuiTableColumnFlags_WidthStretch , 100.f); // 초기값 안넣어주면 깜빡거림
-                            ImGui::TableSetupColumn("Close", ImGuiTableColumnFlags_WidthFixed, 25.0f);
-                            ImGui::TableSetupColumn("SlotLabel", ImGuiTableColumnFlags_WidthFixed, 60.0f);
+                            ImGui::TableSetupColumn("Close", ImGuiTableColumnFlags_WidthFixed, 30.0f);
+                            ImGui::TableSetupColumn("SlotLabel", ImGuiTableColumnFlags_WidthFixed, 100.0f);
 
                             for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
                             {
@@ -1648,8 +1761,27 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                 }
 
                                 ImGui::TableNextColumn();
-                                ImGui::AlignTextToFramePadding(); 
-                                ImGui::Text("Slot %d", i);
+
+                                ImGui::AlignTextToFramePadding();
+
+                                const char* slotLabel = nullptr;
+                                switch (i)
+                                {
+                                case 0: slotLabel = "Albedo";    break; // t0
+                                case 1: slotLabel = "Normal";    break; // t1
+                                case 2: slotLabel = "Specular";  break; // t2
+                                case 3: slotLabel = "Metallic";  break; // t3
+                                case 4: slotLabel = "Roughness"; break; // t4
+                                case 5: slotLabel = "AO";        break; // t5
+                                //case 6: slotLabel = "IBL";       break; // t7
+                                case 7: slotLabel = "SphereMap";    break; // t7 ?? 감마는 뭐야
+                                default: break;
+                                }
+
+                                if (slotLabel)
+                                    ImGui::Text("%s", slotLabel);
+                                else
+                                    ImGui::Text("Slot %d", i);
 
                                 ImGui::PopID();
                             }

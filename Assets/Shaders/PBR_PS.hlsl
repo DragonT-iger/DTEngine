@@ -7,6 +7,7 @@ struct PS_INPUT
     float3 WorldPos : POSITION;
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
+    float3 Bitangent : BITANGENT;
 };
 
 SamplerState g_Sampler : register(s0);
@@ -29,7 +30,7 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_NORMAL)
     {
         float4 texNormal = g_NormalMap.Sample(g_Sampler, input.UV);
-        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent);
+        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent , input.Bitangent);
     }
 
     // PBR 속성 적용
@@ -112,12 +113,6 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 finalColor = directLighting + ambientLighting *0.5f;
 
     finalColor = ACESToneMapping(finalColor);
-
-// 3. 감마 보정 적용 (LDR 상태에서 모니터 출력용 변환)
-    if (NEED_ON_GAMMA)
-    {
-        finalColor = pow(finalColor, 1.0f / 2.2f); // 
-    }
     
     return float4(finalColor, 1.0f);
 }
