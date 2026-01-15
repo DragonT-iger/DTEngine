@@ -39,7 +39,6 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "AssetDatabase.h"
-#include "Camera.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
 
@@ -50,52 +49,6 @@ static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
 
 
-template<typename T>
-void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
-    const std::function<void(void*, void*)>& setter,
-    std::function<std::string(T*)> nameGetter,
-    std::function<T* (Transform*)> dropConverter)
-{
-    std::string displayStr = "None";
-    if (currentVal) displayStr = nameGetter(currentVal);
-
-    float width = ImGui::CalcItemWidth();
-    if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
-    {
-        if (currentVal)
-        {
-            if constexpr (std::is_same_v<T, GameObject>) editor->SetSelectedGameObject(currentVal);
-            else if constexpr (std::is_base_of_v<Component, T>) editor->SetSelectedGameObject(currentVal->_GetOwner());
-        }
-    }
-
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
-        {
-            IM_ASSERT(payload->DataSize == sizeof(Transform*));
-            Transform* draggedTf = *(Transform**)payload->Data;
-
-            if (draggedTf)
-            {
-                T* newVal = dropConverter(draggedTf);
-                if (newVal)
-                {
-                    T* oldVal = currentVal;
-                    setter(targetComp, &newVal);
-
-                    auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
-                        targetComp, setter, oldVal, newVal
-                    );
-                    HistoryManager::Instance().Do(std::move(cmd));
-                }
-            }
-        }
-        ImGui::EndDragDropTarget();
-    }
-    ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
-    ImGui::Text("%s", label);
-}
 
 // 파일 에셋(Texture, Material 등)을 드래그 앤 드롭으로 할당하는 헬퍼
 template<typename T>
