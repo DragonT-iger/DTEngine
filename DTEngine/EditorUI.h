@@ -40,6 +40,8 @@ public:
     GameObject* GetSelectedGameObject() const { return m_selectedGameObject; }
     void SetSelectedGameObject(GameObject* go) { m_selectedGameObject = go; }
 
+    Vector2 GetSceneViewportSize() const { return m_sceneViewportSize; }
+    Vector2 GetGameViewportSize() const { return m_gameViewportSize; }
 
 private:
     void DrawHierarchyWindow(Scene* activeScene);
@@ -97,6 +99,8 @@ private:
     Texture* m_iconTexture = nullptr;
     Texture* m_iconAudio = nullptr;
 
+    Vector2 m_sceneViewportSize = Vector2(0.0f, 0.0f);
+    Vector2 m_gameViewportSize = Vector2(0.0f, 0.0f);
 
     bool m_isHierarchyFocused = false;
 

@@ -22,6 +22,10 @@
 #include "RenderKey.h"
 
 #include "Skeletal.h"
+#include "UIButton.h"
+#include "UISlider.h"
+#include "RectTransform.h"
+#include "UIManager.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
@@ -35,6 +39,87 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     else
         m_gameObjects.emplace_back(std::move(go));
     return raw;
+}
+
+GameObject* Scene::CreateUIObject(const std::string& name)
+{
+    GameObject* go = CreateGameObject(name);
+    if (go && !go->GetComponent<RectTransform>())
+    {
+        go->AddComponent<RectTransform>();
+    }
+    return go;
+}
+
+GameObject* Scene::CreateUIImage(const std::string& name)
+{
+    GameObject* go = CreateUIObject(name);
+    if (go && !go->GetComponent<Image>())
+    {
+        go->AddComponent<Image>();
+    }
+    return go;
+}
+
+GameObject* Scene::CreateUIButton(const std::string& name)
+{
+    GameObject* go = CreateUIImage(name);
+    if (go && !go->GetComponent<UIButton>())
+    {
+        go->AddComponent<UIButton>();
+    }
+    return go;
+}
+
+GameObject* Scene::CreateUISlider(const std::string& name)
+{
+    GameObject* go = CreateUIImage(name);
+    if (go && !go->GetComponent<UISlider>())
+    {
+        go->AddComponent<UISlider>();
+    }
+
+    if (go)
+    {
+        Transform* tf = go->GetTransform();
+        bool hasHandle = false;
+        if (tf)
+        {
+            for (Transform* child : tf->GetChildren())
+            {
+                if (child && child->_GetOwner()->GetName() == "Handle")
+                {
+                    hasHandle = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasHandle)
+        {
+            GameObject* handle = CreateUIImage("Handle");
+            handle->GetTransform()->SetParent(tf);
+
+            if (auto* rect = handle->GetComponent<RectTransform>())
+            {
+                rect->SetAnchorMin(Vector2(0.5f, 0.5f));
+                rect->SetAnchorMax(Vector2(0.5f, 0.5f));
+                rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
+                rect->SetSizeDelta(Vector2(24.0f, 24.0f));
+            }
+
+            if (auto* image = handle->GetComponent<Image>())
+            {
+                image->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+                if (auto* parentImage = go->GetComponent<Image>())
+                {
+                    image->SetOrderInLayer(parentImage->GetOrderInLayer() + 1);
+                }
+            }
+
+        }
+    }
+    return go;
 }
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject)
@@ -482,7 +567,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     const Matrix& projTM = camera->GetProjectionMatrix();
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
-
+    UIManager::Instance().UpdateLayout(this, width, height);
+    UIManager::Instance().UpdateInteraction(this, width, height);
     DX11Renderer::Instance().BindGlobalResources();
 
     std::vector<GameObject*> opaqueQueue;
