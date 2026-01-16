@@ -281,7 +281,7 @@ void DX11Renderer::EndUIRender()
 
     mainCam->SetIsOrthographic(m_isOrthoBackup);
 
-	mainCam->SetProjectionPerspective();
+    mainCam->SetProjectionOrthographic();
     
     
 
@@ -344,14 +344,14 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
     Matrix lightView = XMMatrixLookAtLH(lightPos, target, up);
     Matrix lightProj;
 
-    if (isDirectional)
-    {
-        lightProj = DirectX::XMMatrixOrthographicLH(size, size, 0.1f, 100.0f);
-    }
-    else
-    {
-        lightProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1.0f, 0.1f, 100.0f);
-    }
+    //if (isDirectional)
+    //{
+    lightProj = DirectX::XMMatrixOrthographicLH(size, size, 0.1f, 100.0f);
+    //}
+    //else
+    //{
+    //    lightProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1.0f, 0.1f, 100.0f);
+    //}
 
     Matrix textureScaleBias = Matrix(
         0.5f, 0.0f, 0.0f, 0.0f,

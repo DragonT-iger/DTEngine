@@ -564,7 +564,7 @@ void Game::SetPlayState(bool isPlay)
 
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 		if (hasLastState)
 		{
 			Transform* camTf = m_editorCameraObject->GetTransform();
@@ -621,7 +621,7 @@ void Game::SetEditorCamera(Scene* curScene)
 
 	if (m_editorCameraObject)
 	{
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 	else
 	{
@@ -629,7 +629,7 @@ void Game::SetEditorCamera(Scene* curScene)
 		m_editorCameraObject = curScene->CreateGameObject("EditorCamera55");
 		m_editorCameraObject->AddComponent<Camera>();
 		m_editorCameraObject->AddComponent<FreeCamera>();
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 }
 #endif

@@ -319,7 +319,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
         }
     }
 
-    if (ctrlPressed && vPressed_Down && false)
+    if (ctrlPressed && vPressed_Down)
     {
         if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
         {
@@ -414,6 +414,8 @@ void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
     {
         Matrix viewMatrix = camera->GetViewMatrix();
         Matrix projMatrix = camera->GetProjectionMatrix();
+
+        ImGuizmo::SetOrthographic(camera->IsOrthographic());
 
         GameObject* selectedObject = m_selectedGameObject;
         if (selectedObject)
