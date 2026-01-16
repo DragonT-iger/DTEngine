@@ -569,6 +569,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
     UIManager::Instance().UpdateLayout(this, width, height);
     UIManager::Instance().UpdateInteraction(this, width, height);
+
     DX11Renderer::Instance().BindGlobalResources();
 
     std::vector<GameObject*> opaqueQueue;

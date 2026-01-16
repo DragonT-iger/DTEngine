@@ -115,11 +115,11 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
 
     if (tf)
     {
-        printf("[UI] sw=%.1f sh=%.1f cs=%.6f pw=%.3f ph=%.3f ls=%.6f\n",
-            screenWidth, screenHeight,
-            canvasScale,
-            parentSize.x, parentSize.y,
-            layoutScale);
+        //printf("[UI] sw=%.1f sh=%.1f cs=%.6f pw=%.3f ph=%.3f ls=%.6f\n",
+        //    screenWidth, screenHeight,
+        //    canvasScale,
+        //    parentSize.x, parentSize.y,
+        //    layoutScale);
 
         Vector3 position = tf->GetPosition();
         position.x = layoutCenter.x * layoutScale;
@@ -131,8 +131,7 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
         scale.y = size.y * layoutScale;
         tf->SetScale(scale);
 
-        printf("[UI] pos=(%.3f,%.3f) size=(%.3f,%.3f)\n",
-            position.x, position.y, scale.x, scale.y);
+        //printf("[UI] pos=(%.3f,%.3f) size=(%.3f,%.3f)\n",position.x, position.y, scale.x, scale.y);
     }
 
     m_cachedSize = size;
