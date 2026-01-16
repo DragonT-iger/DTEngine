@@ -66,8 +66,8 @@ void Camera::SetProjectionOrthographic()
     if (m_orthographicSize < 0.01f) {
         m_orthographicSize = 0.01f;
     }
-    if(m_nearZ > -20.f) {
-        m_nearZ = -20.f;
+    if(m_nearZ > -2000.f) {
+        m_nearZ = -2000.f;
 	}
 
     float orthoHeight = 10 * m_orthographicSize;    
