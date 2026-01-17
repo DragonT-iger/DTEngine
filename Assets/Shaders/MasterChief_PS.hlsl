@@ -89,6 +89,10 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float metallic = t_MetallicRoughness.Sample(g_Sampler, input.UV).b;
     float roughness = t_MetallicRoughness.Sample(g_Sampler, input.UV).g;
+    
+    //float metallic = 1;
+    //float roughness = 1;
+    
     //float ao = t_AO.Sample(g_Sampler, uv).r;
 
     float3 viewDir;
