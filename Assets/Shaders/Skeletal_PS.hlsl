@@ -6,7 +6,7 @@ struct PS_INPUT
     float2 UV : TEXCOORD0;
     float3 WorldPos : POSITION;
     float3 WorldNormal : NORMAL;
-    float4 Tangent: TANGENT;
+    float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
 };
 
@@ -30,7 +30,7 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_NORMAL)
     {
         float4 texNormal = g_NormalMap.Sample(g_Sampler, input.UV);
-        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent , input.Bitangent);
+        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent, input.Bitangent);
     }
 
     // PBR 속성 적용
@@ -110,8 +110,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting *0.5f;
-
+    float3 finalColor = directLighting + ambientLighting * 0.5f;
     
     return float4(finalColor, 1.0f);
 }

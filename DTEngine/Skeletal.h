@@ -34,7 +34,9 @@ public:
 	std::string GetSkeletal() { return m_FbxName; }
 
 	std::vector<Matrix>& GetFinalMatrix() { return m_finalTransforms; }
+	BoneResource* GetBoneResource() {  if(m_BoneResource) return m_BoneResource; }
 
+	void SetBonePose(int boneIndex, const Matrix& mat); //Animation에 주입. 
 
 private:
 
@@ -45,6 +47,9 @@ private:
 	std::vector<Matrix> m_globalTransforms;
 	BoneResource* m_BoneResource = nullptr; //Model한테 받는 Raw Resource Pointer 
 
+
+
+	std::vector<Matrix> m_AnimatedLocalMatrices;
 	std::string m_FbxName = " ";
 
 };

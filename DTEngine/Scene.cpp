@@ -22,6 +22,7 @@
 #include "RenderKey.h"
 
 #include "Skeletal.h"
+#include "Animatior.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)

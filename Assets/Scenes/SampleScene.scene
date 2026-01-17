@@ -7057,13 +7057,13 @@
           "Active": true,
           "col": 0,
           "id": 2700290039117229712,
-          "m_go": 5461617176561633630,
+          "m_go": 0,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 20.0,
             "z": 0.0
           },
-          "m_rotator": 2700290039117229712,
+          "m_rotator": 0,
           "typeName": "Rotator"
         }
       ],

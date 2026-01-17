@@ -76,8 +76,9 @@ bool Model::LoadFile(const std::string& fullPath)
 
         ProcessBonesMap(scene); //Mesh 순회하면서 Bone의 이름과 index를 저장해 놓음.  Mapping only ; 이름과 index offset matrix 
 
+
         constexpr int NodeIndex =-1;
-        CreateSkeleton(scene->mRootNode, NodeIndex); //계층 정보 부모의 index; Default matrix를 저장.
+        CreateSkeleton(scene->mRootNode, NodeIndex, Matrix()); //계층 정보 부모의 index; Default matrix를 저장.
     }
 
     ProcessNode(scene->mRootNode, scene);
@@ -299,6 +300,37 @@ void Model::CreateSkeleton(const aiNode* node, int parentIndex)
     }
 }
 
+void Model::CreateSkeleton(const aiNode* node, int parentIndex, Matrix acc)
+{
+ 
+        std::string nodeName = node->mName.C_Str();
+        // 1) 이번 노드 변환을 누적
+        Matrix nodeLocal = Matrix(&node->mTransformation.a1).Transpose(); // (Transpose는 일단 그대로 둠)
+        Matrix acc2 = nodeLocal * acc;  // 너 코드가 local*parent 스타일이니까 이렇게
+
+        int myIndex = -1;
+
+        auto it = m_impl->m_BoneMapping.find(nodeName);
+
+        if (it != m_impl->m_BoneMapping.end())
+        {
+            myIndex = it->second;
+
+            m_impl->m_Bones[myIndex].ParentIndex = parentIndex;
+
+            m_impl->m_Bones[myIndex].DefaultLocalMatrix = acc2;
+
+            acc2 = Matrix();
+        }
+
+        int nextParent = (myIndex != -1) ? myIndex : parentIndex;
+
+        for (unsigned int i = 0; i < node->mNumChildren; i++)
+            CreateSkeleton(node->mChildren[i], nextParent, acc2);
+    
+
+}
+
 void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
 {
     int BoneCounter = 0;
@@ -314,7 +346,7 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
             continue;
         }
 
-        int globalBoneIndex = m_impl->m_BoneMapping[boneName];
+        boneID = m_impl->m_BoneMapping[boneName];
 
         aiVertexWeight* weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights; // 해당 뼈에 영향받는 Vertex 수 
@@ -324,6 +356,8 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
         {
             int vertexId = weights[weightIndex].mVertexId;
             float weight = weights[weightIndex].mWeight;
+            
+
             SetVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }

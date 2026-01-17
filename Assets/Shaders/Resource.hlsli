@@ -1,14 +1,14 @@
 
 cbuffer CBuffer_Frame : register(b1)
 {
-    matrix View_TM;
-    matrix Projection_TM;
+    float4x4 View_TM;
+    float4x4 Projection_TM;
 };
 
 cbuffer CBuffer_Object : register(b2)
 {
-    matrix World_TM;
-    matrix WorldInverseTranspose_TM;
+    float4x4 World_TM;
+    float4x4 WorldInverseTranspose_TM;
 };
 
 
@@ -35,7 +35,7 @@ cbuffer CBuffer_BooleanFlag : register(b5)
 
 cbuffer CBuffer_Matrix_Pallette : register(b6)
 {
-    Matrix Matrix_Pallette_Array[128]; // 운용 할 bone 갯수 만큼 배열 크기를 정의할 예정. 
+    float4x4 Matrix_Pallette_Array[128]; // 운용 할 bone 갯수 만큼 배열 크기를 정의할 예정. 
 };
 
 struct VS_INPUT
@@ -46,9 +46,8 @@ struct VS_INPUT
     float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
     
-    //
-    int4 BoneIDs : BLENDINDICES; 
-    float4 Weights : BLENDWEIGHT; 
+    int4 BoneID : BLENDINDICES;
+    float4 Weights : BLENDWEIGHT;
 };
 
 

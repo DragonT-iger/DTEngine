@@ -28,6 +28,7 @@ private:
     std::unique_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
     void ProcessBonesMap(const aiScene* scene);
     void CreateSkeleton(const aiNode* node, int parentIndex);
+    void CreateSkeleton(const aiNode* node, int parentIndex, Matrix acc); //Bone아닌 노드 행렬의 축적 
 
 
     void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
