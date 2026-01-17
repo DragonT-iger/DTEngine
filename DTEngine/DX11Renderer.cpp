@@ -153,7 +153,7 @@ void DX11Renderer::UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& proje
     m_context->Unmap(m_cbuffer_frame.Get(), 0);
 
 }
-void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const Vector3& cameraPos)
+void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera)
 {
     if (!m_cbuffer_lights) return;
 
@@ -168,7 +168,9 @@ void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const
     int count = std::min((int)lights.size(), MAX_LIGHTS);
     data->ActiveCount = count;
 
-    data->CameraPos = cameraPos;
+    data->CameraPos = camera->GetCamPos();     
+    data->CameraDir = camera->GetCamFor();     
+    data->IsOrtho = camera->IsOrthographic() ? 1.0f : 0.0f;
     data->LightViewProjScale = m_lightViewProjScale.Transpose();
     float w = m_shadowViewport.Width;
     float h = m_shadowViewport.Height;

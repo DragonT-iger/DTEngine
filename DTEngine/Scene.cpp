@@ -464,7 +464,7 @@ void Scene::LateUpdate(float deltaTime)
 
 
     if (m_mainCamera == nullptr) return;
-    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
 
     // 물리 업데이트
 }

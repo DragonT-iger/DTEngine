@@ -336,7 +336,7 @@ void Game::LifeCycle(float deltaTime)
 
 			m_editorCameraObject->LateUpdate(deltaTime);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_editorCameraObject->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_editorCameraObject->GetComponent<Camera>());
 
 
 			Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -402,7 +402,7 @@ void Game::LifeCycle(float deltaTime)
 
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetTransform()->GetPosition());
+	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), editorCam);
 	scene->Render(editorCam, m_sceneRT.get(), true);
 
 
@@ -432,7 +432,7 @@ void Game::LifeCycle(float deltaTime)
 			const auto& col = cam->GetClearColor();
 			m_gameRT->Clear(col.x, col.y, col.z, col.w);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
 
 			scene->Render(cam, m_gameRT.get(), true);
 		}

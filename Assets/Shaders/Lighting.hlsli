@@ -20,6 +20,9 @@ cbuffer CBuffer_GlobalLight : register(b3)
     int ActiveCount;
     float3 CameraPos;
     
+    float3 CameraDir; // ortho 인 경우에는 카메라 위치로 계산하면 안됨 
+    float IsOrtho;
+    
     matrix LightViewProjScale;
     float4 ShadowMapInfo; // xy: 1/w 1/h , zw W, H
 };
