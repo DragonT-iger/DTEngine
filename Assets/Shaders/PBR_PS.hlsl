@@ -26,7 +26,7 @@ float4 PS(PS_INPUT input) : SV_Target
     {
         V = normalize(CameraPos - input.WorldPos);
     }
-    V = -normalize(CameraDir);
+    //V = -normalize(CameraDir);
     float3 albedo = float3(1.0f, 1.0f, 1.0f);
     float metal = 0.0f;
     float rough = 1.0f;
@@ -94,6 +94,7 @@ float4 PS(PS_INPUT input) : SV_Target
         directLighting += DisneyPBR(
             input.WorldPos,
             N,
+            V,
             albedo,
             rough,
             metal,
