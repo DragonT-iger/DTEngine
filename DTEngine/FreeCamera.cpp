@@ -86,16 +86,18 @@ void FreeCamera::HandleInput(float deltaTime)
             Camera* camera = GetComponent<Camera>();
             if (camera && camera->IsOrthographic())
             {
-                if (moveDir.z != 0.0f)
+                if (moveDir.y != 0.0f)
                 {
                     float currentSize = camera->GetOrthographicSize();
-                    float newSize = currentSize - (moveDir.z * currentSpeed * deltaTime);
-                    if (newSize < 0.1f) newSize = 0.1f;  
+                    float newSize = currentSize - (moveDir.y * currentSpeed * deltaTime);
+                    if (newSize < 0.1f) newSize = 0.1f;
                     camera->SetOrthographicSize(newSize);
                 }
 
                 Vector3 right = transform->Right();
-                Vector3 moveVector = (right * moveDir.x) + (Vector3(0, 1, 0) * moveDir.y);
+                Vector3 up = transform->Up();
+
+                Vector3 moveVector = (right * moveDir.x) + (up * moveDir.z);
 
                 Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
                 transform->SetPosition(newPos);

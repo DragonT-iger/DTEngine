@@ -249,23 +249,22 @@ void DX11Renderer::BeginUIRender()
     //        DirectX::XMMatrixIdentity() 
     //    );
     //}
-    Camera* mainCamera = SceneManager::Instance().GetActiveScene()->GetMainCamera();
-
-
-    if (mainCamera == nullptr) return;
-
-    m_isOrthoBackup = mainCamera->IsOrthographic();
-
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    if (mainCam == nullptr) return;
 
-    mainCam->SetIsOrthographic(true);
+    static float orthoSize = 5; // 이게 UI의 기준이 되는 사이즈
 
-    mainCam->SetProjectionOrthographic();
+    static float orthoHeight = 10.0f * orthoSize;
+    float aspectRatio = mainCam->GetAspectRatio();
+    float orthoWidth = orthoHeight * aspectRatio;
 
-    UpdateFrame_CBUFFER(
-        SimpleMathHelper::IdentityMatrix(),
-        SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
-	);
+    static float nearZ = -20.0f;
+    static float farZ = 1000;
+    // 이 값들 때문에 UI의 Z값이 이상해지면 클립되는거임
+
+    Matrix uiProj = DirectX::XMMatrixOrthographicLH(orthoWidth, orthoHeight, nearZ, farZ);
+
+    UpdateFrame_CBUFFER(SimpleMathHelper::IdentityMatrix(), uiProj);
 
     m_context->OMSetDepthStencilState(m_states->DepthNone(), 0);
 
@@ -278,12 +277,12 @@ void DX11Renderer::EndUIRender()
     //    m_spriteBatch->End();
     //}
 
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
-    if (mainCam == nullptr) return;
+    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
+    //if (mainCam == nullptr) return;
 
-    mainCam->SetIsOrthographic(m_isOrthoBackup);
+    //mainCam->SetIsOrthographic(m_isOrthoBackup);
 
-    mainCam->SetProjectionOrthographic();
+    //mainCam->SetProjectionOrthographic();
     
     
 

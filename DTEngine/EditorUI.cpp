@@ -415,8 +415,6 @@ void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
         Matrix viewMatrix = camera->GetViewMatrix();
         Matrix projMatrix = camera->GetProjectionMatrix();
 
-        ImGuizmo::SetOrthographic(camera->IsOrthographic());
-
         GameObject* selectedObject = m_selectedGameObject;
         if (selectedObject)
         {
