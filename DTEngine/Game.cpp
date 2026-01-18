@@ -396,11 +396,17 @@ void Game::LifeCycle(float deltaTime)
 
 	m_sceneRT->Bind();
 
+	
 
-	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
 	// 씬 뷰
 
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
+
+
+	const auto& col = editorCam->GetClearColor();
+
+	m_sceneRT->Clear(col.x , col.y , col.z , col.w);
+
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), editorCam);
 	scene->Render(editorCam, m_sceneRT.get(), true);
