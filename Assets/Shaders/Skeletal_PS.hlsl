@@ -6,8 +6,9 @@ struct PS_INPUT
     float2 UV : TEXCOORD0;
     float3 WorldPos : POSITION;
     float3 WorldNormal : NORMAL;
-    float4 Tangent: TANGENT;
+    float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
+    
 };
 
 SamplerState g_Sampler : register(s0);
@@ -26,7 +27,7 @@ float4 PS(PS_INPUT input) : SV_Target
     {
         V = normalize(CameraPos - input.WorldPos);
     }
-    //V = -normalize(CameraDir);
+    
     float3 albedo = float3(1.0f, 1.0f, 1.0f);
     float metal = 0.0f;
     float rough = 1.0f;
@@ -34,15 +35,13 @@ float4 PS(PS_INPUT input) : SV_Target
     
      
     
-    // [2] 플래그 기반 텍스처 샘플링 및 데이터 업데이트
-    // Normal Map 적용
+
     if (USE_NORMAL)
     {
         float4 texNormal = g_NormalMap.Sample(g_Sampler, input.UV);
-        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent , input.Bitangent);
+        N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent, input.Bitangent);
     }
 
-    // PBR 속성 적용
     if (USE_METAL)
         metal = g_MetalMap.Sample(g_Sampler, input.UV).r * Metallic_Factor;
     if (USE_ROUGH)
@@ -50,17 +49,14 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_AO)
         ao = g_AoMap.Sample(g_Sampler, input.UV).r;
     
-    // Albedo 적용 (AO를 미리 곱함)
     if (USE_ALBEDO)
     {
         float4 texBase = g_DiffuseMap.Sample(g_Sampler, input.UV);
         albedo = texBase.rgb;
     }
 
-    // [3] 직접광(Direct Lighting) 계산 - 루프 내부에 로직 인라이닝
     float3 directLighting = float3(0, 0, 0);
     
-    // 첫 번째 조명(주광원)에 대한 그림자 계산
     float shadowFactor = CalculateShadow(input.WorldPos);
 
     for (int i = 0; i < ActiveCount; ++i)
@@ -120,8 +116,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting *0.5f;
-
+    float3 finalColor = directLighting + ambientLighting * 0.5f;
     
     return float4(finalColor, 1.0f);
 }

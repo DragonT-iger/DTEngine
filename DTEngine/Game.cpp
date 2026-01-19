@@ -336,7 +336,7 @@ void Game::LifeCycle(float deltaTime)
 
 			m_editorCameraObject->LateUpdate(deltaTime);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_editorCameraObject->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_editorCameraObject->GetComponent<Camera>());
 
 
 			Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -396,13 +396,19 @@ void Game::LifeCycle(float deltaTime)
 
 	m_sceneRT->Bind();
 
+	
 
-	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
 	// 씬 뷰
 
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetTransform()->GetPosition());
+
+	const auto& col = editorCam->GetClearColor();
+
+	m_sceneRT->Clear(col.x , col.y , col.z , col.w);
+
+
+	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), editorCam);
 	scene->Render(editorCam, m_sceneRT.get(), true);
 
 
@@ -432,7 +438,7 @@ void Game::LifeCycle(float deltaTime)
 			const auto& col = cam->GetClearColor();
 			m_gameRT->Clear(col.x, col.y, col.z, col.w);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetTransform()->GetPosition());
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
 
 			scene->Render(cam, m_gameRT.get(), true);
 		}
@@ -564,7 +570,7 @@ void Game::SetPlayState(bool isPlay)
 
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 		if (hasLastState)
 		{
 			Transform* camTf = m_editorCameraObject->GetTransform();
@@ -621,7 +627,7 @@ void Game::SetEditorCamera(Scene* curScene)
 
 	if (m_editorCameraObject)
 	{
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 	else
 	{
@@ -629,7 +635,7 @@ void Game::SetEditorCamera(Scene* curScene)
 		m_editorCameraObject = curScene->CreateGameObject("EditorCamera55");
 		m_editorCameraObject->AddComponent<Camera>();
 		m_editorCameraObject->AddComponent<FreeCamera>();
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 }
 #endif
@@ -650,8 +656,11 @@ void Game::OnResize(int width, int height)
 {
 	if (width <= 0 || height <= 0) return;
 	DX11Renderer::Instance().Resize(width, height);
-	
-	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
+	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
+	if (mainCam) {
+		mainCam->SetViewDirty();
+	}
+	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 
 void Game::OnClose()

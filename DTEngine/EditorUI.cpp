@@ -319,7 +319,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
         }
     }
 
-    if (ctrlPressed && vPressed_Down && false)
+    if (ctrlPressed && vPressed_Down)
     {
         if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
         {
@@ -1938,7 +1938,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                 case 4: slotLabel = "Roughness"; break; // t4
                                 case 5: slotLabel = "AO";        break; // t5
                                 //case 6: slotLabel = "IBL";       break; // t7
-                                case 7: slotLabel = "SphereMap";    break; // t7 ?? 감마는 뭐야
+                                //case 7: slotLabel = "SphereMap";    break; // t7 ?? 감마는 뭐야
                                 default: break;
                                 }
 

@@ -59,7 +59,7 @@ bool Model::LoadFile(const std::string& fullPath)
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         return false;
-
+    std::cout << fullPath << std::endl;
 
     bool isRigged = false;
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
@@ -71,11 +71,7 @@ bool Model::LoadFile(const std::string& fullPath)
 
     if (isRigged)
     {
-
-        std::cout << fullPath << std::endl;
-
         ProcessBonesMap(scene); //Mesh 순회하면서 Bone의 이름과 index를 저장해 놓음.  Mapping only ; 이름과 index offset matrix 
-
         constexpr int NodeIndex =-1;
         CreateSkeleton(scene->mRootNode, NodeIndex); //계층 정보 부모의 index; Default matrix를 저장.
     }
@@ -128,9 +124,6 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
         {
             vertex.Texcoord.x = aiMesh->mTextureCoords[0][i].x;
             vertex.Texcoord.y = aiMesh->mTextureCoords[0][i].y;
-
-
-
         }
         else
         {
@@ -149,40 +142,7 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
             vertex.Bitangent.x = aiMesh->mBitangents[i].x;
             vertex.Bitangent.y = aiMesh->mBitangents[i].y;
             vertex.Bitangent.z = aiMesh->mBitangents[i].z;
-            //DirectX::XMFLOAT3 N = {
-            //   aiMesh->mNormals[i].x,
-            //   aiMesh->mNormals[i].y,
-            //   aiMesh->mNormals[i].z
-            //};
-            //DirectX::XMFLOAT3 T = {
-            //    aiMesh->mTangents[i].x,
-            //    aiMesh->mTangents[i].y,
-            //    aiMesh->mTangents[i].z
-            //};
-            //DirectX::XMFLOAT3 B = {
-            //    aiMesh->mBitangents[i].x,
-            //    aiMesh->mBitangents[i].y,
-            //    aiMesh->mBitangents[i].z
-            //};
-
-            //auto norm3 = [](DirectX::XMFLOAT3 v) //Normalize
-            //    {
-            //        float len = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-            //        if (len > 1e-8f) { v.x /= len; v.y /= len; v.z /= len; }
-            //        return v;
-            //    };
-            //N = norm3(N); T = norm3(T); B = norm3(B);
-
-            //DirectX::XMFLOAT3 c = {
-            //    N.y * T.z - N.z * T.y,
-            //    N.z * T.x - N.x * T.z,
-            //    N.x * T.y - N.y * T.x
-            //};
-            //float d = c.x * B.x + c.y * B.y + c.z * B.z;
-
-            //float w = (d < 0.0f) ? 1.0f : -1.0f;
-
-            //vertex.Tangent = { T.x, T.y, T.z, w };
+        
         }
         else
         {
@@ -216,6 +176,8 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
                 v.Weights[1] = 0.0f;
                 v.Weights[2] = 0.0f;
                 v.Weights[3] = 0.0f;
+
+
             }
             else //zero devide 
             {
@@ -230,7 +192,6 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
     }
 
 
-
     for (unsigned int i = 0; i < aiMesh->mNumFaces; i++)
     {
         aiFace face = aiMesh->mFaces[i];
@@ -243,61 +204,62 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
     return mesh;
 }
 
+std::map<std::string, Matrix> m_tempOffsetMap;
+
+
+
 void Model::ProcessBonesMap(const aiScene* scene)
 {
-    int boneCount = 0;
-
-    // 모든 메쉬를 순회
+    // 메쉬에 영향을 주는 '진짜 뼈'들의 OffsetMatrix만 먼저 수집합니다.
     for (unsigned int i = 0; i < scene->mNumMeshes; i++)
     {
         const aiMesh* mesh = scene->mMeshes[i];
-
-        // 해당 메쉬의 모든 뼈를 순회
         for (unsigned int b = 0; b < mesh->mNumBones; b++)
         {
             std::string boneName = mesh->mBones[b]->mName.C_Str();
-
-            if (m_impl->m_BoneMapping.find(boneName) == m_impl->m_BoneMapping.end())
-            {
-                BoneNode newBone;
-                newBone.name = boneName;
-                newBone.id = boneCount;
-
-
-                newBone.OffsetMatrix = Matrix(&mesh->mBones[b]->mOffsetMatrix.a1).Transpose();
-
-                m_impl->m_Bones.push_back(newBone);
-                m_impl->m_BoneMapping[boneName] = boneCount;
-
-                boneCount++;
-            }
+            // 임시 맵에 OffsetMatrix 저장 (나중에 노드 생성 시 매칭)
+            m_tempOffsetMap[boneName] = Matrix(&mesh->mBones[b]->mOffsetMatrix.a1).Transpose(); //coloum to row 
         }
     }
 }
 
 void Model::CreateSkeleton(const aiNode* node, int parentIndex)
 {
-  std::string nodeName = node->mName.C_Str();
-    int myIndex = -1; // 기본은 뼈가 아님
+    std::string nodeName = node->mName.C_Str();
 
-    if (m_impl->m_BoneMapping.find(nodeName) != m_impl->m_BoneMapping.end())
-    {
-        myIndex = m_impl->m_BoneMapping[nodeName]; 
-        
-        m_impl->m_Bones[myIndex].ParentIndex = parentIndex;
+    BoneNode newNode;
+    newNode.name = nodeName;
+    newNode.id = (int)m_impl->m_Bones.size();
+    newNode.ParentIndex = parentIndex;
 
-        m_impl->m_Bones[myIndex].DefaultLocalMatrix = Matrix(&node->mTransformation.a1).Transpose();
-       
+    newNode.DefaultLocalMatrix = Matrix(&node->mTransformation.a1).Transpose(); //coloum to row 
+
+    if (parentIndex != -1) {
+        newNode.GlobalMatrix = newNode.DefaultLocalMatrix * m_impl->m_Bones[parentIndex].GlobalMatrix;
+
+    }
+    else {
+        newNode.GlobalMatrix = newNode.DefaultLocalMatrix;
     }
 
-    
-    int childIndexToPass = (myIndex != -1) ? myIndex : parentIndex;
+    if (m_tempOffsetMap.count(nodeName)) {
+        newNode.OffsetMatrix = m_tempOffsetMap[nodeName];
+    }
+    else {
+        newNode.OffsetMatrix = SimpleMathHelper::IdentityMatrix();;
+    }
 
-    for (unsigned int i = 0; i < node->mNumChildren; i++)
-    {
-        CreateSkeleton(node->mChildren[i], childIndexToPass);
+    m_impl->m_Bones.push_back(newNode);
+    m_impl->m_BoneMapping[nodeName] = newNode.id;
+
+
+
+    int myIndex = newNode.id;
+    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+        CreateSkeleton(node->mChildren[i], myIndex);
     }
 }
+
 
 void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
 {
@@ -314,7 +276,9 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
             continue;
         }
 
-        int globalBoneIndex = m_impl->m_BoneMapping[boneName];
+        boneID = m_impl->m_BoneMapping[boneName];
+
+        if (boneID == 7) std::cout << boneName << std::endl;
 
         aiVertexWeight* weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights; // 해당 뼈에 영향받는 Vertex 수 
@@ -324,6 +288,8 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
         {
             int vertexId = weights[weightIndex].mVertexId;
             float weight = weights[weightIndex].mWeight;
+            
+
             SetVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }

@@ -59,8 +59,13 @@ Client/imgui.ini
 
 !Assets/Shaders/
 
+*.svn
+
+ThirdParty/*
 
 /Assets/Models/*
+
+*.svn
 
 *.ini
 *.aps

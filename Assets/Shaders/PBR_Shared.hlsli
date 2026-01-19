@@ -49,6 +49,7 @@ float3 GetWorldNormalFromNormalMap(float4 texNormal, float3 N, float4 tangent , 
 float3 DisneyPBR(
     float3 worldPos,
     float3 N, // world normal (normalized)
+    float3 V,
     float3 albedo,
     float roughness, // [0..1]
     float metallic, // [0..1]
@@ -57,7 +58,7 @@ float3 DisneyPBR(
     float intensity // light intensity
 )
 {
-    float3 V = normalize(CameraPos - worldPos); // Lighting.hlsli cbuffer의 CameraPos 사용(:contentReference[oaicite:6]{index=6})
+    //float3 V = normalize(CameraPos - worldPos); // Lighting.hlsli cbuffer의 CameraPos 사용(:contentReference[oaicite:6]{index=6}) Ortho 호환 X
     float3 H = normalize(L + V);
 
     float NdotL = saturate(dot(N, L));

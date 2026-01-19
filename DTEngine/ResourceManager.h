@@ -40,7 +40,7 @@ public:
 
     void MoveResource(const std::string& oldPath, const std::string& newPath);
 private:
-    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures);
+    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures, const std::map<std::string, std::string>& fileCache);
     Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
     //uint64_t ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath);

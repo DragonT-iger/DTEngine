@@ -4,7 +4,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <filesystem>
-
+#include <algorithm>
+#include <cctype>   
+#include <map>      
 
 #include "ResourceManager.h"
 #include "Transform.h"
@@ -213,7 +215,27 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
     std::string fileName = std::filesystem::path(fullPath).stem().string();
     GameObject* rootObject = SceneManager::Instance().GetActiveScene()->CreateGameObject(fileName);
 
-    ProcessNode(scene->mRootNode, scene, rootObject, fullPath, extractedTextures);
+    std::map<std::string, std::string> fileCache;
+    std::filesystem::path modelDir = std::filesystem::path(fullPath).parent_path();
+    std::error_code ec;
+
+    if (std::filesystem::exists(modelDir))
+    {
+        for (const auto& entry : std::filesystem::directory_iterator(modelDir, ec))
+        {
+            if (entry.is_regular_file())
+            {
+                std::string fname = entry.path().filename().string();
+                std::string lowerName = fname;
+                std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
+
+                fileCache[lowerName] = entry.path().string();
+            }
+        }
+    }
+
+
+    ProcessNode(scene->mRootNode, scene, rootObject, fullPath, extractedTextures, fileCache);
 
     return rootObject;
 }
@@ -233,7 +255,7 @@ void ResourceManager::MoveResource(const std::string& oldPath, const std::string
     }
 }
 
-void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures)
+void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures, const std::map<std::string, std::string>& fileCache)
 {
     GameObject* currentGO = nullptr;
 
@@ -275,21 +297,16 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
     currentGO->GetTransform()->SetScale(scale);
 
     static const std::string defaultMatPath = "Assets/Materials/Default.mat";
+    static const std::string pbrMatPath = "Assets/Materials/PBR.mat";
+
     static uint64_t defaultMatID = AssetDatabase::Instance().GetIDFromPath(defaultMatPath);
+    static uint64_t pbrMatID = AssetDatabase::Instance().GetIDFromPath(pbrMatPath);
 
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         unsigned int meshIndex = node->mMeshes[i];
-        unsigned int matIndex = scene->mMeshes[meshIndex]->mMaterialIndex;
-
         aiMesh* aiMesh = scene->mMeshes[meshIndex];
         aiMaterial* aiMat = scene->mMaterials[aiMesh->mMaterialIndex];
-
-        Texture* assignedTexture = nullptr;
-        if (matIndex < textures.size())
-        {
-            assignedTexture = textures[matIndex];
-        }
 
         GameObject* targetGO = currentGO;
         if (i > 0)
@@ -302,35 +319,98 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
         renderer->SetMeshIndex(meshIndex);
 
-        if (defaultMatID != 0)
-        {
-            renderer->SetMaterialID(defaultMatID);
 
+        std::string fullTexPath;
+        bool hasDiffuse = false;
+        aiString texPath;
+
+        if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+        {
+            std::filesystem::path modelDir = std::filesystem::path(modelPath).parent_path();
+            fullTexPath = (modelDir / texPath.C_Str()).string();
+            hasDiffuse = true;
+        } // 디퓨즈/알베도 경로만 확보하면 메쉬당 텍스쳐든 모델당 텍스쳐든 둘다 커버가 가능함
+
+        bool foundPBR = false;
+        std::map<int, std::string> foundTextures;
+
+        if (hasDiffuse)
+        {
+            std::filesystem::path texFilePath(fullTexPath);
+            std::string extension = texFilePath.extension().string();
+            std::string stem = texFilePath.stem().string();
+
+            std::string stemLower = stem;
+            std::transform(stemLower.begin(), stemLower.end(), stemLower.begin(), ::tolower);
+
+            std::vector<std::string> suffixesToRemove = { "_albedo", "_diffuse", "_basecolor", "_color" };
+            std::string baseName = stem;
+
+            for (const auto& suffix : suffixesToRemove)
+            {
+                if (stemLower.length() > suffix.length() &&
+                    stemLower.compare(stemLower.length() - suffix.length(), suffix.length(), suffix) == 0)
+                {
+                    baseName = stem.substr(0, stem.length() - suffix.length());
+                    break;
+                }
+            }
+
+            auto CheckAndAddTexture = [&](std::string suffix, int slot) -> bool
+                {
+                    std::string targetName = baseName + suffix + extension;
+
+                    std::string targetLower = targetName;
+                    std::transform(targetLower.begin(), targetLower.end(), targetLower.begin(), ::tolower);
+
+                    auto it = fileCache.find(targetLower);
+                    if (it != fileCache.end())
+                    {
+                        foundTextures[slot] = it->second;
+                        return true;
+                    }
+                    return false;
+                };
+
+            bool hasRough = CheckAndAddTexture("_rough", 4);
+            bool hasMetal = CheckAndAddTexture("_metal", 3);
+
+            CheckAndAddTexture("_basecolor", 0);
+            CheckAndAddTexture("_normal", 1);
+            CheckAndAddTexture("_ao", 5);
+
+            if (hasRough || hasMetal)
+            {
+                foundPBR = true;
+            }
+            //foundTextures[0] = fullTexPath;
+        }
+
+        uint64_t targetMatID = (foundPBR && pbrMatID != 0) ? pbrMatID : defaultMatID;
+
+        if (targetMatID != 0)
+        {
+            renderer->SetMaterialID(targetMatID);
             Material* mat = renderer->GetMaterial();
+
             if (mat)
             {
+                for (auto const& [slot, path] : foundTextures)
+                {
+                    Texture* tex = ResourceManager::Instance().Load<Texture>(path);
+                    if (tex)
+                    {
+                        mat->SetTexture(slot, tex);
+                        std::cout << "[AutoBinding] Slot " << slot << " : " << std::filesystem::path(path).filename().string() << std::endl;
+                    }
+                }
+
                 aiColor3D color(1.f, 1.f, 1.f);
                 if (aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
                 {
                     mat->SetColor(Vector4(color.r, color.g, color.b, 1.0f));
                 }
-
-                aiString texPath;
-                if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-                {
-                    std::filesystem::path modelDir = std::filesystem::path(modelPath).parent_path();
-                    std::string fullTexPath = (modelDir / texPath.C_Str()).string();
-
-                    Texture* texture = ResourceManager::Instance().Load<Texture>(fullTexPath);
-                    if (texture)
-                    {
-                        mat->SetTexture(0, texture);
-                    }
-                }
             }
-            // else:
-            // 모델에 텍스처가 없다면? -> 아무것도 하지 않음.
-            // 인스턴싱을 굳이 하지 않고 공유 머터리얼(Default)의 텍스처를 그대로 사용.
         }
     }
 
@@ -339,7 +419,7 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene, currentGO, modelPath, textures);
+        ProcessNode(node->mChildren[i], scene, currentGO, modelPath, textures, fileCache);
     }
 }
 

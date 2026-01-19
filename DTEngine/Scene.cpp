@@ -26,6 +26,7 @@
 #include "UISlider.h"
 #include "RectTransform.h"
 #include "UIManager.h"
+#include "Animatior.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
@@ -464,7 +465,7 @@ void Scene::LateUpdate(float deltaTime)
 
 
     if (m_mainCamera == nullptr) return;
-    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
 
     // 물리 업데이트
 }
@@ -642,6 +643,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
             Mesh* mesh = mr->GetMesh();
             if (!mesh || !mat) return;
+
+
+            if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
+            {
+                DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+                
+            }
 
 
             if (currentPipelineKey != lastPipelineKey)
