@@ -2,6 +2,7 @@
 
 #include "Singleton.h"
 #include "SimpleMathHelper.h"
+#include "Canvas.h"
 #include <string>
 #include <unordered_map>
 
@@ -17,6 +18,9 @@ public:
     void RegisterLayer(const std::string& name, int order);
     int GetLayerOrder(const std::string& name) const;
 
+    // 캔버스 생성하면 UIManager에 넣어주자.
+    void SetCanvas(const Canvas& canvas) { m_Canvas = &canvas; };
+
 private:
     void EnsureDefaultLayers();
 
@@ -24,5 +28,8 @@ private:
     float m_lastHeight = 0.0f;
     Vector2 m_viewportOrigin = Vector2(0.0f, 0.0f);
     Vector2 m_viewportSize = Vector2(0.0f, 0.0f);
+
     std::unordered_map<std::string, int> m_layerOrders;
+
+    const Canvas* m_Canvas = nullptr;
 };

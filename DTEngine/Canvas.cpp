@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Canvas.h"
+#include "UIManager.h"
 #include <algorithm>
 
 BEGINPROPERTY(Canvas)
@@ -19,6 +20,11 @@ float Canvas::GetScaleFactor(float screenWidth, float screenHeight) const
     float match = std::clamp(m_matchWidthOrHeight, 0.0f, 1.0f);
 
     return scaleX * (1.0f - match) + scaleY * match;
+}
+
+void Canvas::Awake()
+{
+    //UIManager::Instance().SetCanvas(this);
 }
 
 Vector2 Canvas::GetCanvasSize(float screenWidth, float screenHeight) const

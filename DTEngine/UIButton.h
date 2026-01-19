@@ -54,6 +54,6 @@ private:
     Canvas* m_canvas = nullptr;
 
     bool m_interactable = true; // 상호작용
-    bool m_isHovered = false;
+    bool m_isHovered = false;  
     bool m_isPressed = false;
 };

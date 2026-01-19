@@ -4,7 +4,6 @@
 #include <cmath>
 #include "GameObject.h"
 #include "Transform.h"
-#include "RectTransform.h"
 #include "Image.h"
 
 BEGINPROPERTY(UISlider)
@@ -20,12 +19,13 @@ ENDPROPERTY()
 
 void UISlider::Awake()
 {
-    m_rectTransform = GetComponent<RectTransform>();
+    // handle 자식 오브젝트로 강제로 생성시키고 등록을 awake에서 처리하자. 그러면 GameObject* handle로 가지고있고 
+    m_Transform = GetComponent<Transform>();
     m_trackImage = GetComponent<Image>();
+
     CacheHandle();
     ApplyTrackColor();
     ApplyHandleColor();
-    UpdateHandleVisual();
 }
 
 void UISlider::SetValue(float value)
@@ -40,14 +40,7 @@ void UISlider::SetValue(float value)
     if (clamped == m_value) return;
 
     m_value = clamped;
-    UpdateHandleVisual();
     InvokeValueChanged();
-}
-
-void UISlider::InvokeValueChanged()
-{
-    if (!m_interactable) return;
-    if (m_onValueChanged) m_onValueChanged(m_value);
 }
 
 void UISlider::CacheHandle()
@@ -60,7 +53,7 @@ void UISlider::CacheHandle()
         if (!child) continue;
         if (child->_GetOwner()->GetName() == "Handle")
         {
-            m_handleRect = child->_GetOwner()->GetComponent<RectTransform>();
+            m_handleTransform = child;
             m_handleImage = child->_GetOwner()->GetComponent<Image>();
             break;
         }
@@ -72,22 +65,38 @@ void UISlider::CacheHandle()
     }
 }
 
-void UISlider::UpdateHandleVisual()
-{
-    if (!m_rectTransform || !m_handleRect) return;
 
+void UISlider::InvokeValueChanged()
+{
+    if (!m_interactable) return;
+    if (m_onValueChanged) m_onValueChanged(m_value);
+}
+
+void UISlider::Update(float deltaTime)
+{
+    if (!m_handleTransform)
+    {
+        return;
+    }
+  
     float range = m_maxValue - m_minValue;
     if (range <= 0.0f) return;
 
-    Vector2 trackSize = m_rectTransform->GetSize();
-    Vector2 handleSize = m_handleRect->GetSize();
+    Vector3 trackScale = m_Transform->GetScale();
+    Vector3 handleScale = m_handleTransform->GetScale();
+    Vector2 trackSize = Vector2(trackScale.x, trackScale.y);
+    Vector2 handleSize = Vector2(handleScale.x, handleScale.y);
     float available = std::max(0.0f, trackSize.x - handleSize.x);
 
     float t = (m_value - m_minValue) / range;
     float x = -available * 0.5f + available * t;
 
-    m_handleRect->SetAnchoredPosition(Vector2(x, 0.0f));
+    Vector3 localPos = m_handleTransform->GetPosition();
+    localPos.x = x;
+    localPos.y = 0.0f;
+    m_handleTransform->SetPosition(localPos);
 }
+
 
 void UISlider::ApplyTrackColor()
 {

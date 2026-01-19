@@ -37,7 +37,6 @@ public:
     // 엔진 전용 public 함수들
 
     GameObject* CreateGameObject(const std::string& name = "GameObject");
-    GameObject* CreateUIObject(const std::string& name = "UIObject");
     GameObject* CreateUIImage(const std::string& name = "UIImage");
     GameObject* CreateUIButton(const std::string& name = "UIButton");
     GameObject* CreateUISlider(const std::string& name = "UISlider");

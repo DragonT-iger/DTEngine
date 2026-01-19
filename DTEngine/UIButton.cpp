@@ -13,17 +13,20 @@ ENDPROPERTY()
 
 void UIButton::Awake()
 {
+    // 조건 충족 안되면 생성 안시킬거임.
     if (m_canvas)
     {
         return;
     }
 
+    // scene 있는지 체크.
     Scene* scene = SceneManager::Instance().GetActiveScene();
     if (!scene)
     {
         return;
     }
 
+    // canvas 있는 obj 찾기 및 등록.
     for (const auto& obj : scene->GetGameObjects())
     {
         if (!obj)
@@ -37,13 +40,15 @@ void UIButton::Awake()
             m_canvas = canvas;
             break;
         }
-    }
+    } 
+    
+    ApplyNormalState();
 
+    // canvas 없으면 삭제.
     if (!m_canvas)
     {
         Destroy(_GetOwner());
     }
-    ApplyNormalState();
 }
 
 void UIButton::InvokeClick()

@@ -34,7 +34,7 @@
 #include "Image.h"
 #include "ReflectionProbe.h"
 #include "UIButton.h"
-#include "RectTransform.h"
+//#include "RectTransform.h"
 #include "Canvas.h"
 #include "UIManager.h"
 
@@ -165,12 +165,10 @@ bool Game::Initialize()
 
 			GameObject* sliderGO = scene->CreateUISlider("UI_Slider");
 			sliderGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* rect = sliderGO->GetComponent<RectTransform>())
+			if (auto* tf = sliderGO->GetTransform())
 			{
-					rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-					rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-					rect->SetAnchoredPosition(Vector2(100.0f, -340.0f));
-					rect->SetSizeDelta(Vector2(220.0f, 40.0f));
+					tf->SetPosition(Vector3(100.0f, -340.0f, 0.0f));
+					tf->SetScale(Vector3(220.0f, 40.0f, 1.0f));
 			}
 			if (auto* image = sliderGO->GetComponent<Image>())
 			{
