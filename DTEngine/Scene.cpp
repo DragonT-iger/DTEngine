@@ -480,6 +480,16 @@ void Scene::SetMainCamera(Camera* mainCamera)
     m_mainCamera = mainCamera;
 }
 
+Camera* Scene::GetEditorCamera()
+{
+	return m_editorCamera;
+}
+
+void Scene::SetEditorCamera(Camera* editorCamera)
+{
+    m_editorCamera = editorCamera;
+}
+
 
 void Scene::Clear()
 {

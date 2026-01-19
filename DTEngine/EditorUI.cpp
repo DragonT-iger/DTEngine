@@ -50,9 +50,9 @@ static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
 static bool  m_useSnap = false;            
-static float m_snapTranslation  = 1.0f;     
+static float m_snapTranslation  = 2.0f;     
 static float m_snapRotation     = 15.0f;       
-static float m_snapScale        = 1.0f;           
+static float m_snapScale        = 2.0f;           
 
 template<typename T>
 void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,

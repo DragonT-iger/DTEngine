@@ -63,6 +63,9 @@ public:
     Camera* GetMainCamera();
     void SetMainCamera(Camera* mainCamera);
 
+    Camera* GetEditorCamera();
+	void SetEditorCamera(Camera* editorCamera);
+
     const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name) { m_name = name; }
 
@@ -74,6 +77,7 @@ private:
     std::string m_name;
 
     Camera* m_mainCamera;
+	Camera* m_editorCamera;
 
 
 
