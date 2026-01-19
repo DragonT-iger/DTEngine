@@ -2375,6 +2375,8 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
             if (ext == ".meta") continue;
 			if (ext == ".cso") continue;
 			if (ext == ".vso") continue;
+            if (lowerCaseExt == ".svn") continue; 
+            if (filename == ".svn") continue;
 			if (filename == "PlayMode_Backup.scene") continue;
 
             ImGui::PushID(filename.c_str());

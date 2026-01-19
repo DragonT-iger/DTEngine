@@ -23,16 +23,18 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
 {
     static const std::set<std::string> ignoredExtensions = {
         ".meta", ".h", ".cpp",
-        ".vcxproj", ".filters", ".user" , ".orig"
+        ".vcxproj", ".filters", ".user" , ".orig", ".svn"
     };
     static const std::set<std::string> ignoredFileNames = {
-        "packages.config"
+        "packages.config" , ".svn"
     };
 
     for (auto it = fs::recursive_directory_iterator(directoryPath); it != fs::end(it);
         ++it)
     {
         const auto& entry = *it;
+        const auto& path = entry.path();
+        std::string filename = path.filename().string();
 
         //if (entry.is_directory())
         //{
@@ -43,12 +45,17 @@ void AssetDatabase::ScanDirectory(const std::string& directoryPath)
         //    continue;
         //}
 
+
+        if (entry.is_directory() && filename == ".svn")
+        {
+            it.disable_recursion_pending();
+            continue;
+        }
+
         if (!entry.is_regular_file())
         {
             continue;
         }
-
-        const auto& path = entry.path();
 
         if (ignoredFileNames.count(path.filename().string()))
         {
