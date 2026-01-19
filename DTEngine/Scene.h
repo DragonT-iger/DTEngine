@@ -14,6 +14,18 @@ class Camera;
 class Texture;
 class RenderTexture;
 
+struct DeltaTime // 배속용. 
+{
+    float rawTime; // 배속 적용 x.
+    float scaledTime; // 배속 적용. ( rawTime * m_timeScale )
+};
+
+struct Ray // picking용
+{
+    Vector4 rayOrigin;
+    Vector4 rayDir;
+};
+
 class Scene : public IResource
 {
 
@@ -69,6 +81,10 @@ public:
     const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name) { m_name = name; }
 
+    // 배속용.
+    float GetTimeScale() const { return m_timeScale; }
+    void SetTimeScale(float timeScale) { m_timeScale = timeScale; }
+
     void Clear();
 
 
@@ -79,6 +95,7 @@ private:
     Camera* m_mainCamera;
 	Camera* m_editorCamera;
 
+    inline static float m_timeScale = 1.0f; // 배속용.
 
 
     // 지연처리
