@@ -22,8 +22,8 @@ struct DeltaTime // 배속용.
 
 struct Ray // picking용
 {
-    Vector4 rayOrigin;
-    Vector4 rayDir;
+    Vector3 origin;
+    Vector3 dir;
 };
 
 class Scene : public IResource
@@ -84,6 +84,9 @@ public:
     // 배속용.
     float GetTimeScale() const { return m_timeScale; }
     void SetTimeScale(float timeScale) { m_timeScale = timeScale; }
+
+    // picking
+    Ray ScreenPointToRay(int x, int y);
 
     void Clear();
 
