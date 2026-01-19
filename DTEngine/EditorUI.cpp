@@ -2307,9 +2307,6 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
 
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
 
-    bool isHovered = ImGui::IsWindowHovered();
-    FreeCamera::SetIsSceneHovered(isHovered);
-
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();
 
@@ -2340,6 +2337,28 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     }
 
     ImGui::Image((void*)rt->GetSRV(), size);
+
+
+    bool isHovered = ImGui::IsItemHovered();
+
+    bool isFocused = ImGui::IsWindowFocused();
+#ifdef _DEBUG
+    if (isHovered) 
+    {
+        InputManager::Instance().SetGameInputActive(true);
+
+        ImVec2 mousePos = ImGui::GetMousePos();
+        ImVec2 windowPos = ImGui::GetItemRectMin();
+        InputManager::Instance().SetEditorMousePos(
+            (int)(mousePos.x - windowPos.x),
+            (int)(mousePos.y - windowPos.y)
+        );
+    }
+    else
+#endif
+    {
+        InputManager::Instance().SetGameInputActive(false);
+    }
 
 	//DX11Renderer::Instance().DrawString(10, 10, "Game Viewport", 1.0f, Vector4(1, 1, 1, 1));
 

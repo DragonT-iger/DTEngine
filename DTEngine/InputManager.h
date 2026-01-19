@@ -27,6 +27,14 @@ public:
 
     void HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
+    void SetWindowHandle(void* hwnd) { m_hWnd = hwnd; }
+
+    void SetGameInputActive(bool active) { m_isGameInputActive = active; }
+
+#ifdef _DEBUG
+    void SetEditorMousePos(int x, int y) { m_gameMousePos = { x, y }; }
+#endif
+
     void EndFrame();
 
     bool GetKeyDown(KeyCode key) const; 
@@ -45,8 +53,12 @@ private:
     std::array<bool, 256> m_keyUpState;
 
     MousePos m_mousePos = { 0, 0 };
+    MousePos m_gameMousePos = { 0, 0 };
     MousePos m_prevMousePos = { 0, 0 };
     MousePos m_mouseDelta = { 0, 0 };
+
+    void* m_hWnd = nullptr;
+    bool m_isGameInputActive = true;
 
     int MapKeyCodeToVKey(KeyCode key) const;
 };

@@ -96,7 +96,8 @@ bool Game::Initialize()
 	}
 
 
-	InputManager::Instance().Initialize();
+	InputManager::Instance().Initialize(); 
+	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
 	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
