@@ -53,6 +53,8 @@ void UIButton::Awake()
 
 void UIButton::InvokeClick()
 {
+    //std::string n = this->GetComponent<UIButton>()->GetName();
+    //printf("uibutton click, name = %s", n);
     if (!m_interactable) return;
     if (m_onClick) m_onClick();
 }

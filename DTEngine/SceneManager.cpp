@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "ResourceManager.h"
+#include "UIManager.h"
 
 Scene* SceneManager::GetActiveScene() const
 {
@@ -55,8 +56,11 @@ bool SceneManager::ProcessSceneChange()
         m_active->Awake();
         m_active->Start();
 
+        // uimanager 한테 tables 넘겨주기.
+        UIManager::Instance().SetUIInteractables(m_active->CollectUIInteractables());
+
         //m_active->Enter(); addcomponent 할때 OnEnable 호출 됨
-        
+
     }
 
     m_nextName.clear();

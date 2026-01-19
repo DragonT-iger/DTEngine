@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Image.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(UISlider)
 DTPROPERTY_ACCESSOR(UISlider, m_minValue, GetMinValue, SetMinValue)
@@ -20,16 +22,21 @@ ENDPROPERTY()
 void UISlider::Awake()
 {
     // handle 자식 오브젝트로 강제로 생성시키고 등록을 awake에서 처리하자. 그러면 GameObject* handle로 가지고있고 
-    m_Transform = GetComponent<Transform>();
+    m_transform = GetComponent<Transform>();
     m_trackImage = GetComponent<Image>();
 
     CacheHandle();
+    EnsureHandle();
     ApplyTrackColor();
     ApplyHandleColor();
+    UpdateHandleVisual();
 }
 
 void UISlider::SetValue(float value)
 {
+    //std::string n = this->GetComponent<UISlider>()->GetName();
+    //printf("slider setvalue, name = %s", n);
+
     if (m_wholeNumbers)
     {
         value = std::round(value);
@@ -40,6 +47,7 @@ void UISlider::SetValue(float value)
     if (clamped == m_value) return;
 
     m_value = clamped;
+    UpdateHandleVisual();
     InvokeValueChanged();
 }
 
@@ -65,24 +73,48 @@ void UISlider::CacheHandle()
     }
 }
 
-
-void UISlider::InvokeValueChanged()
+void UISlider::EnsureHandle()
 {
-    if (!m_interactable) return;
-    if (m_onValueChanged) m_onValueChanged(m_value);
+    if (m_handleTransform) return;
+
+    Transform* tf = GetTransform();
+    if (!tf) return;
+
+    Scene* scene = SceneManager::Instance().GetActiveScene();
+    if (!scene) return;
+
+    GameObject* handle = scene->CreateUIImage("Handle");
+    if (!handle) return;
+
+    Transform* handleTransform = handle->GetTransform();
+    if (handleTransform)
+    {
+        handleTransform->SetParent(tf);
+        handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+        handleTransform->SetScale(Vector3(1.0f, 1.0f, 1.0f));
+    }
+
+    m_handleTransform = handleTransform;
+    m_handleImage = handle->GetComponent<Image>();
+
+    if (m_handleImage)
+    {
+        m_handleImage->SetColor(m_handleColor);
+        if (auto* parentImage = GetComponent<Image>())
+        {
+            m_handleImage->SetOrderInLayer(parentImage->GetOrderInLayer() + 1);
+        }
+    }
 }
 
-void UISlider::Update(float deltaTime)
+void UISlider::UpdateHandleVisual()
 {
-    if (!m_handleTransform)
-    {
-        return;
-    }
-  
+    if (!m_transform || !m_handleTransform) return;
+
     float range = m_maxValue - m_minValue;
     if (range <= 0.0f) return;
 
-    Vector3 trackScale = m_Transform->GetScale();
+    Vector3 trackScale = m_transform->GetScale();
     Vector3 handleScale = m_handleTransform->GetScale();
     Vector2 trackSize = Vector2(trackScale.x, trackScale.y);
     Vector2 handleSize = Vector2(handleScale.x, handleScale.y);
@@ -97,6 +129,11 @@ void UISlider::Update(float deltaTime)
     m_handleTransform->SetPosition(localPos);
 }
 
+void UISlider::InvokeValueChanged()
+{
+    if (!m_interactable) return;
+    if (m_onValueChanged) m_onValueChanged(m_value);
+}
 
 void UISlider::ApplyTrackColor()
 {

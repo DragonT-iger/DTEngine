@@ -12,6 +12,7 @@ BEGINPROPERTY(Image)
 DTPROPERTY_ACCESSOR(Image, m_textureID, GetTextureID, SetTextureID)
 DTPROPERTY_ACCESSOR(Image, m_color, GetColor, SetColor)
 DTPROPERTY_ACCESSOR(Image, m_orderInLayer, GetOrderInLayer, SetOrderInLayer)
+DTPROPERTY_ACCESSOR(Image, m_layerName, GetLayerName, SetLayerName)
 ENDPROPERTY()
 
 void Image::Awake()
@@ -106,6 +107,17 @@ void Image::SetTextureID(uint64_t id)
     {
         SetTexture(nullptr);
     }
+}
+
+// 기본은 default 반환.
+void Image::SetLayerName(const std::string& name)
+{
+    if (name.empty())
+    {
+        m_layerName = "Default";
+        return;
+    }
+    m_layerName = name;
 }
 
 void Image::SetNativeSize()

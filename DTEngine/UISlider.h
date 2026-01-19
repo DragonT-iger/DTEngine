@@ -44,15 +44,14 @@ public:
     // callback 함수 호출.
     void InvokeValueChanged();
 
-    // handle 찾아서 저장.
-    void CacheHandle();
-
 private:
-    void Update(float deltaTime) override;
+    void CacheHandle();
+    void EnsureHandle();
+    void UpdateHandleVisual();
     void ApplyTrackColor();
     void ApplyHandleColor();
 
-    class Transform* m_Transform = nullptr;
+    class Transform* m_transform = nullptr;
     class Transform* m_handleTransform = nullptr;
     class Image* m_handleImage = nullptr;
     class Image* m_trackImage = nullptr;

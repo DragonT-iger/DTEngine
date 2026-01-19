@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 #include "Texture.h"
 #include "SimpleMathHelper.h"
+#include "string"
 
 class Image : public MonoBehaviour
 {
@@ -25,6 +26,9 @@ public:
     void SetOrderInLayer(int order) { m_orderInLayer = order; }
     const int& GetOrderInLayer() const { return m_orderInLayer; }
 
+    void SetLayerName(const std::string& name);
+    const std::string& GetLayerName() const { return m_layerName; }
+
     void SetNativeSize();
 
 private:
@@ -33,4 +37,6 @@ private:
     uint64_t m_textureID = 0;
     Vector4 m_color = { 1.f, 1.f, 1.f, 1.f };
     int     m_orderInLayer = 0;
+
+    std::string m_layerName = "Default";
 };

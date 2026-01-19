@@ -34,6 +34,7 @@
 #include "Image.h"
 #include "ReflectionProbe.h"
 #include "UIButton.h"
+#include "UISlider.h"
 //#include "RectTransform.h"
 #include "Canvas.h"
 #include "UIManager.h"
@@ -112,29 +113,19 @@ bool Game::Initialize()
 
 	if (scene->FindGameObject("UI Canvas") == nullptr)
 	{
-			GameObject* canvasGO = scene->CreateUIObject("UI Canvas");
+			GameObject* canvasGO = scene->CreateGameObject("UI Canvas");
 			canvasGO->AddComponent<Canvas>();
 
-			if (auto* rect = canvasGO->GetComponent<RectTransform>())
-			{
-					rect->SetAnchorMin(Vector2(0.0f, 0.0f));
-					rect->SetAnchorMax(Vector2(1.0f, 1.0f));
-					rect->SetSizeDelta(Vector2(0.0f, 0.0f));
-					rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
-			}
-
-			auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order, const std::string& layerName, int layerOrder) {
+			auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order) {
 					GameObject* go = scene->CreateUIImage(name);
 					go->GetTransform()->SetParent(canvasGO->GetTransform());
 
-					if (auto* rect = go->GetComponent<RectTransform>())
-					{
-							rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-							rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-							rect->SetAnchoredPosition(pos);
-							rect->SetSizeDelta(size);
-					}
-
+			if (auto* tf = canvasGO->GetTransform())
+			{
+					tf->SetPosition(Vector3(pos.x, pos.y, 0.0f));
+					tf->SetScale(Vector3(size.x, size.y, 1.0f));
+			}
+				
 					if (auto* image = go->GetComponent<Image>())
 					{
 							image->SetColor(color);
@@ -144,18 +135,16 @@ bool Game::Initialize()
 					return go;
 					};
 
-			makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0, "Back", -10);
-			makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1, "Default", 0);
-			makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2, "Front", 10);
+			makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0);
+			makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1);
+			makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2);
 
 			GameObject* buttonGO = scene->CreateUIButton("UI_Button");
 			buttonGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* rect = buttonGO->GetComponent<RectTransform>())
+			if (auto* tf = buttonGO->GetTransform())
 			{
-					rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-					rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-					rect->SetAnchoredPosition(Vector2(100.0f, -260.0f));
-					rect->SetSizeDelta(Vector2(180.0f, 60.0f));
+					tf->SetPosition(Vector3(100.0f, -260.0f, 0.0f));
+					tf->SetScale(Vector3(180.0f, 60.0f, 1.0f));
 			}
 			if (auto* image = buttonGO->GetComponent<Image>())
 			{
@@ -173,7 +162,7 @@ bool Game::Initialize()
 			if (auto* image = sliderGO->GetComponent<Image>())
 			{
 					image->SetColor(Vector4(0.2f, 0.8f, 0.9f, 1.0f));
-					image->SetOrderInLayer(4);
+					image->SetOrderInLayer(10);
 			}
 	}
 

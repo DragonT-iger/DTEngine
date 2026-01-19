@@ -9,6 +9,9 @@
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "Component.h"
+#include "UIButton.h"
+#include "UISlider.h"
+#include "UIManager.h"
 
 GameObject::GameObject(const std::string& name , bool isUI)
     : m_name{ name }, m_active{ true } {
@@ -201,6 +204,8 @@ Component* GameObject::AddComponent(const std::string& typeName)
 
     m_components.emplace_back(std::move(newComponent));
 
+    NotifyComponentAdded(raw);
+
     return raw;
 }
 void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
@@ -213,6 +218,8 @@ void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
     }
 
     m_components.push_back(std::move(comp));
+
+    NotifyComponentAdded(raw);
 
     if (m_phase == Phase::Awake)
     {
@@ -341,6 +348,16 @@ std::vector<std::unique_ptr<GameObject>> GameObject::Clone()
     }
 
     return clonedObjects;
+}
+
+void GameObject::NotifyComponentAdded(Component* component)
+{
+    if (!component) return;
+
+    if (dynamic_cast<UIButton*>(component) || dynamic_cast<UISlider*>(component))
+    {
+        UIManager::Instance().RegisterUIInteractable(this);
+    }
 }
 
 GameObject* GameObject::Find(std::string name)

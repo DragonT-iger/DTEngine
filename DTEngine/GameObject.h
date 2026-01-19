@@ -93,6 +93,8 @@ public:
 
     std::vector<std::unique_ptr<GameObject>> Clone();
 
+    // 컴포넌트 추가. button slider 위해서..
+    void NotifyComponentAdded(Component* component);
 private:
 
     std::string                                   m_name;
