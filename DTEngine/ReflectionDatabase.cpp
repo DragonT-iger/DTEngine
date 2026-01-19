@@ -35,4 +35,6 @@ const ClassInfo* ReflectionDatabase::GetClassInfomation(const std::string& class
 
 
 ReflectionDatabase::ReflectionDatabase() = default;
-ReflectionDatabase::~ReflectionDatabase() = default;
+ReflectionDatabase::~ReflectionDatabase() {
+	Clear();
+}
