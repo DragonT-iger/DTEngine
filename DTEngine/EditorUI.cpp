@@ -2014,6 +2014,17 @@ void EditorUI::OnDropFile(const std::string& rawPath)
         }
         //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
     }
+    else if (ext == ".prefab")
+    {
+        // 프리팹 인스턴스화
+        GameObject* go = ResourceManager::Instance().InstantiatePrefab(path.string());
+
+        if (go)
+        {
+            m_selectedGameObject = go; 
+            std::cout << "[Editor] Instantiated Prefab: " << path.string() << std::endl;
+        }
+    }
 }
 
 void EditorUI::DrawAssetInspector(const std::string& path)
@@ -2480,6 +2491,50 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
     }
 
     ImGui::Columns(1);
+
+
+    ImVec2 avail = ImGui::GetContentRegionAvail();
+    if (avail.y < 50.0f) avail.y = 50.0f; // 최소 높이 보장
+    if (avail.x < 1.0f) avail.x = 1.0f;
+
+    ImGui::InvisibleButton("##ProjectDropTarget", avail);
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+            GameObject* go = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+            if (go)
+            {
+                std::string fileName = go->GetName() + ".prefab";
+                std::filesystem::path fullPath = m_currentProjectDirectory / fileName;
+
+                int counter = 1;
+                while (std::filesystem::exists(fullPath))
+                {
+                    fileName = go->GetName() + "_" + std::to_string(counter) + ".prefab";
+                    fullPath = m_currentProjectDirectory / fileName;
+                    counter++;
+                }
+
+                if (ResourceManager::Instance().SavePrefab(go, fullPath.string()))
+                {
+                    std::cout << "[Editor] Prefab saved successfully: " << fullPath.string() << std::endl;
+
+                    AssetDatabase::Instance().ProcessAssetFile(fullPath.string());
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to save prefab." << std::endl;
+                }
+            }
+        }
+
+        ImGui::EndDragDropTarget();
+    }
 
 
     if (ImGui::BeginPopupContextWindow("ProjectContext", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
