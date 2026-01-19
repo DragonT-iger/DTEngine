@@ -99,8 +99,8 @@ bool Game::Initialize()
 	InputManager::Instance().Initialize();
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	SceneManager::Instance().LoadScene("SampleSceneBum");
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
 	SceneManager::Instance().ProcessSceneChange();
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
