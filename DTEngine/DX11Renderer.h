@@ -125,7 +125,7 @@ public:
     void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
 
     void UpdateTextureFlag_CBUFFER(uint32_t Flags);
-    void UpdateMatrixPallette_CBUFFER();
+    void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
 
     //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
     void ClearCache();

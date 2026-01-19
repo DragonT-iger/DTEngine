@@ -296,6 +296,12 @@
     <ClInclude Include="UIManager.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="Animatior.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -478,6 +484,12 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Animatior.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -554,6 +566,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl">
       <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Skeletal_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl">
+      <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

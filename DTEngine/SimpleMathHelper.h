@@ -69,5 +69,10 @@ namespace SimpleMathHelper {
 
     inline Matrix IdentityMatrix() { return Matrix::CreateScale(1.0f); }
 
-
+    inline Matrix Inverse(const Matrix& m)
+    {
+        Matrix inv;
+        m.Invert(inv);   // SimpleMath 제공
+        return inv;
+    }
 }

@@ -99,8 +99,8 @@ bool Game::Initialize()
 	InputManager::Instance().Initialize();
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
+	SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	SceneManager::Instance().LoadScene("SampleSceneBum");
 	SceneManager::Instance().ProcessSceneChange();
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
@@ -656,8 +656,11 @@ void Game::OnResize(int width, int height)
 {
 	if (width <= 0 || height <= 0) return;
 	DX11Renderer::Instance().Resize(width, height);
-	
-	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
+	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
+	if (mainCam) {
+		mainCam->SetViewDirty();
+	}
+	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 
 void Game::OnClose()

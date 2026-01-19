@@ -64,12 +64,4 @@ struct Matrix_Pallette //b5
 };
 
 
-//너무 시간을 허비해버렸어...
-
-//struct IBL
-//{
-//
-//};
-
-
 

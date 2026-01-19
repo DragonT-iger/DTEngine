@@ -26,6 +26,7 @@
 #include "UISlider.h"
 #include "RectTransform.h"
 #include "UIManager.h"
+#include "Animatior.h"
 
 
 GameObject* Scene::CreateGameObject(const std::string& name)
@@ -641,6 +642,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
             Mesh* mesh = mr->GetMesh();
             if (!mesh || !mat) return;
+
+
+            if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
+            {
+                DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+                
+            }
 
 
             if (currentPipelineKey != lastPipelineKey)
