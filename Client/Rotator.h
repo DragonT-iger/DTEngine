@@ -13,6 +13,8 @@ public:
     Rotator() = default;
     virtual ~Rotator() = default;
 
+
+    //void Start() override;
     void Update(float deltaTime) override;
 
     void SetRotationSpeed(const Vector3& speed) { m_rotationSpeed = speed; }
