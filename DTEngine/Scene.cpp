@@ -567,8 +567,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     const Matrix& projTM = camera->GetProjectionMatrix();
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
-    UIManager::Instance().UpdateLayout(this, width, height);
-    UIManager::Instance().UpdateInteraction(this, width, height);
+    // 이거 주석처리하고 button, slider 수정하고 rect는 남겨두지만 쓰지는 않는 방향으로 .
+    //UIManager::Instance().UpdateLayout(this, width, height);
+    //UIManager::Instance().UpdateInteraction(this, width, height);
 
     DX11Renderer::Instance().BindGlobalResources();
 

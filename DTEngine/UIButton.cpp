@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "UIButton.h"
 #include "Image.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 BEGINPROPERTY(UIButton)
 DTPROPERTY_ACCESSOR(UIButton, m_interactable, GetInteractable, SetInteractable)
@@ -11,6 +13,36 @@ ENDPROPERTY()
 
 void UIButton::Awake()
 {
+    if (m_canvas)
+    {
+        return;
+    }
+
+    Scene* scene = SceneManager::Instance().GetActiveScene();
+    if (!scene)
+    {
+        return;
+    }
+
+    for (const auto& obj : scene->GetGameObjects())
+    {
+        if (!obj)
+        {
+            continue;
+        }
+
+        Canvas* canvas = obj->GetComponent<Canvas>();
+        if (canvas)
+        {
+            m_canvas = canvas;
+            break;
+        }
+    }
+
+    if (!m_canvas)
+    {
+        Destroy(_GetOwner());
+    }
     ApplyNormalState();
 }
 
