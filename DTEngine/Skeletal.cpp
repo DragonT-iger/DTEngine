@@ -5,6 +5,7 @@
 #include "SkeletalRsource.h"
 #include "Model.h"
 
+#include "AnimationClip.h"
 
 BEGINPROPERTY(Skeletal)
 DTPROPERTY_SETTER(Skeletal, m_FbxName , SetSkeletal)
@@ -28,57 +29,36 @@ void Skeletal::Awake()
 
 void Skeletal::Update(float deltaTime)
 {
-	if (!m_BoneResource)
-		return;
+   
+}
 
 
+void Skeletal::LateUpdate(float dTime)
+{
+    if (!m_BoneResource) return;
 
+    size_t nodeCount = m_BoneResource->m_Bones.size();
+    static bool bDebugOnce = true; // 딱 한 번만 출력
 
-    const auto& bones = m_BoneResource->m_Bones; //Read Only
-
-    size_t boneCount = bones.size();
-
-    if (m_AnimatedLocalMatrices.size() != boneCount) 
+    for (size_t i = 0; i < nodeCount; ++i)
     {
-        m_AnimatedLocalMatrices.resize(boneCount);
+         BoneNode& resNode = m_BoneResource->m_Bones[i];
+        Matrix localMat = m_AnimatedLocalMatrices[i];
 
-        for (size_t i = 0; i < boneCount; ++i)
-            m_AnimatedLocalMatrices[i] = bones[i].DefaultLocalMatrix;
-    
-    }
-
-    if (m_globalTransforms.size() != boneCount) m_globalTransforms.resize(boneCount);
-    if (m_finalTransforms.size() != boneCount) m_finalTransforms.resize(boneCount);
-
-
-    //Vector라, Indexing이 계층구조 순서로 되어있음. 
-
-    for (size_t i = 0; i < boneCount; ++i)
-    {
-        const BoneNode& node = bones[i];
-
-        Matrix localMatrix = m_AnimatedLocalMatrices[i];
-
-        if (node.ParentIndex != -1)
+        if (resNode.ParentIndex != -1)
         {
-            const Matrix& parentGlobal = m_globalTransforms[node.ParentIndex];
-
-            m_globalTransforms[i] = localMatrix * parentGlobal;
+            m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
         }
         else
         {
-            m_globalTransforms[i] = localMatrix;
+            m_globalTransforms[i] = localMat;
         }
 
-
-        m_finalTransforms[i] = (m_globalTransforms[i] * node.OffsetMatrix).Transpose();
-
+      
+        m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
 
     }
-
-
 }
-
 void Skeletal::SetSkeletal(std::string filename)
 {
     //붙여넣기 시, 공백 들어가서 
@@ -93,13 +73,44 @@ void Skeletal::SetSkeletal(std::string filename)
 	if (BoneResource)
 	{
 		m_BoneResource = BoneResource;
+
+        size_t nodeCount = m_BoneResource->m_Bones.size();
+        m_AnimatedLocalMatrices.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
+
+
+        //aniamtino 정보가 없는 bone은 defaultlocalmatrix로 초기화 하고, 후에 Animator update를 통해서 값이 업데이트 됨. 
+        for (size_t i = 0; i < nodeCount; ++i)
+        {
+            m_AnimatedLocalMatrices[i] = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
+            Matrix defaultMat = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
+            m_AnimatedLocalMatrices[i] = defaultMat;
+        }
+
+        m_globalTransforms.resize(nodeCount);
+        m_finalTransforms.resize(nodeCount);
+
+
 	}
 	else std::cout << "Bone 생성 오류 FBX 경로: " << filename << std::endl;
 
 }
 
-void Skeletal::SetBonePose(int boneIndex, const Matrix& mat)
+
+int Skeletal::GetBoneIndex(const std::string& Name)
 {
-    if (boneIndex < m_AnimatedLocalMatrices.size())
-        m_AnimatedLocalMatrices[boneIndex] = mat;
+    return (m_BoneResource->GetIndex(Name));
 }
+
+//주입 받기 
+    void Skeletal::SetBonePose(int boneIndex, const Matrix & mat)
+    {
+        if (boneIndex < 0 || boneIndex >= (int)m_AnimatedLocalMatrices.size())
+            return;
+
+        m_AnimatedLocalMatrices[boneIndex] = mat;
+    }
+
+   
+
+
+    

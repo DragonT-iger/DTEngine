@@ -12,7 +12,6 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
 {
     Assimp::Importer importer;
 
-    // [최적화] Mesh, Material, Texture, Light, Camera 등 불필요한 요소 제거 (RVC = Remove Component)
     importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS,
         aiComponent_MESHES |
         aiComponent_MATERIALS |
@@ -23,71 +22,69 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         aiComponent_TEXCOORDS
     );
 
-    // 왼손 좌표계 변환은 Model과 동일하게 유지해야 회전 방향이 맞음
     const aiScene* scene = importer.ReadFile(fullPath,
         aiProcess_ConvertToLeftHanded |
-        aiProcess_RemoveComponent // 위에서 설정한 RVC 플래그 적용
+        aiProcess_RemoveComponent
     );
 
-    if (!scene || !scene->mAnimations)
-    {
-        // 애니메이션이 없는 파일이거나 로드 실패
+    if (!scene || !scene->mAnimations || scene->mNumAnimations == 0)
         return false;
-    }
 
-    // 보통 하나의 파일에 하나의 애니메이션 클립을 담는다고 가정 (index 0)
-    // 여러 개라면 여기서 루프를 돌거나 인자로 인덱스를 받아야 함
     const aiAnimation* anim = scene->mAnimations[0];
 
-    this->Name = anim->mName.C_Str();
-    this->Duration = (float)anim->mDuration;
+    Name = anim->mName.C_Str();
+    Duration = anim->mDuration; // ticks 단위
+    TicksPerSecond = (anim->mTicksPerSecond != 0.0) ? anim->mTicksPerSecond : 25.0;
 
-    // TicksPerSecond가 0인 경우(일부 포맷), 기본값 25.0f로 설정
-    this->TicksPerSecond = (anim->mTicksPerSecond != 0.0f) ? (float)anim->mTicksPerSecond : 25.0f;
+    Channels.clear();
+    Channels.reserve(anim->mNumChannels);
 
-    // 채널(Bone) 데이터 파싱
-    Channels.resize(anim->mNumChannels);
-
-    for (unsigned int i = 0; i < anim->mNumChannels; i++)
+    for (unsigned int i = 0; i < anim->mNumChannels; ++i)
     {
         aiNodeAnim* channel = anim->mChannels[i];
-        BoneChannel& myChannel = Channels[i];
-
         std::string nodeName = channel->mNodeName.C_Str();
 
-        if (nodeName == "Armature") continue;
+  
+        BoneChannel ch;
+        ch.BoneName = nodeName;
 
-
-        myChannel.BoneName = channel->mNodeName.C_Str();
-
-        // 1. Position Keys
-        for (unsigned int k = 0; k < channel->mNumPositionKeys; k++)
+        // Position Keys
+        ch.PositionKeys.reserve(channel->mNumPositionKeys);
+        for (unsigned int k = 0; k < channel->mNumPositionKeys; ++k)
         {
-            aiVector3D val = channel->mPositionKeys[k].mValue;
-            float time = (float)channel->mPositionKeys[k].mTime;
-            myChannel.PositionKeys.push_back({ time, Vector3(val.x, val.y, val.z) });
+            auto& key = channel->mPositionKeys[k];
+
+            key.mValue *= 0.01f;
+
+            ch.PositionKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
         }
 
-        // 2. Rotation Keys
-        for (unsigned int k = 0; k < channel->mNumRotationKeys; k++)
+        // Rotation Keys
+        ch.RotationKeys.reserve(channel->mNumRotationKeys);
+        for (unsigned int k = 0; k < channel->mNumRotationKeys; ++k)
         {
-            aiQuaternion val = channel->mRotationKeys[k].mValue;
-            float time = (float)channel->mRotationKeys[k].mTime;
-            // Assimp(w, x, y, z) -> SimpleMath(x, y, z, w) 생성자 순서 주의
-            myChannel.RotationKeys.push_back({ time, Quaternion(val.x, val.y, val.z, val.w) });
+            const auto& key = channel->mRotationKeys[k];
+            // Assimp: (w,x,y,z), SimpleMath Quaternion(x,y,z,w)
+            ch.RotationKeys.push_back({ key.mTime, Quaternion(key.mValue.x, key.mValue.y, key.mValue.z, key.mValue.w) });
         }
 
-        // 3. Scale Keys
-        for (unsigned int k = 0; k < channel->mNumScalingKeys; k++)
+        // Scale Keys
+        ch.ScaleKeys.reserve(channel->mNumScalingKeys);
+        for (unsigned int k = 0; k < channel->mNumScalingKeys; ++k)
         {
-            aiVector3D val = channel->mScalingKeys[k].mValue;
-            float time = (float)channel->mScalingKeys[k].mTime;
-            myChannel.ScaleKeys.push_back({ time, Vector3(val.x, val.y, val.z) });
+            const auto& key = channel->mScalingKeys[k];
+            ch.ScaleKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
         }
+
+        if (ch.PositionKeys.empty() && ch.RotationKeys.empty() && ch.ScaleKeys.empty())
+            continue;
+
+        Channels.push_back(std::move(ch));
     }
 
     return true;
 }
+
 
 bool AnimationClip::SaveFile(const std::string& fullPath)
 {

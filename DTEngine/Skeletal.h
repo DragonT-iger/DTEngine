@@ -13,6 +13,8 @@
 class Model;
 class BoneResource;
 
+
+
 class Skeletal : public MonoBehaviour
 {
 
@@ -25,7 +27,7 @@ public:
 
 	void Awake() override;
 	void Update(float dTime) override;
-
+	void LateUpdate(float dTime) override;
     uint64_t GetModelID() const { return m_modelID; }
 
     const std::vector<Matrix>& GetFinalBoneTransforms() const { return m_finalTransforms; }
@@ -35,24 +37,21 @@ public:
 
 	std::vector<Matrix>& GetFinalMatrix() { return m_finalTransforms; }
 	BoneResource* GetBoneResource() {  if(m_BoneResource) return m_BoneResource; }
-
-	void SetBonePose(int boneIndex, const Matrix& mat); //Animation에 주입. 
+	int GetBoneIndex(const std::string& Name);
+	void SetBonePose(int boneIndex, const Matrix& mat); 
 
 private:
 
-    uint64_t m_modelID = 0; // Awkae 순회하면서 중복 업데이트 확인; 중복 체크는 SubMesh들이 동일 Skeletal을 참조하기 때문임. 
 
     std::vector<Matrix> m_finalTransforms; //CB에 Binding할 Vector [ ] 
+	std::vector<Matrix> m_globalTransforms; // 중첩되는 Model Matrix 
+	std::vector<Matrix> m_AnimatedLocalMatrices; //animator로 주입되는 matrix 
 
-	std::vector<Matrix> m_globalTransforms;
+
+
 	BoneResource* m_BoneResource = nullptr; //Model한테 받는 Raw Resource Pointer 
-
-
-
-	std::vector<Matrix> m_AnimatedLocalMatrices;
+	uint64_t m_modelID = 0; // Awkae 순회하면서 중복 업데이트 확인; 중복 체크는 SubMesh들이 동일 Skeletal을 참조하기 때문임. ; 일단 대기. 
 	std::string m_FbxName = " ";
 
 };
 
-//Model 
-//Object의 이름으로 fbx를 가져와야 하는건가

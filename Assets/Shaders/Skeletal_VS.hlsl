@@ -9,31 +9,36 @@ struct VS_OUTPUT
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
+    
 };
+
+
 
 VS_OUTPUT VS(VS_INPUT input)
 {
     VS_OUTPUT output;
 
 
-    float4x4 skinMatrix = (float4x4) 0;
+    float4x4 skinMatrix = float4x4(
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0
+);
     
-    skinMatrix += (float4x4) Matrix_Pallette_Array[input.BoneID.x] * input.Weights.x;
-    skinMatrix += (float4x4) Matrix_Pallette_Array[input.BoneID.y] * input.Weights.y;
-    skinMatrix += (float4x4) Matrix_Pallette_Array[input.BoneID.z] * input.Weights.z;
-    skinMatrix += (float4x4) Matrix_Pallette_Array[input.BoneID.w] * input.Weights.w;
+    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.x] * input.Weights.x;
+    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.y] * input.Weights.y;
+    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.z] * input.Weights.z;
+    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.w] * input.Weights.w;
 
     // 2. 열 우선(Column-Major) 방식의 변환 연산: mul(Vector, Matrix)
     // 로컬 좌표 -> 스킨 변환 -> 월드 변환 [cite: 23]
     float4 modelPos = mul(float4(input.Pos, 1.0f), skinMatrix);
     
-    
-
-    
     float4 worldPos = mul(modelPos, World_TM);
     
-    
-
+    float weightSum = input.Weights.x + input.Weights.y + 
+    input.Weights.z + input.Weights.w;
     
     output.WorldPos = worldPos.xyz;
 

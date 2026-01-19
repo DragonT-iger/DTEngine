@@ -6,7 +6,6 @@
 class Skeletal;
 class AnimationClip;
 
-
 class Animator : public MonoBehaviour
 {
 
@@ -14,8 +13,8 @@ class Animator : public MonoBehaviour
 
 
     Skeletal* m_TargetSkeletal = nullptr;
-
     AnimationClip* m_CurrentClip = nullptr;
+
     float m_CurrentTime = 0.0f;
 
     // 최적화: Channel 인덱스 -> Skeletal의 Bone 인덱스 캐싱
@@ -25,17 +24,10 @@ class Animator : public MonoBehaviour
     bool Play = false;
     bool Loop = false;
 
-
     std::string m_Animation_Name;
 
 public:
     void Update(float deltaTime) override;
-
-    //void Play(AnimationClip* clip); //Clip이랑 Skeletal Pointer를 연결-> Index에 넣는 느낌. 
-
-
-    //void SetClip(AnimationClip* clip);
-
 
 
     void SetClip(std::string& Name);// { m_Animation_Name = Name; }

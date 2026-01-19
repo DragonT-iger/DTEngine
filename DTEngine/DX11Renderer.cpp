@@ -239,7 +239,7 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
 
     for (int i = 0; i < matrix.size(); i++)
     {
-        dataPtr->Matrix_Pallette[i] = matrix[i];
+        dataPtr->Matrix_Pallette[i] = matrix[i].Transpose();
     }
 
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
