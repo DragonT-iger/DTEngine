@@ -40,6 +40,7 @@ public:
     GameObject* GetSelectedGameObject() const { return m_selectedGameObject; }
     void SetSelectedGameObject(GameObject* go) { m_selectedGameObject = go; }
 
+
 private:
     void DrawHierarchyWindow(Scene* activeScene);
 
@@ -50,6 +51,8 @@ private:
     void DrawHierarchyNode(Transform* tf);
 
     void DrawComponentProperties(Component* comp);
+
+    void DrawEditorSettings();
 
     void AlignWithView();
 

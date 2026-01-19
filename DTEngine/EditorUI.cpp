@@ -39,7 +39,6 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "AssetDatabase.h"
-#include "Camera.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
 
@@ -48,7 +47,10 @@ namespace fs = std::filesystem;
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
-
+static bool  m_useSnap = false;            
+static float m_snapTranslation  = 1.0f;     
+static float m_snapRotation     = 15.0f;       
+static float m_snapScale        = 1.0f;           
 
 template<typename T>
 void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
@@ -96,6 +98,8 @@ void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Comp
     ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text("%s", label);
 }
+
+
 
 // 파일 에셋(Texture, Material 등)을 드래그 앤 드롭으로 할당하는 헬퍼
 template<typename T>
@@ -158,7 +162,40 @@ void DrawAssetReference(EditorUI* editor, const char* label, T* currentVal, Comp
 
 
 
+void EditorUI::DrawEditorSettings()
+{
+    ImGui::Begin("Editor Settings"); 
 
+    ImGui::Text("Gizmo Operation");
+    if (ImGui::RadioButton("Translate (W)", m_currentOperation == ImGuizmo::TRANSLATE)) m_currentOperation = ImGuizmo::TRANSLATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Rotate (E)", m_currentOperation == ImGuizmo::ROTATE)) m_currentOperation = ImGuizmo::ROTATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Scale (R)", m_currentOperation == ImGuizmo::SCALE)) m_currentOperation = ImGuizmo::SCALE;
+
+    ImGui::Separator();
+
+    ImGui::Text("Gizmo Mode");
+    if (ImGui::RadioButton("Local", m_currentMode == ImGuizmo::LOCAL)) m_currentMode = ImGuizmo::LOCAL;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("World", m_currentMode == ImGuizmo::WORLD)) m_currentMode = ImGuizmo::WORLD;
+
+    ImGui::Separator();
+
+    ImGui::Text("Snap Settings");
+    ImGui::Checkbox("Enable Snap", &m_useSnap);
+
+    if (m_useSnap)
+    {
+        ImGui::Indent();
+        ImGui::InputFloat("Move Step", &m_snapTranslation, 0.1f, 1.0f, "%.2f");
+        ImGui::InputFloat("Rotate Step (Deg)", &m_snapRotation, 1.0f, 10.0f, "%.1f");
+        ImGui::InputFloat("Scale Step", &m_snapScale, 0.1f, 1.0f, "%.2f");
+        ImGui::Unindent();
+    }
+
+    ImGui::End();
+}
 
 
 EditorUI::EditorUI() {
@@ -226,6 +263,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     DrawProjectWindow(engineMode);
     //DrawGizmo(activeScene);
     
+    DrawEditorSettings();
 
     // Redo Undo
 
@@ -388,12 +426,29 @@ void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
 
             //std::cout << "Rendering Gizmo for: " << selectedObject->GetName() << std::endl;
 
+            float snap[3] = { 0.f, 0.f, 0.f };
+            if (m_useSnap)
+            {
+                if (m_currentOperation == ImGuizmo::TRANSLATE) {
+                    snap[0] = snap[1] = snap[2] = m_snapTranslation;
+                }
+                else if (m_currentOperation == ImGuizmo::ROTATE) {
+                    snap[0] = m_snapRotation; 
+                }
+                else if (m_currentOperation == ImGuizmo::SCALE) {
+                    snap[0] = snap[1] = snap[2] = m_snapScale;
+                }
+            }
+            // ---------------------
+
             ImGuizmo::Manipulate(
                 (float*)&viewMatrix,
                 (float*)&projMatrix,
                 m_currentOperation,
                 m_currentMode,
-                (float*)&worldMatrix
+                (float*)&worldMatrix,
+                NULL,               
+                m_useSnap ? snap : NULL 
             );
 
             bool isUsing = ImGuizmo::IsUsing();
@@ -989,7 +1044,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-            if (prop.m_name == "m_editorEulerAngles")
+            if (prop.m_name == "m_editorEulerAngles" || prop.m_name == "m_parent")
             {
                 continue;
             }
@@ -1397,12 +1452,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
             }
             // Transform* (포인터)
-            else if (type == typeid(Transform*))
-            {
-                //Transform* parentTf = *static_cast<Transform**>(data);
-                //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
-                //ImGui::Text("%s: %s", name, parentName.c_str());
-            }
+            //else if (type == typeid(Transform*))
+            //{
+            //    //Transform* parentTf = *static_cast<Transform**>(data);
+            //    //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
+            //    //ImGui::Text("%s: %s", name, parentName.c_str());
+            //}
 
 
             // GameObject*
