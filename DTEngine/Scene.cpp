@@ -491,6 +491,36 @@ void Scene::SetEditorCamera(Camera* editorCamera)
 }
 
 
+Ray Scene::ScreenPointToRay(int x, int y) 
+{
+    Matrix proj = m_mainCamera->GetProjectionMatrix();
+    Matrix view = m_mainCamera->GetViewMatrix();
+
+    Vector4 vr = m_mainCamera->GetViewportRect();
+    
+    // SimpleMath가 계산해준다고 해서 사용해봄.
+    //m_mainCamera->GetTargetTexture();
+    //RenderViewport;
+    DirectX::SimpleMath::Viewport vp(vr.x, vr.y, vr.z, vr.w, 0.0f, 1.0f); 
+
+    float X = static_cast<float>(x);
+    float Y = static_cast<float>(y);
+    Vector3 screenNear(X, Y, 0.0f);
+    Vector3 screenFar(X, Y, 1.0f);
+
+    // Unproject가 뷰포트 기준 스크린(픽셀) 좌표를 NDC로 바꾸고, 
+    // 투영, 뷰, (월드) 행렬의 역변환을 거쳐 3D 월드 공간의 점으로 되돌려줌.
+    Vector3 nearWorld = vp.Unproject(screenNear, proj, view, SimpleMathHelper::IdentityMatrix());
+    Vector3 farWorld = vp.Unproject(screenFar, proj, view, SimpleMathHelper::IdentityMatrix());
+
+    Ray r;
+    r.origin = nearWorld;
+    r.dir = farWorld - nearWorld;
+    r.dir.Normalize();
+
+    return r;
+}
+
 void Scene::Clear()
 {
     m_gameObjects.clear();     
