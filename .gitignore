@@ -62,6 +62,8 @@ Client/imgui.ini
 
 /Assets/Models/*
 
+*.svn
+
 *.ini
 *.aps
 *.rc
