@@ -2377,6 +2377,7 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
 			if (ext == ".vso") continue;
             if (lowerCaseExt == ".svn") continue; 
             if (filename == ".svn") continue;
+			if (lowerCaseExt == ".orig") continue; // git merge temp files
 			if (filename == "PlayMode_Backup.scene") continue;
 
             ImGui::PushID(filename.c_str());
