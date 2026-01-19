@@ -321,7 +321,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     if (ctrlPressed && vPressed_Down)
     {
-        if (!m_clipboardGameObjects.empty() && m_isInspectorFocused)
+        if (!m_clipboardGameObjects.empty() && !m_isInspectorFocused)
         {
             GameObject* prototype = m_clipboardGameObjects[0].get();
             std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
