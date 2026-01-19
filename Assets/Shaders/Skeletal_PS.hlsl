@@ -17,7 +17,16 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     // [1] 데이터 초기화 및 기본값 설정
     float3 N = normalize(input.WorldNormal);
-    float3 V = normalize(CameraPos - input.WorldPos);
+    float3 V;
+    
+    if (IsOrtho > 0.5f) // 0일때 ortho
+    {
+        V = -normalize(CameraDir); // 엔진에서 - 안해줘도 됨 어짜피 어셈블리 열어보면 자동으로 mad 처리 됨
+    }
+    else
+    {
+        V = normalize(CameraPos - input.WorldPos);
+    }
     
     float3 albedo = float3(1.0f, 1.0f, 1.0f);
     float metal = 0.0f;
@@ -81,6 +90,7 @@ float4 PS(PS_INPUT input) : SV_Target
         directLighting += DisneyPBR(
             input.WorldPos,
             N,
+            V,
             albedo,
             rough,
             metal,

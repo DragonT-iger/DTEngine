@@ -30,6 +30,9 @@ struct ID3D11DepthStencilState;
 struct ID3D11RasterizerState;
 struct ID3D11SamplerState;
 struct ID3D11BlendState;
+class Light;
+class Camera;
+
 
 namespace DirectX {
 	inline namespace DX11 {
@@ -40,6 +43,8 @@ namespace DirectX {
 }
 
 enum class BlendMode { Opaque, AlphaBlend };
+
+
 
 
 class DX11Renderer : public Singleton<DX11Renderer>
@@ -114,7 +119,7 @@ public:
     //CB Buffer Data map/unmap ; 외부에서 call 
     void UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
     void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
-    void UpdateLights_CBUFFER(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
+    void UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera);
     void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
 
     void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
@@ -158,6 +163,10 @@ private:
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
         Vector3 CameraPos;
+
+        Vector3 CameraDir; 
+        float IsOrtho;
+
         Matrix LightViewProjScale;
         Vector4 ShadowMapInfo; // 텍셀 크기
     };

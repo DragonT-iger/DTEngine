@@ -50,6 +50,7 @@ public:
 
     void SetViewDirty() { m_dirtyView = true; }
     void SetAspectRatio(float ratio) { m_aspectRatio = ratio; m_dirtyProj = true; }
+	const float& GetAspectRatio() const { return m_aspectRatio; }
 
 	const bool& IsOrthographic() const { return m_isOrthographic; }
 	void SetIsOrthographic(bool isOrtho) { m_isOrthographic = isOrtho; m_dirtyProj = true; }

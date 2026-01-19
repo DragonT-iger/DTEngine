@@ -266,6 +266,8 @@ Material* Material::Clone()
     newMat->m_cullMode = m_cullMode;
     newMat->m_renderMode = m_renderMode;
 
+    newMat->UpdateTextureBatchID();
+
     return newMat;
 }
 

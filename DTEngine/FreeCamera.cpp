@@ -5,6 +5,7 @@
 #include "InputManager.h" 
 #include "HistoryManager.h"
 #include "ResourceManager.h"
+#include "Camera.h"
 
 BEGINPROPERTY(FreeCamera)
 //DTPROPERTY(FreeCamera, m_moveSpeed)
@@ -82,13 +83,35 @@ void FreeCamera::HandleInput(float deltaTime)
             if (input.GetKey(KeyCode::Shift)) currentSpeed *= m_turboScale;
             if (input.GetKey(KeyCode::Control)) currentSpeed /= m_turboScale * 4;
 
-            Vector3 forward = transform->Forward();
-            Vector3 right = transform->Right();
+            Camera* camera = GetComponent<Camera>();
+            if (camera && camera->IsOrthographic())
+            {
+                if (moveDir.y != 0.0f)
+                {
+                    float currentSize = camera->GetOrthographicSize();
+                    float newSize = currentSize - (moveDir.y * currentSpeed * deltaTime);
+                    if (newSize < 0.1f) newSize = 0.1f;
+                    camera->SetOrthographicSize(newSize);
+                }
 
-            Vector3 moveVector = (forward * moveDir.z) + (right * moveDir.x) + (Vector3(0, 1, 0) * moveDir.y);
+                Vector3 right = transform->Right();
+                Vector3 up = transform->Up();
 
-            Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
-            transform->SetPosition(newPos);
+                Vector3 moveVector = (right * moveDir.x) + (up * moveDir.z);
+
+                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
+                transform->SetPosition(newPos);
+            }
+            else
+            {
+                Vector3 forward = transform->Forward();
+                Vector3 right = transform->Right();
+
+                Vector3 moveVector = (forward * moveDir.z) + (right * moveDir.x) + (Vector3(0, 1, 0) * moveDir.y);
+
+                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
+                transform->SetPosition(newPos);
+            }
         }
 
 

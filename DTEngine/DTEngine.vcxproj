@@ -150,6 +150,7 @@
     <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Canvas.h" />
     <ClInclude Include="ChangeComponentActiveCommand.h" />
     <ClInclude Include="ChangeEditorTransformCommand.h" />
     <ClInclude Include="ChangeGameObjectActiveCommand.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="move.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RectTransform.h" />
     <ClInclude Include="ReflectionDatabase.h" />
     <ClInclude Include="ReflectionMacros.h" />
     <ClInclude Include="ReflectionProbe.h" />
@@ -212,6 +214,9 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture_ID_Manager.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UISlider.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
@@ -222,6 +227,7 @@
     <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="ChangeComponentActiveCommand.cpp" />
     <ClCompile Include="ChangeEditorTransformCommand.cpp" />
     <ClCompile Include="ChangeGameObjectActiveCommand.cpp" />
@@ -259,6 +265,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RectTransform.cpp" />
     <ClCompile Include="ReflectionDatabase.cpp" />
     <ClCompile Include="ReflectionProbe.cpp" />
     <ClCompile Include="RegisterCoreTypes.cpp" />
@@ -276,6 +283,9 @@
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UISlider.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>

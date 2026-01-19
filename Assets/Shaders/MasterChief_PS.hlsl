@@ -89,9 +89,23 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float metallic = t_MetallicRoughness.Sample(g_Sampler, input.UV).b;
     float roughness = t_MetallicRoughness.Sample(g_Sampler, input.UV).g;
+    
+    //float metallic = 1;
+    //float roughness = 1;
+    
     //float ao = t_AO.Sample(g_Sampler, uv).r;
 
-    float3 viewDir = normalize(CameraPos - input.WorldPos);
+    float3 viewDir;
+    
+    if (IsOrtho > 0.5)
+    {
+        viewDir = -normalize(CameraDir);
+    }
+    else
+    {
+        viewDir = normalize(CameraPos - input.WorldPos);
+    }
+    
 
     float3 viewNormal = normalize(mul(normal, (float3x3) View_TM));
     float2 sphereUV = viewNormal.xy * 0.5 + 0.5;

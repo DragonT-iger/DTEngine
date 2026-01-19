@@ -112,9 +112,9 @@
           },
           "m_editorFovY": 60.0,
           "m_farZ": 1000.0,
-          "m_isOrthographic": false,
-          "m_nearZ": 0.009999999776482582,
-          "m_orthographicSize": 5.0,
+          "m_isOrthographic": true,
+          "m_nearZ": -2000.0,
+          "m_orthographicSize": 0.4000000059604645,
           "m_viewportRect": {
             "w": 1.0,
             "x": 0.0,
@@ -130,26 +130,26 @@
       "transform": {
         "id": 5111378071936728102,
         "m_editorEulerAngles": {
-          "x": 7.905519008636475,
-          "y": -1.9476978778839111,
-          "z": -1.3468210546818682e-08
+          "x": 28.80546760559082,
+          "y": -45.83401107788086,
+          "z": 0.0
         },
         "m_parent": 1745503933686592374,
         "m_position": {
-          "x": -5.965975761413574,
-          "y": 2.050022840499878,
-          "z": -23.313932418823242
+          "x": -0.5286118984222412,
+          "y": 4.95785665512085,
+          "z": -25.060699462890625
         },
         "m_rotation": {
-          "w": -0.9974771738052368,
-          "x": -0.06892400234937668,
-          "y": 0.016955621540546417,
-          "z": -0.0011716049630194902
+          "w": 0.8921218514442444,
+          "x": 0.22910334169864655,
+          "y": -0.37715908885002136,
+          "z": 0.09685718268156052
         },
         "m_scale": {
-          "x": 0.9999999403953552,
+          "x": 0.9999998807907104,
           "y": 0.9999998211860657,
-          "z": 0.9999998807907104
+          "z": 0.9999970197677612
         }
       }
     },
@@ -168,8 +168,8 @@
           "m_editorFovY": 60.0,
           "m_farZ": 1000.0,
           "m_isOrthographic": false,
-          "m_nearZ": 0.10000000149011612,
-          "m_orthographicSize": 5.0,
+          "m_nearZ": 0.009999999776482582,
+          "m_orthographicSize": 1.8663668632507324,
           "m_viewportRect": {
             "w": 1.0,
             "x": 0.0,
@@ -190,21 +190,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": 35.50546646118164,
-          "y": 6838.57275390625,
+          "x": 37.90550994873047,
+          "y": 6805.89453125,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -5.426510810852051,
-          "y": 7.99122953414917,
-          "z": -29.125492095947266
+          "x": -3.3638737201690674,
+          "y": 5.536991119384766,
+          "z": -23.76142120361328
         },
         "m_rotation": {
-          "w": -0.9523073434829712,
-          "x": -0.3048860430717468,
-          "y": 0.011863866820931435,
-          "z": -0.003798277350142598
+          "w": -0.9042057991027832,
+          "x": -0.31050926446914673,
+          "y": 0.2773524224758148,
+          "z": -0.09524435549974442
         },
         "m_scale": {
           "x": 1.0,
@@ -1791,7 +1791,7 @@
       "transform": {
         "id": 1745503933686592374,
         "m_editorEulerAngles": {
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
           "z": 0.0
         },
@@ -8103,6 +8103,657 @@
           "x": 100.0,
           "y": 100.0,
           "z": 100.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12384779837600028661,
+          "m_anchorMax": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_anchorMin": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_anchoredPosition": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 12748718133345947961,
+          "m_matchWidthOrHeight": 0.0,
+          "m_referenceResolution": {
+            "x": 1280.0,
+            "y": 720.0
+          },
+          "typeName": "Canvas"
+        }
+      ],
+      "id": 7877253753259260451,
+      "name": "UI Canvas",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13298971343405527509,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16787749970904686155,
+          "m_anchorMax": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchoredPosition": {
+            "x": 100.0,
+            "y": -100.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 140.0,
+            "y": 80.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 8350241525590512111,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 0.30000001192092896,
+            "z": 0.30000001192092896
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1682539163018268177,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10855266366579312813,
+      "name": "UI_Image_1",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9873390517926021648,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 13298971343405527509,
+        "m_position": {
+          "x": 20.0,
+          "y": -20.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 28.0,
+          "y": 16.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12597082370782521845,
+          "m_anchorMax": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchoredPosition": {
+            "x": 140.0,
+            "y": -140.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 140.0,
+            "y": 80.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 15163868330441413161,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.30000001192092896,
+            "y": 1.0,
+            "z": 0.30000001192092896
+          },
+          "m_orderInLayer": 1,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5150506024205448282,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 651638400303541740,
+      "name": "UI_Image_2",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14012706928943983368,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 13298971343405527509,
+        "m_position": {
+          "x": 28.0,
+          "y": -28.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 28.0,
+          "y": 16.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 18034514157117166741,
+          "m_anchorMax": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchoredPosition": {
+            "x": 180.0,
+            "y": -180.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 140.0,
+            "y": 80.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 17230453878549560877,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.30000001192092896,
+            "y": 0.30000001192092896,
+            "z": 1.0
+          },
+          "m_orderInLayer": 2,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 14718146496753525349,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 7993287674314648978,
+      "name": "UI_Image_3",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7001465187001521573,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 13298971343405527509,
+        "m_position": {
+          "x": 36.0,
+          "y": -36.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 28.0,
+          "y": 16.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 2427432586814956402,
+          "m_anchorMax": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchoredPosition": {
+            "x": 100.0,
+            "y": -260.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 180.0,
+            "y": 60.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 7289839018501003087,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 3,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 10187642677015384964,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 7552181856112036051,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 14013876667552133316,
+      "name": "UI_Button",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12436038689746623090,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 13298971343405527509,
+        "m_position": {
+          "x": 20.0,
+          "y": -52.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 36.0,
+          "y": 12.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5541653141345186104,
+          "m_anchorMax": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "m_anchoredPosition": {
+            "x": 100.0,
+            "y": -340.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 220.0,
+            "y": 40.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 7770958957902745780,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.4000000059604645,
+            "y": 0.4000000059604645,
+            "z": 0.4000000059604645
+          },
+          "m_orderInLayer": 4,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 16293528533236297543,
+          "m_fillColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_handleColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_interactable": true,
+          "m_maxValue": 1.0,
+          "m_minValue": 0.0,
+          "m_trackColor": {
+            "w": 1.0,
+            "x": 0.4000000059604645,
+            "y": 0.4000000059604645,
+            "z": 0.4000000059604645
+          },
+          "m_value": 0.0,
+          "m_wholeNumbers": false,
+          "typeName": "UISlider"
+        },
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.4000000059604645,
+              0.4000000059604645,
+              0.4000000059604645,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 16658500439183963016,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 3268735856976534907,
+      "name": "UI_Slider",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7345103170589412977,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 13298971343405527509,
+        "m_position": {
+          "x": 20.0,
+          "y": -68.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 44.0,
+          "y": 8.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 967499465395352472,
+          "m_anchorMax": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "m_anchorMin": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_anchoredPosition": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "m_sizeDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "typeName": "RectTransform"
+        },
+        {
+          "Active": true,
+          "id": 2495405515803339176,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 1,
+          "m_textureID": 0,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 93491770794532974,
+          "m_materialID": 1452279306071263180,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 7856329609556578636,
+      "name": "Handle",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14765372113880105654,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 7345103170589412977,
+        "m_position": {
+          "x": 20.0,
+          "y": -68.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 44.0,
+          "y": 8.0,
+          "z": 1.0
         }
       }
     }
