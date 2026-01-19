@@ -321,7 +321,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
 
     if (ctrlPressed && vPressed_Down)
     {
-        if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
+        if (!m_clipboardGameObjects.empty() && m_isInspectorFocused)
         {
             GameObject* prototype = m_clipboardGameObjects[0].get();
             std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
@@ -585,8 +585,6 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
-    m_isHierarchyFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
-
     if (!activeScene) return;
 
     if (m_selectedGameObject)
@@ -781,6 +779,8 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 void EditorUI::DrawInspectorWindow()
 {
     ImGui::Begin("Inspector");
+
+    m_isInspectorFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
     GameObject* targetGameObject = m_selectedGameObject;
     std::string targetAssetPath = m_selectedAssetPath;
