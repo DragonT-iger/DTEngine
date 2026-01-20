@@ -2,6 +2,7 @@
 
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
+#include "Canvas.h"
 #include <functional>
 
 class UIButton : public MonoBehaviour
@@ -43,12 +44,16 @@ private:
     void ApplyImageColor(const Vector4& color);
     void UpdateVisualState();
 
-    bool m_interactable = true;
+    // 컬러값 default.
     Vector4 m_normalColor = Vector4(1.f, 1.f, 1.f, 1.f);
     Vector4 m_hoverColor = Vector4(0.8f, 0.8f, 0.8f, 1.f);
     Vector4 m_pressedColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
-    std::function<void()> m_onClick;
 
-    bool m_isHovered = false;
+    std::function<void()> m_onClick;    // 함수 저장용.
+
+    Canvas* m_canvas = nullptr;
+
+    bool m_interactable = true; // 상호작용
+    bool m_isHovered = false;  
     bool m_isPressed = false;
 };

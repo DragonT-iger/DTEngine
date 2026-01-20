@@ -38,20 +38,25 @@ public:
     void SetHandleColor(const Vector4& value) { m_handleColor = value; }
     const Vector4& GetHandleColor() const { return m_handleColor; }
 
+    // callback 함수 저장.
     void SetOnValueChanged(std::function<void(float)> callback) { m_onValueChanged = std::move(callback); }
+    
+    // callback 함수 호출.
     void InvokeValueChanged();
 
-private:
+    // handle 찾아서 저장.
     void CacheHandle();
-    void UpdateHandleVisual();
+
+private:
+    void Update(float deltaTime) override;
     void ApplyTrackColor();
     void ApplyHandleColor();
 
-    class RectTransform* m_rectTransform = nullptr;
-    class RectTransform* m_handleRect = nullptr;
+    class Transform* m_Transform = nullptr;
+    class Transform* m_handleTransform = nullptr;
     class Image* m_handleImage = nullptr;
     class Image* m_trackImage = nullptr;
-
+    
     float m_minValue = 0.0f;
     float m_maxValue = 1.0f;
     float m_value = 0.0f;
@@ -62,3 +67,4 @@ private:
     Vector4 m_handleColor = Vector4(1.f, 1.f, 1.f, 1.f);
     std::function<void(float)> m_onValueChanged;
 };
+

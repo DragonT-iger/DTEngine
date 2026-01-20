@@ -302,6 +302,15 @@
     <ClInclude Include="AnimationClip.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="TilemapData.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TilemapGenerator.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -488,6 +497,15 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Animatior.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TilemapData.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TilemapGenerator.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

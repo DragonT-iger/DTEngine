@@ -24,7 +24,7 @@
 #include "Skeletal.h"
 #include "UIButton.h"
 #include "UISlider.h"
-#include "RectTransform.h"
+//#include "RectTransform.h"
 #include "UIManager.h"
 #include "Animatior.h"
 
@@ -42,19 +42,9 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     return raw;
 }
 
-GameObject* Scene::CreateUIObject(const std::string& name)
-{
-    GameObject* go = CreateGameObject(name);
-    if (go && !go->GetComponent<RectTransform>())
-    {
-        go->AddComponent<RectTransform>();
-    }
-    return go;
-}
-
 GameObject* Scene::CreateUIImage(const std::string& name)
 {
-    GameObject* go = CreateUIObject(name);
+    GameObject* go = CreateGameObject(name);
     if (go && !go->GetComponent<Image>())
     {
         go->AddComponent<Image>();
@@ -101,12 +91,10 @@ GameObject* Scene::CreateUISlider(const std::string& name)
             GameObject* handle = CreateUIImage("Handle");
             handle->GetTransform()->SetParent(tf);
 
-            if (auto* rect = handle->GetComponent<RectTransform>())
+            if (auto* handleTransform = handle->GetTransform())
             {
-                rect->SetAnchorMin(Vector2(0.5f, 0.5f));
-                rect->SetAnchorMax(Vector2(0.5f, 0.5f));
-                rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
-                rect->SetSizeDelta(Vector2(24.0f, 24.0f));
+                handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+                handleTransform->SetScale(Vector3(24.0f, 24.0f, 1.0f));
             }
 
             if (auto* image = handle->GetComponent<Image>())
@@ -783,8 +771,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     const Matrix& projTM = camera->GetProjectionMatrix();
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
-    UIManager::Instance().UpdateLayout(this, width, height);
-    UIManager::Instance().UpdateInteraction(this, width, height);
+    // 이거 주석처리하고 button, slider 수정하고 rect는 남겨두지만 쓰지는 않는 방향으로 .
+    //UIManager::Instance().UpdateLayout(this, width, height);
+    //UIManager::Instance().UpdateInteraction(this, width, height);
 
     DX11Renderer::Instance().BindGlobalResources();
 

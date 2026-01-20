@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "UIButton.h"
 #include "Image.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 BEGINPROPERTY(UIButton)
 DTPROPERTY_ACCESSOR(UIButton, m_interactable, GetInteractable, SetInteractable)
@@ -11,7 +13,42 @@ ENDPROPERTY()
 
 void UIButton::Awake()
 {
+    // 조건 충족 안되면 생성 안시킬거임.
+    if (m_canvas)
+    {
+        return;
+    }
+
+    // scene 있는지 체크.
+    Scene* scene = SceneManager::Instance().GetActiveScene();
+    if (!scene)
+    {
+        return;
+    }
+
+    // canvas 있는 obj 찾기 및 등록.
+    for (const auto& obj : scene->GetGameObjects())
+    {
+        if (!obj)
+        {
+            continue;
+        }
+
+        Canvas* canvas = obj->GetComponent<Canvas>();
+        if (canvas)
+        {
+            m_canvas = canvas;
+            break;
+        }
+    } 
+    
     ApplyNormalState();
+
+    // canvas 없으면 삭제.
+    if (!m_canvas)
+    {
+        Destroy(_GetOwner());
+    }
 }
 
 void UIButton::InvokeClick()

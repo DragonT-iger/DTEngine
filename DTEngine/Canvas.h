@@ -11,6 +11,8 @@ public:
     Canvas() = default;
     ~Canvas() override = default;
 
+    void Awake() override;
+
     void SetReferenceResolution(const Vector2& value) { m_referenceResolution = value; }
     const Vector2& GetReferenceResolution() const { return m_referenceResolution; }
 

@@ -43,6 +43,9 @@
 #include "Canvas.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
+#include "TilemapData.h"
+#include "TilemapGenerator.h"
+#include "Prefab.h"
 
 namespace fs = std::filesystem;
 
@@ -589,6 +592,8 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 
     if (m_selectedGameObject)
     {
+		//std::cout << ImGui::IsAnyItemActive() << std::endl;
+
         if (InputManager::Instance().GetKeyDown(KeyCode::Delete) &&
             !ImGui::IsAnyItemActive())
         {
@@ -1574,10 +1579,75 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 GameObject* currentGO = *static_cast<GameObject**>(data);
 
-                DrawSceneReference<GameObject>(this, name, currentGO, comp, prop.m_setter,
-                    [](GameObject* go) { return go->GetName(); },
-                    [](Transform* tf) { return tf->_GetOwner(); }
-                );
+                // 1. 현재 할당된 오브젝트 이름 표시 버튼
+                std::string displayStr = "None";
+                if (currentGO) displayStr = currentGO->GetName();
+
+                float width = ImGui::CalcItemWidth();
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    // 버튼 클릭 시 해당 오브젝트를 하이어라키에서 선택
+                    if (currentGO) m_selectedGameObject = currentGO;
+                }
+
+                // 2. 드래그 앤 드롭 처리 (Hierarchy Item + Project File)
+                if (ImGui::BeginDragDropTarget())
+                {
+                    // [기존] 하이어라키에서 드래그했을 때
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+                    {
+                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
+                        Transform* draggedTf = *(Transform**)payload->Data;
+                        GameObject* draggedGO = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+                        if (draggedGO)
+                        {
+                            GameObject* oldVal = currentGO;
+                            prop.m_setter(comp, &draggedGO);
+
+                            auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                comp, prop.m_setter, oldVal, draggedGO
+                            );
+                            HistoryManager::Instance().Do(std::move(cmd));
+                        }
+                    }
+
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::filesystem::path fpath(droppedPath);
+                        std::string ext = fpath.extension().string();
+
+                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                        if (ext == ".prefab")
+                        {
+							Prefab* prefabAsset = ResourceManager::Instance().Load<Prefab>(droppedPath);
+
+                            GameObject* newInstance = prefabAsset->Instantiate();
+
+                            if (newInstance)
+                            {
+                                newInstance->SetActive(false); 
+								newInstance->SetFlag(GameObject::Flags::HideAndDontSave, true);
+
+                                GameObject* oldVal = currentGO;
+                                prop.m_setter(comp, &newInstance);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                    comp, prop.m_setter, oldVal, newInstance
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+
+                                std::cout << "[Editor] Prefab assigned: " << newInstance->GetName() << std::endl;
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
             }
             // component 인 경우 
             else if (ReflectionDatabase::Instance().IsComponentPointer(type))
@@ -1647,6 +1717,18 @@ void EditorUI::DrawComponentProperties(Component* comp)
             //    DrawAssetReference<Material>(this, name, currentMat, comp, prop.m_setter, exts);
             //}
 
+            else if (type == typeid(TilemapData*)) {
+				TilemapData* currentData = *static_cast<TilemapData**>(data);
+
+				std::vector<std::string> exts = { ".tilemap" };
+				DrawAssetReference<TilemapData>(this, name, currentData, comp, prop.m_setter, exts);
+            }
+
+			else if (type == typeid(Prefab*)) {
+				Prefab* currentPrefab = *static_cast<Prefab**>(data);
+				std::vector<std::string> exts = { ".prefab" };
+                DrawAssetReference<Prefab>(this, name, currentPrefab, comp, prop.m_setter, exts);
+			}
             
 
             else {
@@ -2017,7 +2099,10 @@ void EditorUI::OnDropFile(const std::string& rawPath)
     else if (ext == ".prefab")
     {
         // 프리팹 인스턴스화
-        GameObject* go = ResourceManager::Instance().InstantiatePrefab(path.string());
+
+		Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path.string());
+
+        GameObject* go = prefab->Instantiate();
 
         if (go)
         {
@@ -2252,6 +2337,79 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             //ImGui::Text("Preview");
         }
     }
+    else if (ext == ".tilemap") // 1. 사용하는 타일맵 확장자로 변경하세요 (예: .tm, .json)
+    {
+        TilemapData* tilemap = ResourceManager::Instance().Load<TilemapData>(path);
+
+        if (tilemap)
+        {
+            ImGui::Text("Tilemap Editor: %s", filePath.filename().string().c_str());
+            ImGui::Separator();
+
+            int width = tilemap->GetWidth();
+            int height = tilemap->GetHeight();
+            bool changed = false;
+
+            if (ImGui::InputInt("Width", &width))
+            {
+                if (width > 0) { tilemap->SetWidth(width); changed = true; }
+            }
+            if (ImGui::InputInt("Height", &height))
+            {
+                if (height > 0) { tilemap->SetHeight(height); changed = true; }
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Tile Data Grid");
+
+            if (ImGui::BeginTable("TilemapGrid", width > 0 ? width : 1, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX))
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    ImGui::TableNextRow();
+                    for (int x = 0; x < width; ++x)
+                    {
+                        ImGui::TableNextColumn();
+
+                        int tileID = tilemap->GetTileIndex(x, y);
+
+                        ImGui::PushID(x + y * width);
+
+                        std::string label = std::to_string(tileID);
+
+                        int maxTileCount = TilemapGenerator::PALETTE_SIZE;
+
+                        if (ImGui::Button(label.c_str(), ImVec2(30, 30)))
+                        { 
+                            tilemap->SetTileIndex(x, y, (tileID + 1) % maxTileCount);
+                            changed = true;
+                        }
+
+                        if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+                        {
+
+                            int nextID = tileID - 1;
+
+                            if (nextID < 0)
+                                nextID = maxTileCount - 1;
+
+                            tilemap->SetTileIndex(x, y, nextID);
+                            changed = true;
+                        }
+                        ImGui::PopID();
+                    }
+                }
+                ImGui::EndTable();
+            }
+
+            if (changed)
+            {
+                tilemap->SaveFile(path);
+            }
+
+            ImGui::Separator();
+        }
+    }
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
@@ -2306,6 +2464,9 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     }
 
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
+
+    bool isHovered = ImGui::IsWindowHovered();
+    FreeCamera::SetIsSceneHovered(isHovered);
 
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();
@@ -2425,7 +2586,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 #ifdef _DEBUG
     if (isHovered) 
     {
-        InputManager::Instance().SetGameInputActive(true);
+        //InputManager::Instance().SetGameInputActive(true);
 
         ImVec2 mousePos = ImGui::GetMousePos();
         ImVec2 windowPos = ImGui::GetItemRectMin();
@@ -2437,7 +2598,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     else
 #endif
     {
-        InputManager::Instance().SetGameInputActive(false);
+        //InputManager::Instance().SetGameInputActive(false);
     }
 
 	//DX11Renderer::Instance().DrawString(10, 10, "Game Viewport", 1.0f, Vector4(1, 1, 1, 1));
@@ -2767,6 +2928,48 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                     std::cerr << "[Editor] Failed to write scene file." << std::endl;
                 }
             }
+
+            if (ImGui::MenuItem("Tilemap"))
+            {
+                std::string baseName = "New Tilemap";
+                std::string ext = ".tilemap";
+                std::filesystem::path newPath = m_currentProjectDirectory / (baseName + ext);
+
+                int counter = 1;
+                while (std::filesystem::exists(newPath))
+                {
+                    newPath = m_currentProjectDirectory / (baseName + " " + std::to_string(counter) + ext);
+                    counter++;
+                }
+
+                std::ofstream file(newPath);
+                if (file.is_open())
+                {
+                    file << "{\n";
+                    file << "  \"width\": 10,\n";
+                    file << "  \"height\": 10,\n";
+                    file << "  \"p0\": 0, \"p1\": 0, \"p2\": 0, \"p3\": 0, \"p4\": 0,\n";
+
+                    file << "  \"grid\": [\n";
+                    for (int i = 0; i < 100; ++i)
+                    {
+                        file << "    { \"v\": -1 }" << (i < 99 ? "," : "") << "\n";
+                    }
+                    file << "  ]\n";
+                    file << "}";
+
+                    file.close();
+
+                    AssetDatabase::Instance().ProcessAssetFile(newPath.string());
+
+                    std::cout << "[Editor] Created new tilemap: " << newPath.string() << std::endl;
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to create tilemap file." << std::endl;
+                }
+            }
+
             ImGui::EndMenu();
         }
         ImGui::EndPopup();

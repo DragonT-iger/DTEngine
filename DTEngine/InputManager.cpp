@@ -9,11 +9,6 @@ void InputManager::Initialize()
     m_keyDownState.fill(false);
     m_keyUpState.fill(false);
 
-#ifndef _DEBUG
-    m_isGameInputActive = true;
-#else
-    m_isGameInputActive = false;
-#endif
 }
 
 void InputManager::Update()

@@ -3,13 +3,12 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "RectTransform.h"
 #include "Canvas.h"
 #include "UIButton.h"
+#include "UISlider.h"
 #include "Image.h"
 #include "InputManager.h"
 #include "DX11Renderer.h"
-#include <Windows.h>
 
 static Canvas* GetCanvasInHierarchy(Transform* start)
 {
@@ -40,76 +39,10 @@ void UIManager::UpdateLayout(Scene* scene, float width, float height)
 {
     if (!scene || width <= 0.0f || height <= 0.0f) return;
 
-    EnsureDefaultLayers();
-
     if (m_lastWidth != width || m_lastHeight != height)
     {
         m_lastWidth = width;
         m_lastHeight = height;
-    }
-
-    std::vector<RectTransform*> roots;
-    std::vector<RectTransform*> canvasRoots;
-
-    auto collectRectChildren = [&](Transform* parent, auto&& collectRef) -> void {
-        if (!parent) return;
-
-        for (Transform* child : parent->GetChildren())
-        {
-            if (!child) continue;
-            if (auto* rect = child->_GetOwner()->GetComponent<RectTransform>())
-            {
-                canvasRoots.push_back(rect);
-            }
-            else
-            {
-                collectRef(child, collectRef);
-            }
-        }
-        };
-
-    const auto& gameObjects = scene->GetGameObjects();
-    for (const auto& go : gameObjects)
-    {
-        if (!go || !go->IsActiveInHierarchy()) continue;
-
-        if (go->GetComponent<Canvas>())
-        {
-            if (auto* rect = go->GetComponent<RectTransform>())
-            {
-                canvasRoots.push_back(rect);
-            }
-            else if (auto* tf = go->GetTransform())
-            {
-                collectRectChildren(tf, collectRectChildren);
-            }
-            continue;
-        }
-
-        RectTransform* rect = go->GetComponent<RectTransform>();
-        if (!rect) continue;
-
-        Transform* tf = rect->GetTransform();
-        Transform* parent = tf ? tf->GetParent() : nullptr;
-        RectTransform* parentRect = parent ? parent->_GetOwner()->GetComponent<RectTransform>() : nullptr;
-        if (!parentRect)
-        {
-            roots.push_back(rect);
-        }
-    }
-
-    if (!canvasRoots.empty())
-    {
-        for (RectTransform* root : canvasRoots)
-        {
-            root->ApplyLayoutRecursive(width, height);
-        }
-        return;
-    }
-
-    for (RectTransform* root : roots)
-    {
-        root->ApplyLayoutRecursive(width, height);
     }
 }
 
@@ -120,25 +53,10 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
     Vector2 viewportOrigin = m_viewportOrigin;
     Vector2 viewportSize = m_viewportSize;
 
-    if (viewportSize.x <= 0.0f || viewportSize.y <= 0.0f)
-    {
-        HWND hwnd = DX11Renderer::Instance().GetHwnd();
-        RECT clientRect{};
-        POINT originPoint{ 0, 0 };
-        if (hwnd && ::GetClientRect(hwnd, &clientRect) && ::ClientToScreen(hwnd, &originPoint))
-        {
-            viewportOrigin = Vector2(static_cast<float>(originPoint.x), static_cast<float>(originPoint.y));
-            viewportSize = Vector2(static_cast<float>(clientRect.right - clientRect.left),
-                static_cast<float>(clientRect.bottom - clientRect.top));
-        }
-    }
-
+    // 마우스 포지션 가져오기.
     const MousePos& mousePos = InputManager::Instance().GetMousePosition();
     Vector2 mouseScreen = Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-    bool insideViewport = (mouseScreen.x >= viewportOrigin.x &&
-        mouseScreen.y >= viewportOrigin.y &&
-        mouseScreen.x <= viewportOrigin.x + viewportSize.x &&
-        mouseScreen.y <= viewportOrigin.y + viewportSize.y);
+    bool insideViewport = (mouseScreen.x >= viewportOrigin.x && mouseScreen.y >= viewportOrigin.y && mouseScreen.x <= viewportOrigin.x + viewportSize.x && mouseScreen.y <= viewportOrigin.y + viewportSize.y);
 
     Vector2 localMouse = mouseScreen - viewportOrigin;
     float viewportScaleX = (viewportSize.x > 0.0f) ? (width / viewportSize.x) : 1.0f;
@@ -147,65 +65,81 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
     localMouse.y *= viewportScaleY;
 
     bool mouseDown = InputManager::Instance().GetKeyDown(KeyCode::MouseLeft);
+    bool mouseHeld = InputManager::Instance().GetKey(KeyCode::MouseLeft);
     bool mouseUp = InputManager::Instance().GetKeyUp(KeyCode::MouseLeft);
 
     const auto& gameObjects = scene->GetGameObjects();
+
     for (const auto& go : gameObjects)
     {
-        if (!go || !go->IsActiveInHierarchy()) continue;
+        // canvas 없는지 먼저 체크.
+        if (!m_Canvas) break;
 
         UIButton* button = go->GetComponent<UIButton>();
-        if (!button || !button->GetInteractable()) continue;
+        UISlider* slider = go->GetComponent<UISlider>();
 
-        Image* image = go->GetComponent<Image>();
+        // 일단 button, slider 만 input 체크해서 처리하기.
+        if (!button && !slider) continue;
 
-        RectTransform* rect = go->GetComponent<RectTransform>();
-        if (!rect) continue;
+        Transform* tf = go->GetTransform();
 
-        Transform* tf = rect->GetTransform();
-        Canvas* canvas = tf ? GetCanvasInHierarchy(tf) : nullptr;
-        Vector2 referenceResolution = Vector2(width, height);
-        if (canvas)
-        {
-            referenceResolution = canvas->GetReferenceResolution();
-            if (referenceResolution.x <= 0.0f || referenceResolution.y <= 0.0f)
-            {
-                referenceResolution = Vector2(width, height);
-            }
-        }
+        float canvasScale = m_Canvas->GetScaleFactor(width, height);
+        if (canvasScale <= 0.0f) canvasScale = 1.0f;
 
-        float scaleX = (referenceResolution.x > 0.0f) ? (width / referenceResolution.x) : 1.0f;
-        float scaleY = (referenceResolution.y > 0.0f) ? (height / referenceResolution.y) : 1.0f;
-        if (scaleX <= 0.0f) scaleX = 1.0f;
-        if (scaleY <= 0.0f) scaleY = 1.0f;
+        Vector3 worldPos = tf->GetWorldPosition();
+        Vector3 lossyScale = tf->GetLossyScale();
+        Vector2 centerScreen = Vector2(width * 0.5f, height * 0.5f) + Vector2(worldPos.x * canvasScale, -worldPos.y * canvasScale);
 
-        Vector2 center = rect->GetScreenPosition(width, height);
-        Vector2 size = rect->GetSize();
-        Vector2 halfSize = Vector2(size.x * 0.5f * scaleX, size.y * 0.5f * scaleY);
-        Vector2 min = center - halfSize;
-        Vector2 max = center + halfSize;
+        Vector2 size = Vector2(lossyScale.x * canvasScale, lossyScale.y * canvasScale);
+        Vector2 halfSize = Vector2(size.x * 0.5f, size.y * 0.5f);
+        Vector2 min = centerScreen - halfSize;
+        Vector2 max = centerScreen + halfSize;
 
         bool hovered = insideViewport &&
             localMouse.x >= min.x && localMouse.x <= max.x &&
             localMouse.y >= min.y && localMouse.y <= max.y;
 
-        button->SetHovered(hovered);
-
-        if (mouseDown && hovered)
+        if (button)
         {
             button->SetPressed(true);
-        }
+            if (!button->GetInteractable()) continue;
+            button->SetHovered(hovered);
 
-        if (mouseUp)
-        {
-            if (button->IsPressed() && hovered)
+            if (mouseDown && hovered)
             {
-                button->InvokeClick();
+                button->SetPressed(true);
             }
-            button->SetPressed(false);
+
+            if (mouseUp)
+            {
+                if (button->IsPressed() && hovered)
+                {
+                    button->InvokeClick();
+                }
+                button->SetPressed(false);
+            }
+        }
+        
+        if (slider)
+        {
+            if (!slider->GetInteractable()) continue;
+
+            if (mouseHeld)
+            {
+                float widthSpan = max.x - min.x;
+                if (widthSpan > 0.0f)
+                {
+                    float t = (localMouse.x - min.x) / widthSpan;
+                    t = std::clamp(t, 0.0f, 1.0f);
+                    float value = slider->GetMinValue() + t * (slider->GetMaxValue() - slider->GetMinValue());
+                    slider->SetValue(value);
+                }
+            }
+
         }
     }
 }
+
 
 void UIManager::SetViewportRect(const Vector2& origin, const Vector2& size)
 {
