@@ -57,6 +57,12 @@ GameObject* Scene::CreateUIButton(const std::string& name)
     if (go && !go->GetComponent<UIButton>())
     {
         go->AddComponent<UIButton>();
+        UIManager::Instance().RegisterUIInteractable(go);
+
+        if (auto* tf = go->GetTransform())
+        {
+            tf->SetScale(Vector3(100.0f, 50.0f, 1.0f)); 
+        }
     }
     return go;
 }
@@ -67,6 +73,12 @@ GameObject* Scene::CreateUISlider(const std::string& name)
     if (go && !go->GetComponent<UISlider>())
     {
         go->AddComponent<UISlider>();
+        UIManager::Instance().RegisterUIInteractable(go);
+
+        if (auto* tf = go->GetTransform())
+        {
+            tf->SetScale(Vector3(200.0f, 20.0f, 1.0f));  
+        }
     }
 
     if (go)
@@ -255,24 +267,6 @@ bool Scene::LoadFile(const std::string& fullPath)
 
             if (typeName == "RectTransform")
             {
-                Transform* tf = go->GetTransform();
-                if (tf)
-                {
-                    auto anchored = reader.ReadVec2("m_anchoredPosition", { 0.0f, 0.0f });
-                    auto sizeDelta = reader.ReadVec2("m_sizeDelta", { 0.0f, 0.0f });
-
-                    Vector3 position = tf->GetPosition();
-                    position.x = anchored[0];
-                    position.y = anchored[1];
-                    tf->SetPosition(position);
-
-                    Vector3 scale = tf->GetScale();
-                    scale.x = sizeDelta[0];
-                    scale.y = sizeDelta[1];
-                    tf->SetScale(scale);
-                }
-
-                reader.EndArrayItem();
                 continue;
             }
 
@@ -597,8 +591,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
 
     // 매프레임 호출하는데 active button, slider 없으면 처리 없는걸로
-    UIManager::Instance().UpdateLayout(this, width, height);
-    UIManager::Instance().UpdateInteraction(this, width, height);
+    if (renderUI) 
+    {
+        //printf("Scene::Render - width: %f, height: %f\n", width, height);
+
+        UIManager::Instance().UpdateLayout(this, width, height);
+        UIManager::Instance().UpdateInteraction(this, width, height);
+    }
 
     DX11Renderer::Instance().BindGlobalResources();
 
@@ -708,6 +707,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
         DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
 
         // return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
+        // 이거 아래로 수정해서 image에 있는 orderinlayer 로 정렬 우선순위 주기 위해서.
         std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
             Image* imageA = a->GetComponent<Image>();
             Image* imageB = b->GetComponent<Image>();

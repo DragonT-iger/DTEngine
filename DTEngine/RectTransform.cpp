@@ -136,8 +136,6 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
 
     m_cachedSize = size;
     m_cachedWorldCenter = worldCenter;
-
-
 }
 
 void RectTransform::ApplyLayoutRecursive(float screenWidth, float screenHeight)

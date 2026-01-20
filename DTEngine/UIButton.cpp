@@ -11,6 +11,20 @@ DTPROPERTY_ACCESSOR(UIButton, m_hoverColor, GetHoverColor, SetHoverColor)
 DTPROPERTY_ACCESSOR(UIButton, m_pressedColor, GetPressedColor, SetPressedColor)
 ENDPROPERTY()
 
+static Canvas* GetCanvasInHierarchy(Transform* start)
+{
+    Transform* current = start;
+    while (current)
+    {
+        if (auto* canvas = current->_GetOwner()->GetComponent<Canvas>())
+        {
+            return canvas;
+        }
+        current = current->GetParent();
+    }
+    return nullptr;
+
+}
 void UIButton::Awake()
 {
     // 조건 충족 안되면 생성 안시킬거임.
@@ -41,7 +55,9 @@ void UIButton::Awake()
             break;
         }
     } 
-    
+
+    Transform* tf = GetTransform();
+    m_canvas = GetCanvasInHierarchy(tf);
     ApplyNormalState();
 
     // canvas 없으면 삭제.

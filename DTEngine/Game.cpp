@@ -96,9 +96,7 @@ bool Game::Initialize()
 		return false;
 	}
 
-
 	InputManager::Instance().Initialize();
-
 
 	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
 	SceneManager::Instance().LoadScene("SampleScene");
@@ -109,61 +107,6 @@ bool Game::Initialize()
 	{
 		assert(false && "기본 씬 로드 실패");
 		return false;
-	}
-
-	if (scene->FindGameObject("UI Canvas") == nullptr)
-	{
-			GameObject* canvasGO = scene->CreateGameObject("UI Canvas");
-			canvasGO->AddComponent<Canvas>();
-
-			auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order) {
-					GameObject* go = scene->CreateUIImage(name);
-					go->GetTransform()->SetParent(canvasGO->GetTransform());
-
-			if (auto* tf = canvasGO->GetTransform())
-			{
-					tf->SetPosition(Vector3(pos.x, pos.y, 0.0f));
-					tf->SetScale(Vector3(size.x, size.y, 1.0f));
-			}
-				
-					if (auto* image = go->GetComponent<Image>())
-					{
-							image->SetColor(color);
-							image->SetOrderInLayer(order);
-					}
-
-					return go;
-					};
-
-			makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0);
-			makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1);
-			makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2);
-
-			GameObject* buttonGO = scene->CreateUIButton("UI_Button");
-			buttonGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* tf = buttonGO->GetTransform())
-			{
-					tf->SetPosition(Vector3(100.0f, -260.0f, 0.0f));
-					tf->SetScale(Vector3(180.0f, 60.0f, 1.0f));
-			}
-			if (auto* image = buttonGO->GetComponent<Image>())
-			{
-					image->SetColor(Vector4(0.9f, 0.8f, 0.2f, 1.0f));
-					image->SetOrderInLayer(3);
-			}
-
-			GameObject* sliderGO = scene->CreateUISlider("UI_Slider");
-			sliderGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* tf = sliderGO->GetTransform())
-			{
-					tf->SetPosition(Vector3(100.0f, -340.0f, 0.0f));
-					tf->SetScale(Vector3(220.0f, 40.0f, 1.0f));
-			}
-			if (auto* image = sliderGO->GetComponent<Image>())
-			{
-					image->SetColor(Vector4(0.2f, 0.8f, 0.9f, 1.0f));
-					image->SetOrderInLayer(10);
-			}
 	}
 
 #ifdef _DEBUG
