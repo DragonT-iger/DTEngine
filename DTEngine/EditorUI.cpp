@@ -2476,7 +2476,7 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     const bool hovered = ImGui::IsItemHovered();
     const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-    if (activeScene && camera && hovered && clicked && !ImGuizmo::IsUsing())
+    if (activeScene && camera && hovered && clicked && !ImGuizmo::IsUsing() && !ImGuizmo::IsOver())
     {
         ImVec2 mouse = ImGui::GetMousePos();
 
@@ -2545,7 +2545,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
     const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-    if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing())
+    if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing() && !ImGuizmo::IsOver())
     {
         Camera* camera = activeScene->GetMainCamera();
         if (camera) 

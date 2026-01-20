@@ -601,7 +601,7 @@ bool Scene::Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld)
     {
         GameObject* go = up.get();
 
-        if (go->GetName() == "Skybox(temp)") continue;
+        if (go->GetName() == "Skybox(temp)") continue; // 나중에 스카이박스 처리 바꿔주기.
 
         if (!go || !go->IsActiveInHierarchy()) continue;
         if (go->GetComponent<Image>()) continue;
