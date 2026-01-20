@@ -26,7 +26,6 @@ public:
 	static constexpr int PALETTE_SIZE = 5;
 
 public:
-    TilemapData* m_mapData = nullptr;
 
     Prefab* m_prefab0 = 0; 
     Prefab* m_prefab1 = 0;
@@ -35,5 +34,8 @@ public:
     Prefab* m_prefab4 = 0;
 
 private:
+    
+    TilemapData* m_mapData = nullptr;
+
     std::vector<GameObject*> m_spawnedTiles;
 };
