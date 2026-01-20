@@ -1,0 +1,256 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1549800710126249014,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 12721942249057060834,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 15457439187271150869,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12621832947175338989,
+        "m_editorEulerAngles": {
+          "x": 59.90236282348633,
+          "y": -39.10118103027344,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 14.027450561523438,
+          "y": 15.874529838562012,
+          "z": -4.789978504180908
+        },
+        "m_rotation": {
+          "w": 0.8164970278739929,
+          "x": 0.4704776704311371,
+          "y": -0.28994837403297424,
+          "z": 0.16707253456115723
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7126371692199545648,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": true,
+          "m_nearZ": -2000.0,
+          "m_orthographicSize": 2.9000000953674316,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        }
+      ],
+      "id": 14666395232787571475,
+      "name": "MainCamera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7579107605158887194,
+        "m_editorEulerAngles": {
+          "x": 48.202274322509766,
+          "y": -29.001131057739258,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 21.113059997558594,
+          "y": 21.698381423950195,
+          "z": -6.337443828582764
+        },
+        "m_rotation": {
+          "w": 0.8837482333183289,
+          "x": 0.3953406810760498,
+          "y": -0.2285621166229248,
+          "z": 0.10224620252847672
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1388814544720417936,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 6380585766017231848,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7980101960576740612,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6373055932638168785,
+          "m_color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_intensity": 1.0,
+          "m_range": 10.0,
+          "m_type": 0,
+          "typeName": "Light"
+        },
+        {
+          "Active": true,
+          "id": 10857052866812526374,
+          "m_size": 100.0,
+          "typeName": "ShadowMap"
+        }
+      ],
+      "id": 12792323375294926988,
+      "name": "Directional Light",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17987380289712910369,
+        "m_editorEulerAngles": {
+          "x": 129.94200134277344,
+          "y": 35.14500045776367,
+          "z": 19.142457962036133
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -19.94827651977539,
+          "y": 39.897335052490234,
+          "z": -20.24793243408203
+        },
+        "m_rotation": {
+          "w": 0.4432057738304138,
+          "x": 0.8730254769325256,
+          "y": -0.017674967646598816,
+          "z": -0.20268896222114563
+        },
+        "m_scale": {
+          "x": 0.9999997615814209,
+          "y": 0.9999999403953552,
+          "z": 0.9999988675117493
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7171391694734270448,
+          "m_mapData": 6189260170659567125,
+          "m_prefab0": 13094974294612505081,
+          "m_prefab1": 0,
+          "m_prefab2": 0,
+          "m_prefab3": 0,
+          "m_prefab4": 0,
+          "typeName": "TilemapGenerator"
+        }
+      ],
+      "id": 10154570672934640085,
+      "name": "TileMapManager",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3160843146463709048,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}

@@ -20,3 +20,8 @@ void Rotator::Update(float deltaTime)
 
     tr->SetRotationEuler(currentEuler);
 }
+
+//void Rotator::Start()
+//{
+//	std::cout << "Started Rotator on " << GetName() << std::endl;
+//}

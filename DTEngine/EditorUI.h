@@ -102,7 +102,7 @@ private:
     Vector2 m_sceneViewportSize = Vector2(0.0f, 0.0f);
     Vector2 m_gameViewportSize = Vector2(0.0f, 0.0f);
 
-    bool m_isHierarchyFocused = false;
+    bool m_isInspectorFocused = false;
 
     bool m_showRenamePopup = false;
     std::string m_renameTargetFile; 

@@ -11,6 +11,8 @@ class Scene;
 class Camera;
 class GameObject;
 
+struct DeltaTime;
+
 class Game : public WindowBase {
 public:
 	Game();
@@ -27,7 +29,9 @@ public:
 	void Release();
 
 	
-	void LifeCycle(float deltaTime);
+	//void LifeCycle(float deltaTime);
+	void LifeCycle(DeltaTime dt);
+	void UpdateTimeScale(); // 배속 테스트용
 
 #ifdef _DEBUG
 	EngineMode GetEngineMode() const { return m_engineMode; }

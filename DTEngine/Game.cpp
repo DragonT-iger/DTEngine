@@ -96,11 +96,16 @@ bool Game::Initialize()
 	}
 
 
-	InputManager::Instance().Initialize();
+	InputManager::Instance().Initialize(); 
+	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
 	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
 	SceneManager::Instance().LoadScene("SampleScene");
+	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");
+
+
 	SceneManager::Instance().ProcessSceneChange();
 
 	Scene* scene = SceneManager::Instance().GetActiveScene();
@@ -110,72 +115,74 @@ bool Game::Initialize()
 		return false;
 	}
 
-	if (scene->FindGameObject("UI Canvas") == nullptr)
-	{
-			GameObject* canvasGO = scene->CreateUIObject("UI Canvas");
-			canvasGO->AddComponent<Canvas>();
+	//if (scene->FindGameObject("UI Canvas") == nullptr)
+	//{
+	//		GameObject* canvasGO = scene->CreateUIObject("UI Canvas");
+	//		canvasGO->AddComponent<Canvas>();
 
-			if (auto* rect = canvasGO->GetComponent<RectTransform>())
-			{
-					rect->SetAnchorMin(Vector2(0.0f, 0.0f));
-					rect->SetAnchorMax(Vector2(1.0f, 1.0f));
-					rect->SetSizeDelta(Vector2(0.0f, 0.0f));
-					rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
-			}
+	//		if (auto* rect = canvasGO->GetComponent<RectTransform>())
+	//		{
+	//				rect->SetAnchorMin(Vector2(0.0f, 0.0f));
+	//				rect->SetAnchorMax(Vector2(1.0f, 1.0f));
+	//				rect->SetSizeDelta(Vector2(0.0f, 0.0f));
+	//				rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
+	//		}
 
-			auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order, const std::string& layerName, int layerOrder) {
-					GameObject* go = scene->CreateUIImage(name);
-					go->GetTransform()->SetParent(canvasGO->GetTransform());
+	//		auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order, const std::string& layerName, int layerOrder) {
+	//				GameObject* go = scene->CreateUIImage(name);
+	//				go->GetTransform()->SetParent(canvasGO->GetTransform());
 
-					if (auto* rect = go->GetComponent<RectTransform>())
-					{
-							rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-							rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-							rect->SetAnchoredPosition(pos);
-							rect->SetSizeDelta(size);
-					}
+	//				if (auto* rect = go->GetComponent<RectTransform>())
+	//				{
+	//						rect->SetAnchorMin(Vector2(0.0f, 1.0f));
+	//						rect->SetAnchorMax(Vector2(0.0f, 1.0f));
+	//						rect->SetAnchoredPosition(pos);
+	//						rect->SetSizeDelta(size);
+	//				}
 
-					if (auto* image = go->GetComponent<Image>())
-					{
-							image->SetColor(color);
-							image->SetOrderInLayer(order);
-					}
+	//				if (auto* image = go->GetComponent<Image>())
+	//				{
+	//						image->SetColor(color);
+	//						image->SetOrderInLayer(order);
+	//				}
 
-					return go;
-					};
+	//				return go;
+	//				};
 
-			makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0, "Back", -10);
-			makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1, "Default", 0);
-			makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2, "Front", 10);
+	//		makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0, "Back", -10);
+	//		makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1, "Default", 0);
+	//		makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2, "Front", 10);
 
-			GameObject* buttonGO = scene->CreateUIButton("UI_Button");
-			buttonGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* rect = buttonGO->GetComponent<RectTransform>())
-			{
-					rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-					rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-					rect->SetAnchoredPosition(Vector2(100.0f, -260.0f));
-					rect->SetSizeDelta(Vector2(180.0f, 60.0f));
-			}
-			if (auto* image = buttonGO->GetComponent<Image>())
-			{
-					image->SetColor(Vector4(0.9f, 0.8f, 0.2f, 1.0f));
-					image->SetOrderInLayer(3);
-			}
+	//		GameObject* buttonGO = scene->CreateUIButton("UI_Button");
+	//		buttonGO->GetTransform()->SetParent(canvasGO->GetTransform());
+	//		if (auto* rect = buttonGO->GetComponent<RectTransform>())
+	//		{
+	//				rect->SetAnchorMin(Vector2(0.0f, 1.0f));
+	//				rect->SetAnchorMax(Vector2(0.0f, 1.0f));
+	//				rect->SetAnchoredPosition(Vector2(100.0f, -260.0f));
+	//				rect->SetSizeDelta(Vector2(180.0f, 60.0f));
+	//		}
+	//		if (auto* image = buttonGO->GetComponent<Image>())
+	//		{
+	//				image->SetColor(Vector4(0.9f, 0.8f, 0.2f, 1.0f));
+	//				image->SetOrderInLayer(3);
+	//		}
 
-			GameObject* sliderGO = scene->CreateUISlider("UI_Slider");
-			sliderGO->GetTransform()->SetParent(canvasGO->GetTransform());
-			if (auto* tf = sliderGO->GetTransform())
-			{
-					tf->SetPosition(Vector3(100.0f, -340.0f, 0.0f));
-					tf->SetScale(Vector3(220.0f, 40.0f, 1.0f));
-			}
-			if (auto* image = sliderGO->GetComponent<Image>())
-			{
-					image->SetColor(Vector4(0.2f, 0.8f, 0.9f, 1.0f));
-					image->SetOrderInLayer(4);
-			}
-	}
+	//		GameObject* sliderGO = scene->CreateUISlider("UI_Slider");
+	//		sliderGO->GetTransform()->SetParent(canvasGO->GetTransform());
+	//		if (auto* rect = sliderGO->GetComponent<RectTransform>())
+	//		{
+	//				rect->SetAnchorMin(Vector2(0.0f, 1.0f));
+	//				rect->SetAnchorMax(Vector2(0.0f, 1.0f));
+	//				rect->SetAnchoredPosition(Vector2(100.0f, -340.0f));
+	//				rect->SetSizeDelta(Vector2(220.0f, 40.0f));
+	//		}
+	//		if (auto* image = sliderGO->GetComponent<Image>())
+	//		{
+	//				image->SetColor(Vector4(0.2f, 0.8f, 0.9f, 1.0f));
+	//				image->SetOrderInLayer(4);
+	//		}
+	//}
 
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
@@ -254,7 +261,15 @@ void Game::Run()
 			break;
 
 		m_timer->Tick();
- 		LifeCycle(m_timer->DeltaTime());
+
+		UpdateTimeScale();
+		DeltaTime dt{};
+		dt.rawTime = m_timer->DeltaTime();
+		float timeScale = SceneManager::Instance().GetActiveScene()->GetTimeScale();
+		dt.scaledTime = dt.rawTime * timeScale;
+
+		LifeCycle(dt);
+ 		//LifeCycle(m_timer->DeltaTime());
 	}
 }
 
@@ -270,7 +285,288 @@ void Game::Release()
 	ReflectionDatabase::Instance().Clear();
 }
 
+void Game::LifeCycle(DeltaTime dt)
+{
+	if (SceneManager::Instance().ProcessSceneChange()) {
 
+
+#ifdef _DEBUG
+
+		Scene* curScene = SceneManager::Instance().GetActiveScene();
+		SetEditorCamera(curScene);
+
+#endif
+
+	}; // Awake Start
+	Scene* activeScene = SceneManager::Instance().GetActiveScene();
+	if (activeScene)
+	{
+		activeScene->Awake();
+
+#ifdef _DEBUG
+		if (m_engineMode == EngineMode::Play)
+#endif
+		{
+			activeScene->Start(); 
+		}
+	}
+
+
+	Scene* scene = SceneManager::Instance().GetActiveScene();
+
+
+	if (!scene) {
+		std::cout << "현재 활성화된 씬이 없음" << std::endl;
+		return;
+	}
+
+
+	InputManager::Instance().Update();
+
+#ifdef _DEBUG
+	if (m_engineMode == EngineMode::Play)
+	{
+#endif  
+		static float elapsedTime = 0.0f;
+		static float fixedDeltaTime = 0.02f;
+
+		elapsedTime += dt.scaledTime;
+
+		while (elapsedTime >= fixedDeltaTime)
+		{
+			scene->FixedUpdate(fixedDeltaTime);
+			elapsedTime -= fixedDeltaTime;
+		}
+
+		scene->Update(dt.scaledTime);
+
+
+
+
+
+		scene->LateUpdate(dt.scaledTime);
+#ifdef _DEBUG
+	}
+
+
+
+
+	if (m_engineMode == EngineMode::Edit || m_engineMode == EngineMode::Pause) {
+
+		if (m_editorCameraObject != nullptr) {
+
+			m_editorCameraObject->Update(dt.rawTime);
+
+			m_editorCameraObject->LateUpdate(dt.rawTime);
+
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+
+
+			Scene* activeScene = SceneManager::Instance().GetActiveScene();
+
+			if (activeScene)
+			{
+				const auto& gameObjects = activeScene->GetGameObjects();
+
+				for (const auto& go : gameObjects)
+				{
+					if (!go->IsActiveInHierarchy()) continue;
+
+					Camera* cam = go->GetComponent<Camera>();
+
+					if (cam)
+					{
+						if (go.get() != m_editorCameraObject)
+						{
+							cam->LateUpdate(dt.rawTime);
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+	// 렌더링
+
+
+	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	DX11Renderer::Instance().BeginFrame(black);
+
+
+#endif
+
+	if (scene)
+	{
+		const auto& gameObjects = scene->GetGameObjects();
+		for (const auto& go : gameObjects)
+		{
+			if (!go || !go->IsActiveInHierarchy()) continue;
+
+			if (auto probe = go->GetComponent<ReflectionProbe>())
+			{
+				if (probe->IsActive()) {
+					probe->Render();
+				}
+			}
+		}
+	}
+
+
+#ifdef _DEBUG
+
+	if (scene) scene->RenderShadows();
+
+	m_sceneRT->Bind();
+
+
+	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
+	// 씬 뷰
+
+	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
+
+	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+	scene->Render(editorCam, m_sceneRT.get(), true);
+
+
+	const auto& gameObjects = scene->GetGameObjects();
+	for (const auto& go : gameObjects)
+	{
+		if (!go || !go->IsActiveInHierarchy()) continue;
+
+		Camera* cam = go->GetComponent<Camera>();
+		// 에디터 카메라는 위에서 이미 그렸으므로 패스
+		if (!cam || !cam->IsActive() || cam == editorCam) continue;
+
+		RenderTexture* targetRT = cam->GetTargetTexture();
+
+		if (targetRT != nullptr)
+		{
+			targetRT->Bind();
+			const auto& col = cam->GetClearColor();
+			targetRT->Clear(col.x, col.y, col.z, col.w);
+
+			scene->Render(cam, targetRT, false);
+
+		}
+		else
+		{
+			m_gameRT->Bind();
+			const auto& col = cam->GetClearColor();
+			m_gameRT->Clear(col.x, col.y, col.z, col.w);
+
+			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
+
+			scene->Render(cam, m_gameRT.get(), true);
+		}
+	}
+
+
+	//static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	DX11Renderer::Instance().BeginFrame(black);
+
+	m_imgui->NewFrame();
+	ImGuizmo::BeginFrame();
+
+
+	m_editorUI->RenderToolbar(m_engineMode, [this](EngineMode mode) {
+		if (mode == EngineMode::Play) {
+			if (m_engineMode == EngineMode::Edit) SetPlayState(true);
+			else SetPlayState(false);
+		}
+		else if (mode == EngineMode::Pause) {
+			if (m_engineMode == EngineMode::Play) m_engineMode = EngineMode::Pause;
+			else if (m_engineMode == EngineMode::Pause) m_engineMode = EngineMode::Play;
+		}
+		});
+
+	m_editorUI->RenderSceneWindow(m_sceneRT.get(), scene, editorCam);
+	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
+
+
+
+
+	//ImGuizmo::SetRect(
+	//	0, 0,
+	//	(float)DX11Renderer::Instance().GetWidth(), 
+	//	(float)DX11Renderer::Instance().GetHeight() 
+	//);
+
+	m_editorUI->Render(scene, m_engineMode);
+
+	m_imgui->Render();
+
+
+#else
+	if (scene) scene->RenderShadows();
+
+	const auto& gameObjects = scene->GetGameObjects();
+	for (const auto& go : gameObjects)
+	{
+		if (!go || !go->IsActiveInHierarchy()) continue;
+
+		Camera* cam = go->GetComponent<Camera>();
+		if (!cam || !cam->IsActive()) continue;
+
+		RenderTexture* targetRT = cam->GetTargetTexture();
+		if (targetRT != nullptr)
+		{
+			targetRT->Bind();
+			const auto& col = cam->GetClearColor();
+			targetRT->Clear(col.x, col.y, col.z, col.w);
+
+			RenderScene(scene, cam, targetRT, false);
+		}
+	}
+
+	Camera* mainCam = scene->GetMainCamera();
+
+	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0.1f, 0.1f, 0.1f, 1.0f};
+
+	DX11Renderer::Instance().BeginFrame(clearColor);
+
+	if (mainCam)
+	{
+		float ratio = DX11Renderer::Instance().GetAspectRatio();
+		mainCam->SetAspectRatio(ratio);
+
+		RenderScene(scene, mainCam, nullptr, true);
+	}
+
+
+
+#endif
+
+
+
+
+
+
+
+	DX11Renderer::Instance().EndFrame();
+	DX11Renderer::Instance().Present();
+
+	InputManager::Instance().EndFrame();
+
+}
+
+void Game::UpdateTimeScale() // 배속 테스트용
+{
+	if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
+	{
+		SceneManager::Instance().GetActiveScene()->SetTimeScale(0.0f);
+	}
+	if (InputManager::Instance().GetKeyDown(KeyCode::Num1))
+	{
+		SceneManager::Instance().GetActiveScene()->SetTimeScale(1.0f);
+	}
+	if (InputManager::Instance().GetKeyDown(KeyCode::Num2))
+	{
+		SceneManager::Instance().GetActiveScene()->SetTimeScale(2.0f);
+	}
+}
+
+/*
 void Game::LifeCycle(float deltaTime)
 {
 	if (SceneManager::Instance().ProcessSceneChange()) {
@@ -530,6 +826,7 @@ void Game::LifeCycle(float deltaTime)
 	InputManager::Instance().EndFrame();
 
 }
+*/
 #ifdef _DEBUG
 void Game::SetPlayState(bool isPlay)
 {
@@ -548,6 +845,11 @@ void Game::SetPlayState(bool isPlay)
 		{
 			m_engineMode = EngineMode::Play;
 
+			Scene* scene = SceneManager::Instance().GetActiveScene();
+			if (scene)
+			{
+				scene->Start();
+			}
 		}
 	}
 	else
@@ -577,8 +879,8 @@ void Game::SetPlayState(bool isPlay)
 
 			if (scene)
 			{
-				scene->Awake();
-				scene->Start();
+				//scene->Awake();
+				//scene->Start();
 			}
 		}
 

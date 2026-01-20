@@ -43,6 +43,16 @@ MeshRenderer::~MeshRenderer()
     }
 }
 
+void MeshRenderer::Serialize(JsonWriter& writer) const
+{
+    Component::Serialize(writer);
+
+    if (m_isMaterialInstanced)
+    {
+        SaveInstanceData(writer);
+    }
+}
+
 void MeshRenderer::SetMaterial(Material* material)
 {
     if (m_isMaterialInstanced && m_material != nullptr)
@@ -66,7 +76,7 @@ void MeshRenderer::SetMaterialInstance(Material* material)
 }
 
 
-void MeshRenderer::SaveInstanceData(JsonWriter& writer)
+void MeshRenderer::SaveInstanceData(JsonWriter& writer) const
 {
     if (!m_isMaterialInstanced || m_material == nullptr)
         return;

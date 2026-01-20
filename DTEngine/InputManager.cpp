@@ -8,6 +8,7 @@ void InputManager::Initialize()
     m_keyState.fill(false);
     m_keyDownState.fill(false);
     m_keyUpState.fill(false);
+
 }
 
 void InputManager::Update()
@@ -18,10 +19,23 @@ void InputManager::Update()
     m_mousePos.x = static_cast<int>(pt.x);
     m_mousePos.y = static_cast<int>(pt.y);
 
+#ifndef _DEBUG
+    if (m_hWnd)
+    {
+        ScreenToClient((HWND)m_hWnd, &pt);
+        m_gameMousePos.x = static_cast<int>(pt.x);
+        m_gameMousePos.y = static_cast<int>(pt.y);
+    }
+#endif
     m_mouseDelta.x = m_mousePos.x - m_prevMousePos.x;
     m_mouseDelta.y = m_mousePos.y - m_prevMousePos.y;
 
     m_prevMousePos = m_mousePos;
+
+
+	//std::cout << "Game Mouse Pos: (" << m_gameMousePos.x << ", " << m_gameMousePos.y << ")\n";
+
+	//std::cout << "Mouse Pos: (" << m_mousePos.x << ", " << m_mousePos.y << ")\n";
 }
 
 void InputManager::EndFrame()
@@ -89,18 +103,21 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool InputManager::GetKeyDown(KeyCode key) const
 {
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyDownState[vKey] : false;
 }
 
 bool InputManager::GetKey(KeyCode key) const
 {
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyState[vKey] : false;
 }
 
 bool InputManager::GetKeyUp(KeyCode key) const
 {
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyUpState[vKey] : false;
 }
