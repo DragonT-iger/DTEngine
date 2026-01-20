@@ -3,6 +3,7 @@
 #include "ReflectionMacros.h" 
 #include "ReflectionDatabase.h"
 #include "SimpleMathHelper.h"
+#include "TilemapGenerator.h"
 
 
 bool RegisterCoreTypes::Initialize()
