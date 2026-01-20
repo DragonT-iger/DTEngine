@@ -213,6 +213,8 @@
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture_ID_Manager.h" />
+    <ClInclude Include="TilemapData.h" />
+    <ClInclude Include="TilemapGenerator.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
@@ -282,6 +284,8 @@
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TilemapData.cpp" />
+    <ClCompile Include="TilemapGenerator.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />

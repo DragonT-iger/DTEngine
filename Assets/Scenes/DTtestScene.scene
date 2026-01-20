@@ -210,7 +210,19 @@
     },
     {
       "active": true,
-      "components": [],
+      "components": [
+        {
+          "Active": true,
+          "id": 7171391694734270448,
+          "m_mapData": 0,
+          "m_prefab0": 0,
+          "m_prefab1": 0,
+          "m_prefab2": 0,
+          "m_prefab3": 0,
+          "m_prefab4": 0,
+          "typeName": "TilemapGenerator"
+        }
+      ],
       "id": 10154570672934640085,
       "name": "TileMapManager",
       "tag": "Untagged",

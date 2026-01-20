@@ -43,6 +43,7 @@
 #include "Canvas.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
+#include "TilemapData.h"
 
 namespace fs = std::filesystem;
 
@@ -1649,6 +1650,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
             //    DrawAssetReference<Material>(this, name, currentMat, comp, prop.m_setter, exts);
             //}
 
+            else if (type == typeid(TilemapData*)) {
+				TilemapData* currentData = *static_cast<TilemapData**>(data);
+
+				std::vector<std::string> exts = { ".tilemap" };
+				DrawAssetReference<TilemapData>(this, name, currentData, comp, prop.m_setter, exts);
+            }
             
 
             else {
