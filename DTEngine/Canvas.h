@@ -23,6 +23,6 @@ public:
     float GetScaleFactor(float screenWidth, float screenHeight) const;
 
 private:
-    Vector2 m_referenceResolution = Vector2(1280, 720);
+    Vector2 m_referenceResolution = Vector2(1920, 1080);
     float m_matchWidthOrHeight = 0.0f;
 };

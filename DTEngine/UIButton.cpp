@@ -13,12 +13,6 @@ ENDPROPERTY()
 
 void UIButton::Awake()
 {
-    // 조건 충족 안되면 생성 안시킬거임.
-    if (m_canvas)
-    {
-        return;
-    }
-
     // scene 있는지 체크.
     Scene* scene = SceneManager::Instance().GetActiveScene();
     if (!scene)
@@ -47,6 +41,7 @@ void UIButton::Awake()
     // canvas 없으면 삭제.
     if (!m_canvas)
     {
+        printf("canvas없어서 button 지움");
         Destroy(_GetOwner());
     }
 }
