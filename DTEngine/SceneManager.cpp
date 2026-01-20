@@ -50,14 +50,14 @@ bool SceneManager::ProcessSceneChange()
     assert(it != m_scenes.end());
     m_active = it->second.get();
 
-    if (m_active)
-    {
-        m_active->Awake();
-        m_active->Start();
+    //if (m_active)
+    //{
+    //    m_active->Awake();
+    //    m_active->Start();
 
-        //m_active->Enter(); addcomponent 할때 OnEnable 호출 됨
-        
-    }
+    //    //m_active->Enter(); addcomponent 할때 OnEnable 호출 됨
+    //    
+    //}
 
     m_nextName.clear();
 

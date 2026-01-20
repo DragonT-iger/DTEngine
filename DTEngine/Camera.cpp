@@ -30,8 +30,21 @@ Camera::Camera()
 
 void Camera::Awake()
 {
+
+
+    Scene* scene = SceneManager::Instance().GetActiveScene();
     if (this->GetName() == "MainCamera") {
-        SetThisCameraToMain();
+
+        if (scene->GetMainCamera() == nullptr) {
+            scene->SetMainCamera(this);
+        }
+    }
+
+    if (this->GetName() == "EditorCamera55")
+    {
+        if (scene->GetMainCamera() == nullptr) {
+            scene->SetEditorCamera(this);
+        }
     }
 
     m_editorFovY = SimpleMathHelper::Rad2Deg(m_fovY);
@@ -77,11 +90,7 @@ void Camera::SetProjectionOrthographic()
 
 void Camera::SetThisCameraToMain()
 {
-    Scene* scene = SceneManager::Instance().GetActiveScene();
-
-    if (scene->GetMainCamera() == nullptr && this->GetName() != "EditorCamera55") {
-        scene->SetMainCamera(this);
-    }
+    
     //else {
     //    std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
     //}
