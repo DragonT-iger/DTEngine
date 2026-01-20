@@ -45,6 +45,7 @@
 #include "SerializationUtils.h"
 #include "TilemapData.h"
 #include "TilemapGenerator.h"
+#include "Prefab.h"
 
 namespace fs = std::filesystem;
 
@@ -1621,7 +1622,9 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                         if (ext == ".prefab")
                         {
-                            GameObject* newInstance = ResourceManager::Instance().InstantiatePrefab(droppedPath);
+							Prefab* prefabAsset = ResourceManager::Instance().Load<Prefab>(droppedPath);
+
+                            GameObject* newInstance = prefabAsset->Instantiate();
 
                             if (newInstance)
                             {
@@ -1720,6 +1723,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
 				std::vector<std::string> exts = { ".tilemap" };
 				DrawAssetReference<TilemapData>(this, name, currentData, comp, prop.m_setter, exts);
             }
+
+			else if (type == typeid(Prefab*)) {
+				Prefab* currentPrefab = *static_cast<Prefab**>(data);
+				std::vector<std::string> exts = { ".prefab" };
+                DrawAssetReference<Prefab>(this, name, currentPrefab, comp, prop.m_setter, exts);
+			}
             
 
             else {
@@ -2090,7 +2099,10 @@ void EditorUI::OnDropFile(const std::string& rawPath)
     else if (ext == ".prefab")
     {
         // 프리팹 인스턴스화
-        GameObject* go = ResourceManager::Instance().InstantiatePrefab(path.string());
+
+		Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path.string());
+
+        GameObject* go = prefab->Instantiate();
 
         if (go)
         {

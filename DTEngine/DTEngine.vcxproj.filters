@@ -308,6 +308,9 @@
     <ClInclude Include="TilemapGenerator.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -500,6 +503,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="TilemapGenerator.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

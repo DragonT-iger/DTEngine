@@ -6,6 +6,8 @@
 #include "ResourceManager.h"  
 #include "Scene.h"
 #include "SceneManager.h"
+#include "AssetDatabase.h"
+#include "Prefab.h"
 
 BEGINPROPERTY(TilemapGenerator)
 
@@ -21,12 +23,13 @@ ENDPROPERTY()
 
 void TilemapGenerator::Start()
 {
+	std::cout << "TilemapGenerator Start 호출됨" << std::endl;
     BuildMap();
 }
 
 void TilemapGenerator::BuildMap()
 {
-    ClearMap();
+    m_spawnedTiles.clear();
 
     if (m_mapData == nullptr) return;
 
@@ -37,7 +40,7 @@ void TilemapGenerator::BuildMap()
 
     Transform* myTr = GetTransform();
 
-    GameObject* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 };
+    Prefab* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 };
 
     for (int y = 0; y < height; ++y)
     {
@@ -47,45 +50,18 @@ void TilemapGenerator::BuildMap()
 
             if (index < 0 || index >= 5) continue;
 
-            GameObject* prefab = palette[index];
+            Prefab* prefab = palette[index];
             if (!prefab) continue;
 
+            GameObject* instance = prefab->Instantiate();
+            if (!instance) continue;
 
-			Scene* curScene = SceneManager::Instance().GetActiveScene();
+            instance->GetTransform()->SetParent(myTr);
+            instance->GetTransform()->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
+            instance->SetActive(true);
 
-
-
-            auto clones = prefab->Clone();
-            if (clones.empty()) continue;
-
-            GameObject* instance = clones[0].get();
-
-            for (auto& go : clones) {
-                curScene->AddGameObject(std::move(go));
-            }
-
-            if (instance)
-            {
-                Transform* instanceTr = instance->GetTransform();
-                if (instanceTr)
-                {
-                    instanceTr->SetParent(myTr);
-
-                    instanceTr->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
-					instanceTr->_GetOwner()->SetActive(true);
-                }
-            }
         }
     }
-}
-
-void TilemapGenerator::ClearMap()
-{
-    Transform* myTr = GetTransform();
-
-    // 자식 오브젝트들을 모두 파괴하는 로직 필요
-    // 예시: 자식을 순회하며 DestroyGameObjectCommand 등을 호출하거나
-    // 엔진 API에 따라 처리 (여기서는 생략)
 }
 
 void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
@@ -94,20 +70,5 @@ void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
     {
         // 메모리 상의 데이터 수정
         m_mapData->SetTileIndex(x, y, paletteIndex);
-    }
-}
-
-void TilemapGenerator::SaveMapData()
-{
-    if (m_mapData)
-    {
-        // m_mapData는 IResource이므로 자신의 파일 경로(메타정보 등)를 알고 있다고 가정
-        // 혹은 AssetDatabase를 통해 역추적해야 할 수도 있음.
-
-        // 간단히 경로를 알고 있다면:
-        // m_mapData->SaveFile(AssetDatabase::Instance().GetPathFromID(m_mapData->GetMeta().guid));
-
-        // 현재 IResource 인터페이스에는 GetPath가 없으므로
-        // AssetDatabase::Instance().GetPathFromID(m_mapData->GetMeta().guid) 등을 활용해야 합니다.
     }
 }
