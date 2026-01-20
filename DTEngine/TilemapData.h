@@ -17,6 +17,9 @@ public:
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 
+	void SetWidth(int w) { m_width = w; SetDimensions(m_width, m_height); }
+	void SetHeight(int h) { m_height = h; SetDimensions(m_width, m_height); }
+
     void SetDimensions(int w, int h);
     void SetTileIndex(int x, int y, int paletteIndex);
     int GetTileIndex(int x, int y) const;

@@ -2261,6 +2261,70 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             //ImGui::Text("Preview");
         }
     }
+    else if (ext == ".tilemap") // 1. 사용하는 타일맵 확장자로 변경하세요 (예: .tm, .json)
+    {
+        TilemapData* tilemap = ResourceManager::Instance().Load<TilemapData>(path);
+
+        if (tilemap)
+        {
+            ImGui::Text("Tilemap Editor: %s", filePath.filename().string().c_str());
+            ImGui::Separator();
+
+            int width = tilemap->GetWidth();
+            int height = tilemap->GetHeight();
+            bool changed = false;
+
+            if (ImGui::InputInt("Width", &width))
+            {
+                if (width > 0) { tilemap->SetWidth(width); changed = true; }
+            }
+            if (ImGui::InputInt("Height", &height))
+            {
+                if (height > 0) { tilemap->SetHeight(height); changed = true; }
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Tile Data Grid");
+
+            if (ImGui::BeginTable("TilemapGrid", width > 0 ? width : 1, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX))
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    ImGui::TableNextRow();
+                    for (int x = 0; x < width; ++x)
+                    {
+                        ImGui::TableNextColumn();
+
+                        int tileID = tilemap->GetTileIndex(x, y);
+
+                        ImGui::PushID(x + y * width);
+
+                        std::string label = std::to_string(tileID);
+
+                        if (ImGui::Button(label.c_str(), ImVec2(30, 30)))
+                        {
+                            tilemap->SetTileIndex(x, y, (tileID + 1) % 2); 
+                            changed = true;
+                        }
+                        ImGui::PopID();
+                    }
+                }
+                ImGui::EndTable();
+            }
+
+            if (changed)
+            {
+                tilemap->SaveFile(path);
+            }
+
+            ImGui::Separator();
+            if (ImGui::Button("Save Tilemap", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+            {
+                tilemap->SaveFile(path);
+                std::cout << "[Editor] Tilemap Saved: " << path << std::endl;
+            }
+        }
+        }
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
@@ -2699,6 +2763,48 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                     std::cerr << "[Editor] Failed to write scene file." << std::endl;
                 }
             }
+
+            if (ImGui::MenuItem("Tilemap"))
+            {
+                std::string baseName = "New Tilemap";
+                std::string ext = ".tilemap";
+                std::filesystem::path newPath = m_currentProjectDirectory / (baseName + ext);
+
+                int counter = 1;
+                while (std::filesystem::exists(newPath))
+                {
+                    newPath = m_currentProjectDirectory / (baseName + " " + std::to_string(counter) + ext);
+                    counter++;
+                }
+
+                std::ofstream file(newPath);
+                if (file.is_open())
+                {
+                    file << "{\n";
+                    file << "  \"width\": 10,\n";
+                    file << "  \"height\": 10,\n";
+                    file << "  \"p0\": 0, \"p1\": 0, \"p2\": 0, \"p3\": 0, \"p4\": 0,\n";
+
+                    file << "  \"grid\": [\n";
+                    for (int i = 0; i < 100; ++i)
+                    {
+                        file << "    { \"v\": -1 }" << (i < 99 ? "," : "") << "\n";
+                    }
+                    file << "  ]\n";
+                    file << "}";
+
+                    file.close();
+
+                    AssetDatabase::Instance().ProcessAssetFile(newPath.string());
+
+                    std::cout << "[Editor] Created new tilemap: " << newPath.string() << std::endl;
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to create tilemap file." << std::endl;
+                }
+            }
+
             ImGui::EndMenu();
         }
         ImGui::EndPopup();
