@@ -42,7 +42,7 @@
 #include "Camera.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
-
+#include "FSMController.h"
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -839,6 +839,7 @@ void EditorUI::DrawInspectorWindow()
                 {
                     auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
                     HistoryManager::Instance().Do(std::move(cmd));
+
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -1475,8 +1476,10 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 std::vector<std::string> exts = { ".png", ".jpg", ".dds", ".tga", ".bmp" };
                 DrawAssetReference<Texture>(this, name, currentTex, comp, prop.m_setter, exts);
             }
-
-            //else if (type == typeid(Material*))
+               
+            //else if (
+            // 
+            // typeid(Material*))
             //{
             //    Material* currentMat = *static_cast<Material**>(data);
             //    std::vector<std::string> exts = { ".mat" };

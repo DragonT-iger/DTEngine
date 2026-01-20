@@ -23,7 +23,7 @@
 
 #include "Skeletal.h"
 #include "Animatior.h"
-
+#include "FSMController.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {

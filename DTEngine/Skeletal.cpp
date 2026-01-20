@@ -8,7 +8,9 @@
 #include "AnimationClip.h"
 
 BEGINPROPERTY(Skeletal)
-DTPROPERTY_SETTER(Skeletal, m_FbxName , SetSkeletal)
+DTPROPERTY_SETTER(Skeletal, m_skellID, SetSkeletal)
+
+
 ENDPROPERTY()
 
 //넣을 거는 FBX, 즉 Model의 경로  SetSkeletal(std::string filename)
@@ -59,39 +61,51 @@ void Skeletal::LateUpdate(float dTime)
 
     }
 }
-void Skeletal::SetSkeletal(std::string filename)
+
+
+void Skeletal::SetSkeletal(uint64_t id)
 {
-    //붙여넣기 시, 공백 들어가서 
-    filename.erase(std::remove_if(filename.begin(), filename.end(),
-        [](unsigned char x) { return std::isspace(x); }),
-        filename.end());
+    m_skellID = id;
+   
 
-    m_FbxName = filename;
+    if (m_skellID != 0)
+    {
+        std::string path = AssetDatabase::Instance().GetPathFromID(m_skellID);
+        BoneResource* BoneResource = ResourceManager::Instance().Load<Model>(path)->GetBone();
 
-	BoneResource* BoneResource = ResourceManager::Instance().Load<Model>(filename)->GetBone(); //Bone data 생성 주기는 Model 생성과 동일. 
-
-	if (BoneResource)
-	{
-		m_BoneResource = BoneResource;
-
-        size_t nodeCount = m_BoneResource->m_Bones.size();
-        m_AnimatedLocalMatrices.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
-
-
-        //aniamtino 정보가 없는 bone은 defaultlocalmatrix로 초기화 하고, 후에 Animator update를 통해서 값이 업데이트 됨. 
-        for (size_t i = 0; i < nodeCount; ++i)
+        if (BoneResource)
         {
-            m_AnimatedLocalMatrices[i] = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-            Matrix defaultMat = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-            m_AnimatedLocalMatrices[i] = defaultMat;
+
+            m_BoneResource = nullptr;
+
+            m_BoneResource = BoneResource;
+
+            ClearVector();
+
+            size_t nodeCount = m_BoneResource->m_Bones.size();
+            m_AnimatedLocalMatrices.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
+
+            for (size_t i = 0; i < nodeCount; ++i)
+            {
+                m_AnimatedLocalMatrices[i] = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
+                Matrix defaultMat = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
+                m_AnimatedLocalMatrices[i] = defaultMat;
+            }
+
+            m_globalTransforms.resize(nodeCount);
+            m_finalTransforms.resize(nodeCount);
+
+
         }
+    }
+    else return;
+}
 
-        m_globalTransforms.resize(nodeCount);
-        m_finalTransforms.resize(nodeCount);
-
-
-	}
-	else std::cout << "Bone 생성 오류 FBX 경로: " << filename << std::endl;
+void Skeletal::ClearVector()
+{
+    m_finalTransforms.clear();
+    m_globalTransforms.clear();
+    m_AnimatedLocalMatrices.clear();
 
 }
 

@@ -7,6 +7,7 @@ int main() {
 
 	//_CrtSetBreakAlloc(380);
 	Game game;
+	//_CrtSetBreakAlloc(2190250);
 
 	if (!game.Initialize()) {
 		std::cout << "게임 초기화 실패" << std::endl;
