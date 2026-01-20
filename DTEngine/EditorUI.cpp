@@ -589,6 +589,8 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 
     if (m_selectedGameObject)
     {
+		//std::cout << ImGui::IsAnyItemActive() << std::endl;
+
         if (InputManager::Instance().GetKeyDown(KeyCode::Delete) &&
             !ImGui::IsAnyItemActive())
         {
@@ -2345,7 +2347,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 #ifdef _DEBUG
     if (isHovered) 
     {
-        InputManager::Instance().SetGameInputActive(true);
+        //InputManager::Instance().SetGameInputActive(true);
 
         ImVec2 mousePos = ImGui::GetMousePos();
         ImVec2 windowPos = ImGui::GetItemRectMin();
@@ -2357,7 +2359,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     else
 #endif
     {
-        InputManager::Instance().SetGameInputActive(false);
+        //InputManager::Instance().SetGameInputActive(false);
     }
 
 	//DX11Renderer::Instance().DrawString(10, 10, "Game Viewport", 1.0f, Vector4(1, 1, 1, 1));
