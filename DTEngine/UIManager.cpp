@@ -7,6 +7,7 @@
 #include "UIButton.h"
 #include "UISlider.h"
 #include "Image.h"
+#include "RectTransform.h"
 #include "InputManager.h"
 #include "DX11Renderer.h"
 
@@ -55,6 +56,43 @@ void UIManager::UpdateLayout(Scene* scene, float width, float height)
         m_lastWidth = width;
         m_lastHeight = height;
     }
+    // canvas 그냥 찾아서 쓰자 삭제하고 다시하면 댕글링이다.
+    Canvas* foundCanvas = nullptr;
+    for (auto& go : scene->GetGameObjects())
+    {
+        if (!go) continue;
+        if (auto* canvas = go->GetComponent<Canvas>())
+        {
+            foundCanvas = canvas;
+            break;
+        }
+    }
+    m_canvas = foundCanvas;
+
+    for (const auto& go : scene->GetGameObjects())
+    {
+        if (!go || !go->IsActiveInHierarchy()) continue;
+
+        RectTransform* rect = go->GetComponent<RectTransform>();
+        if (!rect) continue;
+
+        Transform* tf = go->GetTransform();
+        bool parentHasRect = false;
+
+        if (tf && tf->GetParent())
+        {
+            GameObject* parentObject = tf->GetParent()->_GetOwner();
+            if (parentObject && parentObject->GetComponent<RectTransform>())
+            {
+                parentHasRect = true;
+            }
+        }
+
+        if (!parentHasRect)
+        {
+            rect->ApplyLayoutRecursive(width, height);
+        }
+    }
 }
 
 void UIManager::UpdateInteraction(Scene* scene, float width, float height)
@@ -67,12 +105,6 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
     Vector2 viewportOrigin = m_viewportOrigin;
     Vector2 viewportSize = m_viewportSize;
 
-    if (m_viewportSize.x <= 0.0f || m_viewportSize.y <= 0.0f)
-    {
-        m_viewportOrigin = Vector2(0.0f, 0.0f);
-        m_viewportSize = Vector2(width, height);
-    }
-
     // 마우스 포지션 가져오기.
     const MousePos& mousePos = InputManager::Instance().GetMousePosition();
     Vector2 mouseScreen = Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
@@ -84,14 +116,28 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
     localMouse.x *= viewportScaleX;
     localMouse.y *= viewportScaleY;
 
-    Vector2 mouseCentered = localMouse - Vector2(width * 0.5f, height * 0.5f);
-
     bool mouseDown = InputManager::Instance().GetKeyDown(KeyCode::MouseLeft);
     bool mouseHeld = InputManager::Instance().GetKey(KeyCode::MouseLeft);
     bool mouseUp = InputManager::Instance().GetKeyUp(KeyCode::MouseLeft);
 
     for (const auto& go : m_uiInteractables)
     {
+        // canvas 없는지 먼저 체크.
+        if (!m_canvas)
+        {
+            //printf("m_canvas null임.");
+            break;
+        }
+
+        if (!go || !go->IsActiveInHierarchy())
+        {
+            if (m_activeSlider && go == m_activeSlider->_GetOwner())
+            {
+                m_activeSlider = nullptr;
+            }
+            continue;
+        }
+
         UIButton* button = go->GetComponent<UIButton>();
         UISlider* slider = go->GetComponent<UISlider>();
 
@@ -101,31 +147,32 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
         Transform* tf = go->GetTransform();
 
         Canvas* canvas = GetCanvasInHierarchy(tf);
-        if (!canvas)
-        {
-            continue;
-        }
-
         float canvasScale = canvas->GetScaleFactor(width, height);
         if (canvasScale <= 0.0f) canvasScale = 1.0f;
 
         Vector2 centerScreen;
         Vector2 size;
 
-        Vector3 worldPos = tf->GetWorldPosition();
-        Vector3 lossyScale = tf->GetLossyScale();
-        centerScreen = Vector2(width * 0.5f, height * 0.5f) + Vector2(worldPos.x * canvasScale, -worldPos.y * canvasScale);
-        //size = Vector2(lossyScale.x * canvasScale, lossyScale.y * canvasScale);
+        if (auto* rect = go->GetComponent<RectTransform>())
+        {
+            centerScreen = rect->GetScreenPosition(width, height);
+            size = rect->GetSize() * canvasScale;
+        }
+        else
+        {
+            Vector3 worldPos = tf->GetWorldPosition();
+            Vector3 lossyScale = tf->GetLossyScale();
+            centerScreen = Vector2(width * 0.5f, height * 0.5f) + Vector2(worldPos.x * canvasScale, -worldPos.y * canvasScale);
+            size = Vector2(lossyScale.x * canvasScale, lossyScale.y * canvasScale);
+        }
 
-        size = Vector2(lossyScale.x * 100.0f, lossyScale.y * 100.0f);
-    
         Vector2 halfSize = Vector2(size.x * 0.5f, size.y * 0.5f);
         Vector2 min = centerScreen - halfSize;
         Vector2 max = centerScreen + halfSize;
 
         bool hovered = insideViewport &&
-            mouseCentered.x >= min.x && mouseCentered.x <= max.x &&
-            mouseCentered.y >= min.y && mouseCentered.y <= max.y;
+            localMouse.x >= min.x && localMouse.x <= max.x &&
+            localMouse.y >= min.y && localMouse.y <= max.y;
 
         // 버튼 처리.
         if (button)
@@ -188,6 +235,8 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
 }
 
 
+
+
 void UIManager::SetViewportRect(const Vector2& origin, const Vector2& size)
 {
     m_viewportOrigin = origin;
@@ -205,8 +254,13 @@ void UIManager::SetUIInteractables(std::vector<GameObject*> interactables)
 {
     if (m_layerOrders.empty())
     {
-        m_layerOrders["Default"] = 0;
-        m_layerOrders["Last"] = 100;
+        m_layerOrders["Default"] =   0;
+        m_layerOrders["Second"]  =  20;
+        m_layerOrders["Third"]   =  30;
+        m_layerOrders["Fourth"]  =  40;
+        m_layerOrders["Fifth"]   =  50;
+        m_layerOrders["Sixth"]   =  60;
+        m_layerOrders["Last"]    = 100;
     }
     m_uiInteractables = std::move(interactables);
     m_activeSlider = nullptr;
@@ -221,7 +275,6 @@ void UIManager::RegisterUIInteractable(GameObject* interactable)
     
     if (it == m_uiInteractables.end())
     {
-        //printf("registeruiinteractable"); // 버튼 추가하고 tables에 들어가졌어.
         m_layerOrders["Default"] = 0;
         m_layerOrders["Last"] = 100;
         m_uiInteractables.push_back(interactable);

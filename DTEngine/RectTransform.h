@@ -42,4 +42,10 @@ private:
 
     Vector2 m_cachedSize = Vector2(0.0f, 0.0f);
     Vector2 m_cachedWorldCenter = Vector2(0.0f, 0.0f);
+
+    Vector2 m_lastAppliedPosition = Vector2(0.0f, 0.0f);
+    Vector2 m_lastAppliedScale = Vector2(0.0f, 0.0f);
+    float m_lastAppliedLayoutScale = 1.0f;
+    bool m_hasApplied = false;
+    bool m_transformOverride = false;
 };
