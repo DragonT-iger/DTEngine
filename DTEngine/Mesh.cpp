@@ -20,6 +20,15 @@ bool Mesh::CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<
 {
     assert(vertices.size() > 0 && indices.size() > 0);
 
+    //m_vertices = vertices;
+    m_indices = indices;
+
+    m_positions.clear();
+    m_positions.reserve(vertices.size());
+
+    for (const auto& v : vertices) { m_positions.emplace_back(v.Pos.x, v.Pos.y, v.Pos.z); }
+
+
     m_indexCount = static_cast<UINT>(indices.size());
     m_stride = sizeof(Vertex);
     m_offset = 0;
@@ -51,6 +60,8 @@ bool Mesh::CreateBuffers(const std::vector<Vertex>& vertices, const std::vector<
     hr = device->CreateBuffer(&ibDesc, &ibData, m_indexBuffer.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
+    BuildLocalBounds();
+
     return true;
 }
 
@@ -71,6 +82,25 @@ void Mesh::Draw() const
     if (!context) return;
 
     context->DrawIndexed(m_indexCount, 0, 0);
+}
+
+void Mesh::BuildLocalBounds()
+{
+    using namespace DirectX;
+
+    if (m_positions.empty())
+    {
+        m_localBounds = BoundingBox(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0));
+        return;
+    }
+
+    // 자동으로 aabb만들어줌.
+    BoundingBox::CreateFromPoints(
+        m_localBounds,
+        (uint32_t)m_positions.size(),
+        reinterpret_cast<const XMFLOAT3*>(m_positions.data()),
+        sizeof(Vector3)
+    );
 }
 
 

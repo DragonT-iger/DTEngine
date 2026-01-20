@@ -463,7 +463,7 @@ void Scene::LateUpdate(float deltaTime)
     m_isIterating = false;
     FlushPending();
 
-
+    
     if (m_mainCamera == nullptr) return;
     DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
 
@@ -491,35 +491,210 @@ void Scene::SetEditorCamera(Camera* editorCamera)
 }
 
 
-Ray Scene::ScreenPointToRay(int x, int y) 
+
+bool Scene::Raycast(const Ray& ray, GameObject*& outHit, float& outT)
 {
-    Matrix proj = m_mainCamera->GetProjectionMatrix();
-    Matrix view = m_mainCamera->GetViewMatrix();
+    using namespace DirectX;
 
-    Vector4 vr = m_mainCamera->GetViewportRect();
-    
-    // SimpleMath가 계산해준다고 해서 사용해봄.
-    //m_mainCamera->GetTargetTexture();
-    //RenderViewport;
-    DirectX::SimpleMath::Viewport vp(vr.x, vr.y, vr.z, vr.w, 0.0f, 1.0f); 
+    outHit = nullptr;
+    outT = FLT_MAX; // 거리 파라미터. 레이 방정식 P(t) = origin + direction * t 에서 t. 
+    //일단 매우 큰 값으로 해두고, 작은 t가 나오면 갱신.
 
-    float X = static_cast<float>(x);
-    float Y = static_cast<float>(y);
-    Vector3 screenNear(X, Y, 0.0f);
-    Vector3 screenFar(X, Y, 1.0f);
+    XMVECTOR rayOrigin = XMLoadFloat3((const XMFLOAT3*)&ray.origin);
+    XMVECTOR rayDir = XMLoadFloat3((const XMFLOAT3*)&ray.direction);
 
-    // Unproject가 뷰포트 기준 스크린(픽셀) 좌표를 NDC로 바꾸고, 
-    // 투영, 뷰, (월드) 행렬의 역변환을 거쳐 3D 월드 공간의 점으로 되돌려줌.
-    Vector3 nearWorld = vp.Unproject(screenNear, proj, view, SimpleMathHelper::IdentityMatrix());
-    Vector3 farWorld = vp.Unproject(screenFar, proj, view, SimpleMathHelper::IdentityMatrix());
+    bool hitAny = false; // 일단 뭔가 하나라도 맞았으면 true
 
-    Ray r;
-    r.origin = nearWorld;
-    r.dir = farWorld - nearWorld;
-    r.dir.Normalize();
+    for (const auto& up : m_gameObjects)
+    {
+        GameObject* go = up.get();
+        if (!go || !go->IsActiveInHierarchy()) continue;
 
-    return r;
+        if (go->GetComponent<Image>()) continue;
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh) continue;
+
+        // 로컬 AABB 가져오기
+        const BoundingBox& localBox = mesh->GetLocalBoundingBox();
+
+        // 월드 AABB 만들기
+        Transform* tf = go->GetTransform();
+        if (!tf) continue;
+
+        const Matrix& world = tf->GetWorldMatrix();
+
+        BoundingBox worldBox;
+        {
+            XMMATRIX W = XMLoadFloat4x4((const XMFLOAT4X4*)&world);
+            localBox.Transform(worldBox, W); // 자동으로 월드 AABB 만들어줌.
+        }
+
+        // Ray랑 AABB 충돌 검사.
+        float t = 0.0f;
+        if (worldBox.Intersects(rayOrigin, rayDir, t)) 
+        {
+            if (t >= 0.0f && t < outT) // 작은 t가 나오면 최소값으로 갱신.
+            {
+                outT = t;
+                outHit = go;
+                hitAny = true;
+            }
+        }
+    }
+
+    return hitAny;
 }
+
+// moller-trumbore 알고리즘.
+static bool IntersectsRayTriangle(
+    const Vector3& rayO, const Vector3& rayD, // Ray를 로컬로 변환한 결과 넣어주기.
+    const Vector3& v0, const Vector3& v1, const Vector3& v2,
+    float& outT)
+{
+    const float EPS = 1e-6f;
+
+    Vector3 e1 = v1 - v0;
+    Vector3 e2 = v2 - v0;
+
+    Vector3 p = rayD.Cross(e2);
+    float det = e1.Dot(p);
+
+    if (fabsf(det) < EPS) return false;
+
+    float invDet = 1.0f / det;
+
+    Vector3 tvec = rayO - v0;
+    float u = tvec.Dot(p) * invDet;
+    if (u < 0.0f || u > 1.0f) return false;
+
+    Vector3 q = tvec.Cross(e1);
+    float v = rayD.Dot(q) * invDet;
+    if (v < 0.0f || (u + v) > 1.0f) return false;
+
+    float t = e2.Dot(q) * invDet;
+    if (t < 0.0f) return false;
+
+    outT = t;
+    return true;
+}
+
+// Ray를 로컬로 바꿔주는 함수
+static Ray TransformRayToLocal(const Ray& worldRay, const Matrix& world)
+{
+    Matrix invW = SimpleMathHelper::Inverse(world);
+
+    Vector3 o = Vector3::Transform(worldRay.origin, invW);
+    Vector3 d = Vector3::TransformNormal(worldRay.direction, invW);
+    d.Normalize();
+
+    return Ray{ o, d };
+}
+
+bool Scene::Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld)
+{
+    using namespace DirectX;
+
+    outHit = nullptr;
+    outTWorld = FLT_MAX;
+
+    Ray rw = rayWorld;
+    rw.direction.Normalize();
+
+    XMVECTOR rayO = XMLoadFloat3((const XMFLOAT3*)&rw.origin);
+    XMVECTOR rayD = XMLoadFloat3((const XMFLOAT3*)&rw.direction);
+
+    bool hitAny = false;
+
+    for (const auto& up : m_gameObjects)
+    {
+        GameObject* go = up.get();
+
+        if (go->GetName() == "Skybox(temp)") continue;
+
+        if (!go || !go->IsActiveInHierarchy()) continue;
+        if (go->GetComponent<Image>()) continue;
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh) continue;
+
+        Transform* tf = go->GetTransform();
+        if (!tf) continue;
+
+        const Matrix& world = tf->GetWorldMatrix();
+
+        // 로컬 AABB -> 월드 AABB
+        const BoundingBox& localBox = mesh->GetLocalBoundingBox();
+
+        BoundingBox worldBox;
+        {
+            XMMATRIX W = XMLoadFloat4x4((const XMFLOAT4X4*)&world);
+            localBox.Transform(worldBox, W);
+        }
+
+        // 월드 레이, 월드 AABB 충돌 검사. 
+        float tAabb = 0.0f;
+        if (!worldBox.Intersects(rayO, rayD, tAabb))
+            continue;
+
+        // 이미 더 가까운게 있으면 컷.
+        if (tAabb > outTWorld)
+            continue;
+
+        // 여기까지 통과했으면 레이를 로컬로 바꿔서 삼각형 검사
+        Ray rl = TransformRayToLocal(rw, world);
+
+        const auto& pos = mesh->GetPositions();
+        const auto& ind = mesh->GetIndices();
+        if (pos.empty() || ind.size() < 3) continue;
+
+        float bestThis = FLT_MAX;
+        bool hitThis = false;
+
+        // 삼각형 루프
+        for (size_t i = 0; i + 2 < ind.size(); i += 3)
+        {
+            uint32_t i0 = ind[i + 0];
+            uint32_t i1 = ind[i + 1];
+            uint32_t i2 = ind[i + 2];
+
+            if (i0 >= pos.size() || i1 >= pos.size() || i2 >= pos.size()) continue;
+
+            float tLocal = 0.0f;
+            if (!IntersectsRayTriangle(rl.origin, rl.direction, pos[i0], pos[i1], pos[i2], tLocal)) continue;
+
+            // 로컬 히트포인트 -> 월드 변환 -> 월드 t로 변환
+            Vector3 hitLocal = rl.origin + rl.direction * tLocal;
+            Vector3 hitWorld = Vector3::Transform(hitLocal, world);
+
+            //float tWorld = (hitWorld - rw.origin).Length();
+            float tWorld = (hitWorld - rw.origin).Dot(rw.direction);
+            if (tWorld < 0.0f) continue;
+
+            if (tWorld < bestThis)
+            {
+                bestThis = tWorld;
+                hitThis = true;
+            }
+        }
+
+        if (hitThis && bestThis < outTWorld)
+        {
+            outTWorld = bestThis;
+            outHit = go;
+            hitAny = true;
+        }
+    }
+
+    return hitAny;
+}
+
 
 void Scene::Clear()
 {

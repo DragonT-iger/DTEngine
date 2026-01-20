@@ -2310,6 +2310,43 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();
 
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool hovered = ImGui::IsItemHovered();
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && camera && hovered && clicked && !ImGuizmo::IsUsing())
+    {
+        ImVec2 mouse = ImGui::GetMousePos();
+
+        float localX = mouse.x - imageMin.x;
+        float localY = mouse.y - imageMin.y;
+
+        float viewW = imageMax.x - imageMin.x;
+        float viewH = imageMax.y - imageMin.y;
+
+        localX = std::clamp(localX, 0.0f, viewW);
+        localY = std::clamp(localY, 0.0f, viewH);
+
+        Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+        GameObject* hit = nullptr;
+        float hitT = 0.0f;
+
+        if (activeScene->Raycast2(ray, hit, hitT))
+        {
+            //std::cout << hit->GetName() << std::endl;
+            m_selectedGameObject = hit;
+        }
+        else
+        {
+            //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+            m_selectedGameObject = nullptr;
+        }
+    }
+    // 
+
+
     ImGuizmo::SetRect(imageMin.x, imageMin.y, imageMax.x - imageMin.x, imageMax.y - imageMin.y);
 
     ImGuizmo::SetDrawlist();
@@ -2323,7 +2360,7 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImGui::PopStyleVar();
 }
 
-void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
+void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)  
 {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("Game");
@@ -2342,6 +2379,49 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     bool isHovered = ImGui::IsItemHovered();
 
     bool isFocused = ImGui::IsWindowFocused();
+
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing())
+    {
+        Camera* camera = activeScene->GetMainCamera();
+        if (camera) 
+        {
+            ImVec2 mouse = ImGui::GetMousePos();
+
+            ImVec2 imgMin = ImGui::GetItemRectMin();
+            ImVec2 imgMax = ImGui::GetItemRectMax();
+
+            float localX = mouse.x - imgMin.x;
+            float localY = mouse.y - imgMin.y;
+
+            float viewW = imgMax.x - imgMin.x;
+            float viewH = imgMax.y - imgMin.y;
+
+            localX = std::clamp(localX, 0.0f, viewW);
+            localY = std::clamp(localY, 0.0f, viewH);
+
+            Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+            GameObject* hit = nullptr;
+            float hitT = 0.0f;
+
+            if (activeScene->Raycast2(ray, hit, hitT))
+            {
+                std::cout << hit->GetName() << std::endl;
+                m_selectedGameObject = hit;
+            }
+            else
+            {
+                //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+                m_selectedGameObject = nullptr;
+            }
+        }
+    }
+    // 
+
 #ifdef _DEBUG
     if (isHovered) 
     {

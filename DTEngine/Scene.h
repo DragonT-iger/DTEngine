@@ -23,7 +23,7 @@ struct DeltaTime // 배속용.
 struct Ray // picking용
 {
     Vector3 origin;
-    Vector3 dir;
+    Vector3 direction;
 };
 
 class Scene : public IResource
@@ -85,8 +85,9 @@ public:
     float GetTimeScale() const { return m_timeScale; }
     void SetTimeScale(float timeScale) { m_timeScale = timeScale; }
 
-    // picking
-    Ray ScreenPointToRay(int x, int y);
+    // 피킹용.
+    bool Raycast(const Ray& ray, GameObject*& outHit, float& outT);
+    bool Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld); // 이게 삼각형 검사까지 추가된거.
 
     void Clear();
 

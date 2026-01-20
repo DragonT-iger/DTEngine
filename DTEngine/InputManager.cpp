@@ -37,10 +37,10 @@ void InputManager::Update()
 
     m_prevMousePos = m_mousePos;
 
+    
+	//std::cout << "Game Mouse Pos: (" << m_gameMousePos.x << ", " << m_gameMousePos.y << ")\n";
 
-	std::cout << "Game Mouse Pos: (" << m_gameMousePos.x << ", " << m_gameMousePos.y << ")\n";
-
-	std::cout << "Mouse Pos: (" << m_mousePos.x << ", " << m_mousePos.y << ")\n";
+	//std::cout << "Mouse Pos: (" << m_mousePos.x << ", " << m_mousePos.y << ")\n";
 }
 
 void InputManager::EndFrame()
@@ -108,21 +108,21 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool InputManager::GetKeyDown(KeyCode key) const
 {
-    if (!m_isGameInputActive) return false;
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyDownState[vKey] : false;
 }
 
 bool InputManager::GetKey(KeyCode key) const
 {
-    if (!m_isGameInputActive) return false;
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyState[vKey] : false;
 }
 
 bool InputManager::GetKeyUp(KeyCode key) const
 {
-    if (!m_isGameInputActive) return false;
+    //if (!m_isGameInputActive) return false;
     int vKey = MapKeyCodeToVKey(key);
     return (vKey < 256) ? m_keyUpState[vKey] : false;
 }
