@@ -634,7 +634,7 @@ GameObject* ResourceManager::InstantiatePrefab(const std::string& fullPath)
     }
 
 
- //   rootObject->Awake();
+    //rootObject->Awake();
 	//rootObject->Start();
 
 

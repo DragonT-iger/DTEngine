@@ -5,7 +5,7 @@
 
 class TilemapData;
 
-class TilemapGenerator : public MonoBehaviour
+class TilemapGenerator : public MonoBehaviour // 나중에 singleton MonoBehaviour로 변경 고려
 {
     DTGENERATED_BODY(TilemapGenerator);
 
@@ -23,6 +23,8 @@ public:
 
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
+
+	static constexpr int PALETTE_SIZE = 5;
 
 public:
     TilemapData* m_mapData = nullptr;

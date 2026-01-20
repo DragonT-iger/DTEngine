@@ -8,7 +8,7 @@ public:
     TilemapData() = default;
     virtual ~TilemapData() = default;
 
-    static constexpr float TILE_SIZE = 1.0f;
+    static constexpr float TILE_SIZE = 2.0f;
 
     virtual bool LoadFile(const std::string& fullPath) override;
     virtual bool SaveFile(const std::string& fullPath) override;

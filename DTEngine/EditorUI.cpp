@@ -44,6 +44,7 @@
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
 #include "TilemapData.h"
+#include "TilemapGenerator.h"
 
 namespace fs = std::filesystem;
 
@@ -1577,10 +1578,73 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 GameObject* currentGO = *static_cast<GameObject**>(data);
 
-                DrawSceneReference<GameObject>(this, name, currentGO, comp, prop.m_setter,
-                    [](GameObject* go) { return go->GetName(); },
-                    [](Transform* tf) { return tf->_GetOwner(); }
-                );
+                // 1. 현재 할당된 오브젝트 이름 표시 버튼
+                std::string displayStr = "None";
+                if (currentGO) displayStr = currentGO->GetName();
+
+                float width = ImGui::CalcItemWidth();
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    // 버튼 클릭 시 해당 오브젝트를 하이어라키에서 선택
+                    if (currentGO) m_selectedGameObject = currentGO;
+                }
+
+                // 2. 드래그 앤 드롭 처리 (Hierarchy Item + Project File)
+                if (ImGui::BeginDragDropTarget())
+                {
+                    // [기존] 하이어라키에서 드래그했을 때
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+                    {
+                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
+                        Transform* draggedTf = *(Transform**)payload->Data;
+                        GameObject* draggedGO = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+                        if (draggedGO)
+                        {
+                            GameObject* oldVal = currentGO;
+                            prop.m_setter(comp, &draggedGO);
+
+                            auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                comp, prop.m_setter, oldVal, draggedGO
+                            );
+                            HistoryManager::Instance().Do(std::move(cmd));
+                        }
+                    }
+
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::filesystem::path fpath(droppedPath);
+                        std::string ext = fpath.extension().string();
+
+                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                        if (ext == ".prefab")
+                        {
+                            GameObject* newInstance = ResourceManager::Instance().InstantiatePrefab(droppedPath);
+
+                            if (newInstance)
+                            {
+                                newInstance->SetActive(false); 
+								newInstance->SetFlag(GameObject::Flags::HideAndDontSave, true);
+
+                                GameObject* oldVal = currentGO;
+                                prop.m_setter(comp, &newInstance);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                    comp, prop.m_setter, oldVal, newInstance
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+
+                                std::cout << "[Editor] Prefab assigned: " << newInstance->GetName() << std::endl;
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
             }
             // component 인 경우 
             else if (ReflectionDatabase::Instance().IsComponentPointer(type))
@@ -2301,9 +2365,23 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
                         std::string label = std::to_string(tileID);
 
+                        int maxTileCount = TilemapGenerator::PALETTE_SIZE;
+
                         if (ImGui::Button(label.c_str(), ImVec2(30, 30)))
+                        { 
+                            tilemap->SetTileIndex(x, y, (tileID + 1) % maxTileCount);
+                            changed = true;
+                        }
+
+                        if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
                         {
-                            tilemap->SetTileIndex(x, y, (tileID + 1) % 2); 
+
+                            int nextID = tileID - 1;
+
+                            if (nextID < 0)
+                                nextID = maxTileCount - 1;
+
+                            tilemap->SetTileIndex(x, y, nextID);
                             changed = true;
                         }
                         ImGui::PopID();
@@ -2318,13 +2396,8 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
 
             ImGui::Separator();
-            if (ImGui::Button("Save Tilemap", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
-            {
-                tilemap->SaveFile(path);
-                std::cout << "[Editor] Tilemap Saved: " << path << std::endl;
-            }
         }
-        }
+    }
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());

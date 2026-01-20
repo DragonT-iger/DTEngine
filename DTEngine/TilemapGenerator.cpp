@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "ResourceManager.h"  
+#include "Scene.h"
+#include "SceneManager.h"
 
 BEGINPROPERTY(TilemapGenerator)
 
@@ -48,17 +50,31 @@ void TilemapGenerator::BuildMap()
             GameObject* prefab = palette[index];
             if (!prefab) continue;
 
+
+			Scene* curScene = SceneManager::Instance().GetActiveScene();
+
+
+
             auto clones = prefab->Clone();
             if (clones.empty()) continue;
 
             GameObject* instance = clones[0].get();
 
-            instance->GetTransform()->SetParent(myTr);
-            instance->GetTransform()->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
-            instance->SetActive(true);
+            for (auto& go : clones) {
+                curScene->AddGameObject(std::move(go));
+            }
 
-            // 관리 리스트에 등록 (선택 사항)
-            // m_spawnedTiles.push_back(instance);
+            if (instance)
+            {
+                Transform* instanceTr = instance->GetTransform();
+                if (instanceTr)
+                {
+                    instanceTr->SetParent(myTr);
+
+                    instanceTr->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
+					instanceTr->_GetOwner()->SetActive(true);
+                }
+            }
         }
     }
 }
