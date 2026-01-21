@@ -20,6 +20,33 @@ DTPROPERTY_ACCESSOR(UISlider, m_trackColor, GetTrackColor, SetTrackColor)
 DTPROPERTY_ACCESSOR(UISlider, m_handleColor, GetHandleColor, SetHandleColor)
 ENDPROPERTY()
 
+
+void UISlider::Awake()
+{
+    // handle 자식 오브젝트로 강제로 생성시키고 등록을 awake에서 처리하자. 그러면 GameObject* handle로 가지고있고 
+    m_Transform = GetComponent<Transform>();
+    m_trackImage = GetComponent<Image>();
+
+    // handle 찾기. 없는 경우 생성해서 자식으로.
+    CacheHandle();
+
+    // 초기 color값 set
+    ApplyTrackColor();
+    ApplyHandleColor();
+
+    UpdateHandlePosition();
+}
+
+void UISlider::Update(float deltaTime)
+{
+    UpdateHandlePosition();
+    if (m_handleComponent)
+    {
+        m_handleComponent->Update(deltaTime);
+    }
+}
+
+
 void UISlider::SetValue(float value)
 {
     if (m_wholeNumbers)
@@ -92,39 +119,10 @@ void UISlider::CacheHandle()
     }
 }
 
-void UISlider::InvokeValueChanged()
-{
-    if (!m_interactable) return;
-    if (m_onValueChanged) m_onValueChanged(m_value);
-}
-
-void UISlider::Awake()
-{
-    // handle 자식 오브젝트로 강제로 생성시키고 등록을 awake에서 처리하자. 그러면 GameObject* handle로 가지고있고 
-    m_Transform = GetComponent<Transform>();
-    m_trackImage = GetComponent<Image>();
-
-    // handle 찾기. 없는 경우 생성해서 자식으로.
-    CacheHandle();
-
-    // 초기 color값 set
-    ApplyTrackColor();
-    ApplyHandleColor();
-
-    UpdateHandlePosition();
-}
-
-void UISlider::Update(float deltaTime)
-{
-    UpdateHandlePosition();
-}
-
-
 void UISlider::UpdateHandlePosition()
 {
     if (!m_handleTransform || !m_Transform)
         return;
-
 
     float range = m_maxValue - m_minValue;
     if (range <= 0.0f) return;
@@ -168,6 +166,11 @@ void UISlider::OnHandleDragged(float mouseLocalX)
     SetValue(newValue);
 }
 
+void UISlider::InvokeValueChanged()
+{
+    if (!m_interactable) return;
+    if (m_onValueChanged) m_onValueChanged(m_value);
+}
 
 void UISlider::ApplyTrackColor()
 {

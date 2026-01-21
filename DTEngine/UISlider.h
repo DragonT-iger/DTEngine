@@ -52,6 +52,8 @@ public:
     void OnHandleDragged(float mouseLocalX);
 
     void UpdateHandlePosition();
+
+    void EditorUpdate(float deltaTime) { Update(deltaTime); };
 private:
 
     void ApplyTrackColor();
@@ -61,7 +63,8 @@ private:
     class Transform* m_handleTransform = nullptr;
     class Image* m_handleImage = nullptr;
     class Image* m_trackImage = nullptr;
-    
+    class UISliderHandle* m_handleComponent = nullptr;
+
     float m_minValue = 0.0f;
     float m_maxValue = 1.0f;
     float m_value = 0.0f;
@@ -71,7 +74,5 @@ private:
     Vector4 m_trackColor = Vector4(1.f, 1.f, 1.f, 1.f);
     Vector4 m_handleColor = Vector4(1.f, 1.f, 1.f, 1.f);
     std::function<void(float)> m_onValueChanged;
-
-    class UISliderHandle* m_handleComponent = nullptr;
 };
 
