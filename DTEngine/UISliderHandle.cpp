@@ -65,9 +65,9 @@ void UISliderHandle::Update(float deltaTime)
     if (m_isDragging && InputManager::Instance().GetKey(KeyCode::MouseLeft))
     {
         float localMouseX = mousePosVec2.x;
-        if (auto* sliderTransform = m_parentSlider->GetTransform())
+        if (auto* handleTransform = m_transform->GetTransform())
         {
-            localMouseX = mousePosVec2.x - sliderTransform->GetPosition().x;
+            localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
         }
         m_parentSlider->OnHandleDragged(localMouseX);
     }
@@ -99,11 +99,11 @@ bool UISliderHandle::IsMouseOver(const Vector2& mousePos)
 
     bool result = (mousePos.x >= left && mousePos.x <= right &&
         mousePos.y >= top && mousePos.y <= bottom);
-    if (result) 
+    /*if (result) 
     {
         std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << std::endl;
         std::cout << "Handle: " << m_transform->GetTransform()->GetPosition().x << ", " << m_transform->GetTransform()->GetPosition().y << std::endl;
-    }
+    }*/
 
     return result;
 }

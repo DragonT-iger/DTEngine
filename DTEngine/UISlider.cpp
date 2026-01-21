@@ -41,9 +41,8 @@ void UISlider::Awake()
 
 void UISlider::Update(float deltaTime)
 {
-#ifndef _DEBUG  // 에디터 아닐 때만 자동 업데이트
     UpdateHandlePosition();
-#endif
+
     if (m_handleComponent)
     {
         m_handleComponent->Update(deltaTime);
@@ -96,11 +95,10 @@ void UISlider::CacheHandle()
         GameObject* handle = scene->CreateGameObject("Handle");
         if (!handle) return;
 
-        
-
         m_handleTransform = handle->GetTransform();
         m_handleTransform->SetParent(tf);
         m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+
         // y값은 동일한 size로. x는 10분의 1로.
         m_handleTransform->SetScale(Vector3((GetTransform()->GetScale().x / 10), GetTransform()->GetScale().y, 1.0f));
 
@@ -150,6 +148,8 @@ void UISlider::OnHandleDragged(float mouseLocalX)
     if (!ComputeHandleBounds(minX, maxX, available))
         return;
 
+    if (available <= 0.0f) return;
+
     float clampedX = std::clamp(mouseLocalX, minX, maxX);
     Vector3 localPos = m_handleTransform->GetPosition();
     localPos.x = clampedX;
@@ -177,6 +177,7 @@ void UISlider::OnHandleReleased(float mouseLocalX)
     float normalizedPos = (clampedX - minX) / available;
     float newValue = m_minValue + (m_maxValue - m_minValue) * normalizedPos;
     SetValue(newValue);
+    UpdateHandlePosition();
 }
 
 void UISlider::InvokeValueChanged()
@@ -221,7 +222,12 @@ bool UISlider::ComputeHandleBounds(float& minX, float& maxX, float& available) c
     float trackWidth = trackScale.x;
     float handleWidth = handleScale.x;
     available = std::max(0.0f, trackWidth - handleWidth);
-    minX = -available * 0.5f;
-    maxX = available * 0.5f;
+    
+    // minX = -available * 0.5f;
+    // maxX = available * 0.5f;
+    // 왼쪽 끝을 기준으로. 이전에는 중앙 기준이였음.
+
+    minX = 0.0f;
+    maxX = available;
     return true;
 }

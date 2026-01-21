@@ -21,4 +21,5 @@ private:
     class Transform* m_transform = nullptr;
     class UIButton* m_button = nullptr;
     bool m_isDragging = false;
+    float m_dragOffset = 0.0f;
 };
