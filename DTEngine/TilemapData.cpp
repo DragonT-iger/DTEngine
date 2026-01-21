@@ -5,9 +5,30 @@
 
 void TilemapData::SetDimensions(int w, int h)
 {
+    if (w == m_width && h == m_height)
+        return;
+
+    std::vector<int> oldGrid = m_grid;
+    int oldWidth = m_width;
+    int oldHeight = m_height;
+
     m_width = w;
     m_height = h;
     m_grid.assign(w * h, -1);
+
+    if (oldGrid.empty())
+        return;
+
+    int copyW = (oldWidth < w) ? oldWidth : w;
+    int copyH = (oldHeight < h) ? oldHeight : h;
+
+    for (int y = 0; y < copyH; ++y)
+    {
+        for (int x = 0; x < copyW; ++x)
+        {
+            m_grid[y * m_width + x] = oldGrid[y * oldWidth + x];
+        }
+    }
 }
 
 void TilemapData::SetTileIndex(int x, int y, int paletteIndex)

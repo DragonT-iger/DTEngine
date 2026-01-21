@@ -10,15 +10,15 @@ public:
 
     static constexpr float TILE_SIZE = 2.0f;
 
-    virtual bool LoadFile(const std::string& fullPath) override;
-    virtual bool SaveFile(const std::string& fullPath) override;
-    virtual void Unload() override;
+    bool LoadFile(const std::string& fullPath) override;
+    bool SaveFile(const std::string& fullPath) override;
+    void Unload() override;
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 
-	void SetWidth(int w) { m_width = w; SetDimensions(m_width, m_height); }
-	void SetHeight(int h) { m_height = h; SetDimensions(m_width, m_height); }
+	void SetWidth(int w) {  SetDimensions(w, m_height); }
+	void SetHeight(int h) { SetDimensions(m_width, h); }
 
     void SetDimensions(int w, int h);
     void SetTileIndex(int x, int y, int paletteIndex);
