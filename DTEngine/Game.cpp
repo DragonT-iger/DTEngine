@@ -491,17 +491,29 @@ void Game::LifeCycle(DeltaTime dt)
 
 	Camera* mainCam = scene->GetMainCamera();
 
-	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0.1f, 0.1f, 0.1f, 1.0f};
+	const float* clearColor = (float*)&mainCam->GetClearColor();
 
-	DX11Renderer::Instance().BeginFrame(clearColor);
 
 	if (mainCam)
 	{
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
-		RenderScene(scene, mainCam, nullptr, true);
+		RenderScene(scene, mainCam, m_gameRT.get(), true);
 	}
+
+	DX11Renderer::Instance().BeginFrame(clearColor);
+
+	DX11Renderer::Instance().BeginUIRender((float)DX11Renderer::Instance().GetWidth(), (float)DX11Renderer::Instance().GetHeight());
+
+	Texture* finalTexture = m_gameRT.get();
+
+	Vector2 screenPos(0, 0);
+	Vector2 screenSize((float)DX11Renderer::Instance().GetWidth(), (float)DX11Renderer::Instance().GetHeight());
+
+	DX11Renderer::Instance().DrawUI(finalTexture, screenPos, screenSize, Vector4(1, 1, 1, 1));
+
+	DX11Renderer::Instance().EndUIRender();
 
 
 
