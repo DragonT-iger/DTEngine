@@ -240,7 +240,7 @@ private:
     bool  m_vsync = false;
 
     int m_refWidth = 1920;
-	int m_refHeight = 1080;
+	int m_refHeight = 1200; // 16:10 의도한거임
 
     Matrix m_viewTM;
     Matrix m_projTM;
