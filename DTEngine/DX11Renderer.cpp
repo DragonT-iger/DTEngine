@@ -153,7 +153,7 @@ void DX11Renderer::UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& proje
     m_context->Unmap(m_cbuffer_frame.Get(), 0);
 
 }
-void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const Vector3& cameraPos)
+void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera)
 {
     if (!m_cbuffer_lights) return;
 
@@ -168,7 +168,9 @@ void DX11Renderer::UpdateLights_CBUFFER(const std::vector<Light*>& lights, const
     int count = std::min((int)lights.size(), MAX_LIGHTS);
     data->ActiveCount = count;
 
-    data->CameraPos = cameraPos;
+    data->CameraPos = camera->GetCamPos();     
+    data->CameraDir = camera->GetCamFor();     
+    data->IsOrtho = camera->IsOrthographic() ? 1.0f : 0.0f;
     data->LightViewProjScale = m_lightViewProjScale.Transpose();
     float w = m_shadowViewport.Width;
     float h = m_shadowViewport.Height;
@@ -245,37 +247,43 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
 }
 
-void DX11Renderer::BeginUIRender()
+void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
-    //if (m_spriteBatch)
-    //{
-    //    m_spriteBatch->Begin(
-    //        DirectX::DX11::SpriteSortMode_Deferred,
-    //        m_states->NonPremultiplied(),
-    //        nullptr,                                    // SamplerState
-    //        nullptr,                                    // DepthStencilState
-    //        nullptr,                                    // RasterizerState
-    //        nullptr,                                    // setCustomShaders
-    //        DirectX::XMMatrixIdentity() 
-    //    );
-    //}
-    Camera* mainCamera = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    float scaleX = renderWidth  / m_refWidth;
+    float scaleY = renderHeight / m_refHeight;
+
+    Matrix uiScaleMatrix = Matrix::CreateScale(scaleX, scaleY, 1.0f);
 
 
-    if (mainCamera == nullptr) return;
-
-    m_isOrthoBackup = mainCamera->IsOrthographic();
-
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->Begin(
+            DirectX::DX11::SpriteSortMode_Deferred,
+            m_states->NonPremultiplied(),
+            nullptr,                                    // SamplerState
+            nullptr,                                    // DepthStencilState
+            nullptr,                                    // RasterizerState
+            nullptr,                                    // setCustomShaders
+            uiScaleMatrix
+        );
+    }
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    if (mainCam == nullptr) return;
 
-    mainCam->SetIsOrthographic(true);
+    static float orthoSize = 1080; // 이게 UI의 기준이 되는 사이즈
 
-    mainCam->SetProjectionOrthographic();
+    static float orthoHeight = orthoSize;
+    float aspectRatio = mainCam->GetAspectRatio();
+    float orthoWidth = orthoHeight * aspectRatio;
 
-    UpdateFrame_CBUFFER(
-        SimpleMathHelper::IdentityMatrix(),
-        SceneManager::Instance().GetActiveScene()->GetMainCamera()->GetProjectionMatrix()
-	);
+    static float nearZ = -20.0f;
+    static float farZ = 1000;
+    // 이 값들 때문에 UI의 Z값이 이상해지면 클립되는거임
+
+    Matrix uiProj = DirectX::XMMatrixOrthographicLH(orthoWidth, orthoHeight, nearZ, farZ);
+
+    UpdateFrame_CBUFFER(SimpleMathHelper::IdentityMatrix(), uiProj);
 
     m_context->OMSetDepthStencilState(m_states->DepthNone(), 0);
 
@@ -283,17 +291,17 @@ void DX11Renderer::BeginUIRender()
 
 void DX11Renderer::EndUIRender()
 {
-    //if (m_spriteBatch)
-    //{
-    //    m_spriteBatch->End();
-    //}
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->End();
+    }
 
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
-    if (mainCam == nullptr) return;
+    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
+    //if (mainCam == nullptr) return;
 
-    mainCam->SetIsOrthographic(m_isOrthoBackup);
+    //mainCam->SetIsOrthographic(m_isOrthoBackup);
 
-	mainCam->SetProjectionPerspective();
+    //mainCam->SetProjectionOrthographic();
     
     
 
@@ -356,14 +364,14 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
     Matrix lightView = XMMatrixLookAtLH(lightPos, target, up);
     Matrix lightProj;
 
-    if (isDirectional)
-    {
-        lightProj = DirectX::XMMatrixOrthographicLH(size, size, 0.1f, 100.0f);
-    }
-    else
-    {
-        lightProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1.0f, 0.1f, 100.0f);
-    }
+    //if (isDirectional)
+    //{
+    lightProj = DirectX::XMMatrixOrthographicLH(size, size, 0.1f, 100.0f);
+    //}
+    //else
+    //{
+    //    lightProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, 1.0f, 0.1f, 100.0f);
+    //}
 
     Matrix textureScaleBias = Matrix(
         0.5f, 0.0f, 0.0f, 0.0f,
@@ -378,12 +386,19 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
 }
 
 
-//void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector4& color)
-//{
-//    if (!m_spriteBatch || !texture) return;
-//
-//    m_spriteBatch->Draw(texture->GetSRV(), position, color);
-//}
+
+void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color)
+{
+    if (!m_spriteBatch || !texture) return;
+
+    RECT destRect;
+    destRect.left   = static_cast<LONG>(position.x);
+    destRect.top    = static_cast<LONG>(position.y);
+    destRect.right  = static_cast<LONG>(position.x + size.x);
+    destRect.bottom = static_cast<LONG>(position.y + size.y);
+
+    m_spriteBatch->Draw(texture->GetSRV(), destRect, color);
+}
 
 void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
 {

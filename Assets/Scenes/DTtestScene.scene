@@ -1,0 +1,307 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1549800710126249014,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 12721942249057060834,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 15457439187271150869,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12621832947175338989,
+        "m_editorEulerAngles": {
+          "x": 41.002506256103516,
+          "y": 1.79887855052948,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 9.147979736328125,
+          "y": 9.626446723937988,
+          "z": -6.450711250305176
+        },
+        "m_rotation": {
+          "w": 0.9365491271018982,
+          "x": 0.35018470883369446,
+          "y": 0.01470332033932209,
+          "z": -0.005497712641954422
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7126371692199545648,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": true,
+          "m_nearZ": -2000.0,
+          "m_orthographicSize": 1.2000000476837158,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "typeName": "Camera"
+        }
+      ],
+      "id": 14666395232787571475,
+      "name": "MainCamera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7579107605158887194,
+        "m_editorEulerAngles": {
+          "x": 48.202274322509766,
+          "y": -45.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 21.113059997558594,
+          "y": 21.698381423950195,
+          "z": -6.337443828582764
+        },
+        "m_rotation": {
+          "w": 0.8433412909507751,
+          "x": 0.3772648572921753,
+          "y": -0.34932342171669006,
+          "z": 0.15626823902130127
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6373055932638168785,
+          "m_color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_intensity": 1.0,
+          "m_range": 10.0,
+          "m_type": 0,
+          "typeName": "Light"
+        },
+        {
+          "Active": true,
+          "id": 10857052866812526374,
+          "m_size": 100.0,
+          "typeName": "ShadowMap"
+        }
+      ],
+      "id": 12792323375294926988,
+      "name": "Directional Light",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17987380289712910369,
+        "m_editorEulerAngles": {
+          "x": 129.94200134277344,
+          "y": 35.14500045776367,
+          "z": 19.142457962036133
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -19.94827651977539,
+          "y": 39.897335052490234,
+          "z": -20.24793243408203
+        },
+        "m_rotation": {
+          "w": 0.4432057738304138,
+          "x": 0.8730254769325256,
+          "y": -0.017674967646598816,
+          "z": -0.20268896222114563
+        },
+        "m_scale": {
+          "x": 0.9999997615814209,
+          "y": 0.9999999403953552,
+          "z": 0.9999988675117493
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7171391694734270448,
+          "m_mapData": 6189260170659567125,
+          "m_prefab0": 16302386552932827796,
+          "m_prefab1": 11325787544210787741,
+          "m_prefab2": 4924267867290484229,
+          "m_prefab3": 0,
+          "m_prefab4": 0,
+          "typeName": "TilemapGenerator"
+        }
+      ],
+      "id": 10154570672934640085,
+      "name": "TileMapManager",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3160843146463709048,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 5.075587272644043,
+          "y": 0.0,
+          "z": 4.4358415603637695
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12796648283351137547,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 6022309272839303111,
+          "m_rotationSpeed": {
+            "x": 0.0,
+            "y": 20.0,
+            "z": 0.0
+          },
+          "typeName": "Rotator"
+        }
+      ],
+      "id": 5804603407003503968,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9826012678473559212,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8434294019800784467,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10905839516507161456,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8746986767933689703,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3160843146463709048,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}

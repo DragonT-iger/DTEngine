@@ -3,6 +3,8 @@
 #include "SimpleMathHelper.h"
 #include "RenderTexture.h"
 
+struct Ray;
+
 class Camera : public MonoBehaviour
 {
     DTGENERATED_BODY(Camera);
@@ -50,6 +52,7 @@ public:
 
     void SetViewDirty() { m_dirtyView = true; }
     void SetAspectRatio(float ratio) { m_aspectRatio = ratio; m_dirtyProj = true; }
+	const float& GetAspectRatio() const { return m_aspectRatio; }
 
 	const bool& IsOrthographic() const { return m_isOrthographic; }
 	void SetIsOrthographic(bool isOrtho) { m_isOrthographic = isOrtho; m_dirtyProj = true; }
@@ -62,6 +65,8 @@ public:
 
     const Vector4& GetViewportRect() const { return m_viewportRect; }
     void SetViewportRect(const Vector4& rect) { m_viewportRect = rect; }
+
+    Ray ScreenPointToRay(float x, float y, float viewportW, float viewportH) const;
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();

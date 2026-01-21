@@ -4,9 +4,6 @@
 
 BEGINPROPERTY(Rotator)
 DTPROPERTY(Rotator, m_rotationSpeed)
-DTPROPERTY(Rotator, m_go)
-DTPROPERTY(Rotator, m_rotator)
-DTPROPERTY(Rotator, col)
 ENDPROPERTY()
 
 void Rotator::Update(float deltaTime)
@@ -20,3 +17,8 @@ void Rotator::Update(float deltaTime)
 
     tr->SetRotationEuler(currentEuler);
 }
+
+//void Rotator::Start()
+//{
+//	std::cout << "Started Rotator on " << GetName() << std::endl;
+//}

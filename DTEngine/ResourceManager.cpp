@@ -4,7 +4,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <filesystem>
-
+#include <algorithm>
+#include <cctype>   
+#include <map>      
 
 #include "ResourceManager.h"
 #include "Transform.h"
@@ -93,72 +95,70 @@ void ResourceManager::CollectDescendants(GameObject* target, std::vector<GameObj
 
 bool ResourceManager::SavePrefab(GameObject* root, const std::string& fullPath)
 {
-    //if (!root) return false;
+    if (!root) return false;
 
-    //JsonWriter writer;
-    //std::string assetPath = ResolveFullPath(fullPath);
+    JsonWriter writer;
+    std::string assetPath = ResolveFullPath(fullPath);
 
-    //std::vector<GameObject*> targets;
-    //CollectDescendants(root, targets);
+    std::vector<GameObject*> targets;
+    CollectDescendants(root, targets);
 
-    //std::unordered_map<uint64_t, bool> prefabIDs;
-    //for (auto* go : targets)
-    //{
-    //    prefabIDs[go->_GetID()] = true;
-    //}
+    std::unordered_map<uint64_t, bool> prefabIDs;
+    for (auto* go : targets)
+    {
+        prefabIDs[go->_GetID()] = true;
+    }
 
-    //writer.BeginArray("gameObjects");
+    writer.BeginArray("gameObjects");
 
-    //for (auto& go : targets)
-    //{
-    //    writer.NextArrayItem();
+    for (auto& go : targets)
+    {
+        writer.NextArrayItem();
 
-    //    writer.Write("id", go->_GetID());
-    //    writer.Write("name", go->GetName());
-    //    writer.Write("tag", go->GetTag());
-    //    writer.Write("active", go->IsActive());
+        writer.Write("id", go->_GetID());
+        writer.Write("name", go->GetName());
+        writer.Write("tag", go->GetTag());
+        writer.Write("active", go->IsActive());
 
-    //    uint64_t parentID = 0;
-    //    Transform* parentTF = go->GetTransform()->GetParent();
-    //    if (parentTF)
-    //    {
-    //        uint64_t pid = parentTF->_GetOwner()->_GetID();
-    //        if (prefabIDs.find(pid) != prefabIDs.end())
-    //        {
-    //            parentID = pid;
-    //        }
-    //    }
-    //    writer.Write("parentID", parentID);
+        uint64_t parentID = 0;
+        Transform* parentTF = go->GetTransform()->GetParent();
+        if (parentTF)
+        {
+            uint64_t pid = parentTF->_GetOwner()->_GetID();
+            if (prefabIDs.find(pid) != prefabIDs.end())
+            {
+                parentID = pid;
+            }
+        }
+        writer.Write("parentID", parentID);
 
-    //    if (auto* tf = go->GetTransform())
-    //    {
-    //        writer.BeginObject("transform");
-    //        writer.Write("id", tf->_GetID());
-    //        tf->Serialize(writer);
-    //        writer.EndObject();
-    //    }
+        if (auto* tf = go->GetTransform())
+        {
+            writer.BeginObject("transform");
+            writer.Write("id", tf->_GetID());
+            tf->Serialize(writer);
+            writer.EndObject();
+        }
 
-    //    writer.BeginArray("components");
-    //    for (auto& comp : go->_GetComponents())
-    //    {
-    //        if (!comp) continue;
-    //        writer.NextArrayItem();
+        writer.BeginArray("components");
+        for (auto& comp : go->_GetComponents())
+        {
+            if (!comp) continue;
+            writer.NextArrayItem();
 
-    //        writer.Write("typeName", comp->_GetTypeName());
-    //        writer.Write("id", comp->_GetID());
-    //        comp->Serialize(writer);
+            writer.Write("typeName", comp->_GetTypeName());
+            writer.Write("id", comp->_GetID());
+            comp->Serialize(writer);
 
-    //        writer.EndArrayItem();
-    //    }
-    //    writer.EndArray();
-    //    writer.EndArrayItem();
-    //}
-    //writer.EndArray();
+            writer.EndArrayItem();
+        }
+        writer.EndArray();
+        writer.EndArrayItem();
+    }
+    writer.EndArray();
 
-    //return writer.SaveFile(assetPath);
-	
-    
-    return false;
+    return writer.SaveFile(assetPath);
+    //return false;
 }
 
 GameObject* ResourceManager::LoadModel(const std::string& fullPath)
@@ -213,7 +213,27 @@ GameObject* ResourceManager::LoadModel(const std::string& fullPath)
     std::string fileName = std::filesystem::path(fullPath).stem().string();
     GameObject* rootObject = SceneManager::Instance().GetActiveScene()->CreateGameObject(fileName);
 
-    ProcessNode(scene->mRootNode, scene, rootObject, fullPath, extractedTextures);
+    std::map<std::string, std::string> fileCache;
+    std::filesystem::path modelDir = std::filesystem::path(fullPath).parent_path();
+    std::error_code ec;
+
+    if (std::filesystem::exists(modelDir))
+    {
+        for (const auto& entry : std::filesystem::directory_iterator(modelDir, ec))
+        {
+            if (entry.is_regular_file())
+            {
+                std::string fname = entry.path().filename().string();
+                std::string lowerName = fname;
+                std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
+
+                fileCache[lowerName] = entry.path().string();
+            }
+        }
+    }
+
+
+    ProcessNode(scene->mRootNode, scene, rootObject, fullPath, extractedTextures, fileCache);
 
     return rootObject;
 }
@@ -233,7 +253,7 @@ void ResourceManager::MoveResource(const std::string& oldPath, const std::string
     }
 }
 
-void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures)
+void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures, const std::map<std::string, std::string>& fileCache)
 {
     GameObject* currentGO = nullptr;
 
@@ -275,21 +295,16 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
     currentGO->GetTransform()->SetScale(scale);
 
     static const std::string defaultMatPath = "Assets/Materials/Default.mat";
+    static const std::string pbrMatPath = "Assets/Materials/PBR.mat";
+
     static uint64_t defaultMatID = AssetDatabase::Instance().GetIDFromPath(defaultMatPath);
+    static uint64_t pbrMatID = AssetDatabase::Instance().GetIDFromPath(pbrMatPath);
 
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         unsigned int meshIndex = node->mMeshes[i];
-        unsigned int matIndex = scene->mMeshes[meshIndex]->mMaterialIndex;
-
         aiMesh* aiMesh = scene->mMeshes[meshIndex];
         aiMaterial* aiMat = scene->mMaterials[aiMesh->mMaterialIndex];
-
-        Texture* assignedTexture = nullptr;
-        if (matIndex < textures.size())
-        {
-            assignedTexture = textures[matIndex];
-        }
 
         GameObject* targetGO = currentGO;
         if (i > 0)
@@ -302,41 +317,104 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
         renderer->SetModelID(AssetDatabase::Instance().GetIDFromPath(modelPath));
         renderer->SetMeshIndex(meshIndex);
 
-        if (defaultMatID != 0)
-        {
-            renderer->SetMaterialID(defaultMatID);
 
+        std::string fullTexPath;
+        bool hasDiffuse = false;
+        aiString texPath;
+
+        if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
+        {
+            std::filesystem::path modelDir = std::filesystem::path(modelPath).parent_path();
+            fullTexPath = (modelDir / texPath.C_Str()).string();
+            hasDiffuse = true;
+        } // 디퓨즈/알베도 경로만 확보하면 메쉬당 텍스쳐든 모델당 텍스쳐든 둘다 커버가 가능함
+
+        bool foundPBR = false;
+        std::map<int, std::string> foundTextures;
+
+        if (hasDiffuse)
+        {
+            std::filesystem::path texFilePath(fullTexPath);
+            std::string extension = texFilePath.extension().string();
+            std::string stem = texFilePath.stem().string();
+
+            std::string stemLower = stem;
+            std::transform(stemLower.begin(), stemLower.end(), stemLower.begin(), ::tolower);
+
+            std::vector<std::string> suffixesToRemove = { "_albedo", "_diffuse", "_basecolor", "_color" };
+            std::string baseName = stem;
+
+            for (const auto& suffix : suffixesToRemove)
+            {
+                if (stemLower.length() > suffix.length() &&
+                    stemLower.compare(stemLower.length() - suffix.length(), suffix.length(), suffix) == 0)
+                {
+                    baseName = stem.substr(0, stem.length() - suffix.length());
+                    break;
+                }
+            }
+
+            auto CheckAndAddTexture = [&](std::string suffix, int slot) -> bool
+                {
+                    std::string targetName = baseName + suffix + extension;
+
+                    std::string targetLower = targetName;
+                    std::transform(targetLower.begin(), targetLower.end(), targetLower.begin(), ::tolower);
+
+                    auto it = fileCache.find(targetLower);
+                    if (it != fileCache.end())
+                    {
+                        foundTextures[slot] = it->second;
+                        return true;
+                    }
+                    return false;
+                };
+
+            bool hasRough = CheckAndAddTexture("_rough", 4);
+            bool hasMetal = CheckAndAddTexture("_metal", 3);
+
+            CheckAndAddTexture("_basecolor", 0);
+            CheckAndAddTexture("_normal", 1);
+            CheckAndAddTexture("_ao", 5);
+
+            if (hasRough || hasMetal)
+            {
+                foundPBR = true;
+            }
+            //foundTextures[0] = fullTexPath;
+        }
+
+        uint64_t targetMatID = (foundPBR && pbrMatID != 0) ? pbrMatID : defaultMatID;
+
+        if (targetMatID != 0)
+        {
+            renderer->SetMaterialID(targetMatID);
             Material* mat = renderer->GetMaterial();
+
             if (mat)
             {
+                for (auto const& [slot, path] : foundTextures)
+                {
+                    Texture* tex = ResourceManager::Instance().Load<Texture>(path);
+                    if (tex)
+                    {
+                        mat->SetTexture(slot, tex);
+                        std::cout << "[AutoBinding] Slot " << slot << " : " << std::filesystem::path(path).filename().string() << std::endl;
+                    }
+                }
+
                 aiColor3D color(1.f, 1.f, 1.f);
                 if (aiMat->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
                 {
                     mat->SetColor(Vector4(color.r, color.g, color.b, 1.0f));
                 }
-
-                aiString texPath;
-                if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-                {
-                    std::filesystem::path modelDir = std::filesystem::path(modelPath).parent_path();
-                    std::string fullTexPath = (modelDir / texPath.C_Str()).string();
-
-                    Texture* texture = ResourceManager::Instance().Load<Texture>(fullTexPath);
-                    if (texture)
-                    {
-                        mat->SetTexture(0, texture);
-                    }
-                }
             }
-            // else:
-            // 모델에 텍스처가 없다면? -> 아무것도 하지 않음.
-            // 인스턴싱을 굳이 하지 않고 공유 머터리얼(Default)의 텍스처를 그대로 사용.
         }
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene, currentGO, modelPath, textures);
+        ProcessNode(node->mChildren[i], scene, currentGO, modelPath, textures, fileCache);
     }
 }
 
@@ -411,13 +489,6 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
     auto mesh = std::make_shared<Mesh>();
     mesh->CreateBuffers(vertices, indices);
 
-    // 리소스 관리 차원에서 캐싱해두는 것이 좋음 (여기서는 생략하고 바로 리턴)
-    // m_meshes[aiMesh->mName.C_Str()] = mesh; 
-
-    // Mesh는 IResource를 상속받았으므로 포인터 관리 주의 (여기선 raw pointer 반환 가정)
-    // 실제로는 ResourceManager::Load<Mesh> 구조에 맞춰야 함.
-    // 여기서는 개념 설명을 위해 new를 사용하지만, 프로젝트 구조에 맞게 shared_ptr 등을 사용하세요.
-
     Mesh* rawMesh = new Mesh();
     rawMesh->CreateBuffers(vertices, indices);
 
@@ -425,106 +496,114 @@ Mesh* ResourceManager::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
 }
 
 
-GameObject* ResourceManager::InstantiatePrefab(const std::string& fullPath)
-{
-    auto rd = JsonReader::LoadJson(fullPath);
-    if (!rd) return nullptr;
-    JsonReader& reader = *rd;
+// Prefab 클래스로 관리
 
-    Scene* scene = SceneManager::Instance().GetActiveScene();
-    if (!scene) return nullptr;
-
-    std::unordered_map<uint64_t, Component*> fileIDToNewComponent;
-    std::unordered_map<uint64_t, GameObject*> fileIDToNewGameObject;
-    std::vector<FixupTask> fixupList;
-    std::vector<std::pair<GameObject*, uint64_t>> parentLinks;
-
-    GameObject* rootObject = nullptr;
-
-    if (reader.BeginArray("gameObjects"))
-    {
-        while (reader.NextArrayItem())
-        {
-            std::string goName = reader.ReadString("name", "GameObject");
-            uint64_t fileGoID = reader.ReadUInt64("id", 0);
-            uint64_t fileParentID = reader.ReadUInt64("parentID", 0);
-
-            GameObject* newGO = scene->CreateGameObject(goName);
-
-            fileIDToNewGameObject[fileGoID] = newGO;
-            if (fileParentID != 0)
-            {
-                parentLinks.push_back({ newGO, fileParentID });
-            }
-
-            if (!rootObject) rootObject = newGO;
-
-            newGO->SetTag(reader.ReadString("tag", "Untagged"));
-            newGO->SetActive(reader.ReadBool("active", true));
-
-            if (reader.BeginObject("transform"))
-            {
-                Transform* tf = newGO->GetTransform();
-                uint64_t fileTfID = reader.ReadUInt64("id", 0);
-
-                if (fileTfID != 0) fileIDToNewComponent[fileTfID] = tf;
-
-                DeserializeComponentProperties(reader, tf, fixupList);
-                reader.EndObject();
-            }
-
-            if (reader.BeginArray("components"))
-            {
-                while (reader.NextArrayItem())
-                {
-                    std::string typeName = reader.ReadString("typeName", "");
-                    uint64_t fileCompID = reader.ReadUInt64("id", 0);
-
-                    if (!typeName.empty())
-                    {
-                        Component* newComp = newGO->AddComponent(typeName);
-                        if (newComp)
-                        {
-                            if (fileCompID != 0) fileIDToNewComponent[fileCompID] = newComp;
-                            DeserializeComponentProperties(reader, newComp, fixupList);
-                        }
-                    }
-                    reader.EndArrayItem();
-                }
-                reader.EndArray();
-            }
-            reader.EndArrayItem();
-        }
-        reader.EndArray();
-    }
-
-    for (auto& link : parentLinks)
-    {
-        GameObject* child = link.first;
-        uint64_t parentFileID = link.second;
-
-        if (fileIDToNewGameObject.find(parentFileID) != fileIDToNewGameObject.end())
-        {
-            GameObject* parent = fileIDToNewGameObject[parentFileID];
-            child->GetTransform()->SetParent(parent->GetTransform());
-        }
-    }
-
-    for (const auto& task : fixupList)
-    {
-        uint64_t targetFileID = task.targetID;
-        Component* targetPtr = nullptr;
-
-        if (targetFileID != 0)
-        {
-            auto it = fileIDToNewComponent.find(targetFileID);
-            if (it != fileIDToNewComponent.end())
-            {
-                targetPtr = it->second;
-            }
-        }
-        task.property.m_setter(task.targetObject, &targetPtr);
-    }
-
-    return rootObject;
-}
+//GameObject* ResourceManager::InstantiatePrefab(const std::string& fullPath)
+//{
+//    auto rd = JsonReader::LoadJson(fullPath);
+//    if (!rd) return nullptr;
+//    JsonReader& reader = *rd;
+//
+//    Scene* scene = SceneManager::Instance().GetActiveScene();
+//    if (!scene) return nullptr;
+//
+//    std::unordered_map<uint64_t, Component*> fileIDToNewComponent;
+//    std::unordered_map<uint64_t, GameObject*> fileIDToNewGameObject;
+//    std::vector<FixupTask> fixupList;
+//    std::vector<std::pair<GameObject*, uint64_t>> parentLinks;
+//
+//    GameObject* rootObject = nullptr;
+//
+//    if (reader.BeginArray("gameObjects"))
+//    {
+//        while (reader.NextArrayItem())
+//        {
+//            std::string goName = reader.ReadString("name", "GameObject");
+//            uint64_t fileGoID = reader.ReadUInt64("id", 0);
+//            uint64_t fileParentID = reader.ReadUInt64("parentID", 0);
+//
+//            GameObject* newGO = scene->CreateGameObject(goName);
+//
+//            fileIDToNewGameObject[fileGoID] = newGO;
+//            if (fileParentID != 0)
+//            {
+//                parentLinks.push_back({ newGO, fileParentID });
+//            }
+//
+//            if (!rootObject) rootObject = newGO;
+//
+//            newGO->SetTag(reader.ReadString("tag", "Untagged"));
+//            newGO->SetActive(reader.ReadBool("active", true));
+//
+//            if (reader.BeginObject("transform"))
+//            {
+//                Transform* tf = newGO->GetTransform();
+//                uint64_t fileTfID = reader.ReadUInt64("id", 0);
+//
+//                if (fileTfID != 0) fileIDToNewComponent[fileTfID] = tf;
+//
+//                DeserializeComponentProperties(reader, tf, fixupList);
+//                reader.EndObject();
+//            }
+//
+//            if (reader.BeginArray("components"))
+//            {
+//                while (reader.NextArrayItem())
+//                {
+//                    std::string typeName = reader.ReadString("typeName", "");
+//                    uint64_t fileCompID = reader.ReadUInt64("id", 0);
+//
+//                    if (!typeName.empty())
+//                    {
+//                        Component* newComp = newGO->AddComponent(typeName);
+//                        if (newComp)
+//                        {
+//                            if (fileCompID != 0) fileIDToNewComponent[fileCompID] = newComp;
+//                            DeserializeComponentProperties(reader, newComp, fixupList);
+//                        }
+//                    }
+//                    reader.EndArrayItem();
+//                }
+//                reader.EndArray();
+//            }
+//            reader.EndArrayItem();
+//        }
+//        reader.EndArray();
+//    }
+//
+//    for (auto& link : parentLinks)
+//    {
+//        GameObject* child = link.first;
+//        uint64_t parentFileID = link.second;
+//
+//        if (fileIDToNewGameObject.find(parentFileID) != fileIDToNewGameObject.end())
+//        {
+//            GameObject* parent = fileIDToNewGameObject[parentFileID];
+//            child->GetTransform()->SetParent(parent->GetTransform());
+//        }
+//    }
+//
+//    for (const auto& task : fixupList)
+//    {
+//        uint64_t targetFileID = task.targetID;
+//        Component* targetPtr = nullptr;
+//
+//        if (targetFileID != 0)
+//        {
+//            auto it = fileIDToNewComponent.find(targetFileID);
+//            if (it != fileIDToNewComponent.end())
+//            {
+//                targetPtr = it->second;
+//            }
+//        }
+//        task.property.m_setter(task.targetObject, &targetPtr);
+//    }
+//
+//
+//    //rootObject->Awake();
+//	//rootObject->Start();
+//
+//
+//
+//    return rootObject;
+//}

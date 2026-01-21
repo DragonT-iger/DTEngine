@@ -7,6 +7,8 @@
 #include "ResourceManager.h"
 #include "Camera.h"
 #include "Material.h"
+#include "TilemapData.h"
+#include "Prefab.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -46,6 +48,8 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         uint64_t id = reader.ReadUInt64(name);
         fixupList.push_back({ base, prop, id });
     }
+	// --------- IResource ---------//
+
     else if (type == typeid(Texture*)) {
         uint64_t id = reader.ReadUInt64(name);
 
@@ -61,6 +65,39 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
             prop.m_setter(base, &nullTex);
         }
     }
+
+    else if (type == typeid(TilemapData*)) {
+        uint64_t id = reader.ReadUInt64(name);
+
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+
+        if (!path.empty()) {
+            TilemapData* data = ResourceManager::Instance().Load<TilemapData>(path);
+            prop.m_setter(base, &data);
+        }
+        else {
+            TilemapData* nullData = nullptr;
+            prop.m_setter(base, &nullData);
+        }
+	}
+
+    else if(type == typeid(Prefab*))
+    {
+		uint64_t id = reader.ReadUInt64(name);
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+        if (!path.empty()) {
+            Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path);
+            prop.m_setter(base, &prefab);
+        }
+        else {
+            Prefab* nullPrefab = nullptr;
+            prop.m_setter(base, &nullPrefab);
+        }
+	}
+
+
+
+
 
     else if (type == typeid(std::wstring))
     {

@@ -23,6 +23,7 @@ public:
     T* GetComponent() const;
 
     Transform* GetTransform();
+    const Transform* GetTransform() const;
 
 	std::string GetName() const;
 

@@ -30,6 +30,9 @@ struct ID3D11DepthStencilState;
 struct ID3D11RasterizerState;
 struct ID3D11SamplerState;
 struct ID3D11BlendState;
+class Light;
+class Camera;
+
 
 namespace DirectX {
 	inline namespace DX11 {
@@ -42,6 +45,8 @@ namespace DirectX {
 enum class BlendMode { Opaque, AlphaBlend };
 
 
+
+
 class DX11Renderer : public Singleton<DX11Renderer>
 {
 public:
@@ -52,7 +57,7 @@ public:
     void Resize(int width, int height);
 
 
-    void BeginUIRender();
+    void BeginUIRender(float renderWidth, float renderHeight);
     void EndUIRender();
 
     void CreateShadowMap(int width, int height);
@@ -63,7 +68,12 @@ public:
 
     const Matrix& GetLightViewProjScaleMatrix() const { return m_lightViewProjScale; }
 
-    //void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1)); // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
+    void DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color = Vector4(1, 1, 1, 1));
+    
+    // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
+	// DXTK로 하면 MeshRenderer의 의존성을 줄여버릴 수 있으므로 그냥 이걸로 처리
+
+
 
     void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
 
@@ -98,6 +108,8 @@ public:
     bool GetVsync() { return m_vsync; }
     void SetVsync(bool vsync) { m_vsync = vsync; }
 
+	int GetRefWidth() const { return m_width; }
+	int GetRefHeight() const { return m_height; }
 
     float GetAspectRatio() const
     {
@@ -114,7 +126,7 @@ public:
     //CB Buffer Data map/unmap ; 외부에서 call 
     void UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& WorldTranspose); // r1
     void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
-    void UpdateLights_CBUFFER(const std::vector<class Light*>& lights, const Vector3& cameraPos); // r2 
+    void UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera);
     void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
 
     void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
@@ -158,6 +170,10 @@ private:
         LightData Lights[MAX_LIGHTS];                // 배열로 선언
         int ActiveCount;                             // 현재 활성화된 조명 개수
         Vector3 CameraPos;
+
+        Vector3 CameraDir; 
+        float IsOrtho;
+
         Matrix LightViewProjScale;
         Vector4 ShadowMapInfo; // 텍셀 크기
     };
@@ -222,6 +238,9 @@ private:
     int   m_width = 0;
     int   m_height = 0;
     bool  m_vsync = false;
+
+    int m_refWidth = 1920;
+	int m_refHeight = 1200; // 16:10 의도한거임
 
     Matrix m_viewTM;
     Matrix m_projTM;

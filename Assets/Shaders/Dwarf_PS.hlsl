@@ -29,7 +29,15 @@ float4 PS(PS_INPUT input) : SV_Target
     float3x3 TBN = float3x3(worldTangent, worldBitangent, worldNormal);
     float3 normal = normalize(mul(localNormal, TBN));
     
-    float3 viewDir = normalize(CameraPos - input.WorldPos);
+    float3 viewDir;
+    if (IsOrtho > 0.5)
+    {
+        viewDir = -normalize(CameraDir);
+    }
+    else
+    {
+        viewDir = normalize(CameraPos - input.WorldPos);
+    }
 
     float4 diffuseTex = g_DiffuseMap.Sample(g_Sampler, input.UV);
     

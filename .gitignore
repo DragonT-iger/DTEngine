@@ -59,8 +59,13 @@ Client/imgui.ini
 
 !Assets/Shaders/
 
+*.svn
+
+ThirdParty/*
 
 /Assets/Models/*
+
+*.svn
 
 *.ini
 *.aps
@@ -80,3 +85,5 @@ Client/imgui.ini
 enc_temp_folder/
 Assets/Fonts/NotoSansKR-ExtraBold.ttf.meta
 *.orig
+ThirdParty/vcpkg
+/ThirdParty

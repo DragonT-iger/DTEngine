@@ -14,6 +14,18 @@ class Camera;
 class Texture;
 class RenderTexture;
 
+struct DeltaTime // 배속용. 
+{
+    float rawTime; // 배속 적용 x.
+    float scaledTime; // 배속 적용. ( rawTime * m_timeScale )
+};
+
+struct Ray // picking용
+{
+    Vector3 origin;
+    Vector3 direction;
+};
+
 class Scene : public IResource
 {
 
@@ -37,6 +49,9 @@ public:
     // 엔진 전용 public 함수들
 
     GameObject* CreateGameObject(const std::string& name = "GameObject");
+    //GameObject* CreateUIImage(const std::string& name = "UIImage");
+    //GameObject* CreateUIButton(const std::string& name = "UIButton");
+    //GameObject* CreateUISlider(const std::string& name = "UISlider");
     void AddGameObject(std::unique_ptr<GameObject> gameObject);
 
     // Undo Redo 호환용 내부 커멘드 (소유권을 넘긴다) 왜냐면 ID (포인터)가 깨져서 완전 삭제 대신 소유권을 커멘드에 넘길 필요가 있음
@@ -59,8 +74,19 @@ public:
     Camera* GetMainCamera();
     void SetMainCamera(Camera* mainCamera);
 
+    Camera* GetEditorCamera();
+	void SetEditorCamera(Camera* editorCamera);
+
     const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name) { m_name = name; }
+
+    // 배속용.
+    float GetTimeScale() const { return m_timeScale; }
+    void SetTimeScale(float timeScale) { m_timeScale = timeScale; }
+
+    // 피킹용.
+    bool Raycast(const Ray& ray, GameObject*& outHit, float& outT);
+    bool Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld); // 이게 삼각형 검사까지 추가된거.
 
     void Clear();
 
@@ -70,7 +96,9 @@ private:
     std::string m_name;
 
     Camera* m_mainCamera;
+	Camera* m_editorCamera;
 
+    inline static float m_timeScale = 1.0f; // 배속용.
 
 
     // 지연처리

@@ -33,14 +33,14 @@ public:
 
 	std::string GetResourceRootPath() const { return m_resourceRootPath; }
 
-    GameObject* InstantiatePrefab(const std::string& fullPath);
+    //GameObject* InstantiatePrefab(const std::string& fullPath);
     bool SavePrefab(GameObject* root, const std::string& fullPath);
 
     GameObject* LoadModel(const std::string& fullPath);
 
     void MoveResource(const std::string& oldPath, const std::string& newPath);
 private:
-    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures);
+    void ProcessNode(aiNode* node, const aiScene* scene, GameObject* parentGO, const std::string& modelPath, const std::vector<Texture*>& textures, const std::map<std::string, std::string>& fileCache);
     Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
     //uint64_t ProcessMaterial(const aiScene* scene, unsigned int materialIndex, const std::string& modelPath);

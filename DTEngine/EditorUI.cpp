@@ -39,16 +39,24 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "AssetDatabase.h"
-#include "Camera.h"
+#include "RectTransform.h"
+#include "Canvas.h"
 //#include "PasteGameObjectCommand.h"
 #include "SerializationUtils.h"
+#include "TilemapData.h"
+#include "TilemapGenerator.h"
+#include "Prefab.h"
+#include "Image.h"
 #include "FSMController.h"
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
 static ImGuizmo::MODE      m_currentMode      = ImGuizmo::LOCAL;
 
-
+static bool  m_useSnap = false;            
+static float m_snapTranslation  = 2.0f;     
+static float m_snapRotation     = 15.0f;       
+static float m_snapScale        = 2.0f;           
 
 template<typename T>
 void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Component* targetComp,
@@ -96,6 +104,8 @@ void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Comp
     ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text("%s", label);
 }
+
+
 
 // 파일 에셋(Texture, Material 등)을 드래그 앤 드롭으로 할당하는 헬퍼
 template<typename T>
@@ -158,7 +168,40 @@ void DrawAssetReference(EditorUI* editor, const char* label, T* currentVal, Comp
 
 
 
+void EditorUI::DrawEditorSettings()
+{
+    ImGui::Begin("Editor Settings"); 
 
+    ImGui::Text("Gizmo Operation");
+    if (ImGui::RadioButton("Translate (W)", m_currentOperation == ImGuizmo::TRANSLATE)) m_currentOperation = ImGuizmo::TRANSLATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Rotate (E)", m_currentOperation == ImGuizmo::ROTATE)) m_currentOperation = ImGuizmo::ROTATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Scale (R)", m_currentOperation == ImGuizmo::SCALE)) m_currentOperation = ImGuizmo::SCALE;
+
+    ImGui::Separator();
+
+    ImGui::Text("Gizmo Mode");
+    if (ImGui::RadioButton("Local", m_currentMode == ImGuizmo::LOCAL)) m_currentMode = ImGuizmo::LOCAL;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("World", m_currentMode == ImGuizmo::WORLD)) m_currentMode = ImGuizmo::WORLD;
+
+    ImGui::Separator();
+
+    ImGui::Text("Snap Settings");
+    ImGui::Checkbox("Enable Snap", &m_useSnap);
+
+    if (m_useSnap)
+    {
+        ImGui::Indent();
+        ImGui::InputFloat("Move Step", &m_snapTranslation, 0.1f, 1.0f, "%.2f");
+        ImGui::InputFloat("Rotate Step (Deg)", &m_snapRotation, 1.0f, 10.0f, "%.1f");
+        ImGui::InputFloat("Scale Step", &m_snapScale, 0.1f, 1.0f, "%.2f");
+        ImGui::Unindent();
+    }
+
+    ImGui::End();
+}
 
 
 EditorUI::EditorUI() {
@@ -226,6 +269,7 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
     DrawProjectWindow(engineMode);
     //DrawGizmo(activeScene);
     
+    DrawEditorSettings();
 
     // Redo Undo
 
@@ -279,9 +323,9 @@ void EditorUI::Render(Scene* activeScene , Game::EngineMode engineMode)
         }
     }
 
-    if (ctrlPressed && vPressed_Down && false)
+    if (ctrlPressed && vPressed_Down)
     {
-        if (!m_clipboardGameObjects.empty() && m_isHierarchyFocused)
+        if (!m_clipboardGameObjects.empty() && !m_isInspectorFocused)
         {
             GameObject* prototype = m_clipboardGameObjects[0].get();
             std::vector<std::unique_ptr<GameObject>> newObjects = prototype->Clone();
@@ -388,12 +432,29 @@ void EditorUI::DrawGizmo(Scene* activeScene, Camera* camera) {
 
             //std::cout << "Rendering Gizmo for: " << selectedObject->GetName() << std::endl;
 
+            float snap[3] = { 0.f, 0.f, 0.f };
+            if (m_useSnap)
+            {
+                if (m_currentOperation == ImGuizmo::TRANSLATE) {
+                    snap[0] = snap[1] = snap[2] = m_snapTranslation;
+                }
+                else if (m_currentOperation == ImGuizmo::ROTATE) {
+                    snap[0] = m_snapRotation; 
+                }
+                else if (m_currentOperation == ImGuizmo::SCALE) {
+                    snap[0] = snap[1] = snap[2] = m_snapScale;
+                }
+            }
+            // ---------------------
+
             ImGuizmo::Manipulate(
                 (float*)&viewMatrix,
                 (float*)&projMatrix,
                 m_currentOperation,
                 m_currentMode,
-                (float*)&worldMatrix
+                (float*)&worldMatrix,
+                NULL,               
+                m_useSnap ? snap : NULL 
             );
 
             bool isUsing = ImGuizmo::IsUsing();
@@ -528,12 +589,12 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 {
     ImGui::Begin("Hierarchy");
 
-    m_isHierarchyFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
-
     if (!activeScene) return;
 
     if (m_selectedGameObject)
     {
+		//std::cout << ImGui::IsAnyItemActive() << std::endl;
+
         if (InputManager::Instance().GetKeyDown(KeyCode::Delete) &&
             !ImGui::IsAnyItemActive())
         {
@@ -724,6 +785,8 @@ void EditorUI::DrawHierarchyWindow(Scene* activeScene)
 void EditorUI::DrawInspectorWindow()
 {
     ImGui::Begin("Inspector");
+
+    m_isInspectorFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
     GameObject* targetGameObject = m_selectedGameObject;
     std::string targetAssetPath = m_selectedAssetPath;
@@ -989,7 +1052,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
     {
         for (const PropertyInfo& prop : info->m_properties)
         {
-            if (prop.m_name == "m_editorEulerAngles")
+            if (prop.m_name == "m_editorEulerAngles" || prop.m_name == "m_parent")
             {
                 continue;
             }
@@ -1397,12 +1460,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 }
             }
             // Transform* (포인터)
-            else if (type == typeid(Transform*))
-            {
-                //Transform* parentTf = *static_cast<Transform**>(data);
-                //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
-                //ImGui::Text("%s: %s", name, parentName.c_str());
-            }
+            //else if (type == typeid(Transform*))
+            //{
+            //    //Transform* parentTf = *static_cast<Transform**>(data);
+            //    //std::string parentName = (parentTf) ? parentTf->_GetOwner()->GetName() : "None (Root)";
+            //    //ImGui::Text("%s: %s", name, parentName.c_str());
+            //}
 
 
             // GameObject*
@@ -1410,11 +1473,78 @@ void EditorUI::DrawComponentProperties(Component* comp)
             {
                 GameObject* currentGO = *static_cast<GameObject**>(data);
 
-                DrawSceneReference<GameObject>(this, name, currentGO, comp, prop.m_setter,
-                    [](GameObject* go) { return go->GetName(); },
-                    [](Transform* tf) { return tf->_GetOwner(); }
-                );
+                // 1. 현재 할당된 오브젝트 이름 표시 버튼
+                std::string displayStr = "None";
+                if (currentGO) displayStr = currentGO->GetName();
+
+                float width = ImGui::CalcItemWidth();
+                if (ImGui::Button(displayStr.c_str(), ImVec2(width, 0)))
+                {
+                    // 버튼 클릭 시 해당 오브젝트를 하이어라키에서 선택
+                    if (currentGO) m_selectedGameObject = currentGO;
+                }
+
+                // 2. 드래그 앤 드롭 처리 (Hierarchy Item + Project File)
+                if (ImGui::BeginDragDropTarget())
+                {
+                    // [기존] 하이어라키에서 드래그했을 때
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+                    {
+                        IM_ASSERT(payload->DataSize == sizeof(Transform*));
+                        Transform* draggedTf = *(Transform**)payload->Data;
+                        GameObject* draggedGO = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+                        if (draggedGO)
+                        {
+                            GameObject* oldVal = currentGO;
+                            prop.m_setter(comp, &draggedGO);
+
+                            auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                comp, prop.m_setter, oldVal, draggedGO
+                            );
+                            HistoryManager::Instance().Do(std::move(cmd));
+                        }
+                    }
+
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_FILE"))
+                    {
+                        const char* droppedPath = (const char*)payload->Data;
+                        std::filesystem::path fpath(droppedPath);
+                        std::string ext = fpath.extension().string();
+
+                        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                        if (ext == ".prefab")
+                        {
+							Prefab* prefabAsset = ResourceManager::Instance().Load<Prefab>(droppedPath);
+
+                            GameObject* newInstance = prefabAsset->Instantiate();
+
+                            if (newInstance)
+                            {
+                                newInstance->SetActive(false); 
+								newInstance->SetFlag(GameObject::Flags::HideAndDontSave, true);
+
+                                GameObject* oldVal = currentGO;
+                                prop.m_setter(comp, &newInstance);
+
+                                auto cmd = std::make_unique<ChangePropertyCommand<GameObject*>>(
+                                    comp, prop.m_setter, oldVal, newInstance
+                                );
+                                HistoryManager::Instance().Do(std::move(cmd));
+
+                                std::cout << "[Editor] Prefab assigned: " << newInstance->GetName() << std::endl;
+                            }
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
+                ImGui::Text("%s", name);
             }
+
+
             // component 인 경우 
             else if (ReflectionDatabase::Instance().IsComponentPointer(type))
             {
@@ -1485,6 +1615,18 @@ void EditorUI::DrawComponentProperties(Component* comp)
             //    DrawAssetReference<Material>(this, name, currentMat, comp, prop.m_setter, exts);
             //}
 
+            else if (type == typeid(TilemapData*)) {
+				TilemapData* currentData = *static_cast<TilemapData**>(data);
+
+				std::vector<std::string> exts = { ".tilemap" };
+				DrawAssetReference<TilemapData>(this, name, currentData, comp, prop.m_setter, exts);
+            }
+
+			else if (type == typeid(Prefab*)) {
+				Prefab* currentPrefab = *static_cast<Prefab**>(data);
+				std::vector<std::string> exts = { ".prefab" };
+                DrawAssetReference<Prefab>(this, name, currentPrefab, comp, prop.m_setter, exts);
+			}
             
 
             else {
@@ -1492,6 +1634,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
             }
 			ImGui::PopID();
         }
+
+        
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
         {
@@ -1796,7 +1940,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                 case 4: slotLabel = "Roughness"; break; // t4
                                 case 5: slotLabel = "AO";        break; // t5
                                 //case 6: slotLabel = "IBL";       break; // t7
-                                case 7: slotLabel = "SphereMap";    break; // t7 ?? 감마는 뭐야
+                                //case 7: slotLabel = "SphereMap";    break; // t7 ?? 감마는 뭐야
                                 default: break;
                                 }
 
@@ -1871,6 +2015,20 @@ void EditorUI::OnDropFile(const std::string& rawPath)
             }
         }
         //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
+    }
+    else if (ext == ".prefab")
+    {
+        // 프리팹 인스턴스화
+
+		Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path.string());
+
+        GameObject* go = prefab->Instantiate();
+
+        if (go)
+        {
+            m_selectedGameObject = go; 
+            std::cout << "[Editor] Instantiated Prefab: " << path.string() << std::endl;
+        }
     }
 }
 
@@ -2099,6 +2257,79 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             //ImGui::Text("Preview");
         }
     }
+    else if (ext == ".tilemap") // 1. 사용하는 타일맵 확장자로 변경하세요 (예: .tm, .json)
+    {
+        TilemapData* tilemap = ResourceManager::Instance().Load<TilemapData>(path);
+
+        if (tilemap)
+        {
+            ImGui::Text("Tilemap Editor: %s", filePath.filename().string().c_str());
+            ImGui::Separator();
+
+            int width = tilemap->GetWidth();
+            int height = tilemap->GetHeight();
+            bool changed = false;
+
+            if (ImGui::InputInt("Width", &width))
+            {
+                if (width > 0) { tilemap->SetWidth(width); changed = true; }
+            }
+            if (ImGui::InputInt("Height", &height))
+            {
+                if (height > 0) { tilemap->SetHeight(height); changed = true; }
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Tile Data Grid");
+
+            if (ImGui::BeginTable("TilemapGrid", width > 0 ? width : 1, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX))
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    ImGui::TableNextRow();
+                    for (int x = 0; x < width; ++x)
+                    {
+                        ImGui::TableNextColumn();
+
+                        int tileID = tilemap->GetTileIndex(x, y);
+
+                        ImGui::PushID(x + y * width);
+
+                        std::string label = std::to_string(tileID);
+
+                        int maxTileCount = TilemapGenerator::PALETTE_SIZE;
+
+                        if (ImGui::Button(label.c_str(), ImVec2(30, 30)))
+                        { 
+                            tilemap->SetTileIndex(x, y, (tileID + 1) % maxTileCount);
+                            changed = true;
+                        }
+
+                        if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+                        {
+
+                            int nextID = tileID - 1;
+
+                            if (nextID < 0)
+                                nextID = maxTileCount - 1;
+
+                            tilemap->SetTileIndex(x, y, nextID);
+                            changed = true;
+                        }
+                        ImGui::PopID();
+                    }
+                }
+                ImGui::EndTable();
+            }
+
+            if (changed)
+            {
+                tilemap->SaveFile(path);
+            }
+
+            ImGui::Separator();
+        }
+    }
     else
     {
         ImGui::Text("Selected Asset: %s", filePath.filename().string().c_str());
@@ -2145,6 +2376,7 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImGui::Begin("Scene");
 
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    m_sceneViewportSize = Vector2(viewportPanelSize.x, viewportPanelSize.y);
 
     if (rt->GetWidth() != (int)viewportPanelSize.x || rt->GetHeight() != (int)viewportPanelSize.y)
     {
@@ -2159,6 +2391,43 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();
 
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool hovered = ImGui::IsItemHovered();
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && camera && hovered && clicked && !ImGuizmo::IsUsing() && !ImGuizmo::IsOver())
+    {
+        ImVec2 mouse = ImGui::GetMousePos();
+
+        float localX = mouse.x - imageMin.x;
+        float localY = mouse.y - imageMin.y;
+
+        float viewW = imageMax.x - imageMin.x;
+        float viewH = imageMax.y - imageMin.y;
+
+        localX = std::clamp(localX, 0.0f, viewW);
+        localY = std::clamp(localY, 0.0f, viewH);
+
+        Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+        GameObject* hit = nullptr;
+        float hitT = 0.0f;
+
+        if (activeScene->Raycast2(ray, hit, hitT))
+        {
+            //std::cout << hit->GetName() << std::endl;
+            m_selectedGameObject = hit;
+        }
+        else
+        {
+            //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+            m_selectedGameObject = nullptr;
+        }
+    }
+    // 
+
+
     ImGuizmo::SetRect(imageMin.x, imageMin.y, imageMax.x - imageMin.x, imageMax.y - imageMin.y);
 
     ImGuizmo::SetDrawlist();
@@ -2172,19 +2441,88 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImGui::PopStyleVar();
 }
 
-void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
+void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)  
 {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("Game");
 
     ImVec2 size = ImGui::GetContentRegionAvail();
+    m_gameViewportSize = Vector2(size.x, size.y);
 
     if (rt->GetWidth() != (int)size.x || rt->GetHeight() != (int)size.y)
     {
         rt->Resize((int)size.x, (int)size.y);
     }
 
+#ifdef _DEBUG
+    InputManager::Instance().SetGameResolution((int)size.x, (int)size.y);
+#endif
     ImGui::Image((void*)rt->GetSRV(), size);
+
+
+    bool isHovered = ImGui::IsItemHovered();
+
+    bool isFocused = ImGui::IsWindowFocused();
+
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing() && !ImGuizmo::IsOver())
+    {
+        Camera* camera = activeScene->GetMainCamera();
+        if (camera) 
+        {
+            ImVec2 mouse = ImGui::GetMousePos();
+
+            ImVec2 imgMin = ImGui::GetItemRectMin();
+            ImVec2 imgMax = ImGui::GetItemRectMax();
+
+            float localX = mouse.x - imgMin.x;
+            float localY = mouse.y - imgMin.y;
+
+            float viewW = imgMax.x - imgMin.x;
+            float viewH = imgMax.y - imgMin.y;
+
+            localX = std::clamp(localX, 0.0f, viewW);
+            localY = std::clamp(localY, 0.0f, viewH);
+
+            Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+            GameObject* hit = nullptr;
+            float hitT = 0.0f;
+
+            if (activeScene->Raycast2(ray, hit, hitT))
+            {
+                std::cout << hit->GetName() << std::endl;
+                m_selectedGameObject = hit;
+            }
+            else
+            {
+                //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+                m_selectedGameObject = nullptr;
+            }
+        }
+    }
+    // 
+
+#ifdef _DEBUG
+    if (isHovered) 
+    {
+        //InputManager::Instance().SetGameInputActive(true);
+
+        ImVec2 mousePos = ImGui::GetMousePos();
+        ImVec2 windowPos = ImGui::GetItemRectMin();
+        InputManager::Instance().SetEditorMousePos(
+            (int)(mousePos.x - windowPos.x),
+            (int)(mousePos.y - windowPos.y)
+        );
+    }
+    else
+#endif
+    {
+        //InputManager::Instance().SetGameInputActive(false);
+    }
 
 	//DX11Renderer::Instance().DrawString(10, 10, "Game Viewport", 1.0f, Vector4(1, 1, 1, 1));
 
@@ -2231,6 +2569,9 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
             if (ext == ".meta") continue;
 			if (ext == ".cso") continue;
 			if (ext == ".vso") continue;
+            if (lowerCaseExt == ".svn") continue; 
+            if (filename == ".svn") continue;
+			if (lowerCaseExt == ".orig") continue; // git merge temp files
 			if (filename == "PlayMode_Backup.scene") continue;
 
             ImGui::PushID(filename.c_str());
@@ -2333,6 +2674,50 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
     }
 
     ImGui::Columns(1);
+
+
+    ImVec2 avail = ImGui::GetContentRegionAvail();
+    if (avail.y < 50.0f) avail.y = 50.0f; // 최소 높이 보장
+    if (avail.x < 1.0f) avail.x = 1.0f;
+
+    ImGui::InvisibleButton("##ProjectDropTarget", avail);
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_ITEM"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(Transform*));
+            Transform* draggedTf = *(Transform**)payload->Data;
+            GameObject* go = draggedTf ? draggedTf->_GetOwner() : nullptr;
+
+            if (go)
+            {
+                std::string fileName = go->GetName() + ".prefab";
+                std::filesystem::path fullPath = m_currentProjectDirectory / fileName;
+
+                int counter = 1;
+                while (std::filesystem::exists(fullPath))
+                {
+                    fileName = go->GetName() + "_" + std::to_string(counter) + ".prefab";
+                    fullPath = m_currentProjectDirectory / fileName;
+                    counter++;
+                }
+
+                if (ResourceManager::Instance().SavePrefab(go, fullPath.string()))
+                {
+                    std::cout << "[Editor] Prefab saved successfully: " << fullPath.string() << std::endl;
+
+                    AssetDatabase::Instance().ProcessAssetFile(fullPath.string());
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to save prefab." << std::endl;
+                }
+            }
+        }
+
+        ImGui::EndDragDropTarget();
+    }
 
 
     if (ImGui::BeginPopupContextWindow("ProjectContext", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
@@ -2466,6 +2851,48 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
                     std::cerr << "[Editor] Failed to write scene file." << std::endl;
                 }
             }
+
+            if (ImGui::MenuItem("Tilemap"))
+            {
+                std::string baseName = "New Tilemap";
+                std::string ext = ".tilemap";
+                std::filesystem::path newPath = m_currentProjectDirectory / (baseName + ext);
+
+                int counter = 1;
+                while (std::filesystem::exists(newPath))
+                {
+                    newPath = m_currentProjectDirectory / (baseName + " " + std::to_string(counter) + ext);
+                    counter++;
+                }
+
+                std::ofstream file(newPath);
+                if (file.is_open())
+                {
+                    file << "{\n";
+                    file << "  \"width\": 10,\n";
+                    file << "  \"height\": 10,\n";
+                    file << "  \"p0\": 0, \"p1\": 0, \"p2\": 0, \"p3\": 0, \"p4\": 0,\n";
+
+                    file << "  \"grid\": [\n";
+                    for (int i = 0; i < 100; ++i)
+                    {
+                        file << "    { \"v\": -1 }" << (i < 99 ? "," : "") << "\n";
+                    }
+                    file << "  ]\n";
+                    file << "}";
+
+                    file.close();
+
+                    AssetDatabase::Instance().ProcessAssetFile(newPath.string());
+
+                    std::cout << "[Editor] Created new tilemap: " << newPath.string() << std::endl;
+                }
+                else
+                {
+                    std::cerr << "[Editor] Failed to create tilemap file." << std::endl;
+                }
+            }
+
             ImGui::EndMenu();
         }
         ImGui::EndPopup();

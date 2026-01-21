@@ -22,6 +22,10 @@
 #include "RenderKey.h"
 
 #include "Skeletal.h"
+#include "UIButton.h"
+#include "UISlider.h"
+//#include "RectTransform.h"
+#include "UIManager.h"
 #include "Animatior.h"
 #include "FSMController.h"
 
@@ -37,6 +41,75 @@ GameObject* Scene::CreateGameObject(const std::string& name)
         m_gameObjects.emplace_back(std::move(go));
     return raw;
 }
+
+//GameObject* Scene::CreateUIImage(const std::string& name)
+//{
+//    GameObject* go = CreateGameObject(name);
+//    if (go && !go->GetComponent<Image>())
+//    {
+//        go->AddComponent<Image>();
+//    }
+//    return go;
+//}
+//
+//GameObject* Scene::CreateUIButton(const std::string& name)
+//{
+//    GameObject* go = CreateUIImage(name);
+//    if (go && !go->GetComponent<UIButton>())
+//    {
+//        go->AddComponent<UIButton>();
+//    }
+//    return go;
+//}
+//
+//GameObject* Scene::CreateUISlider(const std::string& name)
+//{
+//    GameObject* go = CreateUIImage(name);
+//    if (go && !go->GetComponent<UISlider>())
+//    {
+//        go->AddComponent<UISlider>();
+//    }
+//
+//    if (go)
+//    {
+//        Transform* tf = go->GetTransform();
+//        bool hasHandle = false;
+//        if (tf)
+//        {
+//            for (Transform* child : tf->GetChildren())
+//            {
+//                if (child && child->_GetOwner()->GetName() == "Handle")
+//                {
+//                    hasHandle = true;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (!hasHandle)
+//        {
+//            GameObject* handle = CreateUIImage("Handle");
+//            handle->GetTransform()->SetParent(tf);
+//
+//            if (auto* handleTransform = handle->GetTransform())
+//            {
+//                handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+//                handleTransform->SetScale(Vector3(24.0f, 24.0f, 1.0f));
+//            }
+//
+//            if (auto* image = handle->GetComponent<Image>())
+//            {
+//                image->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+//                if (auto* parentImage = go->GetComponent<Image>())
+//                {
+//                    image->SetOrderInLayer(parentImage->GetOrderInLayer() + 1);
+//                }
+//            }
+//
+//        }
+//    }
+//    return go;
+//}
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject)
 {
@@ -378,9 +451,9 @@ void Scene::LateUpdate(float deltaTime)
     m_isIterating = false;
     FlushPending();
 
-
+    
     if (m_mainCamera == nullptr) return;
-    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetTransform()->GetPosition());
+    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
 
     // 물리 업데이트
 }
@@ -393,6 +466,221 @@ Camera* Scene::GetMainCamera()
 void Scene::SetMainCamera(Camera* mainCamera)
 {
     m_mainCamera = mainCamera;
+}
+
+Camera* Scene::GetEditorCamera()
+{
+	return m_editorCamera;
+}
+
+void Scene::SetEditorCamera(Camera* editorCamera)
+{
+    m_editorCamera = editorCamera;
+}
+
+
+
+bool Scene::Raycast(const Ray& ray, GameObject*& outHit, float& outT)
+{
+    using namespace DirectX;
+
+    outHit = nullptr;
+    outT = FLT_MAX; // 거리 파라미터. 레이 방정식 P(t) = origin + direction * t 에서 t. 
+    //일단 매우 큰 값으로 해두고, 작은 t가 나오면 갱신.
+
+    XMVECTOR rayOrigin = XMLoadFloat3((const XMFLOAT3*)&ray.origin);
+    XMVECTOR rayDir = XMLoadFloat3((const XMFLOAT3*)&ray.direction);
+
+    bool hitAny = false; // 일단 뭔가 하나라도 맞았으면 true
+
+    for (const auto& up : m_gameObjects)
+    {
+        GameObject* go = up.get();
+        if (!go || !go->IsActiveInHierarchy()) continue;
+
+        if (go->GetComponent<Image>()) continue;
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh) continue;
+
+        // 로컬 AABB 가져오기
+        const BoundingBox& localBox = mesh->GetLocalBoundingBox();
+
+        // 월드 AABB 만들기
+        Transform* tf = go->GetTransform();
+        if (!tf) continue;
+
+        const Matrix& world = tf->GetWorldMatrix();
+
+        BoundingBox worldBox;
+        {
+            XMMATRIX W = XMLoadFloat4x4((const XMFLOAT4X4*)&world);
+            localBox.Transform(worldBox, W); // 자동으로 월드 AABB 만들어줌.
+        }
+
+        // Ray랑 AABB 충돌 검사.
+        float t = 0.0f;
+        if (worldBox.Intersects(rayOrigin, rayDir, t)) 
+        {
+            if (t >= 0.0f && t < outT) // 작은 t가 나오면 최소값으로 갱신.
+            {
+                outT = t;
+                outHit = go;
+                hitAny = true;
+            }
+        }
+    }
+
+    return hitAny;
+}
+
+// moller-trumbore 알고리즘.
+static bool IntersectsRayTriangle(
+    const Vector3& rayO, const Vector3& rayD, // Ray를 로컬로 변환한 결과 넣어주기.
+    const Vector3& v0, const Vector3& v1, const Vector3& v2,
+    float& outT)
+{
+    const float EPS = 1e-6f;
+
+    Vector3 e1 = v1 - v0;
+    Vector3 e2 = v2 - v0;
+
+    Vector3 p = rayD.Cross(e2);
+    float det = e1.Dot(p);
+
+    if (fabsf(det) < EPS) return false;
+
+    float invDet = 1.0f / det;
+
+    Vector3 tvec = rayO - v0;
+    float u = tvec.Dot(p) * invDet;
+    if (u < 0.0f || u > 1.0f) return false;
+
+    Vector3 q = tvec.Cross(e1);
+    float v = rayD.Dot(q) * invDet;
+    if (v < 0.0f || (u + v) > 1.0f) return false;
+
+    float t = e2.Dot(q) * invDet;
+    if (t < 0.0f) return false;
+
+    outT = t;
+    return true;
+}
+
+// Ray를 로컬로 바꿔주는 함수
+static Ray TransformRayToLocal(const Ray& worldRay, const Matrix& world)
+{
+    Matrix invW = SimpleMathHelper::Inverse(world);
+
+    Vector3 o = Vector3::Transform(worldRay.origin, invW);
+    Vector3 d = Vector3::TransformNormal(worldRay.direction, invW);
+    d.Normalize();
+
+    return Ray{ o, d };
+}
+
+bool Scene::Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld)
+{
+    using namespace DirectX;
+
+    outHit = nullptr;
+    outTWorld = FLT_MAX;
+
+    Ray rw = rayWorld;
+    rw.direction.Normalize();
+
+    XMVECTOR rayO = XMLoadFloat3((const XMFLOAT3*)&rw.origin);
+    XMVECTOR rayD = XMLoadFloat3((const XMFLOAT3*)&rw.direction);
+
+    bool hitAny = false;
+
+    for (const auto& up : m_gameObjects)
+    {
+        GameObject* go = up.get();
+
+        if (go->GetName() == "Skybox(temp)") continue; // 나중에 스카이박스 처리 바꿔주기.
+
+        if (!go || !go->IsActiveInHierarchy()) continue;
+        if (go->GetComponent<Image>()) continue;
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+        if (!mr || !mr->IsActive()) continue;
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh) continue;
+
+        Transform* tf = go->GetTransform();
+        if (!tf) continue;
+
+        const Matrix& world = tf->GetWorldMatrix();
+
+        // 로컬 AABB -> 월드 AABB
+        const BoundingBox& localBox = mesh->GetLocalBoundingBox();
+
+        BoundingBox worldBox;
+        {
+            XMMATRIX W = XMLoadFloat4x4((const XMFLOAT4X4*)&world);
+            localBox.Transform(worldBox, W);
+        }
+
+        // 월드 레이, 월드 AABB 충돌 검사. 
+        float tAabb = 0.0f;
+        if (!worldBox.Intersects(rayO, rayD, tAabb))
+            continue;
+
+        // 이미 더 가까운게 있으면 컷.
+        if (tAabb > outTWorld)
+            continue;
+
+        // 여기까지 통과했으면 레이를 로컬로 바꿔서 삼각형 검사
+        Ray rl = TransformRayToLocal(rw, world);
+
+        const auto& pos = mesh->GetPositions();
+        const auto& ind = mesh->GetIndices();
+        if (pos.empty() || ind.size() < 3) continue;
+
+        float bestThis = FLT_MAX;
+        bool hitThis = false;
+
+        // 삼각형 루프
+        for (size_t i = 0; i + 2 < ind.size(); i += 3)
+        {
+            uint32_t i0 = ind[i + 0];
+            uint32_t i1 = ind[i + 1];
+            uint32_t i2 = ind[i + 2];
+
+            if (i0 >= pos.size() || i1 >= pos.size() || i2 >= pos.size()) continue;
+
+            float tLocal = 0.0f;
+            if (!IntersectsRayTriangle(rl.origin, rl.direction, pos[i0], pos[i1], pos[i2], tLocal)) continue;
+
+            // 로컬 히트포인트 -> 월드 변환 -> 월드 t로 변환
+            Vector3 hitLocal = rl.origin + rl.direction * tLocal;
+            Vector3 hitWorld = Vector3::Transform(hitLocal, world);
+
+            //float tWorld = (hitWorld - rw.origin).Length();
+            float tWorld = (hitWorld - rw.origin).Dot(rw.direction);
+            if (tWorld < 0.0f) continue;
+
+            if (tWorld < bestThis)
+            {
+                bestThis = tWorld;
+                hitThis = true;
+            }
+        }
+
+        if (hitThis && bestThis < outTWorld)
+        {
+            outTWorld = bestThis;
+            outHit = go;
+            hitAny = true;
+        }
+    }
+
+    return hitAny;
 }
 
 
@@ -483,6 +771,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     const Matrix& projTM = camera->GetProjectionMatrix();
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
+    // 이거 주석처리하고 button, slider 수정하고 rect는 남겨두지만 쓰지는 않는 방향으로 .
+    //UIManager::Instance().UpdateLayout(this, width, height);
+    //UIManager::Instance().UpdateInteraction(this, width, height);
 
     DX11Renderer::Instance().BindGlobalResources();
 
@@ -493,8 +784,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     for (const auto& go : GetGameObjects())
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
-        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+
         Image* img = go->GetComponent<Image>();
+        if (img && img->IsActive())
+        {
+            uiQueue.push_back(go.get());
+            continue; 
+        }
+
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         if (!mr || !mr->IsActive()) continue;
 
         Material* mat = mr->GetSharedMaterial();
@@ -589,15 +888,29 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     
 
     if (renderUI) {
-        DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
-
-        std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
-            return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
-            });
+        DX11Renderer::Instance().BeginUIRender(width, height);
 
         for (auto* go : uiQueue)
         {
-            DrawObject(go);
+            Image* img = go->GetComponent<Image>();
+            if (img)
+            {
+                Texture* tex = img->GetTexture();
+                if (tex)
+                {
+                    Transform* tf = go->GetTransform();
+
+                    Vector3 pos = tf->GetPosition();
+                    Vector3 scale = tf->GetScale();
+
+                    DX11Renderer::Instance().DrawUI(
+                        tex,
+                        Vector2(pos.x, pos.y),
+                        Vector2(scale.x, scale.y),
+                        img->GetColor()
+                    );
+                }
+            }
         }
 
         DX11Renderer::Instance().EndUIRender();

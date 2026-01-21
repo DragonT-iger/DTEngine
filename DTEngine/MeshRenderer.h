@@ -16,6 +16,8 @@ public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
+    void Serialize(JsonWriter& writer) const override;
+
     void Awake() override;
 
 
@@ -42,7 +44,7 @@ public:
 
     bool IsMaterialInstanced() const { return m_isMaterialInstanced; }
 
-    void SaveInstanceData(JsonWriter& writer);
+    void SaveInstanceData(JsonWriter& writer) const;
     void LoadInstanceData(JsonReader& reader);
 
 private:

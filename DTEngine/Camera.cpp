@@ -30,8 +30,21 @@ Camera::Camera()
 
 void Camera::Awake()
 {
+
+
+    Scene* scene = SceneManager::Instance().GetActiveScene();
     if (this->GetName() == "MainCamera") {
-        SetThisCameraToMain();
+
+        if (scene->GetMainCamera() == nullptr) {
+            scene->SetMainCamera(this);
+        }
+    }
+
+    if (this->GetName() == "EditorCamera55")
+    {
+        if (scene->GetMainCamera() == nullptr) {
+            scene->SetEditorCamera(this);
+        }
     }
 
     m_editorFovY = SimpleMathHelper::Rad2Deg(m_fovY);
@@ -66,8 +79,8 @@ void Camera::SetProjectionOrthographic()
     if (m_orthographicSize < 0.01f) {
         m_orthographicSize = 0.01f;
     }
-    if(m_nearZ > -20.f) {
-        m_nearZ = -20.f;
+    if(m_nearZ > -2000.f) {
+        m_nearZ = -2000.f;
 	}
 
     float orthoHeight = 10 * m_orthographicSize;    
@@ -77,11 +90,7 @@ void Camera::SetProjectionOrthographic()
 
 void Camera::SetThisCameraToMain()
 {
-    Scene* scene = SceneManager::Instance().GetActiveScene();
-
-    if (scene->GetMainCamera() == nullptr && this->GetName() != "EditorCamera55") {
-        scene->SetMainCamera(this);
-    }
+    
     //else {
     //    std::cout << "Two Camera exists in this Scene Ignore last camera Or double SetThisCamera" << std::endl;
     //}
@@ -132,8 +141,27 @@ const Vector3& Camera::GetCamFor() const
     return tf->Forward();
 }
 
+Ray Camera::ScreenPointToRay(float x, float y, float viewportW, float viewportH) const
+{
+    DirectX::SimpleMath::Viewport vp;
+    vp.x = 0.0f;
+    vp.y = 0.0f;
+    vp.width = viewportW;
+    vp.height = viewportH;
+    vp.minDepth = 0.0f;
+    vp.maxDepth = 1.0f;
 
+    Vector3 screenNear(x, y, 0.0f);
+    Vector3 screenFar(x, y, 1.0f);
 
+    Vector3 nearWorld = vp.Unproject(screenNear, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+    Vector3 farWorld = vp.Unproject(screenFar, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+
+    Vector3 dir = farWorld - nearWorld;
+    dir.Normalize();
+
+    return { nearWorld, dir };
+}
 
 void Camera::UpdateViewMatrix()
 {

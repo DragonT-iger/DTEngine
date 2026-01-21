@@ -281,11 +281,41 @@
     <ClInclude Include="Skeletal.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="SkeletalRsource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Util</Filter>
+    </ClInclude>
     <ClInclude Include="Animatior.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="AnimationClip.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="TilemapData.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TilemapGenerator.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UISliderHandle.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
       <Filter>Renderer</Filter>
@@ -463,10 +493,37 @@
     <ClCompile Include="Skeletal.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
     <ClCompile Include="AnimationClip.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Animatior.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TilemapData.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TilemapGenerator.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="FSMController.cpp">
