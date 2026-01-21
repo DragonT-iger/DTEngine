@@ -24,7 +24,7 @@ float Canvas::GetScaleFactor(float screenWidth, float screenHeight) const
 
 void Canvas::Awake()
 {
-    //UIManager::Instance().SetCanvas(this);
+    UIManager::Instance().SetCanvas(this);
 }
 
 Vector2 Canvas::GetCanvasSize(float screenWidth, float screenHeight) const
