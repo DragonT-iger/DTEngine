@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 
 BEGINPROPERTY(Animator)
+
 DTPROPERTY_SETTER(Animator, Play, SetPlay)
 DTPROPERTY_SETTER(Animator, Loop, SetLoop)
 DTPROPERTY_SETTER(Animator, m_AniID, SetClip)

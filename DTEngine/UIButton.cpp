@@ -50,8 +50,8 @@ void UIButton::Update(float deltaTime)
     float uiMouseY = (float)mousePos.y / scaleY;
 
     Transform* tf = GetTransform();
-    Vector3 pos = tf->GetPosition();
-    Vector3 size = tf->GetScale(); 
+    Vector3 pos = tf->GetWorldPosition();
+    Vector3 size = tf->GetWorldScale(); 
 
     bool isInside = (uiMouseX >= pos.x && uiMouseX <= pos.x + size.x &&
         uiMouseY >= pos.y && uiMouseY <= pos.y + size.y);

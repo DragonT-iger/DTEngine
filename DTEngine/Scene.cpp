@@ -238,7 +238,14 @@ bool Scene::LoadFile(const std::string& fullPath)
             if (typeName.empty() || comp_id == 0) continue;
 
             Component* newComp = go->AddComponent(typeName);
-            if (!newComp) continue;
+            
+            if (!newComp)
+            {
+                std::cout << "Warning: Failed to create component '" << typeName
+                    << "' on GameObject '" << goName << "'" << std::endl;
+                continue;
+            }
+
 
             newComp->_SetID(comp_id);
             idToComponentMap[comp_id] = newComp;
@@ -900,8 +907,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
                 {
                     Transform* tf = go->GetTransform();
 
-                    Vector3 pos = tf->GetPosition();
-                    Vector3 scale = tf->GetScale();
+                    Vector3 pos = tf->GetWorldPosition();
+                    Vector3 scale = tf->GetWorldScale();
 
                     DX11Renderer::Instance().DrawUI(
                         tex,

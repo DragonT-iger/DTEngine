@@ -142,6 +142,16 @@ Vector3 Transform::GetWorldPosition()
 {
 	return GetWorldMatrix().Translation();
 }
+Vector3 Transform::GetWorldScale()
+{
+	Vector3 scale;
+	Quaternion rotation;
+	Vector3 translation;
+
+	m_matrixWorld.Decompose(scale, rotation, translation);
+
+	return scale;
+}
 Vector3 Transform::GetLossyScale()
 {
 	Vector3 scale = m_scale;

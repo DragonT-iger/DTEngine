@@ -27,6 +27,7 @@ public:
 	const Vector3& GetScale();
 
 	Vector3 GetWorldPosition();
+	Vector3 GetWorldScale();
 
 	Vector3 GetLossyScale(); // Sheer인 경우
 

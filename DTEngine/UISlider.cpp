@@ -100,7 +100,7 @@ void UISlider::CacheHandle()
         m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
         // y값은 동일한 size로. x는 10분의 1로.
-        m_handleTransform->SetScale(Vector3((GetTransform()->GetScale().x / 10), GetTransform()->GetScale().y, 1.0f));
+        m_handleTransform->SetScale(Vector3(0.1f, 1.0f, 1.0f));
 
         m_handleImage = handle->GetComponent<Image>();
         m_handleComponent = handle->AddComponent<UISliderHandle>();
@@ -149,8 +149,14 @@ void UISlider::OnHandleDragged(float mouseLocalX)
         return;
 
     if (available <= 0.0f) return;
+    Vector3 trackPos = m_Transform->GetPosition();
+    Vector3 trackScale = m_Transform->GetScale();
 
-    float clampedX = std::clamp(mouseLocalX, minX, maxX);
+    // 마우스를 track 기준 로컬 좌표로 변환 후 정규화
+    float localMouseX = mouseLocalX - trackPos.x;
+    float normalizedMouseX = localMouseX / trackScale.x;
+
+    float clampedX = std::clamp(normalizedMouseX, minX, maxX);
     Vector3 localPos = m_handleTransform->GetPosition();
     localPos.x = clampedX;
     localPos.y = 0.0f;
@@ -173,7 +179,14 @@ void UISlider::OnHandleReleased(float mouseLocalX)
         return;
     }
 
-    float clampedX = std::clamp(mouseLocalX, minX, maxX);
+    Vector3 trackPos = m_Transform->GetPosition();
+    Vector3 trackScale = m_Transform->GetScale();
+
+    // 마우스를 track 기준 로컬 좌표로 변환 후 정규화
+    float localMouseX = mouseLocalX - trackPos.x;
+    float normalizedMouseX = localMouseX / trackScale.x;
+
+    float clampedX = std::clamp(normalizedMouseX, minX, maxX);
     float normalizedPos = (clampedX - minX) / available;
     float newValue = m_minValue + (m_maxValue - m_minValue) * normalizedPos;
     SetValue(newValue);
@@ -217,17 +230,27 @@ bool UISlider::ComputeHandleBounds(float& minX, float& maxX, float& available) c
     if (!m_Transform || !m_handleTransform)
         return false;
 
-    Vector3 trackScale = m_Transform->GetScale();
-    Vector3 handleScale = m_handleTransform->GetScale();
-    float trackWidth = trackScale.x;
-    float handleWidth = handleScale.x;
-    available = std::max(0.0f, trackWidth - handleWidth);
-    
-    // minX = -available * 0.5f;
-    // maxX = available * 0.5f;
-    // 왼쪽 끝을 기준으로. 이전에는 중앙 기준이였음.
+    //Vector3 trackScale = m_Transform->GetScale();
+    //Vector3 handleScale = m_handleTransform->GetScale();
+    //float trackWidth = trackScale.x;
+    //float handleWidth = handleScale.x;
+    //available = std::max(0.0f, trackWidth - handleWidth);
+    //
+    //// minX = -available * 0.5f;
+    //// maxX = available * 0.5f;
+    //// 왼쪽 끝을 기준으로. 이전에는 중앙 기준이였음.
 
+    //minX = 0.0f;
+    //maxX = available;
+
+    // handle의 scale을 고려하여 이동 가능 범위 계산
+    
+    Vector3 handleScale = m_handleTransform->GetScale();
+    float handleWidth = handleScale.x;
+
+    // 0~1 범위에서 handle 크기만큼 빼서 제한.
+    available = 1.0f - handleWidth;
     minX = 0.0f;
-    maxX = available;
+    maxX = 1.0f;
     return true;
 }

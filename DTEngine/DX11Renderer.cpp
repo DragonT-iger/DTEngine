@@ -271,7 +271,7 @@ void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
     if (mainCam == nullptr) return;
 
-    static float orthoSize = 1080; // 이게 UI의 기준이 되는 사이즈
+    static float orthoSize = DX11Renderer::Instance().GetRefHeight(); 
 
     static float orthoHeight = orthoSize;
     float aspectRatio = mainCam->GetAspectRatio();

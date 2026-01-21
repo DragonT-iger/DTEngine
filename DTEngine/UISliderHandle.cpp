@@ -71,20 +71,20 @@ void UISliderHandle::Update(float deltaTime)
         if (InputManager::Instance().GetKey(KeyCode::MouseLeft) || isOutOfBounds)
         {
             float localMouseX = mousePosVec2.x;
-            if (auto* handleTransform = m_transform->GetTransform())
+            /*if (auto* handleTransform = m_transform->GetTransform())
             {
                 localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
-            }
+            }*/
             m_parentSlider->OnHandleDragged(localMouseX);
             m_isDragging = false;
         }
         else if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
         {
             float localMouseX = mousePosVec2.x;
-            if (auto* handleTransform = m_transform->GetTransform())
+           /* if (auto* handleTransform = m_transform->GetTransform())
             {
                 localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
-            }
+            }*/
             m_parentSlider->OnHandleReleased(localMouseX);
         }
     }
