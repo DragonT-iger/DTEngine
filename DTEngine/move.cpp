@@ -19,5 +19,6 @@ void move::Update(float deltaTime)
     transform->SetPosition(nextEuler);
     
 
-    //std::cout << this->_GetOwner()->GetName() << std::endl;
+    //
+    // << this->_GetOwner()->GetName() << std::endl;
 }

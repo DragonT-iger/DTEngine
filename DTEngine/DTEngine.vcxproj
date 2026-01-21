@@ -167,6 +167,8 @@
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="FreeCamera.h" />
+    <ClInclude Include="FSMController.h" />
+    <ClInclude Include="FSMRegister.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
@@ -245,6 +247,8 @@
     <ClCompile Include="DXHelper.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
+    <ClCompile Include="FSMController.cpp" />
+    <ClCompile Include="FSMRegister.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />

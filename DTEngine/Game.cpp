@@ -38,6 +38,8 @@
 #include "Canvas.h"
 #include "UIManager.h"
 
+#include "FSMRegister.h"
+
 Game::Game() = default;
 Game::~Game() = default;
 
@@ -105,6 +107,8 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
+	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	//SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -125,13 +129,16 @@ bool Game::Initialize()
 
 	SetEditorCamera(scene);
 
+
+
+
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1080, RenderTextureType::Tex2D, true);
 #endif
 	
 
-
+	FSMRegister::Instance().Initalize();
 
 
 	//Scene testScene("TestScene");
