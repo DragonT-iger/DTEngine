@@ -222,7 +222,6 @@
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
-    <ClInclude Include="UISliderHandle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
@@ -297,7 +296,6 @@
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
-    <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>

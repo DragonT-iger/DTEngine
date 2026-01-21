@@ -5,7 +5,6 @@
 #include <Windows.h>
 #include <iostream>
 #include <filesystem>
-
 #include <imgui.h>
 #include "Game.h"
 #include "DX11Renderer.h"
@@ -34,6 +33,10 @@
 #include "Text.h"
 #include "Image.h"
 #include "ReflectionProbe.h"
+#include "UIButton.h"
+//#include "RectTransform.h"
+#include "Canvas.h"
+#include "UIManager.h"
 
 #include "FSMRegister.h"
 
@@ -95,13 +98,17 @@ bool Game::Initialize()
 	}
 
 
-<<<<<<< HEAD
-	InputManager::Instance().Initialize();
-	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	//SceneManager::Instance().LoadScene("SampleScene");
+	InputManager::Instance().Initialize(); 
+	InputManager::Instance().SetWindowHandle(GetHwnd());
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	SceneManager::Instance().LoadScene("SampleSceneBum");
+
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
+	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");
+
+	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	//SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -112,6 +119,7 @@ bool Game::Initialize()
 		return false;
 	}
 
+	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
 	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
@@ -342,14 +350,6 @@ void Game::LifeCycle(DeltaTime dt)
 						{
 							cam->LateUpdate(dt.rawTime);
 						}
-					}
-
-					if (auto* slider = go->GetComponent<UISlider>())
-					{
-							if (slider->IsActive())
-							{
-									slider->EditorUpdate(dt.rawTime);
-							}
 					}
 				}
 			}
@@ -815,6 +815,11 @@ void Game::SetPlayState(bool isPlay)
 		{
 			m_engineMode = EngineMode::Play;
 
+			Scene* scene = SceneManager::Instance().GetActiveScene();
+			if (scene)
+			{
+				scene->Start();
+			}
 		}
 	}
 	else
@@ -835,7 +840,7 @@ void Game::SetPlayState(bool isPlay)
 
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 		if (hasLastState)
 		{
 			Transform* camTf = m_editorCameraObject->GetTransform();
@@ -844,8 +849,8 @@ void Game::SetPlayState(bool isPlay)
 
 			if (scene)
 			{
-				scene->Awake();
-				scene->Start();
+				//scene->Awake();
+				//scene->Start();
 			}
 		}
 
@@ -892,7 +897,7 @@ void Game::SetEditorCamera(Scene* curScene)
 
 	if (m_editorCameraObject)
 	{
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 	else
 	{
@@ -900,7 +905,7 @@ void Game::SetEditorCamera(Scene* curScene)
 		m_editorCameraObject = curScene->CreateGameObject("EditorCamera55");
 		m_editorCameraObject->AddComponent<Camera>();
 		m_editorCameraObject->AddComponent<FreeCamera>();
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 }
 #endif

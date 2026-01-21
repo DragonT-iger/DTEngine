@@ -29,7 +29,6 @@ void Skeletal::Awake()
 
 }
 
-//
 void Skeletal::Update(float deltaTime)
 {
    
@@ -41,27 +40,28 @@ void Skeletal::LateUpdate(float dTime)
     if (!m_BoneResource) return;
 
     size_t nodeCount = m_BoneResource->m_Bones.size();
+    static bool bDebugOnce = true; // 딱 한 번만 출력
 
-        for (size_t i = 0; i < nodeCount; ++i)
+    for (size_t i = 0; i < nodeCount; ++i)
+    {
+         BoneNode& resNode = m_BoneResource->m_Bones[i];
+        Matrix localMat = m_AnimatedLocalMatrices[i];
+
+        if (resNode.ParentIndex != -1)
         {
-            BoneNode& resNode = m_BoneResource->m_Bones[i];
-            Matrix localMat = m_AnimatedLocalMatrices[i];
-
-            if (resNode.ParentIndex != -1)
-            {
-                m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
-            }
-            else
-            {
-                m_globalTransforms[i] = localMat;
-            }
-
-
-            m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
-
+            m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
         }
-    
+        else
+        {
+            m_globalTransforms[i] = localMat;
+        }
+
+      
+        m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+
+    }
 }
+
 
 void Skeletal::SetSkeletal(uint64_t id)
 {

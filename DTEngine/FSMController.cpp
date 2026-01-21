@@ -8,7 +8,6 @@ DTPROPERTY(FSMController, m_Die);
 DTPROPERTY(FSMController, m_Skill);
 DTPROPERTY(FSMController, m_Move);
 DTPROPERTY(FSMController, Attack);
-DTPROPERTY(FSMController, Dance);
 
 
 ENDPROPERTY()
