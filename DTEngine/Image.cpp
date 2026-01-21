@@ -57,7 +57,7 @@ void Image::SetupRenderer()
 
 void Image::SetTexture(Texture* texture)
 {
-    MeshRenderer* mr = _GetOwner()->GetComponent<MeshRenderer>();
+    MeshRenderer* mr = GetComponent<MeshRenderer>();
     if (!mr) return;
 
     if (texture) m_textureID = texture->GetMeta().guid;

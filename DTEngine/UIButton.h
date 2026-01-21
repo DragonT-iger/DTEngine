@@ -13,7 +13,7 @@ public:
     UIButton() = default;
     ~UIButton() override = default;
 
-    void Awake() override;
+    //void Awake() override;
 
     void SetInteractable(bool value) { m_interactable = value; }
     const bool& GetInteractable() const { return m_interactable; }
@@ -50,8 +50,6 @@ private:
     Vector4 m_pressedColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
 
     std::function<void()> m_onClick;    // 함수 저장용.
-
-    Canvas* m_canvas = nullptr;
 
     bool m_interactable = true; // 상호작용
     bool m_isHovered = false;  
