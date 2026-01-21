@@ -3,6 +3,11 @@
 #include "UISlider.h"
 #include "Transform.h"
 #include "InputManager.h"
+#include "camera.h"
+#include "Scene.h"
+#include "SceneManager.h"
+#include "DX11Renderer.h"
+
 
 BEGINPROPERTY(UISliderHandle)
 ENDPROPERTY()
@@ -16,6 +21,7 @@ void UISliderHandle::Update(float deltaTime)
 {
     if (!m_parentSlider || !m_transform)
     {
+        printf("NULL check failed\n");
         return;
     }
     
@@ -23,12 +29,12 @@ void UISliderHandle::Update(float deltaTime)
     const MousePos& mousePos = InputManager::Instance().GetGameMousePosition();
     Vector2 mousePosVec2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
-    Vector3 handleWorldPos = m_transform->GetWorldPosition();
-
     // 마우스 왼쪽 버튼 Down
     if (InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
     {
-        Vector3 handleWorldPos = m_transform->GetWorldPosition();
+        printf("\n=== Mouse Click ===\n");
+        printf("Mouse: %.1f, %.1f\n", mousePosVec2.x, mousePosVec2.y);
+
         Vector3 handleScale = m_transform->GetScale();
        
         if (IsMouseOver(mousePosVec2))
@@ -68,21 +74,18 @@ bool UISliderHandle::IsMouseOver(const Vector2& mousePos)
 {
     if (!m_transform) return false;
 
-    // Handle의 월드 위치와 크기
-    Vector3 worldPos = m_transform->GetWorldPosition();
-    Vector3 scale = m_transform->GetScale();
-
     // AABB 충돌 검사
-    float left = worldPos.x - scale.x * 0.5f;
-    float right = worldPos.x + scale.x * 0.5f;
-    float top = worldPos.y - scale.y * 0.5f;
-    float bottom = worldPos.y + scale.y * 0.5f;
+    float left = mousePos.x - m_transform->GetScale().x * 0.5f;
+    float right = mousePos.x + m_transform->GetScale().x * 0.5f;
+    float top = mousePos.y - m_transform->GetScale().y * 0.5f;
+    float bottom = mousePos.y + m_transform->GetScale().y * 0.5f;
 
     bool result = (mousePos.x >= left && mousePos.x <= right &&
         mousePos.y >= top && mousePos.y <= bottom);
-    if (result) {
+    if (result) 
+    {
         std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << std::endl;
-        std::cout << "Handle: " << worldPos.x << ", " << worldPos.y << std::endl;
+        std::cout << "Handle: " << m_transform->GetTransform()->GetPosition().x << ", " << m_transform->GetTransform()->GetPosition().y << std::endl;
     }
 
     return result;

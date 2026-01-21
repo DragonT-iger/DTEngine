@@ -34,12 +34,15 @@ void UISlider::Awake()
     ApplyTrackColor();
     ApplyHandleColor();
 
+    m_value = std::clamp(m_value, m_minValue, m_maxValue);
     UpdateHandlePosition();
 }
 
 void UISlider::Update(float deltaTime)
 {
+#ifndef _DEBUG  // 에디터 아닐 때만 자동 업데이트
     UpdateHandlePosition();
+#endif
     if (m_handleComponent)
     {
         m_handleComponent->Update(deltaTime);
@@ -111,11 +114,6 @@ void UISlider::CacheHandle()
     {
         m_handleComponent->SetParentSlider(this);
         ApplyHandleColor();
-    }
-
-    if (createdHandle)
-    {
-        m_value = std::clamp(m_value, m_minValue, m_maxValue);
     }
 }
 
