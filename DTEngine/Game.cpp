@@ -514,14 +514,15 @@ void Game::LifeCycle(DeltaTime dt)
 		
 	}
 
+
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
-	DX11Renderer::Instance().BeginUIRender((float)DX11Renderer::Instance().GetWidth(), (float)DX11Renderer::Instance().GetHeight());
+	DX11Renderer::Instance().BeginUIRender(m_gameRT->GetWidth(), m_gameRT->GetHeight());
 
 	Texture* finalTexture = m_gameRT.get();
 
 	Vector2 screenPos(0, 0);
-	Vector2 screenSize((float)DX11Renderer::Instance().GetWidth(), (float)DX11Renderer::Instance().GetHeight());
+	Vector2 screenSize(m_gameRT->GetWidth(), m_gameRT->GetHeight()); // 이걸 잘 나누면 레터박스 만들수 있을듯?
 
 	DX11Renderer::Instance().DrawUI(finalTexture, screenPos, screenSize, Vector4(1, 1, 1, 1));
 
