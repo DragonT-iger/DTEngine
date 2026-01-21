@@ -3,6 +3,8 @@
 #include "Image.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "DX11Renderer.h"
+#include "InputManager.h"
 
 BEGINPROPERTY(UIButton)
 DTPROPERTY_ACCESSOR(UIButton, m_interactable, GetInteractable, SetInteractable)
@@ -16,6 +18,70 @@ void UIButton::InvokeClick()
 {
     if (!m_interactable) return;
     if (m_onClick) m_onClick();
+}
+
+void UIButton::Update(float deltaTime)
+{
+	//std::cout << "UIButton Update Called" << std::endl;
+    if (!m_interactable) return;
+
+
+    float screenW;
+    float screenH;
+
+#ifdef _DEBUG
+    MousePos gameRes = InputManager::Instance().GetGameResolution();
+    screenW = (float)gameRes.x;
+    screenH = (float)gameRes.y;
+#else
+    screenW = (float)DX11Renderer::Instance().GetWidth();
+    screenH = (float)DX11Renderer::Instance().GetHeight();
+#endif
+
+    const float refW = DX11Renderer::Instance().GetRefWidth();
+    const float refH = DX11Renderer::Instance().GetRefHeight();
+
+    float scaleX = screenW / refW;
+    float scaleY = screenH / refH;
+
+    auto mousePos = InputManager::Instance().GetGameMousePosition();
+
+    float uiMouseX = (float)mousePos.x / scaleX;
+    float uiMouseY = (float)mousePos.y / scaleY;
+
+    Transform* tf = GetTransform();
+    Vector3 pos = tf->GetPosition();
+    Vector3 size = tf->GetScale(); 
+
+    bool isInside = (uiMouseX >= pos.x && uiMouseX <= pos.x + size.x &&
+        uiMouseY >= pos.y && uiMouseY <= pos.y + size.y);
+
+    if (isInside)
+    {
+        SetHovered(true);
+
+        if (InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
+        {
+            SetPressed(true);
+        }
+        else if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
+        {
+            if (m_isPressed)
+            {
+                InvokeClick();
+            }
+            SetPressed(false);
+        }
+    }
+    else
+    {
+        SetHovered(false);
+
+        if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft) || InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
+        {
+            SetPressed(false);
+        }
+    }
 }
 
 void UIButton::ApplyNormalState()
@@ -50,6 +116,8 @@ void UIButton::SetPressed(bool pressed)
         return;
     }
     m_isPressed = pressed;
+
+	//std::cout << "UIButton Pressed State Changed: " << (m_isPressed ? "Pressed" : "Released") << std::endl;
     UpdateVisualState();
 }
 

@@ -57,7 +57,7 @@ public:
     void Resize(int width, int height);
 
 
-    void BeginUIRender();
+    void BeginUIRender(float renderWidth, float renderHeight);
     void EndUIRender();
 
     void CreateShadowMap(int width, int height);
@@ -108,6 +108,8 @@ public:
     bool GetVsync() { return m_vsync; }
     void SetVsync(bool vsync) { m_vsync = vsync; }
 
+	int GetRefWidth() const { return m_width; }
+	int GetRefHeight() const { return m_height; }
 
     float GetAspectRatio() const
     {
@@ -236,6 +238,9 @@ private:
     int   m_width = 0;
     int   m_height = 0;
     bool  m_vsync = false;
+
+    int m_refWidth = 1920;
+	int m_refHeight = 1080;
 
     Matrix m_viewTM;
     Matrix m_projTM;

@@ -247,8 +247,15 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
 }
 
-void DX11Renderer::BeginUIRender()
+void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
+
+    float scaleX = renderWidth  / m_refWidth;
+    float scaleY = renderHeight / m_refHeight;
+
+    Matrix uiScaleMatrix = Matrix::CreateScale(scaleX, scaleY, 1.0f);
+
+
     if (m_spriteBatch)
     {
         m_spriteBatch->Begin(
@@ -258,7 +265,7 @@ void DX11Renderer::BeginUIRender()
             nullptr,                                    // DepthStencilState
             nullptr,                                    // RasterizerState
             nullptr,                                    // setCustomShaders
-            DirectX::XMMatrixIdentity() 
+            uiScaleMatrix
         );
     }
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();

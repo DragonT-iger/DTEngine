@@ -28,7 +28,6 @@ public:
     void SetNativeSize();
 
 private:
-    void SetupRenderer();
 
     uint64_t m_textureID = 0;
     Vector4 m_color = { 1.f, 1.f, 1.f, 1.f };

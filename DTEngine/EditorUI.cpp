@@ -46,7 +46,7 @@
 #include "TilemapData.h"
 #include "TilemapGenerator.h"
 #include "Prefab.h"
-
+#include "Image.h"
 #include "FSMController.h"
 namespace fs = std::filesystem;
 
@@ -1544,6 +1544,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
                 ImGui::SameLine(0, ImGui::GetStyle().ItemInnerSpacing.x);
                 ImGui::Text("%s", name);
             }
+
+
             // component 인 경우 
             else if (ReflectionDatabase::Instance().IsComponentPointer(type))
             {
@@ -1633,6 +1635,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
             }
 			ImGui::PopID();
         }
+
+        
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
         {
@@ -2431,6 +2435,9 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
         rt->Resize((int)size.x, (int)size.y);
     }
 
+#ifdef _DEBUG
+    InputManager::Instance().SetGameResolution((int)size.x, (int)size.y);
+#endif
     ImGui::Image((void*)rt->GetSRV(), size);
 
 

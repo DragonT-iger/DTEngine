@@ -784,8 +784,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     for (const auto& go : GetGameObjects())
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
-        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
+
         Image* img = go->GetComponent<Image>();
+        if (img && img->IsActive())
+        {
+            uiQueue.push_back(go.get());
+            continue; 
+        }
+
+
+        MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         if (!mr || !mr->IsActive()) continue;
 
         Material* mat = mr->GetSharedMaterial();
@@ -880,7 +888,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     
 
     if (renderUI) {
-        DX11Renderer::Instance().BeginUIRender();
+        DX11Renderer::Instance().BeginUIRender(width, height);
 
         for (auto* go : uiQueue)
         {
