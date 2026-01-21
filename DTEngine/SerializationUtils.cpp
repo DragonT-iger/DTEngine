@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Material.h"
 #include "TilemapData.h"
+#include "Prefab.h"
 
 void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* base, std::vector<FixupTask>& fixupList)
 {
@@ -77,6 +78,20 @@ void ReadPropertyRecursive(JsonReader& reader, const PropertyInfo& prop, void* b
         else {
             TilemapData* nullData = nullptr;
             prop.m_setter(base, &nullData);
+        }
+	}
+
+    else if(type == typeid(Prefab*))
+    {
+		uint64_t id = reader.ReadUInt64(name);
+        std::string path = AssetDatabase::Instance().GetPathFromID(id);
+        if (!path.empty()) {
+            Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path);
+            prop.m_setter(base, &prefab);
+        }
+        else {
+            Prefab* nullPrefab = nullptr;
+            prop.m_setter(base, &nullPrefab);
         }
 	}
 

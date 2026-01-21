@@ -32,7 +32,7 @@ void InputManager::Update()
 
     m_prevMousePos = m_mousePos;
 
-
+    
 	//std::cout << "Game Mouse Pos: (" << m_gameMousePos.x << ", " << m_gameMousePos.y << ")\n";
 
 	//std::cout << "Mouse Pos: (" << m_mousePos.x << ", " << m_mousePos.y << ")\n";

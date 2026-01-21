@@ -33,7 +33,7 @@ public:
 
 	std::string GetResourceRootPath() const { return m_resourceRootPath; }
 
-    GameObject* InstantiatePrefab(const std::string& fullPath);
+    //GameObject* InstantiatePrefab(const std::string& fullPath);
     bool SavePrefab(GameObject* root, const std::string& fullPath);
 
     GameObject* LoadModel(const std::string& fullPath);

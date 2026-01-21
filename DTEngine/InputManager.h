@@ -42,7 +42,7 @@ public:
     const MousePos& GetMousePosition() const { return m_mousePos; }
     const MousePos& GetMouseDelta() const { return m_mouseDelta; }
 
-    const MousePos& GetGameMouseDelta() const { return m_gameMousePos; }
+    const MousePos& GetGameMousePosition() const { return m_gameMousePos; }
 
 private:
     InputManager() = default;

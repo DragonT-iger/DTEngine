@@ -45,6 +45,7 @@
 #include "SerializationUtils.h"
 #include "TilemapData.h"
 #include "TilemapGenerator.h"
+#include "Prefab.h"
 
 namespace fs = std::filesystem;
 
@@ -1048,113 +1049,6 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
     if (header_open)
     {
-        if (auto* rect = dynamic_cast<RectTransform*>(comp))
-        {
-            ImGui::SeparatorText("Anchor Presets");
-
-            const struct Preset { const char* label; Vector2 anchor; } presets[] = {
-                {"TL", Vector2(0.0f, 1.0f)}, {"TC", Vector2(0.5f, 1.0f)}, {"TR", Vector2(1.0f, 1.0f)},
-                {"ML", Vector2(0.0f, 0.5f)}, {"MC", Vector2(0.5f, 0.5f)}, {"MR", Vector2(1.0f, 0.5f)},
-                {"BL", Vector2(0.0f, 0.0f)}, {"BC", Vector2(0.5f, 0.0f)}, {"BR", Vector2(1.0f, 0.0f)}
-            };
-
-            auto applyPreset = [&](const Vector2& anchor) {
-                auto setAnchorMin = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchorMin(*static_cast<Vector2*>(value));
-                    };
-                auto setAnchorMax = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchorMax(*static_cast<Vector2*>(value));
-                    };
-                auto setPivot = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetPivot(*static_cast<Vector2*>(value));
-                    };
-                auto setAnchoredPos = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchoredPosition(*static_cast<Vector2*>(value));
-                    };
-
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchorMin, rect->GetAnchorMin(), anchor));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchorMax, rect->GetAnchorMax(), anchor));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setPivot, rect->GetPivot(), anchor));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchoredPos, rect->GetAnchoredPosition(), Vector2(0.0f, 0.0f)));
-                };
-
-            if (ImGui::BeginTable("RectPresetTable", 3))
-            {
-                for (int i = 0; i < 9; ++i)
-                {
-                    ImGui::TableNextColumn();
-                    if (ImGui::Button(presets[i].label, ImVec2(-FLT_MIN, 0)))
-                    {
-                        applyPreset(presets[i].anchor);
-                    }
-                }
-                ImGui::EndTable();
-            }
-
-            ImGui::SeparatorText("Stretch Presets");
-
-            auto applyStretch = [&](const Vector2& minAnchor, const Vector2& maxAnchor) {
-                auto setAnchorMin = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchorMin(*static_cast<Vector2*>(value));
-                    };
-                auto setAnchorMax = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchorMax(*static_cast<Vector2*>(value));
-                    };
-                auto setPivot = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetPivot(*static_cast<Vector2*>(value));
-                    };
-                auto setAnchoredPos = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetAnchoredPosition(*static_cast<Vector2*>(value));
-                    };
-                auto setSizeDelta = [](void* target, void* value) {
-                    static_cast<RectTransform*>(target)->SetSizeDelta(*static_cast<Vector2*>(value));
-                    };
-
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchorMin, rect->GetAnchorMin(), minAnchor));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchorMax, rect->GetAnchorMax(), maxAnchor));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setPivot, rect->GetPivot(), Vector2(0.5f, 0.5f)));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setAnchoredPos, rect->GetAnchoredPosition(), Vector2(0.0f, 0.0f)));
-                HistoryManager::Instance().Do(std::make_unique<ChangePropertyCommand<Vector2>>(
-                    rect, setSizeDelta, rect->GetSizeDelta(), Vector2(0.0f, 0.0f)));
-                };
-
-            if (ImGui::Button("Stretch All", ImVec2(-FLT_MIN, 0)))
-            {
-                applyStretch(Vector2(0.0f, 0.0f), Vector2(1.0f, 1.0f));
-            }
-
-            if (ImGui::BeginTable("RectStretchTable", 3))
-            {
-                ImGui::TableNextColumn();
-                if (ImGui::Button("Stretch X", ImVec2(-FLT_MIN, 0)))
-                {
-                    applyStretch(Vector2(0.0f, rect->GetAnchorMin().y), Vector2(1.0f, rect->GetAnchorMax().y));
-                }
-
-                ImGui::TableNextColumn();
-                if (ImGui::Button("Stretch Y", ImVec2(-FLT_MIN, 0)))
-                {
-                    applyStretch(Vector2(rect->GetAnchorMin().x, 0.0f), Vector2(rect->GetAnchorMax().x, 1.0f));
-                }
-
-                ImGui::TableNextColumn();
-                if (ImGui::Button("Stretch Center", ImVec2(-FLT_MIN, 0)))
-                {
-                    applyStretch(Vector2(0.5f, 0.5f), Vector2(0.5f, 0.5f));
-                }
-
-                ImGui::EndTable();
-            }
-        }
-
         for (const PropertyInfo& prop : info->m_properties)
         {
             if (prop.m_name == "m_editorEulerAngles" || prop.m_name == "m_parent")
@@ -1621,7 +1515,9 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                         if (ext == ".prefab")
                         {
-                            GameObject* newInstance = ResourceManager::Instance().InstantiatePrefab(droppedPath);
+							Prefab* prefabAsset = ResourceManager::Instance().Load<Prefab>(droppedPath);
+
+                            GameObject* newInstance = prefabAsset->Instantiate();
 
                             if (newInstance)
                             {
@@ -1720,6 +1616,12 @@ void EditorUI::DrawComponentProperties(Component* comp)
 				std::vector<std::string> exts = { ".tilemap" };
 				DrawAssetReference<TilemapData>(this, name, currentData, comp, prop.m_setter, exts);
             }
+
+			else if (type == typeid(Prefab*)) {
+				Prefab* currentPrefab = *static_cast<Prefab**>(data);
+				std::vector<std::string> exts = { ".prefab" };
+                DrawAssetReference<Prefab>(this, name, currentPrefab, comp, prop.m_setter, exts);
+			}
             
 
             else {
@@ -2090,7 +1992,10 @@ void EditorUI::OnDropFile(const std::string& rawPath)
     else if (ext == ".prefab")
     {
         // 프리팹 인스턴스화
-        GameObject* go = ResourceManager::Instance().InstantiatePrefab(path.string());
+
+		Prefab* prefab = ResourceManager::Instance().Load<Prefab>(path.string());
+
+        GameObject* go = prefab->Instantiate();
 
         if (go)
         {
@@ -2459,6 +2364,43 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImVec2 imageMin = ImGui::GetItemRectMin();
     ImVec2 imageMax = ImGui::GetItemRectMax();
 
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool hovered = ImGui::IsItemHovered();
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && camera && hovered && clicked && !ImGuizmo::IsUsing())
+    {
+        ImVec2 mouse = ImGui::GetMousePos();
+
+        float localX = mouse.x - imageMin.x;
+        float localY = mouse.y - imageMin.y;
+
+        float viewW = imageMax.x - imageMin.x;
+        float viewH = imageMax.y - imageMin.y;
+
+        localX = std::clamp(localX, 0.0f, viewW);
+        localY = std::clamp(localY, 0.0f, viewH);
+
+        Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+        GameObject* hit = nullptr;
+        float hitT = 0.0f;
+
+        if (activeScene->Raycast2(ray, hit, hitT))
+        {
+            //std::cout << hit->GetName() << std::endl;
+            m_selectedGameObject = hit;
+        }
+        else
+        {
+            //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+            m_selectedGameObject = nullptr;
+        }
+    }
+    // 
+
+
     ImGuizmo::SetRect(imageMin.x, imageMin.y, imageMax.x - imageMin.x, imageMax.y - imageMin.y);
 
     ImGuizmo::SetDrawlist();
@@ -2472,7 +2414,7 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImGui::PopStyleVar();
 }
 
-void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
+void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)  
 {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("Game");
@@ -2491,6 +2433,49 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     bool isHovered = ImGui::IsItemHovered();
 
     bool isFocused = ImGui::IsWindowFocused();
+
+    // 피킹 테스트.
+    // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
+    const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+
+    if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing())
+    {
+        Camera* camera = activeScene->GetMainCamera();
+        if (camera) 
+        {
+            ImVec2 mouse = ImGui::GetMousePos();
+
+            ImVec2 imgMin = ImGui::GetItemRectMin();
+            ImVec2 imgMax = ImGui::GetItemRectMax();
+
+            float localX = mouse.x - imgMin.x;
+            float localY = mouse.y - imgMin.y;
+
+            float viewW = imgMax.x - imgMin.x;
+            float viewH = imgMax.y - imgMin.y;
+
+            localX = std::clamp(localX, 0.0f, viewW);
+            localY = std::clamp(localY, 0.0f, viewH);
+
+            Ray ray = camera->ScreenPointToRay(localX, localY, viewW, viewH);
+
+            GameObject* hit = nullptr;
+            float hitT = 0.0f;
+
+            if (activeScene->Raycast2(ray, hit, hitT))
+            {
+                std::cout << hit->GetName() << std::endl;
+                m_selectedGameObject = hit;
+            }
+            else
+            {
+                //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+                m_selectedGameObject = nullptr;
+            }
+        }
+    }
+    // 
+
 #ifdef _DEBUG
     if (isHovered) 
     {

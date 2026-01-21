@@ -11,40 +11,6 @@ DTPROPERTY_ACCESSOR(UIButton, m_hoverColor, GetHoverColor, SetHoverColor)
 DTPROPERTY_ACCESSOR(UIButton, m_pressedColor, GetPressedColor, SetPressedColor)
 ENDPROPERTY()
 
-void UIButton::Awake()
-{
-    // scene 있는지 체크.
-    Scene* scene = SceneManager::Instance().GetActiveScene();
-    if (!scene)
-    {
-        return;
-    }
-
-    // canvas 있는 obj 찾기 및 등록.
-    for (const auto& obj : scene->GetGameObjects())
-    {
-        if (!obj)
-        {
-            continue;
-        }
-
-        Canvas* canvas = obj->GetComponent<Canvas>();
-        if (canvas)
-        {
-            m_canvas = canvas;
-            break;
-        }
-    } 
-    
-    ApplyNormalState();
-
-    // canvas 없으면 삭제.
-    if (!m_canvas)
-    {
-        printf("canvas없어서 button 지움");
-        Destroy(_GetOwner());
-    }
-}
 
 void UIButton::InvokeClick()
 {

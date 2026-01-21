@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "TilemapData.h"
+#include "Prefab.h"
 
 
 void Component::Destroy(GameObject* gameobject) {
@@ -122,6 +123,13 @@ static void WritePropertyRecursive(JsonWriter& writer, const std::type_index& ty
         uint64_t id = (tilemapData) ? tilemapData->GetMeta().guid : 0;
         writer.Write(name, id);
 	}
+
+    else if (type == typeid(Prefab*))
+    {
+        Prefab* prefab = *static_cast<Prefab**>(data);
+        uint64_t id = (prefab) ? prefab->GetMeta().guid : 0;
+        writer.Write(name, id);
+    }
 
     //크아아아아아악
 

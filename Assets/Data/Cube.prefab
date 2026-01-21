@@ -1,0 +1,46 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1388814544720417936,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 6380585766017231848,
+      "name": "Cube",
+      "parentID": 0,
+      "tag": "Untagged",
+      "transform": {
+        "id": 7980101960576740612,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}

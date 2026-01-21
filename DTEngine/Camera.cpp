@@ -141,8 +141,27 @@ const Vector3& Camera::GetCamFor() const
     return tf->Forward();
 }
 
+Ray Camera::ScreenPointToRay(float x, float y, float viewportW, float viewportH) const
+{
+    DirectX::SimpleMath::Viewport vp;
+    vp.x = 0.0f;
+    vp.y = 0.0f;
+    vp.width = viewportW;
+    vp.height = viewportH;
+    vp.minDepth = 0.0f;
+    vp.maxDepth = 1.0f;
 
+    Vector3 screenNear(x, y, 0.0f);
+    Vector3 screenFar(x, y, 1.0f);
 
+    Vector3 nearWorld = vp.Unproject(screenNear, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+    Vector3 farWorld = vp.Unproject(screenFar, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+
+    Vector3 dir = farWorld - nearWorld;
+    dir.Normalize();
+
+    return { nearWorld, dir };
+}
 
 void Camera::UpdateViewMatrix()
 {
