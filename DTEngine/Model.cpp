@@ -231,13 +231,17 @@ void Model::CreateSkeleton(const aiNode* node, int parentIndex)
     newNode.id = (int)m_impl->m_Bones.size();
     newNode.ParentIndex = parentIndex;
 
+
     newNode.DefaultLocalMatrix = Matrix(&node->mTransformation.a1).Transpose(); //coloum to row 
+    if (newNode.name == "Armature") newNode.DefaultLocalMatrix = SimpleMathHelper::IdentityMatrix(); //넣어놔야 겠다... 방어로 
+
 
     if (parentIndex != -1) {
         newNode.GlobalMatrix = newNode.DefaultLocalMatrix * m_impl->m_Bones[parentIndex].GlobalMatrix;
 
     }
     else {
+        newNode.DefaultLocalMatrix = SimpleMathHelper::IdentityMatrix(); //첫 번째 노드의 값은 scaling을 무시. 
         newNode.GlobalMatrix = newNode.DefaultLocalMatrix;
     }
 

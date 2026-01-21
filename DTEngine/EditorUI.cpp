@@ -839,7 +839,6 @@ void EditorUI::DrawInspectorWindow()
                 {
                     auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
                     HistoryManager::Instance().Do(std::move(cmd));
-
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -1514,9 +1513,14 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     //    ImGui::TextColored(ImVec4(0.4f, 1.0f, 0.4f, 1.0f), "[Status: Shared (Asset)]");
                     //}
 
+                 
+
                     if (renderer->IsMaterialInstanced())
                     {
                         //ImGui::AlignTextToFramePadding();
+
+
+                        //GameObject 포인터를 받아서 계층 구조에 따라 Material 처리를 하도록 하자인데, 
 
                         ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "[Status: Instanced (Unique)]");
 
@@ -1527,6 +1531,21 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         {
                             renderer->SetMaterialID(renderer->GetMaterialID());
 
+
+                            if (m_selectedGameObject) //해당 Editor에 해당하는 GameObject
+                            {
+
+                                auto tf = m_selectedGameObject->GetTransform();
+                                if (tf)
+                                {
+                                    auto& vec = tf->GetChildren();
+                                    for (auto& child : vec)
+                                    {
+                                        MeshRenderer* Comp = child->GetComponent<MeshRenderer>();
+                                        if (Comp) Comp->SetMaterialID(renderer->GetMaterialID());
+                                    }
+                                }
+                            }
                             ImGui::PopStyleColor(); 
                             ImGui::TreePop();       
                             ImGui::PopID();         
