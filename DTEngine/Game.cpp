@@ -418,6 +418,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 			scene->Render(cam, targetRT, false);
 
+			targetRT->Unbind();
+
 		}
 		else
 		{
@@ -428,6 +430,8 @@ void Game::LifeCycle(DeltaTime dt)
 			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
 
 			scene->Render(cam, m_gameRT.get(), true);
+
+			m_gameRT->Unbind();
 		}
 	}
 
@@ -486,6 +490,8 @@ void Game::LifeCycle(DeltaTime dt)
 			targetRT->Clear(col.x, col.y, col.z, col.w);
 
 			RenderScene(scene, cam, targetRT, false);
+
+			targetRT->Unbind();
 		}
 	}
 
@@ -496,10 +502,16 @@ void Game::LifeCycle(DeltaTime dt)
 
 	if (mainCam)
 	{
+		m_gameRT->Bind();
+		m_gameRT->Clear(clearColor[0], clearColor[1], clearColor[2], 1);
+
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
 		RenderScene(scene, mainCam, m_gameRT.get(), true);
+
+		m_gameRT->Unbind();
+		
 	}
 
 	DX11Renderer::Instance().BeginFrame(clearColor);
