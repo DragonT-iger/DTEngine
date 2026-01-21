@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "UISliderHandle.h"
+#include "UIButton.h"
 
 BEGINPROPERTY(UISlider)
 DTPROPERTY_ACCESSOR(UISlider, m_minValue, GetMinValue, SetMinValue)
@@ -87,28 +88,26 @@ void UISlider::CacheHandle()
     }
 
     // 못찾은 경우 생성.
-    //if (!createdHandle)
-    //{
-    //    Scene* scene = SceneManager::Instance().GetActiveScene();
-    //    if (!scene) return;
+    if (!createdHandle)
+    {
+        Scene* scene = SceneManager::Instance().GetActiveScene();
+        if (!scene) return;
 
-    //    GameObject* handle = scene->CreateUIImage("Handle");
-    //    if (!handle) return;
+        GameObject* handle = scene->CreateGameObject("Handle");
+        if (!handle) return;
 
-    //    m_handleTransform = handle->GetTransform();
-    //    m_handleTransform->SetParent(tf);
-    //    m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-    //    m_handleTransform->SetScale(Vector3(0.1f, 1.0f, 1.0f));
+        
 
-    //    m_handleImage = handle->GetComponent<Image>();
-    //    if (m_handleImage && m_trackImage)
-    //    {
-    //        m_handleImage->SetOrderInLayer(m_trackImage->GetOrderInLayer() + 1);
-    //    }
+        m_handleTransform = handle->GetTransform();
+        m_handleTransform->SetParent(tf);
+        m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+        // y값은 동일한 size로. x는 10분의 1로.
+        m_handleTransform->SetScale(Vector3((GetTransform()->GetScale().x / 10), GetTransform()->GetScale().y, 1.0f));
 
-    //    m_handleComponent = handle->AddComponent<UISliderHandle>();
-    //    createdHandle = true;
-    //}
+        m_handleImage = handle->GetComponent<Image>();
+        m_handleComponent = handle->AddComponent<UISliderHandle>();
+        createdHandle = true;
+    }
 
     if (m_handleComponent)
     {
@@ -125,14 +124,14 @@ void UISlider::UpdateHandlePosition()
     float range = m_maxValue - m_minValue;
     if (range <= 0.0f) return;
 
-    Vector3 trackScale = m_Transform->GetScale();
-    Vector3 handleScale = m_handleTransform->GetScale();
-    float trackWidth = trackScale.x;
-    float handleWidth = handleScale.x;
-    float available = std::max(0.0f, trackWidth - handleWidth);
+    float minX = 0.0f;
+    float maxX = 0.0f;
+    float available = 0.0f;
+    if (!ComputeHandleBounds(minX, maxX, available))
+        return;
 
     float t = (m_value - m_minValue) / range;
-    float x = -available * 0.5f + available * t;
+    float x = minX + available * t;
 
     Vector3 localPos = m_handleTransform->GetPosition();
     localPos.x = x;
@@ -145,21 +144,37 @@ void UISlider::OnHandleDragged(float mouseLocalX)
 {
     if (!m_interactable || !m_handleTransform || !m_Transform) return;
 
-    Vector3 trackScale = m_Transform->GetScale();
-    Vector3 handleScale = m_handleTransform->GetScale();
-    float trackWidth = trackScale.x;
-    float handleWidth = handleScale.x;
-    float available = std::max(0.0f, trackWidth - handleWidth);
+    float minX = 0.0f;
+    float maxX = 0.0f;
+    float available = 0.0f;
+    if (!ComputeHandleBounds(minX, maxX, available))
+        return;
 
-    // 드래그 가능한 범위로 제한
-    float minX = -available * 0.5f;
-    float maxX = available * 0.5f;
     float clampedX = std::clamp(mouseLocalX, minX, maxX);
+    Vector3 localPos = m_handleTransform->GetPosition();
+    localPos.x = clampedX;
+    localPos.y = 0.0f;
+    m_handleTransform->SetPosition(localPos);
+}
 
-    // normalized position
+void UISlider::OnHandleReleased(float mouseLocalX)
+{
+    if (!m_interactable || !m_handleTransform || !m_Transform) return;
+
+    float minX = 0.0f;
+    float maxX = 0.0f;
+    float available = 0.0f;
+    if (!ComputeHandleBounds(minX, maxX, available))
+        return;
+
+    if (available <= 0.0f)
+    {
+        SetValue(m_minValue);
+        return;
+    }
+
+    float clampedX = std::clamp(mouseLocalX, minX, maxX);
     float normalizedPos = (clampedX - minX) / available;
-
-    // value 계산 및 설정
     float newValue = m_minValue + (m_maxValue - m_minValue) * normalizedPos;
     SetValue(newValue);
 }
@@ -184,4 +199,29 @@ void UISlider::ApplyHandleColor()
     {
         m_handleImage->SetColor(m_handleColor);
     }
+
+    if (m_handleTransform)
+    {
+        if (auto* button = m_handleTransform->_GetOwner()->GetComponent<UIButton>())
+        {
+            button->SetNormalColor(m_handleColor);
+            button->SetHoverColor(m_handleColor);
+            button->SetPressedColor(m_handleColor);
+        }
+    }
+}
+
+bool UISlider::ComputeHandleBounds(float& minX, float& maxX, float& available) const
+{
+    if (!m_Transform || !m_handleTransform)
+        return false;
+
+    Vector3 trackScale = m_Transform->GetScale();
+    Vector3 handleScale = m_handleTransform->GetScale();
+    float trackWidth = trackScale.x;
+    float handleWidth = handleScale.x;
+    available = std::max(0.0f, trackWidth - handleWidth);
+    minX = -available * 0.5f;
+    maxX = available * 0.5f;
+    return true;
 }

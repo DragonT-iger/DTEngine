@@ -1,71 +1,88 @@
 #include "pch.h"
 #include "UISliderHandle.h"
 #include "UISlider.h"
-#include "Transform.h"
 #include "InputManager.h"
-#include "camera.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "UIButton.h"
+#include "Image.h"
 #include "DX11Renderer.h"
-
 
 BEGINPROPERTY(UISliderHandle)
 ENDPROPERTY()
 
 void UISliderHandle::Awake()
 {
-    m_transform = GetComponent<Transform>();
+    
+    if (!m_transform)
+    {
+        m_transform = GetComponent<Transform>();
+    }
+    if (!m_button)
+    {
+        m_button = AddComponent<UIButton>();
+    }
 }
 
 void UISliderHandle::Update(float deltaTime)
 {
     if (!m_parentSlider || !m_transform)
     {
-        printf("NULL check failed\n");
         return;
     }
     
-    // InputManager에서 마우스 위치 가져오기
+    float screenW;
+    float screenH;
+
+#ifdef _DEBUG
+    MousePos gameRes = InputManager::Instance().GetGameResolution();
+    screenW = static_cast<float>(gameRes.x);
+    screenH = static_cast<float>(gameRes.y);
+#else
+    screenW = static_cast<float>(DX11Renderer::Instance().GetWidth());
+    screenH = static_cast<float>(DX11Renderer::Instance().GetHeight());
+#endif
+
+    const float refW = DX11Renderer::Instance().GetRefWidth();
+    const float refH = DX11Renderer::Instance().GetRefHeight();
+
+    float scaleX = screenW / refW;
+    float scaleY = screenH / refH;
     const MousePos& mousePos = InputManager::Instance().GetGameMousePosition();
-    Vector2 mousePosVec2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+    float uiMouseX = static_cast<float>(mousePos.x) / scaleX;
+    float uiMouseY = static_cast<float>(mousePos.y) / scaleY;
+    Vector2 mousePosVec2(uiMouseX, uiMouseY);
 
-    // 마우스 왼쪽 버튼 Down
-    if (InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
+    if (!m_parentSlider->GetInteractable())
     {
-        printf("\n=== Mouse Click ===\n");
-        printf("Mouse: %.1f, %.1f\n", mousePosVec2.x, mousePosVec2.y);
-
-        Vector3 handleScale = m_transform->GetScale();
-       
-        if (IsMouseOver(mousePosVec2))
-        {
-            m_isDragging = true;
-            m_dragStartPos = mousePosVec2;
-            m_handleStartPos = m_transform->GetPosition();
-        }
+        m_isDragging = false;
+        return;
     }
 
-    // 드래그 중
+    if (m_button && m_button->IsPressed() && !m_isDragging)
+    {
+        m_isDragging = true;
+    }
+
     if (m_isDragging && InputManager::Instance().GetKey(KeyCode::MouseLeft))
     {
-        if (!m_parentSlider->GetInteractable())
+        float localMouseX = mousePosVec2.x;
+        if (auto* sliderTransform = m_parentSlider->GetTransform())
         {
-            m_isDragging = false;
-            return;
+            localMouseX = mousePosVec2.x - sliderTransform->GetPosition().x;
         }
-
-        // 마우스 이동 거리 계산
-        float deltaX = mousePosVec2.x - m_dragStartPos.x;
-
-        // 새로운 핸들 로컬 X 위치
-        float newLocalX = m_handleStartPos.x + deltaX;
-
-        m_parentSlider->OnHandleDragged(newLocalX);
+        m_parentSlider->OnHandleDragged(localMouseX);
     }
 
-    // 마우스 왼쪽 버튼 Up
     if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
     {
+        if (m_isDragging)
+        {
+            float localMouseX = mousePosVec2.x;
+            if (auto* sliderTransform = m_parentSlider->GetTransform())
+            {
+                localMouseX = mousePosVec2.x - sliderTransform->GetPosition().x;
+            }
+            m_parentSlider->OnHandleReleased(localMouseX);
+        }
         m_isDragging = false;
     }
 }

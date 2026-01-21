@@ -50,14 +50,13 @@ public:
     void CacheHandle();
 
     void OnHandleDragged(float mouseLocalX);
+    void OnHandleReleased(float mouseLocalX);
 
     void UpdateHandlePosition();
-
-    void EditorUpdate(float deltaTime) { Update(deltaTime); };
 private:
-
     void ApplyTrackColor();
     void ApplyHandleColor();
+    bool ComputeHandleBounds(float& minX, float& maxX, float& available) const;
 
     class Transform* m_Transform = nullptr;
     class Transform* m_handleTransform = nullptr;

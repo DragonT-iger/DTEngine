@@ -350,14 +350,6 @@ void Game::LifeCycle(DeltaTime dt)
 							cam->LateUpdate(dt.rawTime);
 						}
 					}
-
-					if (auto* slider = go->GetComponent<UISlider>())
-					{
-							if (slider->IsActive())
-							{
-									slider->EditorUpdate(dt.rawTime);
-							}
-					}
 				}
 			}
 
