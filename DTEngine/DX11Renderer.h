@@ -68,7 +68,12 @@ public:
 
     const Matrix& GetLightViewProjScaleMatrix() const { return m_lightViewProjScale; }
 
-    //void DrawUI(Texture* texture, const Vector2& position, const Vector4& color = Vector4(1, 1, 1, 1)); // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
+    void DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color = Vector4(1, 1, 1, 1));
+    
+    // 텍스쳐는 그냥 쉐이더로 그리는게 맞다고 생각함 간단하고 조작도 쉽고
+	// DXTK로 하면 MeshRenderer의 의존성을 줄여버릴 수 있으므로 그냥 이걸로 처리
+
+
 
     void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
 

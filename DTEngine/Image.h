@@ -22,8 +22,8 @@ public:
     void SetTextureID(uint64_t id);
     const uint64_t& GetTextureID() const { return m_textureID; }
     
-    void SetOrderInLayer(int order) { m_orderInLayer = order; }
-    const int& GetOrderInLayer() const { return m_orderInLayer; }
+    //void SetOrderInLayer(int order) { m_orderInLayer = order; }
+    //const int& GetOrderInLayer() const { return m_orderInLayer; }
 
     void SetNativeSize();
 
@@ -32,5 +32,5 @@ private:
 
     uint64_t m_textureID = 0;
     Vector4 m_color = { 1.f, 1.f, 1.f, 1.f };
-    int     m_orderInLayer = 0;
+    //int     m_orderInLayer = 0;
 };

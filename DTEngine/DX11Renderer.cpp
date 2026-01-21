@@ -249,18 +249,18 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
 
 void DX11Renderer::BeginUIRender()
 {
-    //if (m_spriteBatch)
-    //{
-    //    m_spriteBatch->Begin(
-    //        DirectX::DX11::SpriteSortMode_Deferred,
-    //        m_states->NonPremultiplied(),
-    //        nullptr,                                    // SamplerState
-    //        nullptr,                                    // DepthStencilState
-    //        nullptr,                                    // RasterizerState
-    //        nullptr,                                    // setCustomShaders
-    //        DirectX::XMMatrixIdentity() 
-    //    );
-    //}
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->Begin(
+            DirectX::DX11::SpriteSortMode_Deferred,
+            m_states->NonPremultiplied(),
+            nullptr,                                    // SamplerState
+            nullptr,                                    // DepthStencilState
+            nullptr,                                    // RasterizerState
+            nullptr,                                    // setCustomShaders
+            DirectX::XMMatrixIdentity() 
+        );
+    }
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
     if (mainCam == nullptr) return;
 
@@ -284,10 +284,10 @@ void DX11Renderer::BeginUIRender()
 
 void DX11Renderer::EndUIRender()
 {
-    //if (m_spriteBatch)
-    //{
-    //    m_spriteBatch->End();
-    //}
+    if (m_spriteBatch)
+    {
+        m_spriteBatch->End();
+    }
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera(); 
     //if (mainCam == nullptr) return;
@@ -379,12 +379,19 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
 }
 
 
-//void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector4& color)
-//{
-//    if (!m_spriteBatch || !texture) return;
-//
-//    m_spriteBatch->Draw(texture->GetSRV(), position, color);
-//}
+
+void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color)
+{
+    if (!m_spriteBatch || !texture) return;
+
+    RECT destRect;
+    destRect.left   = static_cast<LONG>(position.x);
+    destRect.top    = static_cast<LONG>(position.y);
+    destRect.right  = static_cast<LONG>(position.x + size.x);
+    destRect.bottom = static_cast<LONG>(position.y + size.y);
+
+    m_spriteBatch->Draw(texture->GetSRV(), destRect, color);
+}
 
 void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
 {

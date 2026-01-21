@@ -203,6 +203,7 @@ Component* GameObject::AddComponent(const std::string& typeName)
 
     return raw;
 }
+
 void GameObject::_Internal_AddComponent(std::unique_ptr<Component> comp)
 {
     Component* raw = comp.get();

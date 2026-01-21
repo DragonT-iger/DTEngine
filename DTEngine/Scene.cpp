@@ -42,74 +42,74 @@ GameObject* Scene::CreateGameObject(const std::string& name)
     return raw;
 }
 
-GameObject* Scene::CreateUIImage(const std::string& name)
-{
-    GameObject* go = CreateGameObject(name);
-    if (go && !go->GetComponent<Image>())
-    {
-        go->AddComponent<Image>();
-    }
-    return go;
-}
-
-GameObject* Scene::CreateUIButton(const std::string& name)
-{
-    GameObject* go = CreateUIImage(name);
-    if (go && !go->GetComponent<UIButton>())
-    {
-        go->AddComponent<UIButton>();
-    }
-    return go;
-}
-
-GameObject* Scene::CreateUISlider(const std::string& name)
-{
-    GameObject* go = CreateUIImage(name);
-    if (go && !go->GetComponent<UISlider>())
-    {
-        go->AddComponent<UISlider>();
-    }
-
-    if (go)
-    {
-        Transform* tf = go->GetTransform();
-        bool hasHandle = false;
-        if (tf)
-        {
-            for (Transform* child : tf->GetChildren())
-            {
-                if (child && child->_GetOwner()->GetName() == "Handle")
-                {
-                    hasHandle = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasHandle)
-        {
-            GameObject* handle = CreateUIImage("Handle");
-            handle->GetTransform()->SetParent(tf);
-
-            if (auto* handleTransform = handle->GetTransform())
-            {
-                handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-                handleTransform->SetScale(Vector3(24.0f, 24.0f, 1.0f));
-            }
-
-            if (auto* image = handle->GetComponent<Image>())
-            {
-                image->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-                if (auto* parentImage = go->GetComponent<Image>())
-                {
-                    image->SetOrderInLayer(parentImage->GetOrderInLayer() + 1);
-                }
-            }
-
-        }
-    }
-    return go;
-}
+//GameObject* Scene::CreateUIImage(const std::string& name)
+//{
+//    GameObject* go = CreateGameObject(name);
+//    if (go && !go->GetComponent<Image>())
+//    {
+//        go->AddComponent<Image>();
+//    }
+//    return go;
+//}
+//
+//GameObject* Scene::CreateUIButton(const std::string& name)
+//{
+//    GameObject* go = CreateUIImage(name);
+//    if (go && !go->GetComponent<UIButton>())
+//    {
+//        go->AddComponent<UIButton>();
+//    }
+//    return go;
+//}
+//
+//GameObject* Scene::CreateUISlider(const std::string& name)
+//{
+//    GameObject* go = CreateUIImage(name);
+//    if (go && !go->GetComponent<UISlider>())
+//    {
+//        go->AddComponent<UISlider>();
+//    }
+//
+//    if (go)
+//    {
+//        Transform* tf = go->GetTransform();
+//        bool hasHandle = false;
+//        if (tf)
+//        {
+//            for (Transform* child : tf->GetChildren())
+//            {
+//                if (child && child->_GetOwner()->GetName() == "Handle")
+//                {
+//                    hasHandle = true;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (!hasHandle)
+//        {
+//            GameObject* handle = CreateUIImage("Handle");
+//            handle->GetTransform()->SetParent(tf);
+//
+//            if (auto* handleTransform = handle->GetTransform())
+//            {
+//                handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+//                handleTransform->SetScale(Vector3(24.0f, 24.0f, 1.0f));
+//            }
+//
+//            if (auto* image = handle->GetComponent<Image>())
+//            {
+//                image->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+//                if (auto* parentImage = go->GetComponent<Image>())
+//                {
+//                    image->SetOrderInLayer(parentImage->GetOrderInLayer() + 1);
+//                }
+//            }
+//
+//        }
+//    }
+//    return go;
+//}
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject)
 {
@@ -880,19 +880,29 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     
 
     if (renderUI) {
-        DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
-        //return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
-        // image 필수니까 text 인 경우 문제여서 recttransform에 둘까 고민중. 
-        std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
-            Image* imageA = a->GetComponent<Image>();
-            Image* imageB = b->GetComponent<Image>();
-
-            return imageA->GetOrderInLayer() < imageB->GetOrderInLayer();
-            });
+        DX11Renderer::Instance().BeginUIRender();
 
         for (auto* go : uiQueue)
         {
-            DrawObject(go);
+            Image* img = go->GetComponent<Image>();
+            if (img)
+            {
+                Texture* tex = img->GetTexture();
+                if (tex)
+                {
+                    Transform* tf = go->GetTransform();
+
+                    Vector3 pos = tf->GetPosition();
+                    Vector3 scale = tf->GetScale();
+
+                    DX11Renderer::Instance().DrawUI(
+                        tex,
+                        Vector2(pos.x, pos.y),
+                        Vector2(scale.x, scale.y),
+                        img->GetColor()
+                    );
+                }
+            }
         }
 
         DX11Renderer::Instance().EndUIRender();

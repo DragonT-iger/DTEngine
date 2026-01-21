@@ -7,16 +7,15 @@
 #include "Material.h"
 #include "Transform.h"
 
-// 리플렉션: 텍스처와 컬러를 에디터에 노출
 BEGINPROPERTY(Image)
 DTPROPERTY_ACCESSOR(Image, m_textureID, GetTextureID, SetTextureID)
 DTPROPERTY_ACCESSOR(Image, m_color, GetColor, SetColor)
-DTPROPERTY_ACCESSOR(Image, m_orderInLayer, GetOrderInLayer, SetOrderInLayer)
+//DTPROPERTY_ACCESSOR(Image, m_orderInLayer, GetOrderInLayer, SetOrderInLayer)
 ENDPROPERTY()
 
 void Image::Awake()
 {
-    SetupRenderer();
+    //SetupRenderer();
 
     if (m_textureID != 0)
     {
@@ -29,27 +28,27 @@ void Image::Awake()
 
 void Image::SetupRenderer()
 {
-    MeshRenderer* mr = GetComponent<MeshRenderer>();
-    if (!mr) mr = AddComponent<MeshRenderer>();
+    //MeshRenderer* mr = GetComponent<MeshRenderer>();
+    //if (!mr) mr = AddComponent<MeshRenderer>();
 
-    if (mr->GetMesh() == nullptr)
-    {
-        uint64_t planeID = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Primitives/Plane.fbx");
-        if (planeID != 0)
-        {
-            mr->SetModelID(planeID);
-            mr->SetMeshIndex(0);
-        }
-    }
+    //if (mr->GetMesh() == nullptr)
+    //{
+    //    uint64_t planeID = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Primitives/Plane.fbx");
+    //    if (planeID != 0)
+    //    {
+    //        mr->SetModelID(planeID);
+    //        mr->SetMeshIndex(0);
+    //    }
+    //}
 
-    if (mr->GetMaterialID() == 0 && mr->GetSharedMaterial() == nullptr)
-    {
-        uint64_t defaultUIID = AssetDatabase::Instance().GetIDFromPath("Assets/Materials/UI_Default.mat");
-        if (defaultUIID != 0)
-        {
-            mr->SetMaterialID(defaultUIID);
-        }
-    }
+    //if (mr->GetMaterialID() == 0 && mr->GetSharedMaterial() == nullptr)
+    //{
+    //    uint64_t defaultUIID = AssetDatabase::Instance().GetIDFromPath("Assets/Materials/UI_Default.mat");
+    //    if (defaultUIID != 0)
+    //    {
+    //        mr->SetMaterialID(defaultUIID);
+    //    }
+    //}
 
     // Transform* tf = GetTransform();
     // if (tf->GetRotationEuler() == Vector3::Zero) tf->SetRotationEuler({ 90.f, 0.f, 0.f });
