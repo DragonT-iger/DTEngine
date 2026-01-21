@@ -21,10 +21,6 @@ class Animator : public MonoBehaviour
     std::vector<int> m_ChannelToBoneIndex;
 
 
-    bool Play = false;
-    bool Loop = false;
-    float Animated_Time = 1.0f;
-
     std::string m_Animation_Name;
 
 public:
@@ -36,6 +32,15 @@ public:
     //Toggle
     void SetPlay (bool On_Off) { Play = On_Off; }
     void SetLoop(bool Looping) { Loop = Looping; }
+
+
+
+private:
+
+    bool Play = false;
+    bool Loop = false;
+    float Animated_Time = 1.0f;
+
 
 
     uint64_t m_AniID = 0;

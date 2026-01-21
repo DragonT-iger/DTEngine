@@ -314,6 +314,9 @@
     <ClInclude Include="Prefab.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="UISliderHandle.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -518,6 +521,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Prefab.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="FSMController.cpp">

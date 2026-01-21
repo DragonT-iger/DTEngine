@@ -38,8 +38,8 @@ void Animator::Update(float deltaTime)
 
         int boneIndex = m_TargetSkeletal->GetBoneIndex(channel.BoneName);
         if (boneIndex < 0) continue; 
-        //channel.bonename이 기존 bonemap이랑 매칭 안되는 경우, animation 없는 bone은 그냥 넘어감. 얘는 Skeletal에서 default 값을 줌.
 
+        //channel.bonename이 기존 bonemap이랑 매칭 안되는 경우, animation 없는 bone은 그냥 넘어감. 얘는 Skeletal에서 default 값을 줌.
         //animation 채널이 있지만 position이 0인 경우는 bindpos로 넣어둠 
 
         auto& boneNode = boneRes->m_Bones[boneIndex];
@@ -72,18 +72,18 @@ void Animator::SetClip(uint64_t id)
     m_AniID = id;
 
     m_TargetSkeletal = _GetOwner()->GetComponent<Skeletal>();
-    if (!m_TargetSkeletal)
+    if (!m_TargetSkeletal || m_TargetSkeletal->GetModelID() == 0) //컴포넌트는 있는데 모델이 없으면 안되니깐.
         return;
 
 
     if (id != 0)
     {
-
         m_CurrentTime = 0.0f;
 
         std::string path = AssetDatabase::Instance().GetPathFromID(m_AniID);
         if (!path.empty())
         {
+            m_Animation_Name = path;
             m_CurrentClip = ResourceManager::Instance().Load<AnimationClip>(path);
         }
     }

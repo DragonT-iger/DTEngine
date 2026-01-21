@@ -14,6 +14,34 @@ class Model;
 class BoneResource;
 
 
+inline float Length(const Vector3& v)
+{
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+
+inline Vector3 GetTranslation_RowMajor(const Matrix& m)
+{
+	return Vector3{
+		m._41, // tx
+		m._42, // ty
+		m._43  // tz
+	};
+}
+
+// Row-major 기준 Scale (회전 섞여 있어도 안전)
+inline Vector3 GetScale_RowMajor(const Matrix& m)
+{
+	Vector3 rowX{ m._11, m._12, m._13 };
+	Vector3 rowY{ m._21, m._22, m._23 };
+	Vector3 rowZ{ m._31, m._32, m._33 };
+
+	return Vector3{
+		Length(rowX),
+		Length(rowY),
+		Length(rowZ)
+	};
+}
 
 class Skeletal : public MonoBehaviour
 {
