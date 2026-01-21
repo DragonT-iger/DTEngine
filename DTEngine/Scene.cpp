@@ -907,8 +907,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
                 {
                     Transform* tf = go->GetTransform();
 
-                    Vector3 pos = tf->GetPosition();
-                    Vector3 scale = tf->GetScale();
+                    Vector3 pos = tf->GetWorldPosition();
+                    Vector3 scale = tf->GetWorldScale();
 
                     DX11Renderer::Instance().DrawUI(
                         tex,
