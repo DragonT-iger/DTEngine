@@ -27,7 +27,7 @@
 //#include "RectTransform.h"
 #include "UIManager.h"
 #include "Animatior.h"
-
+#include "FSMController.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -601,7 +601,7 @@ bool Scene::Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld)
     {
         GameObject* go = up.get();
 
-        if (go->GetName() == "Skybox(temp)") continue;
+        if (go->GetName() == "Skybox(temp)") continue; // 나중에 스카이박스 처리 바꿔주기.
 
         if (!go || !go->IsActiveInHierarchy()) continue;
         if (go->GetComponent<Image>()) continue;
@@ -772,8 +772,8 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
     // 이거 주석처리하고 button, slider 수정하고 rect는 남겨두지만 쓰지는 않는 방향으로 .
-    //UIManager::Instance().UpdateLayout(this, width, height);
-    //UIManager::Instance().UpdateInteraction(this, width, height);
+    UIManager::Instance().UpdateLayout(this, width, height);
+    UIManager::Instance().UpdateInteraction(this, width, height);
 
     DX11Renderer::Instance().BindGlobalResources();
 
@@ -881,9 +881,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     if (renderUI) {
         DX11Renderer::Instance().BeginUIRender(); // 카메라 행렬 Identity , 직교투영 DTXK 초기화 
-
+        //return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
+        // image 필수니까 text 인 경우 문제여서 recttransform에 둘까 고민중. 
         std::sort(uiQueue.begin(), uiQueue.end(), [](GameObject* a, GameObject* b) {
-            return a->GetComponent<Image>()->GetOrderInLayer() < b->GetComponent<Image>()->GetOrderInLayer();
+            Image* imageA = a->GetComponent<Image>();
+            Image* imageB = b->GetComponent<Image>();
+
+            return imageA->GetOrderInLayer() < imageB->GetOrderInLayer();
             });
 
         for (auto* go : uiQueue)

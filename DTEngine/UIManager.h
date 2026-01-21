@@ -19,7 +19,7 @@ public:
     int GetLayerOrder(const std::string& name) const;
 
     // 캔버스 생성하면 UIManager에 넣어주자.
-    void SetCanvas(const Canvas& canvas) { m_Canvas = &canvas; };
+    void SetCanvas(Canvas* canvas) { m_canvas = canvas; };
 
 private:
     void EnsureDefaultLayers();
@@ -31,5 +31,5 @@ private:
 
     std::unordered_map<std::string, int> m_layerOrders;
 
-    const Canvas* m_Canvas = nullptr;
+    const Canvas* m_canvas = nullptr;
 };

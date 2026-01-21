@@ -34,9 +34,11 @@
 #include "Image.h"
 #include "ReflectionProbe.h"
 #include "UIButton.h"
-//#include "RectTransform.h"
+#include "RectTransform.h"
 #include "Canvas.h"
 #include "UIManager.h"
+
+#include "FSMRegister.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -105,6 +107,8 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
+	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	//SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -115,75 +119,7 @@ bool Game::Initialize()
 		return false;
 	}
 
-	//if (scene->FindGameObject("UI Canvas") == nullptr)
-	//{
-	//		GameObject* canvasGO = scene->CreateUIObject("UI Canvas");
-	//		canvasGO->AddComponent<Canvas>();
-
-	//		if (auto* rect = canvasGO->GetComponent<RectTransform>())
-	//		{
-	//				rect->SetAnchorMin(Vector2(0.0f, 0.0f));
-	//				rect->SetAnchorMax(Vector2(1.0f, 1.0f));
-	//				rect->SetSizeDelta(Vector2(0.0f, 0.0f));
-	//				rect->SetAnchoredPosition(Vector2(0.0f, 0.0f));
-	//		}
-
-	//		auto makeChild = [&](const std::string& name, const Vector2& pos, const Vector2& size, const Vector4& color, int order, const std::string& layerName, int layerOrder) {
-	//				GameObject* go = scene->CreateUIImage(name);
-	//				go->GetTransform()->SetParent(canvasGO->GetTransform());
-
-	//				if (auto* rect = go->GetComponent<RectTransform>())
-	//				{
-	//						rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-	//						rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-	//						rect->SetAnchoredPosition(pos);
-	//						rect->SetSizeDelta(size);
-	//				}
-
-	//				if (auto* image = go->GetComponent<Image>())
-	//				{
-	//						image->SetColor(color);
-	//						image->SetOrderInLayer(order);
-	//				}
-
-	//				return go;
-	//				};
-
-	//		makeChild("UI_Image_1", Vector2(100.0f, -100.0f), Vector2(140.0f, 80.0f), Vector4(1.0f, 0.3f, 0.3f, 1.0f), 0, "Back", -10);
-	//		makeChild("UI_Image_2", Vector2(140.0f, -140.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 1.0f, 0.3f, 1.0f), 1, "Default", 0);
-	//		makeChild("UI_Image_3", Vector2(180.0f, -180.0f), Vector2(140.0f, 80.0f), Vector4(0.3f, 0.3f, 1.0f, 1.0f), 2, "Front", 10);
-
-	//		GameObject* buttonGO = scene->CreateUIButton("UI_Button");
-	//		buttonGO->GetTransform()->SetParent(canvasGO->GetTransform());
-	//		if (auto* rect = buttonGO->GetComponent<RectTransform>())
-	//		{
-	//				rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-	//				rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-	//				rect->SetAnchoredPosition(Vector2(100.0f, -260.0f));
-	//				rect->SetSizeDelta(Vector2(180.0f, 60.0f));
-	//		}
-	//		if (auto* image = buttonGO->GetComponent<Image>())
-	//		{
-	//				image->SetColor(Vector4(0.9f, 0.8f, 0.2f, 1.0f));
-	//				image->SetOrderInLayer(3);
-	//		}
-
-	//		GameObject* sliderGO = scene->CreateUISlider("UI_Slider");
-	//		sliderGO->GetTransform()->SetParent(canvasGO->GetTransform());
-	//		if (auto* rect = sliderGO->GetComponent<RectTransform>())
-	//		{
-	//				rect->SetAnchorMin(Vector2(0.0f, 1.0f));
-	//				rect->SetAnchorMax(Vector2(0.0f, 1.0f));
-	//				rect->SetAnchoredPosition(Vector2(100.0f, -340.0f));
-	//				rect->SetSizeDelta(Vector2(220.0f, 40.0f));
-	//		}
-	//		if (auto* image = sliderGO->GetComponent<Image>())
-	//		{
-	//				image->SetColor(Vector4(0.2f, 0.8f, 0.9f, 1.0f));
-	//				image->SetOrderInLayer(4);
-	//		}
-	//}
-
+	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
 	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
@@ -193,13 +129,16 @@ bool Game::Initialize()
 
 	SetEditorCamera(scene);
 
+
+
+
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1080, RenderTextureType::Tex2D, true);
 #endif
 	
 
-
+	FSMRegister::Instance().Initalize();
 
 
 	//Scene testScene("TestScene");

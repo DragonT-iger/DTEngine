@@ -8,7 +8,8 @@
 BEGINPROPERTY(Animator)
 DTPROPERTY_SETTER(Animator, Play, SetPlay)
 DTPROPERTY_SETTER(Animator, Loop, SetLoop)
-DTPROPERTY_SETTER(Animator, m_Animation_Name, SetClip)
+DTPROPERTY_SETTER(Animator, m_AniID, SetClip)
+DTPROPERTY_SETTER(Animator, Animated_Time, SetTime)
 
 ENDPROPERTY()
 
@@ -20,7 +21,7 @@ void Animator::Update(float deltaTime)
     if (!Play) return;
 
 
-    float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond;
+    float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond * Animated_Time;
     m_CurrentTime += timeIncrement;
 
     if (m_CurrentClip->Duration > 0.0f)
@@ -53,8 +54,6 @@ void Animator::Update(float deltaTime)
         Vector3 T = channel.PositionKeys.empty() ? bindT : InterpolatePosition(channel.PositionKeys, m_CurrentTime);
 
        
-       // T *= 0.01f;
-
         R.Normalize();
         Matrix localMat = Matrix::CreateScale(S)
             * Matrix::CreateFromQuaternion(R)
@@ -65,55 +64,57 @@ void Animator::Update(float deltaTime)
     }
 }
 
-
-void Animator::SetClip(std::string& filename)
+void Animator::SetClip(uint64_t id)
 {
-    //붙여넣기 시, 공백 들어가서 
-    filename.erase(std::remove_if(filename.begin(), filename.end(),
-        [](unsigned char x) { return std::isspace(x); }),
-        filename.end());
-
-    m_Animation_Name = filename;
-
-    AnimationClip* clip = ResourceManager::Instance().Load<AnimationClip>(m_Animation_Name);
-
-
-    if (!clip)
-    {
-        std::cout << "Clip data 찾을 수 없음: " << filename << std::endl;
+    if (id == m_AniID)
         return;
-    }
+
+    m_AniID = id;
 
     m_TargetSkeletal = _GetOwner()->GetComponent<Skeletal>();
+    if (!m_TargetSkeletal)
+        return;
 
-    if (m_TargetSkeletal)
+
+    if (id != 0)
     {
-        m_CurrentClip = clip;
+
         m_CurrentTime = 0.0f;
 
-     
-            m_ChannelToBoneIndex.clear();
-            BoneResource* boneRes = m_TargetSkeletal->GetBoneResource();
-
-            for (const auto& channel : m_CurrentClip->Channels)
-            {
-                auto it = boneRes->m_BoneMapping.find(channel.BoneName);
-                if (it != boneRes->m_BoneMapping.end())
-                {
-                    m_ChannelToBoneIndex.push_back(it->second);
-                }
-                else
-                {
-                    m_ChannelToBoneIndex.push_back(-1); // 매칭되는 뼈 없음
-                }
-            }
-        
+        std::string path = AssetDatabase::Instance().GetPathFromID(m_AniID);
+        if (!path.empty())
+        {
+            m_CurrentClip = ResourceManager::Instance().Load<AnimationClip>(path);
+        }
     }
-    else
-    {
-        std::cout << "Animation Clip 연결 오류; Skeletal Component nullptr "<< std::endl;;
+    else 
         return;
+
+
+    if (m_CurrentClip->Channels.size())
+    {
+        m_ChannelToBoneIndex.clear();
+        BoneResource* boneRes = m_TargetSkeletal->GetBoneResource();
+
+        for (const auto& channel : m_CurrentClip->Channels)
+        {
+            auto it = boneRes->m_BoneMapping.find(channel.BoneName);
+            if (it != boneRes->m_BoneMapping.end())
+            {
+                m_ChannelToBoneIndex.push_back(it->second);
+            }
+            else
+            {
+                m_ChannelToBoneIndex.push_back(-1); // 매칭되는 뼈 없음
+            }
+        }
+
     }
 
 
+}
+
+void Animator::SetTime(float Speed)
+{
+    Animated_Time = Speed;
 }

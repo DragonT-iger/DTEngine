@@ -10,6 +10,7 @@ DTPROPERTY_ACCESSOR(RectTransform, m_anchorMax, GetAnchorMax, SetAnchorMax)
 DTPROPERTY_ACCESSOR(RectTransform, m_pivot, GetPivot, SetPivot)
 DTPROPERTY_ACCESSOR(RectTransform, m_sizeDelta, GetSizeDelta, SetSizeDelta)
 DTPROPERTY_ACCESSOR(RectTransform, m_anchoredPosition, GetAnchoredPosition, SetAnchoredPosition)
+DTPROPERTY_ACCESSOR(RectTransform, m_useTransformAsSource, GetUseTransformAsSource, SetUseTransformAsSource)
 ENDPROPERTY()
 
 void RectTransform::SetAnchorMin(const Vector2& value)
@@ -71,7 +72,6 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
 {
     if (screenWidth <= 0.0f || screenHeight <= 0.0f) return;
 
-    RectTransform* parentRect = GetParentRect();
     Transform* tf = GetTransform();
     Canvas* canvas = tf ? GetCanvasInHierarchy(tf) : nullptr;
     float canvasScale = canvas ? canvas->GetScaleFactor(screenWidth, screenHeight) : 1.0f;
@@ -80,6 +80,20 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
         canvasScale = 1.0f;
     }
 
+    if (m_useTransformAsSource && tf)
+    {
+        Vector3 position = tf->GetPosition();
+        Vector3 scale = tf->GetScale();
+
+        Vector2 worldCenter = Vector2(position.x / canvasScale, position.y / canvasScale);
+        Vector2 size = Vector2(scale.x / canvasScale, scale.y / canvasScale);
+
+        m_cachedWorldCenter = worldCenter;
+        m_cachedSize = size;
+        return;
+    }
+
+    RectTransform* parentRect = GetParentRect();
     Vector2 parentSize = Vector2(screenWidth, screenHeight);
     Vector2 parentCenter = Vector2(0.0f, 0.0f);
 
@@ -112,6 +126,11 @@ void RectTransform::ApplyLayout(float screenWidth, float screenHeight)
 
     Vector2 layoutCenter = worldCenter;
     float layoutScale = canvasScale;
+    //printf("[Rect] go=%s center=(%.2f,%.2f) size=(%.2f,%.2f) useTransform=%d\n",
+    //    _GetOwner()->GetName().c_str(),
+    //    m_cachedWorldCenter.x, m_cachedWorldCenter.y,
+    //    m_cachedSize.x, m_cachedSize.y,
+    //    m_useTransformAsSource ? 1 : 0);
 
     if (tf)
     {

@@ -9,6 +9,7 @@
 #include "Image.h"
 #include "InputManager.h"
 #include "DX11Renderer.h"
+#include "RectTransform.h"
 
 static Canvas* GetCanvasInHierarchy(Transform* start)
 {
@@ -44,6 +45,25 @@ void UIManager::UpdateLayout(Scene* scene, float width, float height)
         m_lastWidth = width;
         m_lastHeight = height;
     }
+
+    for (const auto& go : scene->GetGameObjects())
+    {
+        if (!go || !go->IsActiveInHierarchy()) continue;
+        RectTransform* rectTransform = go->GetComponent<RectTransform>();
+        if (!rectTransform) continue;
+
+        Transform* tf = go->GetTransform();
+        if (tf)
+        {
+            Transform* parent = tf->GetParent();
+            if (parent && parent->_GetOwner()->GetComponent<RectTransform>())
+            {
+                continue;
+            }
+        }
+
+        rectTransform->ApplyLayoutRecursive(width, height);
+    }
 }
 
 void UIManager::UpdateInteraction(Scene* scene, float width, float height)
@@ -53,8 +73,8 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
     Vector2 viewportOrigin = m_viewportOrigin;
     Vector2 viewportSize = m_viewportSize;
 
-    // 마우스 포지션 가져오기.
-    const MousePos& mousePos = InputManager::Instance().GetMousePosition();
+    // 마우스 포지션 가져오기. | GameMouse를 가져오는걸로.
+    const MousePos& mousePos = InputManager::Instance().GetGameMousePosition();
     Vector2 mouseScreen = Vector2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
     bool insideViewport = (mouseScreen.x >= viewportOrigin.x && mouseScreen.y >= viewportOrigin.y && mouseScreen.x <= viewportOrigin.x + viewportSize.x && mouseScreen.y <= viewportOrigin.y + viewportSize.y);
 
@@ -70,10 +90,18 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
 
     const auto& gameObjects = scene->GetGameObjects();
 
+
     for (const auto& go : gameObjects)
     {
         // canvas 없는지 먼저 체크.
-        if (!m_Canvas) break;
+        if (!m_canvas)
+        {
+            break;
+        }
+
+        // rect 없으면 처리하지말자.
+        RectTransform* rect = go->GetComponent<RectTransform>();
+        if (!rect) continue;
 
         UIButton* button = go->GetComponent<UIButton>();
         UISlider* slider = go->GetComponent<UISlider>();
@@ -82,22 +110,42 @@ void UIManager::UpdateInteraction(Scene* scene, float width, float height)
         if (!button && !slider) continue;
 
         Transform* tf = go->GetTransform();
+        RectTransform* rectTransform = go->GetComponent<RectTransform>();
 
-        float canvasScale = m_Canvas->GetScaleFactor(width, height);
+        float canvasScale = m_canvas->GetScaleFactor(width, height);
         if (canvasScale <= 0.0f) canvasScale = 1.0f;
 
-        Vector3 worldPos = tf->GetWorldPosition();
-        Vector3 lossyScale = tf->GetLossyScale();
-        Vector2 centerScreen = Vector2(width * 0.5f, height * 0.5f) + Vector2(worldPos.x * canvasScale, -worldPos.y * canvasScale);
+        Vector2 centerScreen = Vector2(width * 0.5f, height * 0.5f);
+        Vector2 size = Vector2(0.0f, 0.0f);
+        if (rectTransform)
+        {
+            Vector2 worldCenter = rectTransform->GetWorldCenter2D();
+            centerScreen = centerScreen + Vector2(worldCenter.x * canvasScale, -worldCenter.y * canvasScale);
+            size = rectTransform->GetSize() * canvasScale;
+        }
+        else
+        {
+            Vector3 worldPos = tf->GetWorldPosition();
+            Vector3 lossyScale = tf->GetLossyScale();
+            centerScreen = centerScreen + Vector2(worldPos.x * canvasScale, -worldPos.y * canvasScale);
+            size = Vector2(lossyScale.x * canvasScale, lossyScale.y * canvasScale);
+        }
 
-        Vector2 size = Vector2(lossyScale.x * canvasScale, lossyScale.y * canvasScale);
         Vector2 halfSize = Vector2(size.x * 0.5f, size.y * 0.5f);
         Vector2 min = centerScreen - halfSize;
         Vector2 max = centerScreen + halfSize;
 
+
         bool hovered = insideViewport &&
             localMouse.x >= min.x && localMouse.x <= max.x &&
             localMouse.y >= min.y && localMouse.y <= max.y;
+
+       /* printf("[UI] go=%s mouse=(%.1f,%.1f) local=(%.1f,%.1f) min=(%.1f,%.1f) max=(%.1f,%.1f) hovered=%d\n",
+            go->GetName().c_str(),
+            mouseScreen.x, mouseScreen.y,
+            localMouse.x, localMouse.y,
+            min.x, min.y, max.x, max.y,
+            hovered ? 1 : 0);*/
 
         if (button)
         {

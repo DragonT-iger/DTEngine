@@ -54,7 +54,7 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         {
             auto& key = channel->mPositionKeys[k];
 
-            key.mValue *= 0.01f;
+           // key.mValue *= 0.01f;
 
             ch.PositionKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
         }

@@ -75,6 +75,9 @@
     <Filter Include="Shader\Specific">
       <UniqueIdentifier>{0d1bc80d-ef06-47a3-83d4-ca294f0584bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{5f6680e5-a928-421f-a549-1baae7cddfa2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -311,6 +314,15 @@
     <ClInclude Include="Prefab.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="SkeletalRsource.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMController.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMRegister.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -507,6 +519,12 @@
     </ClCompile>
     <ClCompile Include="Prefab.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMController.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMRegister.cpp">
+      <Filter>FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
