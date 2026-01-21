@@ -51,6 +51,11 @@ void UISliderHandle::Update(float deltaTime)
     float uiMouseY = static_cast<float>(mousePos.y) / scaleY;
     Vector2 mousePosVec2(uiMouseX, uiMouseY);
 
+    // 마우스 0 미만 혹은 해상도 초과 체크를 위해서.
+    bool isOutOfBounds = (mousePos.x < 0 || mousePos.x >= static_cast<int>(screenW) ||
+        mousePos.y < 0 || mousePos.y >= static_cast<int>(screenH));
+
+
     if (!m_parentSlider->GetInteractable())
     {
         m_isDragging = false;
@@ -61,30 +66,42 @@ void UISliderHandle::Update(float deltaTime)
     {
         m_isDragging = true;
     }
-
-    if (m_isDragging && InputManager::Instance().GetKey(KeyCode::MouseLeft))
+    if (m_isDragging)
     {
-        float localMouseX = mousePosVec2.x;
-        if (auto* handleTransform = m_transform->GetTransform())
+        if (InputManager::Instance().GetKey(KeyCode::MouseLeft) || isOutOfBounds)
         {
-            localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
+            float localMouseX = mousePosVec2.x;
+            if (auto* handleTransform = m_transform->GetTransform())
+            {
+                localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
+            }
+            m_parentSlider->OnHandleDragged(localMouseX);
+            m_isDragging = false;
         }
-        m_parentSlider->OnHandleDragged(localMouseX);
+        else if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
+        {
+            float localMouseX = mousePosVec2.x;
+            if (auto* handleTransform = m_transform->GetTransform())
+            {
+                localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
+            }
+            m_parentSlider->OnHandleReleased(localMouseX);
+        }
     }
 
-    if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
+   /* if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
     {
         if (m_isDragging)
         {
             float localMouseX = mousePosVec2.x;
-            if (auto* sliderTransform = m_parentSlider->GetTransform())
+            if (auto* handleTransform = m_transform->GetTransform())
             {
-                localMouseX = mousePosVec2.x - sliderTransform->GetPosition().x;
+                localMouseX = mousePosVec2.x - handleTransform->GetPosition().x;
             }
             m_parentSlider->OnHandleReleased(localMouseX);
         }
         m_isDragging = false;
-    }
+    }*/
 }
 
 bool UISliderHandle::IsMouseOver(const Vector2& mousePos)
