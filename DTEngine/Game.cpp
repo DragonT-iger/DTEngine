@@ -51,7 +51,7 @@ bool Game::Initialize()
 	m_timer = std::make_unique<GameTimer>();
 	m_timer->Reset(); 
 
-	constexpr int initW = 1920, initH = 1080;
+	constexpr int initW = 1920, initH = 1200;
 
 
 
@@ -102,10 +102,10 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
-	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	//SceneManager::Instance().LoadScene("DTtestScene");
+	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	//SceneManager::Instance().LoadScene("SampleScene");
+	SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	SceneManager::Instance().LoadScene("DTtestScene");
 
 	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	//SceneManager::Instance().LoadScene("SampleSceneBum");
@@ -122,10 +122,10 @@ bool Game::Initialize()
 	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
+	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
 
 	SetEditorCamera(scene);
 
@@ -134,7 +134,7 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1080, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
 #endif
 	
 
