@@ -31,13 +31,17 @@ public:
 
 #ifdef _DEBUG
     void SetEditorMousePos(int x, int y) { m_gameMousePos = { x, y }; }
+
+    void SetGameResolution(int width, int height) { m_gameResolution = { width, height }; }
+
+    const MousePos& GetGameResolution() const { return m_gameResolution; }
 #endif
 
     void EndFrame();
 
-    bool GetKeyDown(KeyCode key) const; 
-    bool GetKey(KeyCode key) const;     
-    bool GetKeyUp(KeyCode key) const;   
+    bool GetKeyDown(KeyCode key) const;
+    bool GetKey(KeyCode key) const;
+    bool GetKeyUp(KeyCode key) const;
 
     const MousePos& GetMousePosition() const { return m_mousePos; }
     const MousePos& GetMouseDelta() const { return m_mouseDelta; }
@@ -60,4 +64,7 @@ private:
     void* m_hWnd = nullptr;
 
     int MapKeyCodeToVKey(KeyCode key) const;
+#ifdef _DEBUG
+    MousePos m_gameResolution = { 800, 600 };
+#endif
 };

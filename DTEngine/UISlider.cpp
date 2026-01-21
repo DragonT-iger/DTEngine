@@ -87,28 +87,28 @@ void UISlider::CacheHandle()
     }
 
     // 못찾은 경우 생성.
-    if (!createdHandle)
-    {
-        Scene* scene = SceneManager::Instance().GetActiveScene();
-        if (!scene) return;
+    //if (!createdHandle)
+    //{
+    //    Scene* scene = SceneManager::Instance().GetActiveScene();
+    //    if (!scene) return;
 
-        GameObject* handle = scene->CreateUIImage("Handle");
-        if (!handle) return;
+    //    GameObject* handle = scene->CreateUIImage("Handle");
+    //    if (!handle) return;
 
-        m_handleTransform = handle->GetTransform();
-        m_handleTransform->SetParent(tf);
-        m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-        m_handleTransform->SetScale(Vector3(0.1f, 1.0f, 1.0f));
+    //    m_handleTransform = handle->GetTransform();
+    //    m_handleTransform->SetParent(tf);
+    //    m_handleTransform->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+    //    m_handleTransform->SetScale(Vector3(0.1f, 1.0f, 1.0f));
 
-        m_handleImage = handle->GetComponent<Image>();
-        if (m_handleImage && m_trackImage)
-        {
-            m_handleImage->SetOrderInLayer(m_trackImage->GetOrderInLayer() + 1);
-        }
+    //    m_handleImage = handle->GetComponent<Image>();
+    //    if (m_handleImage && m_trackImage)
+    //    {
+    //        m_handleImage->SetOrderInLayer(m_trackImage->GetOrderInLayer() + 1);
+    //    }
 
-        m_handleComponent = handle->AddComponent<UISliderHandle>();
-        createdHandle = true;
-    }
+    //    m_handleComponent = handle->AddComponent<UISliderHandle>();
+    //    createdHandle = true;
+    //}
 
     if (m_handleComponent)
     {

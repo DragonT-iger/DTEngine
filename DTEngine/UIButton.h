@@ -15,6 +15,8 @@ public:
 
     //void Awake() override;
 
+    void Update(float deltaTime) override;
+
     void SetInteractable(bool value) { m_interactable = value; }
     const bool& GetInteractable() const { return m_interactable; }
 

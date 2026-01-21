@@ -23,17 +23,21 @@ class Animator : public MonoBehaviour
 
     bool Play = false;
     bool Loop = false;
+    float Animated_Time = 1.0f;
 
     std::string m_Animation_Name;
 
 public:
     void Update(float deltaTime) override;
-
-
-    void SetClip(std::string& Name);// { m_Animation_Name = Name; }
+    void SetClip(uint64_t id);
+    void SetTime(float Speed);
    const std::string& GetClipName() const { return m_Animation_Name; }
 
     //Toggle
     void SetPlay (bool On_Off) { Play = On_Off; }
     void SetLoop(bool Looping) { Loop = Looping; }
+
+
+    uint64_t m_AniID = 0;
+
 };

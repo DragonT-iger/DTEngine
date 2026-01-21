@@ -59,7 +59,6 @@ bool Model::LoadFile(const std::string& fullPath)
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         return false;
-    std::cout << fullPath << std::endl;
 
     bool isRigged = false;
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
@@ -278,7 +277,6 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
 
         boneID = m_impl->m_BoneMapping[boneName];
 
-        if (boneID == 7) std::cout << boneName << std::endl;
 
         aiVertexWeight* weights = mesh->mBones[boneIndex]->mWeights;
         int numWeights = mesh->mBones[boneIndex]->mNumWeights; // 해당 뼈에 영향받는 Vertex 수 
