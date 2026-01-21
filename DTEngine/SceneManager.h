@@ -22,6 +22,9 @@ public:
     bool    RestoreActiveScene();  
 
 
+	float  GetUnscaledDeltaTime() const { return m_unScaledDeltaTime; }
+	void  SetUnscaledDeltaTime(float dt) { m_unScaledDeltaTime = dt; }
+
 private:
 
     Scene* m_active = nullptr; 
@@ -31,5 +34,8 @@ private:
 
     const std::string m_backupPath = "Scenes/PlayMode_Backup.scene";
     std::string m_originalSceneName; 
+
+    // 귀차나
+	float m_unScaledDeltaTime = 0.0f;
 
 };

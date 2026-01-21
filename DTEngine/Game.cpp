@@ -207,6 +207,8 @@ void Game::Run()
 		float timeScale = SceneManager::Instance().GetActiveScene()->GetTimeScale();
 		dt.scaledTime = dt.rawTime * timeScale;
 
+		SceneManager::Instance().SetUnscaledDeltaTime(dt.rawTime);
+
 		LifeCycle(dt);
  		//LifeCycle(m_timer->DeltaTime());
 	}
