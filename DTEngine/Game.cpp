@@ -122,10 +122,10 @@ bool Game::Initialize()
 	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
+	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	SetEditorCamera(scene);
 
@@ -134,7 +134,7 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 #endif
 	
 
@@ -397,6 +397,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
 	scene->Render(editorCam, m_sceneRT.get(), true);
+
+	m_sceneRT->Unbind();
 
 
 	const auto& gameObjects = scene->GetGameObjects();
