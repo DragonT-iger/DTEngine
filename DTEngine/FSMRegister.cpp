@@ -20,11 +20,11 @@ bool FSMRegister::Initalize()
     State idleState;
     idleState.onEnter = [=](GameObject& Owner) 
         
-        // {   SoundManager::Instance().PlayBGM
+         {  /* SoundManager::Instance().PlayBGM
         
-        // (RootPath + "/Sound/The_World Is_Yours.mp3", 1.0f, false); 
+             (RootPath + "/Sound/The_World Is_Yours.mp3", 1.0f, false); */
 
-        // };
+         };
 
     idleState.onUpdate = [=](GameObject& Owner, float dt)
         {

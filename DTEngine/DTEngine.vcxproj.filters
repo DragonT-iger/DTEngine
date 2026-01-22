@@ -81,6 +81,9 @@
     <Filter Include="Sound">
       <UniqueIdentifier>{88051b96-8751-47b4-94f2-e3875aac11e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Specific\Chess">
+      <UniqueIdentifier>{fb745b7d-aba0-412a-9826-16cfba0716ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -629,6 +632,18 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl">
       <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
