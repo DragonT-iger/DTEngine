@@ -49,6 +49,7 @@
 #include "Image.h"
 #include "FSMController.h"
 #include "DX11Renderer.h"
+#include "SoundManager.h"
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -240,7 +241,13 @@ void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Ga
 
         if (ImGui::Button(isPlayPause ? "Stop" : "Play", ImVec2(buttonWidth, 0)))
         {
+          
+            if (isPlayPause)
+            {
+                SoundManager::Instance().ShutDown(); // 또는 ShutDown()
+            }
             onModeChanged(Game::EngineMode::Play);
+
         }
 
         if (isPlayPause) ImGui::PopStyleColor();

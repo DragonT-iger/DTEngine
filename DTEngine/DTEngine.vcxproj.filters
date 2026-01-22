@@ -84,6 +84,12 @@
     <Filter Include="Shader\PostProcessing">
       <UniqueIdentifier>{0beea7db-4a9f-4a9c-8867-ae3704c3dd3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{88051b96-8751-47b4-94f2-e3875aac11e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Specific\Chess">
+      <UniqueIdentifier>{fb745b7d-aba0-412a-9826-16cfba0716ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -335,6 +341,12 @@
     <ClInclude Include="PostProcessManager.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -541,6 +553,12 @@
     <ClCompile Include="PostProcessManager.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -647,6 +665,18 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

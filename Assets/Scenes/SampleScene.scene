@@ -190,21 +190,21 @@
       "transform": {
         "id": 2864688621630208931,
         "m_editorEulerAngles": {
-          "x": 37.90550994873047,
-          "y": 6805.89453125,
+          "x": 27.505504608154297,
+          "y": 6814.49267578125,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -3.3638737201690674,
-          "y": 5.536991119384766,
-          "z": -23.76142120361328
+          "x": -6.5234479904174805,
+          "y": 7.471127033233643,
+          "z": -27.61171531677246
         },
         "m_rotation": {
-          "w": -0.9042057991027832,
-          "x": -0.31050926446914673,
-          "y": 0.2773524224758148,
-          "z": -0.09524435549974442
+          "w": -0.9473661184310913,
+          "x": -0.231867253780365,
+          "y": 0.21443112194538116,
+          "z": -0.05248187854886055
         },
         "m_scale": {
           "x": 1.0,
@@ -374,15 +374,12 @@
       "components": [
         {
           "Active": true,
-          "col": 0,
           "id": 2528580316648048361,
-          "m_go": 6190584098435618667,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 20.0,
             "z": 0.0
           },
-          "m_rotator": 2528580316648048361,
           "typeName": "Rotator"
         }
       ],
@@ -816,15 +813,12 @@
         },
         {
           "Active": true,
-          "col": 0,
           "id": 6836592994783953299,
-          "m_go": 7645814923731139906,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 40.0,
             "z": 0.0
           },
-          "m_rotator": 6836592994783953299,
           "typeName": "Rotator"
         }
       ],
@@ -1354,15 +1348,12 @@
       "components": [
         {
           "Active": true,
-          "col": 0,
           "id": 1037913345541504577,
-          "m_go": 0,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 0.0,
             "z": 3600.0
           },
-          "m_rotator": 0,
           "typeName": "Rotator"
         }
       ],
@@ -1455,176 +1446,6 @@
       "components": [
         {
           "Active": true,
-          "id": 7984872112654284404,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_orderInLayer": 0,
-          "m_textureID": 0,
-          "typeName": "Image"
-        },
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "Textures": {
-              "0": 0
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 7483714394828187603,
-          "m_materialID": 1452279306071263180,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 12239083037830101935,
-          "m_sourceCamera": 8743029791491490589,
-          "materialSlot": 0,
-          "typeName": "MonitorController"
-        }
-      ],
-      "id": 893346955421710239,
-      "name": "MiniMap",
-      "tag": "Untagged",
-      "transform": {
-        "id": 7925094456574060317,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 15194350972049501840,
-        "m_position": {
-          "x": -32.900001525878906,
-          "y": -16.100000381469727,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 9.0,
-          "y": 9.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 5489653834278322917,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_orderInLayer": 0,
-          "m_textureID": 0,
-          "typeName": "Image"
-        },
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ],
-            "CullMode": 2,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "Textures": {
-              "0": 9733538215756963168,
-              "1": 0
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 16225489640028262976,
-          "m_materialID": 15574863115228000525,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 10215830819518880616,
-          "m_sourceCamera": 10682065615911599983,
-          "materialSlot": 1,
-          "typeName": "MonitorController"
-        },
-        {
-          "Active": true,
-          "id": 8263754634987032920,
-          "typeName": "ColorToggler"
-        }
-      ],
-      "id": 2773985608104766369,
-      "name": "TV",
-      "tag": "Untagged",
-      "transform": {
-        "id": 11751994533667389756,
-        "m_editorEulerAngles": {
-          "x": 20.999990463256836,
-          "y": 9.499996185302734,
-          "z": -10.499998092651367
-        },
-        "m_parent": 15194350972049501840,
-        "m_position": {
-          "x": 37.94976806640625,
-          "y": -19.922183990478516,
-          "z": 0.19982145726680756
-        },
-        "m_rotation": {
-          "w": 0.97438645362854,
-          "x": 0.1733975112438202,
-          "y": 0.09769754111766815,
-          "z": -0.10468768328428268
-        },
-        "m_scale": {
-          "x": 9.0,
-          "y": 6.599999904632568,
-          "z": 0.9999995827674866
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
           "id": 8743029791491490589,
           "m_clearColor": {
             "w": 0.0,
@@ -1671,113 +1492,6 @@
         "m_scale": {
           "x": 1.0,
           "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [],
-      "id": 4275209247374767246,
-      "name": "Canvas",
-      "tag": "Untagged",
-      "transform": {
-        "id": 15194350972049501840,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 11621766113162541997,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_orderInLayer": 0,
-          "m_textureID": 0,
-          "typeName": "Image"
-        },
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              0.8830645084381104,
-              0.8830645084381104,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "Textures": {
-              "0": 448662983792522443
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 8181800539477594771,
-          "m_materialID": 1452279306071263180,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 8188308164370930541,
-      "name": "Char",
-      "tag": "Untagged",
-      "transform": {
-        "id": 15635795916779475818,
-        "m_editorEulerAngles": {
-          "x": 0.500073254108429,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 15194350972049501840,
-        "m_position": {
-          "x": -36.270999908447266,
-          "y": 19.441999435424805,
-          "z": -0.009232052601873875
-        },
-        "m_rotation": {
-          "w": 0.9999904632568359,
-          "x": 0.004363948479294777,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 8.0,
-          "y": 5.0,
           "z": 1.0
         }
       }
@@ -2457,156 +2171,6 @@
           "x": 1.239943504333496,
           "y": 1.0,
           "z": 0.9998871088027954
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 249333311201580797,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_orderInLayer": 0,
-          "m_textureID": 301909747288174165,
-          "typeName": "Image"
-        },
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "Textures": {
-              "0": 301909747288174165
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 10775260250616227426,
-          "m_materialID": 1452279306071263180,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 16134953210092764657,
-      "name": "DashBoard",
-      "tag": "Untagged",
-      "transform": {
-        "id": 12202121868248285960,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 15194350972049501840,
-        "m_position": {
-          "x": 2.799999952316284,
-          "y": -21.42799949645996,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 25.600000381469727,
-          "y": 3.5999999046325684,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 2964108637099483905,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_orderInLayer": 0,
-          "m_textureID": 16092573141890277186,
-          "typeName": "Image"
-        },
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "Textures": {
-              "0": 16092573141890277186
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 11444205343312269363,
-          "m_materialID": 1452279306071263180,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 2540995062157463040,
-      "name": "Radar",
-      "tag": "Untagged",
-      "transform": {
-        "id": 12569529559203140804,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 15194350972049501840,
-        "m_position": {
-          "x": 37.20000076293945,
-          "y": 17.299999237060547,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 7.900000095367432,
-          "y": 7.0,
-          "z": 1.0
         }
       }
     },
@@ -7055,15 +6619,12 @@
       "components": [
         {
           "Active": true,
-          "col": 0,
           "id": 2700290039117229712,
-          "m_go": 0,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 20.0,
             "z": 0.0
           },
-          "m_rotator": 0,
           "typeName": "Rotator"
         }
       ],
@@ -7391,15 +6952,12 @@
         },
         {
           "Active": true,
-          "col": 0,
           "id": 5834643171772302302,
-          "m_go": 0,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 20.0,
             "z": 0.0
           },
-          "m_rotator": 0,
           "typeName": "Rotator"
         }
       ],
@@ -7575,15 +7133,12 @@
       "components": [
         {
           "Active": true,
-          "col": 0,
           "id": 1530063051103056621,
-          "m_go": 0,
           "m_rotationSpeed": {
             "x": 0.0,
             "y": 20.0,
             "z": 0.0
           },
-          "m_rotator": 0,
           "typeName": "Rotator"
         }
       ],

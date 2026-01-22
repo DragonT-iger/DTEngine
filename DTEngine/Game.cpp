@@ -34,11 +34,13 @@
 #include "Image.h"
 #include "ReflectionProbe.h"
 #include "UIButton.h"
+#include "UISlider.h"
 //#include "RectTransform.h"
 #include "Canvas.h"
 #include "UIManager.h"
 
 #include "FSMRegister.h"
+#include "SoundManager.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -102,13 +104,16 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	//SceneManager::Instance().LoadScene("SampleScene");
-	SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	SceneManager::Instance().LoadScene("DTtestScene");
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
+	// SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	// SceneManager::Instance().LoadScene("DTtestScene");
 
 	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	//SceneManager::Instance().LoadScene("SampleSceneBum");
+	
+	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -138,8 +143,17 @@ bool Game::Initialize()
 #endif
 	
 
-	FSMRegister::Instance().Initalize();
+	if (!FSMRegister::Instance().Initalize())
+	{
+		assert(false && "FSMRegister 초기화 실패");
+		return false;
+	}
 
+	if (!SoundManager::Instance().Initalize())
+	{
+		assert(false && "SoundManager 초기화 실패");
+		return false;
+	}
 
 	//Scene testScene("TestScene");
 
@@ -230,6 +244,7 @@ void Game::LifeCycle(DeltaTime dt)
 {
 	if (SceneManager::Instance().ProcessSceneChange()) {
 
+		
 
 #ifdef _DEBUG
 
@@ -263,7 +278,7 @@ void Game::LifeCycle(DeltaTime dt)
 
 
 	InputManager::Instance().Update();
-
+	SoundManager::Instance().Update(dt.rawTime);
 #ifdef _DEBUG
 	if (m_engineMode == EngineMode::Play)
 	{
