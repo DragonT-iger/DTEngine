@@ -2454,6 +2454,22 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
         rt->Resize((int)size.x, (int)size.y);
     }
 
+
+	Scene* curScene = SceneManager::Instance().GetActiveScene();
+    
+	Camera* mainCamera = nullptr;
+
+    if(curScene)
+    {
+        mainCamera = curScene->GetMainCamera();
+	}
+
+    if (mainCamera)
+    {
+        float ratio = drawW / drawH;
+        mainCamera->SetAspectRatio(ratio);
+    }
+
 #ifdef _DEBUG
     InputManager::Instance().SetGameResolution((int)size.x, (int)size.y);
 #endif
