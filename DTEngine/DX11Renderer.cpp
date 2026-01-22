@@ -26,6 +26,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "InputManager.h"
 
 #include "DXHelper.h"
 
