@@ -87,3 +87,5 @@ Assets/Fonts/NotoSansKR-ExtraBold.ttf.meta
 *.orig
 ThirdParty/vcpkg
 /ThirdParty
+FMode/
+Assets/Sound/
