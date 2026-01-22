@@ -520,7 +520,6 @@ void Game::LifeCycle(DeltaTime dt)
 	float windowWidth = static_cast<float>(DX11Renderer::Instance().GetWidth());
 	float windowHeight = static_cast<float>(DX11Renderer::Instance().GetHeight());
 
-	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
 
 	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio();
 	float windowAspect = windowWidth / windowHeight;
@@ -547,6 +546,14 @@ void Game::LifeCycle(DeltaTime dt)
 
 	Vector2 finalPos(offsetX, offsetY);
 	Vector2 finalSize(drawWidth, drawHeight);
+
+	if (camera)
+	{
+		float ratio = drawWidth / drawHeight;
+		camera->SetAspectRatio(ratio);
+	}
+
+	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
 
 	DX11Renderer::Instance().DrawUI(finalTexture, finalPos, finalSize, Vector4(1, 1, 1, 1));
 
