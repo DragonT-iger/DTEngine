@@ -13,7 +13,6 @@ PostProcessManager::~PostProcessManager() = default;
 
 void PostProcessManager::Initialize(int width, int height)
 {
-    // 핑퐁 버퍼 생성
     for (int i = 0; i < 2; ++i)
     {
         m_tempRT[i] = std::make_unique<RenderTexture>();
@@ -50,7 +49,6 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
 
     for (auto& effect : m_effects)
     {
-        // ★ [에러 수정] 명시적 형변환으로 비교 (uint32_t <-> PostProcessType)
         uint32_t effectType = static_cast<uint32_t>(effect->GetType());
 
         if ((activeEffectsMask & effectType) == 0)
@@ -84,6 +82,8 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     if (vs) vs->Bind(); 
 
     Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
     if (ps) ps->Bind(); 
 
     context->OMSetDepthStencilState(nullptr, 0);

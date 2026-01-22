@@ -1,11 +1,15 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <d3d11.h>
 #include <wrl/client.h>
 #include "IPostProcess.h"
 
 class RenderTexture;
+struct ID3D11RenderTargetView;
+struct ID3D11VertexShader;
+struct ID3D11PixelShader;
+struct ID3D11SamplerState;
+
 
 class PostProcessManager
 {
