@@ -37,6 +37,13 @@ public:
 
     ID3D11ShaderResourceView* GetSRV() const { return m_srv.Get(); }
 
+    ID3D11RenderTargetView* GetRTV(int faceIndex = 0) const {
+        if (faceIndex < m_faceRTVs.size()) return m_faceRTVs[faceIndex].Get();
+        return nullptr;
+    }
+
+	ID3D11Texture2D* GetTexture() const { return m_renderTargetTexture.Get(); }
+
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 

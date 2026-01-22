@@ -78,6 +78,12 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{5f6680e5-a928-421f-a549-1baae7cddfa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PostProcessing">
+      <UniqueIdentifier>{c8b3836c-b0cf-4dae-baf0-5a2b54da53d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\PostProcessing">
+      <UniqueIdentifier>{0beea7db-4a9f-4a9c-8867-ae3704c3dd3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -323,6 +329,12 @@
     <ClInclude Include="FSMRegister.h">
       <Filter>FSM</Filter>
     </ClInclude>
+    <ClInclude Include="IPostProcess.h">
+      <Filter>PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessManager.h">
+      <Filter>PostProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -526,6 +538,9 @@
     <ClCompile Include="FSMRegister.cpp">
       <Filter>FSM</Filter>
     </ClCompile>
+    <ClCompile Include="PostProcessManager.cpp">
+      <Filter>PostProcessing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -608,6 +623,18 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl">
       <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

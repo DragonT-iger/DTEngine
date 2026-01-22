@@ -14,6 +14,7 @@
 #include "ConstantBuffers.h"
 
 #include "ResourceManager.h"
+#include "PostProcessManager.h"
 
 struct HWND__;
 using HWND = HWND__*;
@@ -32,6 +33,8 @@ struct ID3D11SamplerState;
 struct ID3D11BlendState;
 class Light;
 class Camera;
+class PostProcessManager;
+class RenderTexture;
 
 
 namespace DirectX {
@@ -150,6 +153,9 @@ public:
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
     void OffPS();
+
+    void DrawFullScreenQuad();
+
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -285,6 +291,8 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
 
+    std::unique_ptr<PostProcessManager> m_postProcessManager;
+    std::unique_ptr<RenderTexture>      m_resolvedSceneRT;
 
 
 

@@ -95,6 +95,15 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     //CreateShadowMap(16376, 16376); // max 왜 이러지
 
     CreateShadowMap(4096, 4096);
+
+
+
+    m_postProcessManager = std::make_unique<PostProcessManager>();
+    m_postProcessManager->Initialize(width, height);
+
+    m_resolvedSceneRT = std::make_unique<RenderTexture>();
+    m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
+
     
     return true;
 }
@@ -118,6 +127,12 @@ void DX11Renderer::Resize(int width, int height)
 
     CreateBackbuffers(width, height);
     m_width = width; m_height = height;
+
+    if (m_postProcessManager)
+        m_postProcessManager->Resize(width, height);
+
+    if (m_resolvedSceneRT)
+        m_resolvedSceneRT->Resize(width, height);
 }
  
 //이거 상수버퍼 인터페이스 만든 다음에, 템플릿으로 처리해도 깔끔할듯 함 
@@ -572,10 +587,32 @@ void DX11Renderer::EndFrame()
         );
     }
 
-    //EndUIRender();
 
-    //std::cout << m_width << " " << m_height << std::endl;
-    // 필요 시 파이프라인 언바인드/커맨드 종료 등
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+
+    if (m_msaaTargetTex && m_resolvedSceneRT)
+    {
+        m_context->ResolveSubresource(
+            m_resolvedSceneRT->GetTexture(), 0,
+            m_msaaTargetTex.Get(), 0,
+            DXGI_FORMAT_R8G8B8A8_UNORM
+        );
+
+        if (m_postProcessManager)
+        {
+            m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask);
+        }
+        else
+        {
+            m_context->ResolveSubresource(
+                m_backbufferTex.Get(), 0,
+                m_msaaTargetTex.Get(), 0,
+                DXGI_FORMAT_R8G8B8A8_UNORM
+            );
+        }
+    }
 }
 
 void DX11Renderer::Present()
@@ -740,6 +777,17 @@ ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
 void DX11Renderer::OffPS()
 {
     m_context->PSSetShader(nullptr, nullptr, 0);
+}
+
+void DX11Renderer::DrawFullScreenQuad()
+{
+    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    m_context->IASetInputLayout(nullptr);
+    m_context->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+    m_context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+
+    //m_context->Draw(3, 0);
 }
 
 bool DX11Renderer::CreateDeviceAndSwapchain()
