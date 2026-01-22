@@ -14,8 +14,3 @@ VS_OUTPUT VS(uint id : SV_VertexID)
     
     return output;
 }
-
-
-
-// 포스트 프로세싱의 _VS PostProcess_VS 를 제외하고 굳이 있을 필요는 없지만
-// 엔진의 구조상 있는게 나아서 그냥 냅뒀음 무시해도 되는 코드

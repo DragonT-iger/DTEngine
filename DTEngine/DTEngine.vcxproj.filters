@@ -627,13 +627,25 @@
     <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\GrayScale_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Vignette_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\GrayScale_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\PostProcess_PS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl">
+    <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>

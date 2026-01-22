@@ -787,7 +787,7 @@ void DX11Renderer::DrawFullScreenQuad()
     m_context->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
     m_context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
 
-    //m_context->Draw(3, 0);
+    m_context->Draw(3, 0);
 }
 
 bool DX11Renderer::CreateDeviceAndSwapchain()

@@ -80,11 +80,14 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     context->RSSetViewports(1, &vp);
 
-    // ★ ResourceManager를 이용해 "Copy" 쉐이더(VS, PS 쌍)를 로드해서 바인딩하세요.
-    // 예: Shader* shader = ResourceManager::Instance().Load<Shader>("Copy");
-    //     if(shader) shader->Bind();
+    Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
+    if (vs) vs->Bind(); 
 
-    // 임시: 쉐이더 바인딩 코드는 프로젝트 상황에 맞춰 넣어야 함 (아래는 리소스 바인딩만 함)
+    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+    if (ps) ps->Bind(); 
+
+    context->OMSetDepthStencilState(nullptr, 0);
+
     ID3D11ShaderResourceView* srv = src->GetSRV();
     context->PSSetShaderResources(0, 1, &srv);
     context->PSSetSamplers(0, 1, m_pointSampler.GetAddressOf());
@@ -93,4 +96,6 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
 
     ID3D11ShaderResourceView* nullSRV = nullptr;
     context->PSSetShaderResources(0, 1, &nullSRV);
+
+    DX11Renderer::Instance().OffPS();
 }

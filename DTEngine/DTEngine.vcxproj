@@ -328,6 +328,8 @@
     <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\GrayScale_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\GrayScale_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_PS.hlsl" />
@@ -342,6 +344,8 @@
     <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\UI_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Vignette_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl" />
   </ItemGroup>
