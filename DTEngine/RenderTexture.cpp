@@ -132,22 +132,6 @@ void RenderTexture::Resize(int width, int height)
     if (m_width == width && m_height == height) return;
 
 
-    float refHeight = DX11Renderer::Instance().GetRefHeight();
-	float refWidth  = DX11Renderer::Instance().GetRefWidth();
-
-	float aspectRatio = refWidth / refHeight;
-
-    if(width > height * aspectRatio)
-    {
-        width = static_cast<int>(height * aspectRatio);
-    }
-    else
-    {
-        height = static_cast<int>(width / aspectRatio);
-	}
-
-	m_width = width;
-	m_height = height;
     
 
 

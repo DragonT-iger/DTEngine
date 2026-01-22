@@ -2365,6 +2365,12 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
         rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
     }
 
+    if (camera)
+    {
+        float ratio = viewportPanelSize.x / viewportPanelSize.y;
+        camera->SetAspectRatio(ratio);
+    }
+
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
 
     bool isHovered = ImGui::IsWindowHovered();
