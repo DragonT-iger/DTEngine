@@ -1,10 +1,16 @@
 #pragma once
 #include "Singleton.h"
-#include <fmod.hpp>
 #include <string>
 #include <vector>
 
 class Sound;
+
+namespace FMOD
+{
+    class System;
+    class Channel;
+    class ChannelGroup;
+}
 
 class SoundManager : public Singleton<SoundManager>
 {

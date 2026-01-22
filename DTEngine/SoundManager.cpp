@@ -2,6 +2,9 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "Sound.h"
+#include <fmod.hpp>
+
+
 
 bool SoundManager::Initalize()
 {
