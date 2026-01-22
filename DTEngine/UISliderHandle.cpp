@@ -51,7 +51,7 @@ void UISliderHandle::Update(float deltaTime)
     float uiMouseY = static_cast<float>(mousePos.y) / scaleY;
     Vector2 mousePosVec2(uiMouseX, uiMouseY);
 
-    // 마우스 0 미만 혹은 해상도 초과 체크를 위해서.
+    // 마우스 0 미만 혹은 해상도 초과 체크를 위해서. 그냥 없어도 될거같고 솔직히. 
     bool isOutOfBounds = (mousePos.x < 0 || mousePos.x >= static_cast<int>(screenW) ||
         mousePos.y < 0 || mousePos.y >= static_cast<int>(screenH));
 
@@ -116,11 +116,6 @@ bool UISliderHandle::IsMouseOver(const Vector2& mousePos)
 
     bool result = (mousePos.x >= left && mousePos.x <= right &&
         mousePos.y >= top && mousePos.y <= bottom);
-    /*if (result) 
-    {
-        std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << std::endl;
-        std::cout << "Handle: " << m_transform->GetTransform()->GetPosition().x << ", " << m_transform->GetTransform()->GetPosition().y << std::endl;
-    }*/
 
     return result;
 }
