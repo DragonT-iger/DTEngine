@@ -120,9 +120,8 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting;// * 0.5f;
+    float3 finalColor = directLighting + ambientLighting *0.5f;
 
-        
     
     return float4(finalColor, 1.0f);
 }

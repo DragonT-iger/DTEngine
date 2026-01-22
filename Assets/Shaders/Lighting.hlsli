@@ -64,8 +64,6 @@ float CalculateShadow(float3 worldPos)
     //    }
     //}
     
-    
-    
     return totalShadow;
     
 }

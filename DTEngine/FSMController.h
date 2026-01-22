@@ -16,7 +16,6 @@ enum class e_States
 	e_Die,
 	e_Attack,
 	e_Skill,
-	e_Dance,
 
 	e_Max
 };
@@ -48,8 +47,8 @@ private:
 	std::string m_Die;
 	std::string m_Skill;
 	std::string m_Move;
-	std::string m_Attack;
-	std::string m_Dance;
+	std::string Attack;
+
 
 };
 

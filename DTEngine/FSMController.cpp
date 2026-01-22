@@ -7,8 +7,7 @@ DTPROPERTY(FSMController, m_Idle);
 DTPROPERTY(FSMController, m_Die);
 DTPROPERTY(FSMController, m_Skill);
 DTPROPERTY(FSMController, m_Move);
-DTPROPERTY(FSMController, m_Attack);
-DTPROPERTY(FSMController, m_Dance);
+DTPROPERTY(FSMController, Attack);
 
 
 ENDPROPERTY()
@@ -70,9 +69,8 @@ void FSMController::AdjustFSM()
         m_States[static_cast<int>(e_States::e_Idle)] = FSMRegister::Instance().GetState(m_Idle);
         m_States[static_cast<int>(e_States::e_Move)] = FSMRegister::Instance().GetState(m_Move);
         m_States[static_cast<int>(e_States::e_Die)] = FSMRegister::Instance().GetState(m_Die);
-        m_States[static_cast<int>(e_States::e_Attack)] = FSMRegister::Instance().GetState(m_Attack);
+        m_States[static_cast<int>(e_States::e_Attack)] = FSMRegister::Instance().GetState(Attack);
         m_States[static_cast<int>(e_States::e_Skill)] = FSMRegister::Instance().GetState(m_Skill);
-        m_States[static_cast<int>(e_States::e_Dance)] = FSMRegister::Instance().GetState(m_Dance);
 
     }
 

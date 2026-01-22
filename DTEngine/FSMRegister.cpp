@@ -1,35 +1,17 @@
 #include "pch.h"
 #include "FSMRegister.h"
 
-//여기서 Register를 임의로 만듦.
 
-#include "SoundManager.h"
-#include "ResourceManager.h"
-#include "AssetDatabase.h"
-#include "Animatior.h"
+//여기서 Register를 임의로 만듦.
 
 bool FSMRegister::Initalize()
 {
-
-    std::string RootPath = ResourceManager::Instance().GetResourceRootPath(); //Assets
-
-    
-
     State idleState;
-    idleState.onEnter = [=](GameObject& Owner) 
-        
-         {  /* SoundManager::Instance().PlayBGM
-        
-             (RootPath + "/Sound/The_World Is_Yours.mp3", 1.0f, false); */
-
-         };
-
-    idleState.onUpdate = [=](GameObject& Owner, float dt)
+    idleState.onEnter = [](GameObject& Owner) {  };
+    idleState.onUpdate = [](GameObject& Owner, float dt)
         {
-           
-
+      
         };
-
     RegisterState("P_Idle", idleState);
 
     State moveState;
@@ -54,41 +36,6 @@ bool FSMRegister::Initalize()
         };
     dieState.onUpdate = [](GameObject& Owner, float dt) {  };
     RegisterState("P_Die", dieState);
-
-
-    State danceState;
-    danceState.onEnter = [=](GameObject& Owner)
-        
-        {
-            uint64_t id = AssetDatabase::Instance().GetIDFromPath(RootPath + "/Models/Sandre/Dancing_0.01.fbx");
-            auto Comp = Owner.GetComponent<Animator>();
-            if (Comp) Comp->SetClip(id);
-          
-           // SoundManager::Instance().PlayBGM(RootPath + "/Sound/Doomsday.mp3", 1, true);
-
-
-        };
-
-
-    danceState.onUpdate = [](GameObject& Owner, float dt)
-        {
-        
-            auto Comp = Owner.GetComponent<Animator>();
-        if (Comp)    Comp->SetPlay(true);
-       
-        };
-
-
-    //해당 animation을 지운다?
-    danceState.onExit = [](GameObject& Owner)
-        {
-            auto Comp = Owner.GetComponent<Animator>();
-            if (Comp)    Comp->SetPlay(false);
-        };
-
-    RegisterState("P_Dance", danceState);
-
-
 
     return true;
 }

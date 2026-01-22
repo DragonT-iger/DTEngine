@@ -45,6 +45,38 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     if (!m_hwnd) return false;
     if (!CreateDeviceAndSwapchain()) return false;
 
+
+    // D3D11_BUFFER_DESC cbDesc = {};
+    // cbDesc.ByteWidth = sizeof(CBuffer_Frame_Data);
+    // cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    // HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
+
+
+    // D3D11_BUFFER_DESC lbDesc = {};
+    // lbDesc.ByteWidth = sizeof(CBuffer_GlobalLight);
+    // lbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // lbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // lbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    // hr = m_device->CreateBuffer(&lbDesc, nullptr, m_cbuffer_lights.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
+
+
+
+    // D3D11_BUFFER_DESC boneDesc = {};
+    // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
+    // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
+    // boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    // hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
+    // DXHelper::ThrowIfFailed(hr);
+
+
     CreateConstantBuffers();
     CreateBackbuffers(width, height);
     CreateSamplers();
@@ -458,10 +490,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
-    //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
-
     const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
-
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
     m_context->PSSetShaderResources(9, 1, &CubeMap);
