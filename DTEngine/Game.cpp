@@ -517,14 +517,38 @@ void Game::LifeCycle(DeltaTime dt)
 
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
-	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
+	float windowWidth = static_cast<float>(DX11Renderer::Instance().GetWidth());
+	float windowHeight = static_cast<float>(DX11Renderer::Instance().GetHeight());
+
+	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
+
+	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio();
+	float windowAspect = windowWidth / windowHeight;
+
+	float drawWidth, drawHeight;
+	float offsetX, offsetY;
+
+	if (windowAspect > targetAspect)
+	{
+		drawHeight = windowHeight;
+		drawWidth = windowHeight * targetAspect;
+		offsetX = (windowWidth - drawWidth) * 0.5f;
+		offsetY = 0.0f;
+	}
+	else
+	{
+		drawWidth = windowWidth;
+		drawHeight = drawWidth / targetAspect;
+		offsetX = 0.0f;
+		offsetY = (windowHeight - drawHeight) * 0.5f;
+	}
 
 	Texture* finalTexture = m_gameRT.get();
 
-	Vector2 screenPos(0, 0);
-	Vector2 screenSize(m_gameRT->GetWidth(), m_gameRT->GetHeight()); // 이걸 잘 나누면 레터박스 만들수 있을듯?
+	Vector2 finalPos(offsetX, offsetY);
+	Vector2 finalSize(drawWidth, drawHeight);
 
-	DX11Renderer::Instance().DrawUI(finalTexture, screenPos, screenSize, Vector4(1, 1, 1, 1));
+	DX11Renderer::Instance().DrawUI(finalTexture, finalPos, finalSize, Vector4(1, 1, 1, 1));
 
 	DX11Renderer::Instance().EndUIRender();
 
