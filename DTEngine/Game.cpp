@@ -366,21 +366,21 @@ void Game::LifeCycle(DeltaTime dt)
 
 #endif
 
-	if (scene)
-	{
-		const auto& gameObjects = scene->GetGameObjects();
-		for (const auto& go : gameObjects)
-		{
-			if (!go || !go->IsActiveInHierarchy()) continue;
+	//if (scene)
+	//{
+	//	const auto& gameObjects = scene->GetGameObjects();
+	//	for (const auto& go : gameObjects)
+	//	{
+	//		if (!go || !go->IsActiveInHierarchy()) continue;
 
-			if (auto probe = go->GetComponent<ReflectionProbe>())
-			{
-				if (probe->IsActive()) {
-					probe->Render();
-				}
-			}
-		}
-	}
+	//		if (auto probe = go->GetComponent<ReflectionProbe>())
+	//		{
+	//			if (probe->IsActive()) {
+	//				probe->Render();
+	//			}
+	//		}
+	//	}
+	//} // 나중에 필요하면 돌려이건
 
 
 #ifdef _DEBUG
@@ -517,7 +517,7 @@ void Game::LifeCycle(DeltaTime dt)
 
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
-	DX11Renderer::Instance().BeginUIRender(m_gameRT->GetWidth(), m_gameRT->GetHeight());
+	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
 
 	Texture* finalTexture = m_gameRT.get();
 
@@ -954,7 +954,11 @@ void Game::OnResize(int width, int height)
 	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
 	if (mainCam) {
 		mainCam->SetViewDirty();
+		//std::cout << "Main camera view dirty set from Game OnResize" << std::endl;
 	}
+
+	m_gameRT->Resize(width, height);
+
 	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 

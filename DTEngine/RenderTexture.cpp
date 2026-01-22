@@ -131,11 +131,33 @@ void RenderTexture::Resize(int width, int height)
     if (width <= 0 || height <= 0) return;
     if (m_width == width && m_height == height) return;
 
+
+    float refHeight = DX11Renderer::Instance().GetRefHeight();
+	float refWidth  = DX11Renderer::Instance().GetRefWidth();
+
+	float aspectRatio = refWidth / refHeight;
+
+    if(width > height * aspectRatio)
+    {
+        width = static_cast<int>(height * aspectRatio);
+    }
+    else
+    {
+        height = static_cast<int>(width / aspectRatio);
+	}
+
+	m_width = width;
+	m_height = height;
+    
+
+
+
     m_renderTargetTexture.Reset();
     m_srv.Reset();
     m_textureResource.Reset();
     m_depthStencilTexture.Reset();
     m_dsv.Reset();
+
 
     Initialize(width, height, m_type, m_isSRGB);
 }
