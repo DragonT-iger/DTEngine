@@ -709,16 +709,14 @@ void DX11Renderer::ResetRenderState()
     m_context->RSSetState(m_rsCullBack.Get());
 }
 
-//  ★
 void DX11Renderer::BindShader(Shader* shader)
 {
     if (!shader) return;
-
    
-    if (m_currentShaderID == shader->GetID())
-    {
-        return;
-    }
+    //if (m_currentShaderID == shader->GetID())
+    //{
+    //    return;
+    //}
 
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 

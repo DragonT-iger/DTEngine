@@ -27,16 +27,16 @@ bool Texture::CheckIsLinearTexture(std::string fileName)
     std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
 
     static const std::vector<std::string> linearKeywords = {
-        "normal",      // 노말 맵
-        "mask",              // 마스크 맵
-        "roughness",   // 거칠기
-        "metallic",    // 금속성
-        //"arm",               // AO + Roughness + Metallic 패킹
-        "ao",          // 앰비언트 오클루전
-        "height", "bump",    // 높이/변위 맵
+        "normal",           // 노말 맵
+        "mask",                   // 마스크 맵
+        "roughness",        // 거칠기
+        "metallic",         // 금속성
+        //"arm",                    // AO + Roughness + Metallic 패킹
+        "ao",               // 앰비언트 오클루전
+        "height", "bump",   // 높이/변위 맵
         "spec",
-        //"linear",            // 명시적 리니어 태그
-        //"data"               // 기타 데이터 텍스처
+        //"linear",         // 명시적 리니어 태그
+        //"data"            // 기타 데이터 텍스처
     };
 
     for (const auto& keyword : linearKeywords)

@@ -73,7 +73,15 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         for (unsigned int k = 0; k < channel->mNumScalingKeys; ++k)
         {
             const auto& key = channel->mScalingKeys[k];
-            ch.ScaleKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
+
+            Vector3 scaleValue(key.mValue.x, key.mValue.y, key.mValue.z);
+
+            if (nodeName == "Armature" || nodeName == "RootNode") //중첩 Scaling을 방지. 
+            {
+                scaleValue = Vector3(1.0f, 1.0f, 1.0f);
+            }
+
+            ch.ScaleKeys.push_back({ key.mTime, Vector3(scaleValue) });
         }
 
         if (ch.PositionKeys.empty() && ch.RotationKeys.empty() && ch.ScaleKeys.empty())
