@@ -48,8 +48,8 @@ private:
 	std::string m_Die;
 	std::string m_Skill;
 	std::string m_Move;
-	std::string Attack;
-	std::string Dance;
+	std::string m_Attack;
+	std::string m_Dance;
 
 };
 

@@ -78,6 +78,9 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{5f6680e5-a928-421f-a549-1baae7cddfa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{88051b96-8751-47b4-94f2-e3875aac11e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -326,6 +329,12 @@
     <ClInclude Include="FSMRegister.h">
       <Filter>FSM</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -531,6 +540,12 @@
     </ClCompile>
     <ClCompile Include="FSMRegister.cpp">
       <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

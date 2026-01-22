@@ -5,7 +5,6 @@
 #include <Windows.h>
 #include <iostream>
 #include <filesystem>
-
 #include <imgui.h>
 #include "Game.h"
 #include "DX11Renderer.h"
@@ -34,8 +33,14 @@
 #include "Text.h"
 #include "Image.h"
 #include "ReflectionProbe.h"
+#include "UIButton.h"
+#include "UISlider.h"
+//#include "RectTransform.h"
+#include "Canvas.h"
+#include "UIManager.h"
 
 #include "FSMRegister.h"
+#include "SoundManager.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -95,13 +100,18 @@ bool Game::Initialize()
 	}
 
 
-<<<<<<< HEAD
-	InputManager::Instance().Initialize();
-	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	//SceneManager::Instance().LoadScene("SampleScene");
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	SceneManager::Instance().LoadScene("SampleSceneBum");
+	InputManager::Instance().Initialize(); 
+	InputManager::Instance().SetWindowHandle(GetHwnd());
+
+
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
+	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");
+
+	//SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	//SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -112,6 +122,7 @@ bool Game::Initialize()
 		return false;
 	}
 
+	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
 	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
@@ -130,8 +141,17 @@ bool Game::Initialize()
 #endif
 	
 
-	FSMRegister::Instance().Initalize();
+	if (!FSMRegister::Instance().Initalize())
+	{
+		assert(false && "FSMRegister 초기화 실패");
+		return false;
+	}
 
+	if (!SoundManager::Instance().Initalize())
+	{
+		assert(false && "SoundManager 초기화 실패");
+		return false;
+	}
 
 	//Scene testScene("TestScene");
 
@@ -220,6 +240,7 @@ void Game::LifeCycle(DeltaTime dt)
 {
 	if (SceneManager::Instance().ProcessSceneChange()) {
 
+		
 
 #ifdef _DEBUG
 
@@ -253,7 +274,7 @@ void Game::LifeCycle(DeltaTime dt)
 
 
 	InputManager::Instance().Update();
-
+	SoundManager::Instance().Update(dt.rawTime);
 #ifdef _DEBUG
 	if (m_engineMode == EngineMode::Play)
 	{
@@ -813,6 +834,11 @@ void Game::SetPlayState(bool isPlay)
 		{
 			m_engineMode = EngineMode::Play;
 
+			Scene* scene = SceneManager::Instance().GetActiveScene();
+			if (scene)
+			{
+				scene->Start();
+			}
 		}
 	}
 	else
@@ -833,7 +859,7 @@ void Game::SetPlayState(bool isPlay)
 
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		m_editorCameraObject = scene->FindGameObject("EditorCamera55");
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 		if (hasLastState)
 		{
 			Transform* camTf = m_editorCameraObject->GetTransform();
@@ -842,8 +868,8 @@ void Game::SetPlayState(bool isPlay)
 
 			if (scene)
 			{
-				scene->Awake();
-				scene->Start();
+				//scene->Awake();
+				//scene->Start();
 			}
 		}
 
@@ -890,7 +916,7 @@ void Game::SetEditorCamera(Scene* curScene)
 
 	if (m_editorCameraObject)
 	{
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 	else
 	{
@@ -898,7 +924,7 @@ void Game::SetEditorCamera(Scene* curScene)
 		m_editorCameraObject = curScene->CreateGameObject("EditorCamera55");
 		m_editorCameraObject->AddComponent<Camera>();
 		m_editorCameraObject->AddComponent<FreeCamera>();
-		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, true);
+		m_editorCameraObject->SetFlag(GameObject::Flags::HideInHierarchy, false);
 	}
 }
 #endif
