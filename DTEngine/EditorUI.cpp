@@ -2367,10 +2367,10 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
     m_sceneViewportSize = Vector2(viewportPanelSize.x, viewportPanelSize.y);
 
-    if (rt->GetWidth() != (int)viewportPanelSize.x || rt->GetHeight() != (int)viewportPanelSize.y)
-    {
-        rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
-    }
+    //if (rt->GetWidth() != (int)viewportPanelSize.x || rt->GetHeight() != (int)viewportPanelSize.y)
+    //{
+    //    rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
+    //}
 
     if (camera)
     {
@@ -2456,10 +2456,10 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 
     m_gameViewportSize = Vector2(size.x, size.y);
 
-    if (rt->GetWidth() != (int)drawW || rt->GetHeight() != (int)drawH)
-    {
-        rt->Resize((int)size.x, (int)size.y);
-    }
+    //if (rt->GetWidth() != (int)drawW || rt->GetHeight() != (int)drawH)
+    //{
+    //    rt->Resize((int)size.x, (int)size.y);
+    //}
 
 
 	Scene* curScene = SceneManager::Instance().GetActiveScene();

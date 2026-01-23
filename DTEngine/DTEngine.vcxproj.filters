@@ -347,6 +347,9 @@
     <ClInclude Include="PostProcessManager.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="GrayScale.h">
+      <Filter>PostProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -561,6 +564,9 @@
     </ClCompile>
     <ClCompile Include="UISliderHandle.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GrayScale.cpp">
+      <Filter>PostProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

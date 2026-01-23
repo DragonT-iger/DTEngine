@@ -31,6 +31,7 @@
 #include "DXHelper.h"
 
 #include "Shader.h"
+#include "GrayScale.h"
 
 
 
@@ -72,6 +73,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_resolvedSceneRT = std::make_unique<RenderTexture>();
     m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
 
+    m_postProcessManager->AddEffect<GrayScale>();
     
     return true;
 }
@@ -573,14 +575,10 @@ void DX11Renderer::EndFrame()
 
         if (m_postProcessManager)
         {
-            m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask);
-        }
-        else
-        {
-            m_context->ResolveSubresource(
-                m_backbufferTex.Get(), 0,
-                m_msaaTargetTex.Get(), 0,
-                DXGI_FORMAT_R8G8B8A8_UNORM
+            m_postProcessManager->Execute(
+                m_resolvedSceneRT.get(),      
+                m_resolvedSceneRT->GetRTV(),  
+                effectMask
             );
         }
     }
@@ -715,10 +713,10 @@ void DX11Renderer::BindShader(Shader* shader)
     if (!shader) return;
 
    
-    if (m_currentShaderID == shader->GetID())
-    {
-        return;
-    }
+    //if (m_currentShaderID == shader->GetID())
+    //{
+    //    return;
+    //}
 
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 

@@ -50,7 +50,6 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
 
     for (auto& effect : m_effects)
     {
-        // ★ [에러 수정] 명시적 형변환으로 비교 (uint32_t <-> PostProcessType)
         uint32_t effectType = static_cast<uint32_t>(effect->GetType());
 
         if ((activeEffectsMask & effectType) == 0)
@@ -61,6 +60,11 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
         currentSrc = currentDest;
         pingPongIndex = 1 - pingPongIndex;
         currentDest = m_tempRT[pingPongIndex].get();
+    }
+
+    if (currentSrc == sceneTexture && backBufferRTV == sceneTexture->GetRTV())
+    {
+        return;
     }
 
     Blit(currentSrc, backBufferRTV);
@@ -75,8 +79,8 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
 
     D3D11_VIEWPORT vp;
     vp.TopLeftX = 0; vp.TopLeftY = 0;
-    vp.Width = (float)DX11Renderer::Instance().GetWidth();
-    vp.Height = (float)DX11Renderer::Instance().GetHeight();
+    vp.Width = (float)src->GetWidth();
+    vp.Height = (float)src->GetHeight();
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     context->RSSetViewports(1, &vp);
 
@@ -84,6 +88,8 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     if (vs) vs->Bind(); 
 
     Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
     if (ps) ps->Bind(); 
 
     context->OMSetDepthStencilState(nullptr, 0);

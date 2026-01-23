@@ -9,7 +9,8 @@ enum class PostProcessType : uint32_t
     ToneMapping = 1 << 1,
     Vignette    = 1 << 2,
     Blur        = 1 << 3,
-    Chromatic   = 1 << 4,
+    Chromatic   = 1 << 4, 
+    GrayScale   = 1 << 5,
     All         = 0xFFFFFFFF
 };
 
