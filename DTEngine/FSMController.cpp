@@ -14,10 +14,6 @@ DTPROPERTY(FSMController, m_Dance);
 ENDPROPERTY()
 
 
-
-
-
-
 FSMController::FSMController()
 {  
     m_States.assign(static_cast<size_t>(e_States::e_Max), {});

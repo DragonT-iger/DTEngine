@@ -39,6 +39,13 @@ cbuffer CBuffer_Matrix_Pallette : register(b6)
 };
 
 
+cbuffer CBuffer_SkyBox : register(b7)
+{
+    float4 SkyBox_Color; // 운용 할 bone 갯수 만큼 배열 크기를 정의할 예정. 
+};
+
+
+
 struct VS_INPUT
 {
     float3 Pos : POSITION;

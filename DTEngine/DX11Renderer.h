@@ -128,11 +128,11 @@ public:
     void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
     void UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera);
     void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
-
-    void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
-
     void UpdateTextureFlag_CBUFFER(uint32_t Flags);
     void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
+    void UpdateSkyBox_CBUFFER(SkyBox& data);
+    
+
 
     //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
     void ClearCache();
@@ -213,8 +213,10 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
 
-    //01_10 일단 넌 후순위 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_IBL = nullptr; // 
+
+
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr; // 
 
 #pragma endregion 
 
@@ -273,20 +275,7 @@ private:
 
     Matrix m_lightViewProjScale;
 
-    static constexpr int MAX_BONES = 128;
 
-    __declspec(align(16))
-        struct CBuffer_BoneData
-    {
-        Matrix BoneTransforms[MAX_BONES];
-    };
-
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
-
-
-
-
-    //cacching  ★ 
     private:
       uint16_t m_currentShaderID = 0; 
       ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };

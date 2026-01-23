@@ -21,9 +21,6 @@ enum class e_States
 	e_Max
 };
 
-
-
-
 class FSMController : public MonoBehaviour
 {
 	DTGENERATED_BODY(FSMController);

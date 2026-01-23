@@ -215,6 +215,19 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
 }
 
+void DX11Renderer::UpdateSkyBox_CBUFFER(SkyBox& data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+
+    HRESULT hr = m_context->Map(m_cbuffer_SkyBox.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    SkyBox* dataPtr = static_cast<SkyBox*>(mappedData.pData);
+    dataPtr->SkyBox_Color = data.SkyBox_Color;
+    
+    m_context->Unmap(m_cbuffer_SkyBox.Get(), 0);
+}
+
 void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
 
@@ -470,6 +483,8 @@ void DX11Renderer::BindGlobalResources()
     m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
+    m_context->VSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
+
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -479,6 +494,8 @@ void DX11Renderer::BindGlobalResources()
 
     m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -514,6 +531,10 @@ void DX11Renderer::CreateConstantBuffers()
     //b5
     bd.ByteWidth = sizeof(Matrix_Pallette);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
+
+
+    bd.ByteWidth = sizeof(SkyBox);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_SkyBox.GetAddressOf()));
 
 
       // D3D11_BUFFER_DESC boneDesc = {};
@@ -634,33 +655,7 @@ void DX11Renderer::ClearCache()
     for (int i = 0; i < 16; ++i) m_currentSRVs[i] = nullptr;
 }
 
-void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
-{
-    if (!m_cbuffer_bones || !m_context) return;
 
-    size_t copyCount = bones.size();
-    if (copyCount > MAX_BONES) copyCount = MAX_BONES;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = m_context->Map(m_cbuffer_bones.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    if (FAILED(hr)) return;
-
-    CBuffer_BoneData* dataPtr = static_cast<CBuffer_BoneData*>(mappedData.pData);
-
-    for (size_t i = 0; i < copyCount; ++i)
-    {
-        dataPtr->BoneTransforms[i] = bones[i].Transpose(); 
-    }
-
-    for (size_t i = copyCount; i < MAX_BONES; ++i)
-    {
-        dataPtr->BoneTransforms[i] = SimpleMathHelper::IdentityMatrix();
-    }
-
-    m_context->Unmap(m_cbuffer_bones.Get(), 0);
-
-    m_context->VSSetConstantBuffers(4, 1, m_cbuffer_bones.GetAddressOf());
-}
 
 void DX11Renderer::ResetRenderState()
 {
@@ -932,7 +927,7 @@ void DX11Renderer::ReleaseCB()
 
     m_cbuffer_Texture_flags.Reset();
     m_cbuffer_matrix_pallette.Reset();
-    m_cbuffer_IBL.Reset();
+    m_cbuffer_SkyBox.Reset();
 
 }
 

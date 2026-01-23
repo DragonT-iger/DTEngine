@@ -191,6 +191,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="HistoryManager.h" />
+    <ClInclude Include="SkyBoxComponent.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
     <ClInclude Include="Image.h" />
@@ -274,6 +275,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
+    <ClCompile Include="SkyBoxComponent.cpp" />
     <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImGuiLayer.cpp" />
@@ -339,6 +341,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Assets\Shaders\BackGround_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BackGround_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl" />

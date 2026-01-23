@@ -57,11 +57,21 @@ struct TextureFlag //b4
     float pad[3];
 };
 
+static constexpr int boneCnt = 128;
+
 __declspec(align(16))
 struct Matrix_Pallette //b5
 {
-    Matrix Matrix_Pallette[128]; // 운용할 bone 갯수 만큼 배열 크기를 정의할 예정. 
+    Matrix Matrix_Pallette[boneCnt]; // 운용할 bone 갯수 만큼 배열 크기를 정의할 예정. 
 };
 
 
+//뭐가 더 필요하면 더 넣는 거로 
+__declspec(align(16))
+struct SkyBox
+{
+    Vector4 SkyBox_Color;
+
+
+};
 

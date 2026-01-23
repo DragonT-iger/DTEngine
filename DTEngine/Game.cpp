@@ -41,6 +41,7 @@
 
 #include "FSMRegister.h"
 #include "SoundManager.h"
+#include "SkyBoxComponent.h"
 
 Game::Game() = default;
 Game::~Game() = default;

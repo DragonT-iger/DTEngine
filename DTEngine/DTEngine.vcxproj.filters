@@ -338,6 +338,9 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Sound</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBoxComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -550,6 +553,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBoxComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -644,6 +650,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl">
       <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BackGround_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BackGround_PS.hlsl">
+      <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
