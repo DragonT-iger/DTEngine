@@ -458,9 +458,9 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
-    const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
+    //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
 
-        //const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+        const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
 
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();

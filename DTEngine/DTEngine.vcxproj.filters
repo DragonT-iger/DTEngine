@@ -559,6 +559,9 @@
     <ClCompile Include="PostProcessManager.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
+    <ClCompile Include="UISliderHandle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />

@@ -48,11 +48,8 @@
 #include "Prefab.h"
 #include "Image.h"
 #include "FSMController.h"
-<<<<<<< HEAD
 #include "SoundManager.h"
-=======
 #include "DX11Renderer.h"
->>>>>>> DT2
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;

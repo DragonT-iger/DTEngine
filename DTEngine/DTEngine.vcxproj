@@ -113,7 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/ThirdParty/ImGUIDX11;$(SolutionDir)/ThirdParty/;C:\Users\User\Desktop\BJ\DTEngine\FMode/core/inc;C:\Users\User\Desktop\BJ\DTEngine\FMode/studio/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/ThirdParty/ImGUIDX11;$(SolutionDir)/ThirdParty/;$(SolutionDir)FMode/core/inc;$(SolutionDir)FMode/studio/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -142,7 +142,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/ThirdParty/ImGUIDX11;$(SolutionDir)/ThirdParty/;C:\Users\User\Desktop\BJ\DTEngine\FMode/core/inc;C:\Users\User\Desktop\BJ\DTEngine\FMode/studio/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/ThirdParty/ImGUIDX11;$(SolutionDir)/ThirdParty/;$(SolutionDir)FMode/core/inc;$(SolutionDir)FMode/studio/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -321,6 +321,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
+    <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
@@ -358,8 +359,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_VS.hlsl" />
-    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl"/>
-    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl"/>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PostProcess_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl" />
