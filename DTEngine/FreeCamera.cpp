@@ -6,6 +6,8 @@
 #include "HistoryManager.h"
 #include "ResourceManager.h"
 #include "Camera.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(FreeCamera)
 //DTPROPERTY(FreeCamera, m_moveSpeed)
@@ -40,6 +42,8 @@ void FreeCamera::HandleInput(float deltaTime)
 {
     Transform* transform = GetComponent<Transform>();
     if (!transform) return;
+
+    float unScaledDeltaTime = SceneManager::Instance().GetUnscaledDeltaTime();
 
     InputManager& input = InputManager::Instance();
 
@@ -89,7 +93,7 @@ void FreeCamera::HandleInput(float deltaTime)
                 if (moveDir.y != 0.0f)
                 {
                     float currentSize = camera->GetOrthographicSize();
-                    float newSize = currentSize - (moveDir.y * currentSpeed * deltaTime);
+                    float newSize = currentSize - (moveDir.y * currentSpeed * unScaledDeltaTime);
                     if (newSize < 0.1f) newSize = 0.1f;
                     camera->SetOrthographicSize(newSize);
                 }
@@ -99,7 +103,7 @@ void FreeCamera::HandleInput(float deltaTime)
 
                 Vector3 moveVector = (right * moveDir.x) + (up * moveDir.z);
 
-                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
+                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * unScaledDeltaTime);
                 transform->SetPosition(newPos);
             }
             else
@@ -109,7 +113,7 @@ void FreeCamera::HandleInput(float deltaTime)
 
                 Vector3 moveVector = (forward * moveDir.z) + (right * moveDir.x) + (Vector3(0, 1, 0) * moveDir.y);
 
-                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * deltaTime);
+                Vector3 newPos = transform->GetPosition() + (moveVector * currentSpeed * unScaledDeltaTime);
                 transform->SetPosition(newPos);
             }
         }

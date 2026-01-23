@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
 #include "RenderTexture.h"
+#include "IPostProcess.h"
 
 struct Ray;
 
@@ -67,6 +68,12 @@ public:
     void SetViewportRect(const Vector4& rect) { m_viewportRect = rect; }
 
     Ray ScreenPointToRay(float x, float y, float viewportW, float viewportH) const;
+
+    void SetPostProcessEffect(PostProcessType type, bool enable);
+    bool IsEffectEnabled(PostProcessType type) const;
+    uint32_t GetPostProcessMask() const { return m_postProcessMask; }
+
+
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -100,4 +107,8 @@ private:
 
 
     Vector4 m_viewportRect = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+    bool m_enablePostProcess = true;
+
+    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::All);
 };

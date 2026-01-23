@@ -29,7 +29,6 @@ void Skeletal::Awake()
 
 }
 
-//
 void Skeletal::Update(float deltaTime)
 {
    

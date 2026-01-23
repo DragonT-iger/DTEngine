@@ -50,7 +50,7 @@
 #include "FSMController.h"
 #include "SoundManager.h"
 #include "SkyBoxComponent.h"
-
+#include "DX11Renderer.h"
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -911,6 +911,7 @@ void EditorUI::DrawInspectorWindow()
                 {
                     auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
                     HistoryManager::Instance().Do(std::move(cmd));
+
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -2382,6 +2383,12 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
         rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
     }
 
+    if (camera)
+    {
+        float ratio = viewportPanelSize.x / viewportPanelSize.y;
+        camera->SetAspectRatio(ratio);
+    }
+
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
 
     bool isHovered = ImGui::IsWindowHovered();
@@ -2446,17 +2453,47 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     ImGui::Begin("Game");
 
     ImVec2 size = ImGui::GetContentRegionAvail();
+    ImVec2 startPos = ImGui::GetCursorScreenPos(); 
+
+    float refAspect = DX11Renderer::Instance().GetRefWidth() / static_cast<float>(DX11Renderer::Instance().GetRefHeight());
+    float winAspect = size.x / size.y;
+    float drawW = size.x, drawH = size.y;
+
+    if (winAspect > refAspect) drawW = drawH * refAspect;
+    else drawH = drawW / refAspect;
+
+    float offX = (size.x - drawW) * 0.5f;
+    float offY = (size.y - drawH) * 0.5f;
+
     m_gameViewportSize = Vector2(size.x, size.y);
 
-    if (rt->GetWidth() != (int)size.x || rt->GetHeight() != (int)size.y)
+    if (rt->GetWidth() != (int)drawW || rt->GetHeight() != (int)drawH)
     {
         rt->Resize((int)size.x, (int)size.y);
+    }
+
+
+	Scene* curScene = SceneManager::Instance().GetActiveScene();
+    
+	Camera* mainCamera = nullptr;
+
+    if(curScene)
+    {
+        mainCamera = curScene->GetMainCamera();
+	}
+
+    if (mainCamera)
+    {
+        float ratio = drawW / drawH;
+        mainCamera->SetAspectRatio(ratio);
     }
 
 #ifdef _DEBUG
     InputManager::Instance().SetGameResolution((int)size.x, (int)size.y);
 #endif
-    ImGui::Image((void*)rt->GetSRV(), size);
+    ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + offX, ImGui::GetCursorPosY() + offY));
+
+    ImGui::Image((void*)rt->GetSRV(), ImVec2(drawW, drawH));
 
 
     bool isHovered = ImGui::IsItemHovered();
@@ -2511,10 +2548,9 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
         //InputManager::Instance().SetGameInputActive(true);
 
         ImVec2 mousePos = ImGui::GetMousePos();
-        ImVec2 windowPos = ImGui::GetItemRectMin();
         InputManager::Instance().SetEditorMousePos(
-            (int)(mousePos.x - windowPos.x),
-            (int)(mousePos.y - windowPos.y)
+            (int)(mousePos.x - startPos.x),
+            (int)(mousePos.y - startPos.y)
         );
     }
     else

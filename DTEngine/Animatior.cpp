@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 
 BEGINPROPERTY(Animator)
+
 DTPROPERTY_SETTER(Animator, Play, SetPlay)
 DTPROPERTY_SETTER(Animator, Loop, SetLoop)
 DTPROPERTY_SETTER(Animator, m_AniID, SetClip)
@@ -38,8 +39,8 @@ void Animator::Update(float deltaTime)
 
         int boneIndex = m_TargetSkeletal->GetBoneIndex(channel.BoneName);
         if (boneIndex < 0) continue; 
-
         //channel.bonename이 기존 bonemap이랑 매칭 안되는 경우, animation 없는 bone은 그냥 넘어감. 얘는 Skeletal에서 default 값을 줌.
+
         //animation 채널이 있지만 position이 0인 경우는 bindpos로 넣어둠 
 
         auto& boneNode = boneRes->m_Bones[boneIndex];
@@ -78,6 +79,7 @@ void Animator::SetClip(uint64_t id)
 
     if (id != 0)
     {
+
         m_CurrentTime = 0.0f;
 
         std::string path = AssetDatabase::Instance().GetPathFromID(m_AniID);

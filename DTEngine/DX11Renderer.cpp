@@ -26,6 +26,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "InputManager.h"
 
 #include "DXHelper.h"
 
@@ -62,6 +63,15 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     //CreateShadowMap(16376, 16376); // max 왜 이러지
 
     CreateShadowMap(4096, 4096);
+
+
+
+    m_postProcessManager = std::make_unique<PostProcessManager>();
+    m_postProcessManager->Initialize(width, height);
+
+    m_resolvedSceneRT = std::make_unique<RenderTexture>();
+    m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
+
     
     return true;
 }
@@ -85,6 +95,12 @@ void DX11Renderer::Resize(int width, int height)
 
     CreateBackbuffers(width, height);
     m_width = width; m_height = height;
+
+    if (m_postProcessManager)
+        m_postProcessManager->Resize(width, height);
+
+    if (m_resolvedSceneRT)
+        m_resolvedSceneRT->Resize(width, height);
 }
  
 //이거 상수버퍼 인터페이스 만든 다음에, 템플릿으로 처리해도 깔끔할듯 함 
@@ -252,7 +268,7 @@ void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
     if (mainCam == nullptr) return;
 
-    static float orthoSize = 1080; // 이게 UI의 기준이 되는 사이즈
+    static float orthoSize = DX11Renderer::Instance().GetRefHeight(); 
 
     static float orthoHeight = orthoSize;
     float aspectRatio = mainCam->GetAspectRatio();
@@ -455,9 +471,9 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
-    const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
+    //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
 
-        //const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+        const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
 
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
@@ -555,18 +571,40 @@ void DX11Renderer::EndFrame()
         m_context->ResolveSubresource(
             m_backbufferTex.Get(), 0,      
             m_msaaTargetTex.Get(), 0,      
-#ifdef _DEBUG
+//#ifdef _DEBUG
             DXGI_FORMAT_R8G8B8A8_UNORM
-#else
-            DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
-#endif
+//#else
+            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+//#endif
         );
     }
 
-    //EndUIRender();
 
-    //std::cout << m_width << " " << m_height << std::endl;
-    // 필요 시 파이프라인 언바인드/커맨드 종료 등
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+
+    if (m_msaaTargetTex && m_resolvedSceneRT)
+    {
+        m_context->ResolveSubresource(
+            m_resolvedSceneRT->GetTexture(), 0,
+            m_msaaTargetTex.Get(), 0,
+            DXGI_FORMAT_R8G8B8A8_UNORM
+        );
+
+        if (m_postProcessManager)
+        {
+            m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask);
+        }
+        else
+        {
+            m_context->ResolveSubresource(
+                m_backbufferTex.Get(), 0,
+                m_msaaTargetTex.Get(), 0,
+                DXGI_FORMAT_R8G8B8A8_UNORM
+            );
+        }
+    }
 }
 
 void DX11Renderer::Present()
@@ -707,6 +745,17 @@ void DX11Renderer::OffPS()
     m_context->PSSetShader(nullptr, nullptr, 0);
 }
 
+void DX11Renderer::DrawFullScreenQuad()
+{
+    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    m_context->IASetInputLayout(nullptr);
+    m_context->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+    m_context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+
+    m_context->Draw(3, 0);
+}
+
 bool DX11Renderer::CreateDeviceAndSwapchain()
 {
     UINT flags = 0;
@@ -829,58 +878,58 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
 
     m_backbufferTex = std::move(backTex);
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-#else
-    D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
-    rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
-    rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-    rtvViewDesc.Texture2D.MipSlice = 0;
+//#else
+    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
+    //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
+    //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    //rtvViewDesc.Texture2D.MipSlice = 0;
 
-    hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
 
     
 
    
 
-#endif // _DEBUG
+//#endif // _DEBUG
     
     D3D11_TEXTURE2D_DESC msaaDesc = {};
     m_backbufferTex->GetDesc(&msaaDesc);                    // 백버퍼 설정 복사
     msaaDesc.SampleDesc.Count = m_msaa;                     // 샘플 수 (예: 4)
     msaaDesc.SampleDesc.Quality = m_msaaQuality - 1;        // 품질
     msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;          // 렌더 타겟
-#ifndef _DEBUG
-    msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
-#endif
+//#ifndef _DEBUG
+    //msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+//#endif
     hr = m_device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTargetTex.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 
     hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), nullptr, m_msaaTargetRTV.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
-#else
-    D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
-    msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
+//#else
+    //D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
+    //msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
 
-    if (m_msaa > 1)
-    {
-        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
-    }
-    else
-    {
-        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-        msaaRtvDesc.Texture2D.MipSlice = 0;
-    }
+    //if (m_msaa > 1)
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+    //}
+    //else
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    //    msaaRtvDesc.Texture2D.MipSlice = 0;
+    //}
 
-    hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    //hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
 
-#endif
+//#endif
     
 
     D3D11_TEXTURE2D_DESC rtvDesc;

@@ -12,7 +12,7 @@ public:
     virtual ~WindowBase();
 
     bool Create(const wchar_t* title = L"D3DEngine",
-        int width = 1920, int height = 1080,
+        int width = 1920, int height = 1200,
         WindowMode mode = WindowMode::Windowed,
         int posX = 0, int posY = 0);
 
