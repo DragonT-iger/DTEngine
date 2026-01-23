@@ -23,7 +23,7 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false);
+    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false, bool enableAA = false);
 
     void Resize(int width, int height);
 
@@ -37,6 +37,13 @@ public:
 
     ID3D11ShaderResourceView* GetSRV() const { return m_srv.Get(); }
 
+    ID3D11RenderTargetView* GetRTV(int faceIndex = 0) const {
+        if (faceIndex < m_faceRTVs.size()) return m_faceRTVs[faceIndex].Get();
+        return nullptr;
+    }
+
+	ID3D11Texture2D* GetTexture() const { return m_renderTargetTexture.Get(); }
+
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 
@@ -46,10 +53,15 @@ private:
     int m_height = 0;
 
     bool m_isSRGB;
+    bool m_enableAA = false;
+    int m_msaa = 8;
+	int m_msaaQuality = 0;
 
     ComPtr<ID3D11Texture2D>          m_renderTargetTexture;
-    //ComPtr<ID3D11RenderTargetView>   m_rtv; // 큐브맵 호환을 위해 삭제
-    //ComPtr<ID3D11ShaderResourceView> m_srv;
+
+    ComPtr<ID3D11Texture2D>          m_msaaTexture;
+    ComPtr<ID3D11RenderTargetView>   m_msaaRTV;
+
 
     ComPtr<ID3D11Texture2D>          m_depthStencilTexture;
     ComPtr<ID3D11DepthStencilView>   m_dsv;

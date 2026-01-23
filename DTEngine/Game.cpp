@@ -53,7 +53,7 @@ bool Game::Initialize()
 	m_timer = std::make_unique<GameTimer>();
 	m_timer->Reset(); 
 
-	constexpr int initW = 1920, initH = 1080;
+	constexpr int initW = 1920, initH = 1200;
 
 
 
@@ -100,19 +100,20 @@ bool Game::Initialize()
 	}
 
 
-
 	InputManager::Instance().Initialize(); 
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	//SceneManager::Instance().LoadScene("SampleScene");
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
+	// SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	// SceneManager::Instance().LoadScene("DTtestScene");
 
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	SceneManager::Instance().LoadScene("SampleSceneBum");
+	// SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	// SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -126,10 +127,10 @@ bool Game::Initialize()
 	
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
+	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1280, 720, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	SetEditorCamera(scene);
 
@@ -138,7 +139,7 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1080, RenderTextureType::Tex2D, true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 #endif
 	
 
@@ -219,6 +220,8 @@ void Game::Run()
 		dt.rawTime = m_timer->DeltaTime();
 		float timeScale = SceneManager::Instance().GetActiveScene()->GetTimeScale();
 		dt.scaledTime = dt.rawTime * timeScale;
+
+		SceneManager::Instance().SetUnscaledDeltaTime(dt.rawTime);
 
 		LifeCycle(dt);
  		//LifeCycle(m_timer->DeltaTime());
@@ -363,14 +366,6 @@ void Game::LifeCycle(DeltaTime dt)
 							cam->LateUpdate(dt.rawTime);
 						}
 					}
-
-					if (auto* slider = go->GetComponent<UISlider>())
-					{
-							if (slider->IsActive())
-							{
-									slider->EditorUpdate(dt.rawTime);
-							}
-					}
 				}
 			}
 
@@ -386,21 +381,21 @@ void Game::LifeCycle(DeltaTime dt)
 
 #endif
 
-	if (scene)
-	{
-		const auto& gameObjects = scene->GetGameObjects();
-		for (const auto& go : gameObjects)
-		{
-			if (!go || !go->IsActiveInHierarchy()) continue;
+	//if (scene)
+	//{
+	//	const auto& gameObjects = scene->GetGameObjects();
+	//	for (const auto& go : gameObjects)
+	//	{
+	//		if (!go || !go->IsActiveInHierarchy()) continue;
 
-			if (auto probe = go->GetComponent<ReflectionProbe>())
-			{
-				if (probe->IsActive()) {
-					probe->Render();
-				}
-			}
-		}
-	}
+	//		if (auto probe = go->GetComponent<ReflectionProbe>())
+	//		{
+	//			if (probe->IsActive()) {
+	//				probe->Render();
+	//			}
+	//		}
+	//	}
+	//} // 나중에 필요하면 돌려이건
 
 
 #ifdef _DEBUG
@@ -417,6 +412,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
 	scene->Render(editorCam, m_sceneRT.get(), true);
+
+	m_sceneRT->Unbind();
 
 
 	const auto& gameObjects = scene->GetGameObjects();
@@ -438,6 +435,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 			scene->Render(cam, targetRT, false);
 
+			targetRT->Unbind();
+
 		}
 		else
 		{
@@ -448,6 +447,8 @@ void Game::LifeCycle(DeltaTime dt)
 			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
 
 			scene->Render(cam, m_gameRT.get(), true);
+
+			m_gameRT->Unbind();
 		}
 	}
 
@@ -506,22 +507,74 @@ void Game::LifeCycle(DeltaTime dt)
 			targetRT->Clear(col.x, col.y, col.z, col.w);
 
 			RenderScene(scene, cam, targetRT, false);
+
+			targetRT->Unbind();
 		}
 	}
 
 	Camera* mainCam = scene->GetMainCamera();
 
-	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : new float[4] {0.1f, 0.1f, 0.1f, 1.0f};
+	const float* clearColor = (float*)&mainCam->GetClearColor();
 
-	DX11Renderer::Instance().BeginFrame(clearColor);
 
 	if (mainCam)
 	{
+		m_gameRT->Bind();
+		m_gameRT->Clear(clearColor[0], clearColor[1], clearColor[2], 1);
+
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
-		RenderScene(scene, mainCam, nullptr, true);
+		RenderScene(scene, mainCam, m_gameRT.get(), true);
+
+		m_gameRT->Unbind();
+		
 	}
+
+
+	DX11Renderer::Instance().BeginFrame(clearColor);
+
+	float windowWidth = static_cast<float>(DX11Renderer::Instance().GetWidth());
+	float windowHeight = static_cast<float>(DX11Renderer::Instance().GetHeight());
+
+
+	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio();
+	float windowAspect = windowWidth / windowHeight;
+
+	float drawWidth, drawHeight;
+	float offsetX, offsetY;
+
+	if (windowAspect > targetAspect)
+	{
+		drawHeight = windowHeight;
+		drawWidth = windowHeight * targetAspect;
+		offsetX = (windowWidth - drawWidth) * 0.5f;
+		offsetY = 0.0f;
+	}
+	else
+	{
+		drawWidth = windowWidth;
+		drawHeight = drawWidth / targetAspect;
+		offsetX = 0.0f;
+		offsetY = (windowHeight - drawHeight) * 0.5f;
+	}
+
+	Texture* finalTexture = m_gameRT.get();
+
+	Vector2 finalPos(offsetX, offsetY);
+	Vector2 finalSize(drawWidth, drawHeight);
+
+	if (camera)
+	{
+		float ratio = drawWidth / drawHeight;
+		camera->SetAspectRatio(ratio);
+	}
+
+	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
+
+	DX11Renderer::Instance().DrawUI(finalTexture, finalPos, finalSize, Vector4(1, 1, 1, 1));
+
+	DX11Renderer::Instance().EndUIRender();
 
 
 
@@ -949,7 +1002,11 @@ void Game::OnResize(int width, int height)
 	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
 	if (mainCam) {
 		mainCam->SetViewDirty();
+		//std::cout << "Main camera view dirty set from Game OnResize" << std::endl;
 	}
+
+	m_gameRT->Resize(width, height);
+
 	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }
 

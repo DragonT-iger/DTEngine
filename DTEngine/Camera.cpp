@@ -17,6 +17,7 @@ DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
 DTPROPERTY_ACCESSOR(Camera, m_isOrthographic, IsOrthographic, SetIsOrthographic)
 DTPROPERTY_ACCESSOR(Camera, m_orthographicSize, GetOrthographicSize, SetOrthographicSize)
 DTPROPERTY_ACCESSOR(Camera, m_viewportRect, GetViewportRect, SetViewportRect)
+//DTPROPERTY_ACCESSOR(Camera, m_enablePostProcess, IsPostProcessEnabled, SetPostProcessEnabled)
 
 ENDPROPERTY()
 
@@ -161,6 +162,24 @@ Ray Camera::ScreenPointToRay(float x, float y, float viewportW, float viewportH)
     dir.Normalize();
 
     return { nearWorld, dir };
+}
+
+void Camera::SetPostProcessEffect(PostProcessType type, bool enable)
+{
+    uint32_t flag = static_cast<uint32_t>(type);
+    if (enable)
+    {
+        m_postProcessMask |= flag;
+    }
+    else
+    {
+        m_postProcessMask &= ~flag;
+    }
+}
+
+bool Camera::IsEffectEnabled(PostProcessType type) const
+{
+    return (m_postProcessMask & static_cast<uint32_t>(type)) != 0;
 }
 
 void Camera::UpdateViewMatrix()

@@ -6,6 +6,8 @@
 #include "Animatior.h"
 #include "ResourceManager.h"
 #include "AssetDatabase.h"
+
+
 //여기서 Register를 임의로 만듦.
 
 #include "SoundManager.h"

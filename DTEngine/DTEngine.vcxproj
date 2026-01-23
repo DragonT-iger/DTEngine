@@ -197,6 +197,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="ImGuiLayer.h" />
     <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IPostProcess.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="JsonIO.h" />
     <ClInclude Include="KeyCode.h" />
@@ -209,6 +210,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="move.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PostProcessManager.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="RectTransform.h" />
     <ClInclude Include="ReflectionDatabase.h" />
@@ -242,7 +244,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
-    <ClInclude Include="UISliderHandle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
@@ -293,6 +294,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PostProcessManager.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="RectTransform.cpp" />
     <ClCompile Include="ReflectionDatabase.cpp" />
@@ -319,7 +321,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
-    <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
@@ -339,6 +340,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl" />
@@ -347,24 +350,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\GrayScale_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\GrayScale_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_VS.hlsl" />
-    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl"/>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl"/>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Skeletal_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Skybox_PS.hlsl" />
@@ -373,6 +370,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\TV_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\UI_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\UI_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Vignette_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl" />
   </ItemGroup>

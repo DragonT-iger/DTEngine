@@ -14,6 +14,7 @@
 #include "ConstantBuffers.h"
 
 #include "ResourceManager.h"
+#include "PostProcessManager.h"
 
 struct HWND__;
 using HWND = HWND__*;
@@ -32,6 +33,8 @@ struct ID3D11SamplerState;
 struct ID3D11BlendState;
 class Light;
 class Camera;
+class PostProcessManager;
+class RenderTexture;
 
 
 namespace DirectX {
@@ -108,14 +111,19 @@ public:
     bool GetVsync() { return m_vsync; }
     void SetVsync(bool vsync) { m_vsync = vsync; }
 
-	int GetRefWidth() const { return m_width; }
-	int GetRefHeight() const { return m_height; }
+	int GetRefWidth() const { return m_refWidth; }
+	int GetRefHeight() const { return m_refHeight; }
 
     float GetAspectRatio() const
     {
         if (m_height == 0) return 1.0f;
         return static_cast<float>(m_width) / static_cast<float>(m_height);
     }
+
+    float GetRefAspectRatio() const
+    {
+		return static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
+	}
 
 
     int GetWidth() { return m_width; }
@@ -145,6 +153,9 @@ public:
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
     void OffPS();
+
+    void DrawFullScreenQuad();
+
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -218,10 +229,6 @@ private:
 
 #pragma endregion 
 
-
-
-
-
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
@@ -240,7 +247,8 @@ private:
     bool  m_vsync = false;
 
     int m_refWidth = 1920;
-	int m_refHeight = 1200; // 16:10 의도한거임
+	int m_refHeight = 1200; // 16:10 의도한거임  // 이게 UI의 기준이 되는 사이즈
+	float m_refAspect = static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
 
     Matrix m_viewTM;
     Matrix m_projTM;
@@ -283,6 +291,8 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
 
+    std::unique_ptr<PostProcessManager> m_postProcessManager;
+    std::unique_ptr<RenderTexture>      m_resolvedSceneRT;
 
 
 
