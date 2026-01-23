@@ -65,11 +65,16 @@ private:
 
 #ifdef _DEBUG
 
+	std::unique_ptr<RenderTexture> m_captureRT;
+
 	EngineMode m_engineMode = EngineMode::Edit;
 
 	std::unique_ptr<ImGuiLayer>    m_imgui;
 	std::unique_ptr<EditorUI>      m_editorUI;
 	std::unique_ptr<RenderTexture> m_sceneRT;
+
 	GameObject* m_editorCameraObject = nullptr;
+
+
 #endif
 };

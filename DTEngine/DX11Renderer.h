@@ -156,6 +156,7 @@ public:
 
     void DrawFullScreenQuad();
 
+    PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
 
 private:
     bool CreateDeviceAndSwapchain();

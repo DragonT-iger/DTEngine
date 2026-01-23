@@ -559,31 +559,31 @@ void DX11Renderer::EndFrame()
     }
 
 
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
-    uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+    //uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
 
-    if (m_msaaTargetTex && m_resolvedSceneRT)
-    {
-        m_context->ResolveSubresource(
-            m_resolvedSceneRT->GetTexture(), 0,
-            m_msaaTargetTex.Get(), 0,
-            DXGI_FORMAT_R8G8B8A8_UNORM
-        );
+    //if (m_msaaTargetTex && m_resolvedSceneRT)
+    //{
+    //    m_context->ResolveSubresource(
+    //        m_resolvedSceneRT->GetTexture(), 0,
+    //        m_msaaTargetTex.Get(), 0,
+    //        DXGI_FORMAT_R8G8B8A8_UNORM
+    //    );
 
-        if (m_postProcessManager)
-        {
-            m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask);
-        }
-        else
-        {
-            m_context->ResolveSubresource(
-                m_backbufferTex.Get(), 0,
-                m_msaaTargetTex.Get(), 0,
-                DXGI_FORMAT_R8G8B8A8_UNORM
-            );
-        }
-    }
+    //    if (m_postProcessManager)
+    //    {
+    //        m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask ,1920,1200);
+    //    }
+    //    else
+    //    {
+    //        m_context->ResolveSubresource(
+    //            m_backbufferTex.Get(), 0,
+    //            m_msaaTargetTex.Get(), 0,
+    //            DXGI_FORMAT_R8G8B8A8_UNORM
+    //        );
+    //    }
+    //}
 }
 
 void DX11Renderer::Present()

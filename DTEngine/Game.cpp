@@ -136,12 +136,16 @@ bool Game::Initialize()
 
 
 
+	m_captureRT = std::make_unique<RenderTexture>();
+	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, true, true);
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
+
+
 #endif
-	
+
 
 	if (!FSMRegister::Instance().Initalize())
 	{
@@ -199,7 +203,6 @@ bool Game::Initialize()
 
 
 	//testScene.SaveFile("Scenes/SampleScene.scene");
-
 
 
 	return true;
@@ -440,15 +443,39 @@ void Game::LifeCycle(DeltaTime dt)
 		}
 		else
 		{
-			m_gameRT->Bind();
-			const auto& col = cam->GetClearColor();
-			m_gameRT->Clear(col.x, col.y, col.z, col.w);
+			if (m_captureRT)
+			{
+				m_captureRT->Bind();
+				const auto& col = cam->GetClearColor();
+				m_captureRT->Clear(col.x, col.y, col.z, col.w);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
+				DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam);
 
-			scene->Render(cam, m_gameRT.get(), true);
+				// 씬 렌더링 (UI 포함 여부는 프로젝트 정책에 따라 true/false 결정)
+				scene->Render(cam, m_captureRT.get(), true);
 
-			m_gameRT->Unbind();
+				m_captureRT->Unbind();
+			}
+
+			// B. 포스트 프로세싱 실행 (Source: CaptureRT -> Dest: GameRT)
+			// DX11Renderer에서 매니저 가져오기
+			auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
+
+			if (ppManager && m_captureRT && m_gameRT)
+			{
+				// 전체 효과 적용 마스크 (필요시 cam->GetPostProcessMask() 사용)
+				uint32_t mask = 0xFFFFFFFF;
+
+				// Execute 호출 (크기 인자 전달 필수!)
+				// 결과물은 m_gameRT에 그려짐
+				ppManager->Execute(
+					m_captureRT.get(),      // Source
+					m_gameRT->GetRTV(),     // Destination (RenderTexture에 GetRTV()가 public이어야 함)
+					mask,
+					m_gameRT->GetWidth(),   // Width 전달
+					m_gameRT->GetHeight()   // Height 전달
+				);
+			}
 		}
 	}
 

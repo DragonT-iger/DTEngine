@@ -41,16 +41,19 @@ void PostProcessManager::Resize(int width, int height)
     }
 }
 
-void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask)
+void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, int width, int height)
 {
     RenderTexture* currentSrc = sceneTexture;
     RenderTexture* currentDest = m_tempRT[0].get();
+
+    if (m_tempRT[0]->GetWidth() != width || m_tempRT[0]->GetHeight() != height) {
+        Resize(width, height);
+    }
 
     int pingPongIndex = 0;
 
     for (auto& effect : m_effects)
     {
-        // ★ [에러 수정] 명시적 형변환으로 비교 (uint32_t <-> PostProcessType)
         uint32_t effectType = static_cast<uint32_t>(effect->GetType());
 
         if ((activeEffectsMask & effectType) == 0)
@@ -63,10 +66,10 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
         currentDest = m_tempRT[pingPongIndex].get();
     }
 
-    Blit(currentSrc, backBufferRTV);
+    Blit(currentSrc, backBufferRTV, width, height);
 }
 
-void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV)
+void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height)
 {
     auto context = DX11Renderer::Instance().GetContext();
 
@@ -75,16 +78,21 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
 
     D3D11_VIEWPORT vp;
     vp.TopLeftX = 0; vp.TopLeftY = 0;
-    vp.Width = (float)DX11Renderer::Instance().GetWidth();
-    vp.Height = (float)DX11Renderer::Instance().GetHeight();
+
+    vp.Width = (float)width;
+    vp.Height = (float)height;
+
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     context->RSSetViewports(1, &vp);
 
-    Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
-    if (vs) vs->Bind(); 
 
-    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
-    if (ps) ps->Bind(); 
+    Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
+    if (vs) vs->Bind();
+
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+
+    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
+    if (ps) ps->Bind();
 
     context->OMSetDepthStencilState(nullptr, 0);
 
