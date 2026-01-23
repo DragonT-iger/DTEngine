@@ -19,6 +19,8 @@ void GrayScaleEffect::Render(RenderTexture* src, RenderTexture* dest)
 
     dest->Bind();
 
+	dest->Clear(0.0f, 0.0f, 1.0f, 1.0f);
+
     renderer.SetCullMode(CullMode::None);
     renderer.SetBlendMode(BlendMode::Opaque);
 
