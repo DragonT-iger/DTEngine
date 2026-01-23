@@ -223,6 +223,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="RenderViewport.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -246,6 +247,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Vignette.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +327,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="UISlider.cpp" />
     <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Vignette.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +380,9 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\World_TV_VS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DTEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

@@ -98,6 +98,8 @@ public:
 
     void SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr);
 
+    void ExecutePostProcess(RenderTexture* src, ID3D11RenderTargetView* dest, uint32_t mask);
+
     void SetViewport(float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f, float topLeftX = 0.0f, float topLeftY = 0.0f);
 
     HWND GetHwnd();

@@ -27,19 +27,17 @@ void Rotator::Update(float deltaTime)
 
     if (mainCamera)
     {
-        // 예: G키를 누르면 GrayScale 켜기
         if (InputManager::Instance().GetKeyDown(KeyCode::G))
         {
             mainCamera->SetPostProcessEffect(PostProcessType::GrayScale, true);
+			std::cout << "GrayScale effect enabled." << std::endl;
         }
 
-        // 예: H키를 누르면 GrayScale 끄기
         if (InputManager::Instance().GetKeyDown(KeyCode::H))
         {
             mainCamera->SetPostProcessEffect(PostProcessType::GrayScale, false);
         }
 
-        // 토글(Toggle) 방식 예시
         if (InputManager::Instance().GetKeyDown(KeyCode::T))
         {
             bool isEnabled = mainCamera->IsEffectEnabled(PostProcessType::GrayScale);

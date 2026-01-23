@@ -32,6 +32,7 @@
 
 #include "Shader.h"
 #include "GrayScale.h"
+#include "Vignette.h"
 
 
 
@@ -73,7 +74,8 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_resolvedSceneRT = std::make_unique<RenderTexture>();
     m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
 
-    m_postProcessManager->AddEffect<GrayScale>();
+    m_postProcessManager->AddEffect<GrayScale>(); 
+    m_postProcessManager->AddEffect<Vignette>();
     
     return true;
 }
@@ -560,8 +562,7 @@ void DX11Renderer::EndFrame()
         );
     }
 
-
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+/*    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
     uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
 
@@ -580,8 +581,8 @@ void DX11Renderer::EndFrame()
                 m_resolvedSceneRT->GetRTV(),  
                 effectMask
             );
-        }
-    }
+    //    }
+    //}*/
 }
 
 void DX11Renderer::Present()
@@ -635,6 +636,14 @@ void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStenc
 
     ID3D11RenderTargetView* rtvs[1] = { rtv };
     m_context->OMSetRenderTargets(1, rtvs, dsv);
+}
+
+void DX11Renderer::ExecutePostProcess(RenderTexture* src, ID3D11RenderTargetView* dest, uint32_t mask)
+{
+    if (m_postProcessManager)
+    {
+        m_postProcessManager->Execute(src, dest, mask);
+    }
 }
 
 void DX11Renderer::SetViewport(float width, float height, float minDepth, float maxDepth, float topLeftX, float topLeftY)

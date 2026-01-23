@@ -891,7 +891,18 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
     {
         DrawObject(go);
     }*/
-
+    if (renderTarget != nullptr)
+    {
+        uint32_t mask = camera->GetPostProcessMask();
+        if (mask != 0) 
+        {
+            DX11Renderer::Instance().ExecutePostProcess(
+                renderTarget,            
+                renderTarget->GetRTV(),  
+                mask
+            );
+        }
+    }
     
 
     if (renderUI) {

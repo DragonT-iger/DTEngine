@@ -83,14 +83,16 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     vp.Height = (float)src->GetHeight();
     vp.MinDepth = 0.0f; vp.MaxDepth = 1.0f;
     context->RSSetViewports(1, &vp);
-
+    
     Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
     if (vs) vs->Bind(); 
+	else std::cout << "Failed to load PostProcess_VS.hlsl\n";
 
-    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
-    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
     //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
     if (ps) ps->Bind(); 
+	else std::cout << "Failed to load Copy_PS.hlsl\n";
 
     context->OMSetDepthStencilState(nullptr, 0);
 
