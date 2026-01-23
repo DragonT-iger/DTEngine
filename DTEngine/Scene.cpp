@@ -894,34 +894,34 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     
 
-    if (renderUI) {
-        DX11Renderer::Instance().BeginUIRender(width, height);
+    //if (renderUI) {
+    //    DX11Renderer::Instance().BeginUIRender(width, height);
 
-        for (auto* go : uiQueue)
-        {
-            Image* img = go->GetComponent<Image>();
-            if (img)
-            {
-                Texture* tex = img->GetTexture();
-                if (tex)
-                {
-                    Transform* tf = go->GetTransform();
+    //    for (auto* go : uiQueue)
+    //    {
+    //        Image* img = go->GetComponent<Image>();
+    //        if (img)
+    //        {
+    //            Texture* tex = img->GetTexture();
+    //            if (tex)
+    //            {
+    //                Transform* tf = go->GetTransform();
 
-                    Vector3 pos = tf->GetWorldPosition();
-                    Vector3 scale = tf->GetWorldScale();
+    //                Vector3 pos = tf->GetWorldPosition();
+    //                Vector3 scale = tf->GetWorldScale();
 
-                    DX11Renderer::Instance().DrawUI(
-                        tex,
-                        Vector2(pos.x, pos.y),
-                        Vector2(scale.x, scale.y),
-                        img->GetColor()
-                    );
-                }
-            }
-        }
+    //                DX11Renderer::Instance().DrawUI(
+    //                    tex,
+    //                    Vector2(pos.x, pos.y),
+    //                    Vector2(scale.x, scale.y),
+    //                    img->GetColor()
+    //                );
+    //            }
+    //        }
+    //    }
 
-        DX11Renderer::Instance().EndUIRender();
-    }
+    //    DX11Renderer::Instance().EndUIRender();
+    //}
 }
 
 void Scene::RenderShadows()

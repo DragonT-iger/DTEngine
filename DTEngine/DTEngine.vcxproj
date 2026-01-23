@@ -190,6 +190,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GrayScaleEffect.h" />
     <ClInclude Include="HistoryManager.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
@@ -274,6 +275,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GrayScaleEffect.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="Image.cpp" />

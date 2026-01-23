@@ -31,6 +31,7 @@
 #include "DXHelper.h"
 
 #include "Shader.h"
+#include "GrayScaleEffect.h"
 
 
 
@@ -62,7 +63,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     //CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    CreateShadowMap(4096, 4096);
+    CreateShadowMap(8192, 8192);
 
 
 
@@ -72,6 +73,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_resolvedSceneRT = std::make_unique<RenderTexture>();
     m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
 
+    m_postProcessManager->AddEffect<GrayScaleEffect>();
     
     return true;
 }
@@ -545,6 +547,8 @@ void DX11Renderer::CreateConstantBuffers()
 
 void DX11Renderer::EndFrame()
 {
+
+#ifndef _DEBUG
     if (m_msaaTargetTex && m_backbufferTex)
     {
         m_context->ResolveSubresource(
@@ -557,6 +561,7 @@ void DX11Renderer::EndFrame()
 //#endif
         );
     }
+
 
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
@@ -573,7 +578,7 @@ void DX11Renderer::EndFrame()
 
     //    if (m_postProcessManager)
     //    {
-    //        m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask ,1920,1200);
+    //        m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask, DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
     //    }
     //    else
     //    {
@@ -584,6 +589,7 @@ void DX11Renderer::EndFrame()
     //        );
     //    }
     //}
+#endif
 }
 
 void DX11Renderer::Present()
@@ -715,10 +721,10 @@ void DX11Renderer::BindShader(Shader* shader)
     if (!shader) return;
 
    
-    if (m_currentShaderID == shader->GetID())
-    {
-        return;
-    }
+    //if (m_currentShaderID == shader->GetID())
+    //{
+    //    return;
+    //}
 
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 

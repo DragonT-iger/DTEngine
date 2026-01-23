@@ -13,14 +13,12 @@ PostProcessManager::~PostProcessManager() = default;
 
 void PostProcessManager::Initialize(int width, int height)
 {
-    // 핑퐁 버퍼 생성
     for (int i = 0; i < 2; ++i)
     {
         m_tempRT[i] = std::make_unique<RenderTexture>();
         m_tempRT[i]->Initialize(width, height, RenderTextureType::Tex2D, false);
     }
 
-    // 샘플러 생성
     auto device = DX11Renderer::Instance().GetDevice();
     D3D11_SAMPLER_DESC sampDesc = {};
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
@@ -95,6 +93,7 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     if (ps) ps->Bind();
 
     context->OMSetDepthStencilState(nullptr, 0);
+	context->OMSetRenderTargets(1, rtvs, nullptr);
 
     ID3D11ShaderResourceView* srv = src->GetSRV();
     context->PSSetShaderResources(0, 1, &srv);
