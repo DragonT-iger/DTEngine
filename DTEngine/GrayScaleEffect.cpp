@@ -9,7 +9,7 @@ void GrayScaleEffect::Initialize()
     m_ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
 }
 
-void GrayScaleEffect::void Render(RenderTexture* src, RenderTexture* dest, const Camera* camera) override;
+void GrayScaleEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* camera)
 {
     if ( !m_ps || !src || !dest) return;
 

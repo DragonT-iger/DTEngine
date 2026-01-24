@@ -469,6 +469,7 @@ void Game::LifeCycle(DeltaTime dt)
 					m_captureRT.get(),      
 					m_gameRT->GetRTV(),     
 					mask,
+					mainCam,
 					m_gameRT->GetWidth(),   
 					m_gameRT->GetHeight()   
 				);
@@ -559,6 +560,7 @@ void Game::LifeCycle(DeltaTime dt)
 				m_captureRT.get(),
 				m_gameRT->GetRTV(),
 				0xFFFFFFFF,
+				mainCam,
 				m_gameRT->GetWidth(),
 				m_gameRT->GetHeight()
 			);

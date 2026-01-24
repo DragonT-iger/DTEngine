@@ -57,7 +57,7 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
         if ((activeEffectsMask & effectType) == 0)
             continue;
 
-        effect->Render(currentSrc, currentDest);
+        effect->Render(currentSrc, currentDest, camera);
 
         currentSrc = currentDest;
         pingPongIndex = 1 - pingPongIndex;
