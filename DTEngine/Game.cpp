@@ -554,12 +554,17 @@ void Game::LifeCycle(DeltaTime dt)
 		m_captureRT->Unbind();
 
 		auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
+
+		uint32_t mask = (mainCam) ? mainCam->GetPostProcessMask() : 0;
+
+
+		// uint32_t mask = 0xFFFFFFFF; // 모든 후처리 효과 적용
 		if (ppManager)
 		{
 			ppManager->Execute(
 				m_captureRT.get(),
 				m_gameRT->GetRTV(),
-				0xFFFFFFFF,
+				mask,
 				mainCam,
 				m_gameRT->GetWidth(),
 				m_gameRT->GetHeight()
