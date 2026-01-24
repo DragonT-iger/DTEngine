@@ -104,10 +104,10 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
-	// SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	// SceneManager::Instance().LoadScene("DTtestScene");
+	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	//SceneManager::Instance().LoadScene("SampleScene");
+	 SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	 SceneManager::Instance().LoadScene("DTtestScene");
 
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
@@ -407,10 +407,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 	m_sceneRT->Bind();
 
-
 	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
 	// 씬 뷰
-
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
@@ -457,23 +455,18 @@ void Game::LifeCycle(DeltaTime dt)
 				m_captureRT->Unbind();
 			}
 
-			// B. 포스트 프로세싱 실행 (Source: CaptureRT -> Dest: GameRT)
-			// DX11Renderer에서 매니저 가져오기
 			auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
 
 			if (ppManager && m_captureRT && m_gameRT)
 			{
-				// 전체 효과 적용 마스크 (필요시 cam->GetPostProcessMask() 사용)
 				uint32_t mask = 0xFFFFFFFF;
 
-				// Execute 호출 (크기 인자 전달 필수!)
-				// 결과물은 m_gameRT에 그려짐
 				ppManager->Execute(
-					m_captureRT.get(),      // Source
-					m_gameRT->GetRTV(),     // Destination (RenderTexture에 GetRTV()가 public이어야 함)
+					m_captureRT.get(),      
+					m_gameRT->GetRTV(),     
 					mask,
-					m_gameRT->GetWidth(),   // Width 전달
-					m_gameRT->GetHeight()   // Height 전달
+					m_gameRT->GetWidth(),   
+					m_gameRT->GetHeight()   
 				);
 			}
 		}
@@ -500,7 +493,6 @@ void Game::LifeCycle(DeltaTime dt)
 
 	m_editorUI->RenderSceneWindow(m_sceneRT.get(), scene, editorCam);
 	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
-
 
 
 

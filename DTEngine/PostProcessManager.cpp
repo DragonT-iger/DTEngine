@@ -72,7 +72,6 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     auto context = DX11Renderer::Instance().GetContext();
 
     ID3D11RenderTargetView* rtvs[1] = { destRTV };
-    context->OMSetRenderTargets(1, rtvs, nullptr);
 
     D3D11_VIEWPORT vp;
     vp.TopLeftX = 0; vp.TopLeftY = 0;
@@ -84,12 +83,12 @@ void PostProcessManager::Blit(RenderTexture* src, ID3D11RenderTargetView* destRT
     context->RSSetViewports(1, &vp);
 
 
-    Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
-    if (vs) vs->Bind();
+    //Shader* vs = ResourceManager::Instance().Load<Shader>("Assets/Shaders/PostProcess_VS.hlsl");
+    //if (vs) vs->Bind(); // 어짜피 의미가 없어 지금 코드 논리상
 
-    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
+    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Copy_PS.hlsl");
 
-    Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
+    //Shader* ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
     if (ps) ps->Bind();
 
     context->OMSetDepthStencilState(nullptr, 0);
