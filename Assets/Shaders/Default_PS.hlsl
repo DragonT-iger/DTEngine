@@ -23,7 +23,7 @@ float4 PS(PS_INPUT input) : SV_Target
 {
     float3 normal = normalize(input.Normal);
 
-    float3 finalColor = ComputeLambertLighting(input.WorldPos, normal);
+    float3 finalColor = ComputeLambertLighting(input.WorldPos, normal, Shadow_Bias);
         
     if (UseTexture)
     {

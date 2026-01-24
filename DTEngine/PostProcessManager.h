@@ -16,7 +16,7 @@ public:
     void Initialize(int width, int height);
     void Resize(int width, int height);
 
-    void Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, int width, int height);
+    void Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, Camera* camera, int width, int height);
 
     template <typename T>
     T* AddEffect()

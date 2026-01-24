@@ -39,7 +39,7 @@ void PostProcessManager::Resize(int width, int height)
     }
 }
 
-void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, int width, int height)
+void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, Camera* camera, int width, int height)
 {
     RenderTexture* currentSrc = sceneTexture;
     RenderTexture* currentDest = m_tempRT[0].get();

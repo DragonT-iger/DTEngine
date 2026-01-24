@@ -1,7 +1,7 @@
 #pragma once
 
 class RenderTexture;
-
+class Camera;
 enum class PostProcessType : uint32_t
 {
     None        = 0,
@@ -27,7 +27,7 @@ class IPostProcess
 public:
     virtual ~IPostProcess() = default;
     virtual void Initialize() = 0;
-    virtual void Render(RenderTexture* src, RenderTexture* dest = nullptr) = 0;
+    virtual void Render(RenderTexture* src, RenderTexture* dest, const Camera* camera) = 0;
 
     virtual PostProcessType GetType() const = 0;
 };

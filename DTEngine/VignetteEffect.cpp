@@ -11,7 +11,7 @@ void VignetteEffect::Initialize()
     m_ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
 }
 
-void VignetteEffect::Render(RenderTexture* src, RenderTexture* dest)
+void VignetteEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* camera)
 {
     if (!m_ps || !src || !dest) return;
 

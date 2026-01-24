@@ -10,7 +10,7 @@ public:
     ~GrayScaleEffect() override = default;
 
     void Initialize() override;
-    void Render(RenderTexture* src, RenderTexture* dest) override;
+    void Render(RenderTexture* src, RenderTexture* dest, const Camera* camera) override;
     PostProcessType GetType() const override { return PostProcessType::GrayScale; }
 
 private:
