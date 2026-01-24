@@ -2,16 +2,9 @@
 #include "IPostProcess.h"
 #include <wrl/client.h>
 
-struct BloomData
-{
-    float threshold;
-    float intensity;
-    float padding1;
-    float padding2;
-};
 
 class Shader;
-class ID3D11Buffer;
+struct ID3D11Buffer;
 
 
 class VignetteEffect : public IPostProcess
