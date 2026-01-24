@@ -27,11 +27,9 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "InputManager.h"
-
 #include "DXHelper.h"
-
 #include "Shader.h"
-
+#include "Font.h"
 
 
 using Microsoft::WRL::ComPtr;
@@ -244,6 +242,19 @@ void DX11Renderer::UpdateSkyBox_CBUFFER(SkyBox& data)
     m_context->Unmap(m_cbuffer_SkyBox.Get(), 0);
 }
 
+void DX11Renderer::UpdateEffect_CBUFFER(EffectParams& data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+
+    HRESULT hr = m_context->Map(m_cbuffer_Effect.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    EffectParams* dataPtr = static_cast<EffectParams*>(mappedData.pData);
+    *dataPtr = data;
+
+    m_context->Unmap(m_cbuffer_Effect.Get(), 0);
+}
+
 void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
 
@@ -412,6 +423,24 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
     );
 }
 
+void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color)
+{
+    auto SpriteFont = Font->GetSpriteFont();
+
+    if (!SpriteFont || !m_spriteBatch) return;
+
+    SpriteFont->DrawString(m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        0.0f,
+        DirectX::XMFLOAT2(0, 0),
+        fontSize
+    );
+
+}
+
+
 void DX11Renderer::SetBlendMode(BlendMode mode)
 {
     float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
@@ -500,7 +529,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
     m_context->VSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
-
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -512,6 +541,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
     m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -551,6 +581,10 @@ void DX11Renderer::CreateConstantBuffers()
 
     bd.ByteWidth = sizeof(SkyBox);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_SkyBox.GetAddressOf()));
+
+    bd.ByteWidth = sizeof(EffectParams);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Effect.GetAddressOf()));
+
 
 
       // D3D11_BUFFER_DESC boneDesc = {};
@@ -977,7 +1011,7 @@ void DX11Renderer::ReleaseCB()
     m_cbuffer_Texture_flags.Reset();
     m_cbuffer_matrix_pallette.Reset();
     m_cbuffer_SkyBox.Reset();
-
+    m_cbuffer_SkyBox.Reset();
 }
 
 

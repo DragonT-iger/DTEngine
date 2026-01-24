@@ -73,10 +73,7 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         for (unsigned int k = 0; k < channel->mNumScalingKeys; ++k)
         {
             const auto& key = channel->mScalingKeys[k];
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of b0cf5da (Merge remote-tracking branch 'origin/DT' into BJ)
             Vector3 scaleValue(key.mValue.x, key.mValue.y, key.mValue.z);
 
             if (nodeName == "Armature" || nodeName == "RootNode") //중첩 Scaling을 방지. 
