@@ -246,6 +246,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VignetteEffect.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +326,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="UISlider.cpp" />
     <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VignetteEffect.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>

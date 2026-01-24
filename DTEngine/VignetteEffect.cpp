@@ -1,30 +1,30 @@
 #include "pch.h"
-#include "GrayScaleEffect.h"
+#include "VignetteEffect.h"
 #include "DX11Renderer.h"
 #include "ResourceManager.h"
+#include "Shader.h"
 #include "RenderTexture.h"
 
-void GrayScaleEffect::Initialize()
+
+void VignetteEffect::Initialize()
 {
-    m_ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/GrayScale_PS.hlsl");
+    m_ps = ResourceManager::Instance().Load<Shader>("Assets/Shaders/Vignette_PS.hlsl");
 }
 
-void GrayScaleEffect::Render(RenderTexture* src, RenderTexture* dest)
+void VignetteEffect::Render(RenderTexture* src, RenderTexture* dest)
 {
-    if ( !m_ps || !src || !dest) return;
+    if (!m_ps || !src || !dest) return;
 
     auto& renderer = DX11Renderer::Instance();
     auto context = renderer.GetContext();
 
     dest->Bind();
 
-	dest->Clear(0.0f, 0.0f, 1.0f, 1.0f);
+    dest->Clear(0.0f, 0.0f, 1.0f, 1.0f);
 
-    renderer.SetCullMode(CullMode::None);
-    renderer.SetBlendMode(BlendMode::Opaque);
 
     //m_vs->Bind();
-	m_ps->Bind(); // 지금 어짜피 Bind 함수 자체가 vs, ps 둘다 바인딩 하도록 되어있음.
+    m_ps->Bind(); // 지금 어짜피 Bind 함수 자체가 vs, ps 둘다 바인딩 하도록 되어있음.
 
     ID3D11ShaderResourceView* srv = src->GetSRV();
     context->PSSetShaderResources(0, 1, &srv);

@@ -14,6 +14,5 @@ public:
     PostProcessType GetType() const override { return PostProcessType::GrayScale; }
 
 private:
-    Shader* m_vs = nullptr;
     Shader* m_ps = nullptr;
 };

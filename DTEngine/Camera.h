@@ -74,6 +74,12 @@ public:
     uint32_t GetPostProcessMask() const { return m_postProcessMask; }
 
 
+    const bool& GetUseGrayScale() const { return m_useGrayScale; }
+    void SetUseGrayScale(bool use);
+
+    const bool& GetUseVignette() const { return m_useVignette; }
+    void SetUseVignette(bool use);
+
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -110,5 +116,8 @@ private:
 
     bool m_enablePostProcess = true;
 
-    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::All);
+    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::None);
+
+    bool m_useGrayScale = false;
+    bool m_useVignette = false;
 };

@@ -55,7 +55,7 @@ private:
 
     bool m_isSRGB;
     bool m_enableAA = false;
-    int m_msaa = 1;
+    int m_msaa = 8;
 	int m_msaaQuality = 0;
 
     ComPtr<ID3D11Texture2D>          m_renderTargetTexture;

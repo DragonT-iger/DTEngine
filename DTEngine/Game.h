@@ -62,10 +62,10 @@ private:
 	std::unique_ptr<GameTimer> m_timer;
 
 	std::unique_ptr<RenderTexture> m_gameRT;
+	std::unique_ptr<RenderTexture> m_captureRT;
 
 #ifdef _DEBUG
 
-	std::unique_ptr<RenderTexture> m_captureRT;
 
 	EngineMode m_engineMode = EngineMode::Edit;
 

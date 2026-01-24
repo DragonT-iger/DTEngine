@@ -32,6 +32,7 @@
 
 #include "Shader.h"
 #include "GrayScaleEffect.h"
+#include "VignetteEffect.h"
 
 
 
@@ -74,6 +75,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
 
     m_postProcessManager->AddEffect<GrayScaleEffect>();
+	m_postProcessManager->AddEffect<VignetteEffect>();
     
     return true;
 }
@@ -548,7 +550,6 @@ void DX11Renderer::CreateConstantBuffers()
 void DX11Renderer::EndFrame()
 {
 
-#ifndef _DEBUG
     if (m_msaaTargetTex && m_backbufferTex)
     {
         m_context->ResolveSubresource(
@@ -562,6 +563,7 @@ void DX11Renderer::EndFrame()
         );
     }
 
+#ifndef _DEBUG
 
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
