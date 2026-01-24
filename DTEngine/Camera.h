@@ -81,7 +81,7 @@ public:
     void SetUseVignette(bool use);
 
 	const bool& GetUseBloom() const { return m_useBloom; }
-	void SetUseBloom(bool use) { m_useBloom = use; }
+    void SetUseBloom(bool use);
 
     const float& GetBloomThreshold() const { return m_bloomThreshold; }
     void SetBloomThreshold(float value) { m_bloomThreshold = value; }

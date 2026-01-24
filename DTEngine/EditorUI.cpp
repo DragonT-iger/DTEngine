@@ -2501,7 +2501,7 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 
     if (rt->GetWidth() != (int)drawW || rt->GetHeight() != (int)drawH)
     {
-        rt->Resize((int)size.x, (int)size.y);
+        rt->Resize((int)drawW, (int)drawH);
     }
 
 

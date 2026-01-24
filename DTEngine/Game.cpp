@@ -448,7 +448,13 @@ void Game::LifeCycle(DeltaTime dt)
 		{
 			if (m_captureRT)
 			{
-				m_captureRT->Bind();
+				if (m_gameRT && (m_captureRT->GetWidth() != m_gameRT->GetWidth() || m_captureRT->GetHeight() != m_gameRT->GetHeight()))
+				{
+					m_captureRT->Resize(m_gameRT->GetWidth(), m_gameRT->GetHeight());
+				}
+				// --------------------------------------------------------------------------
+
+				m_captureRT->Bind(); 
 				const auto& col = cam->GetClearColor();
 				m_captureRT->Clear(col.x, col.y, col.z, col.w);
 
@@ -1051,7 +1057,11 @@ void Game::OnResize(int width, int height)
 		//std::cout << "Main camera view dirty set from Game OnResize" << std::endl;
 	}
 
-	m_gameRT->Resize(width, height);
+	if (m_gameRT)
+		m_gameRT->Resize(width, height);
+
+	if (m_captureRT)
+		m_captureRT->Resize(width, height);
 
 	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
 }

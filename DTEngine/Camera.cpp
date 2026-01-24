@@ -200,6 +200,12 @@ void Camera::SetUseVignette(bool use)
     SetPostProcessEffect(PostProcessType::Vignette, use);
 }
 
+void Camera::SetUseBloom(bool use)
+{
+    m_useBloom = use;
+	SetPostProcessEffect(PostProcessType::Bloom, use);
+}
+
 void Camera::UpdateViewMatrix()
 {
 
