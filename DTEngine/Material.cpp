@@ -160,6 +160,15 @@ bool Material::LoadFile(const std::string& fullPath)
         }
     }
 
+    if (data.contains("ShadowBias"))
+    {
+        m_data.Shadow_Bias = data["ShadowBias"];
+    }
+    else
+    {
+        m_data.Shadow_Bias = 0.005f; 
+    }
+
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
@@ -209,7 +218,7 @@ bool Material::SaveFile(const std::string& fullPath)
         }
     }
     data["Textures"] = texData;
-
+    data["ShadowBias"] = m_data.Shadow_Bias;
     std::ofstream file(fullPath);
     if (!file.is_open())
     {
@@ -265,6 +274,7 @@ Material* Material::Clone()
     newMat->m_data = m_data;        
     newMat->m_cullMode = m_cullMode;
     newMat->m_renderMode = m_renderMode;
+	newMat->m_data.Shadow_Bias = m_data.Shadow_Bias;
 
     newMat->UpdateTextureBatchID();
 
@@ -294,6 +304,16 @@ bool Material::SetColor(const Vector4& color)
 Vector4 Material::GetColor() const
 {
     return Vector4(m_data.Color);
+}
+
+void Material::SetShadowBias(float bias)
+{
+	m_data.Shadow_Bias = bias;
+}
+
+float Material::GetShadowBias() const
+{
+    return m_data.Shadow_Bias;
 }
 
 uint16_t Material::GetShaderID()
@@ -389,6 +409,8 @@ void Material::BindPipeLine()
     }
 
     DX11Renderer::Instance().SetCullMode(m_cullMode);
+
+
 
    
 

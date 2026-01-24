@@ -105,10 +105,10 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
-	// SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	// SceneManager::Instance().LoadScene("DTtestScene");
+	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	//SceneManager::Instance().LoadScene("SampleScene");
+	 SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	 SceneManager::Instance().LoadScene("DTtestScene");
 
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
@@ -125,13 +125,14 @@ bool Game::Initialize()
 		return false;
 	}
 
-	
+
+
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
 	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false);
 
 	SetEditorCamera(scene);
 
@@ -140,9 +141,16 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false);
+
+
 #endif
-	
+
+
+	m_captureRT = std::make_unique<RenderTexture>();
+	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, true, true);
+
+
 
 	if (!FSMRegister::Instance().Initalize())
 	{
@@ -200,7 +208,6 @@ bool Game::Initialize()
 
 
 	//testScene.SaveFile("Scenes/SampleScene.scene");
-
 
 
 	return true;
@@ -376,8 +383,6 @@ void Game::LifeCycle(DeltaTime dt)
 	// 렌더링
 
 
-	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
-	DX11Renderer::Instance().BeginFrame(black);
 
 
 #endif
@@ -405,16 +410,16 @@ void Game::LifeCycle(DeltaTime dt)
 
 	m_sceneRT->Bind();
 
-
 	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
 	// 씬 뷰
-
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
 	scene->Render(editorCam, m_sceneRT.get(), true);
 
 	m_sceneRT->Unbind();
+
+	Camera* mainCam = scene->GetMainCamera();
 
 
 	const auto& gameObjects = scene->GetGameObjects();
@@ -441,20 +446,39 @@ void Game::LifeCycle(DeltaTime dt)
 		}
 		else
 		{
-			m_gameRT->Bind();
-			const auto& col = cam->GetClearColor();
-			m_gameRT->Clear(col.x, col.y, col.z, col.w);
+			if (m_captureRT)
+			{
+				m_captureRT->Bind();
+				const auto& col = cam->GetClearColor();
+				m_captureRT->Clear(col.x, col.y, col.z, col.w);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam->GetComponent<Camera>());
+				DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam);
 
-			scene->Render(cam, m_gameRT.get(), true);
+				scene->Render(cam, m_captureRT.get(), true);
 
-			m_gameRT->Unbind();
+				m_captureRT->Unbind();
+			}
+
+			auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
+
+			if (ppManager && m_captureRT && m_gameRT)
+			{
+				uint32_t mask = (mainCam) ? mainCam->GetPostProcessMask() : 0;
+
+				ppManager->Execute(
+					m_captureRT.get(),      
+					m_gameRT->GetRTV(),     
+					mask,
+					mainCam,
+					m_gameRT->GetWidth(),   
+					m_gameRT->GetHeight()   
+				);
+			}
 		}
 	}
 
 
-	//static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
+	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 	DX11Renderer::Instance().BeginFrame(black);
 
 	m_imgui->NewFrame();
@@ -474,7 +498,6 @@ void Game::LifeCycle(DeltaTime dt)
 
 	m_editorUI->RenderSceneWindow(m_sceneRT.get(), scene, editorCam);
 	m_editorUI->RenderGameWindow(m_gameRT.get(), scene);
-
 
 
 
@@ -518,18 +541,37 @@ void Game::LifeCycle(DeltaTime dt)
 	const float* clearColor = (float*)&mainCam->GetClearColor();
 
 
-	if (mainCam)
+	if (mainCam && m_captureRT && m_gameRT)
 	{
-		m_gameRT->Bind();
-		m_gameRT->Clear(clearColor[0], clearColor[1], clearColor[2], 1);
+		m_captureRT->Bind();
+		m_captureRT->Clear(clearColor[0], clearColor[1], clearColor[2], 1);
 
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
-		RenderScene(scene, mainCam, m_gameRT.get(), true);
+		RenderScene(scene, mainCam, m_captureRT.get(), true);
 
-		m_gameRT->Unbind();
-		
+		m_captureRT->Unbind();
+
+		auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
+
+		uint32_t mask = (mainCam) ? mainCam->GetPostProcessMask() : 0;
+
+
+		// uint32_t mask = 0xFFFFFFFF; // 모든 후처리 효과 적용
+		if (ppManager)
+		{
+			ppManager->Execute(
+				m_captureRT.get(),
+				m_gameRT->GetRTV(),
+				mask,
+				mainCam,
+				m_gameRT->GetWidth(),
+				m_gameRT->GetHeight()
+			);
+
+			m_gameRT->Unbind();
+		}
 	}
 
 
@@ -570,6 +612,9 @@ void Game::LifeCycle(DeltaTime dt)
 		float ratio = drawWidth / drawHeight;
 		camera->SetAspectRatio(ratio);
 	}
+
+
+
 
 	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
 

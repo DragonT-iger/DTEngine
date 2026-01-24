@@ -158,6 +158,7 @@ public:
 
     void DrawFullScreenQuad();
 
+    PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -283,7 +284,10 @@ private:
     std::unique_ptr< RenderTexture> m_resolvedSceneRT;
 
     Matrix m_lightViewProjScale;
-
+    
+	std::unique_ptr<PostProcessManager> m_postProcessManager;
+	std::unique_ptr<RenderTexture> m_resolvedSceneRT;
+    
 
     private:
       uint16_t m_currentShaderID = 0; 

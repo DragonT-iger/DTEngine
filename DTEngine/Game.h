@@ -62,14 +62,19 @@ private:
 	std::unique_ptr<GameTimer> m_timer;
 
 	std::unique_ptr<RenderTexture> m_gameRT;
+	std::unique_ptr<RenderTexture> m_captureRT;
 
 #ifdef _DEBUG
+
 
 	EngineMode m_engineMode = EngineMode::Edit;
 
 	std::unique_ptr<ImGuiLayer>    m_imgui;
 	std::unique_ptr<EditorUI>      m_editorUI;
 	std::unique_ptr<RenderTexture> m_sceneRT;
+
 	GameObject* m_editorCameraObject = nullptr;
+
+
 #endif
 };

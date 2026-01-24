@@ -74,6 +74,21 @@ public:
     uint32_t GetPostProcessMask() const { return m_postProcessMask; }
 
 
+    const bool& GetUseGrayScale() const { return m_useGrayScale; }
+    void SetUseGrayScale(bool use);
+
+    const bool& GetUseVignette() const { return m_useVignette; }
+    void SetUseVignette(bool use);
+
+	const bool& GetUseBloom() const { return m_useBloom; }
+	void SetUseBloom(bool use) { m_useBloom = use; }
+
+    const float& GetBloomThreshold() const { return m_bloomThreshold; }
+    void SetBloomThreshold(float value) { m_bloomThreshold = value; }
+
+    const float& GetBloomIntensity() const { return m_bloomIntensity; }
+    void SetBloomIntensity(float value) { m_bloomIntensity = value; }
+
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -110,5 +125,12 @@ private:
 
     bool m_enablePostProcess = true;
 
-    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::All);
+    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::None);
+
+    bool m_useGrayScale = false;
+    bool m_useVignette = false;
+
+	bool m_useBloom = false;
+    float m_bloomThreshold = 1.0f; 
+    float m_bloomIntensity = 1.0f; 
 };

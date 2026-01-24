@@ -30,7 +30,7 @@ cbuffer CBuffer_GlobalLight : register(b3)
 Texture2D g_ShadowMap : register(t10);
 SamplerComparisonState g_ShadowSampler : register(s10);
 
-float CalculateShadow(float3 worldPos)
+float CalculateShadow(float3 worldPos, float shadowBias)
 {
     float4 shadowCoord = mul(float4(worldPos, 1.0f), LightViewProjScale);
     
@@ -47,7 +47,7 @@ float CalculateShadow(float3 worldPos)
    
     
     float currentDepth = shadowCoord.z;
-    float bias = 0.005f;
+    float bias = shadowBias;
     
     float totalShadow = 0;
     
@@ -70,7 +70,7 @@ float CalculateShadow(float3 worldPos)
     
 }
 
-float3 ComputeLambertLighting(float3 worldPos, float3 normal)
+float3 ComputeLambertLighting(float3 worldPos, float3 normal, float shadowBias)
 {
     
     float3 totalDiffuse = float3(0, 0, 0);
@@ -82,7 +82,7 @@ float3 ComputeLambertLighting(float3 worldPos, float3 normal)
 
     float shadowFactor = 1.0f;
     
-    shadowFactor = CalculateShadow(worldPos);
+    shadowFactor = CalculateShadow(worldPos, shadowBias);
 
     for (int i = 0; i < ActiveCount; ++i)
     {
