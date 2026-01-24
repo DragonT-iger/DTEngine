@@ -276,7 +276,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_msaaTargetTex; 
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_msaaTargetRTV;
     UINT m_msaaQuality = 0;
-    int m_msaa = 1;
+    int m_msaa = 8;
 
 
 

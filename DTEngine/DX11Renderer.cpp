@@ -202,6 +202,7 @@ void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
     dataPtr->UseTexture = M_Data.UseTexture;
     dataPtr->metallicFactor = M_Data.metallicFactor;
     dataPtr->roughnessFactor = M_Data.roughnessFactor;
+	dataPtr->Shadow_Bias = M_Data.Shadow_Bias;
 
     m_context->Unmap(m_cbuffer_material.Get(), 0);
 }

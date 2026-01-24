@@ -38,6 +38,4 @@ void VignetteEffect::Render(RenderTexture* src, RenderTexture* dest)
     context->PSSetShaderResources(0, 1, &nullSRV);
 
     dest->Unbind();
-
-    renderer.SetCullMode(CullMode::Back);
 }

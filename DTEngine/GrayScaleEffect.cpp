@@ -20,9 +20,6 @@ void GrayScaleEffect::Render(RenderTexture* src, RenderTexture* dest)
 
 	dest->Clear(0.0f, 0.0f, 1.0f, 1.0f);
 
-    renderer.SetCullMode(CullMode::None);
-    renderer.SetBlendMode(BlendMode::Opaque);
-
     //m_vs->Bind();
 	m_ps->Bind(); // 지금 어짜피 Bind 함수 자체가 vs, ps 둘다 바인딩 하도록 되어있음.
 
@@ -38,6 +35,4 @@ void GrayScaleEffect::Render(RenderTexture* src, RenderTexture* dest)
     context->PSSetShaderResources(0, 1, &nullSRV);
 
     dest->Unbind();
-
-    renderer.SetCullMode(CullMode::Back);
 }
