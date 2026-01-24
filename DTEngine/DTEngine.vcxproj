@@ -183,6 +183,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="DX11Renderer.h" />
     <ClInclude Include="DXHelper.h" />
     <ClInclude Include="EditorUI.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="FSMController.h" />
@@ -271,6 +273,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="DX11Renderer.cpp" />
     <ClCompile Include="DXHelper.cpp" />
     <ClCompile Include="EditorUI.cpp" />
+    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="FreeCamera.cpp" />
     <ClCompile Include="FSMController.cpp" />
     <ClCompile Include="FSMRegister.cpp" />
@@ -365,6 +369,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\CubeMap_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Default_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Dwarf_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Dwarf_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Error_PS.hlsl" />

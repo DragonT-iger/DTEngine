@@ -35,7 +35,7 @@ class Light;
 class Camera;
 class PostProcessManager;
 class RenderTexture;
-
+class Font;
 
 namespace DirectX {
 	inline namespace DX11 {
@@ -79,6 +79,7 @@ public:
 
 
     void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
+    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
@@ -139,7 +140,8 @@ public:
     void UpdateTextureFlag_CBUFFER(uint32_t Flags);
     void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
     void UpdateSkyBox_CBUFFER(SkyBox& data);
-    
+    void UpdateEffect_CBUFFER(EffectParams& data);
+
 
 
     //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
@@ -224,11 +226,9 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
-
-
-
-
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr; // 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Effect = nullptr;
+
 
 #pragma endregion 
 
@@ -280,7 +280,8 @@ private:
     UINT m_msaaQuality = 0;
     int m_msaa = 8;
 
-
+    std::unique_ptr< PostProcessManager> m_postProcessManager;
+    std::unique_ptr< RenderTexture> m_resolvedSceneRT;
 
     Matrix m_lightViewProjScale;
     

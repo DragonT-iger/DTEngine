@@ -92,6 +92,9 @@
     </Filter>
     <Filter Include="PostProcessing\Effect">
       <UniqueIdentifier>{5ed86ba3-8a3b-4e83-b52c-a0cd3f1aa889}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Shader\Specific\Effect">
+      <UniqueIdentifier>{4b1c99ac-beb7-41ec-8bbd-e69a6dc283d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +361,12 @@
     </ClInclude>
     <ClInclude Include="VignetteEffect.h">
       <Filter>PostProcessing\Effect</Filter>
+	</ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -570,7 +579,7 @@
     </ClCompile>
     <ClCompile Include="SkyBoxComponent.cpp">
       <Filter>Component</Filter>
-    </ClInclude>
+    </ClCompile>
     <ClCompile Include="PostProcessManager.cpp">
       <Filter>PostProcessing</Filter>
     </ClCompile>
@@ -582,6 +591,12 @@
     </ClCompile>
     <ClCompile Include="VignetteEffect.cpp">
       <Filter>PostProcessing\Effect</Filter>
+	</ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -707,6 +722,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_VS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_PS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

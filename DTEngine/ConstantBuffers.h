@@ -65,13 +65,28 @@ struct Matrix_Pallette //b5
     Matrix Matrix_Pallette[boneCnt]; // 운용할 bone 갯수 만큼 배열 크기를 정의할 예정. 
 };
 
-
-//뭐가 더 필요하면 더 넣는 거로 
 __declspec(align(16))
 struct SkyBox
 {
     Vector4 SkyBox_Color;
+};
 
+// SHADER를 사용한 종합적인 Effect에 필요한 상수버퍼.
+// Dissolve 나 Alpha 부터 시작.
+__declspec(align(16))
+struct EffectParams
+{
+    float progress = 0.0f;       // 소멸 진행도 (0~1)
+    float edgeWidth = 0.01f;     // 테두리 두께
+    float glowIntensity = 1.0f;  // 발광 강도
+    float totalTime = 0.0f;      // 누적 시간
+
+    Vector4 edgeColor = { 1.0f, 0.5f, 0.2f, 1.0f }; // 테두리 색상
+
+    float noiseScale = 1.0f;
+    float timeMultiplier = 1.0f; // 애니메이션 배속 (추가)
+    float effectType = 0.0f;
+    float Skinned_Flag = false;
 
 };
 

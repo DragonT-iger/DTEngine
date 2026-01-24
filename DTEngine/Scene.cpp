@@ -29,6 +29,9 @@
 #include "Animatior.h"
 #include "FSMController.h"
 
+#include "Text.h"
+#include "Effect.h"
+
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
     auto go = std::make_unique<GameObject>(name);
@@ -862,13 +865,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
             Mesh* mesh = mr->GetMesh();
             if (!mesh || !mat) return;
 
+            Effect* eff = val.obj->GetComponent<Effect>();
+            if (eff) eff->BindEP();
+
 
             if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
             {
                 DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
                 
             }
-
+            
 
             if (currentPipelineKey != lastPipelineKey)
             {
@@ -905,6 +911,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
                 Texture* tex = img->GetTexture();
                 if (tex)
                 {
+                    Effect* eff = go->GetComponent<Effect>();
+                    if (eff) eff->BindEP();
+
                     Transform* tf = go->GetTransform();
 
                     Vector3 pos = tf->GetWorldPosition();
@@ -919,6 +928,15 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
                 }
             }
         }
+
+
+        for (const auto& go : GetGameObjects())
+        {
+            auto cmp = go->GetComponent<Text>();
+
+            if (cmp) cmp->Render();
+        }
+
 
         DX11Renderer::Instance().EndUIRender();
     }

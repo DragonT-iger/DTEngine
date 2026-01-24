@@ -51,6 +51,8 @@
 #include "SoundManager.h"
 #include "SkyBoxComponent.h"
 #include "DX11Renderer.h"
+#include "Effect.h"
+
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -1659,6 +1661,21 @@ void EditorUI::DrawComponentProperties(Component* comp)
             }
         }
 
+        if (Effect* effectComp = dynamic_cast<Effect*>(comp))
+        {
+            if (ImGui::TreeNodeEx("Burning Glow Settings", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                Vector4 eColor = effectComp->GetEdgeColor();
+
+                // HDR 옵션을 추가하면 불타는 강도를 표현하기 더 좋습니다.
+                if (ImGui::ColorEdit4("Edge Glow Color", &eColor.x, ImGuiColorEditFlags_HDR))
+                {
+                    effectComp->SetEdgeColor(eColor);
+                }
+
+                ImGui::TreePop();
+            }
+        }
    
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))

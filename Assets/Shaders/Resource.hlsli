@@ -41,8 +41,23 @@ cbuffer CBuffer_Matrix_Pallette : register(b6)
 
 cbuffer CBuffer_SkyBox : register(b7)
 {
-    float4 SkyBox_Color; // 운용 할 bone 갯수 만큼 배열 크기를 정의할 예정. 
+    float4 SkyBox_Color; 
 };
+
+cbuffer CBuffer_Effect : register(b8)
+{
+    float progress; //진행도 
+    float edgeWidth; 
+    float glowIntensity; //빛의 강도 
+    float totalTime; //
+    
+    float4 edgeColor;
+    
+    float noiseScalef;
+    float timeMultiplier; // 애니메이션 배속 (추가)
+    float effectType;
+    float Skinned_Flag; // bone / rigid  object와의 통합 위해.
+}
 
 
 
@@ -72,6 +87,8 @@ Texture2D g_SpecMap    : register(t2); //Editor에서도 이걸 기준으로 PBR
 Texture2D g_MetalMap   : register(t3);
 Texture2D g_RoughMap   : register(t4);
 Texture2D g_AoMap      : register(t5);
+
+Texture2D g_NoiseMap : register(t6);
 
 TextureCube g_CubeMap : register(t9);
 //Texture2D Empty : register(t6);`
