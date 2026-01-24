@@ -34,7 +34,7 @@ struct MaterialData //b3
 
     int   UseTexture =1;
 	float Shadow_Bias = 0.005f; //일단 넣어놓고 쓰지는 않음.  // 26/1/4 추가.
-    float metallicFactor =1.0f;
+    float Shadow_Scale =1.0f;
     float roughnessFactor = 1.0f;
 };
 

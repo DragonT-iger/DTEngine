@@ -285,9 +285,7 @@ private:
 
     Matrix m_lightViewProjScale;
     
-	std::unique_ptr<PostProcessManager> m_postProcessManager;
-	std::unique_ptr<RenderTexture> m_resolvedSceneRT;
-    
+
 
     private:
       uint16_t m_currentShaderID = 0; 

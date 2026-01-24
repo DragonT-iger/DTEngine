@@ -98,6 +98,8 @@ void MeshRenderer::SaveInstanceData(JsonWriter& writer) const
 
         writer.Write("ShadowBias", m_material->GetShadowBias());
 
+        writer.Write("ShadowScale", m_material->GetShadowScale());
+
         writer.BeginObject("Textures");
         for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
@@ -138,6 +140,9 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
 
             float shadowBias = reader.ReadFloat("ShadowBias", 0.005f);
             mat->SetShadowBias(shadowBias);
+
+            float shadowScale = reader.ReadFloat("ShadowScale", 1.0f);
+            mat->SetShadowScale(shadowScale);
 
             if (reader.BeginObject("Textures"))
             {

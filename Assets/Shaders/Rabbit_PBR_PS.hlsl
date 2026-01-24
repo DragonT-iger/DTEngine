@@ -29,7 +29,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     if (USE_METAL)
-        metal = g_MetalMap.Sample(g_Sampler, input.UV).r * Metallic_Factor;
+        metal = g_MetalMap.Sample(g_Sampler, input.UV).r ;
     if (USE_ROUGH)
         rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
     if (USE_AO)
@@ -43,7 +43,7 @@ float4 PS(PS_INPUT input) : SV_Target
 
     float3 directLighting = float3(0, 0, 0);
     float shadowFactor = CalculateShadow(input.WorldPos, Shadow_Bias);
-
+    
     for (int i = 0; i < ActiveCount; ++i)
     {
         float3 L;
@@ -68,8 +68,8 @@ float4 PS(PS_INPUT input) : SV_Target
         }
 
         // 첫 번째 조명에만 그림자 적용 (Shadow Factor)
-        float currentShadow = (i == 0) ? shadowFactor*0.6f : 1.0f;
-
+        float currentShadow = (i == 0) ? shadowFactor -( Shadow_Scale ) : 1.0f;
+        
         // DisneyPBR (Shared 함수) 호출하여 누적
         // 최종 광원 세기에 감쇠와 그림자 인자를 통합하여 전달
         directLighting += DisneyPBR(
@@ -88,8 +88,7 @@ float4 PS(PS_INPUT input) : SV_Target
         directLighting *= currentShadow;
 
     }
-    
-    float3 ambientLighting = albedo * 0.5f * ao;
+    float3 ambientLighting = albedo * 0.7;
     float3 finalColor = directLighting + ambientLighting;
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;

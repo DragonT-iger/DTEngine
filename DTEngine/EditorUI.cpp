@@ -1839,6 +1839,13 @@ void EditorUI::DrawComponentProperties(Component* comp)
                         renderer->GetMaterial()->SetShadowBias(shadowBias);
                     }
 
+                    float shadowScale = currentMat->GetShadowScale();
+                    if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 1.0f, "%.5f"))
+                    {
+                        renderer->GetMaterial()->SetShadowScale(shadowScale);
+                    }
+
+
 
                     if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetCullMode();
                     if (ImGui::IsItemDeactivatedAfterEdit())
@@ -2182,6 +2189,16 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 material->SetShadowBias(material->GetShadowBias());
                 material->SaveFile(path); 
 			}
+
+
+            float shadowScale = material->GetShadowScale();
+
+            if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 1.0f, "%.5f"))
+            {
+                material->SetShadowScale(material->GetShadowScale());
+                material->SaveFile(path);
+            }
+
 
     //        for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
     //        {

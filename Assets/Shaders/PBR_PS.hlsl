@@ -44,7 +44,7 @@ float4 PS(PS_INPUT input) : SV_Target
 
     // PBR 속성 적용
     if (USE_METAL)
-        metal = g_MetalMap.Sample(g_Sampler, input.UV).r * Metallic_Factor;
+        metal = g_MetalMap.Sample(g_Sampler, input.UV).r ;
     if (USE_ROUGH)
         rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
     if (USE_AO)

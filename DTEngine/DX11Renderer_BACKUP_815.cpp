@@ -199,7 +199,7 @@ void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
     
     dataPtr->UVTransform = M_Data.UVTransform;
     dataPtr->UseTexture = M_Data.UseTexture;
-    dataPtr->Shadow_Scale = M_Data.Shadow_Scale;
+    dataPtr->metallicFactor = M_Data.metallicFactor;
     dataPtr->roughnessFactor = M_Data.roughnessFactor;
 	dataPtr->Shadow_Bias = M_Data.Shadow_Bias;
 
@@ -622,9 +622,12 @@ void DX11Renderer::EndFrame()
 
 #ifndef _DEBUG
 
+<<<<<<< HEAD
     //일단 
 
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+=======
+>>>>>>> main
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 

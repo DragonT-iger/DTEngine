@@ -29,9 +29,6 @@
 #include "InputManager.h"
 #include "DXHelper.h"
 #include "Shader.h"
-#include "GrayScaleEffect.h"
-#include "VignetteEffect.h"
-
 #include "Font.h"
 
 
@@ -63,7 +60,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     //CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    CreateShadowMap(8192, 8192);
+    CreateShadowMap(4096, 4096);
 
 
 
@@ -73,8 +70,6 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_resolvedSceneRT = std::make_unique<RenderTexture>();
     m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
 
-    m_postProcessManager->AddEffect<GrayScaleEffect>();
-	m_postProcessManager->AddEffect<VignetteEffect>();
     
     return true;
 }
@@ -199,9 +194,8 @@ void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
     
     dataPtr->UVTransform = M_Data.UVTransform;
     dataPtr->UseTexture = M_Data.UseTexture;
-    dataPtr->Shadow_Scale = M_Data.Shadow_Scale;
+    dataPtr->metallicFactor = M_Data.metallicFactor;
     dataPtr->roughnessFactor = M_Data.roughnessFactor;
-	dataPtr->Shadow_Bias = M_Data.Shadow_Bias;
 
     m_context->Unmap(m_cbuffer_material.Get(), 0);
 }
@@ -547,7 +541,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
     m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
-    m_context->PSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -606,7 +600,6 @@ void DX11Renderer::CreateConstantBuffers()
 
 void DX11Renderer::EndFrame()
 {
-
     if (m_msaaTargetTex && m_backbufferTex)
     {
         m_context->ResolveSubresource(
@@ -620,38 +613,32 @@ void DX11Renderer::EndFrame()
         );
     }
 
-#ifndef _DEBUG
-
-    //일단 
 
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
-    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
 
-    //uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+    if (m_msaaTargetTex && m_resolvedSceneRT)
+    {
+        m_context->ResolveSubresource(
+            m_resolvedSceneRT->GetTexture(), 0,
+            m_msaaTargetTex.Get(), 0,
+            DXGI_FORMAT_R8G8B8A8_UNORM
+        );
 
-    //if (m_msaaTargetTex && m_resolvedSceneRT)
-    //{
-    //    m_context->ResolveSubresource(
-    //        m_resolvedSceneRT->GetTexture(), 0,
-    //        m_msaaTargetTex.Get(), 0,
-    //        DXGI_FORMAT_R8G8B8A8_UNORM
-    //    );
-
-    //    if (m_postProcessManager)
-    //    {
-    //        m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask, DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
-    //    }
-    //    else
-    //    {
-    //        m_context->ResolveSubresource(
-    //            m_backbufferTex.Get(), 0,
-    //            m_msaaTargetTex.Get(), 0,
-    //            DXGI_FORMAT_R8G8B8A8_UNORM
-    //        );
-    //    }
-    //}
-#endif
+        if (m_postProcessManager)
+        {
+            m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask);
+        }
+        else
+        {
+            m_context->ResolveSubresource(
+                m_backbufferTex.Get(), 0,
+                m_msaaTargetTex.Get(), 0,
+                DXGI_FORMAT_R8G8B8A8_UNORM
+            );
+        }
+    }
 }
 
 void DX11Renderer::Present()
@@ -757,10 +744,10 @@ void DX11Renderer::BindShader(Shader* shader)
     if (!shader) return;
 
    
-    //if (m_currentShaderID == shader->GetID())
-    //{
-    //    return;
-    //}
+    if (m_currentShaderID == shader->GetID())
+    {
+        return;
+    }
 
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 
