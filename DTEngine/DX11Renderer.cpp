@@ -541,7 +541,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
     m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
-    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
+    m_context->PSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -613,6 +613,8 @@ void DX11Renderer::EndFrame()
         );
     }
 
+
+    //일단 
 
     Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
