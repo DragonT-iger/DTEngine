@@ -13,5 +13,5 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
     
     float gray = dot(color.rgb, float3(0.299f, 0.587f, 0.114f));
     
-    return float4(gray, gray, gray, color.a);
+    return float4(gray, gray, gray, 1);
 }

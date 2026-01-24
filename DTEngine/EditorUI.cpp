@@ -1815,6 +1815,13 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     {
                         renderer->GetMaterial()->SetCullMode((CullMode)currentCull);
                     }
+                    
+                    float shadowBias = currentMat->GetShadowBias(); 
+                    if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.00001f, 0.0f, 0.1f, "%.5f"))
+                    {
+                        renderer->GetMaterial()->SetShadowBias(shadowBias);
+                    }
+
 
                     if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetCullMode();
                     if (ImGui::IsItemDeactivatedAfterEdit())
@@ -2150,6 +2157,14 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 material->SetCullMode((CullMode)currentCull);
                 material->SaveFile(path); // 변경 즉시 파일 저장
             }
+
+			float shadowBias = material->GetShadowBias();
+
+            if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.00001f, 0.0f, 0.1f, "%.5f"))
+            {
+                material->SetShadowBias(material->GetShadowBias());
+                material->SaveFile(path); 
+			}
 
     //        for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
     //        {

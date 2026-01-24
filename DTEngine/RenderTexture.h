@@ -38,6 +38,7 @@ public:
     ID3D11ShaderResourceView* GetSRV() const { return m_srv.Get(); }
 
     ID3D11RenderTargetView* GetRTV(int faceIndex = 0) const {
+        if(m_enableAA == true) return m_msaaRTV.Get();
         if (faceIndex < m_faceRTVs.size()) return m_faceRTVs[faceIndex].Get();
         return nullptr;
     }

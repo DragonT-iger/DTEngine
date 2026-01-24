@@ -54,7 +54,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 totalSpecular = float3(0, 0, 0);
     float specularPower = 20.0f; // 이 값이 낮을수록 광택이 넓어짐
 
-    float shadowFactor = CalculateShadow(input.WorldPos);
+    float shadowFactor = CalculateShadow(input.WorldPos , Shadow_Bias);
     
     for (int i = 0; i < ActiveCount; ++i)
     {

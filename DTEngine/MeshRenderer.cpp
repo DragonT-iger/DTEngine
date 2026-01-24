@@ -96,6 +96,8 @@ void MeshRenderer::SaveInstanceData(JsonWriter& writer) const
 
         writer.Write("CullMode", (int)m_material->GetCullMode());
 
+        writer.Write("ShadowBias", m_material->GetShadowBias());
+
         writer.BeginObject("Textures");
         for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
         {
@@ -133,6 +135,9 @@ void MeshRenderer::LoadInstanceData(JsonReader& reader)
 
             int cullModeInt = reader.ReadInt("CullMode", 0); // 기본값 0 (Back)
             mat->SetCullMode((CullMode)cullModeInt);
+
+            float shadowBias = reader.ReadFloat("ShadowBias", 0.005f);
+            mat->SetShadowBias(shadowBias);
 
             if (reader.BeginObject("Textures"))
             {

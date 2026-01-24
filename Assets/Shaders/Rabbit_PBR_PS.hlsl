@@ -42,7 +42,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     float3 directLighting = float3(0, 0, 0);
-       float shadowFactor = CalculateShadow(input.WorldPos);
+    float shadowFactor = CalculateShadow(input.WorldPos, Shadow_Bias);
 
     for (int i = 0; i < ActiveCount; ++i)
     {

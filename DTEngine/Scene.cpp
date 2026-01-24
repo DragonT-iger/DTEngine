@@ -347,10 +347,10 @@ bool Scene::SaveFile(const std::string& solutionPath)
 
             comp->Serialize(writer);
 
-            if (auto* mr = dynamic_cast<MeshRenderer*>(comp.get()))
-            {
-                mr->SaveInstanceData(writer);
-            }
+            //if (auto* mr = dynamic_cast<MeshRenderer*>(comp.get()))
+            //{
+            //    mr->SaveInstanceData(writer);
+            //}
 
             writer.EndArrayItem();
         }

@@ -17,7 +17,13 @@ DTPROPERTY_ACCESSOR(Camera, m_clearColor, GetClearColor, SetClearColor)
 DTPROPERTY_ACCESSOR(Camera, m_isOrthographic, IsOrthographic, SetIsOrthographic)
 DTPROPERTY_ACCESSOR(Camera, m_orthographicSize, GetOrthographicSize, SetOrthographicSize)
 DTPROPERTY_ACCESSOR(Camera, m_viewportRect, GetViewportRect, SetViewportRect)
-//DTPROPERTY_ACCESSOR(Camera, m_enablePostProcess, IsPostProcessEnabled, SetPostProcessEnabled)
+
+DTPROPERTY_ACCESSOR(Camera, m_useGrayScale, GetUseGrayScale, SetUseGrayScale)
+DTPROPERTY_ACCESSOR(Camera, m_useVignette, GetUseVignette, SetUseVignette)
+
+DTPROPERTY_ACCESSOR(Camera, m_useBloom, GetUseBloom, SetUseBloom)
+DTPROPERTY_ACCESSOR(Camera, m_bloomThreshold, GetBloomThreshold, SetBloomThreshold)
+DTPROPERTY_ACCESSOR(Camera, m_bloomIntensity, GetBloomIntensity, SetBloomIntensity)
 
 ENDPROPERTY()
 
@@ -180,6 +186,18 @@ void Camera::SetPostProcessEffect(PostProcessType type, bool enable)
 bool Camera::IsEffectEnabled(PostProcessType type) const
 {
     return (m_postProcessMask & static_cast<uint32_t>(type)) != 0;
+}
+
+void Camera::SetUseGrayScale(bool use)
+{
+    m_useGrayScale = use;
+    SetPostProcessEffect(PostProcessType::GrayScale, use);
+}
+
+void Camera::SetUseVignette(bool use)
+{
+    m_useVignette = use;
+    SetPostProcessEffect(PostProcessType::Vignette, use);
 }
 
 void Camera::UpdateViewMatrix()

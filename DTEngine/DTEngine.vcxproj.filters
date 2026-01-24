@@ -90,6 +90,9 @@
     <Filter Include="Shader\PostProcessing">
       <UniqueIdentifier>{0beea7db-4a9f-4a9c-8867-ae3704c3dd3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PostProcessing\Effect">
+      <UniqueIdentifier>{5ed86ba3-8a3b-4e83-b52c-a0cd3f1aa889}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -350,6 +353,12 @@
     <ClInclude Include="PostProcessManager.h">
       <Filter>PostProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="GrayScaleEffect.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="VignetteEffect.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -567,6 +576,12 @@
     </ClCompile>
     <ClCompile Include="UISliderHandle.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GrayScaleEffect.cpp">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="VignetteEffect.cpp">
+      <Filter>PostProcessing\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -62,7 +62,7 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
 
     float3 Lo = 0;
     
-    float shadowFactor = CalculateShadow(worldPos);
+    float shadowFactor = CalculateShadow(worldPos, 0.005);
 
     for (int i = 0; i < ActiveCount; ++i)
     {

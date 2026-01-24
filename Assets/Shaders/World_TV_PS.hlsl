@@ -28,7 +28,7 @@ float4 PS(PS_INPUT input) : SV_Target
     clip(input.UV.y > 0.04 && input.UV.y < 0.88 ? 1 : -1);
        
     
-    float4 lambert = float4(ComputeLambertLighting(input.WorldPos, normal), 1);
+    float4 lambert = float4(ComputeLambertLighting(input.WorldPos, normal , Shadow_Bias), 1);
     
     float4 finalColor;
     

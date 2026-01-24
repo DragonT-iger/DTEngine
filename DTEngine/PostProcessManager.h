@@ -16,7 +16,7 @@ public:
     void Initialize(int width, int height);
     void Resize(int width, int height);
 
-    void Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask);
+    void Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, Camera* camera, int width, int height);
 
     template <typename T>
     T* AddEffect()
@@ -30,7 +30,7 @@ public:
     }
 
 private:
-    void Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV);
+    void Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height);
 
 private:
     std::vector<std::shared_ptr<IPostProcess>> m_effects;
