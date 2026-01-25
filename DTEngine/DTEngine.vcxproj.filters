@@ -96,6 +96,12 @@
     <Filter Include="Shader\Specific\Effect">
       <UniqueIdentifier>{4b1c99ac-beb7-41ec-8bbd-e69a6dc283d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\UI">
+      <UniqueIdentifier>{6726424d-00ee-4890-9e74-8d67e5b0a5f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\RenderTarget">
+      <UniqueIdentifier>{4ca3ed46-95aa-4ec6-b332-aa71fcc4d720}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -248,32 +254,11 @@
     <ClInclude Include="FreeCamera.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="move.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="SerializationUtils.h">
       <Filter>Reflection\Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="MonitorController.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionProbe.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Text3D.h">
-      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderViewport.h">
       <Filter>Renderer</Filter>
@@ -301,18 +286,6 @@
     </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UISlider.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="RectTransform.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>Util</Filter>
@@ -373,6 +346,39 @@
     </ClInclude>
     <ClInclude Include="UIBase.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransform.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Text3D.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MonitorController.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionProbe.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Component\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -499,32 +505,11 @@
     <ClCompile Include="FreeCamera.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="move.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="SerializationUtils.cpp">
       <Filter>Reflection\Serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="MonitorController.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="ReflectionProbe.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Text3D.cpp">
-      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderTexture.cpp">
       <Filter>Renderer</Filter>
@@ -539,18 +524,6 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Skeletal.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UISlider.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="RectTransform.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Canvas.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
@@ -606,6 +579,39 @@
     </ClCompile>
     <ClCompile Include="BloomEffect.cpp">
       <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransform.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text3D.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MonitorController.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionProbe.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Component\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

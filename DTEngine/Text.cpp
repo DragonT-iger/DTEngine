@@ -9,7 +9,7 @@ BEGINPROPERTY(Text)
 
 DTPROPERTY(Text, m_text)
 DTPROPERTY(Text, m_color)
-DTPROPERTY(Text, m_localOffset)
+//DTPROPERTY(Text, m_localOffset)
 DTPROPERTY(Text, m_fontSize)
 DTPROPERTY_SETTER(Text, m_FontID , SetFont)
 
@@ -18,15 +18,15 @@ ENDPROPERTY()
 Text::Text() = default;
 Text::~Text() = default;
 
-void Text::SetText(const std::string& text)
-{
-    m_text.assign(text.begin(), text.end());
-}
-
-void Text::SetText(const std::wstring& text)
-{
-    m_text = text;
-}
+//void Text::SetText(const std::string& text)
+//{
+//    m_text.assign(text.begin(), text.end());
+//}
+//
+//void Text::SetText(const std::wstring& text)
+//{
+//    m_text = text;
+//}
 
 void Text::SetFont(uint64_t Font_ID)
 {
@@ -66,7 +66,7 @@ void Text::Render()
         return;
 
     Vector2 finalPos(screenPos.x, screenPos.y);
-    finalPos += m_localOffset;
+    //finalPos += m_localOffset;
 
     if (m_Font)
     {
@@ -88,4 +88,44 @@ void Text::Render()
         );
     }
 
+}
+
+void Text::RenderUI()
+{
+    if (m_text.empty()) return;
+
+    Transform* tf = GetTransform();
+    if (!tf) return;
+
+    Vector3 worldPos = tf->GetWorldPosition();
+    Vector3 worldScale = tf->GetWorldScale();       
+    Vector3 rotationEuler = tf->GetWorldRotationEuler();
+
+    float rotationRad = SimpleMathHelper::Deg2Rad(rotationEuler.z);
+
+    Vector2 size(worldScale.x, worldScale.y);
+
+    if (!m_Font)
+    {
+        DX11Renderer::Instance().DrawString(
+            m_text,
+            Vector2(worldPos.x, worldPos.y),
+            size,           
+            rotationRad,    
+            m_color,
+            m_fontSize     
+        );
+    }
+    else
+    {
+        DX11Renderer::Instance().DrawString(
+            m_Font,
+            m_text,
+            Vector2(worldPos.x, worldPos.y),
+            size,
+            rotationRad,
+            m_color,
+            m_fontSize
+        );
+    }
 }

@@ -78,8 +78,12 @@ public:
 
 
 
-    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
-    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
+    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2( 1,1 ));
+    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2(1, 1));
+
+    void DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
+    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
+
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 

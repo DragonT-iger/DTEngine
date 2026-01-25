@@ -56,10 +56,15 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_spriteBatch = std::make_unique<DirectX::DX11::SpriteBatch>(m_context.Get());
 
     try {
-        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/The Jamsil 2 Light.spritefont");
+        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/NotoSansKR-Black.spritefont");
+
+        if (m_font)
+        {
+            m_font->SetDefaultCharacter(L'?');
+        }
     }
     catch (...) {
-        std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
+		std::cout << "[Warning] Failed to load font" << std::endl;
     }
 
     //CreateShadowMap(16376, 16376); // max 왜 이러지
@@ -416,22 +421,24 @@ void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vecto
     m_spriteBatch->Draw(texture->GetSRV(), destRect, color);
 }
 
-void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color, float rotation , Vector2 scale)
 {
     if (!m_spriteBatch || !m_font) return;
+
+    Vector2 origin = Vector2(0, 0);
 
     m_font->DrawString(
         m_spriteBatch.get(),
         text.c_str(),
         position,
         color,
-        0.0f,                    
-        DirectX::XMFLOAT2(0, 0), 
+        rotation,
+        scale, 
         m_fontSize
     );
 }
 
-void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color)
+void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color, float rotation, Vector2 scale)
 {
     auto SpriteFont = Font->GetSpriteFont();
 
@@ -441,11 +448,56 @@ void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector
         text.c_str(),
         position,
         color,
-        0.0f,
-        DirectX::XMFLOAT2(0, 0),
+        rotation,
+        scale,
         fontSize
     );
 
+}
+
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color, float fontSizeMultiplier)
+{
+    if (!m_spriteBatch || !m_font) return;
+
+    float lineSpacing = m_font->GetLineSpacing();
+    if (lineSpacing <= 0.0001f) lineSpacing = 1.0f;
+
+    float targetScale = (size.y / lineSpacing) * fontSizeMultiplier;
+
+    DirectX::XMFLOAT2 origin(0, 0);
+
+    m_font->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        rotation,
+        origin,
+        targetScale 
+    );
+}
+
+void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color, float fontSizeMultiplier)
+{
+    auto SpriteFont = Font->GetSpriteFont();
+    if (!SpriteFont || !m_spriteBatch) return;
+
+    float lineSpacing = SpriteFont->GetLineSpacing();
+    if (lineSpacing <= 0.0001f) lineSpacing = 1.0f;
+
+    float targetScale = (size.y / lineSpacing) * fontSizeMultiplier;
+
+    DirectX::XMFLOAT2 origin(0, 0);
+
+    SpriteFont->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        rotation,
+        origin,
+        targetScale
+    );
 }
 
 

@@ -28,6 +28,7 @@ public:
 
 	Vector3 GetWorldPosition();
 	Vector3 GetWorldScale();
+	Vector3 GetWorldRotationEuler();
 
 	Vector3 GetLossyScale(); // Sheer인 경우
 

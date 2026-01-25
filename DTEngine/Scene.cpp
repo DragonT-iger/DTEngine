@@ -961,40 +961,28 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
 
-        Image* img = go->GetComponent<Image>();
-        if (img && img->IsActive())
+        for (const auto& comp : go->_GetComponents())
         {
-            Texture* tex = img->GetTexture();
-            if (tex)
+            if (auto ui = dynamic_cast<UIBase*>(comp.get()))
             {
-                Effect* eff = go->GetComponent<Effect>();
-                if (eff) eff->BindEP();
-
-                Transform* tf = go->GetTransform();
-
-                Vector3 pos = tf->GetWorldPosition();
-                Vector3 scale = tf->GetWorldScale();
-
-                DX11Renderer::Instance().DrawUI(
-                    tex,
-                    Vector2(pos.x, pos.y),
-                    Vector2(scale.x, scale.y),
-                    img->GetColor()
-                );
+                if (ui->IsActive())
+                {
+                    ui->RenderUI();
+                }
             }
         }
     }
 
-    for (const auto& go : GetGameObjects())
-    {
-        if (!go || !go->IsActiveInHierarchy()) continue;
+    //for (const auto& go : GetGameObjects())
+    //{
+    //    if (!go || !go->IsActiveInHierarchy()) continue;
 
-        auto cmp = go->GetComponent<Text>();
-        if (cmp && cmp->IsActive())
-        {
-            cmp->Render();
-        }
-    }
+    //    auto cmp = go->GetComponent<Text>();
+    //    if (cmp && cmp->IsActive())
+    //    {
+    //        cmp->Render();
+    //    }
+    //}
 
     DX11Renderer::Instance().EndUIRender();
 }

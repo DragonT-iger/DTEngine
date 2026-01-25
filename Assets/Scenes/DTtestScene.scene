@@ -6,6 +6,8 @@
         {
           "Active": true,
           "id": 1549800710126249014,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
           "m_clearColor": {
             "w": 0.20000000298023224,
             "x": 0.20000000298023224,
@@ -17,6 +19,7 @@
           "m_isOrthographic": false,
           "m_nearZ": 0.10000000149011612,
           "m_orthographicSize": 5.0,
+          "m_useBloom": false,
           "m_useGrayScale": false,
           "m_useVignette": false,
           "m_viewportRect": {
@@ -25,6 +28,8 @@
             "y": 0.0,
             "z": 1.0
           },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
           "typeName": "Camera"
         },
         {
@@ -39,21 +44,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 26.30235481262207,
-          "y": 160.39849853515625,
+          "x": 13.402323722839355,
+          "y": 171.29885864257813,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 7.596104621887207,
-          "y": 4.713446617126465,
-          "z": 22.186857223510742
+          "x": 7.041474342346191,
+          "y": 5.609583854675293,
+          "z": 24.999828338623047
         },
         "m_rotation": {
-          "w": 0.16575802862644196,
-          "x": 0.03872920945286751,
-          "y": 0.9595615863800049,
-          "z": -0.22420066595077515
+          "w": 0.07534055411815643,
+          "x": 0.008852030150592327,
+          "y": 0.990306556224823,
+          "z": -0.11635463684797287
         },
         "m_scale": {
           "x": 1.0,
@@ -68,6 +73,8 @@
         {
           "Active": true,
           "id": 7126371692199545648,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
           "m_clearColor": {
             "w": 1.0,
             "x": 0.20000000298023224,
@@ -79,6 +86,7 @@
           "m_isOrthographic": true,
           "m_nearZ": -2000.0,
           "m_orthographicSize": 1.2000000476837158,
+          "m_useBloom": false,
           "m_useGrayScale": false,
           "m_useVignette": false,
           "m_viewportRect": {
@@ -87,6 +95,8 @@
             "y": 0.0,
             "z": 1.0
           },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
           "typeName": "Camera"
         }
       ],
@@ -228,6 +238,7 @@
             ],
             "RenderMode": 0,
             "ShadowBias": 0.004480000119656324,
+            "ShadowScale": 1.0,
             "Textures": {},
             "Tiling": [
               1.0,
@@ -336,7 +347,7 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 0.0,
+          "x": 2.299999952316284,
           "y": 0.0,
           "z": 0.0
         },
@@ -436,6 +447,20 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 10129189046166066503,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_fontSize": 1.0,
+          "m_text": "New Textasdasda권용범",
+          "typeName": "Text"
         }
       ],
       "id": 16628638947925722745,
@@ -450,8 +475,8 @@
         },
         "m_parent": 9137993014704475425,
         "m_position": {
-          "x": 0.0,
-          "y": 0.0,
+          "x": 0.5,
+          "y": 0.5,
           "z": 0.0
         },
         "m_rotation": {
@@ -468,7 +493,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
