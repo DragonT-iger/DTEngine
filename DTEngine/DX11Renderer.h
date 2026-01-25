@@ -280,8 +280,8 @@ private:
     UINT m_msaaQuality = 0;
     int m_msaa = 8;
 
-    //std::unique_ptr< PostProcessManager> m_postProcessManager;
-    //std::unique_ptr< RenderTexture> m_resolvedSceneRT;
+    std::unique_ptr< PostProcessManager> m_postProcessManager;
+    std::unique_ptr< RenderTexture> m_resolvedSceneRT;
 
     Matrix m_lightViewProjScale;
     
