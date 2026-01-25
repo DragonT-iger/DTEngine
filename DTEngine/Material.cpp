@@ -169,6 +169,16 @@ bool Material::LoadFile(const std::string& fullPath)
         m_data.Shadow_Bias = 0.005f; 
     }
 
+
+    if (data.contains("ShadowScale"))
+    {
+        m_data.Shadow_Scale = data["ShadowScale"];
+    }
+    else
+    {
+        m_data.Shadow_Scale = 1.0f;
+    }
+
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
@@ -219,6 +229,8 @@ bool Material::SaveFile(const std::string& fullPath)
     }
     data["Textures"] = texData;
     data["ShadowBias"] = m_data.Shadow_Bias;
+    data["ShadowScale"] = m_data.Shadow_Scale;
+
     std::ofstream file(fullPath);
     if (!file.is_open())
     {
@@ -304,6 +316,16 @@ bool Material::SetColor(const Vector4& color)
 Vector4 Material::GetColor() const
 {
     return Vector4(m_data.Color);
+}
+
+float Material::GetShadowScale() const
+{
+    return m_data.Shadow_Scale;
+}
+
+void Material::SetShadowScale(float Scale)
+{
+    m_data.Shadow_Scale = Scale;
 }
 
 void Material::SetShadowBias(float bias)

@@ -199,7 +199,7 @@ void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
     
     dataPtr->UVTransform = M_Data.UVTransform;
     dataPtr->UseTexture = M_Data.UseTexture;
-    dataPtr->Shadow_Scale = M_Data.Shadow_Scale;
+    dataPtr->metallicFactor = M_Data.metallicFactor;
     dataPtr->roughnessFactor = M_Data.roughnessFactor;
 	dataPtr->Shadow_Bias = M_Data.Shadow_Bias;
 
@@ -547,7 +547,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
     m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
-    m_context->PSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -622,9 +622,6 @@ void DX11Renderer::EndFrame()
 
 #ifndef _DEBUG
 
-    //일단 
-
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 

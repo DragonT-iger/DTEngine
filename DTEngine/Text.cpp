@@ -45,14 +45,47 @@ void Text::SetFont(uint64_t Font_ID)
 
 void Text::Render()
 {
-    if (m_text.empty()) return;
+    Vector3 W_pos = this->GetTransform()->GetWorldPosition();
+    Matrix view = DX11Renderer::Instance().GetViewMatrix();
+    Matrix Proj = DX11Renderer::Instance().GetProjectionMatrix();
+    float Width = DX11Renderer::Instance().GetWidth();
+    float Height = DX11Renderer::Instance().GetHeight();
 
-    if(!m_Font) //없다면 기본으로 
-    DX11Renderer::Instance().DrawString(m_text, m_localOffset, m_fontSize, m_color);
+    //World -> ndc 변환. 
 
+    Vector3 screenPos = XMVector3Project(
+        W_pos,
+        0, 0, Width, Height,
+        0.0f, 1.0f,
+        Proj,
+        view,
+        Matrix()
+    );
+
+    if (screenPos.z < 0.0f || screenPos.z > 1.0f)
+        return;
+
+    Vector2 finalPos(screenPos.x, screenPos.y);
+    finalPos += m_localOffset;
+
+    if (m_Font)
+    {
+        DX11Renderer::Instance().DrawString(
+            m_Font,     
+            m_text,     
+            finalPos,   
+            m_fontSize, 
+            m_color     
+        );
+    }
     else
     {
-        DX11Renderer::Instance().DrawString(m_Font, m_text, m_localOffset, m_fontSize, m_color);
+        DX11Renderer::Instance().DrawString(
+            m_text,
+            finalPos,
+            m_fontSize,
+            m_color
+        );
     }
 
 }

@@ -22,7 +22,7 @@ cbuffer CBuffer_Material : register(b4)
     int UseTexture;
     float Shadow_Bias; //일단 넣어 놓음. + 객체 단위의 정교한 Shadow_Bias 가 필요한 경우가 있을 경우. 
     
-    float Metallic_Factor = 1.0f;
+    float Shadow_Scale;
     float Roughness_Factor =1.0f ;
 };
 
