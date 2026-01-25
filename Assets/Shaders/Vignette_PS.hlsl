@@ -1,6 +1,14 @@
 Texture2D InputTexture : register(t0);
 SamplerState InputSampler : register(s0);
 
+
+cbuffer VignetteParams : register(b0)
+{
+    float Radius;   
+    float Softness; 
+    float2 Padding;
+}
+
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
@@ -15,7 +23,7 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
     
     float len = length(distFromCenter);
     
-    float vignette = 1.0f - smoothstep(0.4f, 0.8f, len);
+    float vignette = 1.0f - smoothstep(Softness, Radius, len);
     
     return color * vignette;
 }

@@ -19,7 +19,10 @@ DTPROPERTY_ACCESSOR(Camera, m_orthographicSize, GetOrthographicSize, SetOrthogra
 DTPROPERTY_ACCESSOR(Camera, m_viewportRect, GetViewportRect, SetViewportRect)
 
 DTPROPERTY_ACCESSOR(Camera, m_useGrayScale, GetUseGrayScale, SetUseGrayScale)
+
 DTPROPERTY_ACCESSOR(Camera, m_useVignette, GetUseVignette, SetUseVignette)
+DTPROPERTY_ACCESSOR(Camera, m_vignetteRadius, GetVignetteRadius, SetVignetteRadius)
+DTPROPERTY_ACCESSOR(Camera, m_vignetteSoftness, GetVignetteSoftness, SetVignetteSoftness)
 
 DTPROPERTY_ACCESSOR(Camera, m_useBloom, GetUseBloom, SetUseBloom)
 DTPROPERTY_ACCESSOR(Camera, m_bloomThreshold, GetBloomThreshold, SetBloomThreshold)

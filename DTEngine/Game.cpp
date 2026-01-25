@@ -132,7 +132,7 @@ bool Game::Initialize()
 	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false);
 
 	SetEditorCamera(scene);
 
@@ -148,7 +148,7 @@ bool Game::Initialize()
 
 
 	m_captureRT = std::make_unique<RenderTexture>();
-	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, true, true);
+	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, false, true);
 
 
 
@@ -415,7 +415,7 @@ void Game::LifeCycle(DeltaTime dt)
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
 	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
-	scene->Render(editorCam, m_sceneRT.get(), true);
+	scene->Render(editorCam, m_sceneRT.get());
 
 	m_sceneRT->Unbind();
 
@@ -439,7 +439,7 @@ void Game::LifeCycle(DeltaTime dt)
 			const auto& col = cam->GetClearColor();
 			targetRT->Clear(col.x, col.y, col.z, col.w);
 
-			scene->Render(cam, targetRT, false);
+			scene->Render(cam, targetRT);
 
 			targetRT->Unbind();
 
@@ -460,7 +460,7 @@ void Game::LifeCycle(DeltaTime dt)
 
 				DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam);
 
-				scene->Render(cam, m_captureRT.get(), true);
+				scene->Render(cam, m_captureRT.get());
 
 				m_captureRT->Unbind();
 			}
@@ -482,6 +482,10 @@ void Game::LifeCycle(DeltaTime dt)
 			}
 		}
 	}
+
+	m_gameRT->Bind(); 
+	scene->RenderUI(mainCam, m_gameRT.get());
+	m_gameRT->Unbind();
 
 
 	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
@@ -1070,10 +1074,10 @@ void Game::OnClose()
 {
 }
 
-void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool renderUI)
+void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 {
 
-	scene->Render(camera, rt, renderUI);
+	scene->Render(camera, rt);
 
 	
 }
