@@ -130,7 +130,7 @@ private:
     bool m_useGrayScale = false;
     bool m_useVignette = false;
 
-	bool m_useBloom = false;
+	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈
     float m_bloomThreshold = 1.0f; 
     float m_bloomIntensity = 1.0f; 
 };

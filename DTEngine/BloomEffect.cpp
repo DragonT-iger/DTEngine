@@ -21,10 +21,10 @@ void BloomEffect::Initialize()
     }
 
     D3D11_BUFFER_DESC desc = {};
-    desc.Usage = D3D11_USAGE_DEFAULT;        // CPU가 업데이트하고 GPU가 읽음
-    desc.ByteWidth = sizeof(BloomCBuffer);   // 구조체 크기
+    desc.Usage = D3D11_USAGE_DEFAULT;       
+    desc.ByteWidth = sizeof(BloomCBuffer);  
     desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    desc.CPUAccessFlags = 0;                 // UpdateSubresource 사용 시 0
+    desc.CPUAccessFlags = 0;                
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;
 
@@ -50,9 +50,9 @@ void BloomEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* 
         m_tempRT[1]->Resize(width, height);
     }
 
+    BloomCBuffer data;
     if (camera && m_constantBuffer)
     {
-        BloomCBuffer data;
         data.threshold = camera->GetBloomThreshold();
         data.intensity = camera->GetBloomIntensity();
 
@@ -68,6 +68,12 @@ void BloomEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* 
     if (m_extractPS)
     {
         m_extractPS->Bind();
+
+        // 추출 단계에서는 블러 방향이 필요 없으므로 0으로 초기화 후 전송
+        data.blurDir[0] = 0.0f;
+        data.blurDir[1] = 0.0f;
+        context->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &data, 0, 0); // [중요] GPU로 전송
+
         context->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
     }
 
@@ -79,7 +85,17 @@ void BloomEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* 
 
     m_tempRT[1]->Bind();
     m_tempRT[1]->Clear(0, 0, 0, 0);
-    if (m_blurPS) m_blurPS->Bind(); 
+
+    if (m_blurPS)
+    {
+        m_blurPS->Bind();
+
+        data.blurDir[0] = 1.0f;
+        data.blurDir[1] = 0.0f;
+        context->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &data, 0, 0);
+
+        context->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    }
 
     ID3D11ShaderResourceView* brightSRV = m_tempRT[0]->GetSRV();
     context->PSSetShaderResources(0, 1, &brightSRV);
@@ -87,7 +103,15 @@ void BloomEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* 
     m_tempRT[1]->Unbind();
 
     m_tempRT[0]->Bind();
-    if (m_blurPS) m_blurPS->Bind();
+
+    if (m_blurPS)
+    {
+        data.blurDir[0] = 0.0f;
+        data.blurDir[1] = 1.0f;
+        context->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &data, 0, 0); // 필수!
+
+        context->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    }
 
     ID3D11ShaderResourceView* blurSRV = m_tempRT[1]->GetSRV();
     context->PSSetShaderResources(0, 1, &blurSRV);
@@ -103,8 +127,8 @@ void BloomEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* 
         context->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
     }
 
-    ID3D11ShaderResourceView* original = src->GetSRV();       
-    ID3D11ShaderResourceView* bloom = m_tempRT[0]->GetSRV();  
+    ID3D11ShaderResourceView* original = src->GetSRV();
+    ID3D11ShaderResourceView* bloom = m_tempRT[0]->GetSRV();
 
     context->PSSetShaderResources(0, 1, &original);
     context->PSSetShaderResources(1, 1, &bloom);
