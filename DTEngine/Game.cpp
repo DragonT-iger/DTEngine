@@ -105,13 +105,11 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
-	/* SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	 SceneManager::Instance().LoadScene("DTtestScene");*/
+	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	//SceneManager::Instance().LoadScene("SampleScene");
+	 SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	 SceneManager::Instance().LoadScene("DTtestScene");
 
-	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	//SceneManager::Instance().LoadScene("DTtestScene");
 
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
@@ -141,7 +139,7 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false);
 
 
 #endif
@@ -540,7 +538,7 @@ void Game::LifeCycle(DeltaTime dt)
 			const auto& col = cam->GetClearColor();
 			targetRT->Clear(col.x, col.y, col.z, col.w);
 
-			RenderScene(scene, cam, targetRT, false);
+			RenderScene(scene, cam, targetRT);
 
 			targetRT->Unbind();
 		}
@@ -559,7 +557,7 @@ void Game::LifeCycle(DeltaTime dt)
 		float ratio = DX11Renderer::Instance().GetAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
-		RenderScene(scene, mainCam, m_captureRT.get(), true);
+		RenderScene(scene, mainCam, m_captureRT.get());
 
 		m_captureRT->Unbind();
 
@@ -583,7 +581,9 @@ void Game::LifeCycle(DeltaTime dt)
 			m_gameRT->Unbind();
 		}
 	}
-
+	m_gameRT->Bind();
+	scene->RenderUI(mainCam, m_gameRT.get());
+	m_gameRT->Unbind();
 
 	DX11Renderer::Instance().BeginFrame(clearColor);
 
