@@ -79,3 +79,7 @@ void Image::SetNativeSize()
 
     GetTransform()->SetScale(Vector3((float)tex->GetWidth(), (float)tex->GetHeight(), 1.0f));
 }
+
+void Image::RenderUI()
+{
+}

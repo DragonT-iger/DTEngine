@@ -55,62 +55,60 @@ GameObject* Prefab::Instantiate()
 
     GameObject* rootObject = nullptr;
 
-    if (reader.BeginArray("gameObjects"))
+    reader.BeginArray("gameObjects");
+
+    while (reader.NextArrayItem())
     {
+        std::string goName = reader.ReadString("name", "GameObject");
+        uint64_t fileGoID = reader.ReadUInt64("id", 0);
+        uint64_t fileParentID = reader.ReadUInt64("parentID", 0);
+
+        GameObject* newGO = scene->CreateGameObject(goName);
+
+        fileIDToNewGameObject[fileGoID] = newGO;
+        if (fileParentID != 0)
+        {
+            parentLinks.push_back({ newGO, fileParentID });
+        }
+
+        if (!rootObject) rootObject = newGO;
+
+        newGO->SetTag(reader.ReadString("tag", "Untagged"));
+        newGO->SetActive(reader.ReadBool("active", true));
+
+        if (reader.BeginObject("transform"))
+        {
+            Transform* tf = newGO->GetTransform();
+            uint64_t fileTfID = reader.ReadUInt64("id", 0);
+
+            if (fileTfID != 0) fileIDToNewComponent[fileTfID] = tf;
+
+            DeserializeComponentProperties(reader, tf, fixupList);
+            reader.EndObject();
+        }
+
+        reader.BeginArray("components");
         while (reader.NextArrayItem())
         {
-            std::string goName = reader.ReadString("name", "GameObject");
-            uint64_t fileGoID = reader.ReadUInt64("id", 0);
-            uint64_t fileParentID = reader.ReadUInt64("parentID", 0);
+            std::string typeName = reader.ReadString("typeName", "");
+            uint64_t fileCompID = reader.ReadUInt64("id", 0);
 
-            GameObject* newGO = scene->CreateGameObject(goName);
-
-            fileIDToNewGameObject[fileGoID] = newGO;
-            if (fileParentID != 0)
+            if (!typeName.empty())
             {
-                parentLinks.push_back({ newGO, fileParentID });
-            }
-
-            if (!rootObject) rootObject = newGO;
-
-            newGO->SetTag(reader.ReadString("tag", "Untagged"));
-            newGO->SetActive(reader.ReadBool("active", true));
-
-            if (reader.BeginObject("transform"))
-            {
-                Transform* tf = newGO->GetTransform();
-                uint64_t fileTfID = reader.ReadUInt64("id", 0);
-
-                if (fileTfID != 0) fileIDToNewComponent[fileTfID] = tf;
-
-                DeserializeComponentProperties(reader, tf, fixupList);
-                reader.EndObject();
-            }
-
-            if (reader.BeginArray("components"))
-            {
-                while (reader.NextArrayItem())
+                Component* newComp = newGO->AddComponent(typeName);
+                if (newComp)
                 {
-                    std::string typeName = reader.ReadString("typeName", "");
-                    uint64_t fileCompID = reader.ReadUInt64("id", 0);
-
-                    if (!typeName.empty())
-                    {
-                        Component* newComp = newGO->AddComponent(typeName);
-                        if (newComp)
-                        {
-                            if (fileCompID != 0) fileIDToNewComponent[fileCompID] = newComp;
-                            DeserializeComponentProperties(reader, newComp, fixupList);
-                        }
-                    }
-                    reader.EndArrayItem();
+                    if (fileCompID != 0) fileIDToNewComponent[fileCompID] = newComp;
+                    DeserializeComponentProperties(reader, newComp, fixupList);
                 }
-                reader.EndArray();
             }
             reader.EndArrayItem();
         }
-        reader.EndArray();
+        reader.EndArray(); 
+
+        reader.EndArrayItem();
     }
+    reader.EndArray(); 
 
     for (auto& link : parentLinks)
     {

@@ -50,7 +50,7 @@ protected:
 
 private: 
 
-	void RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool renderUI = true);
+	void RenderScene(Scene* scene, Camera* camera, RenderTexture* rt);
 
 
 	const std::string m_backupPath = "Scenes/_PlayMode_Backup.scene";

@@ -167,6 +167,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="Animatior.h" />
     <ClInclude Include="AssetDatabase.h" />
     <ClInclude Include="Behaviour.h" />
+    <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="ChangeComponentActiveCommand.h" />
@@ -245,6 +246,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="TilemapData.h" />
     <ClInclude Include="TilemapGenerator.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
@@ -258,6 +260,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="Animatior.cpp" />
     <ClCompile Include="AssetDatabase.cpp" />
     <ClCompile Include="Behaviour.cpp" />
+    <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="ChangeComponentActiveCommand.cpp" />
@@ -363,6 +366,12 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomBlur_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\BloomBlur_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\BloomCombine_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\BloomCombine_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\BloomExtract_PS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\BloomExtract_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />

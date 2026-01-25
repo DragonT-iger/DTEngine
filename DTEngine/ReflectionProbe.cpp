@@ -74,7 +74,7 @@ void ReflectionProbe::Render()
         m_cubeMap->Bind(i);
         m_cubeMap->Clear(0.2f, 0.2f, 0.2f, 1.0f, i); 
 
-        currentScene->Render(m_captureCamera, m_cubeMap.get(), false);
+        currentScene->Render(m_captureCamera, m_cubeMap.get());
     }
 
     m_cubeMap->Unbind();

@@ -31,6 +31,7 @@
 #include "Shader.h"
 #include "GrayScaleEffect.h"
 #include "VignetteEffect.h"
+#include "BloomEffect.h"
 
 #include "Font.h"
 
@@ -75,6 +76,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
 
     m_postProcessManager->AddEffect<GrayScaleEffect>();
 	m_postProcessManager->AddEffect<VignetteEffect>();
+	m_postProcessManager->AddEffect<BloomEffect>();
     
     return true;
 }

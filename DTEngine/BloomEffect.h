@@ -8,7 +8,7 @@ struct BloomCBuffer
 {
     float threshold;  
     float intensity;  
-    float padding[2]; 
+    float blurDir[2];
 };
 
 

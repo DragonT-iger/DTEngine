@@ -1,9 +1,10 @@
 #pragma once
 #include "MonoBehaviour.h"
+#include "UIBase.h"
 #include "Texture.h"
 #include "SimpleMathHelper.h"
 
-class Image : public MonoBehaviour
+class Image : public UIBase
 {
     DTGENERATED_BODY(Image);
 
@@ -26,6 +27,8 @@ public:
     //const int& GetOrderInLayer() const { return m_orderInLayer; }
 
     void SetNativeSize();
+
+	void RenderUI() override;
 
 private:
 

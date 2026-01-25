@@ -2,17 +2,16 @@
 #include "IPostProcess.h"
 #include <wrl/client.h>
 
-struct BloomData
-{
-    float threshold;
-    float intensity;
-    float padding1;
-    float padding2;
-};
 
 class Shader;
-class ID3D11Buffer;
+struct ID3D11Buffer;
 
+struct VignetteCBuffer
+{
+    float radius;
+    float softness;
+    float padding[2];
+};
 
 class VignetteEffect : public IPostProcess
 {
@@ -28,7 +27,7 @@ public:
 private:
     Shader* m_ps = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> m_bloomBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer = nullptr;
 
 
 };

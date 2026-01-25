@@ -21,7 +21,7 @@ void PostProcessManager::Initialize(int width, int height)
 
     auto device = DX11Renderer::Instance().GetDevice();
     D3D11_SAMPLER_DESC sampDesc = {};
-    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // point보다 리니어가 낫네 이게 좀 자연스럽게 보간되네 지글지글 거림이나 계단현상 완화됨
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; // point보다 리니어가 낫네 이게 좀 자연스럽게 보간되네 지글지글 거림이나 계단현상 완화됨
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;

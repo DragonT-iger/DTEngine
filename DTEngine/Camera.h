@@ -80,8 +80,14 @@ public:
     const bool& GetUseVignette() const { return m_useVignette; }
     void SetUseVignette(bool use);
 
+    const float& GetVignetteRadius() const { return m_vignetteRadius; }
+    void SetVignetteRadius(float value) { m_vignetteRadius = value; }
+
+    const float& GetVignetteSoftness() const { return m_vignetteSoftness; }
+    void SetVignetteSoftness(float value) { m_vignetteSoftness = value; }
+
 	const bool& GetUseBloom() const { return m_useBloom; }
-	void SetUseBloom(bool use) { m_useBloom = use; }
+    void SetUseBloom(bool use);
 
     const float& GetBloomThreshold() const { return m_bloomThreshold; }
     void SetBloomThreshold(float value) { m_bloomThreshold = value; }
@@ -128,9 +134,12 @@ private:
     uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::None);
 
     bool m_useGrayScale = false;
-    bool m_useVignette = false;
 
-	bool m_useBloom = false;
+    bool m_useVignette = false;
+    float m_vignetteRadius = 0.8f;
+    float m_vignetteSoftness = 0.4f;
+
+	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈
     float m_bloomThreshold = 1.0f; 
     float m_bloomIntensity = 1.0f; 
 };
