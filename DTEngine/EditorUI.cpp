@@ -1840,7 +1840,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     }
 
                     float shadowScale = currentMat->GetShadowScale();
-                    if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 1.0f, "%.5f"))
+                    if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 5.0f, "%.5f"))
                     {
                         renderer->GetMaterial()->SetShadowScale(shadowScale);
                     }
