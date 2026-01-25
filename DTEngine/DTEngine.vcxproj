@@ -246,6 +246,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="TilemapData.h" />
     <ClInclude Include="TilemapGenerator.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
