@@ -34,7 +34,9 @@ private:
 	GameObject* m_firstNextButton = nullptr;
 	GameObject* m_secondNextButton = nullptr;
 
-	GameObject* m_BattleStartCat = nullptr;
+	GameObject* m_BattleStart = nullptr;
+
+    GameObject* m_victoryUI = nullptr;
 
     int m_CurrentStepIndex = -1;
 };

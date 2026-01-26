@@ -16,7 +16,8 @@ DTPROPERTY(TutorialManager, m_catUI2);
 DTPROPERTY(TutorialManager, m_firstNextButton);
 DTPROPERTY(TutorialManager, m_secondNextButton);
 DTPROPERTY(TutorialManager, m_catText2);
-DTPROPERTY(TutorialManager, m_BattleStartCat);
+DTPROPERTY(TutorialManager, m_BattleStart);
+DTPROPERTY(TutorialManager, m_victoryUI);
 ENDPROPERTY()
 
 void TutorialManager::Awake()
@@ -162,10 +163,22 @@ void TutorialManager::NextStep()
         if(m_catText2) {
             m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n전투를 실행해 봐!");
 		}
-		if (m_BattleStartCat) m_BattleStartCat->SetActive(true);
+		if (m_BattleStart) m_BattleStart->SetActive(true);
     }
     break;
+    case 15:
+    {
+        if (m_BattleStart) m_BattleStart->SetActive(false);
+        if (m_catText2) m_catText2->SetText(L"적이 일정 범위 내에 들어왔을 때 \n전투가 벌어지게 돼");
+    }
+    break;
+    case 16:
+    {
+        if (m_catUI2) m_catUI2->SetActive(false);
+        if (m_victoryUI) m_victoryUI->SetActive(true);
 
+    }
+    break;
 
     default:
         std::cout << "튜토리얼 끝" << std::endl;

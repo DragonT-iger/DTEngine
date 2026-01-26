@@ -44,21 +44,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 22.00232696533203,
-          "y": 134.8974609375,
+          "x": 34.202362060546875,
+          "y": 233.19769287109375,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -4.597456932067871,
-          "y": 2.6225099563598633,
-          "z": 4.581029415130615
+          "x": 20.94977569580078,
+          "y": 5.160084247589111,
+          "z": 15.316009521484375
         },
         "m_rotation": {
-          "w": 0.37646231055259705,
-          "x": 0.0731847956776619,
-          "y": 0.9065651297569275,
-          "z": -0.17623752355575562
+          "w": -0.42794501781463623,
+          "x": -0.13166272640228271,
+          "y": 0.854629635810852,
+          "z": -0.2629376947879791
         },
         "m_scale": {
           "x": 1.0,
@@ -957,13 +957,14 @@
           "id": 4126822075113408942,
           "leftChat": 12206062450784852333,
           "leftChatText": 4887565827465047436,
-          "m_BattleStartCat": 4031496734142982886,
+          "m_BattleStart": 4031496734142982886,
           "m_catText2": 15520398101814369256,
           "m_catUI": 14845203195939369950,
           "m_catUI2": 17904279207892403596,
           "m_firstNextButton": 11176108218897594396,
           "m_queenUI": 9572668432235181836,
           "m_secondNextButton": 1259133298641533460,
+          "m_victoryUI": 6341585058856540258,
           "rightChat": 3796887031993767285,
           "rightChatText": 3014816446671998180,
           "typeName": "TutorialManager"
@@ -1440,7 +1441,7 @@
       "active": false,
       "components": [],
       "id": 4031496734142982886,
-      "name": "BattleStartCat",
+      "name": "BattleStart",
       "tag": "Untagged",
       "transform": {
         "id": 16894505369345768840,
@@ -1541,6 +1542,500 @@
         "m_scale": {
           "x": 300.0,
           "y": 190.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6576746820287875911,
+          "typeName": "GameManager"
+        }
+      ],
+      "id": 15845251961356903549,
+      "name": "GameManager",
+      "tag": "Untagged",
+      "transform": {
+        "id": 15649932189250742933,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 5187384697733711031,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 8668529444446427964,
+          "typeName": "Image"
+        }
+      ],
+      "id": 6341585058856540258,
+      "name": "Victory",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14987221667349848674,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 485.0,
+          "y": 229.5,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1000.0,
+          "y": 603.0999755859375,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16432334077401713557,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 1,
+          "m_text": "New Text",
+          "typeName": "Text"
+        }
+      ],
+      "id": 3540068994554407773,
+      "name": "Reward",
+      "tag": "Untagged",
+      "transform": {
+        "id": 869209400457151961,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 1663658243105846748,
+        "m_position": {
+          "x": 0.10000000149011612,
+          "y": 0.15000000596046448,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7991678166752241918,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 8484118553776787947,
+          "typeName": "Image"
+        }
+      ],
+      "id": 9954984245587546392,
+      "name": "RewardArea",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1663658243105846748,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 14987221667349848674,
+        "m_position": {
+          "x": 0.30000001192092896,
+          "y": 0.3499999940395355,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.4000000059604645,
+          "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 9427420148584979113,
+      "name": "Info",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1761170524681421051,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 15757515239404392927,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        }
+      ],
+      "id": 11571315346676130098,
+      "name": "CostImage",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17825852568500782641,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 1761170524681421051,
+        "m_position": {
+          "x": 1662.0999755859375,
+          "y": 11.199999809265137,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 125.0999984741211,
+          "y": 100.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 9844095026970700098,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 0,
+          "m_text": "Cost",
+          "typeName": "Text"
+        }
+      ],
+      "id": 17685530400219843491,
+      "name": "CostText",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14588585424567240770,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 17825852568500782641,
+        "m_position": {
+          "x": 0.20999999344348907,
+          "y": 0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.5,
+          "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12258473667679435511,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 0,
+          "m_text": "0",
+          "typeName": "Text"
+        }
+      ],
+      "id": 2670338340583961282,
+      "name": "Cost",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17307758241750129211,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 17825852568500782641,
+        "m_position": {
+          "x": 0.4000000059604645,
+          "y": 0.47999998927116394,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.5,
+          "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5472693423851443506,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        }
+      ],
+      "id": 16663896513084595323,
+      "name": "LifeImage",
+      "tag": "Untagged",
+      "transform": {
+        "id": 6292784943863063686,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 1761170524681421051,
+        "m_position": {
+          "x": 1787.199951171875,
+          "y": 11.199999809265137,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 125.0999984741211,
+          "y": 100.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6774544248915975691,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 0,
+          "m_text": "LIFE",
+          "typeName": "Text"
+        }
+      ],
+      "id": 13136572360469050978,
+      "name": "LifeText",
+      "tag": "Untagged",
+      "transform": {
+        "id": 531904043029878745,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 6292784943863063686,
+        "m_position": {
+          "x": 0.23000000417232513,
+          "y": 0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.5,
+          "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 12449708723998633757,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 0,
+          "m_text": "0",
+          "typeName": "Text"
+        }
+      ],
+      "id": 7648293016391937083,
+      "name": "Life",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14718348685911832869,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 6292784943863063686,
+        "m_position": {
+          "x": 0.4000000059604645,
+          "y": 0.47999998927116394,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.5,
+          "y": 0.4000000059604645,
           "z": 1.0
         }
       }
