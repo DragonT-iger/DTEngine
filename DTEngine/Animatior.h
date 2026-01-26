@@ -5,6 +5,7 @@
 
 class Skeletal;
 class AnimationClip;
+class Rigid;
 
 class Animator : public MonoBehaviour
 {
@@ -41,7 +42,8 @@ private:
     bool Loop = false;
     float Animated_Time = 1.0f;
 
-
+    Rigid* m_TargetRigid = nullptr; 
+    bool      m_IsRigidMode = false;
 
     uint64_t m_AniID = 0;
 

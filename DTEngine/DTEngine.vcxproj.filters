@@ -392,6 +392,9 @@
     <ClInclude Include="OwnerSetActive.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Rigid.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -636,6 +639,9 @@
     </ClCompile>
     <ClCompile Include="OwnerSetActive.cpp">
       <Filter>Component\UI</Filter>
+   </ClCompile>
+    <ClCompile Include="Rigid.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

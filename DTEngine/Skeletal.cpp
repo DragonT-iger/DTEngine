@@ -7,6 +7,9 @@
 
 #include "AnimationClip.h"
 
+#include <iostream>
+#include <iomanip>
+
 BEGINPROPERTY(Skeletal)
 DTPROPERTY_SETTER(Skeletal, m_skellID, SetSkeletal)
 
@@ -34,33 +37,34 @@ void Skeletal::Update(float deltaTime)
    
 }
 
-
 void Skeletal::LateUpdate(float dTime)
 {
     if (!m_BoneResource) return;
-
     size_t nodeCount = m_BoneResource->m_Bones.size();
 
-        for (size_t i = 0; i < nodeCount; ++i)
-        {
-            BoneNode& resNode = m_BoneResource->m_Bones[i];
-            Matrix localMat = m_AnimatedLocalMatrices[i];
+    for (size_t i = 0; i < nodeCount; ++i)
+    {
+        BoneNode& resNode = m_BoneResource->m_Bones[i];
+        Matrix localMat = m_AnimatedLocalMatrices[i];
 
-            if (resNode.ParentIndex != -1)
-            {
-                m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
-            }
-            else
-            {
-                m_globalTransforms[i] = localMat;
-            }
+        //std::cout << resNode.name << std::endl;
 
+        Matrix parentG;
+        bool hasParent = (resNode.ParentIndex != -1);
 
-            m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+        if (hasParent)
+            parentG = m_globalTransforms[resNode.ParentIndex];
 
-        }
-    
+        if (hasParent)
+            m_globalTransforms[i] = localMat * parentG;
+        else
+            m_globalTransforms[i] = localMat;
+
+        m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+
+    }
 }
+
 
 void Skeletal::SetSkeletal(uint64_t id)
 {
@@ -70,7 +74,16 @@ void Skeletal::SetSkeletal(uint64_t id)
     if (m_skellID != 0)
     {
         std::string path = AssetDatabase::Instance().GetPathFromID(m_skellID);
-        BoneResource* BoneResource = ResourceManager::Instance().Load<Model>(path)->GetBone();
+
+        Model* pModel = ResourceManager::Instance().Load<Model>(path);
+
+        if (pModel == nullptr)
+        {
+          
+            return;
+        }
+
+        BoneResource* BoneResource = pModel->GetBone();
 
         if (BoneResource)
         {
@@ -87,14 +100,10 @@ void Skeletal::SetSkeletal(uint64_t id)
             for (size_t i = 0; i < nodeCount; ++i)
             {
                 m_AnimatedLocalMatrices[i] = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-                Matrix defaultMat = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-                m_AnimatedLocalMatrices[i] = defaultMat;
             }
 
-            m_globalTransforms.resize(nodeCount);
-            m_finalTransforms.resize(nodeCount);
-
-
+            m_globalTransforms.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
+            m_finalTransforms.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
         }
     }
     else return;

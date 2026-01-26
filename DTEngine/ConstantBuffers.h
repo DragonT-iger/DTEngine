@@ -57,7 +57,7 @@ struct TextureFlag //b4
     float pad[3];
 };
 
-static constexpr int boneCnt = 128;
+static constexpr int boneCnt = 256;
 
 __declspec(align(16))
 struct Matrix_Pallette //b5

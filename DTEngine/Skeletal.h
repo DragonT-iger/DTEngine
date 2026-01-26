@@ -39,7 +39,7 @@ public:
 	std::string GetSkeletal() { return m_FbxName; }
 
 	std::vector<Matrix>& GetFinalMatrix() { return m_finalTransforms; }
-	BoneResource* GetBoneResource() {  if(m_BoneResource) return m_BoneResource; }
+	BoneResource* GetBoneResource() { return m_BoneResource; }
 	int GetBoneIndex(const std::string& Name);
 	void SetBonePose(int boneIndex, const Matrix& mat); 
 
