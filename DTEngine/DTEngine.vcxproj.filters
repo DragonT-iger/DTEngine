@@ -314,7 +314,7 @@
     <ClInclude Include="Prefab.h">
       <Filter>Component</Filter>
     </ClInclude>
-        <ClInclude Include="UISliderHandle.h">
+    <ClInclude Include="UISliderHandle.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
@@ -325,6 +325,12 @@
     </ClInclude>
     <ClInclude Include="FSMRegister.h">
       <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PrefabSelectWindow.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsWindow.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -523,7 +529,7 @@
     <ClCompile Include="Prefab.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-      <ClCompile Include="UISliderHandle.cpp">
+    <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="FSMController.cpp">
@@ -531,6 +537,12 @@
     </ClCompile>
     <ClCompile Include="FSMRegister.cpp">
       <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="PrefabSelectWindow.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsWindow.cpp">
+      <Filter>Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

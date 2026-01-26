@@ -2,6 +2,8 @@
 #include "SimpleMathHelper.h"
 #include "MonoBehaviour.h"
 
+class UIButton;
+
 class UISliderHandle : public MonoBehaviour
 {
     DTGENERATED_BODY(UISliderHandle);

@@ -90,6 +90,7 @@ public:
 
     void Clear();
 
+    void RayUpdate(float deltaTime);
 
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
@@ -109,6 +110,11 @@ private:
     enum class ScenePhase { None, Awake, Start, Update, FixedUpdate, LateUpdate };
     ScenePhase m_phase = ScenePhase::None;
     void FlushPending();
+
+
+
+    
+    GameObject* m_hitObject;
 
 
 

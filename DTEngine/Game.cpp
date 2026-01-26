@@ -281,37 +281,10 @@ void Game::LifeCycle(DeltaTime dt)
 
 		scene->Update(dt.scaledTime);
 
-
-
-
-
 		scene->LateUpdate(dt.scaledTime);
 
 #ifndef _DEBUG
-		auto& input = InputManager::Instance();
-		Camera* camera = scene->GetMainCamera();
-
-		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
-		{
-			auto mp = input.GetGameMousePosition();
-
-			float viewW = (float)DX11Renderer::Instance().GetWidth();
-			float viewH = (float)DX11Renderer::Instance().GetHeight();
-
-			// 창 밖 클릭 방어
-			if (mp.x >= 0 && mp.y >= 0 && mp.x < viewW && mp.y < viewH)
-			{
-				Ray ray = camera->ScreenPointToRay(mp.x, mp.y, viewW, viewH);
-
-				GameObject* hit = nullptr;
-				float t = 0.0f;
-				if (scene->Raycast2(ray, hit, t))
-				{
-					// 여기에 뭔가 더 넣으면 될듯..
-					std::cout << hit->GetName() << std::endl;
-				}
-			}
-		}
+	
 #endif
 
 

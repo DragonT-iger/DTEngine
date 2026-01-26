@@ -13,6 +13,12 @@ class GameObject;
 
 struct DeltaTime;
 
+
+// window용.
+class PrefabSelectWindow;
+class SettingsWindow;
+class Prefab;
+
 class Game : public WindowBase {
 public:
 	Game();
@@ -32,7 +38,6 @@ public:
 	//void LifeCycle(float deltaTime);
 	void LifeCycle(DeltaTime dt);
 	void UpdateTimeScale(); // 배속 테스트용
-
 #ifdef _DEBUG
 	EngineMode GetEngineMode() const { return m_engineMode; }
 	void SetEngineMode(EngineMode mode) { m_engineMode = mode; }

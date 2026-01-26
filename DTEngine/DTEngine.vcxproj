@@ -192,6 +192,7 @@
     <ClInclude Include="move.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Prefab.h" />
+    <ClInclude Include="PrefabSelectWindow.h" />
     <ClInclude Include="RectTransform.h" />
     <ClInclude Include="ReflectionDatabase.h" />
     <ClInclude Include="ReflectionMacros.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SerializationUtils.h" />
+    <ClInclude Include="SettingsWindow.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SimpleMathHelper.h" />
@@ -222,7 +224,7 @@
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
-        <ClInclude Include="UISliderHandle.h" />
+    <ClInclude Include="UISliderHandle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowBase.h" />
   </ItemGroup>
@@ -274,6 +276,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Prefab.cpp" />
+    <ClCompile Include="PrefabSelectWindow.cpp" />
     <ClCompile Include="RectTransform.cpp" />
     <ClCompile Include="ReflectionDatabase.cpp" />
     <ClCompile Include="ReflectionProbe.cpp" />
@@ -285,6 +288,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SerializationUtils.cpp" />
+    <ClCompile Include="SettingsWindow.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Skeletal.cpp" />
@@ -297,7 +301,7 @@
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
-        <ClCompile Include="UISliderHandle.cpp" />
+    <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>

@@ -28,6 +28,9 @@
 #include "UIManager.h"
 #include "Animatior.h"
 #include "FSMController.h"
+#include "SettingsWindow.h"
+#include "PrefabSelectWindow.h"
+#include "InputManager.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -697,6 +700,42 @@ void Scene::Clear()
     m_pendingAdd.clear();      
     m_pendingDestroy.clear();
     m_mainCamera = nullptr;
+}
+
+// game.cpp에서는 scene 가져왔지만 여기서는 그냥 this. 
+void Scene::RayUpdate(float deltaTime)
+{
+    auto& input = InputManager::Instance();
+    Camera* camera = this->GetMainCamera();
+
+    if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
+    {
+        auto mp = input.GetGameMousePosition();
+
+        float viewW = (float)DX11Renderer::Instance().GetWidth();
+        float viewH = (float)DX11Renderer::Instance().GetHeight();
+
+        // 창 밖 클릭 방어
+        if (mp.x >= 0 && mp.y >= 0 && mp.x < viewW && mp.y < viewH)
+        {
+            Ray ray = camera->ScreenPointToRay(mp.x, mp.y, viewW, viewH);
+
+            GameObject* hit = nullptr;
+            float t = 0.0f;
+            if (this->Raycast2(ray, hit, t))
+            {
+                // 여기에 뭔가 더 넣으면 될듯.. | 여기에다가 이름 비교해서 cube 인 경우 생성 이정도로 임시 잡아두기.
+                //std::cout << hit->GetName() << std::endl;
+
+                // 결국 데이터 받아와서 계산하는게 너무 복잡하니까 편하게 가능한 obj 이름 possiblePlane 
+
+                if (hit->GetName() == "Cube")
+                {
+                    // 
+                }
+            }
+        }
+    }
 }
 
 GameObject* Scene::FindGameObjectByID(uint64_t id)
