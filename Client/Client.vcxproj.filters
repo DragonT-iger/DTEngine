@@ -22,6 +22,12 @@
     <Filter Include="GameManager">
       <UniqueIdentifier>{5ef9da52-db07-4133-ad97-f0b3adc02194}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Unit">
+      <UniqueIdentifier>{0a0a3e37-4b33-4dcd-9d73-8c21a413dc5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Battle">
+      <UniqueIdentifier>{665d9818-c214-44a4-924c-15f3b9f38c45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -57,6 +63,21 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>GameManager</Filter>
     </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="AllyUnit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyUnit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatController.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleGrid.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -91,6 +112,21 @@
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="AllyUnit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyUnit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatController.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleGrid.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
