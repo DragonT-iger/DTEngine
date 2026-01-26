@@ -49,6 +49,10 @@ void UIManager::InitializeWindows()
     //m_settingsWindow->CreateOnce();
 }
 
+void test()
+{
+
+}
 void UIManager::RayUpdate()
 {
     if (m_prefabSelectWindow->IsWindowOpen())
@@ -80,11 +84,12 @@ void UIManager::RayUpdate()
 
                 // 결국 데이터 받아와서 계산하는게 너무 복잡하니까 편하게 가능한 obj 이름 possiblePlane 
 
+                std::cout << hit->GetName() << "Fsfasdfasfs" << std::endl;
                 if (hit->GetName() == "Cube")
                 {
                     CloseAllUI();       // ui window 닫기.
-                    Vector3 spawnPos = hit->GetTransform()->GetPosition();
-
+                    Vector3 spawnPos = hit->GetTransform()->GetWorldPosition();
+                    m_hitObject = hit;
                     if (m_prefabSelectWindow)
                     {
                         m_prefabSelectWindow->Open([this, spawnPos](Prefab* selected)
@@ -96,7 +101,11 @@ void UIManager::RayUpdate()
                                     {
                                         model->GetTransform()->SetPosition(spawnPos + Vector3(0.f, 1.f, 0.f));   // tile보다 살짝 위로.
                                         model->GetTransform()->SetRotationEuler(Vector3(0.f, 90.f, 0.f));   // 바라보는 방향으로 회전.
-                                        m_hitObject->SetName("ICube"); // tile 이름 수정으로 이후 생성 못하는걸로.
+                                        
+                                        if (m_hitObject)
+                                        {
+                                            m_hitObject->SetName("ICube"); // tile 이름 수정으로 이후 생성 못하는걸로.
+                                        }
                                     }
                                 }
                             });
