@@ -133,11 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AllyUnit.cpp" />
+    <ClCompile Include="BattleGrid.cpp" />
+    <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
+    <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -145,11 +150,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllyUnit.h" />
+    <ClInclude Include="BattleGrid.h" />
+    <ClInclude Include="CombatController.h" />
     <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
