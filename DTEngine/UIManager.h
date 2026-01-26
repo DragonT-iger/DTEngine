@@ -1,37 +1,33 @@
-//#pragma once
-//
-//#include "Singleton.h"
-//#include "SimpleMathHelper.h"
-//#include "Canvas.h"
-//#include <string>
-//#include <unordered_map>
-//
-//class Scene;
-//
-//class UIManager : public Singleton<UIManager>
-//{
-//public:
-//    void OnResize(float width, float height);
-//    void UpdateLayout(Scene* scene, float width, float height);
-//    void UpdateInteraction(Scene* scene, float width, float height);
-//    void SetViewportRect(const Vector2& origin, const Vector2& size);
-//    void RegisterLayer(const std::string& name, int order);
-//    int GetLayerOrder(const std::string& name) const;
-//
-//    // 캔버스 생성하면 UIManager에 넣어주자.
-//    void SetCanvas(Canvas* canvas) { m_canvas = canvas; };
-//
-//private:
-//    void EnsureDefaultLayers();
-//
-//    float m_lastWidth = 0.0f;
-//    float m_lastHeight = 0.0f;
-//    Vector2 m_viewportOrigin = Vector2(0.0f, 0.0f);
-//    Vector2 m_viewportSize = Vector2(0.0f, 0.0f);
-//
-//    std::unordered_map<std::string, int> m_layerOrders;
-//
-//    const Canvas* m_canvas = nullptr;
-//
-//    
-//};
+#pragma once
+#include "MonoBehaviour.h"
+#include <functional>
+
+class PrefabSelectWindow;
+//class RuleSelectWindow;
+class SettingsWindow;
+
+class UIManager : public MonoBehaviour
+{
+    DTGENERATED_BODY(UIManager);
+public:
+    UIManager() = default;
+    ~UIManager() override = default;
+
+    void Awake() override;
+    void Update(float deltaTime) override;
+
+    // 모든 창을 닫아주는 함수
+    void CloseAllUI();
+
+private:
+    void InitializeWindows(); // 윈도우들 생성 및 컴포넌트 주입
+    void RayUpdate();     
+
+private:
+    // 관리 대상 윈도우들
+    PrefabSelectWindow* m_prefabSelectWindow = nullptr;
+    //RuleSelectWindow* m_ruleSelectWindow = nullptr;
+    SettingsWindow* m_settingsWindow = nullptr;
+
+    GameObject* m_hitObject = nullptr;
+};

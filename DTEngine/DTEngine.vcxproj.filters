@@ -389,6 +389,9 @@
     <ClInclude Include="Image.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
+    <ClInclude Include="OwnerSetActive.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -629,6 +632,9 @@
       <Filter>Component\RenderTarget</Filter>
     </ClCompile>
     <ClCompile Include="Image.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="OwnerSetActive.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
   </ItemGroup>
