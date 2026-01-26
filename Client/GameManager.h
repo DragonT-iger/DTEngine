@@ -14,14 +14,17 @@ class GameManager : public MonoSingleton<GameManager>
 {
 	DTGENERATED_BODY(GameManager)
 
+
 public:
 
+
+	void Awake() override;
 	void SetLife(int life);
 
 
 
-	Text* curCost;
-	Text* maxLife;
+	Text* m_money;
+	Text* m_life;
 private:
 	
 
