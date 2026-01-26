@@ -3,6 +3,8 @@
 #include "Mesh.h"
 #include "SimpleMathHelper.h"
 #include "SkeletalRsource.h"
+#include "AnimationClip.h"
+#include "ResourceManager.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -29,6 +31,7 @@ bool HasBones(const aiScene* scene)
 
 Model::Model() {
     m_impl = std::make_unique<BoneResource>();
+    m_nr = std::make_unique<NodeResource>();
 }
 
 Model::~Model()
@@ -44,7 +47,7 @@ void Model::Unload()
     //}
     m_meshes.clear();
 }
-
+static bool isRigged = false;
 
 
 bool Model::LoadFile(const std::string& fullPath)
@@ -57,10 +60,18 @@ bool Model::LoadFile(const std::string& fullPath)
         aiProcess_CalcTangentSpace 
     );
 
+    isRigged = false;
+
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         return false;
 
-    bool isRigged = false;
+
+    if (scene->HasAnimations())
+    {
+        LoadAnimation(fullPath);
+    }
+
+   
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
         if (scene->mMeshes[i]->HasBones()) {
             isRigged = true;
@@ -75,6 +86,15 @@ bool Model::LoadFile(const std::string& fullPath)
         CreateSkeleton(scene->mRootNode, NodeIndex); //계층 정보 부모의 index; Default matrix를 저장.
     }
 
+
+    //애니는 있는데, bone이 없는 경우 
+    if (scene->HasAnimations() && !isRigged)
+    {
+        ProcessNodeMap(scene);
+      
+    }
+
+
     ProcessNode(scene->mRootNode, scene);
     return true;
 }
@@ -88,10 +108,13 @@ Mesh* Model::GetMesh(size_t index) const
 //여기서 누계시켜야 함. 
 void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
+
+    std::string currentNodeName = node->mName.C_Str();
+
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* aiMesh = scene->mMeshes[node->mMeshes[i]];
-        m_meshes.push_back(ProcessMesh(aiMesh, scene));
+        m_meshes.push_back(ProcessMesh(aiMesh, scene, currentNodeName));
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -100,7 +123,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     }
 }
 
-std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
+std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene, const std::string& nodeName)
 {
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -157,7 +180,7 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
         vertices.push_back(vertex);
     }
 
-    if (1) //Skeleton은 Mesh가 갖고 있음
+    if (isRigged) //Skeleton은 Mesh가 갖고 있음
     {
 
         ExtractBoneWeightForVertices(vertices, aiMesh, scene);
@@ -187,6 +210,17 @@ std::unique_ptr<Mesh> Model::ProcessMesh(aiMesh* aiMesh, const aiScene* scene)
                 v.Weights[2] *= scale;
                 v.Weights[3] *= scale;
             }
+        }
+    }
+
+    else if (m_nr) // [Rigid 방식] 
+    {
+        int nodeID = m_nr->GetIndex(nodeName);
+        for (auto& v : vertices)
+        {
+            v.BoneIDs[0] = (nodeID != -1) ? nodeID : 0;
+            v.Weights[0] = 1.0f; // 이 메쉬는 해당 노드 행렬 하나만 따름
+            v.Weights[1] = v.Weights[2] = v.Weights[3] = 0.0f;
         }
     }
 
@@ -263,6 +297,47 @@ void Model::CreateSkeleton(const aiNode* node, int parentIndex)
     }
 }
 
+void Model::ProcessNodeMap(const aiScene* scene)
+{
+    printf("[ProcessNodeMap] Model=%p\n", this);
+
+
+    m_nr->Nodes.clear();
+    m_nr->NodeMapping.clear();
+
+    CreateNode(scene->mRootNode, -1);
+}
+
+void Model::CreateNode(const aiNode* node, int parentIndex)
+{
+    std::string nodeName = node->mName.C_Str();
+
+    NodeData newNode;
+    newNode.Name = nodeName;
+    newNode.ID = (int)m_nr->Nodes.size();
+    newNode.ParentIndex = parentIndex;
+
+    newNode.DefaultLocalMatrix = Matrix(&node->mTransformation.a1).Transpose();
+
+    if (parentIndex != -1)
+    {
+        newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix * m_nr->Nodes[parentIndex].DefaultGlobalMatrix;
+    }
+    else
+    {
+        newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix;
+    }
+
+    m_nr->Nodes.push_back(newNode);
+    m_nr->NodeMapping[nodeName] = newNode.ID;
+
+    int myIndex = newNode.ID;
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
+    {
+        CreateNode(node->mChildren[i], myIndex);
+    }
+}
+
 
 void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
 {
@@ -295,6 +370,16 @@ void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* 
             SetVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }
+}
+
+bool Model::LoadAnimation(std::string Path)
+{
+    m_clip = ResourceManager::Instance().Load<AnimationClip>(Path);
+
+    assert(m_clip);
+    if (m_clip) return true;
+
+    return false;
 }
 
 void Model::SetVertexBoneData(Vertex& vertex, int boneID, float weight)

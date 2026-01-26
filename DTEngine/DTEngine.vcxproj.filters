@@ -92,7 +92,7 @@
     </Filter>
     <Filter Include="PostProcessing\Effect">
       <UniqueIdentifier>{5ed86ba3-8a3b-4e83-b52c-a0cd3f1aa889}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Shader\Specific\Effect">
       <UniqueIdentifier>{4b1c99ac-beb7-41ec-8bbd-e69a6dc283d2}</UniqueIdentifier>
     </Filter>
@@ -361,11 +361,14 @@
     </ClInclude>
     <ClInclude Include="VignetteEffect.h">
       <Filter>PostProcessing\Effect</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigid.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -591,11 +594,14 @@
     </ClCompile>
     <ClCompile Include="VignetteEffect.cpp">
       <Filter>PostProcessing\Effect</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -70,7 +70,18 @@ void Skeletal::SetSkeletal(uint64_t id)
     if (m_skellID != 0)
     {
         std::string path = AssetDatabase::Instance().GetPathFromID(m_skellID);
-        BoneResource* BoneResource = ResourceManager::Instance().Load<Model>(path)->GetBone();
+
+        Model* pModel = ResourceManager::Instance().Load<Model>(path);
+
+        // 2. 모델이 제대로 로드되었는지 반드시 확인합니다.
+        if (pModel == nullptr)
+        {
+            // 에러 로그 출력 등을 수행하세요.
+            // DebugBreak(); // 혹은 여기서 멈춰서 원인을 파악해보세요.
+            return;
+        }
+
+        BoneResource* BoneResource = pModel->GetBone();
 
         if (BoneResource)
         {
