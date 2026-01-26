@@ -590,10 +590,10 @@ void Game::LifeCycle(DeltaTime dt)
 	Vector2 finalPos(offsetX, offsetY);
 	Vector2 finalSize(drawWidth, drawHeight);
 
-	if (camera)
+	if (mainCam)
 	{
 		float ratio = drawWidth / drawHeight;
-		camera->SetAspectRatio(ratio);
+		mainCam->SetAspectRatio(ratio);
 	}
 
 

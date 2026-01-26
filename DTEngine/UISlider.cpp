@@ -8,10 +8,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "UISliderHandle.h"
-<<<<<<< HEAD
 #include "UIButton.h"
-=======
->>>>>>> origin/main
 
 BEGINPROPERTY(UISlider)
 DTPROPERTY_ACCESSOR(UISlider, m_minValue, GetMinValue, SetMinValue)
@@ -195,37 +192,6 @@ void UISlider::OnHandleReleased(float mouseLocalX)
 
     float clampedX = std::clamp(normalizedMouseX, minX, maxX);
     float normalizedPos = (clampedX - minX) / available;
-}
-
-void UISlider::InvokeValueChanged()
-{
-    if (!m_interactable) return;
-
-    //printf("value change invoke");
-    if (m_onValueChanged) m_onValueChanged(m_value);
-}
-
-void UISlider::OnHandleDragged(float mouseLocalX)
-{
-    if (!m_interactable || !m_handleTransform || !m_Transform) return;
-
-    Vector3 trackScale = m_Transform->GetScale();
-    Vector3 handleScale = m_handleTransform->GetScale();
-    float trackWidth = trackScale.x;
-    float handleWidth = handleScale.x;
-    float available = std::max(0.0f, trackWidth - handleWidth);
-
-    // 드래그 가능한 범위로 제한
-    float minX = -available * 0.5f;
-    float maxX = available * 0.5f;
-    float clampedX = std::clamp(mouseLocalX, minX, maxX);
-
-    // normalized position
-    float normalizedPos = (clampedX - minX) / available;
-
-    // value 계산 및 설정
-    float newValue = m_minValue + (m_maxValue - m_minValue) * normalizedPos;
-    SetValue(newValue);
 }
 
 void UISlider::InvokeValueChanged()

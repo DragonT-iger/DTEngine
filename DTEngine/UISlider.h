@@ -4,6 +4,8 @@
 #include <functional>
 #include "UIBase.h"
 
+class UIButton;
+
 class UISlider : public MonoBehaviour
 {
     DTGENERATED_BODY(UISlider);

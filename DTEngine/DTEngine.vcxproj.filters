@@ -630,7 +630,7 @@
     </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
-    < /ClCompile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
