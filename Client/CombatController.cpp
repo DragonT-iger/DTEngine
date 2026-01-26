@@ -288,14 +288,10 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
         ++aliveAllyCount;
         if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; } 
     }
-    
-    for (AllyUnit* a : m_allyUnits) { 
-        if (a && a->IsAlive()) ++aliveAllyCount; 
-    }
 
     if (aliveAllyCount == 0)  return FindNearestEnemyPos(mePos); // 아군이 혼자뿐이면 적을 향해 간다. 
 
-    if (!allyInPerception) return FindNearestAllyPos(me, mePos); // 아군이 인식범위 안에 
+    if (!allyInPerception) return FindNearestAllyPos(me, mePos); // 아군이 인식범위 안에 없으면 아군을 향해 간다. 
 
     return FindNearestEnemyPos(mePos);
 }
