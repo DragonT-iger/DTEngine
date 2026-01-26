@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MonoBehaviour.h"
+#include "UIBase.h"
 #include "SimpleMathHelper.h"
 #include "Canvas.h"
 #include <functional>

@@ -54,7 +54,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float specularPower = 20.0f;
 
     
-    float shadowFactor = CalculateShadow(input.WorldPos);
+    float shadowFactor = CalculateShadow(input.WorldPos , Shadow_Bias);
     
     for (int i = 0; i < ActiveCount; ++i)
     {

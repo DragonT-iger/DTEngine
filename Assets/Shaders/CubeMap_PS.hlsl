@@ -12,7 +12,6 @@ SamplerState g_Sampler : register(s0);
 
 #include "Lighting.hlsli"
 
-
 float4 PS(PS_INPUT input) : SV_Target
 {
     float3 normal = normalize(input.Normal);
@@ -24,5 +23,5 @@ float4 PS(PS_INPUT input) : SV_Target
 
     
     
-    return envColor * CalculateShadow(input.WorldPos);
+    return envColor * CalculateShadow(input.WorldPos, 0.005); // 의존성슈바
 }

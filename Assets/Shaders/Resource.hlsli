@@ -20,9 +20,9 @@ cbuffer CBuffer_Material : register(b4)
     float4 UVTransform;
     
     int UseTexture;
-    float Shadow_Bias = 0.00001f; //일단 넣어 놓음. + 객체 단위의 정교한 Shadow_Bias 가 필요한 경우가 있을 경우. 
+    float Shadow_Bias; //일단 넣어 놓음. + 객체 단위의 정교한 Shadow_Bias 가 필요한 경우가 있을 경우. 
     
-    float Metallic_Factor = 1.0f;
+    float Shadow_Scale;
     float Roughness_Factor =1.0f ;
 };
 
@@ -37,6 +37,28 @@ cbuffer CBuffer_Matrix_Pallette : register(b6)
 {
     float4x4 Matrix_Pallette_Array[128]; // 운용 할 bone 갯수 만큼 배열 크기를 정의할 예정. 
 };
+
+
+cbuffer CBuffer_SkyBox : register(b7)
+{
+    float4 SkyBox_Color; 
+};
+
+cbuffer CBuffer_Effect : register(b8)
+{
+    float progress; //진행도 
+    float edgeWidth; 
+    float glowIntensity; //빛의 강도 
+    float totalTime; //
+    
+    float4 edgeColor;
+    
+    float noiseScalef;
+    float timeMultiplier; // 애니메이션 배속 (추가)
+    float effectType;
+    float Skinned_Flag; // bone / rigid  object와의 통합 위해.
+}
+
 
 
 struct VS_INPUT
@@ -65,6 +87,8 @@ Texture2D g_SpecMap    : register(t2); //Editor에서도 이걸 기준으로 PBR
 Texture2D g_MetalMap   : register(t3);
 Texture2D g_RoughMap   : register(t4);
 Texture2D g_AoMap      : register(t5);
+
+Texture2D g_NoiseMap : register(t6);
 
 TextureCube g_CubeMap : register(t9);
 //Texture2D Empty : register(t6);`

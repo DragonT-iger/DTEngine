@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AliceComponent.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,6 +146,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AliceComponent.h" />
     <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ForwardMover.h" />

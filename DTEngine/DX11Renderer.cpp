@@ -26,11 +26,14 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Camera.h"
-
+#include "InputManager.h"
 #include "DXHelper.h"
-
 #include "Shader.h"
+#include "GrayScaleEffect.h"
+#include "VignetteEffect.h"
+#include "BloomEffect.h"
 
+#include "Font.h"
 
 
 using Microsoft::WRL::ComPtr;
@@ -44,38 +47,6 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     if (!m_hwnd) return false;
     if (!CreateDeviceAndSwapchain()) return false;
 
-
-    // D3D11_BUFFER_DESC cbDesc = {};
-    // cbDesc.ByteWidth = sizeof(CBuffer_Frame_Data);
-    // cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    // cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    // cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    // HRESULT hr = m_device->CreateBuffer(&cbDesc, nullptr, m_cbuffer_frame.GetAddressOf());
-    // DXHelper::ThrowIfFailed(hr);
-
-
-    // D3D11_BUFFER_DESC lbDesc = {};
-    // lbDesc.ByteWidth = sizeof(CBuffer_GlobalLight);
-    // lbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    // lbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    // lbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    // hr = m_device->CreateBuffer(&lbDesc, nullptr, m_cbuffer_lights.GetAddressOf());
-    // DXHelper::ThrowIfFailed(hr);
-
-
-
-    // D3D11_BUFFER_DESC boneDesc = {};
-    // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
-    // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
-    // boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    // boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    // hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
-    // DXHelper::ThrowIfFailed(hr);
-
-
     CreateConstantBuffers();
     CreateBackbuffers(width, height);
     CreateSamplers();
@@ -85,15 +56,32 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_spriteBatch = std::make_unique<DirectX::DX11::SpriteBatch>(m_context.Get());
 
     try {
-        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/The Jamsil 2 Light.spritefont");
+        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/NotoSansKR-Black.spritefont");
+
+        if (m_font)
+        {
+            m_font->SetDefaultCharacter(L'?');
+        }
     }
     catch (...) {
-        std::cout << "[Warning] Failed to load font: Assets/Fonts/The Jamsil 2 Light.spritefont\n";
+		std::cout << "[Warning] Failed to load font" << std::endl;
     }
 
     //CreateShadowMap(16376, 16376); // max 왜 이러지
 
-    CreateShadowMap(4096, 4096);
+    CreateShadowMap(8192, 8192);
+
+
+
+    m_postProcessManager = std::make_unique<PostProcessManager>();
+    m_postProcessManager->Initialize(width, height);
+
+    m_resolvedSceneRT = std::make_unique<RenderTexture>();
+    m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
+
+    m_postProcessManager->AddEffect<GrayScaleEffect>();
+	m_postProcessManager->AddEffect<VignetteEffect>();
+	m_postProcessManager->AddEffect<BloomEffect>();
     
     return true;
 }
@@ -117,6 +105,12 @@ void DX11Renderer::Resize(int width, int height)
 
     CreateBackbuffers(width, height);
     m_width = width; m_height = height;
+
+    if (m_postProcessManager)
+        m_postProcessManager->Resize(width, height);
+
+    if (m_resolvedSceneRT)
+        m_resolvedSceneRT->Resize(width, height);
 }
  
 //이거 상수버퍼 인터페이스 만든 다음에, 템플릿으로 처리해도 깔끔할듯 함 
@@ -212,8 +206,9 @@ void DX11Renderer::UpdateMaterial_CBUFFER(const MaterialData& M_Data)
     
     dataPtr->UVTransform = M_Data.UVTransform;
     dataPtr->UseTexture = M_Data.UseTexture;
-    dataPtr->metallicFactor = M_Data.metallicFactor;
+    dataPtr->Shadow_Scale = M_Data.Shadow_Scale;
     dataPtr->roughnessFactor = M_Data.roughnessFactor;
+	dataPtr->Shadow_Bias = M_Data.Shadow_Bias;
 
     m_context->Unmap(m_cbuffer_material.Get(), 0);
 }
@@ -245,6 +240,32 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
     }
 
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
+}
+
+void DX11Renderer::UpdateSkyBox_CBUFFER(SkyBox& data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+
+    HRESULT hr = m_context->Map(m_cbuffer_SkyBox.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    SkyBox* dataPtr = static_cast<SkyBox*>(mappedData.pData);
+    dataPtr->SkyBox_Color = data.SkyBox_Color;
+    
+    m_context->Unmap(m_cbuffer_SkyBox.Get(), 0);
+}
+
+void DX11Renderer::UpdateEffect_CBUFFER(EffectParams& data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+
+    HRESULT hr = m_context->Map(m_cbuffer_Effect.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    EffectParams* dataPtr = static_cast<EffectParams*>(mappedData.pData);
+    *dataPtr = data;
+
+    m_context->Unmap(m_cbuffer_Effect.Get(), 0);
 }
 
 void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
@@ -400,20 +421,85 @@ void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vecto
     m_spriteBatch->Draw(texture->GetSRV(), destRect, color);
 }
 
-void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color)
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color, float rotation , Vector2 scale)
 {
     if (!m_spriteBatch || !m_font) return;
+
+    Vector2 origin = Vector2(0, 0);
 
     m_font->DrawString(
         m_spriteBatch.get(),
         text.c_str(),
         position,
         color,
-        0.0f,                    
-        DirectX::XMFLOAT2(0, 0), 
+        rotation,
+        scale, 
         m_fontSize
     );
 }
+
+void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color, float rotation, Vector2 scale)
+{
+    auto SpriteFont = Font->GetSpriteFont();
+
+    if (!SpriteFont || !m_spriteBatch) return;
+
+    SpriteFont->DrawString(m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        rotation,
+        scale,
+        fontSize
+    );
+
+}
+
+void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color, float fontSizeMultiplier)
+{
+    if (!m_spriteBatch || !m_font) return;
+
+    float lineSpacing = m_font->GetLineSpacing();
+    if (lineSpacing <= 0.0001f) lineSpacing = 1.0f;
+
+    float targetScale = (size.y / lineSpacing) * fontSizeMultiplier;
+
+    DirectX::XMFLOAT2 origin(0, 0);
+
+    m_font->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        rotation,
+        origin,
+        targetScale 
+    );
+}
+
+void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color, float fontSizeMultiplier)
+{
+    auto SpriteFont = Font->GetSpriteFont();
+    if (!SpriteFont || !m_spriteBatch) return;
+
+    float lineSpacing = SpriteFont->GetLineSpacing();
+    if (lineSpacing <= 0.0001f) lineSpacing = 1.0f;
+
+    float targetScale = (size.y / lineSpacing) * fontSizeMultiplier;
+
+    DirectX::XMFLOAT2 origin(0, 0);
+
+    SpriteFont->DrawString(
+        m_spriteBatch.get(),
+        text.c_str(),
+        position,
+        color,
+        rotation,
+        origin,
+        targetScale
+    );
+}
+
 
 void DX11Renderer::SetBlendMode(BlendMode mode)
 {
@@ -474,7 +560,10 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
     // 이런 전역적인 데이터는 Renderer에서 따로 관리해도 괜찮을 거 같음. Scene에서 꺼내오는 건 가능하겠다만. 
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
-    const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+    //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
+
+        const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
     m_context->PSSetShaderResources(9, 1, &CubeMap);
@@ -499,6 +588,8 @@ void DX11Renderer::BindGlobalResources()
     m_context->VSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->VSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
 
+    m_context->VSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -508,6 +599,9 @@ void DX11Renderer::BindGlobalResources()
 
     m_context->PSSetConstantBuffers(5, 1, m_cbuffer_Texture_flags.GetAddressOf());
     m_context->PSSetConstantBuffers(6, 1, m_cbuffer_matrix_pallette.GetAddressOf());
+
+    m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
+    m_context->PSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
@@ -545,6 +639,14 @@ void DX11Renderer::CreateConstantBuffers()
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
 
 
+    bd.ByteWidth = sizeof(SkyBox);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_SkyBox.GetAddressOf()));
+
+    bd.ByteWidth = sizeof(EffectParams);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Effect.GetAddressOf()));
+
+
+
       // D3D11_BUFFER_DESC boneDesc = {};
     // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
     // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -558,23 +660,52 @@ void DX11Renderer::CreateConstantBuffers()
 
 void DX11Renderer::EndFrame()
 {
+
     if (m_msaaTargetTex && m_backbufferTex)
     {
         m_context->ResolveSubresource(
             m_backbufferTex.Get(), 0,      
             m_msaaTargetTex.Get(), 0,      
-#ifdef _DEBUG
+//#ifdef _DEBUG
             DXGI_FORMAT_R8G8B8A8_UNORM
-#else
-            DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
-#endif
+//#else
+            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+//#endif
         );
     }
 
-    //EndUIRender();
+#ifndef _DEBUG
 
-    //std::cout << m_width << " " << m_height << std::endl;
-    // 필요 시 파이프라인 언바인드/커맨드 종료 등
+    //일단 
+
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+
+    //uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+
+    //if (m_msaaTargetTex && m_resolvedSceneRT)
+    //{
+    //    m_context->ResolveSubresource(
+    //        m_resolvedSceneRT->GetTexture(), 0,
+    //        m_msaaTargetTex.Get(), 0,
+    //        DXGI_FORMAT_R8G8B8A8_UNORM
+    //    );
+
+    //    if (m_postProcessManager)
+    //    {
+    //        m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask, DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
+    //    }
+    //    else
+    //    {
+    //        m_context->ResolveSubresource(
+    //            m_backbufferTex.Get(), 0,
+    //            m_msaaTargetTex.Get(), 0,
+    //            DXGI_FORMAT_R8G8B8A8_UNORM
+    //        );
+    //    }
+    //}
+#endif
 }
 
 void DX11Renderer::Present()
@@ -663,33 +794,7 @@ void DX11Renderer::ClearCache()
     for (int i = 0; i < 16; ++i) m_currentSRVs[i] = nullptr;
 }
 
-void DX11Renderer::UpdateBoneCBuffer(const std::vector<Matrix>& bones)
-{
-    if (!m_cbuffer_bones || !m_context) return;
 
-    size_t copyCount = bones.size();
-    if (copyCount > MAX_BONES) copyCount = MAX_BONES;
-
-    D3D11_MAPPED_SUBRESOURCE mappedData = {};
-    HRESULT hr = m_context->Map(m_cbuffer_bones.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-    if (FAILED(hr)) return;
-
-    CBuffer_BoneData* dataPtr = static_cast<CBuffer_BoneData*>(mappedData.pData);
-
-    for (size_t i = 0; i < copyCount; ++i)
-    {
-        dataPtr->BoneTransforms[i] = bones[i].Transpose(); 
-    }
-
-    for (size_t i = copyCount; i < MAX_BONES; ++i)
-    {
-        dataPtr->BoneTransforms[i] = SimpleMathHelper::IdentityMatrix();
-    }
-
-    m_context->Unmap(m_cbuffer_bones.Get(), 0);
-
-    m_context->VSSetConstantBuffers(4, 1, m_cbuffer_bones.GetAddressOf());
-}
 
 void DX11Renderer::ResetRenderState()
 {
@@ -706,10 +811,10 @@ void DX11Renderer::BindShader(Shader* shader)
     if (!shader) return;
 
    
-    if (m_currentShaderID == shader->GetID())
-    {
-        return;
-    }
+    //if (m_currentShaderID == shader->GetID())
+    //{
+    //    return;
+    //}
 
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 
@@ -739,6 +844,17 @@ ID3D11SamplerState* DX11Renderer::GetSampler(FilterMode filter, WrapMode wrap)
 void DX11Renderer::OffPS()
 {
     m_context->PSSetShader(nullptr, nullptr, 0);
+}
+
+void DX11Renderer::DrawFullScreenQuad()
+{
+    m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    m_context->IASetInputLayout(nullptr);
+    m_context->IASetVertexBuffers(0, 0, nullptr, nullptr, nullptr);
+    m_context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+
+    m_context->Draw(3, 0);
 }
 
 bool DX11Renderer::CreateDeviceAndSwapchain()
@@ -863,58 +979,58 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
 
     m_backbufferTex = std::move(backTex);
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
     hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), nullptr, m_rtv.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-#else
-    D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
-    rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
-    rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-    rtvViewDesc.Texture2D.MipSlice = 0;
+//#else
+    //D3D11_RENDER_TARGET_VIEW_DESC rtvViewDesc = {};
+    //rtvViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;        // 백버퍼 감마코렉션 나눠주는거
+    //rtvViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    //rtvViewDesc.Texture2D.MipSlice = 0;
 
-    hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    //hr = m_device->CreateRenderTargetView(m_backbufferTex.Get(), &rtvViewDesc, m_rtv.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
 
     
 
    
 
-#endif // _DEBUG
+//#endif // _DEBUG
     
     D3D11_TEXTURE2D_DESC msaaDesc = {};
     m_backbufferTex->GetDesc(&msaaDesc);                    // 백버퍼 설정 복사
     msaaDesc.SampleDesc.Count = m_msaa;                     // 샘플 수 (예: 4)
     msaaDesc.SampleDesc.Quality = m_msaaQuality - 1;        // 품질
     msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;          // 렌더 타겟
-#ifndef _DEBUG
-    msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
-#endif
+//#ifndef _DEBUG
+    //msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+//#endif
     hr = m_device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTargetTex.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 
     hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), nullptr, m_msaaTargetRTV.GetAddressOf());
     DXHelper::ThrowIfFailed(hr);
-#else
-    D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
-    msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
+//#else
+    //D3D11_RENDER_TARGET_VIEW_DESC msaaRtvDesc = {};
+    //msaaRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; 
 
-    if (m_msaa > 1)
-    {
-        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
-    }
-    else
-    {
-        msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-        msaaRtvDesc.Texture2D.MipSlice = 0;
-    }
+    //if (m_msaa > 1)
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+    //}
+    //else
+    //{
+    //    msaaRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    //    msaaRtvDesc.Texture2D.MipSlice = 0;
+    //}
 
-    hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
-    DXHelper::ThrowIfFailed(hr);
+    //hr = m_device->CreateRenderTargetView(m_msaaTargetTex.Get(), &msaaRtvDesc, m_msaaTargetRTV.GetAddressOf());
+    //DXHelper::ThrowIfFailed(hr);
 
-#endif
+//#endif
     
 
     D3D11_TEXTURE2D_DESC rtvDesc;
@@ -961,8 +1077,8 @@ void DX11Renderer::ReleaseCB()
 
     m_cbuffer_Texture_flags.Reset();
     m_cbuffer_matrix_pallette.Reset();
-    m_cbuffer_IBL.Reset();
-
+    m_cbuffer_SkyBox.Reset();
+    m_cbuffer_SkyBox.Reset();
 }
 
 

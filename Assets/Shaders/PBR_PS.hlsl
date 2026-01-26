@@ -44,7 +44,7 @@ float4 PS(PS_INPUT input) : SV_Target
 
     // PBR 속성 적용
     if (USE_METAL)
-        metal = g_MetalMap.Sample(g_Sampler, input.UV).r * Metallic_Factor;
+        metal = g_MetalMap.Sample(g_Sampler, input.UV).r ;
     if (USE_ROUGH)
         rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
     if (USE_AO)
@@ -61,7 +61,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 directLighting = float3(0, 0, 0);
     
     // 첫 번째 조명(주광원)에 대한 그림자 계산
-    float shadowFactor = CalculateShadow(input.WorldPos);
+    float shadowFactor = CalculateShadow(input.WorldPos , Shadow_Bias);
 
     for (int i = 0; i < ActiveCount; ++i)
     {
@@ -120,8 +120,9 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting *0.5f;
+    float3 finalColor = directLighting + ambientLighting;// * 0.5f;
 
+        
     
     return float4(finalColor, 1.0f);
 }

@@ -48,6 +48,11 @@
 #include "Prefab.h"
 #include "Image.h"
 #include "FSMController.h"
+#include "SoundManager.h"
+#include "SkyBoxComponent.h"
+#include "DX11Renderer.h"
+#include "Effect.h"
+
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -239,7 +244,13 @@ void EditorUI::RenderToolbar(Game::EngineMode currentMode, std::function<void(Ga
 
         if (ImGui::Button(isPlayPause ? "Stop" : "Play", ImVec2(buttonWidth, 0)))
         {
+          
+            if (isPlayPause)
+            {
+                SoundManager::Instance().ShutDown(); // 또는 ShutDown()
+            }
             onModeChanged(Game::EngineMode::Play);
+
         }
 
         if (isPlayPause) ImGui::PopStyleColor();
@@ -1636,7 +1647,36 @@ void EditorUI::DrawComponentProperties(Component* comp)
 			ImGui::PopID();
         }
 
-        
+        if (SkyBoxComponent* skyboxComp = dynamic_cast<SkyBoxComponent*>(comp))
+        {
+            if (ImGui::TreeNodeEx("SkyBox Settings", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                Vector4 color = skyboxComp->GetSkyBoxColor();
+                if (ImGui::ColorEdit4("Sky Color", &color.x))
+                {
+                    // DTPROPERTY_SETTER로 등록된 SetSkyBoxColor를 직접 호출하여 연동
+                    skyboxComp->SetSkyBoxColor(color);
+                }
+                ImGui::TreePop();
+            }
+        }
+
+        if (Effect* effectComp = dynamic_cast<Effect*>(comp))
+        {
+            if (ImGui::TreeNodeEx("Burning Glow Settings", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed))
+            {
+                Vector4 eColor = effectComp->GetEdgeColor();
+
+                // HDR 옵션을 추가하면 불타는 강도를 표현하기 더 좋습니다.
+                if (ImGui::ColorEdit4("Edge Glow Color", &eColor.x, ImGuiColorEditFlags_HDR))
+                {
+                    effectComp->SetEdgeColor(eColor);
+                }
+
+                ImGui::TreePop();
+            }
+        }
+   
 
         if (MeshRenderer* renderer = dynamic_cast<MeshRenderer*>(comp))
         {
@@ -1653,11 +1693,6 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                 if (nodeOpen)
                 {
-                    //else
-                    //{
-                    //    ImGui::TextColored(ImVec4(0.4f, 1.0f, 0.4f, 1.0f), "[Status: Shared (Asset)]");
-                    //}
-
                     if (renderer->IsMaterialInstanced())
                     {
                         //ImGui::AlignTextToFramePadding();
@@ -1675,6 +1710,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                             ImGui::TreePop();       
                             ImGui::PopID();         
                             return;                 
+
                         }
                         ImGui::PopStyleColor();
 
@@ -1796,6 +1832,20 @@ void EditorUI::DrawComponentProperties(Component* comp)
                     {
                         renderer->GetMaterial()->SetCullMode((CullMode)currentCull);
                     }
+                    
+                    float shadowBias = currentMat->GetShadowBias(); 
+                    if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.00001f, 0.0f, 0.1f, "%.5f"))
+                    {
+                        renderer->GetMaterial()->SetShadowBias(shadowBias);
+                    }
+
+                    float shadowScale = currentMat->GetShadowScale();
+                    if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 5.0f, "%.5f"))
+                    {
+                        renderer->GetMaterial()->SetShadowScale(shadowScale);
+                    }
+
+
 
                     if (ImGui::IsItemActivated()) m_dragStartValue = (int)renderer->GetMaterial()->GetCullMode();
                     if (ImGui::IsItemDeactivatedAfterEdit())
@@ -2132,6 +2182,24 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 material->SaveFile(path); // 변경 즉시 파일 저장
             }
 
+			float shadowBias = material->GetShadowBias();
+
+            if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.00001f, 0.0f, 0.1f, "%.5f"))
+            {
+                material->SetShadowBias(material->GetShadowBias());
+                material->SaveFile(path); 
+			}
+
+
+            float shadowScale = material->GetShadowScale();
+
+            if (ImGui::DragFloat("Shadow Scale", &shadowScale, 0.01f, 0.0f, 1.0f, "%.5f"))
+            {
+                material->SetShadowScale(material->GetShadowScale());
+                material->SaveFile(path);
+            }
+
+
     //        for (int i = 0; i < Material::MAX_TEXTURE_SLOTS; ++i)
     //        {
     //            ImGui::PushID(i);
@@ -2364,6 +2432,12 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
         rt->Resize((int)viewportPanelSize.x, (int)viewportPanelSize.y);
     }
 
+    if (camera)
+    {
+        float ratio = viewportPanelSize.x / viewportPanelSize.y;
+        camera->SetAspectRatio(ratio);
+    }
+
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
 
     bool isHovered = ImGui::IsWindowHovered();
@@ -2428,17 +2502,47 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     ImGui::Begin("Game");
 
     ImVec2 size = ImGui::GetContentRegionAvail();
+    ImVec2 startPos = ImGui::GetCursorScreenPos(); 
+
+    float refAspect = DX11Renderer::Instance().GetRefWidth() / static_cast<float>(DX11Renderer::Instance().GetRefHeight());
+    float winAspect = size.x / size.y;
+    float drawW = size.x, drawH = size.y;
+
+    if (winAspect > refAspect) drawW = drawH * refAspect;
+    else drawH = drawW / refAspect;
+
+    float offX = (size.x - drawW) * 0.5f;
+    float offY = (size.y - drawH) * 0.5f;
+
     m_gameViewportSize = Vector2(size.x, size.y);
 
-    if (rt->GetWidth() != (int)size.x || rt->GetHeight() != (int)size.y)
+    if (rt->GetWidth() != (int)drawW || rt->GetHeight() != (int)drawH)
     {
-        rt->Resize((int)size.x, (int)size.y);
+        rt->Resize((int)drawW, (int)drawH);
+    }
+
+
+	Scene* curScene = SceneManager::Instance().GetActiveScene();
+    
+	Camera* mainCamera = nullptr;
+
+    if(curScene)
+    {
+        mainCamera = curScene->GetMainCamera();
+	}
+
+    if (mainCamera)
+    {
+        float ratio = drawW / drawH;
+        mainCamera->SetAspectRatio(ratio);
     }
 
 #ifdef _DEBUG
     InputManager::Instance().SetGameResolution((int)size.x, (int)size.y);
 #endif
-    ImGui::Image((void*)rt->GetSRV(), size);
+    ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + offX, ImGui::GetCursorPosY() + offY));
+
+    ImGui::Image((void*)rt->GetSRV(), ImVec2(drawW, drawH));
 
 
     bool isHovered = ImGui::IsItemHovered();
@@ -2493,10 +2597,9 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
         //InputManager::Instance().SetGameInputActive(true);
 
         ImVec2 mousePos = ImGui::GetMousePos();
-        ImVec2 windowPos = ImGui::GetItemRectMin();
         InputManager::Instance().SetEditorMousePos(
-            (int)(mousePos.x - windowPos.x),
-            (int)(mousePos.y - windowPos.y)
+            (int)(mousePos.x - startPos.x),
+            (int)(mousePos.y - startPos.y)
         );
     }
     else

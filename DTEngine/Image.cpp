@@ -4,6 +4,8 @@
 #include "ResourceManager.h"
 #include "AssetDatabase.h"
 #include "Transform.h"
+#include "Effect.h"
+#include "DX11Renderer.h"
 
 
 BEGINPROPERTY(Image)
@@ -78,4 +80,26 @@ void Image::SetNativeSize()
     if (!tex) return;
 
     GetTransform()->SetScale(Vector3((float)tex->GetWidth(), (float)tex->GetHeight(), 1.0f));
+}
+
+void Image::RenderUI()
+{
+    Texture* tex = GetTexture();
+    if (tex)
+    {
+        Effect* eff = GetComponent<Effect>();
+        if (eff) eff->BindEP();
+
+        Transform* tf = GetTransform();
+
+        Vector3 pos = tf->GetWorldPosition();
+        Vector3 scale = tf->GetWorldScale();
+
+        DX11Renderer::Instance().DrawUI(
+            tex,
+            Vector2(pos.x, pos.y),
+            Vector2(scale.x, scale.y),
+            m_color
+        );
+    }
 }

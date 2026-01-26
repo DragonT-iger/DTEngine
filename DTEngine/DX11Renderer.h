@@ -14,6 +14,7 @@
 #include "ConstantBuffers.h"
 
 #include "ResourceManager.h"
+#include "PostProcessManager.h"
 
 struct HWND__;
 using HWND = HWND__*;
@@ -32,7 +33,9 @@ struct ID3D11SamplerState;
 struct ID3D11BlendState;
 class Light;
 class Camera;
-
+class PostProcessManager;
+class RenderTexture;
+class Font;
 
 namespace DirectX {
 	inline namespace DX11 {
@@ -75,7 +78,12 @@ public:
 
 
 
-    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1));
+    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2( 1,1 ));
+    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2(1, 1));
+
+    void DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
+    void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
+
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
@@ -108,14 +116,19 @@ public:
     bool GetVsync() { return m_vsync; }
     void SetVsync(bool vsync) { m_vsync = vsync; }
 
-	int GetRefWidth() const { return m_width; }
-	int GetRefHeight() const { return m_height; }
+	int GetRefWidth() const { return m_refWidth; }
+	int GetRefHeight() const { return m_refHeight; }
 
     float GetAspectRatio() const
     {
         if (m_height == 0) return 1.0f;
         return static_cast<float>(m_width) / static_cast<float>(m_height);
     }
+
+    float GetRefAspectRatio() const
+    {
+		return static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
+	}
 
 
     int GetWidth() { return m_width; }
@@ -128,11 +141,12 @@ public:
     void UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM);    // r0
     void UpdateLights_CBUFFER(const std::vector<Light*>& lights, Camera* camera);
     void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
-
-    void UpdateBoneCBuffer(const std::vector<Matrix>& bones);
-
     void UpdateTextureFlag_CBUFFER(uint32_t Flags);
     void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
+    void UpdateSkyBox_CBUFFER(SkyBox& data);
+    void UpdateEffect_CBUFFER(EffectParams& data);
+
+
 
     //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
     void ClearCache();
@@ -145,6 +159,10 @@ public:
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
     void OffPS();
+
+    void DrawFullScreenQuad();
+
+    PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -212,9 +230,9 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr; // 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Effect = nullptr;
 
-    //01_10 일단 넌 후순위 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_IBL = nullptr; // 
 
 #pragma endregion 
 
@@ -237,6 +255,7 @@ private:
 
     int m_refWidth = 1920;
 	int m_refHeight = 1200; // 16:10 의도한거임  // 이게 UI의 기준이 되는 사이즈
+	float m_refAspect = static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
 
     Matrix m_viewTM;
     Matrix m_projTM;
@@ -265,24 +284,13 @@ private:
     UINT m_msaaQuality = 0;
     int m_msaa = 8;
 
-
+    std::unique_ptr< PostProcessManager> m_postProcessManager;
+    std::unique_ptr< RenderTexture> m_resolvedSceneRT;
 
     Matrix m_lightViewProjScale;
-
-    static constexpr int MAX_BONES = 128;
-
-    __declspec(align(16))
-        struct CBuffer_BoneData
-    {
-        Matrix BoneTransforms[MAX_BONES];
-    };
-
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_cbuffer_bones;
+    
 
 
-
-
-    //cacching  ★ 
     private:
       uint16_t m_currentShaderID = 0; 
       ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };

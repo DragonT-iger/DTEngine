@@ -60,7 +60,9 @@ public:
     void _Internal_AddGameObject(std::unique_ptr<GameObject> go);
     std::unique_ptr<GameObject> _Internal_RemoveGameObject(GameObject* go);
 
-    void Render(Camera* camera, RenderTexture* renderTarget = nullptr, bool renderUI = false);
+    void Render(Camera* camera, RenderTexture* renderTarget = nullptr);
+
+    void RenderUI(Camera* camera, RenderTexture* renderTarget);
     void RenderShadows();
 
     void Awake();

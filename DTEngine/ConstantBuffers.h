@@ -33,8 +33,8 @@ struct MaterialData //b3
     Vector4 UVTransform = { 1, 1, 0, 0 };
 
     int   UseTexture =1;
-    float Shadow_Bias = 0.00001f; //일단 넣어놓고 쓰지는 않음.  
-    float metallicFactor =1.0f;
+	float Shadow_Bias = 0.005f; //일단 넣어놓고 쓰지는 않음.  // 26/1/4 추가.
+    float Shadow_Scale =1.0f;
     float roughnessFactor = 1.0f;
 };
 
@@ -57,11 +57,36 @@ struct TextureFlag //b4
     float pad[3];
 };
 
+static constexpr int boneCnt = 128;
+
 __declspec(align(16))
 struct Matrix_Pallette //b5
 {
-    Matrix Matrix_Pallette[128]; // 운용할 bone 갯수 만큼 배열 크기를 정의할 예정. 
+    Matrix Matrix_Pallette[boneCnt]; // 운용할 bone 갯수 만큼 배열 크기를 정의할 예정. 
 };
 
+__declspec(align(16))
+struct SkyBox
+{
+    Vector4 SkyBox_Color;
+};
 
+// SHADER를 사용한 종합적인 Effect에 필요한 상수버퍼.
+// Dissolve 나 Alpha 부터 시작.
+__declspec(align(16))
+struct EffectParams
+{
+    float progress = 0.0f;       // 소멸 진행도 (0~1)
+    float edgeWidth = 0.01f;     // 테두리 두께
+    float glowIntensity = 1.0f;  // 발광 강도
+    float totalTime = 0.0f;      // 누적 시간
+
+    Vector4 edgeColor = { 1.0f, 0.5f, 0.2f, 1.0f }; // 테두리 색상
+
+    float noiseScale = 1.0f;
+    float timeMultiplier = 1.0f; // 애니메이션 배속 (추가)
+    float effectType = 0.0f;
+    float Skinned_Flag = false;
+
+};
 

@@ -160,6 +160,25 @@ bool Material::LoadFile(const std::string& fullPath)
         }
     }
 
+    if (data.contains("ShadowBias"))
+    {
+        m_data.Shadow_Bias = data["ShadowBias"];
+    }
+    else
+    {
+        m_data.Shadow_Bias = 0.005f; 
+    }
+
+
+    if (data.contains("ShadowScale"))
+    {
+        m_data.Shadow_Scale = data["ShadowScale"];
+    }
+    else
+    {
+        m_data.Shadow_Scale = 1.0f;
+    }
+
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
     if (!device) return false;
 
@@ -209,6 +228,8 @@ bool Material::SaveFile(const std::string& fullPath)
         }
     }
     data["Textures"] = texData;
+    data["ShadowBias"] = m_data.Shadow_Bias;
+    data["ShadowScale"] = m_data.Shadow_Scale;
 
     std::ofstream file(fullPath);
     if (!file.is_open())
@@ -265,6 +286,7 @@ Material* Material::Clone()
     newMat->m_data = m_data;        
     newMat->m_cullMode = m_cullMode;
     newMat->m_renderMode = m_renderMode;
+	newMat->m_data.Shadow_Bias = m_data.Shadow_Bias;
 
     newMat->UpdateTextureBatchID();
 
@@ -294,6 +316,26 @@ bool Material::SetColor(const Vector4& color)
 Vector4 Material::GetColor() const
 {
     return Vector4(m_data.Color);
+}
+
+float Material::GetShadowScale() const
+{
+    return m_data.Shadow_Scale;
+}
+
+void Material::SetShadowScale(float Scale)
+{
+    m_data.Shadow_Scale = Scale;
+}
+
+void Material::SetShadowBias(float bias)
+{
+	m_data.Shadow_Bias = bias;
+}
+
+float Material::GetShadowBias() const
+{
+    return m_data.Shadow_Bias;
 }
 
 uint16_t Material::GetShaderID()
@@ -372,14 +414,12 @@ void Material::BindPipeLine()
     }
 
 
-    //if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
+   // if(m_textures[0] && m_textures[0]->Get_SRGB() ==true) currentFlags |= (uint32_t)MaterialTextureFlag::Gamma; // Albeedo가 0번인 걸 아니깐 하는건데, 좀 더럽긴 하다. 이럴거면 Shader에서 연산하는 것도 나쁘지 않을지도;;
 
 
     currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 
 
     DX11Renderer::Instance().UpdateTextureFlag_CBUFFER(currentFlags);
-
-    //이 밑부분 최적화 예정 Caching; 일단 이게 문제가 아닌 거 같아. 
 
     if (m_renderMode == RenderMode::Transparent)
     {
@@ -391,6 +431,8 @@ void Material::BindPipeLine()
     }
 
     DX11Renderer::Instance().SetCullMode(m_cullMode);
+
+
 
    
 

@@ -54,6 +54,11 @@ public:
     void SetCullMode(CullMode mode) { m_cullMode = mode; }
     CullMode GetCullMode() const { return m_cullMode; }
 
+    float GetShadowScale() const;
+    void SetShadowScale(float Scale);
+    void SetShadowBias(float bias);
+    float GetShadowBias() const;
+
 	static constexpr int MAX_TEXTURE_SLOTS = 8;
    
 
@@ -74,4 +79,6 @@ private:
     CullMode m_cullMode = CullMode::Back;
 
     uint64_t m_textureBatchID = 0;
+
+
 };

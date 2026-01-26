@@ -32,6 +32,9 @@
 #include "PrefabSelectWindow.h"
 #include "InputManager.h"
 
+#include "Text.h"
+#include "Effect.h"
+
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
     auto go = std::make_unique<GameObject>(name);
@@ -350,10 +353,10 @@ bool Scene::SaveFile(const std::string& solutionPath)
 
             comp->Serialize(writer);
 
-            if (auto* mr = dynamic_cast<MeshRenderer*>(comp.get()))
-            {
-                mr->SaveInstanceData(writer);
-            }
+            //if (auto* mr = dynamic_cast<MeshRenderer*>(comp.get()))
+            //{
+            //    mr->SaveInstanceData(writer);
+            //}
 
             writer.EndArrayItem();
         }
@@ -788,7 +791,7 @@ void Scene::Exit()
     }
 }
 
-void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
+void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 {
     if (!camera) return;
 
@@ -901,13 +904,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
             Mesh* mesh = mr->GetMesh();
             if (!mesh || !mat) return;
 
+            Effect* eff = val.obj->GetComponent<Effect>();
+            if (eff) eff->BindEP();
+
 
             if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
             {
                 DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
                 
             }
-
+            
 
             if (currentPipelineKey != lastPipelineKey)
             {
@@ -933,34 +939,91 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget, bool renderUI)
 
     
 
-    if (renderUI) {
-        DX11Renderer::Instance().BeginUIRender(width, height);
+    //if (renderUI) {
+    //    DX11Renderer::Instance().BeginUIRender(width, height);
 
-        for (auto* go : uiQueue)
+    //    for (auto* go : uiQueue)
+    //    {
+    //        Image* img = go->GetComponent<Image>();
+    //        if (img)
+    //        {
+    //            Texture* tex = img->GetTexture();
+    //            if (tex)
+    //            {
+    //                Effect* eff = go->GetComponent<Effect>();
+    //                if (eff) eff->BindEP();
+
+    //                Transform* tf = go->GetTransform();
+
+    //                Vector3 pos = tf->GetWorldPosition();
+    //                Vector3 scale = tf->GetWorldScale();
+
+    //                DX11Renderer::Instance().DrawUI(
+    //                    tex,
+    //                    Vector2(pos.x, pos.y),
+    //                    Vector2(scale.x, scale.y),
+    //                    img->GetColor()
+    //                );
+    //            }
+    //        }
+    //    }
+
+
+    //    for (const auto& go : GetGameObjects())
+    //    {
+    //        auto cmp = go->GetComponent<Text>();
+
+    //        if (cmp) cmp->Render();
+    //    }
+
+
+    //    DX11Renderer::Instance().EndUIRender();
+    //}
+}
+
+void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
+{
+    if (!camera) return;
+
+    float width = (float)DX11Renderer::Instance().GetWidth();
+    float height = (float)DX11Renderer::Instance().GetHeight();
+
+    if (renderTarget != nullptr)
+    {
+        width = (float)renderTarget->GetWidth();
+        height = (float)renderTarget->GetHeight();
+    }
+
+    DX11Renderer::Instance().BeginUIRender(width, height);
+
+    for (const auto& go : GetGameObjects())
+    {
+        if (!go || !go->IsActiveInHierarchy()) continue;
+
+        for (const auto& comp : go->_GetComponents())
         {
-            Image* img = go->GetComponent<Image>();
-            if (img)
+            if (auto ui = dynamic_cast<UIBase*>(comp.get()))
             {
-                Texture* tex = img->GetTexture();
-                if (tex)
+                if (ui->IsActive())
                 {
-                    Transform* tf = go->GetTransform();
-
-                    Vector3 pos = tf->GetWorldPosition();
-                    Vector3 scale = tf->GetWorldScale();
-
-                    DX11Renderer::Instance().DrawUI(
-                        tex,
-                        Vector2(pos.x, pos.y),
-                        Vector2(scale.x, scale.y),
-                        img->GetColor()
-                    );
+                    ui->RenderUI();
                 }
             }
         }
-
-        DX11Renderer::Instance().EndUIRender();
     }
+
+    //for (const auto& go : GetGameObjects())
+    //{
+    //    if (!go || !go->IsActiveInHierarchy()) continue;
+
+    //    auto cmp = go->GetComponent<Text>();
+    //    if (cmp && cmp->IsActive())
+    //    {
+    //        cmp->Render();
+    //    }
+    //}
+
+    DX11Renderer::Instance().EndUIRender();
 }
 
 void Scene::RenderShadows()

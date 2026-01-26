@@ -78,6 +78,30 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{5f6680e5-a928-421f-a549-1baae7cddfa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{88051b96-8751-47b4-94f2-e3875aac11e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Specific\Chess">
+      <UniqueIdentifier>{fb745b7d-aba0-412a-9826-16cfba0716ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcessing">
+      <UniqueIdentifier>{c8b3836c-b0cf-4dae-baf0-5a2b54da53d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\PostProcessing">
+      <UniqueIdentifier>{0beea7db-4a9f-4a9c-8867-ae3704c3dd3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcessing\Effect">
+      <UniqueIdentifier>{5ed86ba3-8a3b-4e83-b52c-a0cd3f1aa889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Specific\Effect">
+      <UniqueIdentifier>{4b1c99ac-beb7-41ec-8bbd-e69a6dc283d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\UI">
+      <UniqueIdentifier>{6726424d-00ee-4890-9e74-8d67e5b0a5f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\RenderTarget">
+      <UniqueIdentifier>{4ca3ed46-95aa-4ec6-b332-aa71fcc4d720}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -230,32 +254,11 @@
     <ClInclude Include="FreeCamera.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="move.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="SerializationUtils.h">
       <Filter>Reflection\Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="MonitorController.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionProbe.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Text3D.h">
-      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderViewport.h">
       <Filter>Renderer</Filter>
@@ -283,18 +286,6 @@
     </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UISlider.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="RectTransform.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>Util</Filter>
@@ -331,6 +322,72 @@
     </ClInclude>
     <ClInclude Include="SettingsWindow.h">
       <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="IPostProcess.h">
+      <Filter>PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessManager.h">
+      <Filter>PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="GrayScaleEffect.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="VignetteEffect.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomEffect.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransform.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Text3D.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MonitorController.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionProbe.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Component\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Component\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -457,32 +514,11 @@
     <ClCompile Include="FreeCamera.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="move.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="SerializationUtils.cpp">
       <Filter>Reflection\Serialization</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="MonitorController.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="ReflectionProbe.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Text3D.cpp">
-      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderTexture.cpp">
       <Filter>Renderer</Filter>
@@ -497,18 +533,6 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Skeletal.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UISlider.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="RectTransform.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Canvas.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
@@ -544,6 +568,69 @@
     <ClCompile Include="SettingsWindow.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessManager.cpp">
+      <Filter>PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderHandle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GrayScaleEffect.cpp">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="VignetteEffect.cpp">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomEffect.cpp">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransform.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text3D.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MonitorController.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionProbe.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>Component\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Component\UI</Filter>
+    < /ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -626,6 +713,72 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Skeletal_PS.hlsl">
       <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Rabbit_Toon_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BackGround_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BackGround_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\GrayScale_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Vignette_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\GrayScale_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\PostProcess_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Vignette_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_VS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Dissolve_MK_1_PS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomBlur_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomBlur_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomCombine_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomCombine_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomExtract_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\BloomExtract_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

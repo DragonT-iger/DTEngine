@@ -73,7 +73,7 @@ void Animator::SetClip(uint64_t id)
     m_AniID = id;
 
     m_TargetSkeletal = _GetOwner()->GetComponent<Skeletal>();
-    if (!m_TargetSkeletal)
+    if (!m_TargetSkeletal || m_TargetSkeletal->GetModelID() == 0) //컴포넌트는 있는데 모델이 없으면 안되니깐.
         return;
 
 
@@ -85,6 +85,7 @@ void Animator::SetClip(uint64_t id)
         std::string path = AssetDatabase::Instance().GetPathFromID(m_AniID);
         if (!path.empty())
         {
+            m_Animation_Name = path;
             m_CurrentClip = ResourceManager::Instance().Load<AnimationClip>(path);
         }
     }

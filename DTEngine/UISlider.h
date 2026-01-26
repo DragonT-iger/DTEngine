@@ -2,6 +2,7 @@
 #include "SimpleMathHelper.h"
 #include "MonoBehaviour.h"
 #include <functional>
+#include "UIBase.h"
 
 class UISlider : public MonoBehaviour
 {

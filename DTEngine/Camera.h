@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
 #include "RenderTexture.h"
+#include "IPostProcess.h"
 
 struct Ray;
 
@@ -67,6 +68,33 @@ public:
     void SetViewportRect(const Vector4& rect) { m_viewportRect = rect; }
 
     Ray ScreenPointToRay(float x, float y, float viewportW, float viewportH) const;
+
+    void SetPostProcessEffect(PostProcessType type, bool enable);
+    bool IsEffectEnabled(PostProcessType type) const;
+    uint32_t GetPostProcessMask() const { return m_postProcessMask; }
+
+
+    const bool& GetUseGrayScale() const { return m_useGrayScale; }
+    void SetUseGrayScale(bool use);
+
+    const bool& GetUseVignette() const { return m_useVignette; }
+    void SetUseVignette(bool use);
+
+    const float& GetVignetteRadius() const { return m_vignetteRadius; }
+    void SetVignetteRadius(float value) { m_vignetteRadius = value; }
+
+    const float& GetVignetteSoftness() const { return m_vignetteSoftness; }
+    void SetVignetteSoftness(float value) { m_vignetteSoftness = value; }
+
+	const bool& GetUseBloom() const { return m_useBloom; }
+    void SetUseBloom(bool use);
+
+    const float& GetBloomThreshold() const { return m_bloomThreshold; }
+    void SetBloomThreshold(float value) { m_bloomThreshold = value; }
+
+    const float& GetBloomIntensity() const { return m_bloomIntensity; }
+    void SetBloomIntensity(float value) { m_bloomIntensity = value; }
+
 private:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -100,4 +128,18 @@ private:
 
 
     Vector4 m_viewportRect = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+    bool m_enablePostProcess = true;
+
+    uint32_t m_postProcessMask = static_cast<uint32_t>(PostProcessType::None);
+
+    bool m_useGrayScale = false;
+
+    bool m_useVignette = false;
+    float m_vignetteRadius = 0.8f;
+    float m_vignetteSoftness = 0.4f;
+
+	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈
+    float m_bloomThreshold = 1.0f; 
+    float m_bloomIntensity = 1.0f; 
 };

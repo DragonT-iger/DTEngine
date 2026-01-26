@@ -55,7 +55,7 @@ protected:
 
 private: 
 
-	void RenderScene(Scene* scene, Camera* camera, RenderTexture* rt, bool renderUI = true);
+	void RenderScene(Scene* scene, Camera* camera, RenderTexture* rt);
 
 
 	const std::string m_backupPath = "Scenes/_PlayMode_Backup.scene";
@@ -67,14 +67,19 @@ private:
 	std::unique_ptr<GameTimer> m_timer;
 
 	std::unique_ptr<RenderTexture> m_gameRT;
+	std::unique_ptr<RenderTexture> m_captureRT;
 
 #ifdef _DEBUG
+
 
 	EngineMode m_engineMode = EngineMode::Edit;
 
 	std::unique_ptr<ImGuiLayer>    m_imgui;
 	std::unique_ptr<EditorUI>      m_editorUI;
 	std::unique_ptr<RenderTexture> m_sceneRT;
+
 	GameObject* m_editorCameraObject = nullptr;
+
+
 #endif
 };

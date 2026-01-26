@@ -22,13 +22,9 @@ void UIButton::InvokeClick()
 
 void UIButton::Update(float deltaTime)
 {
-	//std::cout << "UIButton Update Called" << std::endl;
     if (!m_interactable) return;
 
-
-    float screenW;
-    float screenH;
-
+    float screenW, screenH;
 #ifdef _DEBUG
     MousePos gameRes = InputManager::Instance().GetGameResolution();
     screenW = (float)gameRes.x;
@@ -41,17 +37,36 @@ void UIButton::Update(float deltaTime)
     const float refW = DX11Renderer::Instance().GetRefWidth();
     const float refH = DX11Renderer::Instance().GetRefHeight();
 
-    float scaleX = screenW / refW;
-    float scaleY = screenH / refH;
+    float targetAspect = refW / refH;
+    float windowAspect = screenW / screenH;
+
+    float currentScale = 1.0f;
+    float offsetX = 0.0f;
+    float offsetY = 0.0f;
+
+    if (windowAspect > targetAspect)
+    {
+        currentScale = screenH / refH;
+        float actualWidth = refW * currentScale;
+        offsetX = (screenW - actualWidth) * 0.5f;
+        offsetY = 0.0f; 
+    }
+    else
+    {
+        currentScale = screenW / refW;
+        float actualHeight = refH * currentScale;
+        offsetX = 0.0f; 
+        offsetY = (screenH - actualHeight) * 0.5f;
+    }
 
     auto mousePos = InputManager::Instance().GetGameMousePosition();
 
-    float uiMouseX = (float)mousePos.x / scaleX;
-    float uiMouseY = (float)mousePos.y / scaleY;
+    float uiMouseX = ((float)mousePos.x - offsetX) / currentScale;
+    float uiMouseY = ((float)mousePos.y - offsetY) / currentScale;
 
     Transform* tf = GetTransform();
     Vector3 pos = tf->GetWorldPosition();
-    Vector3 size = tf->GetWorldScale(); 
+    Vector3 size = tf->GetWorldScale();
 
     bool isInside = (uiMouseX >= pos.x && uiMouseX <= pos.x + size.x &&
         uiMouseY >= pos.y && uiMouseY <= pos.y + size.y);

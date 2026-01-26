@@ -152,6 +152,14 @@ Vector3 Transform::GetWorldScale()
 
 	return scale;
 }
+Vector3 Transform::GetWorldRotationEuler()
+{
+	Vector3 scale;
+	Quaternion rotation;
+	Vector3 translation;
+	m_matrixWorld.Decompose(scale, rotation, translation);
+	return QuaternionToEulerDeg_ZXY(rotation);
+}
 Vector3 Transform::GetLossyScale()
 {
 	Vector3 scale = m_scale;
