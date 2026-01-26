@@ -287,9 +287,6 @@
     <ClInclude Include="SkeletalRsource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="UIManager.h">
-      <Filter>Util</Filter>
-    </ClInclude>
     <ClInclude Include="Animatior.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -316,12 +313,6 @@
     </ClInclude>
     <ClInclude Include="FSMRegister.h">
       <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="PrefabSelectWindow.h">
-      <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingsWindow.h">
-      <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>헤더 파일</Filter>
@@ -390,6 +381,15 @@
       <Filter>Component\UI</Filter>
     </ClInclude>
     <ClInclude Include="OwnerSetActive.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PrefabSelectWindow.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsWindow.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -538,9 +538,6 @@
     <ClCompile Include="Skeletal.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="UIManager.cpp">
-      <Filter>Util</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationClip.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -564,12 +561,6 @@
     </ClCompile>
     <ClCompile Include="FSMRegister.cpp">
       <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="PrefabSelectWindow.cpp">
-      <Filter>Util</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingsWindow.cpp">
-      <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Sound</Filter>
@@ -635,6 +626,15 @@
       <Filter>Component\UI</Filter>
     </ClCompile>
     <ClCompile Include="OwnerSetActive.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PrefabSelectWindow.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsWindow.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
   </ItemGroup>

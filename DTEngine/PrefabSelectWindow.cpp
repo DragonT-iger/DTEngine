@@ -33,7 +33,7 @@ void PrefabSelectWindow::Open(SelectCallback callback)
 {
 		if (!m_Window) return;
 
-		printf("!!! Open() Called !!!\n");
+		//printf("!!! Open() Called !!!\n");
 
 		// callback 등록.
 		m_onResult = callback;
@@ -93,7 +93,7 @@ void PrefabSelectWindow::InitializeWindow()
 						// 이미 내가 선택되어 있다면? -> 선택 해제
 						m_selectIndex = (m_selectIndex == 1) ? 0 : 1;
 						UpdateButtonVisuals();
-						printf("[ADDR:%p] Night Selected! Index is now: %d\n", this, m_selectIndex);
+						//printf("[ADDR:%p] Night Selected! Index is now: %d\n", this, m_selectIndex);
 				});
 
 		selectRook->GetTransform()->SetParent(settingWindowBG->GetTransform());
@@ -106,7 +106,7 @@ void PrefabSelectWindow::InitializeWindow()
 				{
 						m_selectIndex = (m_selectIndex == 2) ? 0 : 2;
 						UpdateButtonVisuals();
-						printf("[ADDR:%p] Rook Selected! Index is now: %d\n", this, m_selectIndex);
+						//printf("[ADDR:%p] Rook Selected! Index is now: %d\n", this, m_selectIndex);
 				});
 		selectRook->GetComponent<UIButton>()->SetNormalColor(Vector4(0.4f, 0.4f, 0.4f, 1.0f));
 		selectRook->GetComponent<UIButton>()->SetHoverColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -122,13 +122,10 @@ void PrefabSelectWindow::InitializeWindow()
 				{
 						m_selectIndex = (m_selectIndex == 3) ? 0 : 3;
 						UpdateButtonVisuals();
-						std::cout << "Bishop Selected. Index: " << m_selectIndex << std::endl;
-						printf("[ADDR:%p] Bishop Selected! Index is now: %d\n", this, m_selectIndex);
+						//std::cout << "Bishop Selected. Index: " << m_selectIndex << std::endl;
+						//printf("[ADDR:%p] Bishop Selected! Index is now: %d\n", this, m_selectIndex);
 
 				});
-		selectBishop->GetComponent<UIButton>()->SetNormalColor(Vector4(0.4f, 0.4f, 0.4f, 1.0f));
-		selectBishop->GetComponent<UIButton>()->SetHoverColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		selectBishop->GetComponent<UIButton>()->SetPressedColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		// Okay Button 생성.
 		GameObject* okayButton = scene->CreateGameObject("OkayButton");
@@ -139,7 +136,7 @@ void PrefabSelectWindow::InitializeWindow()
 		okayButton->AddComponent<UIButton>();
 		okayButton->GetComponent<UIButton>()->SetOnClick([this]()
 				{
-						printf("[DEBUG] Clicked OkayButton. Object Address: %p, SelectIndex: %d\n", this, this->m_selectIndex);
+						//printf("[DEBUG] Clicked OkayButton. Object Address: %p, SelectIndex: %d\n", this, this->m_selectIndex);
 						// 결국 값이 선택했으니 확인 누르면 창 toggle.
 						switch (this->m_selectIndex)
 						{
@@ -154,7 +151,7 @@ void PrefabSelectWindow::InitializeWindow()
 						// callback 등록했으면 호출해주기.
 						if (m_onResult)
 						{
-								std::cout << m_selectIndex << " " << "해당 인덱스 prefab 생성." << std::endl;
+								//std::cout << m_selectIndex << " " << "해당 인덱스 prefab 생성." << std::endl;
 								m_onResult(m_selectPrefab);
 						}
 						
@@ -185,9 +182,9 @@ void PrefabSelectWindow::LoadPrefab()
 		m_nightPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/Dwarf.prefab");
 		m_bishopPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/MasterChief_v3.prefab");
 
-		if (!m_rookPrefab)   printf("[Error] Rook Prefab Load Failed! Path: Prefab/Cube.prefab\n");
-		if (!m_nightPrefab)  printf("[Error] Night Prefab Load Failed! Path: Prefab/Dwarf.prefab\n");
-		if (!m_bishopPrefab) printf("[Error] Bishop Prefab Load Failed! Path: Prefab/MasterChief_v3.prefab\n");
+		//if (!m_rookPrefab)   printf("[Error] Rook Prefab Load Failed! Path: Prefab/Cube.prefab\n");
+		//if (!m_nightPrefab)  printf("[Error] Night Prefab Load Failed! Path: Prefab/Dwarf.prefab\n");
+		//if (!m_bishopPrefab) printf("[Error] Bishop Prefab Load Failed! Path: Prefab/MasterChief_v3.prefab\n");
 }
 
 // 결과 넘기고 초기화 시키기.
@@ -205,8 +202,33 @@ void PrefabSelectWindow::UpdateButtonVisuals()
 		// 없으면 update 안함.
 		if (!m_nightImg || !m_rookImg || !m_bishopImg) return;
 
-		// 각각 setcolor로 활성화인지 아닌지.
-		m_nightImg->SetColor(m_selectIndex == 1 ? Vector4(1, 1, 1, 1) : Vector4(0.4f, 0.4f, 0.4f, 1.0f));
-		m_rookImg->SetColor(m_selectIndex == 2 ? Vector4(1, 1, 1, 1) : Vector4(0.4f, 0.4f, 0.4f, 1.0f));
-		m_bishopImg->SetColor(m_selectIndex == 3 ? Vector4(1, 1, 1, 1) : Vector4(0.4f, 0.4f, 0.4f, 1.0f));
+		// 버튼 컴포넌트들을 가져옵니다. 
+		auto nightBtn = m_nightImg->GetComponent<UIButton>();
+		auto rookBtn = m_rookImg->GetComponent<UIButton>();
+		auto bishopBtn = m_bishopImg->GetComponent<UIButton>();
+
+		if (!nightBtn || !rookBtn || !bishopBtn) return;
+
+		// 공통 설정값
+		Vector4 selectedColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 unselectedColor = Vector4(0.4f, 0.4f, 0.4f, 1.0f);
+		Vector4 hoverHighlight = Vector4(1.0f, 1.0f, 1.0f, 1.0f); 
+
+		// 1. Night 버튼 처리
+		bool isNightSelected = (m_selectIndex == 1);
+		nightBtn->SetNormalColor(isNightSelected ? selectedColor : unselectedColor);
+		nightBtn->SetHoverColor(hoverHighlight);
+		nightBtn->ApplyNormalState(); // 즉시 반영을 위해 호출
+
+		// 2. Rook 버튼 처리
+		bool isRookSelected = (m_selectIndex == 2);
+		rookBtn->SetNormalColor(isRookSelected ? selectedColor : unselectedColor);
+		rookBtn->SetHoverColor(hoverHighlight);
+		rookBtn->ApplyNormalState();
+
+		// 3. Bishop 버튼 처리
+		bool isBishopSelected = (m_selectIndex == 3);
+		bishopBtn->SetNormalColor(isBishopSelected ? selectedColor : unselectedColor);
+		bishopBtn->SetHoverColor(hoverHighlight);
+		bishopBtn->ApplyNormalState();
 }
