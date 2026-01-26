@@ -16,6 +16,12 @@
     <Filter Include="Event">
       <UniqueIdentifier>{683f1344-7dd3-448c-9d17-0efa3790b8ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{b70cc1a3-0eea-46bc-a6a2-5dd996d34ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameManager">
+      <UniqueIdentifier>{5ef9da52-db07-4133-ad97-f0b3adc02194}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,20 +42,20 @@
     <ClCompile Include="AliceComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SetActiveEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="ClientSceneManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TutorialTrigger.cpp">
       <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialManager.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>GameManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,20 +77,20 @@
     <ClInclude Include="AliceComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SetActiveEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="ClientSceneManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TutorialTrigger.h">
       <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialManager.h">
+      <Filter>Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>GameManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

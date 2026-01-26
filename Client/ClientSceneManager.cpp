@@ -3,12 +3,15 @@
 #include "SceneManager.h" 
 #include "Scene.h"
 #include <iostream>
+#include "GameManager.h"
 
 void ClientSceneManager::LoadScene(const std::string& sceneName)
 {
+
+    // 예시임
     if (sceneName == "TutorialScene")
     {
-        InitTitleScene();
+        //GameManager::Instance()->m_leftHealth = 10;
     }
     else if (sceneName == "Stage1" || sceneName == "Stage2")
     {

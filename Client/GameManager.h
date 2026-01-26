@@ -11,7 +11,7 @@
 //GameManager는 전역적인 여러 상태들을 저장함 ex) 남은 목숨, 점수 등등
 class GameManager : public MonoSingleton<GameManager>
 {
-
+	DTGENERATED_BODY(GameManager)
 
 public:
 	inline static int m_leftHealth = 9;
