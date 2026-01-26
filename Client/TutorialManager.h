@@ -14,6 +14,8 @@ public:
     void Awake() override;
     void Start() override;
 
+    void Update(float deltaTime) override;
+
     void NextStep();
 
 private:
@@ -23,8 +25,16 @@ private:
     Text* leftChatText = nullptr; // awake에서 자동으로 할당
     Text* rightChatText = nullptr;
 
-    GameObject* m_QueenUI = nullptr;
-    GameObject* m_CatUI = nullptr;
+    GameObject* m_queenUI = nullptr;
+    GameObject* m_catUI = nullptr;
+
+	GameObject* m_catUI2 = nullptr;
+	Text* m_catText2 = nullptr;
+
+	GameObject* m_firstNextButton = nullptr;
+	GameObject* m_secondNextButton = nullptr;
+
+	GameObject* m_BattleStartCat = nullptr;
 
     int m_CurrentStepIndex = -1;
 };

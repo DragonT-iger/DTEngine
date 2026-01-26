@@ -42,8 +42,14 @@
     <ClCompile Include="SetActiveEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialTrigger.cpp">
+    <ClCompile Include="ClientSceneManager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialTrigger.cpp">
+      <Filter>Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +77,14 @@
     <ClInclude Include="SetActiveEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialTrigger.h">
+    <ClInclude Include="ClientSceneManager.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialTrigger.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

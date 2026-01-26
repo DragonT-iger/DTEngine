@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/DTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/DTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DTEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -134,8 +134,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
+    <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
@@ -150,9 +152,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
+    <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ForwardMover.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
     <ClInclude Include="SetActiveEvent.h" />

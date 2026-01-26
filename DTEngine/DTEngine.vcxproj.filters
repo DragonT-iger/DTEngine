@@ -389,6 +389,9 @@
     <ClInclude Include="Image.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
+    <ClInclude Include="MonoSingleton.h">
+      <Filter>Component\ComponentBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">

@@ -9,7 +9,7 @@ class TutorialTrigger : public MonoBehaviour
     DTGENERATED_BODY(TutorialTrigger);
 
 public:
-    virtual void Awake() override;
+    void Start() override;
 
 private:
     TutorialManager* m_TutorialManager = nullptr;

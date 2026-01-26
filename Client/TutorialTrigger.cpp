@@ -8,7 +8,7 @@ DTPROPERTY(TutorialTrigger, m_TutorialManager);
 DTPROPERTY(TutorialTrigger, m_Button);
 ENDPROPERTY()
 
-void TutorialTrigger::Awake()
+void TutorialTrigger::Start()
 {
     if (m_Button && m_TutorialManager)
     {

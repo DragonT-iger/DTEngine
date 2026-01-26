@@ -195,6 +195,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GrayScaleEffect.h" />
     <ClInclude Include="HistoryManager.h" />
+    <ClInclude Include="MonoSingleton.h" />
     <ClInclude Include="SkyBoxComponent.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />

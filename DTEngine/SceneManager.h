@@ -13,7 +13,8 @@ public:
     Scene*  GetActiveScene() const;
 
     void    RegisterScene(const std::string& filePath);
-
+    
+    // 클라이언트 씬 매니저의 LoadScene을 사용할것
     void    LoadScene(const std::string& name);
 
     bool    ProcessSceneChange();
