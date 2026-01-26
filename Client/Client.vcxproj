@@ -139,6 +139,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
+    <ClCompile Include="SetActiveEvent.cpp" />
+    <ClCompile Include="TutorialManager.cpp" />
+    <ClCompile Include="TutorialTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -152,6 +155,9 @@
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
+    <ClInclude Include="SetActiveEvent.h" />
+    <ClInclude Include="TutorialManager.h" />
+    <ClInclude Include="TutorialTrigger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

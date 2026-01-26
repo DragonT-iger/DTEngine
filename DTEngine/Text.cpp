@@ -11,7 +11,8 @@ DTPROPERTY(Text, m_text)
 DTPROPERTY(Text, m_color)
 //DTPROPERTY(Text, m_localOffset)
 DTPROPERTY(Text, m_fontSize)
-DTPROPERTY_SETTER(Text, m_FontID , SetFont)
+DTPROPERTY_SETTER(Text, m_FontID, SetFont)
+DTPROPERTY(Text, m_orderInLayer)
 
 ENDPROPERTY()
 
@@ -23,10 +24,10 @@ Text::~Text() = default;
 //    m_text.assign(text.begin(), text.end());
 //}
 //
-//void Text::SetText(const std::wstring& text)
-//{
-//    m_text = text;
-//}
+void Text::SetText(const std::wstring& text)
+{
+    m_text = text;
+}
 
 void Text::SetFont(uint64_t Font_ID)
 {
@@ -38,6 +39,8 @@ void Text::SetFont(uint64_t Font_ID)
     std::string path = AssetDatabase::Instance().GetPathFromID(Font_ID);
 
     Font* font = ResourceManager::Instance().Load<Font>(path);
+
+
 
     if (font) m_Font = font;
 

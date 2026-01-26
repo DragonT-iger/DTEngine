@@ -19,7 +19,7 @@ public:
     void RenderUI() override;
 
     //void SetText(const std::string& text);
-    //void SetText(const std::wstring& text);
+    void SetText(const std::wstring& text);
 
     void SetFont(uint64_t Font_ID);
 

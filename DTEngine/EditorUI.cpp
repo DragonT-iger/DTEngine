@@ -95,7 +95,7 @@ void DrawSceneReference(EditorUI* editor, const char* label, T* currentVal, Comp
                 if (newVal)
                 {
                     T* oldVal = currentVal;
-                    setter(targetComp, &newVal);
+                    //setter(targetComp, &newVal);
 
                     auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
                         targetComp, setter, oldVal, newVal
@@ -156,7 +156,7 @@ void DrawAssetReference(EditorUI* editor, const char* label, T* currentVal, Comp
                 if (newVal)
                 {
                     T* oldVal = currentVal;
-                    setter(targetComp, &newVal);
+                    //setter(targetComp, &newVal);
 
                     auto cmd = std::make_unique<ChangePropertyCommand<T*>>(
                         targetComp, setter, oldVal, newVal
@@ -1534,8 +1534,8 @@ void EditorUI::DrawComponentProperties(Component* comp)
 
                             if (newInstance)
                             {
-                                newInstance->SetActive(false); 
-								newInstance->SetFlag(GameObject::Flags::HideAndDontSave, true);
+                                //newInstance->SetActive(false); 
+								//newInstance->SetFlag(GameObject::Flags::HideAndDontSave, true);
 
                                 GameObject* oldVal = currentGO;
                                 prop.m_setter(comp, &newInstance);
@@ -1594,7 +1594,7 @@ void EditorUI::DrawComponentProperties(Component* comp)
                                 Component* oldVal = currentComp;
                                 Component* newVal = static_cast<Component*>(targetComponent);
 
-                                prop.m_setter(comp, &newVal);
+                                //prop.m_setter(comp, &newVal);
 
                                 auto cmd = std::make_unique<ChangePropertyCommand<Component*>>(
                                     comp, prop.m_setter, oldVal, newVal

@@ -1,0 +1,997 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1549800710126249014,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_useBloom": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 12721942249057060834,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 15457439187271150869,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12621832947175338989,
+        "m_editorEulerAngles": {
+          "x": 22.00232696533203,
+          "y": 134.8974609375,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 1795.402587890625,
+          "y": 1096.5225830078125,
+          "z": 4.581029415130615
+        },
+        "m_rotation": {
+          "w": 0.37646231055259705,
+          "x": 0.0731847956776619,
+          "y": 0.9065651297569275,
+          "z": -0.17623752355575562
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7126371692199545648,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
+          "m_clearColor": {
+            "w": 1.0,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": true,
+          "m_nearZ": -2000.0,
+          "m_orthographicSize": 1.2000000476837158,
+          "m_useBloom": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
+          "typeName": "Camera"
+        }
+      ],
+      "id": 14666395232787571475,
+      "name": "MainCamera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7579107605158887194,
+        "m_editorEulerAngles": {
+          "x": 30.302358627319336,
+          "y": -136.302490234375,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 23.380672454833984,
+          "y": 9.342917442321777,
+          "z": 21.553537368774414
+        },
+        "m_rotation": {
+          "w": -0.3592212498188019,
+          "x": -0.09726966917514801,
+          "y": 0.8959059119224548,
+          "z": -0.24259275197982788
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6373055932638168785,
+          "m_color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_intensity": 1.0,
+          "m_range": 10.0,
+          "m_type": 0,
+          "typeName": "Light"
+        }
+      ],
+      "id": 12792323375294926988,
+      "name": "Directional Light",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17987380289712910369,
+        "m_editorEulerAngles": {
+          "x": 129.94200134277344,
+          "y": 35.14500045776367,
+          "z": 19.142457962036133
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -19.94827651977539,
+          "y": 39.897335052490234,
+          "z": -20.24793243408203
+        },
+        "m_rotation": {
+          "w": 0.4432057738304138,
+          "x": 0.8730254769325256,
+          "y": -0.017674967646598816,
+          "z": -0.20268896222114563
+        },
+        "m_scale": {
+          "x": 0.9999997615814209,
+          "y": 0.9999999403953552,
+          "z": 0.9999988675117493
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7171391694734270448,
+          "m_mapData": 6189260170659567125,
+          "m_prefab0": 16302386552932827796,
+          "m_prefab1": 11325787544210787741,
+          "m_prefab2": 4924267867290484229,
+          "m_prefab3": 0,
+          "m_prefab4": 0,
+          "typeName": "TilemapGenerator"
+        }
+      ],
+      "id": 10154570672934640085,
+      "name": "TileMapGenerator",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3160843146463709048,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 3.587324068671532e-43,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 5.075587272644043,
+          "y": 0.0,
+          "z": 2.082815647125244
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.975806474685669,
+              0.1888657659292221,
+              0.1888657659292221,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004480000119656324,
+            "ShadowScale": 1.0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 12796648283351137547,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 6022309272839303111,
+          "m_rotationSpeed": {
+            "x": 0.0,
+            "y": 20.0,
+            "z": 0.0
+          },
+          "typeName": "Rotator"
+        }
+      ],
+      "id": 5804603407003503968,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9826012678473559212,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 8.601725578308105,
+          "y": 3.021575450897217,
+          "z": 13.233254432678223
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8434294019800784467,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10905839516507161456,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8746986767933689703,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3160843146463709048,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14874681569479869762,
+          "m_size": 30.0,
+          "typeName": "ShadowMap"
+        }
+      ],
+      "id": 14171456073012411997,
+      "name": "ShadowRef",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17087393488300090766,
+        "m_editorEulerAngles": {
+          "x": 31.802343368530273,
+          "y": -112.80156707763672,
+          "z": 2.0091836177016376e-06
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 23.49452781677246,
+          "y": 8.861589431762695,
+          "z": 14.386226654052734
+        },
+        "m_rotation": {
+          "w": -0.5322054624557495,
+          "x": -0.1516144722700119,
+          "y": 0.8010573983192444,
+          "z": -0.22820492088794708
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 13808796880380785620,
+      "name": "Canvas",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16960684287074828472,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14484658305286496051,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 9298076218162503694,
+          "typeName": "Image"
+        }
+      ],
+      "id": 7437344280169259339,
+      "name": "ChatBoxLeft",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1122977817919399931,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 12604161843774547808,
+        "m_position": {
+          "x": 0.0,
+          "y": 700.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1920.0,
+          "y": 500.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 15456627126579972061,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 14862973819031059299,
+          "typeName": "Image"
+        }
+      ],
+      "id": 13597397309465246378,
+      "name": "ChatNameAlice",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12025537655053784930,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -11.0
+        },
+        "m_parent": 12604161843774547808,
+        "m_position": {
+          "x": 64.30000305175781,
+          "y": 709.2999877929688,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 0.9953961968421936,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.09584575146436691
+        },
+        "m_scale": {
+          "x": 256.0,
+          "y": 139.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [],
+      "id": 12206062450784852333,
+      "name": "LeftChat",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12604161843774547808,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4887565827465047436,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 1,
+          "m_text": "여긴 어디지?",
+          "typeName": "Text"
+        }
+      ],
+      "id": 17505276077743071570,
+      "name": "LeftText",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14342915667481373308,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 4.5
+        },
+        "m_parent": 12604161843774547808,
+        "m_position": {
+          "x": 190.0,
+          "y": 848.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 0.9992290139198303,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.03925981745123863
+        },
+        "m_scale": {
+          "x": 418.79998779296875,
+          "y": 79.30000305175781,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [],
+      "id": 3796887031993767285,
+      "name": "RightChat",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4086880214312189892,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 2629790031972787976,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 1382070093759434628,
+          "typeName": "Image"
+        }
+      ],
+      "id": 18201323215542219825,
+      "name": "ChatBoxLeft",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12747220619678759371,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 4086880214312189892,
+        "m_position": {
+          "x": 0.0,
+          "y": 700.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1920.0,
+          "y": 500.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8690332988345002148,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 5286623183370786140,
+          "typeName": "Image"
+        }
+      ],
+      "id": 12273803247180803479,
+      "name": "ChatNameQueen",
+      "tag": "Untagged",
+      "transform": {
+        "id": 649164433021675329,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 8.5
+        },
+        "m_parent": 4086880214312189892,
+        "m_position": {
+          "x": 1564.300048828125,
+          "y": 711.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 0.9972501993179321,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.07410848885774612
+        },
+        "m_scale": {
+          "x": 256.0,
+          "y": 139.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 3014816446671998180,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 1,
+          "m_text": "이곳은 규칙이 지배하는 보드랜드 \\n ",
+          "typeName": "Text"
+        }
+      ],
+      "id": 4963693740064598632,
+      "name": "RightText",
+      "tag": "Untagged",
+      "transform": {
+        "id": 15080997004557579064,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -3.0
+        },
+        "m_parent": 4086880214312189892,
+        "m_position": {
+          "x": 466.1000061035156,
+          "y": 958.7999877929688,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 0.9996573328971863,
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.026176949962973595
+        },
+        "m_scale": {
+          "x": 418.79998779296875,
+          "y": 77.19999694824219,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 5389857202379352969,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": -1,
+          "m_textureID": 4189575165625488765,
+          "typeName": "Image"
+        }
+      ],
+      "id": 3229077798588324449,
+      "name": "Queen",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16247882404497977318,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 1140.5,
+          "y": -2.5999999046325684,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1066.0,
+          "y": 1200.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 11645956295733425564,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 2,
+          "m_textureID": 2925151103467306181,
+          "typeName": "Image"
+        }
+      ],
+      "id": 17615222815214009992,
+      "name": "ChatNext",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9690912342493110465,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 1118829066418601276,
+        "m_position": {
+          "x": 0.305999755859375,
+          "y": 0.319000244140625,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.429999977350235,
+          "y": 0.3700000047683716,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17918957993013554554,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 9139580111714470471,
+          "m_Button": 17918957993013554554,
+          "m_TutorialManager": 4126822075113408942,
+          "typeName": "TutorialTrigger"
+        }
+      ],
+      "id": 11176108218897594396,
+      "name": "ChatNextClickArea",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1118829066418601276,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 1769.4000244140625,
+          "y": 1062.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 100.0,
+          "y": 100.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10995974805339220426,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": -1,
+          "m_textureID": 16221279067648743593,
+          "typeName": "Image"
+        }
+      ],
+      "id": 12815706883851027212,
+      "name": "Alice",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13480219912851100604,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 12604161843774547808,
+        "m_position": {
+          "x": 0.0,
+          "y": 94.80000305175781,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 688.9999389648438,
+          "y": 1094.9998779296875,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4126822075113408942,
+          "leftChat": 12206062450784852333,
+          "leftChatText": 4887565827465047436,
+          "m_CatUI": 0,
+          "m_QueenUI": 3229077798588324449,
+          "rightChat": 3796887031993767285,
+          "rightChatText": 3014816446671998180,
+          "typeName": "TutorialManager"
+        }
+      ],
+      "id": 2348306077807987028,
+      "name": "TutorialManager",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12529865939967681625,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}
