@@ -54,8 +54,6 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         {
             auto& key = channel->mPositionKeys[k];
 
-           // key.mValue *= 0.01f;
-
             ch.PositionKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
         }
 
@@ -64,7 +62,6 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
         for (unsigned int k = 0; k < channel->mNumRotationKeys; ++k)
         {
             const auto& key = channel->mRotationKeys[k];
-            // Assimp: (w,x,y,z), SimpleMath Quaternion(x,y,z,w)
             ch.RotationKeys.push_back({ key.mTime, Quaternion(key.mValue.x, key.mValue.y, key.mValue.z, key.mValue.w) });
         }
 
@@ -75,7 +72,7 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
             const auto& key = channel->mScalingKeys[k];
             Vector3 scaleValue(key.mValue.x, key.mValue.y, key.mValue.z);
 
-            if (nodeName == "Armature" || nodeName == "RootNode") //중첩 Scaling을 방지. 
+            if (nodeName == "Armature" || nodeName == "RootNode" || nodeName == "Root" ||nodeName == "Rig") //중첩 Scaling을 방지. 
             {
                 scaleValue = Vector3(1.0f, 1.0f, 1.0f);
             }

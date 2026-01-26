@@ -105,8 +105,9 @@ bool Game::Initialize()
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
-	SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
-	SceneManager::Instance().LoadScene("GridTestScene");
+
+	/*SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
+	SceneManager::Instance().LoadScene("GridTestScene");*/
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
@@ -116,6 +117,18 @@ bool Game::Initialize()
 
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
+
+	/*SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");*/
+	/* SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	 SceneManager::Instance().LoadScene("DTtestScene");*/
+
+	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");
+
+	 SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	 SceneManager::Instance().LoadScene("SampleSceneBum");
+
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -224,7 +237,7 @@ void Game::Run()
 
 		m_timer->Tick();
 
-		UpdateTimeScale();
+		//UpdateTimeScale();
 		DeltaTime dt{};
 		dt.rawTime = m_timer->DeltaTime();
 		float timeScale = SceneManager::Instance().GetActiveScene()->GetTimeScale();
@@ -530,7 +543,7 @@ void Game::LifeCycle(DeltaTime dt)
 		m_captureRT->Bind();
 		m_captureRT->Clear(clearColor[0], clearColor[1], clearColor[2], 1);
 
-		float ratio = DX11Renderer::Instance().GetAspectRatio();
+		float ratio = DX11Renderer::Instance().GetRefAspectRatio();
 		mainCam->SetAspectRatio(ratio);
 
 		RenderScene(scene, mainCam, m_captureRT.get());
@@ -593,12 +606,6 @@ void Game::LifeCycle(DeltaTime dt)
 	Vector2 finalPos(offsetX, offsetY);
 	Vector2 finalSize(drawWidth, drawHeight);
 
-	if (mainCam)
-	{
-		float ratio = drawWidth / drawHeight;
-		mainCam->SetAspectRatio(ratio);
-	}
-
 
 
 
@@ -627,18 +634,18 @@ void Game::LifeCycle(DeltaTime dt)
 
 void Game::UpdateTimeScale() // 배속 테스트용
 {
-	if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
-	{
-		SceneManager::Instance().GetActiveScene()->SetTimeScale(0.0f);
-	}
-	if (InputManager::Instance().GetKeyDown(KeyCode::Num1))
-	{
-		SceneManager::Instance().GetActiveScene()->SetTimeScale(1.0f);
-	}
-	if (InputManager::Instance().GetKeyDown(KeyCode::Num2))
-	{
-		SceneManager::Instance().GetActiveScene()->SetTimeScale(2.0f);
-	}
+	//if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
+	//{
+	//	SceneManager::Instance().GetActiveScene()->SetTimeScale(0.0f);
+	//}
+	//if (InputManager::Instance().GetKeyDown(KeyCode::Num1))
+	//{
+	//	SceneManager::Instance().GetActiveScene()->SetTimeScale(1.0f);
+	//}
+	//if (InputManager::Instance().GetKeyDown(KeyCode::Num2))
+	//{
+	//	SceneManager::Instance().GetActiveScene()->SetTimeScale(2.0f);
+	//}
 }
 
 /*
@@ -1030,20 +1037,39 @@ bool Game::OnWndProc(HWND hWnd, uint32_t msg, uintptr_t wparam, intptr_t lparam)
 void Game::OnResize(int width, int height)
 {
 	if (width <= 0 || height <= 0) return;
+
 	DX11Renderer::Instance().Resize(width, height);
-	Camera* mainCam =  SceneManager::Instance().GetActiveScene()->GetMainCamera();
-	if (mainCam) {
-		mainCam->SetViewDirty();
-		//std::cout << "Main camera view dirty set from Game OnResize" << std::endl;
+
+	float windowWidth = static_cast<float>(width);
+	float windowHeight = static_cast<float>(height);
+
+	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio(); 
+	float windowAspect = windowWidth / windowHeight;
+
+	float drawWidth, drawHeight;
+
+	if (windowAspect > targetAspect)
+	{
+		drawHeight = windowHeight;
+		drawWidth = windowHeight * targetAspect;
+	}
+	else
+	{
+		drawWidth = windowWidth;
+		drawHeight = drawWidth / targetAspect;
 	}
 
 	if (m_gameRT)
-		m_gameRT->Resize(width, height);
+		m_gameRT->Resize((int)drawWidth, (int)drawHeight);
 
 	if (m_captureRT)
-		m_captureRT->Resize(width, height);
+		m_captureRT->Resize((int)drawWidth, (int)drawHeight);
 
-	//	SceneManager::Instance().GetActiveScene()->GetMainCamera()->SetViewDirty();
+	Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+	if (mainCam) {
+		mainCam->SetAspectRatio(targetAspect); 
+		mainCam->SetViewDirty();
+	}
 }
 
 void Game::OnClose()

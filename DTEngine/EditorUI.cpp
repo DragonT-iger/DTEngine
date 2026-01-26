@@ -893,31 +893,48 @@ void EditorUI::DrawInspectorWindow()
 
         if (ImGui::Button("Add Component", ImVec2(buttonWidth, 0)))
         {
+            memset(m_componentSearchBuffer, 0, sizeof(m_componentSearchBuffer));
             ImGui::OpenPopup("AddComponentPopup");
         }
 
         if (ImGui::BeginPopup("AddComponentPopup"))
         {
-            ImGui::Text("Component Type:");
+            if (ImGui::IsWindowAppearing())
+                ImGui::SetKeyboardFocusHere();
+
+            ImGui::InputTextWithHint("##SearchComponent", "Search...", m_componentSearchBuffer, sizeof(m_componentSearchBuffer));
+
             ImGui::Separator();
 
             auto& factory = ComponentFactory::Instance();
             std::vector<std::string> componentNames = factory.GetAllRegisteredTypeNames();
-
             std::sort(componentNames.begin(), componentNames.end());
 
-            for (const std::string& typeName : componentNames)
+            std::string searchKey = m_componentSearchBuffer;
+            std::transform(searchKey.begin(), searchKey.end(), searchKey.begin(), ::tolower);
+
+            if (ImGui::BeginChild("ComponentList", ImVec2(250, 200), false, ImGuiWindowFlags_HorizontalScrollbar))
             {
-                if (typeName == "Transform") continue;
-
-                if (ImGui::Selectable(typeName.c_str()))
+                for (const std::string& typeName : componentNames)
                 {
-                    auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
-                    HistoryManager::Instance().Do(std::move(cmd));
+                    if (typeName == "Transform") continue;
 
-                    ImGui::CloseCurrentPopup();
+                    std::string lowerName = typeName;
+                    std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
+
+                    if (searchKey.empty() || lowerName.find(searchKey) != std::string::npos)
+                    {
+                        if (ImGui::Selectable(typeName.c_str()))
+                        {
+                            auto cmd = std::make_unique<AddComponentCommand>(targetGameObject, typeName);
+                            HistoryManager::Instance().Do(std::move(cmd));
+
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
                 }
             }
+            ImGui::EndChild();
             ImGui::EndPopup();
         }
     }
@@ -2046,7 +2063,6 @@ void EditorUI::OnDropFile(const std::string& rawPath)
                 go->GetTransform()->SetPosition(spawnPos);
             }
         }
-        //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
     }
     else if (ext == ".prefab")
     {

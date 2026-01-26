@@ -260,7 +260,7 @@ void ResourceManager::ProcessNode(aiNode* node, const aiScene* scene, GameObject
 
     std::string nodeName = node->mName.C_Str();
 
-    if (nodeName == "Armature") // GameObject 생성만 금지. -> 실질적인 Model "Data"는 Load<Model>에서 파싱; 
+    if (nodeName == "Armature" || nodeName == "rig") // GameObject 생성만 금지. -> 실질적인 Model "Data"는 Load<Model>에서 파싱; 
     {
         return;
     }
