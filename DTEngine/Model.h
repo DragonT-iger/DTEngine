@@ -52,3 +52,5 @@ private:
 
     int m_BoneCounter = 0;
 };
+
+std::string GetPureName(std::string name);

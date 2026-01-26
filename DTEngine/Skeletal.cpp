@@ -7,6 +7,9 @@
 
 #include "AnimationClip.h"
 
+#include <iostream>
+#include <iomanip>
+
 BEGINPROPERTY(Skeletal)
 DTPROPERTY_SETTER(Skeletal, m_skellID, SetSkeletal)
 
@@ -34,33 +37,34 @@ void Skeletal::Update(float deltaTime)
    
 }
 
-
 void Skeletal::LateUpdate(float dTime)
 {
     if (!m_BoneResource) return;
-
     size_t nodeCount = m_BoneResource->m_Bones.size();
 
-        for (size_t i = 0; i < nodeCount; ++i)
-        {
-            BoneNode& resNode = m_BoneResource->m_Bones[i];
-            Matrix localMat = m_AnimatedLocalMatrices[i];
+    for (size_t i = 0; i < nodeCount; ++i)
+    {
+        BoneNode& resNode = m_BoneResource->m_Bones[i];
+        Matrix localMat = m_AnimatedLocalMatrices[i];
 
-            if (resNode.ParentIndex != -1)
-            {
-                m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
-            }
-            else
-            {
-                m_globalTransforms[i] = localMat;
-            }
+        //std::cout << resNode.name << std::endl;
 
+        Matrix parentG;
+        bool hasParent = (resNode.ParentIndex != -1);
 
-            m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+        if (hasParent)
+            parentG = m_globalTransforms[resNode.ParentIndex];
 
-        }
-    
+        if (hasParent)
+            m_globalTransforms[i] = localMat * parentG;
+        else
+            m_globalTransforms[i] = localMat;
+
+        m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+
+    }
 }
+
 
 void Skeletal::SetSkeletal(uint64_t id)
 {
@@ -73,11 +77,9 @@ void Skeletal::SetSkeletal(uint64_t id)
 
         Model* pModel = ResourceManager::Instance().Load<Model>(path);
 
-        // 2. 모델이 제대로 로드되었는지 반드시 확인합니다.
         if (pModel == nullptr)
         {
-            // 에러 로그 출력 등을 수행하세요.
-            // DebugBreak(); // 혹은 여기서 멈춰서 원인을 파악해보세요.
+          
             return;
         }
 
@@ -98,14 +100,10 @@ void Skeletal::SetSkeletal(uint64_t id)
             for (size_t i = 0; i < nodeCount; ++i)
             {
                 m_AnimatedLocalMatrices[i] = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-                Matrix defaultMat = m_BoneResource->m_Bones[i].DefaultLocalMatrix;
-                m_AnimatedLocalMatrices[i] = defaultMat;
             }
 
-            m_globalTransforms.resize(nodeCount);
-            m_finalTransforms.resize(nodeCount);
-
-
+            m_globalTransforms.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
+            m_finalTransforms.assign(nodeCount, SimpleMathHelper::IdentityMatrix());
         }
     }
     else return;

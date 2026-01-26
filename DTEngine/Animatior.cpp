@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 #include "Rigid.h"
 #include "Model.h"
-
+#include <iomanip>
 BEGINPROPERTY(Animator)
 
 DTPROPERTY_SETTER(Animator, Play, SetPlay)
@@ -16,11 +16,25 @@ DTPROPERTY_SETTER(Animator, Animated_Time, SetTime)
 
 ENDPROPERTY()
 
+static void DumpMatrix(const char* label, const Matrix& m)
+{
+    std::cout << label << "\n";
+    std::cout << std::fixed << std::setprecision(4);
+    std::cout << m._11 << " " << m._12 << " " << m._13 << " " << m._14 << "\n";
+    std::cout << m._21 << " " << m._22 << " " << m._23 << " " << m._24 << "\n";
+    std::cout << m._31 << " " << m._32 << " " << m._33 << " " << m._34 << "\n";
+    std::cout << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << "\n";
+}
 
+static void DumpTRS(const Vector3& S, const Quaternion& R, const Vector3& T)
+{
+    std::cout << "  S = (" << S.x << ", " << S.y << ", " << S.z << ")\n";
+    std::cout << "  R = (" << R.x << ", " << R.y << ", " << R.z << ", " << R.w << ")\n";
+    std::cout << "  T = (" << T.x << ", " << T.y << ", " << T.z << ")\n";
+}
 
 void Animator::Update(float deltaTime)
 {
-    // 리지드/스켈레탈 중 하나라도 있어야 업데이트 가능
     if (!m_CurrentClip || !Play) return;
 
     float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond * Animated_Time;
@@ -51,6 +65,24 @@ void Animator::Update(float deltaTime)
         if (m_IsRigidMode) m_TargetRigid->SetNodePose(targetIdx, localMat);
 
         else m_TargetSkeletal->SetBonePose(targetIdx, localMat);
+
+
+        //std::cout << "\n==== Anim Debug ====\n";
+        //std::cout << "ChannelIdx = " << i << "\n";
+        //std::cout << "ChannelName = " << channel.BoneName << "\n";
+        //std::cout << "TargetBoneIdx = " << targetIdx << "\n";
+
+        //DumpMatrix("BindLocalMatrix",
+        //    m_IsRigidMode
+        //    ? m_TargetRigid->GetNodeResource()->Nodes[targetIdx].DefaultLocalMatrix
+        //    : m_TargetSkeletal->GetBoneResource()->m_Bones[targetIdx].DefaultLocalMatrix
+        //);
+
+        //DumpTRS(bindS, bindR, bindT);
+        //DumpTRS(S, R, T);
+
+        //DumpMatrix("AnimatedLocalMatrix", localMat);
+
     }
 }
 
@@ -74,8 +106,8 @@ void Animator::SetClip(uint64_t id)
     Model* pModel = ResourceManager::Instance().Load<Model>(modelPath);
     if (!pModel) return;
 
-    //조건 수정 필요
     m_IsRigidMode = (pModel->GetNodeResource() != nullptr);
+    m_IsRigidMode = false;
 
     if (m_AniID != 0)
     {
@@ -90,7 +122,6 @@ void Animator::SetClip(uint64_t id)
 
     if (!m_CurrentClip) return;
 
-    // 4. 채널 매핑 최적화 (모드 분기)
     if (!m_CurrentClip->Channels.empty())
     {
         m_ChannelToBoneIndex.clear();
@@ -98,7 +129,6 @@ void Animator::SetClip(uint64_t id)
 
         if (m_IsRigidMode)
         {
-            // Rigid 모드: NodeResource의 NodeMapping 사용
             NodeResource* nodeRes = pModel->GetNodeResource();
             for (const auto& channel : m_CurrentClip->Channels)
             {
@@ -108,20 +138,42 @@ void Animator::SetClip(uint64_t id)
         }
         else
         {
-            // Skeletal 모드: BoneResource의 BoneMapping 사용
             BoneResource* boneRes = pModel->GetBone();
             if (!boneRes) return;
+            
+       /*     for (const auto& val : m_CurrentClip->Channels)
+            {
+                std::cout <<"Name: " << val.BoneName << std::endl;
+            }
+
+            for (const auto& val : boneRes->m_Bones)
+            {
+                std::cout << "Name: " << val.name << std::endl;
+            }*/
+
 
             for (const auto& channel : m_CurrentClip->Channels)
             {
-                auto it = boneRes->m_BoneMapping.find(channel.BoneName);
-                if (it != boneRes->m_BoneMapping.end())
-                    m_ChannelToBoneIndex.push_back(it->second);
-                else
-                    m_ChannelToBoneIndex.push_back(-1);
+                std::string pureChannelName = GetPureName(channel.BoneName);
+                std::string channelName = channel.BoneName;
+                int foundIdx = -1;
+
+              
+                for (size_t b = 0; b < boneRes->m_Bones.size(); ++b) 
+                {
+                    if (boneRes->m_Bones[b].name == channelName) 
+                    {
+                        foundIdx = (int)b;
+                        break;
+                    }
+                }
+               
+                m_ChannelToBoneIndex.push_back(foundIdx);
             }
         }
     }
+
+
 }
 void Animator::SetTime(float Speed)
 {
