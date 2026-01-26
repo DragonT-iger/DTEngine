@@ -37,7 +37,6 @@ private:
     bool m_created = false;
 
     GameObject* m_settingWindow = nullptr;
-    GameObject* m_settingButtonObj = nullptr;
 
     UISlider* m_BGMSlider = nullptr;
     UISlider* m_SFXSlider = nullptr;

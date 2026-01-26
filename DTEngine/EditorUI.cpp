@@ -2062,7 +2062,6 @@ void EditorUI::OnDropFile(const std::string& rawPath)
                 go->GetTransform()->SetPosition(spawnPos);
             }
         }
-        //std::cout << "[Editor] Created Model from: " << path.string() << std::endl;
     }
     else if (ext == ".prefab")
     {

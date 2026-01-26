@@ -38,6 +38,7 @@ void SettingsWindow::Close()
 		m_settingWindow->SetActive(false);
 }
 
+// 이제 settingbutton 강제로 안만들어도 owner toggle component 만들어둠. 나중에 settingwindow 컴포넌트 추가하고 따로 오브젝트 생성해서 editor에서 작업하기.
 void SettingsWindow::InitializeWindow()
 {
 		Scene* scene = SceneManager::Instance().GetActiveScene();
@@ -90,19 +91,6 @@ void SettingsWindow::InitializeWindow()
 						Close();
 				}
 		);
-
-		// settingButton 생성.
-		GameObject* settingToggleButton = scene->CreateGameObject("SettingToggleButton");
-		settingToggleButton->AddComponent<Image>();
-		settingToggleButton->AddComponent<UIButton>();
-		m_settingButtonObj = settingToggleButton;
-
-		// 람다로 내 오브젝트 넣어주기.
-		m_settingButtonObj->GetComponent<UIButton>()->SetOnClick([this]()
-				{
-						// toggle 해주기.
-						m_settingWindow->SetActive(!m_settingWindow->IsActive());
-				});
 }
 
 void SettingsWindow::SetBGMVolume(float val)

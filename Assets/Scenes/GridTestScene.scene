@@ -1,0 +1,580 @@
+{
+  "gameObjects": [
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1549800710126249014,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
+          "m_clearColor": {
+            "w": 0.20000000298023224,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_useBloom": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 12721942249057060834,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 15457439187271150869,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12621832947175338989,
+        "m_editorEulerAngles": {
+          "x": 13.402323722839355,
+          "y": 171.29885864257813,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 7.041474342346191,
+          "y": 5.609583854675293,
+          "z": 24.999828338623047
+        },
+        "m_rotation": {
+          "w": 0.07534055411815643,
+          "x": 0.008852030150592327,
+          "y": 0.990306556224823,
+          "z": -0.11635463684797287
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7126371692199545648,
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
+          "m_clearColor": {
+            "w": 1.0,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": true,
+          "m_nearZ": -2000.0,
+          "m_orthographicSize": 1.2000000476837158,
+          "m_useBloom": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_vignetteRadius": 0.800000011920929,
+          "m_vignetteSoftness": 0.4000000059604645,
+          "typeName": "Camera"
+        }
+      ],
+      "id": 14666395232787571475,
+      "name": "MainCamera",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7579107605158887194,
+        "m_editorEulerAngles": {
+          "x": 30.302358627319336,
+          "y": -136.302490234375,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 23.380672454833984,
+          "y": 9.342917442321777,
+          "z": 21.553537368774414
+        },
+        "m_rotation": {
+          "w": -0.3592212498188019,
+          "x": -0.09726966917514801,
+          "y": 0.8959059119224548,
+          "z": -0.24259275197982788
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 6373055932638168785,
+          "m_color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_intensity": 1.0,
+          "m_range": 10.0,
+          "m_type": 0,
+          "typeName": "Light"
+        }
+      ],
+      "id": 12792323375294926988,
+      "name": "Directional Light",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17987380289712910369,
+        "m_editorEulerAngles": {
+          "x": 129.94200134277344,
+          "y": 35.14500045776367,
+          "z": 19.142457962036133
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": -19.94827651977539,
+          "y": 39.897335052490234,
+          "z": -20.24793243408203
+        },
+        "m_rotation": {
+          "w": 0.4432057738304138,
+          "x": 0.8730254769325256,
+          "y": -0.017674967646598816,
+          "z": -0.20268896222114563
+        },
+        "m_scale": {
+          "x": 0.9999997615814209,
+          "y": 0.9999999403953552,
+          "z": 0.9999988675117493
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7171391694734270448,
+          "m_mapData": 6189260170659567125,
+          "m_prefab0": 16302386552932827796,
+          "m_prefab1": 11325787544210787741,
+          "m_prefab2": 4924267867290484229,
+          "m_prefab3": 0,
+          "m_prefab4": 0,
+          "typeName": "TilemapGenerator"
+        }
+      ],
+      "id": 10154570672934640085,
+      "name": "TileMapGenerator",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3160843146463709048,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 3.587324068671532e-43,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 5.075587272644043,
+          "y": 0.0,
+          "z": 2.082815647125244
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              0.975806474685669,
+              0.1888657659292221,
+              0.1888657659292221,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004480000119656324,
+            "ShadowScale": 1.0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 12796648283351137547,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 6022309272839303111,
+          "m_rotationSpeed": {
+            "x": 0.0,
+            "y": 20.0,
+            "z": 0.0
+          },
+          "typeName": "Rotator"
+        }
+      ],
+      "id": 5804603407003503968,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9826012678473559212,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 8.601725578308105,
+          "y": 3.021575450897217,
+          "z": 13.233254432678223
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8434294019800784467,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10905839516507161456,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8746986767933689703,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3160843146463709048,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 11778421806338692559,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9767056707140335182,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 2.299999952316284,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14453469437693765232,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_textureID": 11442415147953682991,
+          "typeName": "Image"
+        }
+      ],
+      "id": 10729742436706824040,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9137993014704475425,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 9767056707140335182,
+        "m_position": {
+          "x": 100.0,
+          "y": 100.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 100.0,
+          "y": 100.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 9437512090258893174,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_textureID": 14791384396114540789,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 7084510593833299199,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 10129189046166066503,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_fontSize": 1.0,
+          "m_text": "New Textasdasda권용범",
+          "typeName": "Text"
+        }
+      ],
+      "id": 16628638947925722745,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 11729853042175849248,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 9137993014704475425,
+        "m_position": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 9046313462223727143,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_textureID": 1087623756073597206,
+          "typeName": "Image"
+        }
+      ],
+      "id": 10169687403797365547,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4922655923850045622,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 35.5,
+          "y": 21.799999237060547,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 304.20001220703125,
+          "y": 137.8000030517578,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14874681569479869762,
+          "m_size": 30.0,
+          "typeName": "ShadowMap"
+        }
+      ],
+      "id": 14171456073012411997,
+      "name": "ShadowRef",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17087393488300090766,
+        "m_editorEulerAngles": {
+          "x": 31.802343368530273,
+          "y": -112.80156707763672,
+          "z": 2.0091836177016376e-06
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 23.49452781677246,
+          "y": 8.861589431762695,
+          "z": 14.386226654052734
+        },
+        "m_rotation": {
+          "w": -0.5322054624557495,
+          "x": -0.1516144722700119,
+          "y": 0.8010573983192444,
+          "z": -0.22820492088794708
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    }
+  ]
+}
