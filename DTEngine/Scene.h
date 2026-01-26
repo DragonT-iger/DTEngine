@@ -112,9 +112,6 @@ private:
     enum class ScenePhase { None, Awake, Start, Update, FixedUpdate, LateUpdate };
     ScenePhase m_phase = ScenePhase::None;
     void FlushPending();
-
-
-
     
     GameObject* m_hitObject;
 

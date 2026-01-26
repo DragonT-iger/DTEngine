@@ -11,6 +11,7 @@
 BEGINPROPERTY(Image)
 DTPROPERTY_ACCESSOR(Image, m_textureID, GetTextureID, SetTextureID)
 DTPROPERTY_ACCESSOR(Image, m_color, GetColor, SetColor)
+DTPROPERTY(Image, m_orderInLayer)
 ENDPROPERTY()
 
 void Image::Awake()
@@ -95,11 +96,14 @@ void Image::RenderUI()
         Vector3 pos = tf->GetWorldPosition();
         Vector3 scale = tf->GetWorldScale();
 
+        float rotationRad = DirectX::XMConvertToRadians(tf->GetWorldRotationEuler().z);
+
         DX11Renderer::Instance().DrawUI(
             tex,
             Vector2(pos.x, pos.y),
             Vector2(scale.x, scale.y),
-            m_color
+            m_color,
+            rotationRad 
         );
     }
 }

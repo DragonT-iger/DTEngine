@@ -996,6 +996,9 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
 
     DX11Renderer::Instance().BeginUIRender(width, height);
 
+    std::vector<UIBase*> uiList;
+    uiList.reserve(m_gameObjects.size());
+
     for (const auto& go : GetGameObjects())
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
@@ -1006,10 +1009,19 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
             {
                 if (ui->IsActive())
                 {
-                    ui->RenderUI();
+                    uiList.push_back(ui);
                 }
             }
         }
+    }
+
+    std::sort(uiList.begin(), uiList.end(), [](UIBase* a, UIBase* b) {
+        return a->GetOrderInLayer() < b->GetOrderInLayer();
+        });
+
+    for (auto* ui : uiList)
+    {
+        ui->RenderUI();
     }
 
     //for (const auto& go : GetGameObjects())

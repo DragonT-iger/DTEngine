@@ -408,17 +408,33 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
 
 
 
-void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color)
+void DX11Renderer::DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color, float rotation)
 {
     if (!m_spriteBatch || !texture) return;
 
-    RECT destRect;
-    destRect.left   = static_cast<LONG>(position.x);
-    destRect.top    = static_cast<LONG>(position.y);
-    destRect.right  = static_cast<LONG>(position.x + size.x);
-    destRect.bottom = static_cast<LONG>(position.y + size.y);
+    float texW = static_cast<float>(texture->GetWidth());
+    float texH = static_cast<float>(texture->GetHeight());
 
-    m_spriteBatch->Draw(texture->GetSRV(), destRect, color);
+    Vector2 scaleFactor(1.0f, 1.0f);
+    if (texW > 0 && texH > 0)
+    {
+        scaleFactor.x = size.x / texW;
+        scaleFactor.y = size.y / texH;
+    }
+
+    Vector2 origin(0.0f, 0.0f);
+
+    m_spriteBatch->Draw(
+        texture->GetSRV(),
+        position,
+        nullptr,     
+        color,
+        rotation,    
+        origin,      
+        scaleFactor, 
+        DirectX::DX11::SpriteEffects_None,
+        0.0f          
+    );
 }
 
 void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position, const float& m_fontSize, const Vector4& color, float rotation , Vector2 scale)
