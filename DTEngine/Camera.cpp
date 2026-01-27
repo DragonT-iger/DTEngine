@@ -183,7 +183,6 @@ Ray Camera::ScreenPointToRay(float x, float y) const
     const auto& gameRes = InputManager::Instance().GetGameResolution();
     vp.width = static_cast<float>(gameRes.x);
     vp.height = static_cast<float>(gameRes.y);
-	std::cout << "ScreenPointToRay Width: " << vp.width << " Height: " << vp.height << std::endl;
 #else
     vp.width = static_cast<float>(DX11Renderer::Instance().Width());
     vp.height = static_cast<float>(DX11Renderer::Instance().Height());
