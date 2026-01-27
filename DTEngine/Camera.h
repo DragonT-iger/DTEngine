@@ -68,6 +68,7 @@ public:
     void SetViewportRect(const Vector4& rect) { m_viewportRect = rect; }
 
     Ray ScreenPointToRay(float x, float y, float viewportW, float viewportH) const;
+	Ray ScreenPointToRay(float x, float y) const;
 
     void SetPostProcessEffect(PostProcessType type, bool enable);
     bool IsEffectEnabled(PostProcessType type) const;
@@ -102,11 +103,8 @@ private:
     Matrix m_view;
     Matrix m_projection;
 
-
-
     bool m_dirtyView = true;
     bool m_dirtyProj = true;
-
 
     RenderTexture* m_targetTexture = nullptr;
 
@@ -120,12 +118,10 @@ private:
     float m_nearZ = 0.1f;
     float m_farZ = 1000.0f;
 
-
 	bool m_isOrthographic = false;
     float m_orthographicSize = 5.0f;
 
     Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
-
 
     Vector4 m_viewportRect = { 0.0f, 0.0f, 1.0f, 1.0f };
 

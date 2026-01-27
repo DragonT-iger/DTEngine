@@ -10,6 +10,7 @@ class TutorialTrigger : public MonoBehaviour
 
 public:
     void Start() override;
+	void Update(float deltaTime) override;
 
 private:
     TutorialManager* m_TutorialManager = nullptr;

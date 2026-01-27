@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "SimpleMathHelper.h"
 #include "MonitorController.h"
+#include "InputManager.h"
 
 BEGINPROPERTY(Camera)
 
@@ -158,6 +159,37 @@ Ray Camera::ScreenPointToRay(float x, float y, float viewportW, float viewportH)
     vp.y = 0.0f;
     vp.width = viewportW;
     vp.height = viewportH;
+    vp.minDepth = 0.0f;
+    vp.maxDepth = 1.0f;
+
+    Vector3 screenNear(x, y, 0.0f);
+    Vector3 screenFar(x, y, 1.0f);
+
+    Vector3 nearWorld = vp.Unproject(screenNear, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+    Vector3 farWorld = vp.Unproject(screenFar, m_projection, m_view, SimpleMathHelper::IdentityMatrix());
+
+    Vector3 dir = farWorld - nearWorld;
+    dir.Normalize();
+
+    return { nearWorld, dir };
+}
+
+Ray Camera::ScreenPointToRay(float x, float y) const
+{
+    DirectX::SimpleMath::Viewport vp;
+    vp.x = 0.0f;
+    vp.y = 0.0f;
+#ifdef _DEBUG
+    const auto& gameRes = InputManager::Instance().GetGameResolution();
+    vp.width = static_cast<float>(gameRes.x);
+    vp.height = static_cast<float>(gameRes.y);
+#else
+    vp.width = static_cast<float>(DX11Renderer::Instance().Width());
+    vp.height = static_cast<float>(DX11Renderer::Instance().Height());
+#endif
+    vp.width *= m_viewportRect.z;
+    vp.height *= m_viewportRect.w;
+
     vp.minDepth = 0.0f;
     vp.maxDepth = 1.0f;
 

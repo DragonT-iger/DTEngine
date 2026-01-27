@@ -532,10 +532,11 @@ void Game::LifeCycle(DeltaTime dt)
 			targetRT->Unbind();
 		}
 	}
+	static const float defaultClearColor[4] = { 0.f, 0.f, 0.f, 1.f };
 
 	Camera* mainCam = scene->GetMainCamera();
 
-	const float* clearColor = (float*)&mainCam->GetClearColor();
+	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : defaultClearColor;
 
 
 	if (mainCam && m_captureRT && m_gameRT)
