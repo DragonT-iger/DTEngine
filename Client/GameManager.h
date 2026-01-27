@@ -14,24 +14,26 @@ class GameManager : public MonoSingleton<GameManager>
 {
 	DTGENERATED_BODY(GameManager)
 
-
 public:
 
-
-	void Awake() override;
+	void Start() override;
 	void SetLife(int life);
+	int GetLife() const;
+	
+	void SetMoney(int money);
+	int GetMoney() const;
 
-
-
-	Text* m_money;
-	Text* m_life;
+	void Update(float deltaTime) override;
+	
 private:
 	
+	Text* m_money;
+	Text* m_life;
 
 	static inline int maxLife = 9;
 	static inline int curLife = 9;
 
-	static inline int curMoney = 0; //cost는 좀 짜친데
+	static inline int curMoney = 9; //cost는 좀 짜친데
 
 };
 

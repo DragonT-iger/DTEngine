@@ -968,6 +968,13 @@
           "rightChat": 3796887031993767285,
           "rightChatText": 3014816446671998180,
           "typeName": "TutorialManager"
+        },
+        {
+          "Active": true,
+          "id": 18427615254177141059,
+          "m_Button": 0,
+          "m_TutorialManager": 0,
+          "typeName": "TutorialTrigger"
         }
       ],
       "id": 2348306077807987028,
@@ -1552,7 +1559,16 @@
         {
           "Active": true,
           "id": 6576746820287875911,
+          "m_life": 12449708723998633757,
+          "m_money": 12258473667679435511,
           "typeName": "GameManager"
+        },
+        {
+          "Active": true,
+          "id": 8571230958626869497,
+          "m_Button": 0,
+          "m_TutorialManager": 0,
+          "typeName": "TutorialTrigger"
         }
       ],
       "id": 15845251961356903549,
