@@ -145,6 +145,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
+    <ClCompile Include="RuleSelectOkayEvenet.cpp" />
+    <ClCompile Include="SelectOkayEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
@@ -168,6 +170,8 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
+    <ClInclude Include="RuleSelectOkayEvenet.h" />
+    <ClInclude Include="SelectOkayEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />

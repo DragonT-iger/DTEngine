@@ -5,7 +5,7 @@
 #include "Image.h"
 #include "UIButton.h"
 #include "UISlider.h"
-
+#include "ResourceManager.h"
 BEGINPROPERTY(SettingsWindow)
 DTPROPERTY_ACCESSOR(SettingsWindow, m_bgmVolume, GetBGMVolume, SetBGMVolume)
 DTPROPERTY_ACCESSOR(SettingsWindow, m_sfxVolume, GetSFXVolume, SetSFXVolume)
@@ -51,11 +51,12 @@ void SettingsWindow::InitializeWindow()
 		GameObject* settingWindowBG = scene->CreateGameObject("SettingWindowBG");
 		settingWindowBG->GetTransform()->SetParent(settingWindow->GetTransform());
 		settingWindowBG->AddComponent<Image>();
+		//settingWindowBG->GetComponent<Image>()->SetTexture(ResourceManager);
 
 		// titlebar. 
-		GameObject* titleBar = scene->CreateGameObject("TitleBar");
-		titleBar->GetTransform()->SetParent(settingWindowBG->GetTransform());
-		titleBar->AddComponent<Image>();
+		//GameObject* titleBar = scene->CreateGameObject("TitleBar");
+		//titleBar->GetTransform()->SetParent(settingWindowBG->GetTransform());
+		//titleBar->AddComponent<Image>();
 
 		// bgm slider
 		GameObject* bgmslider = scene->CreateGameObject("Bgmslider");

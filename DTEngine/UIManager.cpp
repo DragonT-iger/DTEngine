@@ -13,7 +13,6 @@
 //#include "RuleSelectWindow.h"
 #include "SettingsWindow.h"
 
-
 BEGINPROPERTY(UIManager)
 ENDPROPERTY()
 
@@ -49,10 +48,6 @@ void UIManager::InitializeWindows()
 		//m_settingsWindow->CreateOnce();
 }
 
-void test()
-{
-
-}
 void UIManager::RayUpdate()
 {
 		if (m_prefabSelectWindow->IsWindowOpen())

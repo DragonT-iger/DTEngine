@@ -5,6 +5,8 @@
 class Prefab;
 class Image;
 class GameObject;
+class SelectOkayEvent;
+
 
 class PrefabSelectWindow : public MonoBehaviour
 {
@@ -35,8 +37,8 @@ public:
 		bool TryConsumeResult(Prefab*& out);
 
 
-		Prefab*& GetNightPrefab() { return m_nightPrefab; }
-		void SetNightPrefab(Prefab* value) { m_nightPrefab = value; }
+		Prefab*& GetNightPrefab() { return m_knightPrefab; }
+		void SetNightPrefab(Prefab* value) { m_knightPrefab = value; }
 
 		Prefab*& GetRookPrefab() { return m_rookPrefab; }
 		void SetRookPrefab(Prefab* value) { m_rookPrefab = value; }
@@ -54,12 +56,12 @@ private:
 		SelectCallback m_onResult = nullptr;
 
 		// prefab load해두기 위해서.
-		Prefab* m_nightPrefab = nullptr;
+		Prefab* m_knightPrefab = nullptr;
 		Prefab* m_rookPrefab = nullptr;
 		Prefab* m_bishopPrefab = nullptr;
 
 		// image 컴포넌트. visual update 편하게 해주기 위해.
-		Image* m_nightImg = nullptr;
+		Image* m_knightImg = nullptr;
 		Image* m_rookImg = nullptr;
 		Image* m_bishopImg = nullptr;
 
@@ -68,6 +70,9 @@ private:
 
 		// 계산할 index
 		int m_selectIndex = 0;
+
+		// OkayButton
+		SelectOkayEvent* m_okayButton = nullptr;
 
 		// 생성 및 결과 반환을 위해서.
 		bool m_created = false;

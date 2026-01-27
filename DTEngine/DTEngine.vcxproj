@@ -198,6 +198,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="MonoSingleton.h" />
     <ClInclude Include="OwnerSetActive.h" />
     <ClInclude Include="Rigid.h" />
+    <ClInclude Include="RuleSelectWindow.h" />
     <ClInclude Include="SkyBoxComponent.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
@@ -294,6 +295,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="OwnerSetActive.cpp" />
     <ClCompile Include="Rigid.cpp" />
+    <ClCompile Include="RuleSelectWindow.cpp" />
     <ClCompile Include="SkyBoxComponent.cpp" />
     <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="Image.cpp" />

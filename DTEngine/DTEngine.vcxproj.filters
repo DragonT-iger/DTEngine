@@ -398,6 +398,9 @@
     <ClInclude Include="Rigid.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="RuleSelectWindow.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -633,7 +636,7 @@
     </ClCompile>
     <ClCompile Include="OwnerSetActive.cpp">
       <Filter>Component\UI</Filter>
-   </ClCompile>
+    </ClCompile>
     <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -644,6 +647,9 @@
       <Filter>Component\UI</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="RuleSelectWindow.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
   </ItemGroup>

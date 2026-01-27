@@ -6,11 +6,14 @@
 #include "UIButton.h"
 #include "ResourceManager.h"
 #include "Prefab.h"
+#include "../Client/SelectOkayEvent.h"
+
 
 BEGINPROPERTY(PrefabSelectWindow)
-DTPROPERTY_ACCESSOR(PrefabSelectWindow, m_nightPrefab, GetNightPrefab, SetNightPrefab)
+DTPROPERTY_ACCESSOR(PrefabSelectWindow, m_knightPrefab, GetNightPrefab, SetNightPrefab)
 DTPROPERTY_ACCESSOR(PrefabSelectWindow, m_rookPrefab, GetRookPrefab, SetRookPrefab)
 DTPROPERTY_ACCESSOR(PrefabSelectWindow, m_bishopPrefab, GetBishopPrefab, SetBishopPrefab)
+DTPROPERTY(PrefabSelectWindow, m_okayButton)
 ENDPROPERTY()
 
 void PrefabSelectWindow::Awake()
@@ -86,12 +89,17 @@ void PrefabSelectWindow::InitializeWindow()
 		selectNight->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 1.0f));
 		selectNight->GetTransform()->SetPosition(Vector3(0.2f, 0.4f, 0.0f));
 		selectNight->AddComponent<Image>();
-		m_nightImg = selectNight->GetComponent<Image>();
+		m_knightImg = selectNight->GetComponent<Image>();
 		selectNight->AddComponent<UIButton>();
 		selectNight->GetComponent<UIButton>()->SetOnClick([this]() 
 				{
 						// 이미 내가 선택되어 있다면? -> 선택 해제
 						m_selectIndex = (m_selectIndex == 1) ? 0 : 1;
+
+						// okaybutton index set 해주기.
+						if (!m_okayButton)
+								m_okayButton->SetSelectIndex(m_selectIndex);
+
 						UpdateButtonVisuals();
 						//printf("[ADDR:%p] Night Selected! Index is now: %d\n", this, m_selectIndex);
 				});
@@ -105,6 +113,8 @@ void PrefabSelectWindow::InitializeWindow()
 		selectRook->GetComponent<UIButton>()->SetOnClick([this]() 
 				{
 						m_selectIndex = (m_selectIndex == 2) ? 0 : 2;
+						if (!m_okayButton)
+								m_okayButton->SetSelectIndex(m_selectIndex);
 						UpdateButtonVisuals();
 						//printf("[ADDR:%p] Rook Selected! Index is now: %d\n", this, m_selectIndex);
 				});
@@ -121,6 +131,8 @@ void PrefabSelectWindow::InitializeWindow()
 		selectBishop->GetComponent<UIButton>()->SetOnClick([this]() 
 				{
 						m_selectIndex = (m_selectIndex == 3) ? 0 : 3;
+						if (!m_okayButton)
+								m_okayButton->SetSelectIndex(m_selectIndex);
 						UpdateButtonVisuals();
 						//std::cout << "Bishop Selected. Index: " << m_selectIndex << std::endl;
 						//printf("[ADDR:%p] Bishop Selected! Index is now: %d\n", this, m_selectIndex);
@@ -134,29 +146,30 @@ void PrefabSelectWindow::InitializeWindow()
 		okayButton->GetTransform()->SetParent(settingWindowBG->GetTransform());
 		okayButton->AddComponent<Image>();
 		okayButton->AddComponent<UIButton>();
-		okayButton->GetComponent<UIButton>()->SetOnClick([this]()
-				{
-						//printf("[DEBUG] Clicked OkayButton. Object Address: %p, SelectIndex: %d\n", this, this->m_selectIndex);
-						// 결국 값이 선택했으니 확인 누르면 창 toggle.
-						switch (this->m_selectIndex)
-						{
-						case 1: this->m_selectPrefab = m_nightPrefab;  break;
-						case 2: this->m_selectPrefab = m_rookPrefab;   break;
-						case 3: this->m_selectPrefab = m_bishopPrefab; break;
-						default: this->m_selectPrefab = nullptr;       break;
-						}
-						// 결과 있는거고 닫기.
-						m_hasResult = true;
-
-						// callback 등록했으면 호출해주기.
-						if (m_onResult)
-						{
-								//std::cout << m_selectIndex << " " << "해당 인덱스 prefab 생성." << std::endl;
-								m_onResult(m_selectPrefab);
-						}
-						
-						Close();
-				});
+		okayButton->AddComponent<SelectOkayEvent>();		// 이제 이벤트 추가해주기.
+		//okayButton->GetComponent<UIButton>()->SetOnClick([this]()
+		//		{
+		//				//printf("[DEBUG] Clicked OkayButton. Object Address: %p, SelectIndex: %d\n", this, this->m_selectIndex);
+		//				// 결국 값이 선택했으니 확인 누르면 창 toggle.
+		//				switch (this->m_selectIndex)
+		//				{
+		//				case 1: this->m_selectPrefab = m_knightPrefab;  break;
+		//				case 2: this->m_selectPrefab = m_rookPrefab;   break;
+		//				case 3: this->m_selectPrefab = m_bishopPrefab; break;
+		//				default: this->m_selectPrefab = nullptr;       break;
+		//				}
+		//				// 결과 있는거고 닫기.
+		//				m_hasResult = true;
+		//
+		//				// callback 등록했으면 호출해주기.
+		//				if (m_onResult)
+		//				{
+		//						//std::cout << m_selectIndex << " " << "해당 인덱스 prefab 생성." << std::endl;
+		//						m_onResult(m_selectPrefab);
+		//				}
+		//				
+		//				Close();
+		//		});
 
 		//// exitButton 생성 일단 없음.
 		//GameObject* exitButton = scene->CreateGameObject("ExitButton");
@@ -178,8 +191,8 @@ void PrefabSelectWindow::InitializeWindow()
 void PrefabSelectWindow::LoadPrefab()
 {
 		// prefab 위치 고정이라서 수정해야함.
-		m_rookPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/Cube.prefab");
-		m_nightPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/Dwarf.prefab");
+		m_rookPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/Rabbit_MK_1.prefab");
+		m_knightPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/Dwarf.prefab");
 		m_bishopPrefab = ResourceManager::Instance().Load<Prefab>("Prefab/MasterChief_v3.prefab");
 
 		//if (!m_rookPrefab)   printf("[Error] Rook Prefab Load Failed! Path: Prefab/Cube.prefab\n");
@@ -200,10 +213,10 @@ bool PrefabSelectWindow::TryConsumeResult(Prefab*& out)
 void PrefabSelectWindow::UpdateButtonVisuals() 
 {
 		// 없으면 update 안함.
-		if (!m_nightImg || !m_rookImg || !m_bishopImg) return;
+		if (!m_knightImg || !m_rookImg || !m_bishopImg) return;
 
 		// 버튼 컴포넌트들을 가져옵니다. 
-		auto nightBtn = m_nightImg->GetComponent<UIButton>();
+		auto nightBtn = m_knightImg->GetComponent<UIButton>();
 		auto rookBtn = m_rookImg->GetComponent<UIButton>();
 		auto bishopBtn = m_bishopImg->GetComponent<UIButton>();
 
