@@ -4,15 +4,14 @@
 #include "SkeletalRsource.h"
 #include "Model.h"
 
-
+#include <iomanip>
 
 BEGINPROPERTY(Rigid)
 DTPROPERTY_SETTER(Rigid, m_modelID, SetModel)
 
 ENDPROPERTY()
 
-
-void Rigid::Update(float dTime)
+void Rigid::LateUpdate(float dTime)
 {
     if (!m_resource) return;
 
@@ -21,14 +20,14 @@ void Rigid::Update(float dTime)
     {
         auto& nodeData = m_resource->Nodes[i];
         Matrix localMat = m_animatedLocalMatrices[i];
+        //Matrix localMat  = nodeData.DefaultLocalMatrix;
 
         if (nodeData.ParentIndex != -1)
             m_globalTransforms[i] = localMat * m_globalTransforms[nodeData.ParentIndex];
         else
             m_globalTransforms[i] = localMat;
 
-        // Rigid는 OffsetMatrix가 없으므로 Global이 곧 최종 행렬
-        m_finalTransforms[i] = m_globalTransforms[i];
+        m_finalTransforms[i] = nodeData.OffsetMatrix* m_globalTransforms[i];
     }
 }
 
@@ -48,6 +47,8 @@ void Rigid::SetModel(uint64_t id)
 
     if (pNodeRes != nullptr)
     {
+        m_resource = nullptr;
+
         m_resource = pNodeRes;
 
         size_t count = m_resource->Nodes.size();

@@ -35,8 +35,9 @@ struct NodeData
     int ID;
     int ParentIndex;
 
-    Matrix DefaultLocalMatrix;
-    Matrix DefaultGlobalMatrix;
+    Matrix DefaultLocalMatrix{};
+    Matrix DefaultGlobalMatrix{};
+    Matrix OffsetMatrix{}; 
 };
 
 struct NodeResource
