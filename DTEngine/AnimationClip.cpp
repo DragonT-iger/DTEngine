@@ -8,8 +8,10 @@
 #include "SimpleMathHelper.h"
 
 
+
 bool AnimationClip::LoadFile(const std::string& fullPath)
 {
+
     Assimp::Importer importer;
 
     importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS,
@@ -30,7 +32,12 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
     if (!scene || !scene->mAnimations || scene->mNumAnimations == 0)
         return false;
 
+
+
     const aiAnimation* anim = scene->mAnimations[0];
+
+
+
 
     Name = anim->mName.C_Str();
     Duration = anim->mDuration; // ticks 단위

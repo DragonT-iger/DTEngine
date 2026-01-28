@@ -31,6 +31,7 @@
 
 #include "Text.h"
 #include "Effect.h"
+#include "Rigid.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -872,8 +873,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
             if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
             {
                 DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
-                
             }
+
+            if (Rigid* rg = val.obj->GetComponent<Rigid>(); rg != nullptr)
+            {
+                DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
+            }
+
             
 
             if (currentPipelineKey != lastPipelineKey)
@@ -900,46 +906,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
     
 
-    //if (renderUI) {
-    //    DX11Renderer::Instance().BeginUIRender(width, height);
-
-    //    for (auto* go : uiQueue)
-    //    {
-    //        Image* img = go->GetComponent<Image>();
-    //        if (img)
-    //        {
-    //            Texture* tex = img->GetTexture();
-    //            if (tex)
-    //            {
-    //                Effect* eff = go->GetComponent<Effect>();
-    //                if (eff) eff->BindEP();
-
-    //                Transform* tf = go->GetTransform();
-
-    //                Vector3 pos = tf->GetWorldPosition();
-    //                Vector3 scale = tf->GetWorldScale();
-
-    //                DX11Renderer::Instance().DrawUI(
-    //                    tex,
-    //                    Vector2(pos.x, pos.y),
-    //                    Vector2(scale.x, scale.y),
-    //                    img->GetColor()
-    //                );
-    //            }
-    //        }
-    //    }
-
-
-    //    for (const auto& go : GetGameObjects())
-    //    {
-    //        auto cmp = go->GetComponent<Text>();
-
-    //        if (cmp) cmp->Render();
-    //    }
-
-
-    //    DX11Renderer::Instance().EndUIRender();
-    //}
+  
 }
 
 void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
@@ -999,6 +966,8 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
     DX11Renderer::Instance().EndUIRender();
 }
 
+//DepthStencil Flag; 
+//Stencil 중복 
 void Scene::RenderShadows()
 {
     ShadowMap* shadow = nullptr;

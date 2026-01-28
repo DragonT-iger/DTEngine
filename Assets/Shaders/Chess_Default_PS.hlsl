@@ -8,34 +8,19 @@ struct PS_INPUT
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
-    
 };
 
 SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-        
-    // [1] 데이터 초기화 및 기본값 설정
     float3 N = normalize(input.WorldNormal);
-    float3 V;
-    
-    if (IsOrtho > 0.5f) // 0일때 ortho
-    {
-        V = -normalize(CameraDir); // 엔진에서 - 안해줘도 됨 어짜피 어셈블리 열어보면 자동으로 mad 처리 됨
-    }
-    else
-    {
-        V = normalize(CameraPos - input.WorldPos);
-    }
+    float3 V = (IsOrtho > 0.5f) ? -normalize(CameraDir) : normalize(CameraPos - input.WorldPos);
     
     float3 albedo = float3(1.0f, 1.0f, 1.0f);
     float metal = 0.0f;
     float rough = 1.0f;
     float ao = 1.0f;
-    
-     
-    
 
     if (USE_NORMAL)
     {
@@ -44,7 +29,7 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     if (USE_METAL)
-        metal = g_MetalMap.Sample(g_Sampler, input.UV).r ;
+        metal = g_MetalMap.Sample(g_Sampler, input.UV).r;
     if (USE_ROUGH)
         rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
     if (USE_AO)
@@ -57,9 +42,11 @@ float4 PS(PS_INPUT input) : SV_Target
     }
 
     float3 directLighting = float3(0, 0, 0);
+    float shadowFactor = CalculateShadow(input.WorldPos, Shadow_Bias);
     
-    float shadowFactor = CalculateShadow(input.WorldPos ,Shadow_Bias);
-
+    
+    float Temp = 1;
+    
     for (int i = 0; i < ActiveCount; ++i)
     {
         float3 L;
@@ -84,8 +71,8 @@ float4 PS(PS_INPUT input) : SV_Target
         }
 
         // 첫 번째 조명에만 그림자 적용 (Shadow Factor)
-        float currentShadow = (i == 0) ? shadowFactor : 1.0f;
-
+        float currentShadow = (i == 0) ? Temp = shadowFactor * 0.6f : 1.0f;
+        
         // DisneyPBR (Shared 함수) 호출하여 누적
         // 최종 광원 세기에 감쇠와 그림자 인자를 통합하여 전달
         directLighting += DisneyPBR(
@@ -97,27 +84,20 @@ float4 PS(PS_INPUT input) : SV_Target
             metal,
             L,
             Lights[i].ColorIntensity.rgb,
-            Lights[i].ColorIntensity.w * attenuation * currentShadow
+            Lights[i].ColorIntensity.w * attenuation // * currentShadow
         );
-    }
-
-    // [4] 간접광(IBL) 계산 - Shared 함수 활용
-    float3 ambientLighting = float3(0, 0, 0);
-    if (USE_IBL)
-    {
-        float3 R = reflect(-V, N);
-        float mipLevel = rough * 7.0f; // Roughness 기반 밉맵 샘플링
         
-        // Specular 및 Diffuse 환경광 샘플링
-        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
-        float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
+        
+        directLighting *= currentShadow;
 
-        // 물리 연산은 Shared 함수 호출 (데이터만 전달)
-        ambientLighting = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
-
-    // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting * 0.5f;
     
-    return float4(finalColor, 1.0f);
+   // directLighting *= Shadow_Scale;
+        
+    float3 ambientLighting = albedo * 0.7f;
+    
+    float3 finalColor = directLighting + ambientLighting;
+    
+    float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;
+    return float4(finalColor, alpha);
 }

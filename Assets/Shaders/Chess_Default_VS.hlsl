@@ -1,6 +1,5 @@
 #include "Resource.hlsli"
 
-
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
@@ -9,17 +8,13 @@ struct VS_OUTPUT
     float3 WorldNormal : NORMAL;
     float4 Tangent : TANGENT;
     float3 Bitangent : BITANGENT;
-    
 };
 
-
-
-
-VS_OUTPUT VS(VS_INPUT input)
+VS_OUTPUT VS (VS_INPUT input)
 {
+    
     VS_OUTPUT output;
-
-
+    
     float4x4 skinMatrix = float4x4(
     0, 0, 0, 0,
     0, 0, 0, 0,
@@ -27,10 +22,10 @@ VS_OUTPUT VS(VS_INPUT input)
     0, 0, 0, 0
 );
     
-    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.x] * input.Weights.x;
-    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.y] * input.Weights.y;
-    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.z] * input.Weights.z;
-    skinMatrix +=  Matrix_Pallette_Array[input.BoneID.w] * input.Weights.w;
+    skinMatrix += Matrix_Pallette_Array[input.BoneID.x] * input.Weights.x;
+    skinMatrix += Matrix_Pallette_Array[input.BoneID.y] * input.Weights.y;
+    skinMatrix += Matrix_Pallette_Array[input.BoneID.z] * input.Weights.z;
+    skinMatrix += Matrix_Pallette_Array[input.BoneID.w] * input.Weights.w;
 
    
     float4 modelPos = mul(float4(input.Pos, 1.0f), skinMatrix);
@@ -54,6 +49,6 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Bitangent = normalize(mul(skinbitangent, (float3x3) WorldInverseTranspose_TM));
     
     output.UV = input.UV;
-
+    
     return output;
 }

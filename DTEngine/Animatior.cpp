@@ -16,22 +16,22 @@ DTPROPERTY_SETTER(Animator, Animated_Time, SetTime)
 
 ENDPROPERTY()
 
-static void DumpMatrix(const char* label, const Matrix& m)
-{
-    std::cout << label << "\n";
-    std::cout << std::fixed << std::setprecision(4);
-    std::cout << m._11 << " " << m._12 << " " << m._13 << " " << m._14 << "\n";
-    std::cout << m._21 << " " << m._22 << " " << m._23 << " " << m._24 << "\n";
-    std::cout << m._31 << " " << m._32 << " " << m._33 << " " << m._34 << "\n";
-    std::cout << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << "\n";
-}
+//
+//  
+//
+//
+//
+// 1 cycle animation -> flag;  ->  
+//
+// 
+// 
+// 
+//
+// 
+//
+//
 
-static void DumpTRS(const Vector3& S, const Quaternion& R, const Vector3& T)
-{
-    std::cout << "  S = (" << S.x << ", " << S.y << ", " << S.z << ")\n";
-    std::cout << "  R = (" << R.x << ", " << R.y << ", " << R.z << ", " << R.w << ")\n";
-    std::cout << "  T = (" << T.x << ", " << T.y << ", " << T.z << ")\n";
-}
+
 
 void Animator::Update(float deltaTime)
 {
@@ -67,22 +67,6 @@ void Animator::Update(float deltaTime)
         else m_TargetSkeletal->SetBonePose(targetIdx, localMat);
 
 
-        //std::cout << "\n==== Anim Debug ====\n";
-        //std::cout << "ChannelIdx = " << i << "\n";
-        //std::cout << "ChannelName = " << channel.BoneName << "\n";
-        //std::cout << "TargetBoneIdx = " << targetIdx << "\n";
-
-        //DumpMatrix("BindLocalMatrix",
-        //    m_IsRigidMode
-        //    ? m_TargetRigid->GetNodeResource()->Nodes[targetIdx].DefaultLocalMatrix
-        //    : m_TargetSkeletal->GetBoneResource()->m_Bones[targetIdx].DefaultLocalMatrix
-        //);
-
-        //DumpTRS(bindS, bindR, bindT);
-        //DumpTRS(S, R, T);
-
-        //DumpMatrix("AnimatedLocalMatrix", localMat);
-
     }
 }
 
@@ -107,7 +91,6 @@ void Animator::SetClip(uint64_t id)
     if (!pModel) return;
 
     m_IsRigidMode = (pModel->GetNodeResource() != nullptr);
-    m_IsRigidMode = false;
 
     if (m_AniID != 0)
     {
@@ -140,21 +123,9 @@ void Animator::SetClip(uint64_t id)
         {
             BoneResource* boneRes = pModel->GetBone();
             if (!boneRes) return;
-            
-       /*     for (const auto& val : m_CurrentClip->Channels)
-            {
-                std::cout <<"Name: " << val.BoneName << std::endl;
-            }
-
-            for (const auto& val : boneRes->m_Bones)
-            {
-                std::cout << "Name: " << val.name << std::endl;
-            }*/
-
-
+           
             for (const auto& channel : m_CurrentClip->Channels)
             {
-                std::string pureChannelName = GetPureName(channel.BoneName);
                 std::string channelName = channel.BoneName;
                 int foundIdx = -1;
 
