@@ -302,9 +302,6 @@
     <ClInclude Include="Prefab.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="UISliderHandle.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="SkeletalRsource.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -383,22 +380,10 @@
     <ClInclude Include="MonoSingleton.h">
       <Filter>Component\ComponentBase</Filter>
     </ClInclude>
-    <ClInclude Include="OwnerSetActive.h">
-      <Filter>Component\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PrefabSelectWindow.h">
-      <Filter>Component\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingsWindow.h">
-      <Filter>Component\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIManager.h">
-      <Filter>Component\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Rigid.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="RuleSelectWindow.h">
+    <ClInclude Include="UISliderHandle.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -562,9 +547,6 @@
     <ClCompile Include="Prefab.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="UISliderHandle.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="FSMController.cpp">
       <Filter>FSM</Filter>
     </ClCompile>
@@ -634,22 +616,10 @@
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
-    <ClCompile Include="OwnerSetActive.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PrefabSelectWindow.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingsWindow.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="RuleSelectWindow.cpp">
+    <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
   </ItemGroup>

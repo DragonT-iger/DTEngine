@@ -78,10 +78,28 @@
     <ClCompile Include="BattleGrid.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
-    <ClCompile Include="SelectOkayEvent.cpp">
+    <ClCompile Include="SelectIndexEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
-    <ClCompile Include="RuleSelectOkayEvenet.cpp">
+    <ClCompile Include="ImageVisualUpdateEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastHitEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenPSEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickPSOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenRSEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickRSOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="RuleImageVisualEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,10 +152,28 @@
     <ClInclude Include="BattleGrid.h">
       <Filter>Battle</Filter>
     </ClInclude>
-    <ClInclude Include="SelectOkayEvent.h">
+    <ClInclude Include="SelectIndexEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
-    <ClInclude Include="RuleSelectOkayEvenet.h">
+    <ClInclude Include="ImageVisualUpdateEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastHitEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenPSEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickPSOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenRSEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickRSOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="RuleImageVisualEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>

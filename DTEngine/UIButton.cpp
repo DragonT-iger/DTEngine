@@ -5,7 +5,6 @@
 #include "SceneManager.h"
 #include "DX11Renderer.h"
 #include "InputManager.h"
-#include "OwnerSetActive.h"
 
 BEGINPROPERTY(UIButton)
 DTPROPERTY_ACCESSOR(UIButton, m_interactable, GetInteractable, SetInteractable)

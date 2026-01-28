@@ -14,7 +14,6 @@ class Transform;
 class RenderTexture;
 class Camera;
 class Texture;
-class UIManager;
 
 
 
@@ -63,9 +62,6 @@ private:
 	  void DrawAssetInspector(const std::string& path);
 
     void CreatePrimitive(const std::string& name, const std::string& assetPath);
-    UIManager* GetCachedUIManager(Scene* scene);    // uimanager 캐시해서 재사용하기 위해서.
-    UIManager* m_cachedUIManager = nullptr;
-    Scene* m_cachedUIManagerScene = nullptr;
 
     std::any m_dragStartValue;
     bool m_isGizmoUsing = false;

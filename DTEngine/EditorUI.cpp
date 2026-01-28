@@ -52,7 +52,6 @@
 #include "SkyBoxComponent.h"
 #include "DX11Renderer.h"
 #include "Effect.h"
-#include "UIManager.h"
 
 namespace fs = std::filesystem;
 
@@ -2433,25 +2432,6 @@ void EditorUI::CreatePrimitive(const std::string& name, const std::string& asset
     m_selectedGameObject = newGO;
 }
 
-UIManager* EditorUI::GetCachedUIManager(Scene* scene)
-{
-    // 씬이 바뀌었거나 아직 캐시가 없다면 다시 찾는다.
-    if (!scene || scene != m_cachedUIManagerScene || !m_cachedUIManager)
-    {
-        m_cachedUIManagerScene = scene;
-        m_cachedUIManager = nullptr;
-
-        // 이름은 씬에서 UIManager가 붙어있는 GameObject 이름에 맞춰야 한다.
-        GameObject* uiManagerObj = scene ? scene->FindGameObject("UIManager") : nullptr;
-        if (uiManagerObj)
-        {
-            m_cachedUIManager = uiManagerObj->GetComponent<UIManager>();
-        }
-    }
-
-    return m_cachedUIManager;
-}
-
 
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
 {
@@ -2589,7 +2569,6 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
     // 이미지 위에서 좌클릭 했을 때만 + 기즈모 조작 중이 아닐 때만
     const bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-    // 여기 조건 추가해줘서 rect 범위 안이면 체크 안하는걸로. 
     if (activeScene && isHovered && clicked && !ImGuizmo::IsUsing() && !ImGuizmo::IsOver())
     {
         Camera* camera = activeScene->GetMainCamera();
@@ -2614,26 +2593,26 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
             GameObject* hit = nullptr;
             float hitT = 0.0f;
 
-            if (activeScene->Raycast2(ray, hit, hitT))
-            {
-                //std::cout << hit->GetName() << std::endl;
-                if (hit->GetName() == "Cube")
-                {
-                    m_selectedGameObject = hit;
-                    //std::cout << "cube selected" << std::endl;
-                }
-                
-                std::cout << hit->GetComponent<Transform>()->GetPosition().x << " " << hit->GetComponent<Transform>()->GetPosition().y << " " << hit->GetComponent<Transform>()->GetPosition().z << std::endl;
-                if (UIManager* uiManager = GetCachedUIManager(activeScene))
-                {
-                    uiManager->HandleEditorHit(hit);
-                }
-            }
-            else
-            {
-                //std::cout << "일단 뭔가 되고는 있음" << std::endl;
-                m_selectedGameObject = nullptr;
-            }
+            //if (activeScene->Raycast2(ray, hit, hitT))
+            //{
+            //    //std::cout << hit->GetName() << std::endl;
+            //    if (hit->GetName() == "Cube")
+            //    {
+            //        m_selectedGameObject = hit;
+            //        //std::cout << "cube selected" << std::endl;
+            //    }
+            //    
+            //    std::cout << hit->GetComponent<Transform>()->GetPosition().x << " " << hit->GetComponent<Transform>()->GetPosition().y << " " << hit->GetComponent<Transform>()->GetPosition().z << std::endl;
+            //    if (UIManager* uiManager = GetCachedUIManager(activeScene))
+            //    {
+            //        uiManager->HandleEditorHit(hit);
+            //    }
+            //}
+            //else
+            //{
+            //    //std::cout << "일단 뭔가 되고는 있음" << std::endl;
+            //    m_selectedGameObject = nullptr;
+            //}
         }
     }
     // 

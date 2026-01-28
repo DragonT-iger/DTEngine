@@ -196,9 +196,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="GrayScaleEffect.h" />
     <ClInclude Include="HistoryManager.h" />
     <ClInclude Include="MonoSingleton.h" />
-    <ClInclude Include="OwnerSetActive.h" />
     <ClInclude Include="Rigid.h" />
-    <ClInclude Include="RuleSelectWindow.h" />
     <ClInclude Include="SkyBoxComponent.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IDManager.h" />
@@ -221,7 +219,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="pch.h" />
     <ClInclude Include="PostProcessManager.h" />
     <ClInclude Include="Prefab.h" />
-    <ClInclude Include="PrefabSelectWindow.h" />
     <ClInclude Include="RectTransform.h" />
     <ClInclude Include="ReflectionDatabase.h" />
     <ClInclude Include="ReflectionMacros.h" />
@@ -236,7 +233,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SerializationUtils.h" />
-    <ClInclude Include="SettingsWindow.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SimpleMathHelper.h" />
@@ -254,7 +250,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIButton.h" />
-    <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
     <ClInclude Include="UISliderHandle.h" />
     <ClInclude Include="Vertex.h" />
@@ -293,9 +288,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GrayScaleEffect.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
-    <ClCompile Include="OwnerSetActive.cpp" />
     <ClCompile Include="Rigid.cpp" />
-    <ClCompile Include="RuleSelectWindow.cpp" />
     <ClCompile Include="SkyBoxComponent.cpp" />
     <ClCompile Include="IDManager.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -318,7 +311,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     </ClCompile>
     <ClCompile Include="PostProcessManager.cpp" />
     <ClCompile Include="Prefab.cpp" />
-    <ClCompile Include="PrefabSelectWindow.cpp" />
     <ClCompile Include="RectTransform.cpp" />
     <ClCompile Include="ReflectionDatabase.cpp" />
     <ClCompile Include="ReflectionProbe.cpp" />
@@ -330,7 +322,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SerializationUtils.cpp" />
-    <ClCompile Include="SettingsWindow.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Skeletal.cpp" />
@@ -343,7 +334,6 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="TilemapGenerator.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
     <ClCompile Include="UISliderHandle.cpp" />
     <ClCompile Include="Vertex.cpp" />

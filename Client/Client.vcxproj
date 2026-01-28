@@ -134,6 +134,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
+    <ClCompile Include="ClickPSOkayEvent.cpp" />
+    <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
     <ClCompile Include="BattleGrid.cpp" />
@@ -142,11 +144,15 @@
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OpenPSEvent.cpp" />
+    <ClCompile Include="OpenRSEvent.cpp" />
+    <ClCompile Include="RayCastHitEvent.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
-    <ClCompile Include="RuleSelectOkayEvenet.cpp" />
-    <ClCompile Include="SelectOkayEvent.cpp" />
+    <ClCompile Include="RuleImageVisualEvent.cpp" />
+    <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
@@ -159,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
+    <ClInclude Include="ClickPSOkayEvent.h" />
+    <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />
     <ClInclude Include="BattleGrid.h" />
@@ -168,10 +176,14 @@
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="ImageVisualUpdateEvent.h" />
+    <ClInclude Include="OpenPSEvent.h" />
+    <ClInclude Include="OpenRSEvent.h" />
+    <ClInclude Include="RayCastHitEvent.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
-    <ClInclude Include="RuleSelectOkayEvenet.h" />
-    <ClInclude Include="SelectOkayEvent.h" />
+    <ClInclude Include="RuleImageVisualEvent.h" />
+    <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />
