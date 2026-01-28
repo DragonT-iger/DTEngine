@@ -4,19 +4,23 @@
 #include "SkeletalRsource.h"
 #include "Model.h"
 
-
+#include <iomanip>
 
 BEGINPROPERTY(Rigid)
 DTPROPERTY_SETTER(Rigid, m_modelID, SetModel)
 
 ENDPROPERTY()
 
-
-void Rigid::Update(float dTime)
+void Rigid::LateUpdate(float dTime)
 {
     if (!m_resource) return;
 
+
     size_t nodeCount = m_resource->Nodes.size();
+
+   // std::cout << nodeCount << std::endl;
+    //std::cout << this->_GetOwner()->GetName()<< std::endl;
+
     for (size_t i = 0; i < nodeCount; ++i)
     {
         auto& nodeData = m_resource->Nodes[i];
@@ -27,8 +31,7 @@ void Rigid::Update(float dTime)
         else
             m_globalTransforms[i] = localMat;
 
-        // Rigid는 OffsetMatrix가 없으므로 Global이 곧 최종 행렬
-        m_finalTransforms[i] = m_globalTransforms[i];
+        m_finalTransforms[i] = nodeData.OffsetMatrix* m_globalTransforms[i];
     }
 }
 
@@ -48,6 +51,8 @@ void Rigid::SetModel(uint64_t id)
 
     if (pNodeRes != nullptr)
     {
+        m_resource = nullptr;
+
         m_resource = pNodeRes;
 
         size_t count = m_resource->Nodes.size();

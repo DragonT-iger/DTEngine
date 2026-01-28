@@ -374,6 +374,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\BloomCombine_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\BloomExtract_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\BloomExtract_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />

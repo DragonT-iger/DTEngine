@@ -31,7 +31,6 @@ bool HasBones(const aiScene* scene)
 
 Model::Model() {
     m_impl = std::make_unique<BoneResource>();
-    m_nr = std::make_unique<NodeResource>();
 }
 
 Model::~Model()
@@ -66,10 +65,10 @@ bool Model::LoadFile(const std::string& fullPath)
         return false;
 
 
-    if (scene->HasAnimations())
+  /*  if (scene->HasAnimations())
     {
         LoadAnimation(fullPath);
-    }
+    }*/
 
    
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
@@ -87,11 +86,9 @@ bool Model::LoadFile(const std::string& fullPath)
     }
 
 
-    //애니는 있는데, bone이 없는 경우 
-    if (scene->HasAnimations() && !isRigged)
+    else
     {
         ProcessNodeMap(scene);
-      
     }
 
 
@@ -318,8 +315,8 @@ void Model::CreateSkeleton(const aiNode* node, int parentIndex)
 
 void Model::ProcessNodeMap(const aiScene* scene)
 {
-    printf("[ProcessNodeMap] Model=%p\n", this);
 
+    if(!m_nr) m_nr = std::make_unique<NodeResource>();
 
     m_nr->Nodes.clear();
     m_nr->NodeMapping.clear();
@@ -346,6 +343,9 @@ void Model::CreateNode(const aiNode* node, int parentIndex)
     {
         newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix;
     }
+
+
+    newNode.OffsetMatrix = newNode.DefaultGlobalMatrix.Invert();
 
     m_nr->Nodes.push_back(newNode);
     m_nr->NodeMapping[nodeName] = newNode.ID;

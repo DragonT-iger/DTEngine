@@ -616,6 +616,9 @@
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
+    <ClCompile Include="OwnerSetActive.cpp">
+      <Filter>Component\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -770,6 +773,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\BloomExtract_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
