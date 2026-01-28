@@ -899,6 +899,9 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
     }
 
+
+
+
   /*  for (auto* go : transparentQueue)
     {
         DrawObject(go);
@@ -970,6 +973,7 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
 //Stencil 중복 
 void Scene::RenderShadows()
 {
+
     ShadowMap* shadow = nullptr;
     for (const auto& go : m_gameObjects)
     {
@@ -1013,6 +1017,16 @@ void Scene::RenderShadows()
 
         Transform* transform = go->GetTransform();
         mat->Bind(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
+
+        if (Skeletal* sk = go->GetComponent<Skeletal>(); sk != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+        }
+
+        if (Rigid* rg = go->GetComponent<Rigid>(); rg != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
+        }
 
 
 

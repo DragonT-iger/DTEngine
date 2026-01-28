@@ -16,29 +16,30 @@ DTPROPERTY_SETTER(Animator, Animated_Time, SetTime)
 
 ENDPROPERTY()
 
-//
-//  
-//
-//
-//
-// 1 cycle animation -> flag;  ->  
-//
-// 
-// 
-// 
-//
-// 
-//
-//
-
-
-
 void Animator::Update(float deltaTime)
 {
     if (!m_CurrentClip || !Play) return;
 
     float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond * Animated_Time;
     m_CurrentTime = fmod(m_CurrentTime + timeIncrement, m_CurrentClip->Duration);
+
+    m_CurrentTime += timeIncrement;
+
+    if (m_CurrentTime >= m_CurrentClip->Duration) {
+        if (Loop) 
+        {
+            m_CurrentTime = fmod(m_CurrentTime, m_CurrentClip->Duration);
+        }
+        else {
+            m_CurrentTime = m_CurrentClip->Duration; 
+
+            Play = false; 
+            m_Done = true;
+
+            return;
+        }
+    }
+
 
     for (size_t i = 0; i < m_CurrentClip->Channels.size(); ++i)
     {
@@ -68,6 +69,9 @@ void Animator::Update(float deltaTime)
 
 
     }
+
+    //std::cout << "OBJ NAME" << this->_GetOwner()->GetName() << deltaTime << std::endl;
+
 }
 
 void Animator::SetClip(uint64_t id)

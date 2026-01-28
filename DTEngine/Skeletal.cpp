@@ -47,8 +47,6 @@ void Skeletal::LateUpdate(float dTime)
         BoneNode& resNode = m_BoneResource->m_Bones[i];
         Matrix localMat = m_AnimatedLocalMatrices[i];
 
-        //std::cout << resNode.name << std::endl;
-
         Matrix parentG;
         bool hasParent = (resNode.ParentIndex != -1);
 

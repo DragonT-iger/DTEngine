@@ -376,6 +376,7 @@ void DX11Renderer::BeginShadowPass(const Vector3& lightPos, const Vector3& light
     ID3D11RenderTargetView* nullRTV = nullptr;
     m_context->OMSetRenderTargets(0, &nullRTV, m_shadowDSV.Get());
     m_context->ClearDepthStencilView(m_shadowDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+  //  m_context-
 
     m_context->RSSetViewports(1, reinterpret_cast<const D3D11_VIEWPORT*>(&m_shadowViewport));
 
@@ -769,6 +770,17 @@ void DX11Renderer::Destroy()
     m_hwnd = nullptr;
 }
 
+void DX11Renderer::CBFlush()
+{
+    ID3D11Buffer* nullBuffers[8] = { nullptr, };
+
+    // VS와 PS의 1번 슬롯부터 8개 슬롯을 모두 해제
+    m_context->VSSetConstantBuffers(1, 8, nullBuffers);
+    m_context->PSSetConstantBuffers(1, 8, nullBuffers);
+  
+
+}
+
 void DX11Renderer::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
 	//assert(rtv != nullptr && "RTV cannot be null");
@@ -840,11 +852,6 @@ void DX11Renderer::BindShader(Shader* shader)
 void DX11Renderer::BindTexture(int slot, ID3D11ShaderResourceView* srv)
 {
     if (slot < 0 || slot >= 16) return;
-
-  /*  if (m_currentSRVs[slot] == srv)
-    {
-        return;
-    }*/
 
     m_context->PSSetShaderResources(slot, 1, &srv);
     m_currentSRVs[slot] = srv; 

@@ -14,6 +14,8 @@ SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
+    
+    
     float3 N = normalize(input.WorldNormal);
     float3 V = (IsOrtho > 0.5f) ? -normalize(CameraDir) : normalize(CameraPos - input.WorldPos);
     
@@ -99,5 +101,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 finalColor = directLighting + ambientLighting;
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;
+    
+        
     return float4(finalColor, alpha);
 }

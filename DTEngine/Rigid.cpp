@@ -15,12 +15,16 @@ void Rigid::LateUpdate(float dTime)
 {
     if (!m_resource) return;
 
+
     size_t nodeCount = m_resource->Nodes.size();
+
+   // std::cout << nodeCount << std::endl;
+    //std::cout << this->_GetOwner()->GetName()<< std::endl;
+
     for (size_t i = 0; i < nodeCount; ++i)
     {
         auto& nodeData = m_resource->Nodes[i];
         Matrix localMat = m_animatedLocalMatrices[i];
-        //Matrix localMat  = nodeData.DefaultLocalMatrix;
 
         if (nodeData.ParentIndex != -1)
             m_globalTransforms[i] = localMat * m_globalTransforms[nodeData.ParentIndex];
