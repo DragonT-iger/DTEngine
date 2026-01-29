@@ -118,8 +118,8 @@ bool Game::Initialize()
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
-	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	//SceneManager::Instance().LoadScene("SampleScene");
+	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	SceneManager::Instance().LoadScene("SampleScene");
 
 	/* SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	 SceneManager::Instance().LoadScene("DTtestScene");*/
@@ -127,8 +127,8 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
-	 SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	 SceneManager::Instance().LoadScene("SampleSceneBum");
+	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
 	SceneManager::Instance().ProcessSceneChange();
