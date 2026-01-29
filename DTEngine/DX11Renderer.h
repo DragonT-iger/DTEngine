@@ -165,6 +165,9 @@ public:
 
     PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
 
+
+
+
 private:
     bool CreateDeviceAndSwapchain();
     void CreateBackbuffers(int width, int height);
