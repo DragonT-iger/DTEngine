@@ -22,8 +22,8 @@ void ClickRSOkayEvent::Start()
         int mIdx = bgEvent->GetMoveIndex();
         int aIdx = bgEvent->GetBattleIndex();
 
-        // 둘 다 0 초과 4 미만일 때만 적용
-        if (mIdx > 0 && mIdx < 4 && aIdx > 0 && aIdx < 4) 
+        // 둘 다 0 이랑 같거나 3 미만일 때만 적용
+        if (mIdx >= 0 && mIdx < 3 && aIdx >= 0 && aIdx < 3)
         {
             auto unit = bgEvent->GetTargetUnit();
             if (unit) 

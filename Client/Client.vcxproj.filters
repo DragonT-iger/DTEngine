@@ -108,6 +108,15 @@
     <ClCompile Include="CombatTestRunner.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="ClickStartButton.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitButtonEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitActionEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -187,6 +196,15 @@
     </ClInclude>
     <ClInclude Include="CombatTestRunner.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickStartButton.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitButtonEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitActionEvent.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,8 +20,8 @@ public:
 
 private:
     bool m_isBoss = false;      // 보스라면
-    float m_BossScale = 2.0f;   // 스텟 뻥튀기 
-
+    float m_BossScale = 1.1f;   // 스텟 뻥튀기 
+    
     int m_pathIndex = 0; // 현재 목표 인덱스.
 
     // 경로 등록용.

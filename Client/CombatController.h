@@ -49,10 +49,10 @@ public:
 	bool ReadyPhase();
 	bool ReadyToMovePhase();
 	bool ReadyForBattlePhase();
-	bool MoveAndBattlePhase();
+	bool MoveAndBattlePhase(float dTime);
 	bool EndPhase();
 
-	void Process();
+	void Process(float dTime);
 
 	// 준비준비 단계
 	bool CanActuallyAttack(const Unit* me, const Unit* target) const; // 실질적인 공격이 가능한지.
@@ -91,9 +91,12 @@ public:
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
 	void SetEnemyUnit2(EnemyUnit* enemyUnit) { enemyUnit2 = enemyUnit; }
 
+
+	void PrintFrame();
 private:
 	Phase m_currPhase = Phase::Ready;
 	StageResult m_stageResult = StageResult::InProgress;
+	bool m_isStageStart = false;	// 
 	bool m_phaseEntered = false; // 페이즈 처음 들어온거 확인용.
 	bool m_stageEnd = false; // 스테이지 끝났는지 확인용.
 

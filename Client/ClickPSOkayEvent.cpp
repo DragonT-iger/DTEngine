@@ -7,7 +7,8 @@
 #include "OpenPSEvent.h"
 #include "OpenRSEvent.h"
 #include "TilemapData.h"
-
+#include "AllyUnit.h"
+#include "CombatController.h"
 
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -16,6 +17,7 @@ DTPROPERTY(ClickPSOkayEvent, m_knight)
 DTPROPERTY(ClickPSOkayEvent, m_rook)
 DTPROPERTY(ClickPSOkayEvent, m_bishop)
 DTPROPERTY(ClickPSOkayEvent, m_RSWindow)
+DTPROPERTY(ClickPSOkayEvent, m_combatObj)
 ENDPROPERTY()
 
 void ClickPSOkayEvent::Start()
@@ -39,14 +41,13 @@ void ClickPSOkayEvent::SetClick()
 						GameObject* parentObj = _GetOwner()->GetTransform()->GetParent()->_GetOwner();
 
 						int idx = parentObj->GetComponent<SelectIndexEvent>()->GetIndex();
-						std::cout << "idx = " << idx << std::endl;
 						switch (idx)
 						{
 						case 1:
-								m_selectPrefab = m_knight;
+								m_selectPrefab = m_rook;
 								break;
 						case 2:
-								m_selectPrefab = m_rook;
+								m_selectPrefab = m_knight;
 								break;
 						case 3:
 								m_selectPrefab = m_bishop;
@@ -65,18 +66,44 @@ void ClickPSOkayEvent::SetClick()
 						}
 						
 						Transform* targetTf = parentObj->GetComponent<OpenPSEvent>()->GetRayObjTransform();
-						if (!targetTf) 
-						{
-								std::cout << "[Error] Ray Target Transform is Null!" << std::endl;
-								return;
-						}
-					
-						Vector3 worldPos = targetTf->GetWorldPosition();
+						Vector3 worldPos = targetTf->GetPosition();
 						worldPos.y += 1;
 						GameObject* go = m_selectPrefab->Instantiate();
-						go->GetTransform()->SetPosition(worldPos);
-						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 125.0f, 0.0f));
+						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 90.0f, 0.0f));
 						
+						go->GetTransform()->SetPosition(worldPos);
+						std::cout << worldPos.x << " " << worldPos.y << std::endl;
+
+						// allyunit 컴포넌트 가져와서 setpos 추가해주기.
+						auto allyC = go->GetComponent<AllyUnit>();
+						if (allyC)
+						{
+								Vector2 pos = Vector2((worldPos.x / 2), (worldPos.z / 2));
+								
+								allyC->SetPos(pos);
+
+								std::cout << pos.x << " " << pos.y << std::endl;
+								if (m_combatObj)
+								{
+										switch (index)
+										{
+										case 0:
+												m_combatObj->GetComponent<CombatController>()->SetAllyUnit0(allyC);
+												break;
+										case 1:
+												m_combatObj->GetComponent<CombatController>()->SetAllyUnit1(allyC);
+												break;
+										case 2:
+												m_combatObj->GetComponent<CombatController>()->SetAllyUnit2(allyC);
+												break;
+										default:
+												index = 100;
+												break;
+										}
+										index++;
+								}
+						}
+
 						// 상태 바꿔주기.
 						parentObj->GetComponent<OpenPSEvent>()->SetIsOpen(false);
 
@@ -97,10 +124,8 @@ void ClickPSOkayEvent::SetClick()
 								auto rswindow = m_RSWindow->GetComponent<OpenRSEvent>();
 								if (rswindow) 
 								{
-										rswindow->SetTargetUnit(go);
+										rswindow->RequestOpenWindow(go);
 								}
 						}
 				});
 }
-
-
