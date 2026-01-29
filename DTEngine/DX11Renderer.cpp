@@ -32,6 +32,7 @@
 #include "GrayScaleEffect.h"
 #include "VignetteEffect.h"
 #include "BloomEffect.h"
+#include "CircleMask.h"
 
 #include "Font.h"
 
@@ -82,7 +83,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_postProcessManager->AddEffect<GrayScaleEffect>();
 	m_postProcessManager->AddEffect<VignetteEffect>();
 	m_postProcessManager->AddEffect<BloomEffect>();
-    
+    m_postProcessManager->AddEffect<CircleMaskEffect>();
     return true;
 }
 
@@ -127,7 +128,6 @@ void DX11Renderer::UpdateObject_CBUFFER(const Matrix& Worrld, const Matrix& Worl
     dataPtr->WorldInverseTransposeTM = WorldTranspose.Transpose();
     m_context->Unmap(m_cbuffer_world_M.Get(), 0);
     
-    //binding은 되어있으니 걱정말라구!
 }
 
 void DX11Renderer::UpdateFrame_CBUFFER(const Matrix& viewTM, const Matrix& projectionTM)
@@ -679,19 +679,49 @@ void DX11Renderer::CreateConstantBuffers()
 
 void DX11Renderer::EndFrame()
 {
+    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
-    if (m_msaaTargetTex && m_backbufferTex)
-    {
-        m_context->ResolveSubresource(
-            m_backbufferTex.Get(), 0,      
-            m_msaaTargetTex.Get(), 0,      
-//#ifdef _DEBUG
-            DXGI_FORMAT_R8G8B8A8_UNORM
-//#else
-            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
-//#endif
-        );
-    }
+   // mainCam->SetPostProcessEffect(PostProcessType::CircleMask, true);
+
+   uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+
+   if (m_msaaTargetTex && m_resolvedSceneRT)
+   {
+       m_context->ResolveSubresource(
+           m_resolvedSceneRT->GetTexture(), 0,
+           m_msaaTargetTex.Get(), 0,
+           DXGI_FORMAT_R8G8B8A8_UNORM
+       );
+
+       if (m_postProcessManager)
+       {
+           m_postProcessManager->Execute(m_resolvedSceneRT.get(), m_rtv.Get(), effectMask, mainCam ,DX11Renderer::Instance().GetWidth(), DX11Renderer::Instance().GetHeight());
+       }
+       else
+       {
+           m_context->ResolveSubresource(
+               m_backbufferTex.Get(), 0,
+               m_msaaTargetTex.Get(), 0,
+               DXGI_FORMAT_R8G8B8A8_UNORM
+           );
+       }
+   }
+
+
+
+//
+//    if (m_msaaTargetTex && m_backbufferTex)
+//    {
+//        m_context->ResolveSubresource(
+//            m_backbufferTex.Get(), 0,      
+//            m_msaaTargetTex.Get(), 0,      
+////#ifdef _DEBUG
+//            DXGI_FORMAT_R8G8B8A8_UNORM
+////#else
+//            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+////#endif
+//        );
+//    }
 
 #ifndef _DEBUG
 
@@ -835,17 +865,10 @@ void DX11Renderer::ResetRenderState()
     m_context->RSSetState(m_rsCullBack.Get());
 }
 
-//  ★
+
 void DX11Renderer::BindShader(Shader* shader)
 {
     if (!shader) return;
-
-   
-    //if (m_currentShaderID == shader->GetID())
-    //{
-    //    return;
-    //}
-
     shader->Bind(); 
     m_currentShaderID = shader->GetID(); 
 }

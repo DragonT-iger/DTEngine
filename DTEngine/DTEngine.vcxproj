@@ -176,6 +176,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="ChangeParentCommand.h" />
     <ClInclude Include="ChangePropertyCommand.h" />
     <ClInclude Include="ChangeTransformCommand.h" />
+    <ClInclude Include="CircleMask.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="ConstantBuffers.h" />
@@ -195,6 +196,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GrayScaleEffect.h" />
     <ClInclude Include="HistoryManager.h" />
+    <ClInclude Include="Levitating.h" />
     <ClInclude Include="MonoSingleton.h" />
     <ClInclude Include="Rigid.h" />
     <ClInclude Include="SkyBoxComponent.h" />
@@ -271,6 +273,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="ChangeParentCommand.cpp" />
     <ClCompile Include="ChangePropertyCommand.cpp" />
     <ClCompile Include="ChangeTransformCommand.cpp" />
+    <ClCompile Include="CircleMask.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CreateGameObjectCommand.cpp" />
     <ClCompile Include="DestroyGameObjectCommand.cpp" />
@@ -288,6 +291,8 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GrayScaleEffect.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
+    <ClCompile Include="Levitating.cpp" />
+    <ClCompile Include="OwnerSetActive.cpp" />
     <ClCompile Include="Rigid.cpp" />
     <ClCompile Include="SkyBoxComponent.cpp" />
     <ClCompile Include="IDManager.cpp" />
@@ -386,6 +391,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\CircleMask_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\CircleMask_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Copy_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Copy_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\CubeMap_PS.hlsl" />
@@ -431,6 +448,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Test_UI_MultiplyLayer_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tutorial_Height_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tutorial_Height_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

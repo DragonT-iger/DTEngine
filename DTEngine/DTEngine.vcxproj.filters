@@ -383,6 +383,12 @@
     <ClInclude Include="UISliderHandle.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Levitating.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleMask.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -619,6 +625,12 @@
     <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Levitating.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleMask.cpp">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -779,6 +791,18 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Test_UI_MultiplyLayer_PS.hlsl">
       <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tutorial_Height_VS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tutorial_Height_PS.hlsl">
+      <Filter>Shader\Specific\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\CircleMask_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\CircleMask_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

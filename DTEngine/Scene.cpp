@@ -33,6 +33,9 @@
 #include "Effect.h"
 #include "Rigid.h"
 
+#include "Levitating.h"
+
+
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
     auto go = std::make_unique<GameObject>(name);
@@ -876,8 +879,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
                 DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
             }
 
-            
-
             if (currentPipelineKey != lastPipelineKey)
             {
                 mat->BindPipeLine();
@@ -895,17 +896,10 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
     }
 
-
-
-
     for (auto* go : transparentQueue)
     {
         DrawObject(go);
     }
-
-    
-
-  
 }
 
 void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
