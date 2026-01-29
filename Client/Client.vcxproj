@@ -137,6 +137,7 @@
     <ClCompile Include="ClickPSOkayEvent.cpp" />
     <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="AliceUnit.cpp" />
+    <ClCompile Include="ClickStartButton.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
     <ClCompile Include="BattleGrid.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
+    <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
@@ -170,6 +172,7 @@
     <ClInclude Include="ClickPSOkayEvent.h" />
     <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="AliceUnit.h" />
+    <ClInclude Include="ClickStartButton.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />
     <ClInclude Include="BattleGrid.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="EnemyUnit.h" />
+    <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />

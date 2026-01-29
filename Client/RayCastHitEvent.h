@@ -1,5 +1,6 @@
 #pragma once
 #include "MonoBehaviour.h"
+#include "SimpleMathHelper.h"
 
 class Scene;
 
@@ -13,6 +14,8 @@ public:
 
 		GameObject* GetHitObject() { return m_hitObj; }
 		void SetHitObject(GameObject* hitobj) { m_hitObj = hitobj; }
+		bool IsMouseInUI(GameObject* uiObj, const Vector2& mousePos);
+		void CloseAllWindows();
 
 private:
 		GameObject* m_hitObj = nullptr;

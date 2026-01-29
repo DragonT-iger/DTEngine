@@ -94,6 +94,7 @@ public:
 private:
 	Phase m_currPhase = Phase::Ready;
 	StageResult m_stageResult = StageResult::InProgress;
+	bool m_isStageStart = false;	// 
 	bool m_phaseEntered = false; // 페이즈 처음 들어온거 확인용.
 	bool m_stageEnd = false; // 스테이지 끝났는지 확인용.
 

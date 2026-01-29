@@ -25,5 +25,8 @@ private:
 		Prefab* m_bishop = nullptr;
 
 		GameObject* m_RSWindow = nullptr;
+		GameObject* m_combatObj = nullptr;
+
+		int index = 0;
 };
 

@@ -8,7 +8,10 @@ class RuleImageVisualEvent : public MonoBehaviour
     DTGENERATED_BODY(RuleImageVisualEvent);
 public:
     void Start() override;
-    void UpdateVisuals();
+
+    void UpdateAllVisuals();      // 전체 초기화용
+    void UpdateMoveVisuals();     // 이동 버튼만 갱신
+    void UpdateBattleVisuals();   // 전투 버튼만 갱신
 
 private:
 

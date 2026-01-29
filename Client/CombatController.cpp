@@ -35,7 +35,7 @@ CombatController::~CombatController()
 
 void CombatController::Start()
 {
-    Setup();
+    //Setup();
 }
 
 void CombatController::Update(float dTime)
@@ -52,6 +52,8 @@ void CombatController::Setup()
     if (enemyUnit0) m_enemyUnits.push_back(enemyUnit0);
     if (enemyUnit1) m_enemyUnits.push_back(enemyUnit1);
     if (enemyUnit2) m_enemyUnits.push_back(enemyUnit2);
+
+    m_isStageStart = true;
 }
 
 bool CombatController::ReadyPhase()
@@ -318,7 +320,7 @@ bool CombatController::EndPhase()
 
 void CombatController::Process()
 {
-    if (m_stageEnd) return;
+    if (m_stageEnd || !m_isStageStart) return;
 
     switch (m_currPhase)
     {

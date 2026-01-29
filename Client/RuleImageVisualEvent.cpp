@@ -16,7 +16,6 @@ void RuleImageVisualEvent::Start()
 {
 		auto bgEvent = _GetOwner()->GetComponent<OpenRSEvent>();
 
-
 		// 반복문 쓸려고 배열로.
 		UIButton* moveButtons[] = { m_movefBtns, m_movesBtns, m_movetBtns };
 		UIButton* battleButtons[] = { m_battlefBtns, m_battlesBtns, m_battletBtns };
@@ -28,51 +27,62 @@ void RuleImageVisualEvent::Start()
 				{
 						moveButtons[i]->SetOnClick([this, bgEvent, i]()
 								{
-										bgEvent->SetMoveIndex(i + 1);
-										UpdateVisuals();
+										bgEvent->SetMoveIndex(i);
+										UpdateMoveVisuals();
 								});
 				}
 				if (battleButtons[i])
 				{
 						battleButtons[i]->SetOnClick([this, bgEvent, i]()
 								{
-										bgEvent->SetBattleIndex(i + 1);
-										UpdateVisuals();
+										bgEvent->SetBattleIndex(i);
+										UpdateBattleVisuals();
 								});
 				}
 		}
 }
 
-void RuleImageVisualEvent::UpdateVisuals()
+void RuleImageVisualEvent::UpdateAllVisuals()
+{
+		UpdateMoveVisuals();
+		UpdateBattleVisuals();
+}
+
+void RuleImageVisualEvent::UpdateMoveVisuals()
 {
 		auto bgEvent = _GetOwner()->GetComponent<OpenRSEvent>();
 		if (!bgEvent) return;
 
 		int mIdx = bgEvent->GetMoveIndex();
-		int aIdx = bgEvent->GetBattleIndex();
-
-		// 반복문 쓸려고 배열로.
 		UIButton* moveButtons[] = { m_movefBtns, m_movesBtns, m_movetBtns };
-		UIButton* battleButtons[] = { m_battlefBtns, m_battlesBtns, m_battletBtns };
+		Vector4 selectedColor(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 unselectedColor(0.4f, 0.4f, 0.4f, 1.0f);
 
-		Vector4 selectedColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector4 unselectedColor = Vector4(0.4f, 0.4f, 0.4f, 1.0f);
-
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 3; ++i) 
 		{
-				// 이동 버튼 처리
-				if (moveButtons[i])
+				if (moveButtons[i]) 
 				{
-						bool isSelected = (mIdx == (i + 1));
-						moveButtons[i]->SetNormalColor(isSelected ? selectedColor : unselectedColor);
-						moveButtons[i]->ApplyNormalState(); // 즉시 반영
+						moveButtons[i]->SetNormalColor((mIdx == i) ? selectedColor : unselectedColor);
+						moveButtons[i]->ApplyNormalState();
 				}
+		}
+}
 
-				// 공격(배틀) 버튼 처리
-				if (battleButtons[i])
+void RuleImageVisualEvent::UpdateBattleVisuals()
+{
+		auto bgEvent = _GetOwner()->GetComponent<OpenRSEvent>();
+		if (!bgEvent) return;
+
+		int aIdx = bgEvent->GetBattleIndex();
+		UIButton* battleButtons[] = { m_battlefBtns, m_battlesBtns, m_battletBtns };
+		Vector4 selectedColor(1.0f, 1.0f, 1.0f, 1.0f);
+		Vector4 unselectedColor(0.4f, 0.4f, 0.4f, 1.0f);
+
+		for (int i = 0; i < 3; ++i) 
+		{
+				if (battleButtons[i]) 
 				{
-						bool isSelected = (aIdx == (i + 1));
-						battleButtons[i]->SetNormalColor(isSelected ? selectedColor : unselectedColor);
+						battleButtons[i]->SetNormalColor((aIdx == i) ? selectedColor : unselectedColor);
 						battleButtons[i]->ApplyNormalState();
 				}
 		}
