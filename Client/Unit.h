@@ -11,7 +11,7 @@ enum UnitType
     Rook = 0,
     Knight,
     Bishop,
-    //Alice,
+    Alice,
     //Queen
 };
 
@@ -20,7 +20,10 @@ enum class TurnAction // 이번 턴에 할 행동
     Wait,
     Move,
     Attack,
-    Miss
+    Miss,
+    BreakWall,
+
+    Die, // 사망처리용
 };
 
 enum class Team
@@ -85,7 +88,8 @@ public:
 
     // 유닛 현재 체력
     float GetHp() const { return m_hp; }
-    bool IsAlive() const { return m_hp > 0; }
+    bool IsAlive() const { return m_isAlive; }
+    void SetIsAlive(bool alive) { m_isAlive = alive; }
 
     // 데미지 받음
     void TakeDamage(float damage) { m_hp = (std::max)(m_hp - damage, 0.0f); }
@@ -94,6 +98,8 @@ public:
     void Heal(float heal) { m_hp = (std::min)(m_hp + heal, m_stats.maxHp); }
 
     // 이동목표
+    Unit* GetMoveTarget() const { return m_moveTarget; }
+    void SetMoveTarget(Unit* u) { m_moveTarget = u; }
     Vector2 GetMoveTargetPos() const { return m_moveTargetPos; }
     void SetMoveTargetPos(const Vector2& p) { m_moveTargetPos = p; }
     bool HasMoveTarget() const { return m_moveTargetPos != GRIDPOS_INVALID; }
@@ -116,6 +122,9 @@ public:
     // 이번 턴 행동
     TurnAction GetAction() const { return m_action; }
     void SetAction(TurnAction action) { m_action = action; }
+    bool IsActionDone() const { return m_actionDone; }
+    void SetActionDone(bool done) { m_actionDone = done; }
+    void StartAction();
 
     // 바라보는 방향
     Dir8 GetDir() const { return m_dir; }
@@ -137,9 +146,11 @@ protected:
 
     UnitStats m_stats{};
     float m_hp = 100;
+    bool m_isAlive = true;
 
-    int m_perceptionRange = 3;
+    int m_perceptionRange = 5;
 
+    Unit* m_moveTarget = nullptr;
     Vector2 m_moveTargetPos = GRIDPOS_INVALID;
     Vector2 m_movePos = GRIDPOS_INVALID;
 
@@ -147,6 +158,7 @@ protected:
     Vector2 m_attackPos = GRIDPOS_INVALID;
 
     TurnAction m_action = TurnAction::Wait;
+    bool m_actionDone = false;
 
     Dir8 m_dir = Dir8::Right;
 };
