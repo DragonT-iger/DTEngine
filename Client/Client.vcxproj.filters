@@ -101,6 +101,11 @@
     </ClCompile>
     <ClCompile Include="RuleImageVisualEvent.cpp">
       <Filter>Event</Filter>
+    <ClCompile Include="AliceUnit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatTestRunner.cpp">
+      <Filter>Battle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +180,11 @@
     </ClInclude>
     <ClInclude Include="RuleImageVisualEvent.h">
       <Filter>Event</Filter>
+    <ClInclude Include="AliceUnit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatTestRunner.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
