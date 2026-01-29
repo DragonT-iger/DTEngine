@@ -55,8 +55,7 @@ float4 PS(PS_INPUT input) : SV_Target
         float attenuation = 1.0f;
         float type = Lights[i].DirectionType.w;
 
-        // 조명 타입별 방향 및 감쇠 연산
-        if (type < 0.5f) // Directional Light
+        if (type < 0.5f) 
         {
             L = normalize(Lights[i].DirectionType.xyz);
             attenuation = 1.0f;
@@ -68,15 +67,12 @@ float4 PS(PS_INPUT input) : SV_Target
             L = normalize(toLight);
             
             float range = Lights[i].PositionRange.w;
-            // 거리 기반 감쇠 (Lighting.hlsli 공식 적용)
             attenuation = saturate(1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range));
         }
 
-        // 첫 번째 조명에만 그림자 적용 (Shadow Factor)
-        float currentShadow = (i == 0) ? Temp = shadowFactor * 0.6f : 1.0f;
+        float currentShadow = (i == 0) ? Temp = shadowFactor : 1.0f;
         
-        // DisneyPBR (Shared 함수) 호출하여 누적
-        // 최종 광원 세기에 감쇠와 그림자 인자를 통합하여 전달
+        
         directLighting += DisneyPBR(
             input.WorldPos,
             N,
@@ -90,11 +86,10 @@ float4 PS(PS_INPUT input) : SV_Target
         );
         
         
-        directLighting *= currentShadow;
+        directLighting *= currentShadow * 0.01;
 
     }
     
-   // directLighting *= Shadow_Scale;
         
     float3 ambientLighting = albedo * 0.7f;
     

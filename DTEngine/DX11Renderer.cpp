@@ -525,6 +525,8 @@ void DX11Renderer::SetBlendMode(BlendMode mode)
     if (mode == BlendMode::AlphaBlend)
     {
         m_context->OMSetBlendState(m_alphaBlendState.Get(), blendFactor, 0xffffffff);
+
+        //m_context->OMSetBlendState(m_multiplyBlendState.Get(), blendFactor, 0xffffffff);
     }
     else
     {
@@ -941,6 +943,7 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
     blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
     blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
     blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
     blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
     blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
@@ -950,6 +953,27 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     DXHelper::ThrowIfFailed(hr);
 
 
+    blendDesc.RenderTarget[0].BlendEnable = TRUE;
+
+    // Color: out.rgb = src.rgb * dest.rgb
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_COLOR;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+    // Alpha: 그냥 덮어쓰기 (UI에서 거의 안 씀)
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+
+
+    //일단 임의로 생성.
+    hr = dev->CreateBlendState(
+        &blendDesc,
+        m_multiplyBlendState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+
+    
     DXGI_SWAP_CHAIN_DESC1 scd{};
     scd.Width = 0;
     scd.Height = 0;
