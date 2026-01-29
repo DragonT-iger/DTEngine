@@ -284,9 +284,6 @@
     <ClInclude Include="Skeletal.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="SkeletalRsource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Animatior.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -564,9 +561,6 @@
     </ClCompile>
     <ClCompile Include="PostProcessManager.cpp">
       <Filter>PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="UISliderHandle.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GrayScaleEffect.cpp">
       <Filter>PostProcessing\Effect</Filter>

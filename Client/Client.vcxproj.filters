@@ -101,6 +101,7 @@
     </ClCompile>
     <ClCompile Include="RuleImageVisualEvent.cpp">
       <Filter>Event</Filter>
+    </ClCompile>
     <ClCompile Include="AliceUnit.cpp">
       <Filter>Unit</Filter>
     </ClCompile>
@@ -180,6 +181,7 @@
     </ClInclude>
     <ClInclude Include="RuleImageVisualEvent.h">
       <Filter>Event</Filter>
+    </ClInclude>
     <ClInclude Include="AliceUnit.h">
       <Filter>Unit</Filter>
     </ClInclude>
