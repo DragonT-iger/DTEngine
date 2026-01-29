@@ -42,6 +42,9 @@ public:
 
     void Initialize(int width, int height); // 타일 정보 저장하기.
     bool InBounds(const Vector2& p) const { return (p.x >= 0 && p.y >= 0 && p.x < m_width && p.y < m_height); }
+    int GetWidth() { return m_width; }
+    int GetHeight() { return m_height; }
+
 
     void SetTile(const Vector2& p);
     void SetSolidWall(const Vector2& p);

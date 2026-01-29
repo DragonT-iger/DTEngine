@@ -91,6 +91,8 @@ public:
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
 	void SetEnemyUnit2(EnemyUnit* enemyUnit) { enemyUnit2 = enemyUnit; }
 
+
+	void PrintFrame();
 private:
 	Phase m_currPhase = Phase::Ready;
 	StageResult m_stageResult = StageResult::InProgress;

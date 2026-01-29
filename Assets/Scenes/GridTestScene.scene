@@ -1489,7 +1489,7 @@
           "m_combatObj": 7541685513989182900,
           "m_knight": 3377014030586769903,
           "m_mapData": 7171391694734270448,
-          "m_rook": 8646684001397475195,
+          "m_rook": 0,
           "typeName": "ClickPSOkayEvent"
         }
       ],
@@ -1570,7 +1570,7 @@
           "allyUnit1": 0,
           "allyUnit2": 0,
           "battleGrid": 17217331222344769167,
-          "enemyUnit0": 2355951669884388969,
+          "enemyUnit0": 570417400661800883,
           "enemyUnit1": 0,
           "enemyUnit2": 0,
           "id": 6276163554272591340,
@@ -2075,18 +2075,31 @@
     },
     {
       "active": true,
-      "components": [],
-      "id": 7089952594529998995,
-      "name": "",
+      "components": [
+        {
+          "Active": true,
+          "id": 17955262937377222646,
+          "m_battleRule": 0,
+          "m_moveRule": 0,
+          "m_pos": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_type": 1,
+          "typeName": "AllyUnit"
+        }
+      ],
+      "id": 15510816811600611429,
+      "name": "Chess_Sword_Shield_Test",
       "tag": "Untagged",
       "transform": {
-        "id": 17345128312488547944,
+        "id": 3417382878783348190,
         "m_editorEulerAngles": {
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 0,
+        "m_parent": 7391673662214864519,
         "m_position": {
           "x": 0.0,
           "y": 0.0,
@@ -2094,9 +2107,255 @@
         },
         "m_rotation": {
           "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 2931371597178195541,
+              "1": 885120150060770054,
+              "3": 13530188703377643776,
+              "4": 5791674905025866242
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 10067770580888366886,
+          "m_materialID": 10671092131083317277,
+          "m_meshIndex": 0,
+          "m_modelID": 15036042619192132349,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 5053622321146247379,
+          "m_skellID": 15036042619192132349,
+          "typeName": "Skeletal"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 8370509836617715285,
+          "m_AniID": 1897428081162014869,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 17823672735063406660,
+      "name": "Chess",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17086611545070936875,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 3417382878783348190,
+        "m_position": {
           "x": 0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 12219225787821283075,
+              "1": 15995925660948491865,
+              "3": 17567310345030162650,
+              "4": 12500137428735934224
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 7661339602836936680,
+          "m_materialID": 10671092131083317277,
+          "m_meshIndex": 0,
+          "m_modelID": 9425705190399495907,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 1424920540752127607,
+          "m_modelID": 9425705190399495907,
+          "typeName": "Rigid"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 10450176682180810670,
+          "m_AniID": 16175562438746557851,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 15028921041724932330,
+      "name": "Sword",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8292398901862214811,
+        "m_editorEulerAngles": {
+          "x": 3.4733364582061768,
+          "y": 12.138792991638184,
+          "z": 0.8702892661094666
+        },
+        "m_parent": 3417382878783348190,
+        "m_position": {
+          "x": -0.5127735137939453,
+          "y": 0.6819778680801392,
+          "z": -0.21532440185546875
+        },
+        "m_rotation": {
+          "w": 0.9939334988594055,
+          "x": 0.03093782626092434,
+          "y": 0.10545246303081512,
+          "z": 0.004344349727034569
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 0.9999999403953552
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 12219225787821283075,
+              "1": 15995925660948491865,
+              "3": 17567310345030162650,
+              "4": 12500137428735934224
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 14584549990509696692,
+          "m_materialID": 10671092131083317277,
+          "m_meshIndex": 0,
+          "m_modelID": 9885964485411881895,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 10550075466096542824,
+          "m_modelID": 9885964485411881895,
+          "typeName": "Rigid"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 17305809591827084113,
+          "m_AniID": 13192146717951043045,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 16430448262009006549,
+      "name": "Shield",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13600574449900943740,
+        "m_editorEulerAngles": {
+          "x": 0.9054089784622192,
+          "y": -12.265984535217285,
+          "z": -8.261096000671387
+        },
+        "m_parent": 3417382878783348190,
+        "m_position": {
+          "x": 0.5118694305419922,
+          "y": 0.6817687749862671,
+          "z": -0.3009834289550781
+        },
+        "m_rotation": {
+          "w": 0.9917238354682922,
+          "x": 0.015530595555901527,
+          "y": -0.10598993301391602,
+          "z": -0.07077281922101974
         },
         "m_scale": {
           "x": 1.0,

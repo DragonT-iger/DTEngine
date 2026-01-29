@@ -1,6 +1,5 @@
 #include "CombatController.h"
 #include "GameObject.h"
-#include <iomanip>
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -52,14 +51,13 @@ void CombatController::Setup()
     if (enemyUnit0) m_enemyUnits.push_back(enemyUnit0);
     if (enemyUnit1) m_enemyUnits.push_back(enemyUnit1);
     if (enemyUnit2) m_enemyUnits.push_back(enemyUnit2);
-
     m_isStageStart = true;
 }
 
 bool CombatController::ReadyPhase()
 {
     m_battleUnits.clear();
-    
+
     battleGrid->ClearDynamicGrid();
     battleGrid->SyncUnitsPos(m_allyUnits, m_enemyUnits, m_aliceUnit);
 
@@ -159,7 +157,7 @@ bool CombatController::ReadyForBattlePhase()
         Vector2 attackPos = DecideAttackPos(me);
 
         if (attackPos != GRIDPOS_INVALID) me->SetAttackPos(attackPos);
-        
+
         TurnAction ta = me->GetAction();
         if (ta != TurnAction::Miss && ta != TurnAction::BreakWall) me->SetAction(TurnAction::Attack);
     }
@@ -202,13 +200,13 @@ bool CombatController::MoveAndBattlePhase()
     {
         if (ally && ally->IsAlive() && !ally->IsActionDone()) return false;
     }
-        
+
 
     for (EnemyUnit* enemy : m_enemyUnits)
     {
         if (enemy && enemy->IsAlive() && !enemy->IsActionDone()) return false;
     }
-    
+
     m_phaseEntered = false; // 전부 끝나면 다음 단계로.
 
     std::cout << "moveDone" << std::endl;
@@ -218,7 +216,9 @@ bool CombatController::MoveAndBattlePhase()
 bool CombatController::EndPhase()
 {
     std::cout << "end" << std::endl;
-    
+
+    PrintFrame();
+
     if (!m_phaseEntered)
     {
         m_phaseEntered = true;
@@ -264,7 +264,7 @@ bool CombatController::EndPhase()
         for (AllyUnit* ally : m_allyUnits)
         {
             if (ally && ally->IsAlive()) ++aliveAllyCount;
-        } 
+        }
 
         if (aliveAllyCount == 0 && m_stageResult != StageResult::Win) m_stageResult = StageResult::Lose; // 전멸하면 패배
 
@@ -278,7 +278,7 @@ bool CombatController::EndPhase()
     {
         if (ally && !ally->IsAlive() && !ally->IsActionDone()) return false;
     }
-        
+
 
     for (EnemyUnit* enemy : m_enemyUnits)
     {
@@ -289,13 +289,13 @@ bool CombatController::EndPhase()
     for (AllyUnit* ally : m_allyUnits)
     {
         if (ally) ally->ResetTurnPlan();
-    } 
+    }
 
     for (EnemyUnit* enemy : m_enemyUnits)
     {
         if (enemy) enemy->ResetTurnPlan();
     }
-        
+
     // 종료조건 만족시 승패 처리
     if (m_stageResult != StageResult::InProgress && !m_stageEnd)
     {
@@ -386,9 +386,9 @@ static int DirDiff8(int a, int b)
 static bool HasTypeAdvantage(int me, int target)
 {
     // 일단 나 > 비 > 룩 > 나
-    return  (me == UnitType::Knight && target == UnitType::Bishop)  ||
-            (me == UnitType::Bishop && target == UnitType::Rook)    ||
-            (me == UnitType::Rook && target == UnitType::Knight);
+    return  (me == UnitType::Knight && target == UnitType::Bishop) ||
+        (me == UnitType::Bishop && target == UnitType::Rook) ||
+        (me == UnitType::Rook && target == UnitType::Knight);
 }
 
 static int GetTypeAdvantage(int me, int target) // 내가 상성우위면 1, 상대가 상성우위면 -1, 같으면 0
@@ -402,7 +402,7 @@ Unit* CombatController::SelectAttackTarget(Unit* me, const std::vector<Unit*>& t
 {
     if (!me || targets.empty()) return nullptr; // 공격 가능한 상대가 없음.
     if (targets.size() == 1) return targets[0]; // 공격 가능한 상대가 하나뿐이면 걔 공격하면 됨. 간단.. 
-    
+
     int rule = battleRule;
 
     Unit* best = nullptr;
@@ -419,9 +419,9 @@ Unit* CombatController::SelectAttackTarget(Unit* me, const std::vector<Unit*>& t
     for (Unit* target : targets)
     {
         if (!target) continue;
-        
+
         Vector2 tp = target->GetPos();
-        
+
         int toDir = me->GetDir2(tp);
         int dirDiff = DirDiff8(meDir, toDir);
 
@@ -483,7 +483,7 @@ bool CombatController::IsBattleUnit(const Unit* u) const
     return std::find(m_battleUnits.begin(), m_battleUnits.end(), u) != m_battleUnits.end();
 }
 
-Unit* CombatController::FindNearestEnemy(const Vector2& from) const 
+Unit* CombatController::FindNearestEnemy(const Vector2& from) const
 {
     EnemyUnit* best = nullptr;
     int bestDist = 9999;
@@ -530,7 +530,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
                 me->SetMoveTarget(enemy);
                 return enemy->GetPos();
             }
-        }          
+        }
     }
 
     if (rule == MoveRule::Hold) // 대기
@@ -538,7 +538,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
         Vector2 defPos = GRIDPOS_INVALID;
         if (battleGrid->GetNearestDefenseTile(mePos, myMovePos, defPos))
         {
-            me->SetMoveTarget(nullptr); 
+            me->SetMoveTarget(nullptr);
             return defPos;
         }
         return GRIDPOS_INVALID; // 방어타일 없으면 목표 없음 처리
@@ -555,7 +555,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
         if (!ally || !ally->IsAlive() || ally == me) continue;
 
         ++aliveAllyCount;
-        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; } 
+        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; }
     }
 
     Unit* target = nullptr;
@@ -569,7 +569,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
         return target->GetPos(); // 아군이 혼자뿐이면 적을 향해 간다. 
     }
 
-    if (!allyInPerception) 
+    if (!allyInPerception)
     {
         target = FindNearestAlly(me, mePos);
         if (!target) return GRIDPOS_INVALID;
@@ -609,7 +609,7 @@ Vector2 CombatController::DecideMovePos_Ally(AllyUnit* me, const Vector2& moveTa
     return next;
 }
 
-static int Sign(int x) 
+static int Sign(int x)
 {
     if (x > 0) return 1;
     if (x < 0) return -1;
@@ -623,7 +623,7 @@ Vector2 CombatController::DecideMovePos_Enemy(EnemyUnit* me)
 
     int idx = me->GetPathIndex();
     Vector2 goal = me->GetPathPoint(idx);
-    
+
     while (idx < 7 && goal != GRIDPOS_INVALID && curPos == goal)
     {
         idx++;
@@ -714,7 +714,7 @@ Unit* CombatController::FindBlockingUnitByPos(const Vector2& pos, Unit* me) cons
 Vector2 CombatController::DecideAttackPos(Unit* me)
 {
     if (!me) return GRIDPOS_INVALID;
-    
+
     Unit* target = me->GetAttackTarget();
 
     if (!target)
@@ -741,7 +741,7 @@ Vector2 CombatController::DecideAttackPos(Unit* me)
     else
     {
         me->SetAction(TurnAction::Miss); // 빗나감 설정. 
-        return target->GetPos(); 
+        return target->GetPos();
     }
 }
 
@@ -766,7 +766,7 @@ void CombatController::ResolveTurnAction(Unit* me)
 
         me->SetDir(me->GetAttackPos());
         target->TakeDamage(damage);
-        
+
     }  break;
     case TurnAction::Miss: // 빗나감 처리
     {
@@ -785,7 +785,7 @@ void CombatController::ResolveTurnAction(Unit* me)
 float CombatController::CalculateDamage(Unit* me, Unit* target)
 {
     float bonus = 1.0f; // 상성 보너스.
-    if      (HasTypeAdvantage(me->GetUnitType(), target->GetUnitType())) bonus = 1.5f;
+    if (HasTypeAdvantage(me->GetUnitType(), target->GetUnitType())) bonus = 1.5f;
     else if (HasTypeAdvantage(target->GetUnitType(), me->GetUnitType())) bonus = 0.5f;
 
     float bonus2 = 1.0f; // 방어타일 보너스.
@@ -794,4 +794,64 @@ float CombatController::CalculateDamage(Unit* me, Unit* target)
     float damage = ((float)me->GetStats().atk - (float)target->GetStats().def * bonus2) * bonus;
 
     return (std::max)(damage, 0.0f);
+}
+
+
+void CombatController::PrintFrame()
+{
+    if (!battleGrid) return;
+
+    auto isSame = [](const Vector2& a, const Vector2& b) {
+        return (int)a.x == (int)b.x && (int)a.y == (int)b.y;
+        };
+
+    for (int y = 0; y < battleGrid->GetHeight(); ++y)
+    {
+        for (int x = 0; x < battleGrid->GetWidth(); ++x)
+        {
+            Vector2 p{ (float)x, (float)y };
+            const auto& s = battleGrid->GetStaticTile(p);
+
+            char c = ' ';
+            if (!s.tile) c = ' ';
+            else if (s.solidWall) c = '#';
+            else if (s.breakableWall) c = '*';
+            else if (s.defenseTile) c = 'D';
+            else c = '.';
+
+            if (m_aliceUnit && m_aliceUnit->IsAlive() && isSame(m_aliceUnit->GetPos(), p)) c = 'S';
+
+            for (auto* a : m_allyUnits)
+                if (a && a->IsAlive() && isSame(a->GetPos(), p)) c = 'A';
+
+            for (auto* e : m_enemyUnits)
+                if (e && e->IsAlive() && isSame(e->GetPos(), p)) c = (e->IsBoss() ? 'B' : 'E');
+
+            std::cout << c << ' ';
+        }
+        std::cout << "\n";
+    }
+
+    auto printUnit = [](const char* name, const Unit* u)
+        {
+            if (!u) { std::cout << name << ": (null)\n"; return; }
+            std::cout << name
+                << " pos(" << (int)u->GetPos().x << "," << (int)u->GetPos().y << ")"
+                << " hp=" << u->GetHp()
+                << " alive=" << (u->IsAlive() ? 1 : 0)
+                << " act=" << (int)u->GetAction()
+                << " done=" << (u->IsActionDone() ? 1 : 0)
+                << " move(" << (int)u->GetMovePos().x << "," << (int)u->GetMovePos().y << ")"
+                << " movetarget(" << (int)u->GetMoveTargetPos().x << "," << (int)u->GetMoveTargetPos().y << ")"
+                << " atkPos(" << (int)u->GetAttackPos().x << "," << (int)u->GetAttackPos().y << ")"
+                << "\n";
+        };
+
+    if (m_aliceUnit) printUnit("Alice", m_aliceUnit);
+    if (allyUnit0) printUnit("Ally0", allyUnit0);
+    if (allyUnit1) printUnit("Ally1", allyUnit1);
+    if (allyUnit2) printUnit("Ally2", allyUnit2);
+    if (enemyUnit0) printUnit("Enemy0", enemyUnit0);
+    if (enemyUnit1) printUnit("Enemy1", enemyUnit1);
+    if (enemyUnit2) printUnit("Enemy2", enemyUnit2);
 }

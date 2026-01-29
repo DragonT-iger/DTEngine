@@ -17,17 +17,19 @@ ENDPROPERTY()
 
 void EnemyUnit::SetBoss(bool isBoss)
 {
-	m_isBoss = isBoss;
-	if (isBoss)
-	{
-		UnitStats bossStats = GetStats() * m_BossScale; // 스텟 뻥튀기
-		bossStats.attackRange = GetStats().attackRange; // 단 공격범위는 예외.
-		SetStats(bossStats);
-	}
-	else
-	{
-		SetUnitType(m_type); // 다시 원래 스텟으로 돌리기
-	}
+    m_isBoss = isBoss;
+    if (isBoss)
+    {
+        //UnitStats bossStats = GetStats() * m_BossScale; // 스텟 뻥튀기
+        //bossStats.attackRange = GetStats().attackRange; // 단 공격범위는 예외.
+        UnitStats bossStats = GetStats();
+        bossStats.maxHp = bossStats.maxHp * m_BossScale; // 체력만 뻥튀기?
+        SetStats(bossStats);
+    }
+    else
+    {
+        SetUnitType(m_type); // 다시 원래 스텟으로 돌리기
+    }
 }
 
 Vector2 EnemyUnit::GetPathPoint(int i) const

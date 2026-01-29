@@ -128,5 +128,3 @@ void ClickPSOkayEvent::SetClick()
 						}
 				});
 }
-
-
