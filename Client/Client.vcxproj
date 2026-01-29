@@ -134,11 +134,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
+    <ClCompile Include="AliceUnit.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
     <ClCompile Include="BattleGrid.cpp" />
     <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
+    <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -157,11 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
+    <ClInclude Include="AliceUnit.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />
     <ClInclude Include="BattleGrid.h" />
     <ClInclude Include="CombatController.h" />
     <ClInclude Include="ColorToggler.h" />
+    <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ForwardMover.h" />

@@ -3,6 +3,8 @@
 #include "TilemapData.h"     
 #include "GameObject.h"
 
+#include <queue>
+
 BEGINPROPERTY(BattleGrid)
 DTPROPERTY_SETTER(BattleGrid, m_tilemapGenerator, SetTilemapGenerator)
 ENDPROPERTY()
@@ -99,15 +101,23 @@ void BattleGrid::SetDefenseTile(const Vector2& p)
 
 void BattleGrid::WallBreak(const Vector2& p)
 {
+    if (!InBounds(p)) return;
     GetStaticTile(p).breakableWall = false;
 }
 
 bool BattleGrid::IsBreakableWall(const Vector2& p) const
 {
+    if (!InBounds(p)) return false;
     return GetStaticTile(p).breakableWall;
 }
 
-bool BattleGrid::GetNearestDefenseTile(const Vector2& me, Vector2& outPos) const
+bool BattleGrid::IsDefenseTile(const Vector2& p) const
+{
+    if (!InBounds(p)) return false;
+    return GetStaticTile(p).defenseTile;
+}
+
+bool BattleGrid::GetNearestDefenseTile(const Vector2& me, const Vector2& myMovePos, Vector2& outPos) const
 {
     bool found = false;
     int bestDist = 9999;
@@ -121,20 +131,30 @@ bool BattleGrid::GetNearestDefenseTile(const Vector2& me, Vector2& outPos) const
             const BattleStaticTile& s = m_staticGrid[i];
             if (!s.tile || !s.defenseTile) continue;
 
+            if (x == (int)me.x && y == (int)me.y) 
+            {
+                outPos = me;
+                return true; 
+            }
+
+            if (x == (int)myMovePos.x && y == (int)myMovePos.y)
+            {
+                outPos = myMovePos;
+                return true;
+            }
+
             const BattleDynamicTile& d = m_dynamicGrid[i];
             if (d.unitPresent || d.reservedMove) continue;
 
             int dx = std::abs(x - (int)me.x);
             int dy = std::abs(y - (int)me.y);
-            int dist = dx + dy;
+            int dist = (std::max)(dx, dy);
 
             if (!found || dist < bestDist)
             {
                 bestDist = dist;
                 outPos = Vector2{ (float)x, (float)y };
                 found = true;
-
-                if (bestDist == 0) return true; // 내가 이미 방어타일 위에 있으면 더 찾을 필요 없음. 
             }
         }
     }
@@ -147,7 +167,8 @@ void BattleGrid::ClearDynamicGrid()
     std::fill(m_dynamicGrid.begin(), m_dynamicGrid.end(), BattleDynamicTile{});
 }
 
-void BattleGrid::SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, const std::vector<EnemyUnit*>& enemyUnits)
+void BattleGrid::SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, 
+    const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit)
 {
     for (auto& d : m_dynamicGrid)
     {
@@ -156,26 +177,34 @@ void BattleGrid::SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, const std
 
     for (const AllyUnit* ally : allyUnits)
     {
-        if (!ally) continue;
+        if (!ally || !ally->IsAlive()) continue;
         const Vector2& p = ally->GetPos();
         GetDynamicTile(p).unitPresent = true;
     }
 
     for (const EnemyUnit* enemy : enemyUnits)
     {
-        if (!enemy) continue;
+        if (!enemy || !enemy->IsAlive()) continue;
         const Vector2& p = enemy->GetPos();
+        GetDynamicTile(p).unitPresent = true;
+    }
+
+    {
+        if (!aliceUnit) return;
+        const Vector2& p = aliceUnit->GetPos();
         GetDynamicTile(p).unitPresent = true;
     }
 }
 
 void BattleGrid::ReserveMove(const Vector2& p)
 {
+    if (!InBounds(p)) return;
     GetDynamicTile(p).reservedMove = true;
 }
 
 bool BattleGrid::IsReserved(const Vector2& p) const
 {
+    if (!InBounds(p)) return true;
     return GetDynamicTile(p).reservedMove;
 }
 
@@ -207,7 +236,11 @@ bool BattleGrid::IsBlocked(const Vector2& p, const Unit* me, const Unit* target,
     }
 
     // 이동 예약
-    if (d.reservedMove) return true;
+    if (d.reservedMove)
+    {
+        if (me && p == me->GetMovePos()) return false; 
+        return true;
+    }
 
     return false;
 }
@@ -268,4 +301,128 @@ bool BattleGrid::HasLineOfSight(const Vector2& me, const Vector2& target) const 
     }
 
     return true;
+}
+
+static int HeuristicOctile(const Vector2& a, const Vector2& b)
+{
+    int dx = std::abs((int)b.x - (int)a.x);
+    int dy = std::abs((int)b.y - (int)a.y);
+    int dmin = (std::min)(dx, dy);
+    int dmax = (std::max)(dx, dy);
+    return 14 * dmin + 10 * (dmax - dmin);
+}
+
+bool BattleGrid::FindNextStepAStar(const Vector2& start, const Vector2& goal,
+    const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const
+{
+    outNext = start;
+
+    if (start == GRIDPOS_INVALID || goal == GRIDPOS_INVALID) return false;
+    if (!InBounds(start) || !InBounds(goal)) return false;
+
+    if (start == goal) // 목표칸이 시작점이면 시작점 반환.
+    {
+        outNext = start;
+        return true;
+    }
+
+    if (IsBlocked(start, me, target, moveRule)) return false; // 시작칸이 막혀있으면 실패.
+
+    const int N = m_width * m_height;
+
+    std::vector<int> gScore(N, 999999);
+    std::vector<int> parent(N, -1);
+    std::vector<bool> closed(N, false);
+
+    auto idxOf = [&](const Vector2& p) { return Index(p); };
+    auto posOf = [&](int idx) -> Vector2 {
+        int x = idx % m_width;
+        int y = idx / m_width;
+        return Vector2{ (float)x, (float)y };
+        };
+
+    struct Node { int f; int g; int idx; };
+    struct Cmp {
+        bool operator()(const Node& a, const Node& b) const {
+            if (a.f != b.f) return a.f > b.f;      // f 작은 게 우선
+            if (a.g != b.g) return a.g < b.g;      // 예: g 큰 걸 우선(탐색이 더 진행된 쪽)
+            return a.idx > b.idx;                  // 완전 동점이면 인덱스로 고정
+        }
+    };
+
+    int startIdx = idxOf(start);
+    int goalIdx = idxOf(goal);
+
+    gScore[startIdx] = 0;
+
+    std::priority_queue<Node, std::vector<Node>, Cmp> open;
+    open.push(Node{ HeuristicOctile(start, goal), 0, startIdx });
+
+    const int dir8[8][3] = {
+        { 0,-1,10}, { 1, 0,10}, { 0, 1,10}, {-1, 0,10},
+        { 1,-1,14}, { 1, 1,14}, {-1, 1,14}, {-1,-1,14},
+    };
+
+    const bool allowCornerCut = false; // 코너 끼고 대각 이동 방지.
+
+    while (!open.empty())
+    {
+        Node cur = open.top();
+        open.pop();
+
+        if (closed[cur.idx]) continue;
+        if (cur.g != gScore[cur.idx]) continue;
+
+        if (cur.idx == goalIdx)
+        {
+            int t = goalIdx;
+            int prev = parent[t];
+
+            while (prev != -1 && prev != startIdx)
+            {
+                t = prev;
+                prev = parent[t];
+            }
+            outNext = posOf(t); // 시작칸의 다음칸
+            return true;
+        }
+
+        closed[cur.idx] = true;
+        Vector2 curPos = posOf(cur.idx);
+
+        for (int k = 0; k < 8; ++k)
+        {
+            int sx = dir8[k][0];
+            int sy = dir8[k][1];
+            int stepCost = dir8[k][2];
+
+            Vector2 nb{ curPos.x + (float)sx, curPos.y + (float)sy };
+            if (!InBounds(nb)) continue;
+
+            int nbIdx = idxOf(nb);
+            if (closed[nbIdx]) continue;
+
+            if (IsBlocked(nb, me, target, moveRule)) continue;
+
+            if (!allowCornerCut && sx != 0 && sy != 0)
+            {
+                Vector2 side1{ curPos.x + (float)sx, curPos.y };
+                Vector2 side2{ curPos.x, curPos.y + (float)sy };
+                if (IsBlocked(side1, me, target, moveRule) || IsBlocked(side2, me, target, moveRule))
+                    continue;
+            }
+
+            int tentativeG = gScore[cur.idx] + stepCost;
+            if (tentativeG < gScore[nbIdx])
+            {
+                gScore[nbIdx] = tentativeG;
+                parent[nbIdx] = cur.idx;
+
+                int f = tentativeG + HeuristicOctile(nb, goal);
+                open.push(Node{ f, tentativeG, nbIdx });
+            }
+        }
+    }
+
+    return false;
 }

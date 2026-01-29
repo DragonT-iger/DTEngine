@@ -5,13 +5,14 @@ static const UnitStats UnitStatsTable[] =
     // 공, 방, 체, 공격범위
     { 20, 10, 100, 1 }, // 룩
     { 20, 10, 100, 1 }, // 나이트
-    { 20, 10, 100, 1 }, // 비숍
-    //{ 20, 10, 100, 1 }, // 앨리스
+    { 20, 10, 100, 2 }, // 비숍
+    {  0,  0, 100, 0 }, // 앨리스
     //{ 20, 10, 100, 1 }, // 퀸
 };
 
 void Unit::SetUnitType(int type)
 {
+    if (type < UnitType::Rook || type > UnitType::Alice) type = UnitType::Rook;
     m_type = type;
     SetStats(UnitStatsTable[type]);
 }
@@ -20,6 +21,11 @@ void Unit::SetStats(const UnitStats& s)
 {
     m_stats = s;
     m_hp = m_stats.maxHp;
+}
+
+void Unit::StartAction()
+{
+    m_actionDone = true;
 }
 
 int Unit::GetDir2(const Vector2& p) const // 대충 어느 위치 던져주면 그 위치를 바라보는 방향을 8방향으로 바꿔줌.
@@ -46,10 +52,13 @@ void Unit::SetDir(const Vector2& p)
 
 void Unit::ResetTurnPlan()
 {
+    m_moveTarget = nullptr;
     m_moveTargetPos = GRIDPOS_INVALID;
     m_movePos = GRIDPOS_INVALID;
     m_attackTarget = nullptr;
     m_attackPos = GRIDPOS_INVALID;
     m_action = TurnAction::Wait;
+    if (m_isAlive) m_actionDone = false;
+    else m_actionDone = true;
 }
 
