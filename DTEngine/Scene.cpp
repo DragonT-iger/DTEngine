@@ -898,10 +898,10 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
 
 
-  /*  for (auto* go : transparentQueue)
+    for (auto* go : transparentQueue)
     {
         DrawObject(go);
-    }*/
+    }
 
     
 

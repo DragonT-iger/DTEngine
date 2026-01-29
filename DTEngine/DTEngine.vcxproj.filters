@@ -780,5 +780,11 @@
     <FxCompile Include="..\Assets\Shaders\Chess_Default_PS.hlsl">
       <Filter>Shader\Specific\Chess</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Test_UI_MultiplyLayer_VS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Test_UI_MultiplyLayer_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -241,6 +241,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
     Microsoft::WRL::ComPtr<ID3D11BlendState>        m_alphaBlendState;
+    Microsoft::WRL::ComPtr<ID3D11BlendState>        m_multiplyBlendState;
+
     //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
 
