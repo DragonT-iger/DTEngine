@@ -39,7 +39,7 @@ void CombatController::Start()
 
 void CombatController::Update(float dTime)
 {
-    Process();
+    Process(dTime);
 }
 
 void CombatController::Setup()
@@ -165,7 +165,7 @@ bool CombatController::ReadyForBattlePhase()
     return true;
 }
 
-bool CombatController::MoveAndBattlePhase()
+bool CombatController::MoveAndBattlePhase(float dTime)
 {
     std::cout << "move" << std::endl;
     if (!m_phaseEntered) // 이번 단계 처음 들어옴.
@@ -195,7 +195,18 @@ bool CombatController::MoveAndBattlePhase()
         return false;
     }
 
-    // 애니메이션 완료 체크
+    for (AllyUnit* ally : m_allyUnits)
+    {
+        if (ally && ally->IsAlive()) ally->UpdateAction(dTime);
+    }
+
+    for (EnemyUnit* enemy : m_enemyUnits)
+    {
+        if (enemy && enemy->IsAlive()) enemy->UpdateAction(dTime);
+    }
+
+
+    // 실제 이동 및 애니메이션 완료 체크
     for (AllyUnit* ally : m_allyUnits)
     {
         if (ally && ally->IsAlive() && !ally->IsActionDone()) return false;
@@ -269,7 +280,7 @@ bool CombatController::EndPhase()
         if (aliveAllyCount == 0 && m_stageResult != StageResult::Win) m_stageResult = StageResult::Lose; // 전멸하면 패배
 
         return false;
-    }
+    }   
 
     // 애니메이션 완료 체크
     if (m_aliceUnit && !m_aliceUnit->IsAlive() && !m_aliceUnit->IsActionDone()) return false;
@@ -318,7 +329,7 @@ bool CombatController::EndPhase()
     return true;
 }
 
-void CombatController::Process()
+void CombatController::Process(float dTime)
 {
     if (m_stageEnd || !m_isStageStart) return;
 
@@ -334,7 +345,7 @@ void CombatController::Process()
         if (ReadyForBattlePhase()) m_currPhase = Phase::MoveAndBattle;
         break;
     case Phase::MoveAndBattle:
-        if (MoveAndBattlePhase()) m_currPhase = Phase::End; // 여기서 false면 계속 MoveAndBattle 유지
+        if (MoveAndBattlePhase(dTime)) m_currPhase = Phase::End; // 여기서 false면 계속 MoveAndBattle 유지
         break;
     case Phase::End:
         if (EndPhase()) m_currPhase = Phase::Ready; // 여기서 false면 계속 End 유지

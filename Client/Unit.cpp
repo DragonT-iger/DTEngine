@@ -23,9 +23,48 @@ void Unit::SetStats(const UnitStats& s)
     m_hp = m_stats.maxHp;
 }
 
-void Unit::StartAction()
+static Vector3 GridToWorld(const Vector2& p)
 {
+    return Vector3{ p.x * 2.0f, 1.0f, p.y * 2.0f };
+}
+
+void Unit::StartAction()
+{   
+    if (m_action == TurnAction::Move)
+    {
+        m_worldFrom = _GetOwner()->GetTransform()->GetPosition();
+        m_worldTo = GridToWorld(m_pos);
+
+        m_moveT = 0.0f;
+        m_isMoving = true;
+        m_actionDone = false;
+        return;
+    }
+    else if (m_action == TurnAction::Die)
+    {
+        _GetOwner()->GetTransform()->SetPosition(Vector3{ m_pos.x * 2.0f, -3, m_pos.y * 2.0f });
+    }
+
     m_actionDone = true;
+}
+
+void Unit::UpdateAction(float dTime)
+{
+    if (!m_isMoving) return;
+
+    m_moveT += dTime / m_moveDuration;
+    float t = (m_moveT > 1.0f) ? 1.0f : m_moveT;
+
+    float smooth = t * t * (3.0f - 2.0f * t);
+
+    Vector3 p = m_worldFrom + (m_worldTo - m_worldFrom) * smooth;
+    _GetOwner()->GetTransform()->SetPosition(p);
+
+    if (t >= 1.0f)
+    {
+        m_isMoving = false;
+        m_actionDone = true;
+    }
 }
 
 int Unit::GetDir2(const Vector2& p) const // 대충 어느 위치 던져주면 그 위치를 바라보는 방향을 8방향으로 바꿔줌.
@@ -61,4 +100,3 @@ void Unit::ResetTurnPlan()
     if (m_isAlive) m_actionDone = false;
     else m_actionDone = true;
 }
-

@@ -161,6 +161,7 @@
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitActionEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -196,6 +197,7 @@
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitActionEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

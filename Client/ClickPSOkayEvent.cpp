@@ -69,7 +69,8 @@ void ClickPSOkayEvent::SetClick()
 						Vector3 worldPos = targetTf->GetPosition();
 						worldPos.y += 1;
 						GameObject* go = m_selectPrefab->Instantiate();
-						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 125.0f, 0.0f));
+						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 90.0f, 0.0f));
+						
 						go->GetTransform()->SetPosition(worldPos);
 						std::cout << worldPos.x << " " << worldPos.y << std::endl;
 

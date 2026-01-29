@@ -49,10 +49,10 @@ public:
 	bool ReadyPhase();
 	bool ReadyToMovePhase();
 	bool ReadyForBattlePhase();
-	bool MoveAndBattlePhase();
+	bool MoveAndBattlePhase(float dTime);
 	bool EndPhase();
 
-	void Process();
+	void Process(float dTime);
 
 	// 준비준비 단계
 	bool CanActuallyAttack(const Unit* me, const Unit* target) const; // 실질적인 공격이 가능한지.

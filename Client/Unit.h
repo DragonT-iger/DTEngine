@@ -124,7 +124,9 @@ public:
     void SetAction(TurnAction action) { m_action = action; }
     bool IsActionDone() const { return m_actionDone; }
     void SetActionDone(bool done) { m_actionDone = done; }
+
     void StartAction();
+    void UpdateAction(float dTime);
 
     // 바라보는 방향
     Dir8 GetDir() const { return m_dir; }
@@ -134,10 +136,8 @@ public:
     // 인식범위
     int GetPerceptionRange() const { return m_perceptionRange; }
     
-
     // 목표, 지점, 행동 초기화
     void ResetTurnPlan();
-
 protected:
     Team m_team = Team::Ally;
     int m_type = UnitType::Rook; // 이건 에디터에서 만지게 할거임
@@ -161,4 +161,13 @@ protected:
     bool m_actionDone = false;
 
     Dir8 m_dir = Dir8::Right;
+
+
+    // 실제 이동용
+    bool  m_isMoving = false;
+    float m_moveT = 0.0f;
+    float m_moveDuration = 0.5f;
+    Vector3 m_worldFrom{};
+    Vector3 m_worldTo{};
+
 };
