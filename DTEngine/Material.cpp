@@ -375,8 +375,7 @@ void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM
     BindPerObject(worldTM, worldInverseTransposeTM);
 }
 
-// ★ 기존 bind를 분리; Bind 폐기 예정 
-// RenderKey에서 Depth를 제외한 Shader Texture의 값이 변동된 순간에만 gpu bind를 명령하도록 설계 
+
 void Material::BindPipeLine()
 {
     if (!m_shader) return;
@@ -428,6 +427,62 @@ void Material::BindPipeLine()
    
 
 }
+
+// Resourceview만 Object의 material에서 가져옴. 
+// 외곽선과 같은 공통된 Shader, BlendMode를 적용시키기 위함.
+// Sampler는 필요하면 추가하겠음.
+void Material::BindPipeLine(Shader* PS, BlendMode BlendMode, CullMode CullMode)
+{
+    if (!PS) return;
+    DX11Renderer::Instance().BindShader(PS);
+
+    ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
+    if (!context) return;
+
+    uint32_t currentFlags = 0; //Texture bit flag 처리 
+
+    for (size_t i = 0; i < MAX_TEXTURE_SLOTS; ++i) //0 1 2 3 4 5 장의 기본 Texture에 대한 연산 
+    {
+        ID3D11ShaderResourceView* srv = nullptr;
+        ID3D11SamplerState* sampler = nullptr;
+
+        if (m_textures[i])
+        {
+            currentFlags |= (1 << i);
+
+            srv = m_textures[i]->GetSRV();
+            sampler = m_textures[i]->GetSampler();
+            context->VSSetShaderResources(i, 1, &srv);
+        }
+
+        DX11Renderer::Instance().BindTexture((int)i, srv);
+
+
+
+        /*if (sampler)
+            context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);*/
+
+    }
+    ID3D11SamplerState* Sampler =  DX11Renderer::Instance().GetSampler(FilterMode::Bilinear, WrapMode::Repeat);
+    if (Sampler)
+    {
+        context->PSSetSamplers(0, 1, &Sampler);
+        context->VSSetSamplers(0, 1, &Sampler);
+    }
+
+
+    currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 
+
+    DX11Renderer::Instance().UpdateTextureFlag_CBUFFER(currentFlags);
+
+    DX11Renderer::Instance().SetBlendMode(BlendMode);
+
+    DX11Renderer::Instance().SetCullMode(CullMode);
+
+
+}
+
+
 
 void Material::BindPerObject(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
