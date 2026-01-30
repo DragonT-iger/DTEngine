@@ -74,7 +74,6 @@ public:
     bool IsEffectEnabled(PostProcessType type) const;
     uint32_t GetPostProcessMask() const { return m_postProcessMask; }
 
-
     const bool& GetUseGrayScale() const { return m_useGrayScale; }
     void SetUseGrayScale(bool use);
 
@@ -95,6 +94,18 @@ public:
 
     const float& GetBloomIntensity() const { return m_bloomIntensity; }
     void SetBloomIntensity(float value) { m_bloomIntensity = value; }
+
+
+
+    const Vector2& GetCircleCenter() const { return m_CircleCenter; }
+    const Vector2& GetCircleWidthHeight() const { return m_CircleWH; }
+
+    void SetCrircleCenter(Vector2 Center) { m_CircleCenter = Center; }
+    void SetCrircleWidthHeight(Vector2 WH) { m_CircleWH = WH; }
+
+    const bool& GetUseCircleMask() const { return m_useCircleMask; }
+    void SetUseCircleMask(bool use);
+
 
 private:
     void UpdateViewMatrix();
@@ -139,7 +150,14 @@ private:
     float m_vignetteRadius = 0.8f;
     float m_vignetteSoftness = 0.4f;
 
-	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈
+	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈 // ㅇㅋ
     float m_bloomThreshold = 1.0f; 
     float m_bloomIntensity = 1.0f; 
+
+
+
+    bool m_useCircleMask = false;
+    Vector2 m_CircleCenter = {};
+    Vector2 m_CircleWH = {};
+
 };

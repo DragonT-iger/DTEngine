@@ -11,8 +11,10 @@ enum class PostProcessType : uint32_t
     Blur        = 1 << 3,
     Chromatic   = 1 << 4,
     GrayScale   = 1 << 5,
+    CircleMask = 1 << 6,
     All         = 0xFFFFFFFF
 };
+
 
 inline PostProcessType operator|(PostProcessType a, PostProcessType b) {
     return static_cast<PostProcessType>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
