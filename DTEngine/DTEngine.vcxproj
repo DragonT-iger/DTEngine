@@ -198,6 +198,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="HistoryManager.h" />
     <ClInclude Include="Levitating.h" />
     <ClInclude Include="MonoSingleton.h" />
+    <ClInclude Include="outline.h" />
     <ClInclude Include="Rigid.h" />
     <ClInclude Include="SkyBoxComponent.h" />
     <ClInclude Include="ICommand.h" />
@@ -292,7 +293,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="GrayScaleEffect.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="Levitating.cpp" />
-    <ClCompile Include="OwnerSetActive.cpp" />
+    <ClCompile Include="outline.cpp" />
     <ClCompile Include="Rigid.cpp" />
     <ClCompile Include="SkyBoxComponent.cpp" />
     <ClCompile Include="IDManager.cpp" />
@@ -429,6 +430,18 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <FxCompile Include="..\Assets\Shaders\GrayScale_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\MasterChief_VS.hlsl" />
+    <FxCompile Include="..\Assets\Shaders\OutlineShader_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\OutlineShader_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Assets\Shaders\PBR_PS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\PBR_VS.hlsl" />
     <FxCompile Include="..\Assets\Shaders\Rabbit_PBR_PS.hlsl" />

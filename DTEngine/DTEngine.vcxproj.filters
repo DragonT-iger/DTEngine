@@ -389,6 +389,9 @@
     <ClInclude Include="CircleMask.h">
       <Filter>PostProcessing\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="outline.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -616,9 +619,6 @@
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
-    <ClCompile Include="OwnerSetActive.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -630,6 +630,9 @@
     </ClCompile>
     <ClCompile Include="CircleMask.cpp">
       <Filter>PostProcessing\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="outline.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -803,6 +806,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\CircleMask_VS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\OutlineShader_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\OutlineShader_PS.hlsl">
+      <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
