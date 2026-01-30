@@ -44,6 +44,35 @@ enum Dir8
     DownRight,
 };
 
+enum class ActionPhase
+{
+    None,
+    Rotating,
+    Moving,
+    Attacking,
+    Dying
+};
+
+struct MoveAnim
+{
+    bool active = false;
+    float t = 0.0f;
+    float duration = 0.5f;
+    Vector3 from{};
+    Vector3 to{};
+};
+
+struct RotateAnim
+{
+    bool active = false;
+    float t = 0.0f;
+    float duration = 0.1f;
+    float fromYaw = 0.0f;  // degrees
+    float toYaw = 0.0f;  // degrees
+};
+
+
+
 struct UnitStats // 유닛 기본 스텟
 {
     int atk = 20;
@@ -138,6 +167,26 @@ public:
     
     // 목표, 지점, 행동 초기화
     void ResetTurnPlan();
+
+
+    // 애니메이션용
+    void BeginRotateToDir();
+    bool TickRotate(float dt);
+
+    void BeginMoveToPos();
+    bool TickMove(float dt);
+
+    void FinishAction();
+
+
+private:
+    static Vector3 GridToWorld(const Vector2& p);
+    static float   DirToYaw(Dir8 d);
+    static float   Smooth01(float t);
+    static float   LerpAngleDeg(float a, float b, float t);
+    static float   NormalizeDeg(float deg);
+    static float   DeltaAngleDeg(float from, float to);
+
 protected:
     Team m_team = Team::Ally;
     int m_type = UnitType::Rook; // 이건 에디터에서 만지게 할거임
@@ -163,11 +212,9 @@ protected:
     Dir8 m_dir = Dir8::Right;
 
 
-    // 실제 이동용
-    bool  m_isMoving = false;
-    float m_moveT = 0.0f;
-    float m_moveDuration = 0.5f;
-    Vector3 m_worldFrom{};
-    Vector3 m_worldTo{};
+private:
+    ActionPhase m_phase = ActionPhase::None;
 
+    RotateAnim m_rot;
+    MoveAnim   m_move;
 };

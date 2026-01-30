@@ -167,7 +167,7 @@ bool CombatController::ReadyForBattlePhase()
 
 bool CombatController::MoveAndBattlePhase(float dTime)
 {
-    std::cout << "move" << std::endl;
+    //std::cout << "move" << std::endl;
     if (!m_phaseEntered) // 이번 단계 처음 들어옴.
     {
         m_phaseEntered = true;
@@ -220,13 +220,13 @@ bool CombatController::MoveAndBattlePhase(float dTime)
 
     m_phaseEntered = false; // 전부 끝나면 다음 단계로.
 
-    std::cout << "moveDone" << std::endl;
+    //std::cout << "moveDone" << std::endl;
     return true;
 }
 
 bool CombatController::EndPhase()
 {
-    std::cout << "end" << std::endl;
+    //std::cout << "end" << std::endl;
 
     PrintFrame();
 
@@ -325,7 +325,7 @@ bool CombatController::EndPhase()
 
     m_phaseEntered = false;
 
-    std::cout << "endDone" << std::endl;
+    //std::cout << "endDone" << std::endl;
     return true;
 }
 
