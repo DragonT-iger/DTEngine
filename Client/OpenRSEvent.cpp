@@ -3,14 +3,11 @@
 #include "Image.h"
 #include "AllyUnit.h"
 #include "RuleImageVisualEvent.h"
+#include "AssetDatabase.h"
 
 BEGINPROPERTY(OpenRSEvent)
 DTPROPERTY(OpenRSEvent, m_windowBar)
-DTPROPERTY(OpenRSEvent, m_imageFirst)
-DTPROPERTY(OpenRSEvent, m_imageSecond)
-DTPROPERTY(OpenRSEvent, m_imageThird)
 ENDPROPERTY()
-
 
 void OpenRSEvent::OpenWindow()
 {
@@ -33,13 +30,12 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
 
     // 상단 바 이미지 업데이트
     Image* barImage = m_windowBar->GetComponent<Image>();
-    if (m_imageFirst && m_imageSecond && m_imageThird)
-    {
-        if (unitName == "Chess_Sword_Shield_Test") barImage->SetTexture(m_imageFirst->GetComponent<Image>()->GetTexture());
-        else if (unitName == "Chess_Spear_Test") barImage->SetTexture(m_imageSecond->GetComponent<Image>()->GetTexture());
-        else if (unitName == "Chess_Wand_Test") barImage->SetTexture(m_imageThird->GetComponent<Image>()->GetTexture());
-    }
 
+    // AssetDatabase로 직접 가져오기. gameobject 만들어서 하지말고.
+    if (unitName == "Chess_Sword_Shield_Test") barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
+    else if (unitName == "Chess_Spear_Test") barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Rook.png"));
+    else if (unitName == "Chess_Wand_Test") barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Bishop.png"));
+    
     // 이동, 전투 값 가져오기.
     auto alloy = m_targetUnit->GetComponent<AllyUnit>();
     if (alloy)

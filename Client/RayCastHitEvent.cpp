@@ -9,8 +9,10 @@
 #include "OpenRSEvent.h"
 
 BEGINPROPERTY(RayCastHitEvent)
-DTPROPERTY(RayCastHitEvent, m_PSWinodwBG)
-DTPROPERTY(RayCastHitEvent, m_RSWinodwBG)
+DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
+DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
+DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
+DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
@@ -32,10 +34,12 @@ void RayCastHitEvent::RaycastCheck()
 		
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
 		{
+				// 이거는 inputmanager에다가 받는거 추가해달라고 요청해야함. 아니면 가끔씩 터짐.
 				const Vector2 mp = Vector2(input.GetGameMousePosition().x, input.GetGameMousePosition().y);
-
+				std::cout << mp.x << " " << mp.y << std::endl;
 				// 둘 중 한개라도 활성 상태고 마우스가 그 위에 있는지 체크.
-				if (IsMouseInUI(m_PSWinodwBG, mp) || IsMouseInUI(m_RSWinodwBG, mp))
+				if (IsMouseInUI(m_leftPSWinodwBG, mp) || IsMouseInUI(m_leftRSWinodwBG, mp)
+						|| IsMouseInUI(m_rightPSWinodwBG, mp) || IsMouseInUI(m_rightRSWinodwBG, mp))
 				{
 						return;
 				}
@@ -49,15 +53,30 @@ void RayCastHitEvent::RaycastCheck()
 
 				scene->Raycast2(r, hit, hitT);
 
+				bool isLeft = x < 960;
+
 				if (hit)
 				{
 						std::cout << hit->GetName() << std::endl;
 						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
 						{
-								if (m_PSWinodwBG)
+								if (isLeft)
 								{
+										if (!m_leftPSWinodwBG)
+												return;
+
 										CloseAllWindows(); // 먼저 다 닫고
-										auto psEvent = m_PSWinodwBG->GetComponent<OpenPSEvent>();
+										auto psEvent = m_leftPSWinodwBG->GetComponent<OpenPSEvent>();
+										psEvent->SetRayObj(hit);
+										psEvent->SetActivePSWindow(); // PS 오픈
+								}
+								if (!isLeft)
+								{
+										if (!m_rightPSWinodwBG)
+												return;
+
+										CloseAllWindows(); // 먼저 다 닫고
+										auto psEvent = m_rightPSWinodwBG->GetComponent<OpenPSEvent>();
 										psEvent->SetRayObj(hit);
 										psEvent->SetActivePSWindow(); // PS 오픈
 								}
@@ -67,10 +86,21 @@ void RayCastHitEvent::RaycastCheck()
 						else if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield" 
 								|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
 						{ 
-								if (m_RSWinodwBG)
+								if (isLeft)
 								{
+										if (!m_leftRSWinodwBG)
+												return;
+
 										CloseAllWindows(); // 먼저 다 닫고
-										m_RSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+										m_leftRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+								}
+								if (!isLeft)
+								{
+										if (!m_rightRSWinodwBG)
+												return;
+
+										CloseAllWindows(); // 먼저 다 닫고
+										m_rightRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
 								}
 						}
 
@@ -87,11 +117,18 @@ bool RayCastHitEvent::IsMouseInUI(GameObject* uiObj, const Vector2& mousePos)
 		Transform* uiTf = uiObj->GetTransform();
 		Vector3 pos = uiTf->GetPosition();
 		Vector3 scale = uiTf->GetScale();
-
-		float minX = pos.x - (scale.x * 0.5f);
+		
+		// 중앙 기준.
+		/*float minX = pos.x - (scale.x * 0.5f);
 		float maxX = pos.x + (scale.x * 0.5f);
 		float minY = pos.y - (scale.y * 0.5f);
-		float maxY = pos.y + (scale.y * 0.5f);
+		float maxY = pos.y + (scale.y * 0.5f);*/
+
+		// 0,0 피벗 기준
+		float minX = pos.x;
+		float maxX = pos.x + scale.x;
+		float minY = pos.y;
+		float maxY = pos.y + scale.y;
 
 		return (mousePos.x >= minX && mousePos.x <= maxX &&
 				mousePos.y >= minY && mousePos.y <= maxY);
@@ -99,6 +136,9 @@ bool RayCastHitEvent::IsMouseInUI(GameObject* uiObj, const Vector2& mousePos)
 
 void RayCastHitEvent::CloseAllWindows()
 {
-		if (m_PSWinodwBG) m_PSWinodwBG->SetActive(false);
-		if (m_RSWinodwBG) m_RSWinodwBG->SetActive(false);
+		if (m_rightPSWinodwBG) m_rightPSWinodwBG->SetActive(false);
+		if (m_rightRSWinodwBG) m_rightRSWinodwBG->SetActive(false);
+
+		if (m_leftPSWinodwBG) m_leftPSWinodwBG->SetActive(false);
+		if (m_leftRSWinodwBG) m_leftRSWinodwBG->SetActive(false);
 }

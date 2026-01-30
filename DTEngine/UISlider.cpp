@@ -134,10 +134,7 @@ void UISlider::UpdateHandlePosition()
 
     Vector3 localPos = m_handleTransform->GetPosition();
     localPos.x = x;
-    localPos.y = 0.0f;
     m_handleTransform->SetPosition(localPos);
-
-    // setvalue 500.000
 }
 
 void UISlider::OnHandleDragged(float mouseLocalX)
@@ -152,14 +149,13 @@ void UISlider::OnHandleDragged(float mouseLocalX)
 
     if (available <= 0.0f) return;
     
-    Vector3 trackPos = m_Transform->GetPosition();
-    Vector3 trackScale = m_Transform->GetScale();
+    Vector3 trackPos = m_Transform->GetWorldPosition();
+    Vector3 trackScale = m_Transform->GetWorldScale();
     float localMouseX_normalized = (mouseLocalX - trackPos.x) / trackScale.x;
 
     float clampedX = std::clamp(localMouseX_normalized, minX, maxX);
     Vector3 localPos = m_handleTransform->GetPosition();
     localPos.x = clampedX;
-    localPos.y = 0.0f;
     m_handleTransform->SetPosition(localPos);
 
     // value 업데이트
@@ -183,8 +179,8 @@ void UISlider::OnHandleReleased(float mouseLocalX)
         return;
     }
 
-    Vector3 trackPos = m_Transform->GetPosition();
-    Vector3 trackScale = m_Transform->GetScale();
+    Vector3 trackPos = m_Transform->GetWorldPosition();
+    Vector3 trackScale = m_Transform->GetWorldScale();
 
     // 마우스를 track 기준 로컬 좌표로 변환 후 정규화
     float localMouseX = mouseLocalX - trackPos.x;
@@ -197,7 +193,7 @@ void UISlider::OnHandleReleased(float mouseLocalX)
 void UISlider::InvokeValueChanged()
 {
     if (!m_interactable) return;
-    if (m_onValueChanged) m_onValueChanged(m_value);
+    if (m_onValueChanged) m_onValueChanged();
 }
 
 void UISlider::ApplyTrackColor()
@@ -234,6 +230,12 @@ bool UISlider::ComputeHandleBounds(float& minX, float& maxX, float& available) c
     // handle의 scale을 고려하여 이동 가능 범위 계산
     Vector3 handleScale = m_handleTransform->GetScale();
     float handleWidth = handleScale.x;
+
+    float trackWidth = m_Transform->GetWorldScale().x;
+    if (trackWidth > 0.0f && handleWidth > 1.0f)
+    {
+        handleWidth /= trackWidth;
+    }
 
     // set value는 바꿔도 여기는 고정으로 가도 괜찮다고 생각함. track에 범위를 제한하기 때문에.
     minX = 0.0f;

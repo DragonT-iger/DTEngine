@@ -20,7 +20,10 @@ public:
 private:
 		GameObject* m_hitObj = nullptr;
 
-		GameObject* m_PSWinodwBG = nullptr;
-		GameObject* m_RSWinodwBG = nullptr;
+		GameObject* m_rightPSWinodwBG = nullptr;
+		GameObject* m_rightRSWinodwBG = nullptr;
+
+		GameObject* m_leftPSWinodwBG = nullptr;
+		GameObject* m_leftRSWinodwBG = nullptr;
 };
 

@@ -117,6 +117,15 @@
     <ClCompile Include="UnitActionEvent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SetMainSceneEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderValueEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -205,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="UnitActionEvent.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SetMainSceneEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderValueEvent.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,11 +19,6 @@ public:
 		int GetBattleIndex() { return m_battleIndex; }
 
 private:
-		// image settexure 어캐하지 음.. 
-		GameObject* m_imageFirst = nullptr;
-		GameObject* m_imageSecond = nullptr;
-		GameObject* m_imageThird = nullptr;
-
 		// 생성 유닛 및 image 변경을 위해서
 		GameObject* m_targetUnit = nullptr;
 		GameObject* m_windowBar = nullptr;

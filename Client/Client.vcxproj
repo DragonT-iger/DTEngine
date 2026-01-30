@@ -148,6 +148,7 @@
     <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameOverEvent.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenPSEvent.cpp" />
@@ -158,6 +159,8 @@
     <ClCompile Include="RuleImageVisualEvent.cpp" />
     <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
+    <ClCompile Include="SetMainSceneEvent.cpp" />
+    <ClCompile Include="SliderValueEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
     <ClCompile Include="Unit.cpp" />
@@ -185,6 +188,7 @@
     <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameOverEvent.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
@@ -194,6 +198,8 @@
     <ClInclude Include="RuleImageVisualEvent.h" />
     <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
+    <ClInclude Include="SetMainSceneEvent.h" />
+    <ClInclude Include="SliderValueEvent.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />
     <ClInclude Include="Unit.h" />
