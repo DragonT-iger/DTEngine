@@ -610,9 +610,6 @@
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
-    <ClCompile Include="OwnerSetActive.cpp">
-      <Filter>Component\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Rigid.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
