@@ -727,7 +727,7 @@ void DX11Renderer::EndFrame()
 
     //일단 
 
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+   //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
     //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
