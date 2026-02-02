@@ -63,14 +63,11 @@ void RayCastHitEvent::RaycastCheck()
 
 				if (hit)
 				{
-						//std::cout << hit->GetName() << std::endl;
-
 						if (m_isHealSkillOn)
 						{
 								// 일단 닫고. 
 								CloseAllWindows();
 								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
-								std::cout << "heal skill시작한다." << std::endl;
 								
 								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
@@ -88,15 +85,17 @@ void RayCastHitEvent::RaycastCheck()
 
 										if (m_Unit)
 										{
-												m_Unit->GetComponent<AllyUnit>()->Heal(30);
+												auto unit = m_Unit->GetComponent<AllyUnit>();
+												if (!unit)
+														return;
+
+												unit->Heal(30);
 												m_isHealSkillOn = false;
 
-												std::cout << "heal 했음." << std::endl;
-												std::cout << m_Unit->GetComponent<AllyUnit>()->GetHp() << std::endl;
+												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
 										}
 								}
 
-								SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
 								return;
 						}
 
@@ -104,7 +103,6 @@ void RayCastHitEvent::RaycastCheck()
 						{
 								CloseAllWindows();
 								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
-								std::cout << "attack skill시작한다." << std::endl;
 
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
 										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
@@ -121,14 +119,16 @@ void RayCastHitEvent::RaycastCheck()
 
 										if (m_Unit)
 										{
-												m_Unit->GetComponent<EnemyUnit>()->TakeDamage(30);
+												auto unit = m_Unit->GetComponent<AllyUnit>();
+												if (!unit)
+														return;
+
+												unit->TakeDamage(30);
 												m_isAttackSkillOn = false;
 
-												std::cout << "attack 했음." << std::endl;
-												std::cout << m_Unit->GetComponent<EnemyUnit>()->GetHp() << std::endl;
+												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
 										}
 								}
-								SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
 								return;
 						}
 
