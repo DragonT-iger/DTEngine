@@ -65,10 +65,6 @@ void RayCastHitEvent::RaycastCheck()
 				{
 						if (m_isHealSkillOn)
 						{
-								// 일단 닫고. 
-								CloseAllWindows();
-								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
-								
 								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
 										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
@@ -101,9 +97,6 @@ void RayCastHitEvent::RaycastCheck()
 
 						if (m_isAttackSkillOn)
 						{
-								CloseAllWindows();
-								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
-
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
 										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
 								{

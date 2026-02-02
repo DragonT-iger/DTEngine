@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "RayCastHitEvent.h"
 #include "UIButton.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(SkillButton)
 DTPROPERTY(SkillButton, m_rayObj)
@@ -15,14 +17,19 @@ void SkillButton::Start()
 		if (!m_rayObj || !m_attackButton || !m_healButton)
 				return;
 
-		// 있는 경우 각각 넣어주기.
-
+		// window 닫고 timescale 0으로.
 		m_attackButton->SetOnClick([this]()
 				{
 						if (!m_isAttackUnlocked)
 								return;
 
-						m_rayObj->GetComponent<RayCastHitEvent>()->SetAttackSkill(true);
+						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();
+						if (!rayEvent)
+								return;
+
+						rayEvent->CloseAllWindows();
+						SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+						rayEvent->SetAttackSkill(true);
 				});
 
 		m_healButton->SetOnClick([this]()
@@ -30,6 +37,12 @@ void SkillButton::Start()
 						if (!m_isHealUnlocked)
 								return;
 
-						m_rayObj->GetComponent<RayCastHitEvent>()->SetHealSkill(true);
+						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();
+						if (!rayEvent)
+								return;
+
+						rayEvent->CloseAllWindows();
+						SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+						rayEvent->SetHealSkill(true);
 				});
 }
