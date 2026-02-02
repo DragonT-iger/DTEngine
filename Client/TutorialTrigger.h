@@ -3,7 +3,6 @@
 
 class UIButton;
 class TutorialManager;
-
 class TutorialTrigger : public MonoBehaviour
 {
     DTGENERATED_BODY(TutorialTrigger);

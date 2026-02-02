@@ -61,6 +61,10 @@ public:
     std::unique_ptr<GameObject> _Internal_RemoveGameObject(GameObject* go);
 
     void Render(Camera* camera, RenderTexture* renderTarget = nullptr);
+    void RenderOpaque(std::vector<GameObject*>& OpaqueVec);
+    void RenderTrans(std::vector<GameObject*>& TransVec, const Matrix& Cam);
+    void RenderOutline(std::vector<GameObject*>& OutlineVec);
+
 
     void RenderUI(Camera* camera, RenderTexture* renderTarget);
     void RenderShadows();

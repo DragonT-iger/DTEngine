@@ -18,7 +18,6 @@ public:
     // 렌더링 직전에 호출되어 상수버퍼를 업데이트하는 함수
     void BindEP();
 
-    // Get/Set (리플렉션용)
     void SetProgress(float p) { m_EM.progress = p; }
 
     void SetEdgeColor(const Vector4& color) { m_EM.edgeColor = color; }
@@ -27,6 +26,7 @@ public:
     float GetTimeMultiplier() const { return m_EM.timeMultiplier; }
     Vector4 GetEdgeColor() const { return m_EM.edgeColor; }
     float GetProgress() const { return m_EM.progress; }
+    void SetCameraInverrse(const Matrix mat) { m_EM.invcamerarotation = mat; }
 
 private:
     EffectParams m_EM;

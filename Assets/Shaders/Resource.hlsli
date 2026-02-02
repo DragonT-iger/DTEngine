@@ -57,9 +57,19 @@ cbuffer CBuffer_Effect : register(b8)
     float timeMultiplier; // 애니메이션 배속 (추가)
     float effectType;
     float Skinned_Flag; // bone / rigid  object와의 통합 위해.
+    
+    
+    float4x4 invcamerarotation;
 }
 
-
+cbuffer CBuffer_Fog : register(b9)
+{
+    float4 FogColor;
+    float FogGlobalDensity;
+    float FogHeightFalloff;
+    float FogBaseHeight;
+    float FogStartDistance;
+}
 
 struct VS_INPUT
 {

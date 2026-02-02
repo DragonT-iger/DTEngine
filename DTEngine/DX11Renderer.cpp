@@ -268,6 +268,19 @@ void DX11Renderer::UpdateEffect_CBUFFER(EffectParams& data)
     m_context->Unmap(m_cbuffer_Effect.Get(), 0);
 }
 
+void DX11Renderer::UpdateFog_CBUFFER(FogParams& data)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedData = {};
+
+    HRESULT hr = m_context->Map(m_cbuffer_Fog.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
+    DXHelper::ThrowIfFailed(hr);
+
+    FogParams* dataPtr = static_cast<FogParams*>(mappedData.pData);
+    *dataPtr = data;
+
+    m_context->Unmap(m_cbuffer_Fog.Get(), 0);
+}
+
 void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
 
@@ -592,10 +605,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 //  ★
 void DX11Renderer::BindGlobalResources()
 {
-    //상수 버퍼 Binding
-
-    //Sampler는 더 봐야 할 듯 
-    //m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //imgui에서 0번을 써서 indexing을 하나 높여서 binding한다는 거 잊지마! 
 
     //VS
     m_context->VSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
@@ -609,6 +619,9 @@ void DX11Renderer::BindGlobalResources()
 
     m_context->VSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
     m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
+
+    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Fog.GetAddressOf());
+
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());
     m_context->PSSetConstantBuffers(2, 1, m_cbuffer_world_M.GetAddressOf());
@@ -622,6 +635,9 @@ void DX11Renderer::BindGlobalResources()
     m_context->PSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
     m_context->PSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
+    m_context->PSSetConstantBuffers(9, 1, m_cbuffer_Fog.GetAddressOf());
+
+    
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
     m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
@@ -637,53 +653,49 @@ void DX11Renderer::CreateConstantBuffers()
     bd.MiscFlags = 0;
 
     //해당 자료형에서 16 byte 정렬 되어있음. 
+    //Imgui에서 0번을 써서 indexing 하나씩 늘린 거임. 가끔 충돌 나더라 
 
-    //b0
+
+
+    //b1
     bd.ByteWidth = sizeof(CBuffer_Frame_Data);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_frame.GetAddressOf()));
-    //b1
+    //b2
     bd.ByteWidth = sizeof(CBuffer_Object_Data);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_world_M.GetAddressOf()));
-    //b2
+    //b3
     bd.ByteWidth = sizeof(CBuffer_GlobalLight);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_lights.GetAddressOf()));
-    //b3
+    //b4
     bd.ByteWidth = sizeof(MaterialData);
     DXHelper::ThrowIfFailed (m_device->CreateBuffer(&bd, nullptr, m_cbuffer_material.GetAddressOf()));
-    //b4
+    //b5
     bd.ByteWidth = sizeof(TextureFlag);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Texture_flags.GetAddressOf()));
-    //b5
+    //b6
     bd.ByteWidth = sizeof(Matrix_Pallette);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
-
-
+    //b7
     bd.ByteWidth = sizeof(SkyBox);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_SkyBox.GetAddressOf()));
-
+    //b8
     bd.ByteWidth = sizeof(EffectParams);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Effect.GetAddressOf()));
 
+    bd.ByteWidth = sizeof(FogParams);
+    DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_Fog.GetAddressOf()));
 
-
-      // D3D11_BUFFER_DESC boneDesc = {};
-    // boneDesc.ByteWidth = sizeof(CBuffer_BoneData);
-    // boneDesc.Usage = D3D11_USAGE_DYNAMIC;
-    // boneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    // boneDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    // hr = m_device->CreateBuffer(&boneDesc, nullptr, m_cbuffer_bones.GetAddressOf());
-    // DXHelper::ThrowIfFailed(hr);
+   
 
 }
 
 void DX11Renderer::EndFrame()
 {
-    Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+    //Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 
    // mainCam->SetPostProcessEffect(PostProcessType::CircleMask, true);
 
-   uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
+  /* uint32_t effectMask = (mainCam != nullptr) ? mainCam->GetPostProcessMask() : 0;
 
    if (m_msaaTargetTex && m_resolvedSceneRT)
    {
@@ -706,22 +718,22 @@ void DX11Renderer::EndFrame()
            );
        }
    }
+*/
 
 
 
-//
-//    if (m_msaaTargetTex && m_backbufferTex)
-//    {
-//        m_context->ResolveSubresource(
-//            m_backbufferTex.Get(), 0,      
-//            m_msaaTargetTex.Get(), 0,      
-////#ifdef _DEBUG
-//            DXGI_FORMAT_R8G8B8A8_UNORM
-////#else
-//            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
-////#endif
-//        );
-//    }
+    if (m_msaaTargetTex && m_backbufferTex)
+    {
+        m_context->ResolveSubresource(
+            m_backbufferTex.Get(), 0,      
+            m_msaaTargetTex.Get(), 0,      
+//#ifdef _DEBUG
+            DXGI_FORMAT_R8G8B8A8_UNORM
+//#else
+            //DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+//#endif
+        );
+    }
 
 #ifndef _DEBUG
 
@@ -1148,7 +1160,8 @@ void DX11Renderer::ReleaseCB()
     m_cbuffer_Texture_flags.Reset();
     m_cbuffer_matrix_pallette.Reset();
     m_cbuffer_SkyBox.Reset();
-    m_cbuffer_SkyBox.Reset();
+    m_cbuffer_Effect.Reset();
+    m_cbuffer_Fog.Reset();
 }
 
 

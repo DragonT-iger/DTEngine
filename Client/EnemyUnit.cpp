@@ -47,3 +47,64 @@ Vector2 EnemyUnit::GetPathPoint(int i) const
 	default: return GRIDPOS_INVALID;
 	}
 }
+
+static int Sign(int x)
+{
+    if (x > 0) return 1;
+    if (x < 0) return -1;
+    return 0;
+}
+
+static Vector2 StepToward(const Vector2& cur, const Vector2& goal)
+{
+    int dx = (int)goal.x - (int)cur.x;
+    int dy = (int)goal.y - (int)cur.y;
+
+    int sx = Sign(dx);
+    int sy = Sign(dy);
+
+    return Vector2{ cur.x + sx, cur.y + sy };
+}
+
+std::vector<Vector2> EnemyUnit::GetAllPath() const
+{
+    std::vector<Vector2> tiles;
+    tiles.reserve(64);
+
+    Vector2 cur = GetPos();
+
+    int idx = m_pathIndex;
+    Vector2 goal = GetPathPoint(idx);
+
+    while (idx < 7 && goal != GRIDPOS_INVALID && cur == goal)
+    {
+        idx++;
+        goal = GetPathPoint(idx);
+    }
+
+    if (goal == GRIDPOS_INVALID) return tiles;
+
+    const int maxSteps = 512; // 안전장치. 무한루프 방지.
+
+    for (int step = 0; step < maxSteps; ++step)
+    {
+        // goal 도착 → 다음 goal
+        while (idx < 7 && goal != GRIDPOS_INVALID && cur == goal)
+        {
+            idx++;
+            goal = GetPathPoint(idx);
+        }
+
+        if (goal == GRIDPOS_INVALID)
+            break;
+
+        Vector2 next = StepToward(cur, goal);
+
+        tiles.push_back(next);
+        cur = next;
+    }
+
+    return tiles;
+}
+
+

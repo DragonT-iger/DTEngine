@@ -392,6 +392,12 @@
     <ClInclude Include="outline.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteEffect.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Fog.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -580,9 +586,6 @@
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="BloomEffect.cpp">
       <Filter>PostProcessing\Effect</Filter>
     </ClCompile>
@@ -619,20 +622,29 @@
     <ClCompile Include="Image.cpp">
       <Filter>Component\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Rigid.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="UISliderHandle.cpp">
       <Filter>Component\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Levitating.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CircleMask.cpp">
       <Filter>PostProcessing\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Levitating.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
     <ClCompile Include="outline.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigid.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteEffect.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Fog.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -811,6 +823,18 @@
       <Filter>Shader\Default</Filter>
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\OutlineShader_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\SpriteAnimation_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\SpriteAnimation_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Test_HeightFog_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Test_HeightFog_PS.hlsl">
       <Filter>Shader\Default</Filter>
     </FxCompile>
   </ItemGroup>

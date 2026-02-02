@@ -44,6 +44,10 @@ void CombatController::Update(float dTime)
 
 void CombatController::Setup()
 {
+    m_allyUnits.clear();
+    m_enemyUnits.clear();
+    m_battleUnits.clear();
+    
     if (allyUnit0) m_allyUnits.push_back(allyUnit0);
     if (allyUnit1) m_allyUnits.push_back(allyUnit1);
     if (allyUnit2) m_allyUnits.push_back(allyUnit2);
@@ -176,7 +180,16 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         {
             if (!ally || !ally->IsAlive()) continue;
 
+            if (ally->GetPos() != ally->GetMovePos() && battleGrid->IsTrapTile(ally->GetMovePos()))
+            {
+                ally->SetOnTrapTile(true);
+            }
+
             ResolveTurnAction(ally);
+            //if (battleGrid->IsTrapTile(ally->GetPos()))
+            //{
+            //    ally->TakeDamage(m_trapDamage);
+            //}
 
             ally->SetActionDone(false);
             ally->StartAction();   // 애니메이션 시작
@@ -186,7 +199,16 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         {
             if (!enemy || !enemy->IsAlive()) continue;
 
+            if (enemy->GetPos() != enemy->GetMovePos() && battleGrid->IsTrapTile(enemy->GetMovePos()))
+            {
+                enemy->SetOnTrapTile(true);
+            }
+
             ResolveTurnAction(enemy);
+            //if (battleGrid->IsTrapTile(enemy->GetPos()))
+            //{
+            //    enemy->TakeDamage(m_trapDamage);
+            //}
 
             enemy->SetActionDone(false);
             enemy->StartAction();
@@ -209,13 +231,41 @@ bool CombatController::MoveAndBattlePhase(float dTime)
     // 실제 이동 및 애니메이션 완료 체크
     for (AllyUnit* ally : m_allyUnits)
     {
-        if (ally && ally->IsAlive() && !ally->IsActionDone()) return false;
-    }
+        if (!ally || !ally->IsAlive()) continue;
 
+        if (!ally->IsActionDone()) return false;
+        if (ally->GetAction() == TurnAction::Wait) continue;
+        if (ally->IsAnimStart() && !ally->IsAnimDone()) return false;
+    }
 
     for (EnemyUnit* enemy : m_enemyUnits)
     {
-        if (enemy && enemy->IsAlive() && !enemy->IsActionDone()) return false;
+        if (!enemy || !enemy->IsAlive()) continue;
+
+        if (!enemy->IsActionDone()) return false;
+        if (enemy->GetAction() == TurnAction::Wait) continue;
+        if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
+    }
+
+    // 함정타일 밟았을 때, 데미지 처리
+    for (AllyUnit* ally : m_allyUnits)
+    {
+        if (!ally || !ally->IsAlive()) continue;
+
+        if (ally->IsOnTrapTile())
+        {
+            ally->TakeDamage(m_trapDamage);
+        }
+    }
+
+    for (EnemyUnit* enemy : m_enemyUnits)
+    {
+        if (!enemy || !enemy->IsAlive()) continue;
+
+        if (enemy->IsOnTrapTile())
+        {
+            enemy->TakeDamage(m_trapDamage);
+        }
     }
 
     m_phaseEntered = false; // 전부 끝나면 다음 단계로.
@@ -239,8 +289,9 @@ bool CombatController::EndPhase()
         {
             m_aliceUnit->SetIsAlive(false);
             m_aliceUnit->SetAction(TurnAction::Die);
-            m_aliceUnit->SetActionDone(false);
-            m_aliceUnit->StartAction();
+            //m_aliceUnit->SetActionDone(false);
+            //m_aliceUnit->StartAction();
+            m_aliceUnit->StartDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -252,8 +303,9 @@ bool CombatController::EndPhase()
             {
                 ally->SetIsAlive(false);
                 ally->SetAction(TurnAction::Die);
-                ally->SetActionDone(false);
-                ally->StartAction();
+                //ally->SetActionDone(false);
+                //ally->StartAction();
+                ally->StartDieAnim();
             }
         }
 
@@ -265,8 +317,9 @@ bool CombatController::EndPhase()
             {
                 enemy->SetIsAlive(false);
                 enemy->SetAction(TurnAction::Die);
-                enemy->SetActionDone(false);
-                enemy->StartAction();
+                //enemy->SetActionDone(false);
+                //enemy->StartAction();
+                enemy->StartDieAnim();
                 if (enemy->IsBoss()) m_stageResult = StageResult::Win; // 보스 잡으면 무조건 승리
             }
         }
@@ -283,18 +336,27 @@ bool CombatController::EndPhase()
     }   
 
     // 애니메이션 완료 체크
-    if (m_aliceUnit && !m_aliceUnit->IsAlive() && !m_aliceUnit->IsActionDone()) return false;
+    //if (m_aliceUnit && !m_aliceUnit->IsAlive())
+    //{
+    //    if (!m_aliceUnit->IsActionDone()) return false;
+    //    if (m_aliceUnit->IsAnimStart() && !m_aliceUnit->IsAnimDone()) return false;
+    //}
 
-    for (AllyUnit* ally : m_allyUnits)
-    {
-        if (ally && !ally->IsAlive() && !ally->IsActionDone()) return false;
-    }
+    //for (AllyUnit* ally : m_allyUnits)
+    //{
+    //    if (!ally || ally->IsAlive()) continue;
 
+    //    if (!ally->IsActionDone()) return false;
+    //    if (ally->IsAnimStart() && !ally->IsAnimDone()) return false;
+    //}
 
-    for (EnemyUnit* enemy : m_enemyUnits)
-    {
-        if (enemy && !enemy->IsAlive() && !enemy->IsActionDone()) return false;
-    }
+    //for (EnemyUnit* enemy : m_enemyUnits)
+    //{
+    //    if (!enemy || enemy->IsAlive()) continue;
+
+    //    if (!enemy->IsActionDone()) return false;
+    //    if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
+    //}
 
     // 리셋
     for (AllyUnit* ally : m_allyUnits)
@@ -315,11 +377,29 @@ bool CombatController::EndPhase()
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
             // 승리 처리
+            for (AllyUnit* ally : m_allyUnits)
+            {
+                if (ally && ally->IsAlive()) ally->StartIdleAnim();
+            }
+
+            for (EnemyUnit* enemy : m_enemyUnits)
+            {
+                if (enemy && enemy->IsAlive()) enemy->StartDieAnim();
+            }
         }
         else if (m_stageResult == StageResult::Lose)
         {
             std::cout << "Lose!!!!!!!!!!!!" << std::endl;
             // 패배 처리
+            for (AllyUnit* ally : m_allyUnits)
+            {
+                if (ally && ally->IsAlive()) ally->StartDieAnim();
+            }
+
+            for (EnemyUnit* enemy : m_enemyUnits)
+            {
+                if (enemy && enemy->IsAlive()) enemy->StartIdleAnim();
+            }
         }
     }
 
@@ -763,13 +843,17 @@ void CombatController::ResolveTurnAction(Unit* me)
     switch (me->GetAction()) {
     case TurnAction::Wait: // 대기 처리
     {
-
+        me->StartIdleAnim();
     } break;
+
     case TurnAction::Move: // 이동 처리
     {
         me->SetDir(me->GetMovePos());
         me->SetPos(me->GetMovePos());
+
+        //me->StartMoveAnim();
     } break;
+
     case TurnAction::Attack: // 공격 처리
     {
         Unit* target = me->GetAttackTarget();
@@ -778,16 +862,24 @@ void CombatController::ResolveTurnAction(Unit* me)
         me->SetDir(me->GetAttackPos());
         target->TakeDamage(damage);
 
+        //me->StartAttackAnim();
     }  break;
+
     case TurnAction::Miss: // 빗나감 처리
     {
         me->SetDir(me->GetAttackPos());
+
+        //me->StartAttackAnim();
     }  break;
+
     case TurnAction::BreakWall: // 벽 파괴 처리
     {
         me->SetDir(me->GetAttackPos());
         battleGrid->WallBreak(me->GetAttackPos());
+
+        //me->StartAttackAnim();
     } break;
+
     default:
         return;
     }
