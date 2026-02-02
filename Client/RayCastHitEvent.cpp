@@ -63,6 +63,8 @@ void RayCastHitEvent::RaycastCheck()
 
 				if (hit)
 				{
+						std::cout << hit->GetName() << std::endl;
+
 						if (m_isHealSkillOn)
 						{
 								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
@@ -88,6 +90,7 @@ void RayCastHitEvent::RaycastCheck()
 												unit->Heal(30);
 												m_isHealSkillOn = false;
 
+												std::cout << unit->GetHp() << std::endl;
 												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
 										}
 								}
@@ -112,11 +115,12 @@ void RayCastHitEvent::RaycastCheck()
 
 										if (m_Unit)
 										{
-												auto unit = m_Unit->GetComponent<AllyUnit>();
+												auto unit = m_Unit->GetComponent<EnemyUnit>();
 												if (!unit)
 														return;
 
 												unit->TakeDamage(30);
+												std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
 												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
@@ -124,6 +128,10 @@ void RayCastHitEvent::RaycastCheck()
 								}
 								return;
 						}
+
+						// 전투 중 클릭해도 tile, chess 선택 안함. 위에는 스킬이라서 처리해야함.
+						if (m_isStartBattle)
+								return;
 
 						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
 						{

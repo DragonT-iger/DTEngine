@@ -19,6 +19,7 @@ public:
 
 		void SetHealSkill(bool healSkill) { m_isHealSkillOn = healSkill; }
 		void SetAttackSkill(bool attackSkill) { m_isAttackSkillOn = attackSkill; }
+		void SetStartBattle(bool battlestart) { m_isStartBattle = battlestart; }
 
 		bool GetHealSkill() { return m_isHealSkillOn; }
 		bool GetAttackSkill() { return m_isAttackSkillOn; }
@@ -34,5 +35,7 @@ private:
 
 		bool m_isHealSkillOn = false;
 		bool m_isAttackSkillOn = false;
+
+		bool m_isStartBattle = false;
 };
 

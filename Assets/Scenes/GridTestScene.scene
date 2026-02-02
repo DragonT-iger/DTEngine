@@ -620,6 +620,7 @@
           "Active": true,
           "id": 8703637472770791007,
           "m_combatObj": 7541685513989182900,
+          "m_rayObj": 4771222732717351773,
           "m_startButton": 3172165213437105257,
           "typeName": "ClickStartButton"
         }
@@ -3308,6 +3309,206 @@
           "x": 100.0,
           "y": 100.0,
           "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 2073913413768791125
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 7504682451214846171,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 8472706803506591917,
+          "m_fillObject": 10791217083116232753,
+          "m_lerpSpeed": 8.0,
+          "m_targetObject": 3859076468797295072,
+          "typeName": "HPBarFollowEvent"
+        }
+      ],
+      "id": 6134921577330785994,
+      "name": "HPBarEdge_Final",
+      "tag": "Untagged",
+      "transform": {
+        "id": 6388334563879331418,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 224.0,
+          "z": 0.0
+        },
+        "m_parent": 6007003118662846288,
+        "m_position": {
+          "x": 0.0,
+          "y": 2.4000000953674316,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": -0.37460657954216003,
+          "x": 0.0,
+          "y": 0.9271838068962097,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 1435333987562861863
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 2146534887680807837,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 678987700705615473,
+      "name": "HPBarVoid",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5403761661630331608,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 6388334563879331418,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.009999999776482582
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.949999988079071,
+          "y": 0.699999988079071,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 17073523278039357435
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 11471131779408590143,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 10791217083116232753,
+      "name": "HPBarFill",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10153703877577994701,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 5403761661630331608,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.010999999940395355
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 0.9999999403953552
         }
       }
     }

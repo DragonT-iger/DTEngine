@@ -291,7 +291,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            m_aliceUnit->StartDieAnim();
+            //m_aliceUnit->StartDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
