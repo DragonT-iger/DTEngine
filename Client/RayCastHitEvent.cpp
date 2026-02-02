@@ -104,7 +104,7 @@ void RayCastHitEvent::RaycastCheck()
 								{
 										GameObject* m_Unit = nullptr;
 										GameObject* unitRoot = hit;
-										if (hit->GetName().find("_Test") == std::string::npos) // 이름에 _Test가 없다면 자식으로 간주
+										if (hit->GetName().find("_V1") == std::string::npos) // 이름에 _Test가 없다면 자식으로 간주
 										{
 												if (hit->GetTransform()->GetParent())
 														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
@@ -136,7 +136,7 @@ void RayCastHitEvent::RaycastCheck()
 								{
 										GameObject* m_Unit = nullptr;
 										GameObject* unitRoot = hit;
-										if (hit->GetName().find("_Test") == std::string::npos) 
+										if (hit->GetName().find("_V1") == std::string::npos) 
 										{
 												if (hit->GetTransform()->GetParent())
 														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
