@@ -95,13 +95,11 @@ public:
     const float& GetBloomIntensity() const { return m_bloomIntensity; }
     void SetBloomIntensity(float value) { m_bloomIntensity = value; }
 
-
-
     const Vector2& GetCircleCenter() const { return m_CircleCenter; }
     const Vector2& GetCircleWidthHeight() const { return m_CircleWH; }
 
-    void SetCrircleCenter(Vector2 Center) { m_CircleCenter = Center; }
-    void SetCrircleWidthHeight(Vector2 WH) { m_CircleWH = WH; }
+    void SetCircleCenter(Vector2 Center) { m_CircleCenter = Center; }
+    void SetCircleWidthHeight(Vector2 WH) { m_CircleWH = WH; }
 
     const bool& GetUseCircleMask() const { return m_useCircleMask; }
     void SetUseCircleMask(bool use);
@@ -143,8 +141,8 @@ private:
     bool m_useGrayScale = false;
 
     bool m_useVignette = false;
-    float m_vignetteRadius = 0.8f;
-    float m_vignetteSoftness = 0.4f;
+    float m_vignetteRadius = 1.0f;
+    float m_vignetteSoftness = 1.0f;
 
 	bool m_useBloom = false; // 키면 AA가 꺼져버림 쓰지 마셈 // ㅇㅋ
     float m_bloomThreshold = 1.0f; 

@@ -3,6 +3,7 @@
 #include "ReflectionMacros.h"
 #include <vector>
 
+
 class TilemapData;
 class Prefab;
 
@@ -22,6 +23,8 @@ public:
 
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
+
+    void ReplaceTile(int x, int y, Prefab* newPrefab);
 
 	static constexpr int PALETTE_SIZE = 7;
 

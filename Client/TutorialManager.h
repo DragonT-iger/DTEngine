@@ -6,6 +6,8 @@
 class GameObject;
 class Text; 
 class CombatController;
+class Prefab;
+class TilemapGenerator;
 
 class TutorialManager : public MonoBehaviour
 {
@@ -49,10 +51,18 @@ private:
     CombatController* m_combatController = nullptr;
     GameObject* m_aliceGameObject = nullptr;
 
+    GameObject* m_infoUI = nullptr;
+    Prefab* m_glowTilePrefab = nullptr;
+
     bool m_rayActive = false;
     bool m_aliceDead = false;
 
     bool m_isVignetteSequence = false;
     float m_currentSoftness = 1.0f;
     float m_vignetteDelayTimer = 0.0f;
+    
+    TilemapGenerator* m_tilemapGenerator = nullptr;
+
+    float m_circleCenterX = 0.0f;
+    float m_circleCenterY = 0.0f;
 };

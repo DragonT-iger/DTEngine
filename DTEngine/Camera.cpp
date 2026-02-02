@@ -32,8 +32,8 @@ DTPROPERTY_ACCESSOR(Camera, m_bloomIntensity, GetBloomIntensity, SetBloomIntensi
 
 
 DTPROPERTY_ACCESSOR(Camera, m_useCircleMask, GetUseCircleMask, SetUseCircleMask)
-DTPROPERTY_ACCESSOR(Camera, m_CircleCenter, GetCircleCenter, SetCrircleCenter)
-DTPROPERTY_ACCESSOR(Camera, m_CircleWH, GetCircleWidthHeight, SetCrircleWidthHeight)
+DTPROPERTY_ACCESSOR(Camera, m_CircleCenter, GetCircleCenter, SetCircleCenter)
+DTPROPERTY_ACCESSOR(Camera, m_CircleWH, GetCircleWidthHeight, SetCircleWidthHeight)
 
 
 
@@ -151,7 +151,6 @@ void Camera::Bind()
 const Vector3& Camera::GetCamPos() const 
 {
     Transform* tf = GetComponent<Transform>();
-
     return tf->GetWorldPosition();
 
 }
@@ -286,8 +285,6 @@ void Camera::UpdateProjectionMatrix()
 
     //float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio(); 
     // 이건 전체 화면의 해상비임 
-
-
 
     // 얘없음  0보다 작은거 들어가서 튕김
 

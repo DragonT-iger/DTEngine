@@ -44,11 +44,15 @@ void TilemapGenerator::BuildMap()
 
     Prefab* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 , m_prefab5 , m_prefab6 };
 
+    m_spawnedTiles.resize(width * height, nullptr);
+
     for (int y = 0; y < height; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
             int index = m_mapData->GetTileIndex(x, y);
+
+            int arrayIndex = y * width + x;
 
             if (index < 0 || index >= 7) continue;
 
@@ -62,6 +66,7 @@ void TilemapGenerator::BuildMap()
             instance->GetTransform()->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
             instance->SetActive(true);
 
+            m_spawnedTiles[arrayIndex] = instance;
         }
     }
 }
@@ -72,5 +77,38 @@ void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
     {
         // 메모리 상의 데이터 수정
         m_mapData->SetTileIndex(x, y, paletteIndex);
+    }
+}
+
+void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
+{
+    if (!m_mapData || !newPrefab) return;
+
+    int width = m_mapData->GetWidth();
+    int height = m_mapData->GetHeight();
+
+    if (x < 0 || x >= width || y < 0 || y >= height) return;
+
+    int arrayIndex = y * width + x;
+
+    if (arrayIndex >= m_spawnedTiles.size()) return;
+
+    if (m_spawnedTiles[arrayIndex] != nullptr)
+    {
+        SceneManager::Instance().GetActiveScene()->Destroy(m_spawnedTiles[arrayIndex]);
+        m_spawnedTiles[arrayIndex] = nullptr;
+    }
+
+    GameObject* instance = newPrefab->Instantiate();
+    if (instance)
+    {
+        Transform* myTr = GetTransform();
+        float tileSize = TilemapData::TILE_SIZE;
+
+        instance->GetTransform()->SetParent(myTr);
+        instance->GetTransform()->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
+        instance->SetActive(true);
+
+        m_spawnedTiles[arrayIndex] = instance;
     }
 }
