@@ -10,8 +10,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include <iomanip>
-
 
 //Helper
 bool HasBones(const aiScene* scene)
@@ -335,13 +333,23 @@ void Model::CreateNode(const aiNode* node, int parentIndex)
 
     newNode.DefaultLocalMatrix = Matrix(&node->mTransformation.a1).Transpose();
 
+
+    if (nodeName == "Armature" || nodeName == "RootNode" || nodeName == "Root") 
+    {
+        newNode.DefaultLocalMatrix = SimpleMathHelper::IdentityMatrix();
+    }
+
     if (parentIndex != -1)
     {
         newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix * m_nr->Nodes[parentIndex].DefaultGlobalMatrix;
     }
     else
     {
+      //  newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix;
+
+        newNode.DefaultLocalMatrix = SimpleMathHelper::IdentityMatrix();
         newNode.DefaultGlobalMatrix = newNode.DefaultLocalMatrix;
+
     }
 
 

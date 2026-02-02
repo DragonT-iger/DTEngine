@@ -26,6 +26,8 @@ public:
 private:
     uint64_t m_modelID = 0;
     NodeResource* m_resource = nullptr;
+    std::vector<Matrix> m_baseLocalInv;
+    bool m_baseInitialized = false;
 
     std::vector<Matrix> m_finalTransforms;       // GPU 전달용 (Global)
     std::vector<Matrix> m_globalTransforms;      // 계층 계산용

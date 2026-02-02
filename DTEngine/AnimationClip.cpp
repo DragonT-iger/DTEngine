@@ -40,6 +40,7 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
 
 
     Name = anim->mName.C_Str();
+
     Duration = anim->mDuration; // ticks 단위
     TicksPerSecond = (anim->mTicksPerSecond != 0.0) ? anim->mTicksPerSecond : 25.0;
 
@@ -50,7 +51,6 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
     {
         aiNodeAnim* channel = anim->mChannels[i];
         std::string nodeName = channel->mNodeName.C_Str();
-
   
         BoneChannel ch;
         ch.BoneName = nodeName;
@@ -62,6 +62,7 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
             auto& key = channel->mPositionKeys[k];
 
             ch.PositionKeys.push_back({ key.mTime, Vector3(key.mValue.x, key.mValue.y, key.mValue.z) });
+
         }
 
         // Rotation Keys
@@ -92,7 +93,6 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
 
         Channels.push_back(std::move(ch));
     }
-
     return true;
 }
 

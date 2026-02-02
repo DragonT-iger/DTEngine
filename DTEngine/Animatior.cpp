@@ -6,7 +6,6 @@
 #include "ResourceManager.h"
 #include "Rigid.h"
 #include "Model.h"
-#include <iomanip>
 BEGINPROPERTY(Animator)
 
 DTPROPERTY_SETTER(Animator, Play, SetPlay)
@@ -21,7 +20,6 @@ void Animator::Update(float deltaTime)
     if (!m_CurrentClip || !Play) return;
 
     float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond * Animated_Time;
-
     m_CurrentTime += timeIncrement;
 
     if (m_CurrentTime >= m_CurrentClip->Duration) {
@@ -69,7 +67,6 @@ void Animator::Update(float deltaTime)
 
     }
 
-    //std::cout << "OBJ NAME" << this->_GetOwner()->GetName() << deltaTime << std::endl;
 
 }
 
