@@ -833,12 +833,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
          std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
         RenderOpaque(SortedVector);
-        RenderOutline(SortedVector);
+      // RenderOutline(SortedVector);
 
-       // Sorter::Instance().CreateKeyTransparent(transparentQueue);
-         std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
+        //Sorter::Instance().CreateKeyTransparent(transparentQueue);
+       // std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
          RenderTrans(transparentQueue, viewTM);
         //RenderTrans(SortedVectorTrans, viewTM);
+
+
+         
+
 }
 
 void Scene::RenderOpaque(std::vector<GameObject*>& OpaqueVec)
