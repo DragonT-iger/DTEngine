@@ -7,7 +7,7 @@
 #include "Shader.h"
 #include "RenderTexture.h"
 #include "Camera.h"
-
+#include "Effect.h"
 
 struct CircleMaskCbuffere
 {
@@ -56,11 +56,16 @@ void CircleMaskEffect::Render(RenderTexture* src, RenderTexture* dest, const Cam
         data.ViewPortW = dest->GetWidth();
 
         context->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &data, 0, 0);
+
+        auto cmp = camera->_GetOwner()->GetComponent<Effect>();
+        if (cmp) cmp->BindEP();
+
+
     }
 
     dest->Bind();
 
-    dest->Clear(0.0f, 0.0f, 1.0f, 1.0f);
+    dest->Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
 
     //m_vs->Bind();

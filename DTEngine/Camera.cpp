@@ -8,6 +8,7 @@
 #include "SimpleMathHelper.h"
 #include "MonitorController.h"
 #include "InputManager.h"
+#include "Fog.h"
 
 BEGINPROPERTY(Camera)
 
