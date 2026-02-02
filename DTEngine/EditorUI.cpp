@@ -2322,7 +2322,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             //ImGui::Text("Preview");
         }
     }
-    else if (ext == ".tilemap") // 1. 사용하는 타일맵 확장자로 변경하세요 (예: .tm, .json)
+    else if (ext == ".tilemap")
     {
         TilemapData* tilemap = ResourceManager::Instance().Load<TilemapData>(path);
 

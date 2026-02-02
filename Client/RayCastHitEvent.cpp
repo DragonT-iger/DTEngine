@@ -34,10 +34,18 @@ void RayCastHitEvent::RaycastCheck()
 		
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
 		{
-				// 이거는 inputmanager에다가 받는거 추가해달라고 요청해야함. 아니면 가끔씩 터짐.
-				const Vector2 mp = Vector2(input.GetGameMousePosition().x, input.GetGameMousePosition().y);
-				std::cout << mp.x << " " << mp.y << std::endl;
-				// 둘 중 한개라도 활성 상태고 마우스가 그 위에 있는지 체크.
+				const Vector2 mp = Vector2((float)input.GetGameMousePosition().x, (float)input.GetGameMousePosition().y);
+
+#ifdef _DEBUG
+				float screenWidth = (float)input.GetGameResolution().x;
+#else
+				float screenWidth = DX11Renderer::Instance().GetWidth();
+#endif
+
+				float screenCenter = screenWidth * 0.5f;
+
+				bool isLeft = mp.x > screenCenter;
+
 				if (IsMouseInUI(m_leftPSWinodwBG, mp) || IsMouseInUI(m_leftRSWinodwBG, mp)
 						|| IsMouseInUI(m_rightPSWinodwBG, mp) || IsMouseInUI(m_rightRSWinodwBG, mp))
 				{
@@ -53,7 +61,7 @@ void RayCastHitEvent::RaycastCheck()
 
 				scene->Raycast2(r, hit, hitT);
 
-				bool isLeft = x < 960;
+				//bool isLeft = x < 960;
 
 				if (hit)
 				{

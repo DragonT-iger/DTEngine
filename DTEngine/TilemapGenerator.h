@@ -23,15 +23,17 @@ public:
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
 
-	static constexpr int PALETTE_SIZE = 5;
+	static constexpr int PALETTE_SIZE = 7;
 
 public:
 
-    Prefab* m_prefab0 = 0; 
-    Prefab* m_prefab1 = 0;
-    Prefab* m_prefab2 = 0;
-    Prefab* m_prefab3 = 0;
-    Prefab* m_prefab4 = 0;
+    Prefab* m_prefab0 = nullptr; 
+    Prefab* m_prefab1 = nullptr;
+    Prefab* m_prefab2 = nullptr;
+    Prefab* m_prefab3 = nullptr;
+    Prefab* m_prefab4 = nullptr;
+    Prefab* m_prefab5 = nullptr;
+    Prefab* m_prefab6 = nullptr;
 
 private:
     
