@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 BEGINPROPERTY(EnemyUnit)
-DTPROPERTY(EnemyUnit, path0)
+//DTPROPERTY(EnemyUnit, path0)
 DTPROPERTY(EnemyUnit, path1)
 DTPROPERTY(EnemyUnit, path2)
 DTPROPERTY(EnemyUnit, path3)
@@ -12,7 +12,7 @@ DTPROPERTY(EnemyUnit, path6)
 DTPROPERTY(EnemyUnit, path7)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_type, GetUnitType, SetUnitType)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_isBoss, IsBoss, SetBoss)
-DTPROPERTY_ACCESSOR(EnemyUnit, m_pos, GetPos, SetPos)
+//DTPROPERTY_ACCESSOR(EnemyUnit, m_pos, GetPos, SetPos)
 ENDPROPERTY()
 
 void EnemyUnit::SetBoss(bool isBoss)
@@ -66,45 +66,84 @@ static Vector2 StepToward(const Vector2& cur, const Vector2& goal)
     return Vector2{ cur.x + sx, cur.y + sy };
 }
 
-std::vector<Vector2> EnemyUnit::GetAllPath() const
+static int GetDirFromTo(const Vector2& from, const Vector2& to)
 {
-    std::vector<Vector2> tiles;
-    tiles.reserve(64);
+    float vx = to.x - from.x;
+    float vy = to.y - from.y;
 
-    Vector2 cur = GetPos();
+    if (vx == 0.0f && vy == 0.0f) return 0;
 
-    int idx = m_pathIndex;
-    Vector2 goal = GetPathPoint(idx);
+    float ang = std::atan2(-vy, vx);
 
-    while (idx < 7 && goal != GRIDPOS_INVALID && cur == goal)
+    // Right=0, UpRight=1, Up=2, UpLeft=3, Left=4, DownLeft=5, Down=6, DownRight=7
+    float step = 3.1415926535f / 4.0f;
+    int dir = (int)std::lround(ang / step);
+    dir = (dir % 8 + 8) % 8;
+
+    return dir;
+}
+
+void EnemyUnit::SetPath0()
+{
+    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+
+    Vector2 p0;
+    p0.x = std::round(pos.x / 2.0f);
+    p0.y = std::round(pos.z / 2.0f);
+
+    m_pos = p0;
+    path0 = p0;
+}
+
+std::vector<PathPoint> EnemyUnit::GetAllPath() const
+{
+    std::vector<PathPoint> tiles;
+    tiles.reserve(128);
+
+    int startIdx = 0;
+
+    int endIdx = 0;
+    for (int i = 7; i >= 0; --i)
     {
-        idx++;
-        goal = GetPathPoint(idx);
+        if (GetPathPoint(i) != GRIDPOS_INVALID)
+        {
+            endIdx = i;
+            break;
+        }
     }
 
-    if (goal == GRIDPOS_INVALID) return tiles;
+    if (endIdx <= startIdx) return tiles;
 
-    const int maxSteps = 512; // 안전장치. 무한루프 방지.
+    //Vector2 cur = GetPathPoint(startIdx);
 
-    for (int step = 0; step < maxSteps; ++step)
+    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+    Vector2 cur;
+    cur.x = std::round(pos.x / 2.0f);
+    cur.y = std::round(pos.z / 2.0f);
+
+    const int maxSteps = 128; 
+
+    for (int idx = startIdx + 1; idx <= endIdx; ++idx)
     {
-        // goal 도착 → 다음 goal
-        while (idx < 7 && goal != GRIDPOS_INVALID && cur == goal)
+        Vector2 goal = GetPathPoint(idx);
+
+        if (goal == GRIDPOS_INVALID) break;
+
+        for (int step = 0; step < maxSteps; ++step)
         {
-            idx++;
-            goal = GetPathPoint(idx);
+            if (cur == goal) break;
+
+            Vector2 next = StepToward(cur, goal);
+
+            if ((idx != endIdx) || (next != goal))
+            {
+                int dir = GetDirFromTo(cur, next);
+                tiles.push_back(PathPoint{ next, dir });
+            }
+
+            cur = next;
         }
-
-        if (goal == GRIDPOS_INVALID)
-            break;
-
-        Vector2 next = StepToward(cur, goal);
-
-        tiles.push_back(next);
-        cur = next;
     }
 
     return tiles;
 }
-
-

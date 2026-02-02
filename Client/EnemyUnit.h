@@ -3,6 +3,12 @@
 
 // 적군
 
+struct PathPoint
+{
+    Vector2 pathPoint;
+    int dir; // 시선 방향
+};
+
 class EnemyUnit : public Unit
 {
     DTGENERATED_BODY(EnemyUnit);
@@ -18,7 +24,9 @@ public:
     int GetPathIndex() const { return m_pathIndex; }
     void SetPathIndex(int i) { m_pathIndex = (std::max)(0, (std::min)(i, 7)); }
 
-    std::vector<Vector2> GetAllPath() const;
+    void SetPath0();
+
+    std::vector<PathPoint> GetAllPath() const;
 
 private:
     bool m_isBoss = false;      // 보스라면

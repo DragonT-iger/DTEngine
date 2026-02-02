@@ -55,6 +55,12 @@ void CombatController::Setup()
     if (enemyUnit0) m_enemyUnits.push_back(enemyUnit0);
     if (enemyUnit1) m_enemyUnits.push_back(enemyUnit1);
     if (enemyUnit2) m_enemyUnits.push_back(enemyUnit2);
+
+    for (EnemyUnit* enemy : m_enemyUnits)
+    {
+        if(enemy) enemy->SetPath0();
+    }
+
     m_isStageStart = true;
 }
 
@@ -82,6 +88,10 @@ bool CombatController::ReadyPhase()
             Unit* target = SelectAttackTarget(ally, targets, ally->GetBattleRule());
             ally->SetAttackTarget(target);
         }
+        else
+        {
+            ally->SetAttackTarget(nullptr);
+        }
     }
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -97,6 +107,10 @@ bool CombatController::ReadyPhase()
 
             Unit* target = SelectAttackTarget(enemy, targets, BattleRule::Nearest);
             enemy->SetAttackTarget(target);
+        }
+        else
+        {
+            enemy->SetAttackTarget(nullptr);
         }
     }
 
@@ -291,7 +305,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            m_aliceUnit->StartDieAnim();
+            //m_aliceUnit->StartDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -510,6 +524,7 @@ Unit* CombatController::SelectAttackTarget(Unit* me, const std::vector<Unit*>& t
     for (Unit* target : targets)
     {
         if (!target) continue;
+        if (target == me->GetAttackTarget()) return target;
 
         Vector2 tp = target->GetPos();
 
@@ -643,7 +658,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
 
     for (AllyUnit* ally : m_allyUnits)
     {
-        if (!ally || !ally->IsAlive() || ally == me) continue;
+        if (!ally || !ally->IsAlive() || ally == me || ally->GetMoveRule() == 0) continue; // 대기 상태인 유닛도 없는 아군 취급.
 
         ++aliveAllyCount;
         if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; }

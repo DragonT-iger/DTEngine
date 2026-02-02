@@ -13,6 +13,7 @@ class AllyUnit;
 class EnemyUnit;
 class AliceUnit;
 class BattleGrid;
+//class Prefab;
 
 struct UnitStats;
 
@@ -122,4 +123,5 @@ private:
 	EnemyUnit* enemyUnit1 = nullptr;
 	EnemyUnit* enemyUnit2 = nullptr;
 
+	//Prefab* asdf = nullptr;
 };
