@@ -14,6 +14,7 @@ class Texture;
 
 enum class RenderMode { Opaque, Transparent };
 enum class CullMode { Back, Front, None };
+enum class BlendMode;
 
 class Material : public IResource
 {
@@ -28,6 +29,7 @@ public:
     void Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM);
 
     void BindPipeLine();
+    void BindPipeLine(Shader* PS, BlendMode BlendMode , CullMode CullMode = CullMode::Back);
     void BindPerObject(const Matrix& worldTM, const Matrix& WorldINVTM);
     
     bool SetTexture(int slot, Texture* texture);

@@ -34,7 +34,7 @@
 #include "Rigid.h"
 
 #include "Levitating.h"
-
+#include "outline.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -888,6 +888,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
             const Matrix& worldTM = tf->GetWorldMatrix();
             Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
 
+            
             mat->BindPerObject(worldTM, worldInvT);
             mesh->Bind();
             mesh->Draw();
@@ -895,11 +896,83 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
         }
 
     }
+    {
+        uint64_t lastPipelineKey = UINT64_MAX;
 
+
+        const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
+
+
+
+        // 주말에 예쁘게 만들거임.. 01_30 건들지마셈
+
+
+        for (const auto& val : SortedVector)
+        {
+            auto cmp = val.obj->GetComponent<Outline>();
+            if (cmp)
+            {
+                uint64_t currentPipelineKey = val.key << 30; //Depth 빼고 Shader 16; Texture 16; cull에 해당
+
+                MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
+                Transform* tf = val.obj->GetTransform();
+
+                Material* mat = mr->GetSharedMaterial();
+                if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+                Mesh* mesh = mr->GetMesh();
+                if (!mesh || !mat) return;
+
+                //
+                Effect* eff = val.obj->GetComponent<Effect>();
+                if (eff) eff->BindEP();
+
+                if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr)
+                {
+                    DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+                }
+
+                if (Rigid* rg = val.obj->GetComponent<Rigid>(); rg != nullptr)
+                {
+                    DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
+                }
+
+              
+
+                if (currentPipelineKey != lastPipelineKey)
+                {
+                    Shader* OutlineShader = cmp->GetShader();
+                    if (OutlineShader)
+
+                    {
+                        mat->BindPipeLine(OutlineShader, BlendMode::Opaque, CullMode::Front);
+                        lastPipelineKey = currentPipelineKey;
+
+                    }
+                    else return;
+                }
+                const Matrix& worldTM = tf->GetWorldMatrix();
+                Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+                mat->BindPerObject(worldTM, worldInvT);
+                mesh->Bind();
+                mesh->Draw();
+
+            }
+        }
+    }
+
+    //나중에 Pass 개념을 체계화 시킨다면 구분하도록 하자 + 01_30 일 기준 Transparent plane 이 나오면 명시적으로 나누자. 
     for (auto* go : transparentQueue)
     {
         DrawObject(go);
     }
+
+
+   
+
+
+
 }
 
 void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
