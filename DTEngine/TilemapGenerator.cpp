@@ -23,7 +23,7 @@ ENDPROPERTY()
 
 void TilemapGenerator::Start()
 {
-	std::cout << "TilemapGenerator Start 호출됨" << std::endl;
+	//std::cout << "TilemapGenerator Start 호출됨" << std::endl;
     BuildMap();
 }
 

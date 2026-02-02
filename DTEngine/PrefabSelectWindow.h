@@ -53,7 +53,6 @@ private:
 		// 콜백 저장용 변수
 		SelectCallback m_onResult = nullptr;
 
-		// prefab load해두기 위해서.
 		Prefab* m_nightPrefab = nullptr;
 		Prefab* m_rookPrefab = nullptr;
 		Prefab* m_bishopPrefab = nullptr;

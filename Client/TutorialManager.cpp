@@ -45,6 +45,9 @@ void TutorialManager::Update(float deltaTime)
 
 void TutorialManager::NextStep()
 {
+    if(m_canProceedToNextStep == false)
+		return;
+
     m_CurrentStepIndex++;
 
     switch (m_CurrentStepIndex)

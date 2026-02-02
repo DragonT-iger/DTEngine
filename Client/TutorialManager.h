@@ -39,4 +39,5 @@ private:
     GameObject* m_victoryUI = nullptr;
 
     int m_CurrentStepIndex = -1;
+	bool m_canProceedToNextStep = true;
 };
