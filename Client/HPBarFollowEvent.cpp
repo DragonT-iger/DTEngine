@@ -1,106 +1,74 @@
-//#include "pch.h"
-//#include "HPBarFollowEvent.h"
-//#include "GameObject.h"
-//#include "Unit.h"
-//#include "Camera.h"
-//#include "Image.h"
-//#include "Scene.h"
-//#include "SceneManager.h"
-//#include "DX11Renderer.h"
-//
-//BEGINPROPERTY(HPBarFollowEvent)
-//DTPROPERTY(HPBarFollowEvent, m_targetObject)
-//DTPROPERTY(HPBarFollowEvent, m_trackImage)
-//DTPROPERTY(HPBarFollowEvent, m_fillImage)
-//DTPROPERTY(HPBarFollowEvent, m_camera)
-//DTPROPERTY(HPBarFollowEvent, m_lerpSpeed)
-//DTPROPERTY(HPBarFollowEvent, m_worldOffset)
-//DTPROPERTY(HPBarFollowEvent, m_screenOffset)
-//ENDPROPERTY()
-//
-//void HPBarFollowEvent::Start()
-//{
-//    if (!m_fillImage || !m_targetObject)
-//        return;
-//
-//    // 원래 스케일 저장.
-//    m_fillBaseScale = m_fillImage->GetTransform()->GetScale();
-//
-//    // unit component 캐싱.
-//    m_targetUnit = m_targetObject->GetComponent<Unit>();
-//}
-//
-//void HPBarFollowEvent::Update(float deltaTime)
-//{
-//    if (!m_camera)
-//        return;
-//
-//    UpdateFollowPosition(deltaTime);
-//    UpdateFillScale(deltaTime);
-//}
-//
-//void HPBarFollowEvent::UpdateFollowPosition(float deltaTime)
-//{
-//    const Vector3 worldPos = m_targetObject->GetTransform()->GetWorldPosition() + m_worldOffset;
-//    const Vector3 screenPos = m_camera->WorldToScreenPoint(worldPos);
-//
-//#ifdef _DEBUG
-//    const auto& gameRes = InputManager::Instance().GetGameResolution();
-//    const float renderWidth = static_cast<float>(gameRes.x);
-//    const float renderHeight = static_cast<float>(gameRes.y);
-//#else
-//    const float renderWidth = static_cast<float>(DX11Renderer::Instance().GetWidth());
-//    const float renderHeight = static_cast<float>(DX11Renderer::Instance().GetHeight());
-//#endif
-//
-//    const float refWidth = static_cast<float>(DX11Renderer::Instance().GetRefWidth());
-//    const float refHeight = static_cast<float>(DX11Renderer::Instance().GetRefHeight());
-//    const float scaleX = renderWidth / refWidth;
-//    const float scaleY = renderHeight / refHeight;
-//
-//    Vector2 uiPos(screenPos.x / scaleX, screenPos.y / scaleY);
-//    uiPos += m_screenOffset;
-//
-//    Transform* uiTransform = GetTransform();
-//    const Vector3 uiSize = uiTransform->GetWorldScale();
-//    uiPos.x -= uiSize.x * 0.5f;
-//    uiPos.y -= uiSize.y * 0.5f;
-//
-//    const Vector3 currentPos = uiTransform->GetPosition();
-//    uiTransform->SetPosition(Vector3(uiPos.x, uiPos.y, currentPos.z));
-//}
-//
-//void HPBarFollowEvent::UpdateFillScale(float deltaTime)
-//{
-//    if (!m_fillImage)
-//        return;
-//
-//    if (!m_targetUnit->IsAlive())
-//    {
-//        if (auto* owner = _GetOwner())
-//        {
-//            owner->SetActive(false);
-//        }
-//        return;
-//    }
-//
-//    const float maxHp = m_targetUnit->GetStats().maxHp;
-//
-//    if (maxHp <= 0.0f)
-//    {
-//        _GetOwner()->SetActive(false);
-//        return;
-//    }
-//
-//    const float targetRatio = std::clamp(m_targetUnit->GetHp() / maxHp, 0.0f, 1.0f);
-//
-//    // 지수형 보간으로 부드럽게
-//    const float t = 1.0f - std::exp(-m_lerpSpeed * deltaTime);
-//    m_currentRatio = m_currentRatio + (targetRatio - m_currentRatio) * t;
-//
-//    // x 스케일만 줄이면 우측부터 줄어드는거. 
-//    Vector3 scale = m_fillBaseScale;
-//    scale.x *= m_currentRatio;
-//
-//    m_fillImage->GetTransform()->SetScale(scale);
-//}
+#include "HPBarFollowEvent.h"
+#include "GameObject.h"
+#include "Unit.h"
+#include "AllyUnit.h"
+#include "EnemyUnit.h"
+
+BEGINPROPERTY(HPBarFollowEvent)
+DTPROPERTY(HPBarFollowEvent, m_targetObject)
+DTPROPERTY(HPBarFollowEvent, m_fillObject)
+DTPROPERTY(HPBarFollowEvent, m_lerpSpeed)
+ENDPROPERTY()
+
+void HPBarFollowEvent::Start()
+{
+		if (!m_targetObject || !m_fillObject)
+				return;
+				
+		m_targetUnit = m_targetObject->GetComponent<Unit>();
+		m_fillBaseScale = m_fillObject->GetTransform()->GetScale();
+		m_fillBasePosition = m_fillObject->GetTransform()->GetPosition();
+		m_originalRotation = _GetOwner()->GetTransform()->GetEditorEuler();		
+}
+
+void HPBarFollowEvent::Update(float deltaTime)
+{
+		UpdateFillScale(deltaTime);
+}
+
+void HPBarFollowEvent::UpdateFillScale(float deltaTime)
+{
+		if (!m_targetObject || !m_fillObject)
+				return;
+
+		// 체력이 아니라 isalive로 판단.
+		if (!m_targetUnit->IsAlive())
+		{
+				_GetOwner()->SetActive(false);
+				return;
+		}
+		
+		Transform* parentTf = m_targetObject->GetTransform();
+		if (!parentTf)
+				return;
+		Vector3 parentRot = parentTf->GetEditorEuler();
+		Vector3 inverseRot = Vector3(-parentRot.x, -parentRot.y, -parentRot.z);
+
+		// 비율 계산하고
+		float targetRatio = m_targetUnit->GetHp() / m_targetUnit->GetStats().maxHp;
+
+		// 보간해서 줄어드는 연출 자연스럽게
+		m_currentRatio = Lerp(m_currentRatio, targetRatio, m_lerpSpeed * deltaTime);
+
+		Vector3 fillScale = m_fillObject->GetTransform()->GetScale();
+
+		// Scale 조절. 
+		Vector3 newScale = m_fillBaseScale;
+		newScale.x = m_fillBaseScale.x * m_currentRatio;
+		m_fillObject->GetTransform()->SetScale(newScale);
+
+		// Position 조정
+		Vector3 newPos = m_fillBasePosition;
+		float offsetX = m_fillBaseScale.x * (1.0f - m_currentRatio);
+		newPos.x = m_fillBasePosition.x - offsetX;
+		m_fillObject->GetTransform()->SetPosition(newPos);
+
+		// 부모 회전 역행렬에다가 원래 회전값으로. 
+		Vector3 finalRot = m_originalRotation + inverseRot;
+		_GetOwner()->GetTransform()->SetRotationEuler(finalRot);
+}
+
+float HPBarFollowEvent::Lerp(float start, float end, float t)
+{
+		return start + (end - start) * t;
+}

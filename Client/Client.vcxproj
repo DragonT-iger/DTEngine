@@ -161,6 +161,7 @@
     <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="SetMainSceneEvent.cpp" />
+    <ClCompile Include="SkillButton.cpp" />
     <ClCompile Include="SliderValueEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="SetMainSceneEvent.h" />
+    <ClInclude Include="SkillButton.h" />
     <ClInclude Include="SliderValueEvent.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />

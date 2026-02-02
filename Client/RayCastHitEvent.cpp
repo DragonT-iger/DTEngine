@@ -8,6 +8,10 @@
 #include "OpenPSEvent.h"
 #include "OpenRSEvent.h"
 #include "TutorialManager.h"
+#include "AllyUnit.h"
+#include "EnemyUnit.h"
+
+
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
@@ -91,6 +95,75 @@ void RayCastHitEvent::RaycastCheck()
 				if (hit)
 				{
 						std::cout << hit->GetName() << std::endl;
+
+						if (m_isHealSkillOn)
+						{
+								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
+								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+								{
+										GameObject* m_Unit = nullptr;
+										GameObject* unitRoot = hit;
+										if (hit->GetName().find("_Test") == std::string::npos) // 이름에 _Test가 없다면 자식으로 간주
+										{
+												if (hit->GetTransform()->GetParent())
+														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
+										}
+
+										m_Unit = unitRoot;
+
+										if (m_Unit)
+										{
+												auto unit = m_Unit->GetComponent<AllyUnit>();
+												if (!unit)
+														return;
+
+												unit->Heal(30);
+												m_isHealSkillOn = false;
+
+												std::cout << unit->GetHp() << std::endl;
+												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+										}
+								}
+
+								return;
+						}
+
+						if (m_isAttackSkillOn)
+						{
+								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+								{
+										GameObject* m_Unit = nullptr;
+										GameObject* unitRoot = hit;
+										if (hit->GetName().find("_Test") == std::string::npos) 
+										{
+												if (hit->GetTransform()->GetParent())
+														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
+										}
+
+										m_Unit = unitRoot;
+
+										if (m_Unit)
+										{
+												auto unit = m_Unit->GetComponent<EnemyUnit>();
+												if (!unit)
+														return;
+
+												unit->TakeDamage(30);
+												std::cout << unit->GetHp() << std::endl;
+												m_isAttackSkillOn = false;
+
+												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+										}
+								}
+								return;
+						}
+
+						// 전투 중 클릭해도 tile, chess 선택 안함. 위에는 스킬이라서 처리해야함.
+						if (m_isStartBattle)
+								return;
+
 						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
 						{
 								if (isLeft)

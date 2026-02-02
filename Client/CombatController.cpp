@@ -377,11 +377,29 @@ bool CombatController::EndPhase()
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
             // 승리 처리
+            for (AllyUnit* ally : m_allyUnits)
+            {
+                if (ally && ally->IsAlive()) ally->StartIdleAnim();
+            }
+
+            for (EnemyUnit* enemy : m_enemyUnits)
+            {
+                if (enemy && enemy->IsAlive()) enemy->StartDieAnim();
+            }
         }
         else if (m_stageResult == StageResult::Lose)
         {
             std::cout << "Lose!!!!!!!!!!!!" << std::endl;
             // 패배 처리
+            for (AllyUnit* ally : m_allyUnits)
+            {
+                if (ally && ally->IsAlive()) ally->StartDieAnim();
+            }
+
+            for (EnemyUnit* enemy : m_enemyUnits)
+            {
+                if (enemy && enemy->IsAlive()) enemy->StartIdleAnim();
+            }
         }
     }
 
