@@ -228,7 +228,7 @@ bool CombatController::EndPhase()
 {
     //std::cout << "end" << std::endl;
 
-    PrintFrame();
+    //PrintFrame();
 
     if (!m_phaseEntered)
     {

@@ -7,6 +7,10 @@
 #include "Camera.h"
 #include "OpenPSEvent.h"
 #include "OpenRSEvent.h"
+#include "AllyUnit.h"
+#include "EnemyUnit.h"
+
+
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
@@ -37,6 +41,7 @@ void RayCastHitEvent::RaycastCheck()
 				// 이거는 inputmanager에다가 받는거 추가해달라고 요청해야함. 아니면 가끔씩 터짐.
 				const Vector2 mp = Vector2(input.GetGameMousePosition().x, input.GetGameMousePosition().y);
 				std::cout << mp.x << " " << mp.y << std::endl;
+
 				// 둘 중 한개라도 활성 상태고 마우스가 그 위에 있는지 체크.
 				if (IsMouseInUI(m_leftPSWinodwBG, mp) || IsMouseInUI(m_leftRSWinodwBG, mp)
 						|| IsMouseInUI(m_rightPSWinodwBG, mp) || IsMouseInUI(m_rightRSWinodwBG, mp))
@@ -53,11 +58,80 @@ void RayCastHitEvent::RaycastCheck()
 
 				scene->Raycast2(r, hit, hitT);
 
+				// 960 기준으로 좌우측 구분. 
 				bool isLeft = x < 960;
 
 				if (hit)
 				{
-						std::cout << hit->GetName() << std::endl;
+						//std::cout << hit->GetName() << std::endl;
+
+						if (m_isHealSkillOn)
+						{
+								// 일단 닫고. 
+								CloseAllWindows();
+								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+								std::cout << "heal skill시작한다." << std::endl;
+								
+								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
+								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+								{
+										GameObject* m_Unit = nullptr;
+										GameObject* unitRoot = hit;
+										if (hit->GetName().find("_Test") == std::string::npos) // 이름에 _Test가 없다면 자식으로 간주
+										{
+												if (hit->GetTransform()->GetParent())
+														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
+										}
+
+										m_Unit = unitRoot;
+
+										if (m_Unit)
+										{
+												m_Unit->GetComponent<AllyUnit>()->Heal(30);
+												m_isHealSkillOn = false;
+
+												std::cout << "heal 했음." << std::endl;
+												std::cout << m_Unit->GetComponent<AllyUnit>()->GetHp() << std::endl;
+										}
+								}
+
+								SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+								return;
+						}
+
+						if (m_isAttackSkillOn)
+						{
+								CloseAllWindows();
+								SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+								std::cout << "attack skill시작한다." << std::endl;
+
+								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+								{
+										GameObject* m_Unit = nullptr;
+										GameObject* unitRoot = hit;
+										if (hit->GetName().find("_Test") == std::string::npos) 
+										{
+												if (hit->GetTransform()->GetParent())
+														unitRoot = hit->GetTransform()->GetParent()->_GetOwner();
+										}
+
+										m_Unit = unitRoot;
+
+										if (m_Unit)
+										{
+												m_Unit->GetComponent<EnemyUnit>()->TakeDamage(30);
+												m_isAttackSkillOn = false;
+
+												std::cout << "attack 했음." << std::endl;
+												std::cout << m_Unit->GetComponent<EnemyUnit>()->GetHp() << std::endl;
+										}
+								}
+								SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+								return;
+						}
+
 						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
 						{
 								if (isLeft)

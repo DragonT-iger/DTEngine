@@ -17,6 +17,12 @@ public:
 		bool IsMouseInUI(GameObject* uiObj, const Vector2& mousePos);
 		void CloseAllWindows();
 
+		void SetHealSkill(bool healSkill) { m_isHealSkillOn = healSkill; }
+		void SetAttackSkill(bool attackSkill) { m_isAttackSkillOn = attackSkill; }
+
+		bool GetHealSkill() { return m_isHealSkillOn; }
+		bool GetAttackSkill() { return m_isAttackSkillOn; }
+
 private:
 		GameObject* m_hitObj = nullptr;
 
@@ -25,5 +31,8 @@ private:
 
 		GameObject* m_leftPSWinodwBG = nullptr;
 		GameObject* m_leftRSWinodwBG = nullptr;
+
+		bool m_isHealSkillOn = false;
+		bool m_isAttackSkillOn = false;
 };
 

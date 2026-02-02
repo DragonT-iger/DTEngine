@@ -129,6 +129,9 @@
     <ClCompile Include="HPBarFollowEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="SkillButton.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -228,6 +231,9 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="HPBarFollowEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillButton.h">
       <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
