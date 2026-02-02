@@ -29,6 +29,7 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
             else if (tileIdx == 2) SetSolidWall(Vector2{ (float)w, (float)h });
             else if (tileIdx == 3) SetBreakableWall(Vector2{ (float)w, (float)h });
             else if (tileIdx == 4) SetDefenseTile(Vector2{ (float)w, (float)h }); // 인덱스 약속은 나중에 하면 될듯.
+            else if (tileIdx == 5) SetTrapTile(Vector2{ (float)w, (float)h });
             else { /*뭔가 이상한 타일.. 암튼 필요없는 정보*/ }
         }
     }
@@ -70,6 +71,7 @@ void BattleGrid::SetTile(const Vector2& p)
     t.solidWall = false;
     t.breakableWall = false;
     t.defenseTile = false;
+    t.trapTile = false;
 }
 
 void BattleGrid::SetSolidWall(const Vector2& p)
@@ -79,6 +81,7 @@ void BattleGrid::SetSolidWall(const Vector2& p)
     t.solidWall = true;
     t.breakableWall = false;
     t.defenseTile = false;
+    t.trapTile = false;
 }
 
 void BattleGrid::SetBreakableWall(const Vector2& p)
@@ -88,6 +91,7 @@ void BattleGrid::SetBreakableWall(const Vector2& p)
     t.solidWall = false;
     t.breakableWall = true; 
     t.defenseTile = false;
+    t.trapTile = false;
 }
 
 void BattleGrid::SetDefenseTile(const Vector2& p)
@@ -97,6 +101,17 @@ void BattleGrid::SetDefenseTile(const Vector2& p)
     t.solidWall = false;
     t.breakableWall = false;
     t.defenseTile = true;
+    t.trapTile = false;
+}
+
+void BattleGrid::SetTrapTile(const Vector2& p)
+{
+    auto& t = GetStaticTile(p);
+    t.tile = true;
+    t.solidWall = false;
+    t.breakableWall = false;
+    t.defenseTile = false;
+    t.trapTile = true;
 }
 
 void BattleGrid::WallBreak(const Vector2& p)
@@ -115,6 +130,12 @@ bool BattleGrid::IsDefenseTile(const Vector2& p) const
 {
     if (!InBounds(p)) return false;
     return GetStaticTile(p).defenseTile;
+}
+
+bool BattleGrid::IsTrapTile(const Vector2& p) const
+{
+    if (!InBounds(p)) return false;
+    return GetStaticTile(p).trapTile;
 }
 
 bool BattleGrid::GetNearestDefenseTile(const Vector2& me, const Vector2& myMovePos, Vector2& outPos) const

@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "AssetDatabase.h"
 
 static const UnitStats UnitStatsTable[] =
 {
@@ -9,6 +10,30 @@ static const UnitStats UnitStatsTable[] =
     {  0,  0, 150, 0 }, // 앨리스
     //{ 30,  3, 300, 1 }, // 퀸
 };
+
+void Unit::Start()
+{
+    Transform* tf = GetTransform();
+    if (!tf) return;
+
+    for (Transform* child : tf->GetChildren())
+    {
+        if (!child) continue;
+        if (child->_GetOwner()->GetName() == "Chess")
+        {
+            m_anim = child->_GetOwner()->GetComponent<Animator>();
+        }
+        else if (child->_GetOwner()->GetName() == "Shield")
+        {
+            m_anim2 = child->_GetOwner()->GetComponent<Animator>();
+        }
+        else
+        {
+            Animator* anim = child->_GetOwner()->GetComponent<Animator>();
+            if (anim) m_anim1 = child->_GetOwner()->GetComponent<Animator>();
+        }
+    }
+}
 
 void Unit::SetUnitType(int type)
 {
@@ -21,11 +46,6 @@ void Unit::SetStats(const UnitStats& s)
 {
     m_stats = s;
     m_hp = m_stats.maxHp;
-}
-
-static Vector3 GridToWorld(const Vector2& p)
-{
-    return Vector3{ p.x * 2.0f, 1.0f, p.y * 2.0f };
 }
 
 void Unit::StartAction()
@@ -45,15 +65,23 @@ void Unit::StartAction()
         break;
 
     case TurnAction::Attack:
+        BeginRotateToDir();
+        m_phase = ActionPhase::Rotating;
+        break;
+
     case TurnAction::Miss:
+        BeginRotateToDir();
+        m_phase = ActionPhase::Rotating;
+        break;
+
     case TurnAction::BreakWall:
         BeginRotateToDir();
         m_phase = ActionPhase::Rotating;
         break;
 
-    case TurnAction::Wait:
     default:
-        FinishAction();
+        m_phase = ActionPhase::None;
+        m_actionDone = true;
         break;
     }
 }
@@ -73,10 +101,13 @@ void Unit::UpdateAction(float dt)
             {
                 BeginMoveToPos();
                 m_phase = ActionPhase::Moving;
+                StartMoveAnim();
             }
-            else // 일단 나머지는 나중에.
+            else 
             {
-                FinishAction();
+                StartAttackAnim();
+                m_phase = ActionPhase::None;
+                m_actionDone = true;
             }
         }
     } break;
@@ -90,7 +121,8 @@ void Unit::UpdateAction(float dt)
     } break;
 
     default:
-        FinishAction();
+        m_phase = ActionPhase::None;
+        m_actionDone = true;
         break;
     }
 }
@@ -128,6 +160,8 @@ void Unit::ResetTurnPlan()
     m_action = TurnAction::Wait;
     if (m_isAlive) m_actionDone = false;
     else m_actionDone = true;
+    m_animStart = false;
+    m_isOnTrapTile = false;
 }
 
 Vector3 Unit::GridToWorld(const Vector2& p)
@@ -274,5 +308,44 @@ void Unit::FinishAction()
 
     m_phase = ActionPhase::None;
     m_actionDone = true;
+}
+
+void Unit::PlayAnim(uint64_t id, float speed, bool loop)
+{
+    m_anim->SetClip(id);
+    m_anim->SetTime(speed);
+    m_anim->SetLoop(loop);
+    m_anim->SetPlay(true);
+}
+
+void Unit::StartIdleAnim()
+{
+    uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/Idle_Final_Plz_God.fbx");
+    PlayAnim(id, 1.0f, true);
+}
+
+void Unit::StartMoveAnim()
+{
+    if (m_animStart) return;
+    uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_move.fbx");
+    PlayAnim(id, 1.0f, false);
+    m_animStart = true;
+}
+
+void Unit::StartAttackAnim()
+{
+    if (m_animStart) return;
+    uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_hurt.fbx");
+    PlayAnim(id, 1.0f, false);
+    m_animStart = true;
+}
+
+void Unit::StartDieAnim()
+{
+    //if (m_animStart) return;
+    //std::cout << _GetOwner()->_GetID() << std::endl;
+    uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_die.fbx");
+    PlayAnim(id, 1.0f, false);
+    m_animStart = true;
 }
 

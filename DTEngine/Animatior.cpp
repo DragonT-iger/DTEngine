@@ -21,7 +21,6 @@ void Animator::Update(float deltaTime)
     if (!m_CurrentClip || !Play) return;
 
     float timeIncrement = deltaTime * m_CurrentClip->TicksPerSecond * Animated_Time;
-    m_CurrentTime = fmod(m_CurrentTime + timeIncrement, m_CurrentClip->Duration);
 
     m_CurrentTime += timeIncrement;
 
@@ -80,6 +79,7 @@ void Animator::SetClip(uint64_t id)
         return;
 
     m_AniID = id;
+    m_ClipChanged = true;
 
     m_TargetSkeletal = _GetOwner()->GetComponent<Skeletal>();
     m_TargetRigid = _GetOwner()->GetComponent<Rigid>();
@@ -153,4 +153,25 @@ void Animator::SetClip(uint64_t id)
 void Animator::SetTime(float Speed)
 {
     Animated_Time = Speed;
+}
+
+void Animator::SetPlay(bool On_Off)
+{
+    if (On_Off)
+    {
+        if (Play)
+        {
+            if (Loop && !m_ClipChanged) return;
+        }
+
+        m_CurrentTime = 0.0f;
+        m_Done = false;
+        Play = true;
+        m_ClipChanged = false;
+
+        return;
+    }
+
+    Play = false;
+    m_Done = true;
 }
