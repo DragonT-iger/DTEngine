@@ -4,18 +4,11 @@
 #include "SelectIndexEvent.h"
 
 BEGINPROPERTY(ImageVisualUpdateEvent)
-DTPROPERTY_ACCESSOR(ImageVisualUpdateEvent, m_visualIndex, GetVisualIndex, SetVisualIndex)
 DTPROPERTY(ImageVisualUpdateEvent, m_fButton)
 DTPROPERTY(ImageVisualUpdateEvent, m_sButton)
 DTPROPERTY(ImageVisualUpdateEvent, m_tButton)
 ENDPROPERTY()
 
-
-void ImageVisualUpdateEvent::Update(float deltaTime)
-{
-		// 어차피 아래 함수에서 return 처리 다 하는 중.
-		//UpdateAllButtonsVisual();
-}
 
 void ImageVisualUpdateEvent::Start()
 {
@@ -62,8 +55,6 @@ void ImageVisualUpdateEvent::UpdateAllButtonsVisual()
 		auto parent = _GetOwner()->GetTransform()->GetParent()->_GetOwner();
 		auto selectEvent = parent->GetComponent<SelectIndexEvent>();
 		int index = selectEvent->GetIndex();
-		if (!selectEvent)
-				std::cout << "event 컴포넌트 없다 index 어캐하냐" << std::endl;
 
 		for (int i = 0; i < 3; ++i)
 		{

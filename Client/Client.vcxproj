@@ -149,6 +149,7 @@
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverEvent.cpp" />
+    <ClCompile Include="HPBarFollowEvent.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenPSEvent.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameOverEvent.h" />
+    <ClInclude Include="HPBarFollowEvent.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
