@@ -18,7 +18,7 @@ void HPBarFollowEvent::Start()
 		m_targetUnit = m_targetObject->GetComponent<Unit>();
 		m_fillBaseScale = m_fillObject->GetTransform()->GetScale();
 		m_fillBasePosition = m_fillObject->GetTransform()->GetPosition();
-		m_originalRotation = _GetOwner()->GetTransform()->GetEditorEuler();
+		m_originalRotation = _GetOwner()->GetTransform()->GetEditorEuler();		
 }
 
 void HPBarFollowEvent::Update(float deltaTime)
@@ -28,6 +28,9 @@ void HPBarFollowEvent::Update(float deltaTime)
 
 void HPBarFollowEvent::UpdateFillScale(float deltaTime)
 {
+		if (!m_targetObject || !m_fillObject)
+				return;
+
 		// 체력이 아니라 isalive로 판단.
 		if (!m_targetUnit->IsAlive())
 		{

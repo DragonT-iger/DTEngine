@@ -12,9 +12,11 @@ public:
 		void Start() override;
 		void Update(float deltaTime) override;
 
-		void UpdateFollowPosition(float deltaTime);
 		void UpdateFillScale(float deltaTime);
 		float Lerp(float start, float end, float t);
+
+		void SetTargetObject(GameObject* obj) { m_targetObject = obj; }
+		void SetFillObject(GameObject* obj) { m_fillObject = obj; }
 private:
 		// target
 		GameObject* m_targetObject = nullptr;

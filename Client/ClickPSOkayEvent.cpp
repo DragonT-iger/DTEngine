@@ -9,6 +9,10 @@
 #include "TilemapData.h"
 #include "AllyUnit.h"
 #include "CombatController.h"
+#include "Unit.h"
+#include "EnemyUnit.h"
+#include "HPBarFollowEvent.h"
+
 
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -36,7 +40,8 @@ void ClickPSOkayEvent::SetClick()
 								return;
 
 						if (!m_knight || !m_rook || !m_bishop)
-								std::cout << "model prefab 없다" << std::endl;
+								return;
+								//std::cout << "model prefab 없다" << std::endl;
 
 						GameObject* parentObj = _GetOwner()->GetTransform()->GetParent()->_GetOwner();
 
@@ -70,9 +75,9 @@ void ClickPSOkayEvent::SetClick()
 						worldPos.y += 1;
 						GameObject* go = m_selectPrefab->Instantiate();
 						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 90.0f, 0.0f));
-						
 						go->GetTransform()->SetPosition(worldPos);
-						std::cout << worldPos.x << " " << worldPos.y << std::endl;
+
+						//std::cout << worldPos.x << " " << worldPos.y << std::endl;
 
 						// allyunit 컴포넌트 가져와서 setpos 추가해주기.
 						auto allyC = go->GetComponent<AllyUnit>();
@@ -82,7 +87,7 @@ void ClickPSOkayEvent::SetClick()
 								
 								allyC->SetPos(pos);
 
-								std::cout << pos.x << " " << pos.y << std::endl;
+								//std::cout << pos.x << " " << pos.y << std::endl;
 								if (m_combatObj)
 								{
 										switch (index)
