@@ -78,6 +78,57 @@
     <ClCompile Include="BattleGrid.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="SelectIndexEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageVisualUpdateEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastHitEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenPSEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickPSOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenRSEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickRSOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="RuleImageVisualEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="AliceUnit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatTestRunner.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickStartButton.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitButtonEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitActionEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SetMainSceneEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderValueEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="HPBarFollowEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -127,6 +178,57 @@
     </ClInclude>
     <ClInclude Include="BattleGrid.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectIndexEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageVisualUpdateEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastHitEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenPSEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickPSOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenRSEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickRSOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="RuleImageVisualEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="AliceUnit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatTestRunner.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickStartButton.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitButtonEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitActionEvent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SetMainSceneEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderValueEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="HPBarFollowEvent.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

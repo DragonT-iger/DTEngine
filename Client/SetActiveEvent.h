@@ -5,12 +5,11 @@ class UIButton;
 #include "MonoBehaviour.h"
 class SetActiveEvent : public MonoBehaviour
 {
-
+		DTGENERATED_BODY(SetActiveEvent);
+public:
 	void Start() override;
 
-
-	DTGENERATED_BODY(SetActiveEvent);
-
+private:
 
 	UIButton* m_button = nullptr;
 };

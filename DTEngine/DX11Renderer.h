@@ -100,6 +100,8 @@ public:
     void SetFullscreen(bool enable);
     void Destroy();
 
+    void CBFlush();
+
     void SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr);
 
     void SetViewport(float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f, float topLeftX = 0.0f, float topLeftY = 0.0f);
@@ -144,7 +146,7 @@ public:
     void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
     void UpdateSkyBox_CBUFFER(SkyBox& data);
     void UpdateEffect_CBUFFER(EffectParams& data);
-
+    void UpdateFog_CBUFFER(FogParams& data);
 
 
     //기계 장치에 대한 Bind를 Cycle Update 다응에 매 프레임마다 설정하기 
@@ -162,6 +164,9 @@ public:
     void DrawFullScreenQuad();
 
     PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
+
+
+
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -229,8 +234,9 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr; // 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr;  
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Effect = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Fog = nullptr;
 
 
 #pragma endregion 
@@ -239,6 +245,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
     Microsoft::WRL::ComPtr<ID3D11BlendState>        m_alphaBlendState;
+    Microsoft::WRL::ComPtr<ID3D11BlendState>        m_multiplyBlendState;
+
     //Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_defaultSamplerState;
 
 

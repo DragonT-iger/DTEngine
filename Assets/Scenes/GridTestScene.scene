@@ -44,21 +44,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 13.402323722839355,
-          "y": 171.29885864257813,
+          "x": 36.70192337036133,
+          "y": 678.0986328125,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 7.041474342346191,
-          "y": 5.609583854675293,
-          "z": 24.999828338623047
+          "x": 13.524530410766602,
+          "y": 7.753663539886475,
+          "z": 4.578540802001953
         },
         "m_rotation": {
-          "w": 0.07534055411815643,
-          "x": 0.008852030150592327,
-          "y": 0.990306556224823,
-          "z": -0.11635463684797287
+          "w": 0.8863964080810547,
+          "x": 0.29402247071266174,
+          "y": -0.33938080072402954,
+          "z": 0.11257443577051163
         },
         "m_scale": {
           "x": 1.0,
@@ -182,8 +182,8 @@
           "Active": true,
           "id": 7171391694734270448,
           "m_mapData": 6189260170659567125,
-          "m_prefab0": 16302386552932827796,
-          "m_prefab1": 11325787544210787741,
+          "m_prefab0": 736820918105964445,
+          "m_prefab1": 14720221284518089057,
           "m_prefab2": 4924267867290484229,
           "m_prefab3": 0,
           "m_prefab4": 0,
@@ -202,9 +202,9 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 5.075587272644043,
+          "x": 0.0,
           "y": 0.0,
-          "z": 2.082815647125244
+          "z": 0.0
         },
         "m_rotation": {
           "w": 1.0,
@@ -224,65 +224,35 @@
       "components": [
         {
           "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              0.975806474685669,
-              0.1888657659292221,
-              0.1888657659292221,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004480000119656324,
-            "ShadowScale": 1.0,
-            "Textures": {},
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 12796648283351137547,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 5153523167697001826,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 6022309272839303111,
-          "m_rotationSpeed": {
-            "x": 0.0,
-            "y": 20.0,
-            "z": 0.0
-          },
-          "typeName": "Rotator"
+          "id": 8138808444096392086,
+          "m_leftPSWinodwBG": 13644169991980458124,
+          "m_leftRSWinodwBG": 14800340861935470279,
+          "m_rightPSWinodwBG": 14165272807283552,
+          "m_rightRSWinodwBG": 82358940468270108,
+          "typeName": "RayCastHitEvent"
         }
       ],
-      "id": 5804603407003503968,
-      "name": "Cube",
+      "id": 4771222732717351773,
+      "name": "rayobj",
       "tag": "Untagged",
       "transform": {
-        "id": 9826012678473559212,
+        "id": 3838017594762128607,
         "m_editorEulerAngles": {
-          "x": -0.0,
+          "x": 0.0,
           "y": 0.0,
-          "z": -0.0
+          "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 8.601725578308105,
-          "y": 3.021575450897217,
-          "z": 13.233254432678223
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "m_rotation": {
           "w": 1.0,
-          "x": -0.0,
+          "x": 0.0,
           "y": 0.0,
-          "z": -0.0
+          "z": 0.0
         },
         "m_scale": {
           "x": 1.0,
@@ -296,24 +266,29 @@
       "components": [
         {
           "Active": true,
-          "id": 8434294019800784467,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 5153523167697001826,
-          "typeName": "MeshRenderer"
+          "id": 6046924333935023102,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 14056618309374951913,
+          "typeName": "Image"
         }
       ],
-      "id": 10905839516507161456,
-      "name": "Cube",
+      "id": 13058682264058090145,
+      "name": "imager",
       "tag": "Untagged",
       "transform": {
-        "id": 8746986767933689703,
+        "id": 9994684478619704801,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 3160843146463709048,
+        "m_parent": 0,
         "m_position": {
           "x": 0.0,
           "y": 0.0,
@@ -321,9 +296,228 @@
         },
         "m_rotation": {
           "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 13373865791260948433,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11989691549227905264,
+          "typeName": "Image"
+        }
+      ],
+      "id": 13103189085852067150,
+      "name": "imagek",
+      "tag": "Untagged",
+      "transform": {
+        "id": 11748487385206834508,
+        "m_editorEulerAngles": {
           "x": -0.0,
           "y": 0.0,
-          "z": -0.0
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17340659655771104659,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12890356882561109328,
+          "typeName": "Image"
+        }
+      ],
+      "id": 13066375628726797954,
+      "name": "imageb",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3151838183156534054,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17217331222344769167,
+          "m_tilemapGenerator": 7171391694734270448,
+          "typeName": "BattleGrid"
+        }
+      ],
+      "id": 10007894330152835925,
+      "name": "grid",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2571895995661900209,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "allyUnit0": 0,
+          "allyUnit1": 0,
+          "allyUnit2": 0,
+          "battleGrid": 17217331222344769167,
+          "enemyUnit0": 570417400661800883,
+          "enemyUnit1": 0,
+          "enemyUnit2": 0,
+          "id": 6276163554272591340,
+          "m_aliceUnit": 9781302197654319293,
+          "typeName": "CombatController"
+        }
+      ],
+      "id": 7541685513989182900,
+      "name": "combat",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4744754019065986298,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 9781302197654319293,
+          "m_pos": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "typeName": "AliceUnit"
+        }
+      ],
+      "id": 10494504114322562742,
+      "name": "alice",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1090369088132048465,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "m_scale": {
           "x": 1.0,
@@ -335,19 +529,19 @@
     {
       "active": true,
       "components": [],
-      "id": 11778421806338692559,
-      "name": "GameObject",
+      "id": 6136182857642238672,
+      "name": "enemy",
       "tag": "Untagged",
       "transform": {
-        "id": 9767056707140335182,
+        "id": 7391673662214864519,
         "m_editorEulerAngles": {
-          "x": -0.0,
+          "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 2.299999952316284,
+          "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
@@ -369,64 +563,20 @@
       "components": [
         {
           "Active": true,
-          "id": 14453469437693765232,
+          "id": 4576100491774274256,
           "m_color": {
             "w": 1.0,
             "x": 1.0,
             "y": 1.0,
             "z": 1.0
           },
-          "m_textureID": 11442415147953682991,
-          "typeName": "Image"
-        }
-      ],
-      "id": 10729742436706824040,
-      "name": "GameObject",
-      "tag": "Untagged",
-      "transform": {
-        "id": 9137993014704475425,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 9767056707140335182,
-        "m_position": {
-          "x": 100.0,
-          "y": 100.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 100.0,
-          "y": 100.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 9437512090258893174,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_textureID": 14791384396114540789,
+          "m_orderInLayer": 0,
+          "m_textureID": 7237646827701484134,
           "typeName": "Image"
         },
         {
           "Active": true,
-          "id": 7084510593833299199,
+          "id": 3172165213437105257,
           "m_hoverColor": {
             "w": 1.0,
             "x": 0.800000011920929,
@@ -450,69 +600,17 @@
         },
         {
           "Active": true,
-          "id": 10129189046166066503,
-          "m_FontID": 0,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_fontSize": 1.0,
-          "m_text": "New Textasdasda권용범",
-          "typeName": "Text"
+          "id": 8703637472770791007,
+          "m_combatObj": 7541685513989182900,
+          "m_startButton": 3172165213437105257,
+          "typeName": "ClickStartButton"
         }
       ],
-      "id": 16628638947925722745,
-      "name": "GameObject",
+      "id": 9419903296967584286,
+      "name": "TestStartButton",
       "tag": "Untagged",
       "transform": {
-        "id": 11729853042175849248,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 9137993014704475425,
-        "m_position": {
-          "x": 0.5,
-          "y": 0.5,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 0.5,
-          "y": 0.5,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": false,
-      "components": [
-        {
-          "Active": true,
-          "id": 9046313462223727143,
-          "m_color": {
-            "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-          },
-          "m_textureID": 1087623756073597206,
-          "typeName": "Image"
-        }
-      ],
-      "id": 10169687403797365547,
-      "name": "GameObject",
-      "tag": "Untagged",
-      "transform": {
-        "id": 4922655923850045622,
+        "id": 15449287259136968270,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
@@ -520,8 +618,8 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 35.5,
-          "y": 21.799999237060547,
+          "x": 50.0,
+          "y": 0.0,
           "z": 0.0
         },
         "m_rotation": {
@@ -531,8 +629,8 @@
           "z": 0.0
         },
         "m_scale": {
-          "x": 304.20001220703125,
-          "y": 137.8000030517578,
+          "x": 200.0,
+          "y": 200.0,
           "z": 1.0
         }
       }
@@ -542,36 +640,2480 @@
       "components": [
         {
           "Active": true,
-          "id": 14874681569479869762,
-          "m_size": 30.0,
-          "typeName": "ShadowMap"
+          "id": 570417400661800883,
+          "m_isBoss": true,
+          "m_pos": {
+            "x": 2.0,
+            "y": 8.0
+          },
+          "m_type": 0,
+          "path0": {
+            "x": 2.0,
+            "y": 8.0
+          },
+          "path1": {
+            "x": 2.0,
+            "y": 1.0
+          },
+          "path2": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "path3": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "path4": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path5": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path6": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path7": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "typeName": "EnemyUnit"
         }
       ],
-      "id": 14171456073012411997,
-      "name": "ShadowRef",
+      "id": 3859076468797295072,
+      "name": "Chess_Spear_Test",
       "tag": "Untagged",
       "transform": {
-        "id": 17087393488300090766,
+        "id": 6007003118662846288,
         "m_editorEulerAngles": {
-          "x": 31.802343368530273,
-          "y": -112.80156707763672,
-          "z": 2.0091836177016376e-06
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
         },
-        "m_parent": 0,
+        "m_parent": 7391673662214864519,
         "m_position": {
-          "x": 23.49452781677246,
-          "y": 8.861589431762695,
-          "z": 14.386226654052734
+          "x": 4.0,
+          "y": 1.0,
+          "z": 16.0
         },
         "m_rotation": {
-          "w": -0.5322054624557495,
-          "x": -0.1516144722700119,
-          "y": 0.8010573983192444,
-          "z": -0.22820492088794708
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
         },
         "m_scale": {
           "x": 1.0,
           "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 2931371597178195541,
+              "1": 885120150060770054,
+              "3": 13530188703377643776,
+              "4": 5791674905025866242
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 7310074725881531405,
+          "m_materialID": 10671092131083317277,
+          "m_meshIndex": 0,
+          "m_modelID": 15036042619192132349,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 5910824544078998904,
+          "m_skellID": 15036042619192132349,
+          "typeName": "Skeletal"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 1205362726852986338,
+          "m_AniID": 1897428081162014869,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 8750728248339346310,
+      "name": "Chess",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8138232525440219409,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 6007003118662846288,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 12219225787821283075,
+              "1": 15995925660948491865,
+              "3": 17567310345030162650
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 5098202088484987967,
+          "m_materialID": 10354447960854782024,
+          "m_meshIndex": 0,
+          "m_modelID": 16273426721281812034,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 12271847913748979920,
+          "m_modelID": 16273426721281812034,
+          "typeName": "Rigid"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 6344695924710190261,
+          "m_AniID": 16775286386219350275,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 4098735060481435015,
+      "name": "Spear",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12146086727459393711,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 6007003118662846288,
+        "m_position": {
+          "x": -0.5019416809082031,
+          "y": 0.6400325298309326,
+          "z": -0.1998882293701172
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 3562454344954254056,
+      "name": "RightPrefabSelectWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1025138812929096544,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 10420904889405659856,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 7691920421426771574,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 17480733333436711008,
+          "m_index": 0,
+          "typeName": "SelectIndexEvent"
+        },
+        {
+          "Active": true,
+          "id": 7045286994184321220,
+          "m_rayObject": 0,
+          "typeName": "OpenPSEvent"
+        }
+      ],
+      "id": 14165272807283552,
+      "name": "RightPrefabSelectWindowBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3084540489734458606,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 1025138812929096544,
+        "m_position": {
+          "x": 1072.0,
+          "y": 341.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 748.0,
+          "y": 518.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 13688086986830286557,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 9450232514678575410,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 16259032481906092414,
+          "m_fButton": 9450232514678575410,
+          "m_sButton": 15417259429606272676,
+          "m_tButton": 11196832958611947967,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 10167534319587506032,
+      "name": "SelectKnight",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2570665692395957537,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3084540489734458606,
+        "m_position": {
+          "x": 0.08500000089406967,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1393050148304217114,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 15417259429606272676,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 4696455276472288596,
+          "m_fButton": 9450232514678575410,
+          "m_sButton": 15417259429606272676,
+          "m_tButton": 11196832958611947967,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 8556066420976087337,
+      "name": "SelectRook",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3823845874929765251,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3084540489734458606,
+        "m_position": {
+          "x": 0.4099999964237213,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7688261593115411838,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 11196832958611947967,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 15949140636188915712,
+          "m_fButton": 9450232514678575410,
+          "m_sButton": 15417259429606272676,
+          "m_tButton": 11196832958611947967,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 4922162424777302168,
+      "name": "SelectBishop",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17178666691844836766,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3084540489734458606,
+        "m_position": {
+          "x": 0.7350000143051147,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17272954828137587065,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5508172115925057707,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 3581851458029775468,
+          "m_RSWindow": 82358940468270108,
+          "m_bishop": 14930257652906015251,
+          "m_button": 5508172115925057707,
+          "m_combatObj": 7541685513989182900,
+          "m_knight": 3377014030586769903,
+          "m_mapData": 7171391694734270448,
+          "m_rook": 17045068543029947324,
+          "typeName": "ClickPSOkayEvent"
+        }
+      ],
+      "id": 12365362530194394640,
+      "name": "OkayButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 883498518241978150,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 3084540489734458606,
+        "m_position": {
+          "x": 0.3499999940395355,
+          "y": 1.0499999523162842,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.20000000298023224,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 17553107550433472530,
+      "name": "LeftPrefabSelectWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 15487588310205732585,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 6425392775916364341,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 7691920421426771574,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 11316910366291077390,
+          "m_index": 0,
+          "typeName": "SelectIndexEvent"
+        },
+        {
+          "Active": true,
+          "id": 17870482130434727709,
+          "m_rayObject": 0,
+          "typeName": "OpenPSEvent"
+        }
+      ],
+      "id": 13644169991980458124,
+      "name": "LeftPrefabSelectWindowBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 412168683736674281,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 15487588310205732585,
+        "m_position": {
+          "x": 100.0,
+          "y": 341.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 748.0,
+          "y": 518.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10986957230707384231,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 7619543229225093043,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 10050178375695719958,
+          "m_fButton": 7619543229225093043,
+          "m_sButton": 5654175943256943488,
+          "m_tButton": 8996063328769449522,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 289712593532750741,
+      "name": "SelectKnight",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7121200460097252581,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 412168683736674281,
+        "m_position": {
+          "x": 0.08500000089406967,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4991477328391274712,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5654175943256943488,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 3960452596875304128,
+          "m_fButton": 7619543229225093043,
+          "m_sButton": 5654175943256943488,
+          "m_tButton": 8996063328769449522,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 8583394357374909482,
+      "name": "SelectRook",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2427350248234303044,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 412168683736674281,
+        "m_position": {
+          "x": 0.4099999964237213,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 11190240459954730822,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 8996063328769449522,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 16798492839494961388,
+          "m_fButton": 7619543229225093043,
+          "m_sButton": 5654175943256943488,
+          "m_tButton": 8996063328769449522,
+          "m_visualIndex": 0,
+          "typeName": "ImageVisualUpdateEvent"
+        }
+      ],
+      "id": 8195932947360659830,
+      "name": "SelectBishop",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18354813181961587212,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 412168683736674281,
+        "m_position": {
+          "x": 0.7350000143051147,
+          "y": 0.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.18000000715255737,
+          "y": 0.44999998807907104,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8482721113050654087,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11338436910694156633,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 2056293130688999352,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 2621649265141160521,
+          "m_RSWindow": 14800340861935470279,
+          "m_bishop": 14930257652906015251,
+          "m_button": 2056293130688999352,
+          "m_combatObj": 7541685513989182900,
+          "m_knight": 3377014030586769903,
+          "m_mapData": 7171391694734270448,
+          "m_rook": 17045068543029947324,
+          "typeName": "ClickPSOkayEvent"
+        }
+      ],
+      "id": 8790336046565185831,
+      "name": "OkayButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10576270167431045512,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 412168683736674281,
+        "m_position": {
+          "x": 0.3499999940395355,
+          "y": 1.0499999523162842,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.20000000298023224,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 15778205586751464368,
+      "name": "LeftRuleSelectWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5478925673006354514,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 2089392710043102264,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 5872622350538280037,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5417655901363708054,
+          "m_windowBar": 3942539419647813714,
+          "typeName": "OpenRSEvent"
+        },
+        {
+          "Active": true,
+          "id": 2211825933479715591,
+          "m_battlefBtns": 6932027978093546345,
+          "m_battlesBtns": 1775862312111715379,
+          "m_battletBtns": 16507606380881499613,
+          "m_movefBtns": 4877278484995670337,
+          "m_movesBtns": 7678010941710093948,
+          "m_movetBtns": 1349278322551903868,
+          "typeName": "RuleImageVisualEvent"
+        }
+      ],
+      "id": 14800340861935470279,
+      "name": "LeftRuleSelectWindowBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14010056599279819888,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 5478925673006354514,
+        "m_position": {
+          "x": 200.0,
+          "y": 346.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 606.0,
+          "y": 508.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5219165960954481550,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11989691549227905264,
+          "typeName": "Image"
+        }
+      ],
+      "id": 3942539419647813714,
+      "name": "RuleSelectWindowBar",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13395452041381606322,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": -0.15000000596046448,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.6072607040405273,
+          "y": 0.4114173352718353,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16534173471095912570,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 7237646827701484134,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 6956302447113660091,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 10718949589605998082,
+          "m_exitButton": 6956302447113660091,
+          "typeName": "ExitButtonEvent"
+        }
+      ],
+      "id": 9744515678385578250,
+      "name": "ExitButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16120961033068528171,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.8600000143051147,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.18481847643852234,
+          "y": 0.2106299251317978,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14931390004668276317,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 10807500002573719733,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 206359914673530380,
+          "m_okayBtn": 10807500002573719733,
+          "typeName": "ClickRSOkayEvent"
+        }
+      ],
+      "id": 1931208770093395731,
+      "name": "OkayButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12807790730541078689,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.30000001192092896,
+          "y": 0.9599999785423279,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.3993399143218994,
+          "y": 0.2381889820098877,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 13406465710863232830,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 4877278484995670337,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 1955276633431879385,
+      "name": "Rule_Move_Wait",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7164937486263536394,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.4399999976158142,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16286341496521781128,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 7678010941710093948,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 2559905526251250017,
+      "name": "Rule_Move_Forward",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16104659069788311071,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.574999988079071,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7417797421430573605,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1349278322551903868,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 6357098556587276579,
+      "name": "Rule_Move_BossChase",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2794631984542729133,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.7250000238418579,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 211044788901069494,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 6932027978093546345,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 816646690715099741,
+      "name": "Rule_Attack_LowestHP",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7750585039495507825,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.4399999976158142,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 874171812118873800,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1775862312111715379,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 6270572956479263517,
+      "name": "Rule_Attack_HighestHP",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9045717111247922826,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.574999988079071,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 11703799446470646262,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 16507606380881499613,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 91557443602133371,
+      "name": "Rule_Attack_Nearest",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7484266526019332995,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14010056599279819888,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.7250000238418579,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 558142622206752269,
+      "name": "RightRuleSelectWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5989946257071473899,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 7792460193177341110,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 5872622350538280037,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 4992839715667189951,
+          "m_battlefBtns": 15978223294297354963,
+          "m_battlesBtns": 18229874718033373120,
+          "m_battletBtns": 10021075390683034714,
+          "m_movefBtns": 16423474319093366698,
+          "m_movesBtns": 7584787341663908850,
+          "m_movetBtns": 13157739955402477341,
+          "typeName": "RuleImageVisualEvent"
+        },
+        {
+          "Active": true,
+          "id": 2769525035403087351,
+          "m_windowBar": 16836750353567610195,
+          "typeName": "OpenRSEvent"
+        }
+      ],
+      "id": 82358940468270108,
+      "name": "RightRuleSelectWindowBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 86906267600889420,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 5989946257071473899,
+        "m_position": {
+          "x": 1114.0,
+          "y": 346.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 606.0,
+          "y": 508.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 16263440438932763958,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11989691549227905264,
+          "typeName": "Image"
+        }
+      ],
+      "id": 16836750353567610195,
+      "name": "RuleSelectWindowBar",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13292422424295570569,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": -0.15000000596046448,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.6072607040405273,
+          "y": 0.4114173352718353,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4607513315142236347,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 7237646827701484134,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1026861482826012787,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 2791222319206022273,
+          "m_exitButton": 1026861482826012787,
+          "typeName": "ExitButtonEvent"
+        }
+      ],
+      "id": 18024018195584593887,
+      "name": "ExitButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2386360405942588937,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.8600000143051147,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.18481847643852234,
+          "y": 0.2106299251317978,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7910565118914183450,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 543071794705848755,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 10997339579225271780,
+          "m_okayBtn": 543071794705848755,
+          "typeName": "ClickRSOkayEvent"
+        }
+      ],
+      "id": 6893508676892989152,
+      "name": "OkayButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 11832032679402445006,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.30000001192092896,
+          "y": 0.9599999785423279,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.3993399143218994,
+          "y": 0.2381889820098877,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 7110527618254723098,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 16423474319093366698,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 1662888799462976627,
+      "name": "Rule_Move_Wait",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2858357408557237250,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.4399999976158142,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1153749465794282206,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 7584787341663908850,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 4310542876839761155,
+      "name": "Rule_Move_Forward",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4674994687047504718,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.574999988079071,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17812229332377443087,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 13157739955402477341,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 9171783885078377282,
+      "name": "Rule_Move_BossChase",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8872958731712328073,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.20000000298023224,
+          "y": 0.7250000238418579,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10865007977005284129,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 15978223294297354963,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 17785732977938274540,
+      "name": "Rule_Attack_LowestHP",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5179124544463338249,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.4399999976158142,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5620413037201813356,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 18229874718033373120,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 6758408526930994662,
+      "name": "Rule_Attack_HighestHP",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10341487877762104449,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.574999988079071,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 3878340646629911145,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 10021075390683034714,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 11636774580388786120,
+      "name": "Rule_Attack_Nearest",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13498892051197011330,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 86906267600889420,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 0.7250000238418579,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.20000000298023224,
+          "y": 0.10000000149011612,
           "z": 1.0
         }
       }

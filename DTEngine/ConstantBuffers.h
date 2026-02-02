@@ -66,7 +66,7 @@ struct Matrix_Pallette //b5
 };
 
 __declspec(align(16))
-struct SkyBox
+struct SkyBox //b6
 {
     Vector4 SkyBox_Color;
 };
@@ -74,7 +74,7 @@ struct SkyBox
 // SHADER를 사용한 종합적인 Effect에 필요한 상수버퍼.
 // Dissolve 나 Alpha 부터 시작.
 __declspec(align(16))
-struct EffectParams
+struct EffectParams //b7
 {
     float progress = 0.0f;       // 소멸 진행도 (0~1)
     float edgeWidth = 0.01f;     // 테두리 두께
@@ -88,5 +88,15 @@ struct EffectParams
     float effectType = 0.0f;
     float Skinned_Flag = false;
 
-};
+    Matrix invcamerarotation{};
 
+};
+__declspec(align(16))
+struct FogParams
+{
+     Vector4 FogColor = Vector4(1, 1, 1, 1);
+     float FogGlobalDensity = 0;
+     float FogHeightFalloff =0;
+     float FogBaseHeight = 0;
+     float FogStartDistance = 0;
+};

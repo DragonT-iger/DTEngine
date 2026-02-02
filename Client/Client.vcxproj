@@ -134,21 +134,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
+    <ClCompile Include="ClickPSOkayEvent.cpp" />
+    <ClCompile Include="ClickRSOkayEvent.cpp" />
+    <ClCompile Include="AliceUnit.cpp" />
+    <ClCompile Include="ClickStartButton.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
     <ClCompile Include="BattleGrid.cpp" />
     <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
+    <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
+    <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameOverEvent.cpp" />
+    <ClCompile Include="HPBarFollowEvent.cpp" />
+    <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OpenPSEvent.cpp" />
+    <ClCompile Include="OpenRSEvent.cpp" />
+    <ClCompile Include="RayCastHitEvent.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
+    <ClCompile Include="RuleImageVisualEvent.cpp" />
+    <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
+    <ClCompile Include="SetMainSceneEvent.cpp" />
+    <ClCompile Include="SliderValueEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitActionEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -157,21 +174,38 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
+    <ClInclude Include="ClickPSOkayEvent.h" />
+    <ClInclude Include="ClickRSOkayEvent.h" />
+    <ClInclude Include="AliceUnit.h" />
+    <ClInclude Include="ClickStartButton.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />
     <ClInclude Include="BattleGrid.h" />
     <ClInclude Include="CombatController.h" />
     <ClInclude Include="ColorToggler.h" />
+    <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="EnemyUnit.h" />
+    <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameOverEvent.h" />
+    <ClInclude Include="HPBarFollowEvent.h" />
+    <ClInclude Include="ImageVisualUpdateEvent.h" />
+    <ClInclude Include="OpenPSEvent.h" />
+    <ClInclude Include="OpenRSEvent.h" />
+    <ClInclude Include="RayCastHitEvent.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
+    <ClInclude Include="RuleImageVisualEvent.h" />
+    <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
+    <ClInclude Include="SetMainSceneEvent.h" />
+    <ClInclude Include="SliderValueEvent.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialTrigger.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitActionEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

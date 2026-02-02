@@ -15,6 +15,7 @@ SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
+        
     // [1] 데이터 초기화 및 기본값 설정
     float3 N = normalize(input.WorldNormal);
     float3 V;
@@ -100,7 +101,6 @@ float4 PS(PS_INPUT input) : SV_Target
         );
     }
 
-    // [4] 간접광(IBL) 계산 - Shared 함수 활용
     float3 ambientLighting = float3(0, 0, 0);
     if (USE_IBL)
     {
@@ -115,7 +115,8 @@ float4 PS(PS_INPUT input) : SV_Target
         ambientLighting = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
 
-    // [5] 최종 결과 합성 및 감마 보정
+    ambientLighting = albedo * 0.2;
+    
     float3 finalColor = directLighting + ambientLighting * 0.5f;
     
     return float4(finalColor, 1.0f);

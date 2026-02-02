@@ -14,6 +14,7 @@ class Texture;
 
 enum class RenderMode { Opaque, Transparent };
 enum class CullMode { Back, Front, None };
+enum class BlendMode;
 
 class Material : public IResource
 {
@@ -28,6 +29,7 @@ public:
     void Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM);
 
     void BindPipeLine();
+    void FixeddBindPipeLine();
     void BindPerObject(const Matrix& worldTM, const Matrix& WorldINVTM);
     
     bool SetTexture(int slot, Texture* texture);
@@ -47,6 +49,8 @@ public:
 
     void SetTiling(float x, float y) { m_data.UVTransform.x = x; m_data.UVTransform.y = y; }
     void SetOffset(float x, float y) { m_data.UVTransform.z = x; m_data.UVTransform.w = y; }
+
+    void SetUVTransform(Vector4& Vector) { m_data.UVTransform = Vector; }
 
     void SetRenderMode(RenderMode mode) { m_renderMode = mode; }
     RenderMode GetRenderMode() const { return m_renderMode; }

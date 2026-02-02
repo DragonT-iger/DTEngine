@@ -44,7 +44,7 @@ public:
     const Vector4& GetHandleColor() const { return m_handleColor; }
 
     // callback 함수 저장.
-    void SetOnValueChanged(std::function<void(float)> callback) { m_onValueChanged = std::move(callback); }
+    void SetOnValueChanged(std::function<void()> callback) { m_onValueChanged = callback; }
     
     // callback 함수 호출.
     void InvokeValueChanged();
@@ -75,6 +75,6 @@ private:
     Vector4 m_fillColor = Vector4(1.f, 1.f, 1.f, 1.f);
     Vector4 m_trackColor = Vector4(1.f, 1.f, 1.f, 1.f);
     Vector4 m_handleColor = Vector4(1.f, 1.f, 1.f, 1.f);
-    std::function<void(float)> m_onValueChanged;
+    std::function<void()> m_onValueChanged;
 };
 

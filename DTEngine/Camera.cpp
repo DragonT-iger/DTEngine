@@ -8,6 +8,7 @@
 #include "SimpleMathHelper.h"
 #include "MonitorController.h"
 #include "InputManager.h"
+#include "Fog.h"
 
 BEGINPROPERTY(Camera)
 
@@ -28,6 +29,13 @@ DTPROPERTY_ACCESSOR(Camera, m_vignetteSoftness, GetVignetteSoftness, SetVignette
 DTPROPERTY_ACCESSOR(Camera, m_useBloom, GetUseBloom, SetUseBloom)
 DTPROPERTY_ACCESSOR(Camera, m_bloomThreshold, GetBloomThreshold, SetBloomThreshold)
 DTPROPERTY_ACCESSOR(Camera, m_bloomIntensity, GetBloomIntensity, SetBloomIntensity)
+
+
+DTPROPERTY_ACCESSOR(Camera, m_useCircleMask, GetUseCircleMask, SetUseCircleMask)
+DTPROPERTY_ACCESSOR(Camera, m_CircleCenter, GetCircleCenter, SetCrircleCenter)
+DTPROPERTY_ACCESSOR(Camera, m_CircleWH, GetCircleWidthHeight, SetCrircleWidthHeight)
+
+
 
 ENDPROPERTY()
 
@@ -70,8 +78,10 @@ void Camera::Awake()
 
 }
 
+
 void Camera::LateUpdate(float deltaTime)
 {
+
     UpdateViewMatrix();
     UpdateProjectionMatrix();
 }
@@ -239,6 +249,13 @@ void Camera::SetUseBloom(bool use)
 {
     m_useBloom = use;
 	SetPostProcessEffect(PostProcessType::Bloom, use);
+}
+
+void Camera::SetUseCircleMask(bool use)
+{
+    m_useCircleMask = use;
+    SetPostProcessEffect(PostProcessType::CircleMask, use);
+
 }
 
 void Camera::UpdateViewMatrix()

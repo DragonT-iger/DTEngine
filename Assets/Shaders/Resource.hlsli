@@ -57,9 +57,19 @@ cbuffer CBuffer_Effect : register(b8)
     float timeMultiplier; // 애니메이션 배속 (추가)
     float effectType;
     float Skinned_Flag; // bone / rigid  object와의 통합 위해.
+    
+    
+    float4x4 invcamerarotation;
 }
 
-
+cbuffer CBuffer_Fog : register(b9)
+{
+    float4 FogColor;
+    float FogGlobalDensity;
+    float FogHeightFalloff;
+    float FogBaseHeight;
+    float FogStartDistance;
+}
 
 struct VS_INPUT
 {
@@ -89,6 +99,7 @@ Texture2D g_RoughMap   : register(t4);
 Texture2D g_AoMap      : register(t5);
 
 Texture2D g_NoiseMap : register(t6);
+Texture2D g_SphereMap : register(t7);
 
 TextureCube g_CubeMap : register(t9);
 //Texture2D Empty : register(t6);`
@@ -103,7 +114,6 @@ TextureCube g_CubeMap : register(t9);
 
 
 //얘도 어찌보면 index 하나 더 올릴거임. 
-Texture2D g_SphereMap : register(t7);
 
 // 01_10 지금 기준으로는 Light에 종속되어있지만 나중에 shadow를 Light 공용 헤더에서 빼서 여기에 넣을 생각임. 
 // IBL도 따로 만들까 싶음. 

@@ -25,6 +25,14 @@ public:
 
 	void Update(float deltaTime) override;
 	
+	void SetUnitCount(int count) { curUnitCount = count; }
+	int GetUnitCount() const { return curUnitCount; }
+
+	void SetBgmValue(int value) { curbgmValue = value; }
+	int GetBgmValue() const { return curbgmValue; }
+
+	void SetSfxValue(int value) { cursfxValue = value; }
+	int GetSfxValue() const { return cursfxValue; }
 private:
 	
 	Text* m_money;
@@ -34,6 +42,11 @@ private:
 	static inline int curLife = 9;
 
 	static inline int curMoney = 9; //cost는 좀 짜친데
+	static inline int curUnitCount = 0;		// 3 초과부터는 유닛 소환 불가능으로.
+
+	static inline int curbgmValue = 3;		// slider 값이랑 맞추기 위해서.
+	static inline int cursfxValue = 3;
+	
 
 };
 

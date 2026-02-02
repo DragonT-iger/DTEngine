@@ -31,6 +31,12 @@
 
 #include "Text.h"
 #include "Effect.h"
+#include "Rigid.h"
+
+#include "Levitating.h"
+#include "outline.h"
+#include "SpriteEffect.h"
+#include "Fog.h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -756,8 +762,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 {
     if (!camera) return;
 
-    //★ Sorting 
-    Sorter::Instance().SetCamParameters(camera); 
 
 
     float width = (float)DX11Renderer::Instance().GetWidth();
@@ -777,14 +781,12 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
     camera->Bind();
     
+
+    Sorter::Instance().SetCamParameters(camera);
     const Matrix& viewTM = camera->GetViewMatrix();
     const Matrix& projTM = camera->GetProjectionMatrix();
 
     DX11Renderer::Instance().UpdateFrame_CBUFFER(viewTM, projTM);
-    // 이거 주석처리하고 button, slider 수정하고 rect는 남겨두지만 쓰지는 않는 방향으로 .
-    //UIManager::Instance().UpdateLayout(this, width, height);
-    //UIManager::Instance().UpdateInteraction(this, width, height);
-
     DX11Renderer::Instance().BindGlobalResources();
 
     std::vector<GameObject*> opaqueQueue;
@@ -825,7 +827,87 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
     }
 
    
-    auto DrawObject = [&](GameObject* go) {
+   
+
+        Sorter::Instance().CreateKeyOpaque(opaqueQueue);
+         std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
+
+        RenderOpaque(SortedVector);
+        RenderOutline(SortedVector);
+
+       // Sorter::Instance().CreateKeyTransparent(transparentQueue);
+         std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
+         RenderTrans(transparentQueue, viewTM);
+        //RenderTrans(SortedVectorTrans, viewTM);
+}
+
+void Scene::RenderOpaque(std::vector<GameObject*>& OpaqueVec)
+{
+
+    for (const auto& val : OpaqueVec)
+    {
+
+        MeshRenderer* mr = val->GetComponent<MeshRenderer>();
+        Transform* tf = val->GetTransform();
+
+        Material* mat = mr->GetSharedMaterial();
+        if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
+
+        Mesh* mesh = mr->GetMesh();
+        if (!mesh || !mat) return;
+
+        Effect* eff = val->GetComponent<Effect>();
+        if (eff) eff->BindEP();
+
+        if (Skeletal* sk = val->GetComponent<Skeletal>(); sk != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+        }
+
+        if (Rigid* rg = val->GetComponent<Rigid>(); rg != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
+        }
+
+        if (Fog* fg = val->GetComponent<Fog>(); fg != nullptr)
+        {
+            fg->BindFog();
+        }
+
+        const Matrix& worldTM = tf->GetWorldMatrix();
+        Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
+
+        mat->BindPipeLine();
+        mat->BindPerObject(worldTM, worldInvT);
+        mesh->Bind();
+        mesh->Draw();
+
+    }
+}
+
+// 일단 예정은 Plane; Sprite Effect 정도임. 
+// Plane은 Tile위에 Alpha Blending으로 
+
+
+// Pre multiplied state로 기존 alpha blending statee를 변경시킬거임. 
+// 
+// Alpha Blending이 필요한 Object는 shader에서 alpha를 곱하는 형태로 처리 
+// 
+
+
+
+void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
+{
+
+    Matrix invRotation = cam;
+    invRotation._41 = 0.0f; invRotation._42 = 0.0f; invRotation._43 = 0.0f;
+    //invRotation = invRotation  //전치 한 번 더 하기 싫어서 그냥 안 함. 
+   
+    //
+
+
+    auto DrawObject = [&](GameObject* go) 
+        {
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
         Transform* tf = go->GetTransform();
 
@@ -834,6 +916,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 
         Mesh* mesh = mr->GetMesh();
         if (!mesh || !mat) return;
+
+        SpriteEffect* spt = go->GetComponent<SpriteEffect>();
+        if (spt)
+        {
+            spt->SetCameraInverrse(invRotation);
+            spt->BindWrapped();
+        }
 
         const Matrix& worldTM = tf->GetWorldMatrix();
         Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
@@ -844,20 +933,28 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
         };
 
 
-
-
+    for (auto* go : TransVec)
     {
-        Sorter::Instance().CreateKey(opaqueQueue);
-        const std::vector<SortingValue>& SortedVector = Sorter::Instance().GetRenderVec();
+        DrawObject(go);
+    }
+}
 
-        uint64_t lastPipelineKey = UINT64_MAX;
+// 걍 한 번에 Sorting을 해버리는 건 어떨까? 
+// 뭐 나중에 궁금하면 해보자 .
 
-        for (const auto& val : SortedVector)
+
+void Scene::RenderOutline(std::vector<GameObject*>& OutlineVec)
+{
+    DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
+    DX11Renderer::Instance().SetCullMode(CullMode::Front);    
+    
+    for (const auto& val : OutlineVec)
+    {
+        auto cmp = val->GetComponent<Outline>();
+        if (cmp)
         {
-            uint64_t currentPipelineKey = val.key << 30; //Depth 빼고 Shader 16; Texture 16; cull에 해당
-
-            MeshRenderer* mr = val.obj->GetComponent<MeshRenderer>();
-            Transform* tf = val.obj->GetTransform();
+            MeshRenderer* mr = val->GetComponent<MeshRenderer>();
+            Transform* tf = val->GetTransform();
 
             Material* mat = mr->GetSharedMaterial();
             if (!mat) mat = ResourceManager::Instance().Load<Material>("Materials/Error");
@@ -865,23 +962,24 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
             Mesh* mesh = mr->GetMesh();
             if (!mesh || !mat) return;
 
-            Effect* eff = val.obj->GetComponent<Effect>();
+            //
+            Effect* eff = val->GetComponent<Effect>();
             if (eff) eff->BindEP();
 
-
-            if (Skeletal* sk = val.obj->GetComponent<Skeletal>(); sk != nullptr) 
+            if (Skeletal* sk = val->GetComponent<Skeletal>(); sk != nullptr)
             {
                 DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
-                
             }
-            
 
-            if (currentPipelineKey != lastPipelineKey)
+            if (Rigid* rg = val->GetComponent<Rigid>(); rg != nullptr)
             {
-                mat->BindPipeLine();
-
-                lastPipelineKey = currentPipelineKey;
+                DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
             }
+ 
+            if (Shader* shader = cmp->GetShader(); shader != nullptr)
+                DX11Renderer::Instance().BindShader(shader);
+
+            mat->FixeddBindPipeLine();
             const Matrix& worldTM = tf->GetWorldMatrix();
             Matrix worldInvT = tf->GetWorldInverseTransposeMatrix();
 
@@ -892,54 +990,6 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
         }
 
     }
-
-  /*  for (auto* go : transparentQueue)
-    {
-        DrawObject(go);
-    }*/
-
-    
-
-    //if (renderUI) {
-    //    DX11Renderer::Instance().BeginUIRender(width, height);
-
-    //    for (auto* go : uiQueue)
-    //    {
-    //        Image* img = go->GetComponent<Image>();
-    //        if (img)
-    //        {
-    //            Texture* tex = img->GetTexture();
-    //            if (tex)
-    //            {
-    //                Effect* eff = go->GetComponent<Effect>();
-    //                if (eff) eff->BindEP();
-
-    //                Transform* tf = go->GetTransform();
-
-    //                Vector3 pos = tf->GetWorldPosition();
-    //                Vector3 scale = tf->GetWorldScale();
-
-    //                DX11Renderer::Instance().DrawUI(
-    //                    tex,
-    //                    Vector2(pos.x, pos.y),
-    //                    Vector2(scale.x, scale.y),
-    //                    img->GetColor()
-    //                );
-    //            }
-    //        }
-    //    }
-
-
-    //    for (const auto& go : GetGameObjects())
-    //    {
-    //        auto cmp = go->GetComponent<Text>();
-
-    //        if (cmp) cmp->Render();
-    //    }
-
-
-    //    DX11Renderer::Instance().EndUIRender();
-    //}
 }
 
 void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
@@ -999,8 +1049,11 @@ void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)
     DX11Renderer::Instance().EndUIRender();
 }
 
+//DepthStencil Flag; 
+//Stencil 중복 
 void Scene::RenderShadows()
 {
+
     ShadowMap* shadow = nullptr;
     for (const auto& go : m_gameObjects)
     {
@@ -1044,6 +1097,16 @@ void Scene::RenderShadows()
 
         Transform* transform = go->GetTransform();
         mat->Bind(transform->GetWorldMatrix(), transform->GetWorldInverseTransposeMatrix());
+
+        if (Skeletal* sk = go->GetComponent<Skeletal>(); sk != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(sk->GetFinalMatrix());
+        }
+
+        if (Rigid* rg = go->GetComponent<Rigid>(); rg != nullptr)
+        {
+            DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
+        }
 
 
 

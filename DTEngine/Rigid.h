@@ -15,12 +15,12 @@ public:
 
 public:
 
-    void Update(float dTime) override;
+    void LateUpdate(float dTime) override;
     uint64_t GetModelID() const { return m_modelID; }
     void SetModel(uint64_t id);
     void SetNodePose(int nodeIndex, const Matrix& mat);
 
-    const std::vector<Matrix>& GetFinalTransforms() const { return m_finalTransforms; }
+    std::vector<Matrix>& GetFinalTransforms()  { return m_finalTransforms; }
     NodeResource* GetNodeResource() { return m_resource; }
 
 private:
