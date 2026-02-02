@@ -30,7 +30,11 @@ void Unit::Start()
         else
         {
             Animator* anim = child->_GetOwner()->GetComponent<Animator>();
-            if (anim) m_anim1 = child->_GetOwner()->GetComponent<Animator>();
+            if (anim)
+            {
+                m_weaponName = child->_GetOwner()->GetName();
+                m_anim1 = child->_GetOwner()->GetComponent<Animator>();
+            }
         }
     }
 }
@@ -310,25 +314,63 @@ void Unit::FinishAction()
     m_actionDone = true;
 }
 
-void Unit::PlayAnim(uint64_t id, float speed, bool loop)
+void Unit::PlayAnim(uint64_t id, uint64_t id1, uint64_t id2, float speed, bool loop)
 {
     m_anim->SetClip(id);
+    m_anim1->SetClip(id1);
+    if (id2 != -1) m_anim2->SetClip(id2);
+
     m_anim->SetTime(speed);
     m_anim->SetLoop(loop);
     m_anim->SetPlay(true);
+
+    m_anim1->SetTime(speed);
+    m_anim1->SetLoop(loop);
+    m_anim1->SetPlay(true);
+
+    if (id2 != -1)
+    {
+        m_anim->SetTime(speed);
+        m_anim->SetLoop(loop);
+        m_anim->SetPlay(true);
+    }
 }
 
 void Unit::StartIdleAnim()
 {
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/Idle_Final_Plz_God.fbx");
-    PlayAnim(id, 1.0f, true);
+    uint64_t id1 = -1;
+    uint64_t id2 = -1;
+    if (m_weaponName == "Sword") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/sword_Idle.fbx");
+        id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/shield_Idle.fbx");
+    }
+    else if (m_weaponName == "Spear") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/spear_Idle.fbx");
+    }
+    else if (m_weaponName == "Wand") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/wand_Idle.fbx");
+    }
+    PlayAnim(id, id1, id2, 1.0f, true);
 }
 
 void Unit::StartMoveAnim()
 {
     if (m_animStart) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_move.fbx");
-    PlayAnim(id, 1.0f, false);
+    uint64_t id1 = -1;
+    uint64_t id2 = -1;
+    if (m_weaponName == "Sword") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/sword_Idle.fbx");
+        id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/shield_Idle.fbx");
+    }
+    else if (m_weaponName == "Spear") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/spear_Idle.fbx");
+    }
+    else if (m_weaponName == "Wand") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/wand_move.fbx");
+    }
+    PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
 }
 
@@ -336,7 +378,19 @@ void Unit::StartAttackAnim()
 {
     if (m_animStart) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_hurt.fbx");
-    PlayAnim(id, 1.0f, false);
+    uint64_t id1 = -1;
+    uint64_t id2 = -1;
+    if (m_weaponName == "Sword") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/sword_hurt.fbx");
+        id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/shield_hurt.fbx");
+    }
+    else if (m_weaponName == "Spear") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/spear_hurt.fbx");
+    }
+    else if (m_weaponName == "Wand") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/wand_hurt.fbx");
+    }
+    PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
 }
 
@@ -345,7 +399,19 @@ void Unit::StartDieAnim()
     //if (m_animStart) return;
     //std::cout << _GetOwner()->_GetID() << std::endl;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/unit_die.fbx");
-    PlayAnim(id, 1.0f, false);
+    uint64_t id1 = -1;
+    uint64_t id2 = -1;
+    if (m_weaponName == "Sword") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/sword_Idle.fbx");
+        id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/shield_Idle.fbx");
+    }
+    else if (m_weaponName == "Spear") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/spear_Idle.fbx");
+    }
+    else if (m_weaponName == "Wand") {
+        id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Rabbit_2/wand_die.fbx");
+    }
+    PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
 }
 

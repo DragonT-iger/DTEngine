@@ -182,7 +182,7 @@ public:
 
     void FinishAction();
 
-    void PlayAnim(uint64_t id, float speed, bool loop);
+    void PlayAnim(uint64_t id, uint64_t id1, uint64_t id2, float speed, bool loop);
 
     void StartIdleAnim();
     void StartMoveAnim();
@@ -213,7 +213,7 @@ protected:
     float m_hp = 100;
     bool m_isAlive = true;
 
-    int m_perceptionRange = 5;
+    int m_perceptionRange = 5; // 인식범위
 
     Unit* m_moveTarget = nullptr;
     Vector2 m_moveTargetPos = GRIDPOS_INVALID;
@@ -241,4 +241,6 @@ private:
     Animator* m_anim = nullptr;
     Animator* m_anim1 = nullptr;
     Animator* m_anim2 = nullptr;
+
+    std::string m_weaponName;
 };

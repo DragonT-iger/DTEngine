@@ -18,6 +18,8 @@ public:
     int GetPathIndex() const { return m_pathIndex; }
     void SetPathIndex(int i) { m_pathIndex = (std::max)(0, (std::min)(i, 7)); }
 
+    std::vector<Vector2> GetAllPath() const;
+
 private:
     bool m_isBoss = false;      // 보스라면
     float m_BossScale = 1.1f;   // 스텟 뻥튀기 
