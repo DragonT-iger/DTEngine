@@ -4,7 +4,7 @@
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
-    { 20, 10, 150, 1 }, // 룩
+    { 20, 10, 150, 1 }, // 룩 
     { 25,  5, 110, 1 }, // 나이트
     { 30,  2,  90, 2 }, // 비숍
     {  0,  0, 150, 0 }, // 앨리스
@@ -159,7 +159,7 @@ void Unit::ResetTurnPlan()
     m_moveTarget = nullptr;
     m_moveTargetPos = GRIDPOS_INVALID;
     m_movePos = GRIDPOS_INVALID;
-    m_attackTarget = nullptr;
+    if (!m_attackTarget || !m_attackTarget->IsAlive()) m_attackTarget = nullptr;
     m_attackPos = GRIDPOS_INVALID;
     m_action = TurnAction::Wait;
     if (m_isAlive) m_actionDone = false;
@@ -173,10 +173,24 @@ Vector3 Unit::GridToWorld(const Vector2& p)
     return Vector3{ p.x * 2.0f, 1.0f, p.y * 2.0f };
 }
 
-float Unit::Smooth01(float t)
+float Unit::SmoothStep(float t)
 {
     t = std::clamp(t, 0.0f, 1.0f);
     return t * t * (3.0f - 2.0f * t);
+}
+
+float Unit::SmoothStep2(float t, float start, float end)
+{
+    t = std::clamp(t, 0.0f, 1.0f);
+    start = std::clamp(start, 0.0f, 1.0f);
+    end = std::clamp(end, start + 0.0001f, 1.0f);
+
+    if (t <= start) return 0.0f;
+    if (t >= end)   return 1.0f;
+
+    float u = (t - start) / (end - start);
+
+    return u * u * (3.0f - 2.0f * u);
 }
 
 float Unit::LerpAngleDeg(float a, float b, float t)
@@ -238,7 +252,7 @@ bool Unit::TickRotate(float dt)
     m_rot.t += dt / dur;
     float t = (std::min)(m_rot.t, 1.0f);
 
-    float s = Smooth01(t);
+    float s = SmoothStep(t);
     float yaw = LerpAngleDeg(m_rot.fromYaw, m_rot.toYaw, s);
 
     e.y = yaw;
@@ -258,7 +272,7 @@ bool Unit::TickRotate(float dt)
 
 void Unit::BeginMoveToPos()
 {
-    auto* tr = _GetOwner()->GetTransform();
+    Transform* tr = _GetOwner()->GetTransform();
 
     m_move.from = tr->GetPosition();
     m_move.to = GridToWorld(m_pos);
@@ -271,13 +285,13 @@ bool Unit::TickMove(float dt)
 {
     if (!m_move.active) return true;
 
-    auto* tr = _GetOwner()->GetTransform();
+    Transform* tr = _GetOwner()->GetTransform();
 
     float dur = (std::max)(m_move.duration, 0.001f);
     m_move.t += dt / dur;
     float t = (std::min)(m_move.t, 1.0f);
 
-    float s = Smooth01(t);
+    float s = SmoothStep2(t, 0.3f, 0.75f);
     Vector3 p = m_move.from + (m_move.to - m_move.from) * s;
     tr->SetPosition(p);
 
@@ -294,7 +308,7 @@ bool Unit::TickMove(float dt)
 
 void Unit::FinishAction()
 {
-    auto* tr = _GetOwner()->GetTransform();
+    Transform* tr = _GetOwner()->GetTransform();
 
     if (m_rot.active)
     {

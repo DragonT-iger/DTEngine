@@ -59,7 +59,7 @@ struct MoveAnim
 {
     bool active = false;
     float t = 0.0f;
-    float duration = 0.5f;
+    float duration = 1.3f;
     Vector3 from{};
     Vector3 to{};
 };
@@ -198,7 +198,8 @@ public:
 private:
     static Vector3 GridToWorld(const Vector2& p);
     static float   DirToYaw(Dir8 d);
-    static float   Smooth01(float t);
+    static float   SmoothStep(float t);
+    static float   SmoothStep2(float t, float start, float end);
     static float   LerpAngleDeg(float a, float b, float t);
     static float   NormalizeDeg(float deg);
     static float   DeltaAngleDeg(float from, float to);
@@ -225,7 +226,7 @@ protected:
     TurnAction m_action = TurnAction::Wait;
     bool m_actionDone = false;
 
-    Dir8 m_dir = Dir8::Right;
+    Dir8 m_dir = Dir8::Left;
 
     bool m_isOnTrapTile = false;
 
