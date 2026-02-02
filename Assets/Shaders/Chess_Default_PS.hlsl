@@ -70,7 +70,7 @@ float4 PS(PS_INPUT input) : SV_Target
             attenuation = saturate(1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range));
         }
 
-        float currentShadow = (i == 0) ? Temp = shadowFactor : 1.0f;
+        float currentShadow = (i == 0) ? Temp = shadowFactor  : 1.0f;
         
         
         directLighting += DisneyPBR(
@@ -86,14 +86,14 @@ float4 PS(PS_INPUT input) : SV_Target
         );
         
         
-        directLighting *= currentShadow *2.0f;
+        //directLighting *= currentShadow *2.0f;
 
     }
     
         
     float3 ambientLighting = albedo * 0.7f;
     
-    float3 finalColor = directLighting + ambientLighting;
+    float3 finalColor = (directLighting + ambientLighting) * (Temp + Shadow_Scale);
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;
     

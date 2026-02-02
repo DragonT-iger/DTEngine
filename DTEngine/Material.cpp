@@ -367,8 +367,6 @@ void Material::UpdateTextureBatchID()
 
 }
 
-
-//일단 기존 LEGACY랑 호환 
 void Material::Bind(const Matrix& worldTM, const Matrix& worldInverseTransposeTM)
 {
     BindPipeLine();
@@ -428,14 +426,10 @@ void Material::BindPipeLine()
 
 }
 
-// Resourceview만 Object의 material에서 가져옴. 
-// 외곽선과 같은 공통된 Shader, BlendMode를 적용시키기 위함.
-// Sampler는 필요하면 추가하겠음.
-void Material::BindPipeLine(Shader* PS, BlendMode BlendMode, CullMode CullMode)
-{
-    if (!PS) return;
-    DX11Renderer::Instance().BindShader(PS);
+//외부에서 device Binding을 고정시킨 상황에서 Resourceview만 bind함. 
 
+void Material::FixeddBindPipeLine()
+{
     ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
     if (!context) return;
 
@@ -452,34 +446,13 @@ void Material::BindPipeLine(Shader* PS, BlendMode BlendMode, CullMode CullMode)
 
             srv = m_textures[i]->GetSRV();
             sampler = m_textures[i]->GetSampler();
-            context->VSSetShaderResources(i, 1, &srv);
+            if (sampler)  context->PSSetSamplers(i, 1, &sampler);     
         }
 
         DX11Renderer::Instance().BindTexture((int)i, srv);
-
-
-
-        /*if (sampler)
-            context->PSSetSamplers(static_cast<UINT>(i), 1, &sampler);*/
-
     }
-    ID3D11SamplerState* Sampler =  DX11Renderer::Instance().GetSampler(FilterMode::Bilinear, WrapMode::Repeat);
-    if (Sampler)
-    {
-        context->PSSetSamplers(0, 1, &Sampler);
-        context->VSSetSamplers(0, 1, &Sampler);
-    }
-
-
-    currentFlags |= (uint32_t)MaterialTextureFlag::IBL; //일단 기본으로 넣어둘게 
-
+    currentFlags |= (uint32_t)MaterialTextureFlag::IBL; 
     DX11Renderer::Instance().UpdateTextureFlag_CBUFFER(currentFlags);
-
-    DX11Renderer::Instance().SetBlendMode(BlendMode);
-
-    DX11Renderer::Instance().SetCullMode(CullMode);
-
-
 }
 
 

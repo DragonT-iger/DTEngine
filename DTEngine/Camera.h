@@ -132,11 +132,7 @@ private:
 	bool m_isOrthographic = false;
     float m_orthographicSize = 5.0f;
 
-  //  Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
-
-    Vector4 m_clearColor = {1,1,1,1 };
-
-
+    Vector4 m_clearColor = { 0.2f,0.2f,0.2f,0.2f };
 
     Vector4 m_viewportRect = { 0.0f, 0.0f, 1.0f, 1.0f };
 

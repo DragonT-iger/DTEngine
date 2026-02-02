@@ -30,26 +30,16 @@ PS_INPUT VS(VS_INPUT input)
         skinMatrix = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     
     float4 modelPos = mul(float4(input.Pos, 1.0f), skinMatrix);
+    
     float3 modelNormal = normalize(mul(input.Normal, (float3x3) skinMatrix));
-
-
-   // float2 noiseUV = frac(input.UV + progress); //
-   // //float2 noiseUV = input.UV + (progress * 0.2f) * 100.0f; //
-   //// noiseUV = input.UV *100.0f;
-    
-    float noiseValue = g_NoiseMap.SampleLevel(g_Sampler, input.UV, 0).r;
-
-    float dWidth = noiseValue * edgeWidth;
-    
+        
+    float dWidth =  edgeWidth;
     float3 expandedPos = modelPos.xyz + (modelNormal * edgeWidth);
 
 
     
     float4 worldPos = mul(float4(expandedPos, 1.0f), World_TM);
     output.Pos = mul(mul(worldPos, View_TM), Projection_TM);
-    
-    
-    
     output.WorldNormal = normalize(mul(modelNormal, (float3x3) WorldInverseTranspose_TM));
     output.UV = input.UV;
     output.Color = edgeColor;

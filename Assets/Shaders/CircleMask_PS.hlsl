@@ -28,6 +28,8 @@ cbuffer CBuffer_Effect : register(b8)
     float timeMultiplier; // 애니메이션 배속 (추가)
     float effectType;
     float Skinned_Flag; // bone / rigid  object와의 통합 위해.
+    
+    float4x4 invcamerarotation;
 }
 
 
@@ -46,13 +48,8 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 
     float2 ellipticalDist = d / Width_Height;
     float len = length(ellipticalDist);
-
-    // --- 튕기는(Bounce) 로직 추가 ---
-    float t = saturate(progress);
     
-    // Back Out 공식: 목표 지점을 살짝 넘겼다가 돌아옴
-    // c1과 c3 값을 조절하여 튕기는 강도를 조절할 수 있습니다.
-   // const float c1 = 1.70158;
+    float t = saturate(progress);
     
     float c1 = 1.20158;
     
@@ -67,7 +64,7 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
     float softness = 0.2f;
     float mask = smoothstep(currentRadius, currentRadius - softness, len);
     
-    float darkness = 0.2f;
+    float darkness = 0.5f;
     float finalAlpha = lerp(darkness, 1.0f, mask);
     
     return color * finalAlpha;
