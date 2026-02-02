@@ -1,8 +1,10 @@
 #pragma once
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
-
+#include "Animatior.h"
 #include "GameObject.h"
+
+class Animator;
 
 static constexpr Vector2 GRIDPOS_INVALID{ -999, -999 };
 
@@ -99,6 +101,8 @@ public:
     Unit() { SetUnitType(UnitType::Rook); }
     virtual ~Unit() = default;
 
+    void Start() override;
+
     // 팀
     Team GetTeam() const { return m_team; } 
     void SetTeam(Team team) { m_team = team; }
@@ -178,6 +182,18 @@ public:
 
     void FinishAction();
 
+    void PlayAnim(uint64_t id, float speed, bool loop);
+
+    void StartIdleAnim();
+    void StartMoveAnim();
+    void StartAttackAnim();
+    void StartDieAnim();
+
+    bool IsAnimStart() const { return m_animStart; }
+    bool IsAnimDone() { return m_anim->GetAnimationDone(); }
+
+    bool IsOnTrapTile() const { return m_isOnTrapTile; }
+    void SetOnTrapTile(bool on) { m_isOnTrapTile = on; }
 
 private:
     static Vector3 GridToWorld(const Vector2& p);
@@ -211,10 +227,18 @@ protected:
 
     Dir8 m_dir = Dir8::Right;
 
+    bool m_isOnTrapTile = false;
+
+
 
 private:
     ActionPhase m_phase = ActionPhase::None;
 
     RotateAnim m_rot;
     MoveAnim   m_move;
+
+    bool m_animStart = false;
+    Animator* m_anim = nullptr;
+    Animator* m_anim1 = nullptr;
+    Animator* m_anim2 = nullptr;
 };

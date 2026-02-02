@@ -100,6 +100,8 @@ private:
 	bool m_phaseEntered = false; // 페이즈 처음 들어온거 확인용.
 	bool m_stageEnd = false; // 스테이지 끝났는지 확인용.
 
+	float m_trapDamage = 30.0f; // 트랩 데미지.
+
 	AliceUnit* m_aliceUnit = nullptr; // 앨리스 // 얘도 등록받아야해. 
 
 	std::vector<AllyUnit*> m_allyUnits; // 아군유닛 목록

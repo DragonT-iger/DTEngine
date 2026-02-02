@@ -31,7 +31,7 @@ public:
    const std::string& GetClipName() const { return m_Animation_Name; }
 
     //Toggle
-   void SetPlay(bool On_Off) { Play = On_Off; m_Done = !On_Off; } //애니 끄면 done인거고, 애니 키면 done이 아니니깐? 초기화 개념.
+   void SetPlay(bool On_Off);/* { Play = On_Off; m_Done = !On_Off; }*/ //애니 끄면 done인거고, 애니 키면 done이 아니니깐? 초기화 개념.
     void SetLoop(bool Looping) { Loop = Looping; }
 
     bool GetAnimationDone() { return m_Done; }
@@ -47,6 +47,8 @@ private:
 
     Rigid* m_TargetRigid = nullptr; 
     bool      m_IsRigidMode = false;
+
+    bool m_ClipChanged = false;
 
     uint64_t m_AniID = 0;
 

@@ -22,6 +22,7 @@ struct BattleStaticTile // 정적타일 정보
     bool solidWall = false;     // 벽
     bool breakableWall = false; // 부서지는 벽
     bool defenseTile = false;   // 방어타일
+    bool trapTile = false; // 함정타일
 };
 // 타일만 true면 그냥 타일, 타일 + 벽이 true면 벽, 타일 + 부벽이 true면 부벽..  
 
@@ -50,6 +51,7 @@ public:
     void SetSolidWall(const Vector2& p);
     void SetBreakableWall(const Vector2& p);
     void SetDefenseTile(const Vector2& p);
+    void SetTrapTile(const Vector2& p);
 
     int Index(const Vector2& p) const {
         int x = static_cast<int>(p.x);
@@ -68,6 +70,7 @@ public:
     void WallBreak(const Vector2& p); // 벽 파괴! 
     bool IsBreakableWall(const Vector2& p) const; // 이 위치가 부벽인지.
     bool IsDefenseTile(const Vector2& p) const; // 이 위치가 방어타일인지.
+    bool IsTrapTile(const Vector2& p) const; // 이 위치가 함정타일인지.
 
     bool GetNearestDefenseTile(const Vector2& me, const Vector2& myMovePos, Vector2& outPos) const; // 내 위치로부터 가까운 방어타일 위치 얻기. 
 
