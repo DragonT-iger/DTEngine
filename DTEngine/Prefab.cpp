@@ -125,17 +125,33 @@ GameObject* Prefab::Instantiate()
     for (const auto& task : fixupList)
     {
         uint64_t targetFileID = task.targetID;
-        Component* targetPtr = nullptr;
 
-        if (targetFileID != 0)
+        if (task.property.m_type == typeid(GameObject*))
         {
-            auto it = fileIDToNewComponent.find(targetFileID);
-            if (it != fileIDToNewComponent.end())
+            GameObject* targetGO = nullptr;
+            if (targetFileID != 0)
             {
-                targetPtr = it->second;
+                auto it = fileIDToNewGameObject.find(targetFileID);
+                if (it != fileIDToNewGameObject.end())
+                {
+                    targetGO = it->second;
+                }
             }
+            task.property.m_setter(task.targetObject, &targetGO);
         }
-        task.property.m_setter(task.targetObject, &targetPtr);
+        else
+        {
+            Component* targetPtr = nullptr;
+            if (targetFileID != 0)
+            {
+                auto it = fileIDToNewComponent.find(targetFileID);
+                if (it != fileIDToNewComponent.end())
+                {
+                    targetPtr = it->second;
+                }
+            }
+            task.property.m_setter(task.targetObject, &targetPtr);
+        }
     }
 
     return rootObject;

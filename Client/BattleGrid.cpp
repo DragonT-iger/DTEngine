@@ -12,7 +12,12 @@ ENDPROPERTY()
 void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
 {
     m_tilemapGenerator = tg;
+
+
+    if (m_tilemapGenerator == nullptr) return;
+
     TilemapData* td = tg->GetMapData();
+
 
     int width = td->GetWidth();
     int height = td->GetHeight();

@@ -2,6 +2,9 @@
 #include "MonoBehaviour.h"
 #include "SimpleMathHelper.h"
 
+
+class TutorialManager;
+
 class Scene;
 
 class RayCastHitEvent : public MonoBehaviour
@@ -25,5 +28,7 @@ private:
 
 		GameObject* m_leftPSWinodwBG = nullptr;
 		GameObject* m_leftRSWinodwBG = nullptr;
+
+		TutorialManager* m_tutorialManager = nullptr;
 };
 

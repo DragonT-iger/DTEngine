@@ -495,7 +495,7 @@ void Scene::SetEditorCamera(Camera* editorCamera)
 }
 
 
-
+// 이건 쓰지말래
 bool Scene::Raycast(const Ray& ray, GameObject*& outHit, float& outT)
 {
     using namespace DirectX;
@@ -833,7 +833,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
          std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
         RenderOpaque(SortedVector);
-        RenderOutline(SortedVector);
+       //RenderOutline(SortedVector);
 
        // Sorter::Instance().CreateKeyTransparent(transparentQueue);
          std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
@@ -946,7 +946,7 @@ void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
 void Scene::RenderOutline(std::vector<GameObject*>& OutlineVec)
 {
     DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
-    DX11Renderer::Instance().SetCullMode(CullMode::Front);    
+    DX11Renderer::Instance().SetCullMode(CullMode::Front);
     
     for (const auto& val : OutlineVec)
     {

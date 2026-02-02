@@ -4,6 +4,11 @@
 #include "Text.h"  
 #include "UIButton.h" 
 #include "InputManager.h"
+#include "CombatController.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "Camera.h"
+#include "VignetteEffect.h"
 
 BEGINPROPERTY(TutorialManager)
 DTPROPERTY(TutorialManager, leftChat);
@@ -18,6 +23,9 @@ DTPROPERTY(TutorialManager, m_secondNextButton);
 DTPROPERTY(TutorialManager, m_catText2);
 DTPROPERTY(TutorialManager, m_BattleStart);
 DTPROPERTY(TutorialManager, m_victoryUI);
+DTPROPERTY(TutorialManager, m_chessSoldier);
+DTPROPERTY(TutorialManager, m_combatController);
+DTPROPERTY(TutorialManager, m_aliceGameObject);
 ENDPROPERTY()
 
 void TutorialManager::Awake()
@@ -41,6 +49,50 @@ void TutorialManager::Update(float deltaTime)
     {
         NextStep();
 	}
+
+    if (m_aliceGameObject) {
+        AllyUnit* aliceAllyUnit = m_aliceGameObject->GetComponent<AllyUnit>();
+        if (!aliceAllyUnit->IsAlive()) {
+            if (m_aliceDead == false) {
+                m_aliceDead = true;
+                m_canProceedToNextStep = true;
+                NextStep();
+            }
+        }
+    }
+
+    if (m_CurrentStepIndex == 3 && m_isVignetteSequence)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            m_vignetteDelayTimer += deltaTime;
+
+            if (m_vignetteDelayTimer >= 2.0f)
+            {
+                Camera* mainCam = activeScene->GetMainCamera();
+                if (mainCam)
+                {
+                    m_currentSoftness -= deltaTime * 5.0f;
+                    mainCam->SetVignetteSoftness(m_currentSoftness);
+
+                    if (m_currentSoftness <= -10.0f)
+                    {
+                        m_currentSoftness = -10.0f;
+                        mainCam->SetVignetteSoftness(m_currentSoftness);
+
+                        // 애니메이션 종료 후 처리
+                        // TODO: 여기서 특정 애니메이션(예: 캐릭터 등장 등)이 끝났는지 체크해야 함.
+                        // 현재는 나중에 구현할 것이므로 바로 다음 단계로 넘어감.
+
+                        m_isVignetteSequence = false;
+                        m_canProceedToNextStep = true;
+                        NextStep();
+                    }
+                }
+            }
+        }
+    }
 }
 
 void TutorialManager::NextStep()
@@ -76,9 +128,13 @@ void TutorialManager::NextStep()
 
     case 2:
     {
+        m_canProceedToNextStep = false;
+
 		if (m_queenUI) m_queenUI->SetActive(false);
 		if (rightChat) rightChat->SetActive(false);
 
+        if (m_chessSoldier) m_chessSoldier->SetActive(true);
+        if (m_combatController) m_combatController->Setup();
 
         // 체스 병사 엘리스에게 접근 후 공격 
         // 엘리스 체력바 점차 감소 ~~~
@@ -87,12 +143,27 @@ void TutorialManager::NextStep()
 
     case 3:
     {
-        // 체서 고양이 UI 애니메이션
+        m_canProceedToNextStep = false;
+
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                mainCam->SetUseVignette(true);
+                mainCam->SetVignetteSoftness(1.0);
+
+                m_currentSoftness = 1.0f;
+                m_isVignetteSequence = true;   
+            }
+        }
     }
     break;
 
     case 4:
     {
+        if (rightChat) rightChat->SetActive(true);
 		if (m_catUI) m_catUI->SetActive(true);
         if (rightChatText)
             rightChatText->SetText(L"이곳에서 나가려면 너만의 규칙을 \n정해야만 하지");

@@ -5,6 +5,7 @@
 
 class GameObject;
 class Text; 
+class CombatController;
 
 class TutorialManager : public MonoBehaviour
 {
@@ -17,6 +18,9 @@ public:
     void Update(float deltaTime) override;
 
     void NextStep();
+
+    bool GetRayActive() { return m_rayActive; }
+    void SetRayActive(bool active) { m_rayActive = active; }
 
 private:
     GameObject* leftChat = nullptr;
@@ -40,4 +44,15 @@ private:
 
     int m_CurrentStepIndex = -1;
 	bool m_canProceedToNextStep = true;
+
+    GameObject* m_chessSoldier = nullptr;
+    CombatController* m_combatController = nullptr;
+    GameObject* m_aliceGameObject = nullptr;
+
+    bool m_rayActive = false;
+    bool m_aliceDead = false;
+
+    bool m_isVignetteSequence = false;
+    float m_currentSoftness = 1.0f;
+    float m_vignetteDelayTimer = 0.0f;
 };

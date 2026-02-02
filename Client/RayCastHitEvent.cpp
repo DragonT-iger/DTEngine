@@ -7,12 +7,14 @@
 #include "Camera.h"
 #include "OpenPSEvent.h"
 #include "OpenRSEvent.h"
+#include "TutorialManager.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
+
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
@@ -27,9 +29,32 @@ void RayCastHitEvent::RaycastCheck()
 		if (!_GetOwner()->IsActive())
 				return;
 
+		if (m_rightPSWinodwBG->IsActive() || m_leftPSWinodwBG->IsActive()) {
+			return;
+		}
+
+		if (m_rightRSWinodwBG->IsActive() || m_leftRSWinodwBG->IsActive()) {
+			return;
+		}
+
+		// UI 켜져있을때 ray 검사 안함
+
+
 		auto& input = InputManager::Instance();
 		Scene* scene = SceneManager::Instance().GetActiveScene();
 		Camera* camera = scene->GetMainCamera();
+
+
+		// 튜토리얼 씬인 경우에 예외처리
+
+
+
+		if (scene->GetName() == "TutorialScene") {
+			if (m_tutorialManager == nullptr) return;
+			if (!m_tutorialManager->GetRayActive()) return;
+		}
+
+
 		
 		
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
@@ -46,11 +71,11 @@ void RayCastHitEvent::RaycastCheck()
 
 				bool isLeft = mp.x > screenCenter;
 
-				if (IsMouseInUI(m_leftPSWinodwBG, mp) || IsMouseInUI(m_leftRSWinodwBG, mp)
-						|| IsMouseInUI(m_rightPSWinodwBG, mp) || IsMouseInUI(m_rightRSWinodwBG, mp))
-				{
-						return;
-				}
+				//if (IsMouseInUI(m_leftPSWinodwBG, mp) || IsMouseInUI(m_leftRSWinodwBG, mp)
+				//		|| IsMouseInUI(m_rightPSWinodwBG, mp) || IsMouseInUI(m_rightRSWinodwBG, mp))
+				//{
+				//		return;
+				//} 그냥 UI 키고 끌때 예외처리 하는게 나을듯
 
 				// 레이캐스트 시작.
 				float x = mp.x;
