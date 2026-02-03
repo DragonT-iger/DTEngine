@@ -16,6 +16,7 @@ void ArrowObjectPool::Start()
         arrow->GetTransform()->SetParent(_GetOwner()->GetTransform());
         // 필요 시 여기에 addcomponent 하는데 할려면 include 먼저.
         arrow->SetActive(false);
+
+        m_arrows.push_back(arrow);
     }
-   
 }
