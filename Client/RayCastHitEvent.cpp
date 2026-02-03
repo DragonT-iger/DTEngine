@@ -160,9 +160,21 @@ void RayCastHitEvent::RaycastCheck()
 								return;
 						}
 
+						
+					
 						// 전투 중 클릭해도 tile, chess 선택 안함. 위에는 스킬이라서 처리해야함.
 						if (m_isStartBattle)
 								return;
+
+						// 여기는 화살표 보여주기 위해서
+						if (CheckEnemyObj(hit))
+						{
+								// 여기가 적인 경우임. 그래서 m_Unit이 GameObject 타입이고 unit은 enemyunit component여서 여기서 처리해주면 됨.
+								// 3개의 경로를 전부 다 가지고 있고 선택 시 각각 다른애들 다 끄고 본인만 켜지게 하는 로직이 있어야겠네. 
+								// prefab이 있다보니까 결국 걍 prefab으로 생성을 시키고 전부 setactive false를 하면 다 꺼지잖아.
+								// 클릭되는 경우 해당하는 prefab으로 만들어둔 object setacitve true 나머지 다 false하면 되는거니까
+								// level design이 먼저라 생각하는데 배치 위치에 따라 우리가 작업을 모든 예외처리를 다 할 필요가 없다 라는 생각이라.
+						}
 
 						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
 						{
@@ -247,4 +259,32 @@ void RayCastHitEvent::CloseAllWindows()
 
 		if (m_leftPSWinodwBG) m_leftPSWinodwBG->SetActive(false);
 		if (m_leftRSWinodwBG) m_leftRSWinodwBG->SetActive(false);
+}
+
+bool RayCastHitEvent::CheckEnemyObj(GameObject* obj)
+{
+		if (obj->GetName() == "Chess" || obj->GetName() == "Wand" || obj->GetName() == "Shield"
+				|| obj->GetName() == "Sword" || obj->GetName() == "Spear" || obj->GetName() == "Shield")
+		{
+				GameObject* m_Unit = nullptr;
+				GameObject* unitRoot = obj;
+				if (obj->GetName().find("_V1") == std::string::npos)
+				{
+						if (obj->GetTransform()->GetParent())
+								unitRoot = obj->GetTransform()->GetParent()->_GetOwner();
+				}
+
+				m_Unit = unitRoot;
+
+				if (m_Unit)
+				{
+						auto unit = m_Unit->GetComponent<EnemyUnit>();
+						if (!unit)
+								return false;
+
+						return true;
+				}
+		}
+
+		return false;
 }

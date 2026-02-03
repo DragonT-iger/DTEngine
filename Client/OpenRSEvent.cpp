@@ -24,7 +24,7 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
         if (target->GetTransform()->GetParent())
             unitRoot = target->GetTransform()->GetParent()->_GetOwner();
     }
-
+    
     m_targetUnit = unitRoot;
     std::string unitName = m_targetUnit->GetName();
 
@@ -35,20 +35,19 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
     if (unitName == "Chess_Sword_Shield_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
-        m_targetUnit->GetComponent<Unit>()->SetUnitType(0);
+        m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
     }
     else if (unitName == "Chess_Spear_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Rook.png"));
-        m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
+        m_targetUnit->GetComponent<Unit>()->SetUnitType(0);
     }
     else if (unitName == "Chess_Wand_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Bishop.png"));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(2);
-        
     }
-    
+     
     // 이동, 전투 값 가져오기.
     auto alloy = m_targetUnit->GetComponent<AllyUnit>();
     if (alloy)

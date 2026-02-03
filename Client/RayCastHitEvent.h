@@ -26,6 +26,7 @@ public:
 
 		bool GetHealSkill() { return m_isHealSkillOn; }
 		bool GetAttackSkill() { return m_isAttackSkillOn; }
+		bool CheckEnemyObj(GameObject* obj);		// enemy check 용도로 따로 빼기.
 
 private:
 		GameObject* m_hitObj = nullptr;

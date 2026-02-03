@@ -87,7 +87,6 @@ void ClickPSOkayEvent::SetClick()
 								
 								allyC->SetPos(pos);
 
-								//std::cout << pos.x << " " << pos.y << std::endl;
 								if (m_combatObj)
 								{
 										switch (index)
