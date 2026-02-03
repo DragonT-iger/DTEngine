@@ -35,12 +35,12 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
     if (unitName == "Chess_Sword_Shield_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
-        m_targetUnit->GetComponent<Unit>()->SetUnitType(0);
+        m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
     }
     else if (unitName == "Chess_Spear_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Rook.png"));
-        m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
+        m_targetUnit->GetComponent<Unit>()->SetUnitType(0);
     }
     else if (unitName == "Chess_Wand_V1")
     {
