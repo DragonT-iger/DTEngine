@@ -226,7 +226,7 @@ protected:
     TurnAction m_action = TurnAction::Wait;
     bool m_actionDone = false;
 
-    Dir8 m_dir = Dir8::Left;
+    Dir8 m_dir = Dir8::Down;
 
     bool m_isOnTrapTile = false;
 
