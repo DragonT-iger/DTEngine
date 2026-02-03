@@ -29,6 +29,7 @@ public:
     float GetProgress() const { return m_EM.progress; }
     void SetCameraInverrse(const Matrix mat) { m_EM.invcamerarotation = mat; }
 
+    void SetAnimating(bool value) { m_isAnimating = value; }
 private:
     EffectParams m_EM;
     bool m_isAnimating = true; // 에디터에서 체크박스로 제어 가능

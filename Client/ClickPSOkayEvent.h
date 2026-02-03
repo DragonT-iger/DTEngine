@@ -26,7 +26,5 @@ private:
 
 		GameObject* m_RSWindow = nullptr;
 		GameObject* m_combatObj = nullptr;
-
-		int index = 0;
 };
 

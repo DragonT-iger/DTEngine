@@ -24,7 +24,7 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
         if (target->GetTransform()->GetParent())
             unitRoot = target->GetTransform()->GetParent()->_GetOwner();
     }
-
+    
     m_targetUnit = unitRoot;
     std::string unitName = m_targetUnit->GetName();
 
@@ -46,9 +46,8 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Bishop.png"));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(2);
-        
     }
-    
+     
     // 이동, 전투 값 가져오기.
     auto alloy = m_targetUnit->GetComponent<AllyUnit>();
     if (alloy)

@@ -915,6 +915,16 @@ float CombatController::CalculateDamage(Unit* me, Unit* target)
 }
 
 
+void CombatController::AddAllyUnit(AllyUnit* allyUnit)
+{
+    if (allyCount == 0) allyUnit0 = allyUnit;
+    else if (allyCount == 1) allyUnit1 = allyUnit;
+    else if (allyCount == 2) allyUnit2 = allyUnit;
+    else return;
+
+    ++allyCount;
+}
+
 void CombatController::PrintFrame()
 {
     if (!battleGrid) return;

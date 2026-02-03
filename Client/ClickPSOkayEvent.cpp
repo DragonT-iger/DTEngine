@@ -12,7 +12,7 @@
 #include "Unit.h"
 #include "EnemyUnit.h"
 #include "HPBarFollowEvent.h"
-
+#include "Effect.h"
 
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -87,25 +87,9 @@ void ClickPSOkayEvent::SetClick()
 								
 								allyC->SetPos(pos);
 
-								//std::cout << pos.x << " " << pos.y << std::endl;
 								if (m_combatObj)
 								{
-										switch (index)
-										{
-										case 0:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit0(allyC);
-												break;
-										case 1:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit1(allyC);
-												break;
-										case 2:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit2(allyC);
-												break;
-										default:
-												index = 100;
-												break;
-										}
-										index++;
+										m_combatObj->GetComponent<CombatController>()->AddAllyUnit(allyC);
 								}
 						}
 
@@ -118,6 +102,13 @@ void ClickPSOkayEvent::SetClick()
 
 						if (targetObj)
 						{
+								auto effect = targetObj->GetComponent<Effect>();
+								if (effect)
+								{
+										effect->SetAnimating(false);
+										effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+								}
+							
 								targetObj->SetName("iCube");
 						}
 						// 창 닫기.
