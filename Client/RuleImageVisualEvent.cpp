@@ -2,6 +2,9 @@
 #include "UIButton.h"
 #include "GameObject.h"
 #include "OpenRSEvent.h"
+#include "TutorialManager.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(RuleImageVisualEvent)
 DTPROPERTY(RuleImageVisualEvent, m_movefBtns)
@@ -27,6 +30,33 @@ void RuleImageVisualEvent::Start()
 				{
 						moveButtons[i]->SetOnClick([this, bgEvent, i]()
 								{
+								Scene* activeScene = SceneManager::Instance().GetActiveScene();
+								if (activeScene && activeScene->GetName() == "TutorialScene")
+								{
+									// TutorialManager 찾기
+									GameObject* tmObj = GameObject::Find("TutorialManager");
+
+									if (tmObj)
+									{
+										auto tm = tmObj->GetComponent<TutorialManager>();
+										if (tm)
+										{
+											int step = tm->GetCurrentStepIndex(); 
+
+											if (step == 13)
+											{
+												if (i == 0) 
+												{
+													bgEvent->SetMoveIndex(i);
+													UpdateMoveVisuals();
+													tm->NextStep(true); 
+												}
+												return; 
+											}
+										}
+									}
+								}
+
 										bgEvent->SetMoveIndex(i);
 										UpdateMoveVisuals();
 								});
@@ -35,6 +65,32 @@ void RuleImageVisualEvent::Start()
 				{
 						battleButtons[i]->SetOnClick([this, bgEvent, i]()
 								{
+								Scene* activeScene = SceneManager::Instance().GetActiveScene();
+								if (activeScene && activeScene->GetName() == "TutorialScene")
+								{
+									GameObject* tmObj = GameObject::Find("TutorialManager");
+									if (tmObj)
+									{
+										auto tm = tmObj->GetComponent<TutorialManager>();
+										if (tm)
+										{
+											int step = tm->GetCurrentStepIndex();
+
+											if (step == 14)
+											{
+												if (i == 2) 
+												{
+													bgEvent->SetBattleIndex(i);
+													UpdateBattleVisuals();
+													tm->NextStep(true);
+												}
+												return;
+											}
+										}
+									}
+								}
+
+										
 										bgEvent->SetBattleIndex(i);
 										UpdateBattleVisuals();
 								});

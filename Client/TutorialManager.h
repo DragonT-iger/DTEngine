@@ -8,6 +8,7 @@ class Text;
 class CombatController;
 class Prefab;
 class TilemapGenerator;
+class UIButton;
 
 class TutorialManager : public MonoBehaviour
 {
@@ -19,10 +20,12 @@ public:
 
     void Update(float deltaTime) override;
 
-    void NextStep();
+    void NextStep(bool force = false);
 
     bool GetRayActive() { return m_rayActive; }
     void SetRayActive(bool active) { m_rayActive = active; }
+
+    int GetCurrentStepIndex() { return m_CurrentStepIndex; }
 
 private:
     GameObject* leftChat = nullptr;
@@ -60,9 +63,12 @@ private:
     bool m_isVignetteSequence = false;
     float m_currentSoftness = 1.0f;
     float m_vignetteDelayTimer = 0.0f;
+
+
+    float m_circleRadius = 1.0f;
     
     TilemapGenerator* m_tilemapGenerator = nullptr;
 
-    float m_circleCenterX = 0.0f;
-    float m_circleCenterY = 0.0f;
+    UIButton* m_RRSokayButton = nullptr;
+
 };

@@ -12,6 +12,9 @@
 #include "Unit.h"
 #include "EnemyUnit.h"
 #include "HPBarFollowEvent.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "TutorialManager.h"
 
 
 BEGINPROPERTY(ClickPSOkayEvent)
@@ -22,6 +25,7 @@ DTPROPERTY(ClickPSOkayEvent, m_rook)
 DTPROPERTY(ClickPSOkayEvent, m_bishop)
 DTPROPERTY(ClickPSOkayEvent, m_RSWindow)
 DTPROPERTY(ClickPSOkayEvent, m_combatObj)
+DTPROPERTY(ClickPSOkayEvent, m_tutorialManager)
 ENDPROPERTY()
 
 void ClickPSOkayEvent::Start()
@@ -64,10 +68,14 @@ void ClickPSOkayEvent::SetClick()
 						
 						if (!m_selectPrefab)
 						{
-								parentObj->SetActive(false);
-								// 상태 바꿔주기.
-								parentObj->GetComponent<OpenPSEvent>()->SetIsOpen(false);
+							if (idx == 0 && SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene")
+							{
 								return;
+							}
+
+							parentObj->SetActive(false);
+							parentObj->GetComponent<OpenPSEvent>()->SetIsOpen(false);
+							return;
 						}
 						
 						Transform* targetTf = parentObj->GetComponent<OpenPSEvent>()->GetRayObjTransform();
@@ -109,6 +117,12 @@ void ClickPSOkayEvent::SetClick()
 								}
 						}
 
+						std::cout << SceneManager::Instance().GetActiveScene()->GetName() << std::endl;
+
+						
+
+
+
 						// 상태 바꿔주기.
 						parentObj->GetComponent<OpenPSEvent>()->SetIsOpen(false);
 
@@ -124,6 +138,11 @@ void ClickPSOkayEvent::SetClick()
 						parentObj->SetActive(false);
 						openEvent->SetIsOpen(false);
 
+						if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene") {
+							if (m_tutorialManager) m_tutorialManager->NextStep(true);
+							return;
+						}
+
 						if (m_RSWindow)
 						{
 								auto rswindow = m_RSWindow->GetComponent<OpenRSEvent>();
@@ -132,5 +151,7 @@ void ClickPSOkayEvent::SetClick()
 										rswindow->RequestOpenWindow(go);
 								}
 						}
+
+						
 				});
 }

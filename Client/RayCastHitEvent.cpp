@@ -18,6 +18,7 @@ DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
+DTPROPERTY(RayCastHitEvent , m_tutorialManager)
 
 ENDPROPERTY()
 
@@ -95,6 +96,57 @@ void RayCastHitEvent::RaycastCheck()
 				if (hit)
 				{
 						std::cout << hit->GetName() << std::endl;
+						if (scene->GetName() == "TutorialScene") {
+							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
+								if (isLeft)
+								{
+									if (!m_leftPSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_leftPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+								}
+								if (!isLeft)
+								{
+									if (!m_rightPSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_rightPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+								}
+
+								if(m_tutorialManager) m_tutorialManager->NextStep(true);
+							}
+							else if (hit->GetName() == "Chess") {
+								if (isLeft)
+								{
+									if (!m_leftRSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									m_leftRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+								}
+								if (!isLeft)
+								{
+									if (!m_rightRSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									m_rightRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+								}
+								if (m_tutorialManager) m_tutorialManager->NextStep(true);
+							}
+
+							else {
+								return;
+							}
+						}
+
+
 
 						if (m_isHealSkillOn)
 						{

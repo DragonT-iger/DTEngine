@@ -32,6 +32,7 @@ DTPROPERTY(TutorialManager, m_aliceGameObject)
 DTPROPERTY(TutorialManager, m_infoUI);
 DTPROPERTY(TutorialManager, m_glowTilePrefab)
 DTPROPERTY(TutorialManager, m_tilemapGenerator)
+DTPROPERTY(TutorialManager, m_RRSokayButton)
 ENDPROPERTY()
 
 void TutorialManager::Awake()
@@ -146,29 +147,141 @@ void TutorialManager::Update(float deltaTime)
             Camera* mainCam = activeScene->GetMainCamera();
             if (mainCam)
             {
-                float targetX = 0.15f;
-                float targetY = 0.15f;
 
-                float moveSpeed = 0.5f;
+                if (m_circleRadius > 0.15f) {
+                    m_circleRadius -= 0.9f * deltaTime;
+                }
 
-                m_circleCenterX += (targetX - m_circleCenterX) * moveSpeed * deltaTime;
-                m_circleCenterY += (targetY - m_circleCenterY) * moveSpeed * deltaTime;
+                mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
+            }
+        }
+    }
 
-                if (abs(m_circleCenterX - targetX) < 0.15f) m_circleCenterX = targetX;
-                if (abs(m_circleCenterY - targetY) < 0.15f) m_circleCenterY = targetY;
+    if (m_CurrentStepIndex == 10 && m_isVignetteSequence)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                m_vignetteDelayTimer += deltaTime;
 
-                mainCam->SetCircleWidthHeight({ m_circleCenterX, m_circleCenterY });
+                float duration = 0.5f;
+                float t = m_vignetteDelayTimer / duration;
+
+                if (t >= 1.0f)
+                {
+                    t = 1.0f;
+                    m_isVignetteSequence = false; 
+                }
+
+                Vector2 startCenter = Vector2(0.415f, 0.355f);
+                Vector2 startWH = Vector2(0.15f, 0.15f);
+
+                Vector2 targetCenter = Vector2(0.770f, 0.350f);
+                Vector2 targetWH = Vector2(0.45f, 0.45f);
+
+                Vector2 currentCenter = Vector2::Lerp(startCenter, targetCenter, t);
+                Vector2 currentWH = Vector2::Lerp(startWH, targetWH, t);
+
+                mainCam->SetCircleCenter(currentCenter);
+                mainCam->SetCircleWidthHeight(currentWH);
+            }
+        }
+    }
+
+    if (m_CurrentStepIndex == 12 && m_isVignetteSequence)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                m_vignetteDelayTimer += deltaTime;
+
+                float duration = 0.5f;
+                float t = m_vignetteDelayTimer / duration;
+
+                if (t >= 1.0f)
+                {
+                    t = 1.0f;
+                    m_isVignetteSequence = false;
+
+                    mainCam->SetCircleCenter({ 0.415f, 0.35f });
+                    mainCam->SetCircleWidthHeight({ 0.15f, 0.15f });
+                    //mainCam->SetUseCircleMask(false);
+                }
+                else
+                {
+                    Vector2 startCenter = Vector2(0.770f, 0.350f);
+                    Vector2 startWH = Vector2(0.45f, 0.45f);
+
+                    Vector2 targetCenter = Vector2(0.415f, 0.35f); 
+                    Vector2 targetWH = Vector2(0.15f, 0.15f);      
+
+                    Vector2 currentCenter = Vector2::Lerp(startCenter, targetCenter, t);
+                    Vector2 currentWH = Vector2::Lerp(startWH, targetWH, t);
+
+                    mainCam->SetCircleCenter(currentCenter);   
+                    mainCam->SetCircleWidthHeight(currentWH);  
+                }
+            }
+        }
+    }
+
+    if (m_CurrentStepIndex == 13 && m_isVignetteSequence)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                m_vignetteDelayTimer += deltaTime;
+
+                float duration = 0.5f; 
+                float t = m_vignetteDelayTimer / duration;
+
+                if (t >= 1.0f)
+                {
+                    t = 1.0f;
+                    m_isVignetteSequence = false;
+
+                    mainCam->SetCircleWidthHeight({ 2.0f, 2.0f });
+                    mainCam->SetUseCircleMask(false);
+                    mainCam->SetCircleCenter({ 0.5f, 0.5f });
+                }
+                else
+                {
+                    Vector2 startCenter = Vector2(0.415f, 0.35f);
+                    Vector2 startWH = Vector2(0.15f, 0.15f);
+
+                    Vector2 targetCenter = Vector2(0.5f, 0.5f);
+                    Vector2 targetWH = Vector2(2.0f, 2.0f);
+
+                    Vector2 currentCenter = Vector2::Lerp(startCenter, targetCenter, t);
+                    Vector2 currentWH = Vector2::Lerp(startWH, targetWH, t);
+
+                    mainCam->SetCircleCenter(currentCenter);
+                    mainCam->SetCircleWidthHeight(currentWH);
+                }
             }
         }
     }
 }
 
-void TutorialManager::NextStep()
+void TutorialManager::NextStep(bool force)
 {
-    if(m_canProceedToNextStep == false)
-		return;
+    if (!force) {
+        if(m_canProceedToNextStep == false)
+		    return;
+    }
 
     m_CurrentStepIndex++;
+
+    std::cout << m_CurrentStepIndex << std::endl;
 
     switch (m_CurrentStepIndex)
     {
@@ -274,6 +387,8 @@ void TutorialManager::NextStep()
         if(m_catText2)
 			m_catText2->SetText(L"빛나는 타일을 눌러봐");
 
+        m_canProceedToNextStep = false;
+
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 4, m_glowTilePrefab);
 
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
@@ -287,10 +402,11 @@ void TutorialManager::NextStep()
                 mainCam->SetUseVignette(false);
                 mainCam->SetUseCircleMask(true);
 
-                mainCam->SetCircleCenter({ 0.415, 0.400 });
-                mainCam->SetCircleWidthHeight({ 1,1 });
+                mainCam->SetCircleCenter({ 0.415, 0.355 });
 
+                m_circleRadius = 1.0f;
 
+                mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
                 //mainCam->SetVignetteSoftness(1.0);
 
                 m_currentSoftness = 1.0f;
@@ -304,21 +420,28 @@ void TutorialManager::NextStep()
     case 10:
     {
         if (m_catText2)
-			m_catText2->SetText(L"해당 위치에 코스트를 지불하고 \n체스 병사를 소환할 수 있어");
+            m_catText2->SetText(L"해당 위치에 코스트를 지불하고 \n체스 병사를 소환할 수 있어");
+        m_canProceedToNextStep = false;
+        m_isVignetteSequence = true;
+        m_vignetteDelayTimer = 0.0f;
     }
     break;
     case 11:
     {
-        if (m_catText2) {
-			m_catText2->SetText(L"적은 지정된 경로를\n따라서 움직여");
-        }
+   //     if (m_catText2) {
+			//m_catText2->SetText(L"먼저 이 녀석을 소환해 봐");
+   //     }
+        NextStep(true);
     }
     break;
     case 12:
     {
         if (m_catText2) {
-			m_catText2->SetText(L"병사를 선택해서 이동과 전투\n규칙을 정해줄 수 있어");
+            m_catText2->SetText(L"병사를 선택해서 이동과 전투\n규칙을 정해줄 수 있어");
         }
+                                    
+        m_isVignetteSequence = true;
+        m_vignetteDelayTimer = 0.0f;
     }
     break;
     case 13:
@@ -326,23 +449,73 @@ void TutorialManager::NextStep()
         if (m_catText2) {
             m_catText2->SetText(L"대기 규칙을 적용하면\n병사가 방어타일로 이동해");
         }
+
+        m_isVignetteSequence = true;
+        m_vignetteDelayTimer = 0.0f;
+
+        m_RRSokayButton->SetActive(false);
     }
     break;
     case 14:
     {
-        if(m_catText2) {
-            m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n전투를 실행해 봐!");
-		}
-		if (m_BattleStart) m_BattleStart->SetActive(true);
+        if (m_catText2) {
+            m_catText2->SetText(L"적은 하나뿐이니,\n이번엔 가까운 놈을 노려 보지");
+        }
+        // ruleImageVisualEvent에 하드코딩해둠
     }
     break;
     case 15:
+    {
+        if (m_catText2) {
+            m_catText2->SetText(L"결정을 마쳤다면,\n확인을 눌러.");
+        }
+
+        // 확인 선택 가능
+        
+        m_rayActive = false;
+
+        m_RRSokayButton->SetActive(true);
+    }
+    break;
+    case 16:
+    {
+        m_canProceedToNextStep = true;
+        if (m_catText2) {
+            m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
+        }
+    }
+    break;
+    case 17:
+    {
+        if (m_catText2) {
+            m_catText2->SetText(L"적을 누르면 그 녀석이 어디로 움직일지,\n확인할 수 있지.");
+        }
+    }
+    break;
+    case 18:
+    {
+        if (m_catText2) {
+            m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
+        }
+    }
+    break;
+    case 19:
+    {
+        if(m_catText2) {
+            m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n전투를 실행해 봐!");
+		}
+
+        m_canProceedToNextStep = true;
+		if (m_BattleStart) m_BattleStart->SetActive(true);
+    }
+    break;
+    case 20:
     {
         if (m_BattleStart) m_BattleStart->SetActive(false);
         if (m_catText2) m_catText2->SetText(L"적이 일정 범위 내에 들어왔을 때 \n전투가 벌어지게 돼");
     }
     break;
-    case 16:
+    case 21:
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);

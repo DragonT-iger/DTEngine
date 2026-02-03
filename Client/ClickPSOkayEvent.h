@@ -5,6 +5,7 @@ class UIButton;
 class TilemapGenerator;
 class Prefab;
 class GameObject;
+class TutorialManager;
 
 class ClickPSOkayEvent : public MonoBehaviour
 {
@@ -28,5 +29,7 @@ private:
 		GameObject* m_combatObj = nullptr;
 
 		int index = 0;
+
+		TutorialManager* m_tutorialManager = nullptr;
 };
 

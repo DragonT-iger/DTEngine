@@ -1082,7 +1082,14 @@ void Scene::RenderShadows()
     {
         if (!go || !go->IsActiveInHierarchy()) continue;
 
-        if (go->GetComponent<Image>()) continue; // UI는 렌더링 할필요 없으니까
+        if (go->GetComponent<UIBase>()) continue;
+
+        if (go->GetName() == "HPBarEdge_Final") continue;
+        if (go->GetName() == "HPBarVoid") continue;
+        if (go->GetName() == "HPBarFill") continue;
+        
+
+        //if (go->GetComponent<HPBarFollowEvent>()) continue;
 
         MeshRenderer* mr = go->GetComponent<MeshRenderer>();
 
@@ -1107,7 +1114,6 @@ void Scene::RenderShadows()
         {
             DX11Renderer::Instance().UpdateMatrixPallette_CBUFFER(rg->GetFinalTransforms());
         }
-
 
 
         mesh->Bind();
