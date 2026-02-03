@@ -132,6 +132,9 @@
     <ClCompile Include="SkillButton.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="ArrowObjectPool.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="SkillButton.h">
       <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowObjectPool.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

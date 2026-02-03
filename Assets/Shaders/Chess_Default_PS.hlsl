@@ -19,6 +19,9 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 N = normalize(input.WorldNormal);
     float3 V = (IsOrtho > 0.5f) ? -normalize(CameraDir) : normalize(CameraPos - input.WorldPos);
     
+    
+    
+    
     float3 albedo = float3(1.0f, 1.0f, 1.0f);
     float metal = 0.0f;
     float rough = 1.0f;

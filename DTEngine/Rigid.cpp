@@ -4,35 +4,38 @@
 #include "SkeletalRsource.h"
 #include "Model.h"
 
-#include <iomanip>
-
 BEGINPROPERTY(Rigid)
 DTPROPERTY_SETTER(Rigid, m_modelID, SetModel)
 
 ENDPROPERTY()
 
+
 void Rigid::LateUpdate(float dTime)
 {
     if (!m_resource) return;
 
-
     size_t nodeCount = m_resource->Nodes.size();
-
-   // std::cout << nodeCount << std::endl;
-    //std::cout << this->_GetOwner()->GetName()<< std::endl;
 
     for (size_t i = 0; i < nodeCount; ++i)
     {
         auto& nodeData = m_resource->Nodes[i];
-        Matrix localMat = m_animatedLocalMatrices[i];
+
+        Matrix animDelta =
+            m_animatedLocalMatrices[i] * m_baseLocalInv[i];
 
         if (nodeData.ParentIndex != -1)
-            m_globalTransforms[i] = localMat * m_globalTransforms[nodeData.ParentIndex];
+        {
+            m_globalTransforms[i] =
+                animDelta * m_globalTransforms[nodeData.ParentIndex];
+        }
         else
-            m_globalTransforms[i] = localMat;
+        {
+            m_globalTransforms[i] = animDelta;
+        }
 
-        m_finalTransforms[i] = nodeData.OffsetMatrix* m_globalTransforms[i];
+        m_finalTransforms[i] = m_globalTransforms[i];
     }
+  
 }
 
 void Rigid::SetModel(uint64_t id)
@@ -58,11 +61,17 @@ void Rigid::SetModel(uint64_t id)
         size_t count = m_resource->Nodes.size();
 
         m_animatedLocalMatrices.assign(count, Matrix());
-        m_globalTransforms.resize(count);
-        m_finalTransforms.resize(count);
+        m_globalTransforms.assign(count, Matrix());
+        m_finalTransforms.assign(count, Matrix());
+        m_baseLocalInv.assign(count, Matrix());
 
         for (size_t i = 0; i < count; ++i)
+        {
             m_animatedLocalMatrices[i] = m_resource->Nodes[i].DefaultLocalMatrix;
+            m_baseLocalInv[i] = m_animatedLocalMatrices[i].Invert();
+        }
+       
+
     }
 }
 

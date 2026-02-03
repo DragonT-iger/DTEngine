@@ -48,6 +48,19 @@ Vector2 EnemyUnit::GetPathPoint(int i) const
 	}
 }
 
+
+void EnemyUnit::SetPath0()
+{
+    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+
+    Vector2 p0;
+    p0.x = std::round(pos.x / 2.0f);
+    p0.y = std::round(pos.z / 2.0f);
+
+    m_pos = p0;
+    path0 = p0;
+}
+
 static int Sign(int x)
 {
     if (x > 0) return 1;
@@ -66,7 +79,7 @@ static Vector2 StepToward(const Vector2& cur, const Vector2& goal)
     return Vector2{ cur.x + sx, cur.y + sy };
 }
 
-static int GetDirFromTo(const Vector2& from, const Vector2& to)
+static float GetDirFromTo(const Vector2& from, const Vector2& to)
 {
     float vx = to.x - from.x;
     float vy = to.y - from.y;
@@ -80,19 +93,7 @@ static int GetDirFromTo(const Vector2& from, const Vector2& to)
     int dir = (int)std::lround(ang / step);
     dir = (dir % 8 + 8) % 8;
 
-    return dir;
-}
-
-void EnemyUnit::SetPath0()
-{
-    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
-
-    Vector2 p0;
-    p0.x = std::round(pos.x / 2.0f);
-    p0.y = std::round(pos.z / 2.0f);
-
-    m_pos = p0;
-    path0 = p0;
+    return dir * 45.0f;
 }
 
 std::vector<PathPoint> EnemyUnit::GetAllPath() const
@@ -137,8 +138,9 @@ std::vector<PathPoint> EnemyUnit::GetAllPath() const
 
             if ((idx != endIdx) || (next != goal))
             {
-                int dir = GetDirFromTo(cur, next);
-                tiles.push_back(PathPoint{ next, dir });
+                float dir = GetDirFromTo(cur, next);
+                Vector3 wNext{ next.x * 2.0f, 1.1f, next.y * 2.0f};
+                tiles.push_back(PathPoint{ wNext, dir });
             }
 
             cur = next;
