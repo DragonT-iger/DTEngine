@@ -6,6 +6,7 @@
 class TutorialManager;
 
 class Scene;
+class ArrowObjectPool;
 
 class RayCastHitEvent : public MonoBehaviour
 {
@@ -42,5 +43,7 @@ private:
 		bool m_isAttackSkillOn = false;
 
 		bool m_isStartBattle = false;
+
+		ArrowObjectPool* m_arrowPool = nullptr;
 };
 

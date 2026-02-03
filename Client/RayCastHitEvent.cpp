@@ -10,7 +10,7 @@
 #include "TutorialManager.h"
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
-
+#include "ArrowObjectPool.h"
 
 
 BEGINPROPERTY(RayCastHitEvent)
@@ -18,6 +18,7 @@ DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
+DTPROPERTY(RayCastHitEvent, m_arrowPool)
 
 ENDPROPERTY()
 
@@ -33,11 +34,13 @@ void RayCastHitEvent::RaycastCheck()
 		if (!_GetOwner()->IsActive())
 				return;
 
-		if (m_rightPSWinodwBG->IsActive() || m_leftPSWinodwBG->IsActive()) {
+		if (m_rightPSWinodwBG->IsActive() || m_leftPSWinodwBG->IsActive()) 
+		{
 			return;
 		}
 
-		if (m_rightRSWinodwBG->IsActive() || m_leftRSWinodwBG->IsActive()) {
+		if (m_rightRSWinodwBG->IsActive() || m_leftRSWinodwBG->IsActive()) 
+		{
 			return;
 		}
 
