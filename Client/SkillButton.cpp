@@ -2,8 +2,7 @@
 #include "GameObject.h"
 #include "RayCastHitEvent.h"
 #include "UIButton.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "GameManager.h"
 
 BEGINPROPERTY(SkillButton)
 DTPROPERTY(SkillButton, m_rayObj)
@@ -27,8 +26,12 @@ void SkillButton::Start()
 						if (!rayEvent)
 								return;
 
+						// 이미 스킬 활성화 중이면 무시
+						if (rayEvent->GetAttackSkill() || rayEvent->GetHealSkill())
+								return;
+
 						rayEvent->CloseAllWindows();
-						SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+						GameManager::Instance()->SetTimeScale(0);
 						rayEvent->SetAttackSkill(true);
 				});
 
@@ -41,8 +44,12 @@ void SkillButton::Start()
 						if (!rayEvent)
 								return;
 
+						// 이미 스킬 활성화 중이면 무시
+						if (rayEvent->GetAttackSkill() || rayEvent->GetHealSkill())
+								return;
+
 						rayEvent->CloseAllWindows();
-						SceneManager::Instance().GetActiveScene()->SetTimeScale(0);
+						GameManager::Instance()->SetTimeScale(0.0f);
 						rayEvent->SetHealSkill(true);
 				});
 }

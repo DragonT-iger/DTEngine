@@ -3,6 +3,8 @@
 
 class UIButton;
 class GameObject;
+class Image;
+
 
 class ClickStartButton : public MonoBehaviour
 {
@@ -16,5 +18,7 @@ private:
 		GameObject* m_combatObj = nullptr;
 		GameObject* m_rayObj = nullptr;
 		GameObject* m_tileMapObj = nullptr;
+
+		Image* m_startClickImg = nullptr;
 };
 

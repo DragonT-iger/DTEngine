@@ -5,6 +5,7 @@
 #include "CombatController.h"
 #include "RayCastHitEvent.h"
 #include "Effect.h"
+#include "AssetDatabase.h"
 
 BEGINPROPERTY(ClickStartButton)
 DTPROPERTY(ClickStartButton, m_startButton)
@@ -35,6 +36,8 @@ void ClickStartButton::Start()
 										}
 								}
 						}
+
+						//m_startClickImg->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
 
 						m_combatObj->GetComponent<CombatController>()->Setup();
 						m_rayObj->GetComponent<RayCastHitEvent>()->SetStartBattle(true);

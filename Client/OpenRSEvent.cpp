@@ -7,10 +7,19 @@
 
 BEGINPROPERTY(OpenRSEvent)
 DTPROPERTY(OpenRSEvent, m_windowBar)
+DTPROPERTY(OpenRSEvent, m_moveRuleWindow)
+DTPROPERTY(OpenRSEvent, m_battleRuleWindow)
 ENDPROPERTY()
 
 void OpenRSEvent::OpenWindow()
 {
+    if (!m_moveRuleWindow || !m_battleRuleWindow)
+        return;
+
+    // info window는 열 떄 무조건 꺼주기.
+    m_moveRuleWindow->SetActive(false);
+    m_battleRuleWindow->SetActive(false);
+
     _GetOwner()->SetActive(true);
 }
 

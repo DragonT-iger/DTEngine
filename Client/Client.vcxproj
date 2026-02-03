@@ -138,6 +138,7 @@
     <ClCompile Include="ClickPSOkayEvent.cpp" />
     <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="AliceUnit.cpp" />
+    <ClCompile Include="ClickSetActiveObjEvent.cpp" />
     <ClCompile Include="ClickStartButton.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ClickPSOkayEvent.h" />
     <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="AliceUnit.h" />
+    <ClInclude Include="ClickSetActiveObjEvent.h" />
     <ClInclude Include="ClickStartButton.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />

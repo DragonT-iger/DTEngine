@@ -135,6 +135,9 @@
     <ClCompile Include="ArrowObjectPool.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="ClickSetActiveObjEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="ArrowObjectPool.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickSetActiveObjEvent.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

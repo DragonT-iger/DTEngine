@@ -33,6 +33,10 @@ public:
 
 	void SetSfxValue(int value) { cursfxValue = value; }
 	int GetSfxValue() const { return cursfxValue; }
+
+	void SetTimeScale(int scale);
+	int GetTimeScale() const { return curTimeScale; }
+	int GetPrevTimeScale() const { return prevTimeScale; }
 private:
 	
 	Text* m_money;
@@ -48,5 +52,7 @@ private:
 	static inline int cursfxValue = 3;
 	
 
+	static inline int curTimeScale = 1;		// 배속값 위해서.
+	static inline int prevTimeScale = 1.0f;
 };
 
