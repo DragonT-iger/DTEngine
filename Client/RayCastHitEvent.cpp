@@ -62,8 +62,6 @@ void RayCastHitEvent::RaycastCheck()
 		}
 
 
-		
-		
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
 		{
 				const Vector2 mp = Vector2((float)input.GetGameMousePosition().x, (float)input.GetGameMousePosition().y);
