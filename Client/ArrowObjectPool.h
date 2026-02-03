@@ -1,6 +1,8 @@
 #pragma once
 #include "MonoBehaviour.h"
 
+class Prefab;
+class GameObject;
 
 class ArrowObjectPool : public MonoBehaviour
 {
@@ -9,5 +11,8 @@ public:
 	ArrowObjectPool() = default;
 	~ArrowObjectPool() = default;
 
-	void Awake() override;
+	void Start() override;
+
+private:
+	Prefab* m_arrow = nullptr;
 };

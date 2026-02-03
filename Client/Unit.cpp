@@ -344,9 +344,9 @@ void Unit::PlayAnim(uint64_t id, uint64_t id1, uint64_t id2, float speed, bool l
 
     if (id2 != -1)
     {
-        m_anim->SetTime(speed);
-        m_anim->SetLoop(loop);
-        m_anim->SetPlay(true);
+        m_anim2->SetTime(speed);
+        m_anim2->SetLoop(loop);
+        m_anim2->SetPlay(true);
     }
 }
 
