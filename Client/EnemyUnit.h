@@ -5,8 +5,8 @@
 
 struct PathPoint
 {
-    Vector2 pathPoint;
-    int dir; // 시선 방향
+    Vector3 pathPoint;
+    float dir; // 시선 방향
 };
 
 class EnemyUnit : public Unit

@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
+    <ClCompile Include="ArrowObjectPool.cpp" />
     <ClCompile Include="ClickPSOkayEvent.cpp" />
     <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="AliceUnit.cpp" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
+    <ClInclude Include="ArrowObjectPool.h" />
     <ClInclude Include="ClickPSOkayEvent.h" />
     <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="AliceUnit.h" />
