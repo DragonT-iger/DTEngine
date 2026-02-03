@@ -88,6 +88,8 @@ public:
 	void SetAllyUnit1(AllyUnit* allyUnit) { allyUnit1 = allyUnit; }
 	void SetAllyUnit2(AllyUnit* allyUnit) { allyUnit2 = allyUnit; }
 
+	void AddAllyUnit(AllyUnit* allyUnit);
+
 	void SetEnemyUnit0(EnemyUnit* enemyUnit) { enemyUnit0 = enemyUnit; }
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
 	void SetEnemyUnit2(EnemyUnit* enemyUnit) { enemyUnit2 = enemyUnit; }
@@ -124,4 +126,5 @@ private:
 	EnemyUnit* enemyUnit2 = nullptr;
 
 	//Prefab* asdf = nullptr;
+	int allyCount = 0;
 };

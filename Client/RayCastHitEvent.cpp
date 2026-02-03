@@ -176,7 +176,7 @@ void RayCastHitEvent::RaycastCheck()
 								// level design이 먼저라 생각하는데 배치 위치에 따라 우리가 작업을 모든 예외처리를 다 할 필요가 없다 라는 생각이라.
 						}
 
-						if (hit->GetName() == "Height_01_White_Test" || hit->GetName() == "Height_01_Red_Test")
+						if (hit->GetName() == "Glow_W_Height_01_Red_Test" || hit->GetName() == "Glow_W_Height_01_White_Test")
 						{
 								if (isLeft)
 								{

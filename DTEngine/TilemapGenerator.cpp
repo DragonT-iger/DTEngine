@@ -20,6 +20,7 @@ DTPROPERTY(TilemapGenerator, m_prefab3)
 DTPROPERTY(TilemapGenerator, m_prefab4)
 DTPROPERTY(TilemapGenerator, m_prefab5)
 DTPROPERTY(TilemapGenerator, m_prefab6)
+DTPROPERTY(TilemapGenerator, m_prefab7)
 
 ENDPROPERTY()
 
@@ -42,7 +43,7 @@ void TilemapGenerator::BuildMap()
 
     Transform* myTr = GetTransform();
 
-    Prefab* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 , m_prefab5 , m_prefab6 };
+    Prefab* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 , m_prefab5 , m_prefab6, m_prefab7 };
 
     for (int y = 0; y < height; ++y)
     {
@@ -50,7 +51,7 @@ void TilemapGenerator::BuildMap()
         {
             int index = m_mapData->GetTileIndex(x, y);
 
-            if (index < 0 || index >= 7) continue;
+            if (index < 0 || index >= 8) continue;
 
             Prefab* prefab = palette[index];
             if (!prefab) continue;
