@@ -20,5 +20,8 @@ private:
 		GameObject* m_tileMapObj = nullptr;
 
 		Image* m_startClickImg = nullptr;
+
+		int m_maxCount = 3;
+		int m_cost = 10;
 };
 

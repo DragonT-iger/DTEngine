@@ -26,5 +26,8 @@ private:
 
 		GameObject* m_RSWindow = nullptr;
 		GameObject* m_combatObj = nullptr;
+
+		int maxUnitCount = 3;
+		int m_cost = 10;
 };
 
