@@ -2331,34 +2331,38 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             ImGui::Text("Tilemap Editor: %s", filePath.filename().string().c_str());
             ImGui::Separator();
 
-            int width = tilemap->GetWidth();
+            int width = tilemap->GetWidth(); // 테두리 안포함
             int height = tilemap->GetHeight();
+
             bool changed = false;
 
             if (ImGui::InputInt("Width", &width))
             {
-                if (width > 0) { tilemap->SetWidth(width); changed = true; }
+                if (width >= 0) { tilemap->SetWidth(width); changed = true; }
             }
             if (ImGui::InputInt("Height", &height))
             {
-                if (height > 0) { tilemap->SetHeight(height); changed = true; }
+                if (height >= 0) { tilemap->SetHeight(height); changed = true; }
             }
+
+            int widthEX = tilemap->GetExpandedWidth();   // 테두리 포함
+            int heightEX = tilemap->GetExpandedHeight();
 
             ImGui::Separator();
             ImGui::Text("Tile Data Grid");
 
-            if (ImGui::BeginTable("TilemapGrid", width > 0 ? width : 1, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX))
+            if (ImGui::BeginTable("TilemapGrid", widthEX > 0 ? widthEX : 1, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX))
             {
-                for (int y = 0; y < height; ++y)
+                for (int y = 0; y < heightEX; ++y)
                 {
                     ImGui::TableNextRow();
-                    for (int x = 0; x < width; ++x)
+                    for (int x = 0; x < widthEX; ++x)
                     {
                         ImGui::TableNextColumn();
 
                         int tileID = tilemap->GetTileIndex(x, y);
 
-                        ImGui::PushID(x + y * width);
+                        ImGui::PushID(x + y * widthEX);
 
                         std::string label = std::to_string(tileID);
 

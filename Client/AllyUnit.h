@@ -5,16 +5,16 @@
 
 enum MoveRule
 {
-    Hold = 0, // 대기
-    Advance,  // 전진
+    Advance = 0,  // 전진
+    Hold,     // 대기
     Chase     // 추격
 };
 
 enum BattleRule
 {
     Nearest = 0,     // 가장 가까운 적
-    LowestHp,        // 체력 낮은 적
     TypeAdvantage,   // 상성 우위
+    LowestHp,        // 체력 낮은 적
 };
 
 class AllyUnit : public Unit 
