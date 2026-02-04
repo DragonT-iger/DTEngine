@@ -56,7 +56,7 @@ void RuleImageVisualEvent::UpdateMoveVisuals()
 		int mIdx = bgEvent->GetMoveIndex();
 		UIButton* moveButtons[] = { m_movefBtns, m_movesBtns, m_movetBtns };
 		Vector4 selectedColor(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector4 unselectedColor(0.4f, 0.4f, 0.4f, 1.0f);
+		Vector4 unselectedColor(1.0f, 1.0f, 1.0f, 0.0f);
 
 		for (int i = 0; i < 3; ++i) 
 		{
@@ -76,7 +76,7 @@ void RuleImageVisualEvent::UpdateBattleVisuals()
 		int aIdx = bgEvent->GetBattleIndex();
 		UIButton* battleButtons[] = { m_battlefBtns, m_battlesBtns, m_battletBtns };
 		Vector4 selectedColor(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector4 unselectedColor(0.4f, 0.4f, 0.4f, 1.0f);
+		Vector4 unselectedColor(1.0f, 1.0f, 1.0f, 0.0f);
 
 		for (int i = 0; i < 3; ++i) 
 		{

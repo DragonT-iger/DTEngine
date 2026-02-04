@@ -15,5 +15,6 @@ private:
 		UIButton* m_startButton = nullptr;
 		GameObject* m_combatObj = nullptr;
 		GameObject* m_rayObj = nullptr;
+		GameObject* m_tileMapObj = nullptr;
 };
 
