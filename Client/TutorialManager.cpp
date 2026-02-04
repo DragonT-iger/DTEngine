@@ -11,6 +11,8 @@
 #include "VignetteEffect.h"
 #include "Prefab.h"
 #include "TilemapGenerator.h"
+#include "RayCastHitEvent.h"
+#include "ArrowObjectPool.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -33,7 +35,8 @@ DTPROPERTY(TutorialManager, m_infoUI);
 DTPROPERTY(TutorialManager, m_glowTilePrefab)
 DTPROPERTY(TutorialManager, m_tilemapGenerator)
 DTPROPERTY(TutorialManager, m_RRSokayButton)
-DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemy)
+DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemyPrefab)
+DTPROPERTY(TutorialManager, m_rayCastHitEvent)
 ENDPROPERTY()
 
 void TutorialManager::Awake()
@@ -257,6 +260,46 @@ void TutorialManager::Update(float deltaTime)
             }
         }
     }
+    if (m_CurrentStep == TutorialStep::Cat_Explain_EnemyIntent)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                if (m_circleRadius > 0.15f) {
+                    m_circleRadius -= 2.0f * deltaTime;
+                    if (m_circleRadius < 0.15f) m_circleRadius = 0.15f;
+                }
+                mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
+            }
+        }
+    }
+
+    if (m_CurrentStep == TutorialStep::Cat_Explain_EnemyPathWait)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                if (m_circleRadius < 2.0f) {
+                    m_circleRadius += 2.0f * deltaTime; 
+                }
+
+                if (m_circleRadius >= 2.0f) {
+                    m_circleRadius = 2.0f;
+                     mainCam->SetUseCircleMask(false);
+
+                     m_canProceedToNextStep = true;
+                }
+
+                mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
+            }
+        }
+    }
 }
 
 void TutorialManager::NextStep(bool force)
@@ -470,7 +513,8 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2) {
             m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
         }
-        m_tutorialAdditionalEnemy->Instantiate();
+        m_tutorialAdditionalEnemy = m_tutorialAdditionalEnemyPrefab->Instantiate();
+
     }
     break;
 
@@ -480,31 +524,56 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"적을 누르면 그 녀석이 어디로 움직일지,\n확인할 수 있지.");
         }
 
-        m_rayActive = true;
-    }
-    break;
+        m_canProceedToNextStep = false;
 
-    case TutorialStep::Cat_Strategy_DefenseTile: // 18
-    {
-        if (m_catText2) {
-            m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
+        m_rayActive = true;
+
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                mainCam->SetUseCircleMask(true);
+                mainCam->SetCircleCenter({ 0.755f, 0.270f });
+
+                m_circleRadius = 1.5f;
+                mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
+            }
         }
     }
     break;
 
-    case TutorialStep::Cat_Order_StartBattle: // 19
+    case TutorialStep::Cat_Explain_EnemyPathWait:
+    {
+        m_rayActive = false;
+    }
+    break;
+
+    case TutorialStep::Cat_Strategy_DefenseTile: 
+    {
+        if (m_catText2) {
+            m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
+        }
+        m_rayCastHitEvent->GetArrowPool()->_GetOwner()->SetActive(false);
+    }
+    break;
+
+    case TutorialStep::Cat_Order_StartBattle:
     {
         if (m_catText2) {
             m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n싸움을 붙여 보자고!");
         }
 
+        m_combatController->SetEnemyUnit0(m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>());
         m_canProceedToNextStep = true;
         if (m_BattleStart) m_BattleStart->SetActive(true);
     }
     break;
 
-    case TutorialStep::Cat_Explain_EnemyRange: // 20
+    case TutorialStep::Cat_Explain_EnemyRange:
     {
+        m_combatController->Setup();
         if (m_catText2) {
             m_catText2->SetText(L"아, 참! 깜빡할 뻔했는데,\n이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어.!");
         }
@@ -512,7 +581,7 @@ void TutorialManager::NextStep(bool force)
     }
     break;
 
-    case TutorialStep::Cat_Explain_EnemyRange_End: // 21
+    case TutorialStep::Cat_Explain_EnemyRange_End: 
     {
         if (m_catText2) {
             m_catText2->SetText(L"뭐, 알고 있으면 좋을 거야.\n너를 위해서 말이야.");
@@ -522,7 +591,7 @@ void TutorialManager::NextStep(bool force)
     break;
 
 
-    case TutorialStep::Victory: // 23
+    case TutorialStep::Victory:
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);

@@ -31,6 +31,8 @@ public:
 		bool GetAttackSkill() { return m_isAttackSkillOn; }
 		EnemyUnit* CheckEnemyObj(GameObject* obj);		// enemy check 용도로 따로 빼기.
 
+		ArrowObjectPool* GetArrowPool() { return m_arrowPool; }
+
 private:
 		GameObject* m_hitObj = nullptr;
 

@@ -9,6 +9,7 @@ class CombatController;
 class Prefab;
 class TilemapGenerator;
 class UIButton;
+class RayCastHitEvent;
 
 class TutorialManager : public MonoBehaviour
 {
@@ -36,6 +37,7 @@ public:
         Cat_Order_Confirm,              // "확인을 눌러"
         Cat_Explain_EnemyPath,          // "적은 지정된 경로를..."
         Cat_Explain_EnemyIntent,        // "적을 누르면..."
+        Cat_Explain_EnemyPathWait,
         Cat_Strategy_DefenseTile,       // "방어 타일 위에 있으면..."
         Cat_Order_StartBattle,          // "싸움을 붙여 보자고!"
         Cat_Explain_EnemyRange,         // "토끼 녀석들은 공격 범위가 정해져 있어" 
@@ -100,6 +102,9 @@ private:
 
     UIButton* m_RRSokayButton = nullptr;
 
-    Prefab* m_tutorialAdditionalEnemy = nullptr;
+    Prefab* m_tutorialAdditionalEnemyPrefab = nullptr;
+    GameObject* m_tutorialAdditionalEnemy = nullptr;
+
+    RayCastHitEvent* m_rayCastHitEvent = nullptr;
 
 };

@@ -106,6 +106,76 @@ void RayCastHitEvent::RaycastCheck()
 
 				if (hit)
 				{
+					std::cout << hit->GetName() << std::endl;
+
+					if (m_tutorialManager &&
+						m_tutorialManager->GetCurrentStep() >= TutorialManager::TutorialStep::Cat_Explain_EnemyPath &&
+						m_tutorialManager->GetCurrentStep() < TutorialManager::TutorialStep::Cat_Explain_EnemyPathWait)
+					{
+						bool isEnemy = (hit->GetTag() == "Enemy");
+						if (!isEnemy && hit->GetTransform()->GetParent() && hit->GetTransform()->GetParent()->_GetOwner()->GetTag() == "Enemy")
+						{
+							isEnemy = true;
+						}
+
+						if (isEnemy)
+						{
+							EnemyUnit* enemy = hit->GetComponent<EnemyUnit>();
+							if (!enemy && hit->GetTransform()->GetParent())
+							{
+								enemy = hit->GetTransform()->GetParent()->_GetOwner()->GetComponent<EnemyUnit>();
+							}
+							if (!enemy) enemy = CheckEnemyObj(hit); 
+
+							if (enemy && m_arrowPool)
+							{
+								m_arrowPool->_GetOwner()->SetActive(false); 
+
+								std::vector<ArrowSegment> path = enemy->GetArrowSegments();
+								std::vector<GameObject*> heads = m_arrowPool->GetHeads();
+								std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
+								std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+
+								m_arrowPool->DeactivateAll();
+
+								// 화살표 배치
+								for (int i = 0; i < path.size(); ++i)
+								{
+									Transform* tr = bodys[i]->GetTransform();
+									tr->SetPosition(path[i].midWorld);
+									Vector3 s = tr->GetScale();
+									s.x = path[i].lenWorld;
+									tr->SetScale(s);
+									Vector3 e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									bodys[i]->SetActive(true);
+
+									tr = heads[i]->GetTransform();
+									tr->SetPosition(path[i].headWorld);
+									e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									heads[i]->SetActive(true);
+
+									tr = starts[i]->GetTransform();
+									tr->SetPosition(path[i].startWorld);
+									e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									starts[i]->SetActive(true);
+								}
+								m_arrowPool->_GetOwner()->SetActive(true);
+
+								m_tutorialManager->NextStep(true);
+								// 중요: 여기서 return 하여 아래쪽의 RS 창 로직이 실행되지 않도록 함
+								return;
+							}
+						}
+
+						// 적이 아닌 것을 클릭했거나, EnemyUnit을 못 찾은 경우 클릭 무시
+						return;
+					}
 						std::cout << hit->GetName() << std::endl;
 						if (scene->GetName() == "TutorialScene") {
 							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
@@ -156,7 +226,6 @@ void RayCastHitEvent::RaycastCheck()
 								return;
 							}
 						}
-
 
 						//std::cout << hit->GetName() << std::endl;
 
@@ -234,7 +303,7 @@ void RayCastHitEvent::RaycastCheck()
 						{
 							return;
 						}
-								
+
 
 						// 여기는 화살표 보여주기 위해서
 						EnemyUnit* enemy = CheckEnemyObj(hit);

@@ -105,8 +105,8 @@ bool Game::Initialize()
 
 
 
-	SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
-	SceneManager::Instance().LoadScene("GridTestScene");
+	//SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
+	//SceneManager::Instance().LoadScene("GridTestScene");
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 

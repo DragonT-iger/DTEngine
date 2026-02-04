@@ -44,7 +44,12 @@ void CombatController::Update(float dTime)
 
 void CombatController::Setup()
 {
-    m_allyUnits.clear();
+    m_stageEnd = false;                     
+    m_currPhase = Phase::Ready;             
+    m_stageResult = StageResult::InProgress;
+    m_phaseEntered = false;
+
+      m_allyUnits.clear();
     m_enemyUnits.clear();
     m_battleUnits.clear();
     
