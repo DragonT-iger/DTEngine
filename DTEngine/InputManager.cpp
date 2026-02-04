@@ -65,7 +65,7 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
             {
                 m_keyDownState[vKey] = true;
             }
-            m_keyDownState[vKey] = true;
+            m_keyState[vKey] = true;
         }
         
         break;
