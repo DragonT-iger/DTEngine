@@ -41,9 +41,9 @@ void RuleImageVisualEvent::Start()
 										auto tm = tmObj->GetComponent<TutorialManager>();
 										if (tm)
 										{
-											int step = tm->GetCurrentStepIndex(); 
+											TutorialManager::TutorialStep step = tm->GetCurrentStep();
 
-											if (step == 13)
+											if (step == TutorialManager::TutorialStep::Cat_Explain_Wait)
 											{
 												if (i == 0) 
 												{
@@ -74,9 +74,9 @@ void RuleImageVisualEvent::Start()
 										auto tm = tmObj->GetComponent<TutorialManager>();
 										if (tm)
 										{
-											int step = tm->GetCurrentStepIndex();
+											TutorialManager::TutorialStep step = tm->GetCurrentStep();
 
-											if (step == 14)
+											if (step == TutorialManager::TutorialStep::Cat_Strategy_Closest)
 											{
 												if (i == 2) 
 												{

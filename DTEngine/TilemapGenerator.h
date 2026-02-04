@@ -7,7 +7,7 @@
 class TilemapData;
 class Prefab;
 
-class TilemapGenerator : public MonoBehaviour // 나중에 singleton MonoBehaviour로 변경 고려
+class TilemapGenerator : public MonoBehaviour 
 {
     DTGENERATED_BODY(TilemapGenerator);
 

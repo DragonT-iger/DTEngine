@@ -88,6 +88,9 @@ public:
 	void SetAllyUnit1(AllyUnit* allyUnit) { allyUnit1 = allyUnit; }
 	void SetAllyUnit2(AllyUnit* allyUnit) { allyUnit2 = allyUnit; }
 
+	// 튜토리얼에서 가져와서 방향 돌리기 위한용
+	AllyUnit* GetAllyUnit0() { return allyUnit0; }
+
 	void SetEnemyUnit0(EnemyUnit* enemyUnit) { enemyUnit0 = enemyUnit; }
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
 	void SetEnemyUnit2(EnemyUnit* enemyUnit) { enemyUnit2 = enemyUnit; }
