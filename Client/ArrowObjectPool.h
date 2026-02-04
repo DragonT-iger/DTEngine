@@ -14,9 +14,18 @@ public:
 
 	void Start() override;
 
-	std::vector<GameObject*>& GetArrows() { return m_arrows; }
+	std::vector<GameObject*>& GetHeads() { return m_heads; }
+	std::vector<GameObject*>& GetBodys() { return m_bodys; }
+	std::vector<GameObject*>& GetStarts() { return m_starts; }
+
+	void DeactivateAll();
 
 private:
-	Prefab* m_arrow = nullptr;
-	std::vector<GameObject*> m_arrows;
+	Prefab* m_head = nullptr;
+	Prefab* m_body = nullptr;
+	Prefab* m_start = nullptr;
+
+	std::vector<GameObject*> m_heads;
+	std::vector<GameObject*> m_bodys;
+	std::vector<GameObject*> m_starts;
 };
