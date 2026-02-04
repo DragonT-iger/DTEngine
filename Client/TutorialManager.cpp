@@ -33,6 +33,7 @@ DTPROPERTY(TutorialManager, m_infoUI);
 DTPROPERTY(TutorialManager, m_glowTilePrefab)
 DTPROPERTY(TutorialManager, m_tilemapGenerator)
 DTPROPERTY(TutorialManager, m_RRSokayButton)
+DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemy)
 ENDPROPERTY()
 
 void TutorialManager::Awake()
@@ -412,6 +413,7 @@ void TutorialManager::NextStep(bool force)
         m_canProceedToNextStep = false;
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
+       
     }
     break;
 
@@ -468,6 +470,7 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2) {
             m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
         }
+        m_tutorialAdditionalEnemy->Instantiate();
     }
     break;
 
@@ -476,6 +479,8 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2) {
             m_catText2->SetText(L"적을 누르면 그 녀석이 어디로 움직일지,\n확인할 수 있지.");
         }
+
+        m_rayActive = true;
     }
     break;
 

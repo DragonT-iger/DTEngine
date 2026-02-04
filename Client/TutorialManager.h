@@ -100,4 +100,6 @@ private:
 
     UIButton* m_RRSokayButton = nullptr;
 
+    Prefab* m_tutorialAdditionalEnemy = nullptr;
+
 };
