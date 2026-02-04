@@ -61,24 +61,7 @@ void EnemyUnit::SetPath0()
     path0 = p0;
 }
 
-static int Sign(int x)
-{
-    if (x > 0) return 1;
-    if (x < 0) return -1;
-    return 0;
-}
-
-static Vector2 StepToward(const Vector2& cur, const Vector2& goal)
-{
-    int dx = (int)goal.x - (int)cur.x;
-    int dy = (int)goal.y - (int)cur.y;
-
-    int sx = Sign(dx);
-    int sy = Sign(dy);
-
-    return Vector2{ cur.x + sx, cur.y + sy };
-}
-
+// 화살표 관련 로직
 static float GetDirFromTo(const Vector2& from, const Vector2& to)
 {
     float vx = to.x - from.x;
@@ -96,56 +79,106 @@ static float GetDirFromTo(const Vector2& from, const Vector2& to)
     return dir * 45.0f;
 }
 
-std::vector<PathPoint> EnemyUnit::GetAllPath() const
+static Vector3 GridToWorld_A(const Vector2& g)
 {
-    std::vector<PathPoint> tiles;
-    tiles.reserve(128);
+    return Vector3{ g.x * 2.0f, 1.1f, g.y * 2.0f };
+}
 
-    int startIdx = 0;
+static int Sign(int x)
+{
+    if (x > 0) return 1;
+    if (x < 0) return -1;
+    return 0;
+}
 
-    int endIdx = 0;
-    for (int i = 7; i >= 0; --i)
-    {
-        if (GetPathPoint(i) != GRIDPOS_INVALID)
-        {
-            endIdx = i;
-            break;
-        }
-    }
+static Vector2 StepTowardGrid(const Vector2& cur, const Vector2& goal)
+{
+    int dx = (int)goal.x - (int)cur.x;
+    int dy = (int)goal.y - (int)cur.y;
+    return Vector2{ cur.x + (float)Sign(dx), cur.y + (float)Sign(dy) };
+}
 
-    if (endIdx <= startIdx) return tiles;
+static int GridDist(const Vector2& a, const Vector2& b)
+{
+    int dx = std::abs((int)b.x - (int)a.x);
+    int dy = std::abs((int)b.y - (int)a.y);
+    return (std::max)(dx, dy);
+}
 
-    //Vector2 cur = GetPathPoint(startIdx);
+static float StepLen(const Vector2& a, const Vector2& b)
+{
+    int dx = std::abs((int)b.x - (int)a.x);
+    int dy = std::abs((int)b.y - (int)a.y);
+
+    return (dx != 0 && dy != 0) ? (1.41421356237f) : 1.0f;
+}
+
+std::vector<Vector2> EnemyUnit::CollectPathPoints() const
+{
+    std::vector<Vector2> pts;
+    pts.reserve(8);
+
 
     Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
-    Vector2 cur;
-    cur.x = std::round(pos.x / 2.0f);
-    cur.y = std::round(pos.z / 2.0f);
 
-    const int maxSteps = 128; 
+    Vector2 p0;
+    p0.x = std::round(pos.x / 2.0f);
+    p0.y = std::round(pos.z / 2.0f);
 
-    for (int idx = startIdx + 1; idx <= endIdx; ++idx)
+    pts.push_back(p0); // 자신의 위치가 시작위치
+
+    for (int i = 1; i < 8; ++i) // 0번이 시작위치인데, 시작위치 값을 안넣어줘서 1번부터 시작.
     {
-        Vector2 goal = GetPathPoint(idx);
+        Vector2 p = GetPathPoint(i);
+        if (p == GRIDPOS_INVALID) break;
+        if (!pts.empty() && pts.back() == p) continue;
+        pts.push_back(p);
+    }
+    return pts;
+}
 
-        if (goal == GRIDPOS_INVALID) break;
 
-        for (int step = 0; step < maxSteps; ++step)
-        {
-            if (cur == goal) break;
+std::vector<ArrowSegment> EnemyUnit::GetArrowSegments() const
+{
+    std::vector<ArrowSegment> segs;
 
-            Vector2 next = StepToward(cur, goal);
+    std::vector<Vector2> pts = CollectPathPoints();
+    if (pts.size() < 2) return segs;
 
-            if ((idx != endIdx) || (next != goal))
-            {
-                float dir = GetDirFromTo(cur, next);
-                Vector3 wNext{ next.x * 2.0f, 1.1f, next.y * 2.0f};
-                tiles.push_back(PathPoint{ wNext, dir });
-            }
+    pts.front() = StepTowardGrid(pts[0], pts[1]);
+    pts.back() = StepTowardGrid(pts.back(), pts[pts.size() - 2]);
 
-            cur = next;
-        }
+    segs.reserve(pts.size() - 1);
+
+    for (size_t i = 0; i + 1 < pts.size(); ++i)
+    {
+        Vector2 A = pts[i];
+        Vector2 B = pts[i + 1];
+        if (A == B) continue; // 두 지점이 같으면 그릴 필요가 없음. 
+
+        float yaw = GetDirFromTo(A, B);
+        int steps = GridDist(A, B);
+
+        float stepLen = StepLen(A, B);
+        float len = (std::max)(0, steps - 1) * stepLen;
+
+        Vector3 wA = GridToWorld_A(A);
+        Vector3 wB = GridToWorld_A(B);
+
+        Vector3 mid = (wA + wB) / 2.0f;
+
+        Vector3 dir = wB - wA;
+        dir.y = 0.0f;
+
+        float d = std::sqrt(dir.x * dir.x + dir.z * dir.z);
+        if (d > 1e-6f) { dir.x /= d; dir.z /= d; }
+        else { dir = Vector3{ 1,0,0 }; }
+
+        Vector3 startPos = mid - dir * (len + 0.25f);
+        Vector3 headPos = mid + dir * (len + 0.5f);
+
+        segs.push_back(ArrowSegment{ headPos, startPos, mid, len, yaw });
     }
 
-    return tiles;
+    return segs;
 }

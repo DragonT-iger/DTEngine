@@ -7,6 +7,7 @@ class TutorialManager;
 
 class Scene;
 class ArrowObjectPool;
+class EnemyUnit;
 
 class RayCastHitEvent : public MonoBehaviour
 {
@@ -27,7 +28,7 @@ public:
 
 		bool GetHealSkill() { return m_isHealSkillOn; }
 		bool GetAttackSkill() { return m_isAttackSkillOn; }
-		bool CheckEnemyObj(GameObject* obj);		// enemy check 용도로 따로 빼기.
+		EnemyUnit* CheckEnemyObj(GameObject* obj);		// enemy check 용도로 따로 빼기.
 
 private:
 		GameObject* m_hitObj = nullptr;
@@ -45,5 +46,6 @@ private:
 		bool m_isStartBattle = false;
 
 		ArrowObjectPool* m_arrowPool = nullptr;
+		EnemyUnit* m_lastSelectedEnemy = nullptr;
 };
 
