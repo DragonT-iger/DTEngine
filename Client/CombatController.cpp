@@ -904,7 +904,7 @@ float CombatController::CalculateDamage(Unit* me, Unit* target)
 {
     float bonus = 1.0f; // 상성 보너스.
     if (HasTypeAdvantage(me->GetUnitType(), target->GetUnitType())) bonus = 1.5f;
-    else if (HasTypeAdvantage(target->GetUnitType(), me->GetUnitType())) bonus = 0.5f;
+    else if (HasTypeAdvantage(target->GetUnitType(), me->GetUnitType())) bonus = 0.7f;
 
     float bonus2 = 1.0f; // 방어타일 보너스.
     if (battleGrid->IsDefenseTile(target->GetMovePos())) bonus2 = 2.0f;

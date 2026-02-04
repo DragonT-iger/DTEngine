@@ -66,10 +66,10 @@ void ClickPSOkayEvent::SetClick()
 						switch (idx)
 						{
 						case 1:
-								m_selectPrefab = m_rook;
+								m_selectPrefab = m_knight; 
 								break;
 						case 2:
-								m_selectPrefab = m_knight;
+								m_selectPrefab = m_rook;
 								break;
 						case 3:
 								m_selectPrefab = m_bishop;

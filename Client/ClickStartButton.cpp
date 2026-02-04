@@ -35,7 +35,7 @@ void ClickStartButton::Start()
 						if (managerUnitCount < m_maxCount && managerMoney >= m_cost)
 						{
 								std::cout << "유닛 생성 가능한 count 및 cost 보유." << std::endl;
-								return;
+								//return;
 						}
 
 						// 전투 시작 시 타일들 전부 깜빡거리는거 꺼주기 위해서.
