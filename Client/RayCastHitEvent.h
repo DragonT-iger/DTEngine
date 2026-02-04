@@ -16,6 +16,7 @@ public:
 		void Update(float deltaTime) override;	  // ray check 해주기.
 
 		void RaycastCheck();
+		void ToggleSettingWindow();
 
 		GameObject* GetHitObject() { return m_hitObj; }
 		void SetHitObject(GameObject* hitobj) { m_hitObj = hitobj; }
@@ -33,6 +34,8 @@ public:
 private:
 		GameObject* m_hitObj = nullptr;
 
+		GameObject* m_settingWindowBG = nullptr;
+
 		GameObject* m_rightPSWinodwBG = nullptr;
 		GameObject* m_rightRSWinodwBG = nullptr;
 
@@ -47,5 +50,7 @@ private:
 
 		ArrowObjectPool* m_arrowPool = nullptr;
 		EnemyUnit* m_lastSelectedEnemy = nullptr;
+
+		int curTimeScale = 1;
 };
 

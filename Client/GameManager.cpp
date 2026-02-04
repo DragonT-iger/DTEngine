@@ -2,6 +2,8 @@
 #include "Text.h"
 #include "GameObject.h"
 #include "InputManager.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(GameManager)
 //DTPROPERTY(GameManager, m_leftHealth) static inline은 직렬화 시 의미가 없어짐 값이 덮힘 주의할것
@@ -43,4 +45,15 @@ void GameManager::Update(float deltaTime)
 	if(InputManager::Instance().GetKeyDown(KeyCode::L)) {
 		SetLife(GetLife() - 1);
 	}
+}
+
+void GameManager::SetTimeScale(int scale)
+{
+		if (curTimeScale != 0.0f)
+		{
+				prevTimeScale = curTimeScale;
+		}
+
+		curTimeScale = scale;
+		SceneManager::Instance().GetActiveScene()->SetTimeScale(scale);
 }

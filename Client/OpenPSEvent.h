@@ -20,6 +20,10 @@ public:
 
 private:
 		GameObject* m_rayObject = nullptr;
+		
+		// unit info window 
+		GameObject* m_unitRuleWindow = nullptr;
+
 		Transform* m_rayobjTransform = nullptr;
 		bool m_isOpen = false;
 };

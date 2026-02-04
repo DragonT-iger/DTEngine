@@ -7,6 +7,7 @@
 
 BEGINPROPERTY(OpenPSEvent)
 DTPROPERTY(OpenPSEvent, m_rayObject)
+DTPROPERTY(OpenPSEvent, m_unitRuleWindow)
 ENDPROPERTY()
 
 
@@ -18,6 +19,13 @@ void OpenPSEvent::SetActivePSWindow()
 		{
 				_GetOwner()->SetActive(false);
 		}
+
+		if (!m_unitRuleWindow)
+				return;
+		
+		// 도움말 끄기.
+		m_unitRuleWindow->SetActive(false);
+
 		// 화면 켜주기.
 		_GetOwner()->SetActive(true);
 

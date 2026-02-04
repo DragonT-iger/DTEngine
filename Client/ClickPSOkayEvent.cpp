@@ -17,6 +17,7 @@
 #include "TutorialManager.h"
 
 #include "Effect.h"
+#include "GameManager.h"
 
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -48,16 +49,32 @@ void ClickPSOkayEvent::SetClick()
 								return;
 								//std::cout << "model prefab 없다" << std::endl;
 
+						// manager unit 카운트가 만약 maxcount와 같거나 큰경우 생성 안함. 
+						int managerUnitCount = GameManager::Instance()->GetUnitCount();
+						int managerMoney = GameManager::Instance()->GetMoney();
+
+						if (maxUnitCount <= managerUnitCount)
+						{
+								std::cout << "unit count 초과." << std::endl;
+								return;
+						}
+
+						if (m_cost > managerMoney)
+						{
+								std::cout << "cost 초과." << std::endl;
+								return;
+						}
+						
 						GameObject* parentObj = _GetOwner()->GetTransform()->GetParent()->_GetOwner();
 
 						int idx = parentObj->GetComponent<SelectIndexEvent>()->GetIndex();
 						switch (idx)
 						{
 						case 1:
-								m_selectPrefab = m_rook;
+								m_selectPrefab = m_knight; 
 								break;
 						case 2:
-								m_selectPrefab = m_knight;
+								m_selectPrefab = m_rook;
 								break;
 						case 3:
 								m_selectPrefab = m_bishop;
@@ -135,6 +152,9 @@ void ClickPSOkayEvent::SetClick()
 							return;
 						}
 
+						// 생성 성공이니까 manager unit count 증가시켜주기.
+						GameManager::Instance()->SetUnitCount(managerUnitCount + 1);
+						GameManager::Instance()->SetMoney(managerMoney - m_cost);
 						if (m_RSWindow)
 						{
 								auto rswindow = m_RSWindow->GetComponent<OpenRSEvent>();

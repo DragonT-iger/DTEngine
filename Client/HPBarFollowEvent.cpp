@@ -3,6 +3,9 @@
 #include "Unit.h"
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
+#include "Camera.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(HPBarFollowEvent)
 DTPROPERTY(HPBarFollowEvent, m_targetObject)
@@ -10,20 +13,48 @@ DTPROPERTY(HPBarFollowEvent, m_fillObject)
 DTPROPERTY(HPBarFollowEvent, m_lerpSpeed)
 ENDPROPERTY()
 
+void HPBarFollowEvent::Awake()
+{
+		if (!m_mainCamera)
+		{
+				HPBarCameraSetUp();
+		}
+}
 void HPBarFollowEvent::Start()
 {
+		if (!m_mainCamera)
+		{
+				HPBarCameraSetUp();
+		}
+
 		if (!m_targetObject || !m_fillObject)
 				return;
-				
+		
 		m_targetUnit = m_targetObject->GetComponent<Unit>();
 		m_fillBaseScale = m_fillObject->GetTransform()->GetScale();
 		m_fillBasePosition = m_fillObject->GetTransform()->GetPosition();
 		m_originalRotation = _GetOwner()->GetTransform()->GetEditorEuler();		
 }
 
+
 void HPBarFollowEvent::Update(float deltaTime)
 {
 		UpdateFillScale(deltaTime);
+}
+
+void HPBarFollowEvent::HPBarCameraSetUp()
+{
+		Scene* scene = SceneManager::Instance().GetActiveScene();
+		m_mainCamera = scene->GetMainCamera();
+
+		Transform* camTf = m_mainCamera->GetComponent<Transform>();
+		Vector3 camEuler = camTf->GetEditorEuler();
+
+		// 카메라 반대 방향으로 설정 (Y축 180도 반전)
+		Vector3 billboardRot = Vector3(camEuler.x, camEuler.y + 180.0f, camEuler.z);
+		_GetOwner()->GetTransform()->SetRotationEuler(billboardRot);
+
+		m_originalRotation = billboardRot;
 }
 
 void HPBarFollowEvent::UpdateFillScale(float deltaTime)
@@ -63,8 +94,14 @@ void HPBarFollowEvent::UpdateFillScale(float deltaTime)
 		newPos.x = m_fillBasePosition.x - offsetX;
 		m_fillObject->GetTransform()->SetPosition(newPos);
 
-		// 부모 회전 역행렬에다가 원래 회전값으로. 
-		Vector3 finalRot = m_originalRotation + inverseRot;
+		// 빌보딩
+		Transform* camTf = m_mainCamera->GetComponent<Transform>();
+		Vector3 camEuler = camTf->GetEditorEuler();
+
+		// 부모 회전 역행렬에다가 원래 회전값으로.  + 카메라 반대 방향
+		Vector3 billboardRot = Vector3(0, camEuler.y + 360.0f, 0);
+		Vector3 inverseParentRot = Vector3(0, -parentRot.y, 0);
+		Vector3 finalRot = billboardRot + inverseParentRot;
 		_GetOwner()->GetTransform()->SetRotationEuler(finalRot);
 }
 

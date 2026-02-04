@@ -11,9 +11,11 @@
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
 #include "ArrowObjectPool.h"
+#include "GameManager.h"
 
 
 BEGINPROPERTY(RayCastHitEvent)
+DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
 DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
@@ -27,6 +29,7 @@ void RayCastHitEvent::Update(float deltaTime)
 {
 		// 차피 밑에서 검사함.
 		RaycastCheck();
+		ToggleSettingWindow();
 }
 
 void RayCastHitEvent::RaycastCheck()
@@ -155,6 +158,7 @@ void RayCastHitEvent::RaycastCheck()
 						}
 
 
+						//std::cout << hit->GetName() << std::endl;
 
 						if (m_isHealSkillOn)
 						{
@@ -181,8 +185,10 @@ void RayCastHitEvent::RaycastCheck()
 												unit->Heal(30);
 												m_isHealSkillOn = false;
 
-												std::cout << unit->GetHp() << std::endl;
-												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+												//std::cout << unit->GetHp() << std::endl;
+
+												int prevScale = GameManager::Instance()->GetPrevTimeScale();
+												GameManager::Instance()->SetTimeScale(prevScale);
 										}
 								}
 
@@ -211,10 +217,11 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 
 												unit->TakeDamage(30);
-												std::cout << unit->GetHp() << std::endl;
+												//std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
-												SceneManager::Instance().GetActiveScene()->SetTimeScale(1);
+												int prevScale = GameManager::Instance()->GetPrevTimeScale();
+												GameManager::Instance()->SetTimeScale(prevScale);
 										}
 								}
 								return;
@@ -341,6 +348,32 @@ void RayCastHitEvent::RaycastCheck()
 
 
 				}
+		}
+}
+
+void RayCastHitEvent::ToggleSettingWindow()
+{
+		if (!m_settingWindowBG)
+				return;
+
+		auto& input = InputManager::Instance();
+		if (input.GetKeyDown(KeyCode::Escape))
+		{
+				// toggle 해주기.
+				CloseAllWindows();
+				m_settingWindowBG->SetActive(!m_settingWindowBG->IsActive());
+
+				if (m_settingWindowBG->IsActive()) // 설정창 열림
+				{
+						GameManager::Instance()->SetTimeScale(0.0f);
+				}
+				else // 설정창 닫힘
+				{
+						// 이전 배속으로 복원
+						int prevScale = GameManager::Instance()->GetPrevTimeScale();
+						GameManager::Instance()->SetTimeScale(prevScale);
+				}
+				
 		}
 }
 

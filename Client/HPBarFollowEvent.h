@@ -4,14 +4,17 @@
 
 class GameObject;
 class Unit;
+class Camera;
 
 class HPBarFollowEvent : public MonoBehaviour
 {
 		DTGENERATED_BODY(HPBarFollowEvent);
 public:
+		void Awake() override;
 		void Start() override;
 		void Update(float deltaTime) override;
 
+		void HPBarCameraSetUp();
 		void UpdateFillScale(float deltaTime);
 		float Lerp(float start, float end, float t);
 
@@ -35,5 +38,8 @@ private:
 
 		// 내 원래 rotation 값.
 		Vector3 m_originalRotation = Vector3(1.0f, 1.0f, 1.0f);
+
+		// maincamera에 맞춰서 각도 조절할려고.
+		Camera* m_mainCamera = nullptr;
 };
 

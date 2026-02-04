@@ -7,10 +7,19 @@
 
 BEGINPROPERTY(OpenRSEvent)
 DTPROPERTY(OpenRSEvent, m_windowBar)
+DTPROPERTY(OpenRSEvent, m_moveRuleWindow)
+DTPROPERTY(OpenRSEvent, m_battleRuleWindow)
 ENDPROPERTY()
 
 void OpenRSEvent::OpenWindow()
 {
+    if (!m_moveRuleWindow || !m_battleRuleWindow)
+        return;
+
+    // info window는 열 떄 무조건 꺼주기.
+    m_moveRuleWindow->SetActive(false);
+    m_battleRuleWindow->SetActive(false);
+
     _GetOwner()->SetActive(true);
 }
 
@@ -32,12 +41,12 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
     Image* barImage = m_windowBar->GetComponent<Image>();
 
     // AssetDatabase로 직접 가져오기. gameobject 만들어서 하지말고.
-    if (unitName == "Chess_Sword_Shield_V1")
+    if (unitName == "Chess_Spear_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
     }
-    else if (unitName == "Chess_Spear_V1")
+    else if (unitName == "Chess_Sword_Shield_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Rook.png"));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(0);

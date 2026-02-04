@@ -31,5 +31,7 @@ private:
 		int index = 0;
 
 		TutorialManager* m_tutorialManager = nullptr;
+		int maxUnitCount = 3;
+		int m_cost = 10;
 };
 
