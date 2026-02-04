@@ -4229,7 +4229,7 @@
         {
           "Active": true,
           "id": 1838616038401361351,
-          "m_mapData": 6189260170659567125,
+          "m_mapData": 7521294909207559263,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
           "m_prefab2": 4924267867290484229,
@@ -4237,6 +4237,7 @@
           "m_prefab4": 0,
           "m_prefab5": 0,
           "m_prefab6": 0,
+          "m_prefab7": 0,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -4275,6 +4276,7 @@
         {
           "Active": true,
           "id": 6111372104770950930,
+          "m_arrowPool": 0,
           "m_leftPSWinodwBG": 9182016968008138226,
           "m_leftRSWinodwBG": 11851453804454365017,
           "m_rightPSWinodwBG": 1521769991847734162,
@@ -4517,6 +4519,7 @@
           "m_combatObj": 3785137383686980969,
           "m_rayObj": 0,
           "m_startButton": 8141426489862057535,
+          "m_tileMapObj": 0,
           "typeName": "ClickStartButton"
         }
       ],

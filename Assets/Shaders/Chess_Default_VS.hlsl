@@ -28,8 +28,12 @@ VS_OUTPUT VS (VS_INPUT input)
     skinMatrix += Matrix_Pallette_Array[input.BoneID.w] * input.Weights.w;
 
    
+    
+    
     float4 modelPos = mul(float4(input.Pos, 1.0f), skinMatrix);
     
+    
+
     float4 worldPos = mul(modelPos, World_TM);
     
   

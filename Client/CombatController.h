@@ -90,6 +90,7 @@ public:
 
 	// 튜토리얼에서 가져와서 방향 돌리기 위한용
 	AllyUnit* GetAllyUnit0() { return allyUnit0; }
+	void AddAllyUnit(AllyUnit* allyUnit);
 
 	void SetEnemyUnit0(EnemyUnit* enemyUnit) { enemyUnit0 = enemyUnit; }
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
@@ -127,4 +128,5 @@ private:
 	EnemyUnit* enemyUnit2 = nullptr;
 
 	//Prefab* asdf = nullptr;
+	int allyCount = 0;
 };

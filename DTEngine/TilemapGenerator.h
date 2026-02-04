@@ -26,7 +26,7 @@ public:
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
-	static constexpr int PALETTE_SIZE = 7;
+	static constexpr int PALETTE_SIZE = 8;
 
 public:
 
@@ -37,6 +37,7 @@ public:
     Prefab* m_prefab4 = nullptr;
     Prefab* m_prefab5 = nullptr;
     Prefab* m_prefab6 = nullptr;
+    Prefab* m_prefab7 = nullptr;
 
 private:
     

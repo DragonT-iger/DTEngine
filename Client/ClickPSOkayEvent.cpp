@@ -16,6 +16,7 @@
 #include "Scene.h"
 #include "TutorialManager.h"
 
+#include "Effect.h"
 
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -82,9 +83,9 @@ void ClickPSOkayEvent::SetClick()
 						Vector3 worldPos = targetTf->GetPosition();
 						worldPos.y += 1;
 						GameObject* go = m_selectPrefab->Instantiate();
-						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 90.0f, 0.0f));
+						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 180.0f, 0.0f));
 						go->GetTransform()->SetPosition(worldPos);
-
+						
 						//std::cout << worldPos.x << " " << worldPos.y << std::endl;
 
 						// allyunit 컴포넌트 가져와서 setpos 추가해주기.
@@ -95,25 +96,9 @@ void ClickPSOkayEvent::SetClick()
 								
 								allyC->SetPos(pos);
 
-								//std::cout << pos.x << " " << pos.y << std::endl;
 								if (m_combatObj)
 								{
-										switch (index)
-										{
-										case 0:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit0(allyC);
-												break;
-										case 1:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit1(allyC);
-												break;
-										case 2:
-												m_combatObj->GetComponent<CombatController>()->SetAllyUnit2(allyC);
-												break;
-										default:
-												index = 100;
-												break;
-										}
-										index++;
+										m_combatObj->GetComponent<CombatController>()->AddAllyUnit(allyC);
 								}
 						}
 
@@ -132,6 +117,13 @@ void ClickPSOkayEvent::SetClick()
 
 						if (targetObj)
 						{
+								auto effect = targetObj->GetComponent<Effect>();
+								if (effect)
+								{
+										effect->SetAnimating(false);
+										effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+								}
+							
 								targetObj->SetName("iCube");
 						}
 						// 창 닫기.
