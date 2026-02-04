@@ -42,24 +42,29 @@ void InputManager::EndFrame()
 {
     m_keyDownState.fill(false);
     m_keyUpState.fill(false);
+    m_mouseWheelDelta = 0.0f;
 }
 
 void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    unsigned int vKey = static_cast<unsigned int>(wParam);
+    /*unsigned int vKey = static_cast<unsigned int>(wParam);
     if (vKey >= 256)
     {
         return;
-    }
+    }*/
 
     switch (msg)
     {
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN: 
     {
-        if (!m_keyState[vKey])
+        unsigned int vKey = static_cast<unsigned int>(wParam);
+        if (vKey < 256)
         {
-            m_keyDownState[vKey] = true;
+            if (!m_keyState[vKey])
+            {
+                m_keyDownState[vKey] = true;
+            }
         }
         m_keyState[vKey] = true;
         break;
@@ -68,8 +73,12 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYUP:
     case WM_SYSKEYUP:
     {
-        m_keyUpState[vKey] = true;
-        m_keyState[vKey] = false;
+        unsigned int vKey = static_cast<unsigned int>(wParam);
+        if (vKey < 256)
+        {
+            m_keyUpState[vKey] = true;
+            m_keyState[vKey] = false;
+        }
         break;
     }
 
@@ -98,6 +107,12 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
         m_keyUpState[VK_MBUTTON] = true;
         m_keyState[VK_MBUTTON] = false;
         break;
+    case WM_MOUSEWHEEL:
+    {
+        short delta = GET_WHEEL_DELTA_WPARAM(wParam);
+        m_mouseWheelDelta += static_cast<float>(delta) / 120.0f;
+        break;
+    }
     }
 }
 

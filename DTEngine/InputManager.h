@@ -48,6 +48,7 @@ public:
 
     const MousePos& GetGameMousePosition() const { return m_gameMousePos; }
 
+    float GetMouseWheelDelta() const { return m_mouseWheelDelta; }
 private:
     InputManager() = default;
     ~InputManager() = default;
@@ -60,7 +61,7 @@ private:
     MousePos m_gameMousePos = { 0, 0 };
     MousePos m_prevMousePos = { 0, 0 };
     MousePos m_mouseDelta = { 0, 0 };
-
+    float m_mouseWheelDelta = 0;
     void* m_hWnd = nullptr;
 
     int MapKeyCodeToVKey(KeyCode key) const;

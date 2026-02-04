@@ -27,7 +27,7 @@ void RuleImageVisualEvent::Start()
 				{
 						moveButtons[i]->SetOnClick([this, bgEvent, i]()
 								{
-										bgEvent->SetMoveIndex(i);
+										bgEvent->SetMoveIndex(i); 
 										UpdateMoveVisuals();
 								});
 				}
