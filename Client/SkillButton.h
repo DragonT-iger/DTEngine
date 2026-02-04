@@ -21,6 +21,6 @@ private:
 		GameObject* m_rayObj = nullptr;
 		UIButton* m_attackButton = nullptr;
 		UIButton* m_healButton = nullptr;
-		bool m_isAttackUnlocked = true;
-		bool m_isHealUnlocked = true;
+		bool m_isAttackUnlocked = false;
+		bool m_isHealUnlocked = false;
 };

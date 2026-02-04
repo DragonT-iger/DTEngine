@@ -65,8 +65,9 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
             {
                 m_keyDownState[vKey] = true;
             }
+            m_keyDownState[vKey] = true;
         }
-        m_keyState[vKey] = true;
+        
         break;
     }
 
@@ -110,10 +111,11 @@ void InputManager::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_MOUSEWHEEL:
     {
         short delta = GET_WHEEL_DELTA_WPARAM(wParam);
-        m_mouseWheelDelta += static_cast<float>(delta) / 120.0f;
+        m_mouseWheelDelta = static_cast<float>(delta) / 120.0f;
         break;
     }
     }
+
 }
 
 bool InputManager::GetKeyDown(KeyCode key) const

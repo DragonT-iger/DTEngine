@@ -13,7 +13,6 @@ public:
 
     void HandleMovement(float deltaTime);
     void HandleZoom(float deltaTime);
-
     void SetCameraMoveSpeed(float speed) { m_moveSpeed = speed; }
     const float& GetCameraMoveSpeed() const { return m_moveSpeed; }
 
