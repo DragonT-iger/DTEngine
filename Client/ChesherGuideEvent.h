@@ -1,0 +1,24 @@
+#pragma once
+#include "MonoBehaviour.h"
+
+class GameObject;
+class UIButton;
+
+class ChesherGuideEvent : public MonoBehaviour
+{
+		DTGENERATED_BODY(ChesherGuideEvent);
+public:
+		void Start() override;
+		void SetActiveUI(bool b);
+		
+private:
+		GameObject* m_rayObj = nullptr;
+
+		UIButton* m_battleSkillButton = nullptr;
+		UIButton* m_healSkillButton = nullptr;
+		UIButton* m_settingButton = nullptr;
+		UIButton* m_startButton = nullptr;
+
+		UIButton* m_button = nullptr;
+};
+
