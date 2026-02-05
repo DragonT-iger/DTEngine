@@ -25,6 +25,7 @@ private:
 		Prefab* m_rook = nullptr;
 		Prefab* m_bishop = nullptr;
 
+		GameObject* m_nonCostObj = nullptr;
 		GameObject* m_RSWindow = nullptr;
 		GameObject* m_combatObj = nullptr;
 

@@ -27,6 +27,9 @@ void ClickStartButton::Start()
 
 		m_startButton->SetOnClick([this]()
 				{
+						// 이미 시작한 경우 다시 눌리지 않기 위해서.
+						if (isStart)
+								return;
 
 						int managerUnitCount = GameManager::Instance()->GetUnitCount();
 						int managerMoney = GameManager::Instance()->GetMoney();
@@ -38,25 +41,29 @@ void ClickStartButton::Start()
 								//return;
 						}
 
-						// 전투 시작 시 타일들 전부 깜빡거리는거 꺼주기 위해서.
-						for (auto obj : m_tileMapObj->GetTransform()->GetChildren())
-						{
-								if (obj->GetName() == "Glow_W_Height_01_Red_Test" || obj->GetName() == "Glow_W_Height_01_White_Test")
-								{
-										auto effect = obj->GetComponent<Effect>();
-										if (effect)
-										{
-												effect->SetAnimating(false);
-												effect->SetEdgeColor(Vector4(0, 0, 0, 1));
-										}
-								}
-						}
-						
-						// 이미지 바꿔주기.
-						m_startClickImg->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Battle_start_button_2.png"));
-						m_combatObj->GetComponent<CombatController>()->Setup();
-						m_rayObj->GetComponent<RayCastHitEvent>()->SetStartBattle(true);
+						StartGame();
 				});
 }
 
+void ClickStartButton::StartGame()
+{
+		// 전투 시작 시 타일들 전부 깜빡거리는거 꺼주기 위해서.
+		for (auto obj : m_tileMapObj->GetTransform()->GetChildren())
+		{
+				if (obj->GetName() == "Glow_W_Height_01_Red_Test" || obj->GetName() == "Glow_W_Height_01_White_Test")
+				{
+						auto effect = obj->GetComponent<Effect>();
+						if (effect)
+						{
+								effect->SetAnimating(false);
+								effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+						}
+				}
+		}
 
+		// 이미지 바꿔주기.
+		m_startClickImg->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Battle_start_button_2.png"));
+		m_combatObj->GetComponent<CombatController>()->Setup();
+		m_rayObj->GetComponent<RayCastHitEvent>()->SetStartBattle(true);
+		isStart = true;
+}

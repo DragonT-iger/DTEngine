@@ -4,10 +4,12 @@
 #include "SelectIndexEvent.h"
 #include "Transform.h"
 #include "ImageVisualUpdateEvent.h"
+#include "DelayDisableEvent.h"
 
 BEGINPROPERTY(OpenPSEvent)
 DTPROPERTY(OpenPSEvent, m_rayObject)
 DTPROPERTY(OpenPSEvent, m_unitRuleWindow)
+DTPROPERTY(OpenPSEvent, m_nonCostObj)
 ENDPROPERTY()
 
 
@@ -18,6 +20,13 @@ void OpenPSEvent::SetActivePSWindow()
 		if (_GetOwner()->IsActive())
 		{
 				_GetOwner()->SetActive(false);
+		}
+		
+		// 켜진 상태에서 끈 경우 timer 멈추고 다시 보이기 때문에 막아주기.
+		if (m_nonCostObj)
+		{
+				m_nonCostObj->GetComponent<DelayDisableEvent>()->SetTimer(0);
+				m_nonCostObj->SetActive(false);
 		}
 
 		if (!m_unitRuleWindow)

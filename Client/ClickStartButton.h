@@ -12,7 +12,9 @@ class ClickStartButton : public MonoBehaviour
 public:
 
 		void Start() override;
-
+		void StartGame();
+		void SetIsStart(bool value) { isStart = value; }
+		
 private:
 		UIButton* m_startButton = nullptr;
 		GameObject* m_combatObj = nullptr;
@@ -23,5 +25,7 @@ private:
 
 		int m_maxCount = 3;
 		int m_cost = 10;
+
+		bool isStart = false;
 };
 

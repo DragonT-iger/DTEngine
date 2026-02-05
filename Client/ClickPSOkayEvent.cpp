@@ -20,6 +20,7 @@
 #include "GameManager.h"
 
 BEGINPROPERTY(ClickPSOkayEvent)
+DTPROPERTY(ClickPSOkayEvent, m_nonCostObj)
 DTPROPERTY(ClickPSOkayEvent, m_button)
 DTPROPERTY(ClickPSOkayEvent, m_mapData)
 DTPROPERTY(ClickPSOkayEvent, m_knight)
@@ -53,15 +54,13 @@ void ClickPSOkayEvent::SetClick()
 						int managerUnitCount = GameManager::Instance()->GetUnitCount();
 						int managerMoney = GameManager::Instance()->GetMoney();
 
-						if (maxUnitCount <= managerUnitCount)
-						{
-								std::cout << "unit count 초과." << std::endl;
-								return;
-						}
-
 						if (m_cost > managerMoney)
 						{
-								std::cout << "cost 초과." << std::endl;
+								if (m_nonCostObj)
+								{
+										m_nonCostObj->SetActive(true);
+								}
+								//std::cout << "cost 초과." << std::endl;
 								return;
 						}
 						
