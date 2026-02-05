@@ -159,6 +159,12 @@
     <ClCompile Include="DelayDisableEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="ClickWarningWindowOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickWarningWindowExitButtonEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -288,6 +294,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DelayDisableEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickWarningWindowOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickWarningWindowExitButtonEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>

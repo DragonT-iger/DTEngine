@@ -260,7 +260,9 @@
           "m_rightPSWinodwBG": 14165272807283552,
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
+          "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
+          "m_warningWindowBG": 3229347010474187303,
           "typeName": "RayCastHitEvent"
         }
       ],
@@ -7268,8 +7270,10 @@
           "id": 5425226427455043202,
           "m_combatObj": 7541685513989182900,
           "m_rayObj": 4771222732717351773,
+          "m_settingWindow": 10500202484059138583,
           "m_startButton": 793254361010250082,
           "m_tileMapObj": 10154570672934640085,
+          "m_warningWindow": 3229347010474187303,
           "typeName": "ClickStartButton"
         }
       ],
@@ -9356,6 +9360,286 @@
         "m_scale": {
           "x": 1.2000000476837158,
           "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 5686207923679739268,
+      "name": "WarningWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 15047090223012896934,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 13422678119758164120,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 8484118553776787947,
+          "typeName": "Image"
+        }
+      ],
+      "id": 3229347010474187303,
+      "name": "WarningWindowBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12032990914209589272,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 15047090223012896934,
+        "m_position": {
+          "x": 760.0,
+          "y": 325.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 500.0,
+          "y": 400.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17758602037773878950,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 9980910641260764926,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 17914692606771842721,
+          "m_startButton": 13952739433572599621,
+          "m_window": 3229347010474187303,
+          "typeName": "ClickWarningWindowOkayEvent"
+        }
+      ],
+      "id": 6609846911881283600,
+      "name": "OkayButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7858908945172855026,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 12032990914209589272,
+        "m_position": {
+          "x": 0.15000000596046448,
+          "y": 1.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10178670581514905826,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 12226174886760877013,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 4651938127707335756,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 13356743906374578203,
+          "m_rayObj": 4771222732717351773,
+          "m_startButton": 13952739433572599621,
+          "typeName": "ClickWarningWindowExitButtonEvent"
+        }
+      ],
+      "id": 13083163711608383222,
+      "name": "ExitButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14705252196370620624,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 12032990914209589272,
+        "m_position": {
+          "x": 0.6000000238418579,
+          "y": 1.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 18128080011479775231,
+          "m_FontID": 0,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_fontSize": 1.0,
+          "m_orderInLayer": 0,
+          "m_text": "코스트 남았음. 시작임?",
+          "typeName": "Text"
+        }
+      ],
+      "id": 2342674675636943376,
+      "name": "Text",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8240170653589315894,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 12032990914209589272,
+        "m_position": {
+          "x": 0.10000000149011612,
+          "y": 0.22499999403953552,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.10000000149011612,
+          "y": 0.10000000149011612,
           "z": 1.0
         }
       }

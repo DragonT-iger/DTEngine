@@ -20,6 +20,8 @@ private:
 		GameObject* m_combatObj = nullptr;
 		GameObject* m_rayObj = nullptr;
 		GameObject* m_tileMapObj = nullptr;
+		GameObject* m_warningWindow = nullptr;
+		GameObject* m_settingWindow = nullptr;
 
 		Image* m_startClickImg = nullptr;
 

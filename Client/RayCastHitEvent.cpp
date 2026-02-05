@@ -12,7 +12,7 @@
 #include "EnemyUnit.h"
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
-
+#include "ClickStartButton.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -22,7 +22,8 @@ DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
 DTPROPERTY(RayCastHitEvent , m_tutorialManager)
 DTPROPERTY(RayCastHitEvent, m_arrowPool)
-
+DTPROPERTY(RayCastHitEvent, m_warningWindowBG)
+DTPROPERTY(RayCastHitEvent, m_startButton)
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
@@ -73,7 +74,7 @@ void RayCastHitEvent::RaycastCheck()
 		}
 		
 		
-		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
+		if (input.GetKeyDown(KeyCode::MouseLeft) && camera && m_isRay)
 		{
 				const Vector2 mp = Vector2((float)input.GetGameMousePosition().x, (float)input.GetGameMousePosition().y);
 
@@ -422,12 +423,25 @@ void RayCastHitEvent::RaycastCheck()
 
 void RayCastHitEvent::ToggleSettingWindow()
 {
-		if (!m_settingWindowBG)
+		if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
 				return;
 
 		auto& input = InputManager::Instance();
 		if (input.GetKeyDown(KeyCode::Escape))
 		{
+				if (m_warningWindowBG->IsActive())
+				{
+						// warningwindow 꺼주고.
+						m_warningWindowBG->SetActive(false);
+
+						// startbutton 다시 상호작용 가능하게 켜주기.
+						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+
+						// ray 꺼져있는 상태면 다시 켜줄거임.
+						if (!m_isRay)
+								SetRay(true);
+				}
+
 				// toggle 해주기.
 				CloseAllWindows();
 				m_settingWindowBG->SetActive(!m_settingWindowBG->IsActive());
@@ -435,12 +449,14 @@ void RayCastHitEvent::ToggleSettingWindow()
 				if (m_settingWindowBG->IsActive()) // 설정창 열림
 				{
 						GameManager::Instance()->SetTimeScale(0.0f);
+						SetRay(false);
 				}
 				else // 설정창 닫힘
 				{
 						// 이전 배속으로 복원
 						int prevScale = GameManager::Instance()->GetPrevTimeScale();
 						GameManager::Instance()->SetTimeScale(prevScale);
+						SetRay(true);
 				}
 				
 		}

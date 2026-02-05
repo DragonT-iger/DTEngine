@@ -14,12 +14,14 @@ DTPROPERTY(ClickStartButton, m_startButton)
 DTPROPERTY(ClickStartButton, m_combatObj)
 DTPROPERTY(ClickStartButton, m_rayObj)
 DTPROPERTY(ClickStartButton, m_tileMapObj)
+DTPROPERTY(ClickStartButton, m_warningWindow)
+DTPROPERTY(ClickStartButton, m_settingWindow)
 ENDPROPERTY()
 
 
 void ClickStartButton::Start()
 {
-		if (!m_startButton || !m_combatObj || !m_rayObj || !m_tileMapObj)
+		if (!m_startButton || !m_combatObj || !m_rayObj || !m_tileMapObj || !m_warningWindow || !m_settingWindow)
 				return;
 
 		// 이미지 컴포넌트 가져오고.
@@ -31,14 +33,24 @@ void ClickStartButton::Start()
 						if (isStart)
 								return;
 
-						int managerUnitCount = GameManager::Instance()->GetUnitCount();
 						int managerMoney = GameManager::Instance()->GetMoney();
 
 						// 이후에는 gameobject 한개 가지고 있어서 띄우기.
-						if (managerUnitCount < m_maxCount && managerMoney >= m_cost)
+						if (managerMoney >= m_cost)
 						{
-								std::cout << "유닛 생성 가능한 count 및 cost 보유." << std::endl;
-								//return;
+								std::cout << "유닛 생성 cost 보유." << std::endl;
+
+								// 만약 settingwindow 켜져있으면 끄기.
+								if (m_settingWindow->IsActive())
+										m_settingWindow->SetActive(false);
+
+								auto rayobj = m_rayObj->GetComponent<RayCastHitEvent>();
+								rayobj->CloseAllWindows(); // window들도 다 꺼주기.
+								m_warningWindow->SetActive(true);		// warningwindow 켜주고 
+								// start 다시 안눌리게 처리하기. 근데 만약 취소 혹은 esc 누르면 다시 isStart를 false로 바꿔줘야함
+								rayobj->SetRay(false);		// ray만 꺼주기.
+								isStart = true;											
+								return;
 						}
 
 						StartGame();
