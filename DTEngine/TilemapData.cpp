@@ -89,6 +89,66 @@ bool TilemapData::LoadFile(const std::string& fullPath)
         reader.EndArray();
     }
 
+    // 적
+    ResetEnemiesToDefault();
+
+    if (reader.BeginArray("enemies"))
+    {
+        int ei = 0;
+        while (reader.NextArrayItem())
+        {
+            if (ei < MAX_ENEMIES)
+            {
+                auto& e = m_enemies[ei];
+                e.enabled = reader.ReadBool("enabled", false);
+                e.type = reader.ReadInt("type", 0);
+                e.isBoss = reader.ReadBool("isBoss", false);
+
+                // pathPoints
+                if (reader.BeginArray("pathPoints"))
+                {
+                    int pi = 0;
+                    while (reader.NextArrayItem())
+                    {
+                        if (pi < NUM_PATHPOINTS)
+                        {
+                            float x = reader.ReadFloat("x", -999.f);
+                            float y = reader.ReadFloat("y", -999.f);
+                            e.pathPoints[pi] = Vector2{ x, y };
+                        }
+                        pi++;
+                        reader.EndArrayItem();
+                    }
+                    reader.EndArray();
+                }
+            }
+
+            ei++;
+            reader.EndArrayItem();
+        }
+        reader.EndArray();
+    }
+
+    // 대사
+    ResetDialoguesToDefault();
+
+    if (reader.BeginArray("dialogues"))
+    {
+        int di = 0;
+        while (reader.NextArrayItem())
+        {
+            if (di < MAX_DIALOGUES)
+            {
+                auto& d = m_dialogues[di];
+                d.enabled = reader.ReadBool("enabled", false);
+                d.text = reader.ReadString("text", "");
+            }
+            di++;
+            reader.EndArrayItem();
+        }
+        reader.EndArray();
+    }
+
     MakeBorder();
     return true;
 }
@@ -108,12 +168,51 @@ bool TilemapData::SaveFile(const std::string& fullPath)
     }
     writer.EndArray();
 
+    // 적 저장
+    writer.BeginArray("enemies");
+    for (int i = 0; i < MAX_ENEMIES; ++i)
+    {
+        const auto& e = m_enemies[i];
+        writer.NextArrayItem();
+
+        writer.Write("enabled", e.enabled);
+        writer.Write("type", e.type);
+        writer.Write("isBoss", e.isBoss);
+
+        writer.BeginArray("pathPoints");
+        for (int p = 0; p < NUM_PATHPOINTS; ++p)
+        {
+            writer.NextArrayItem();
+            writer.Write("x", e.pathPoints[p].x);
+            writer.Write("y", e.pathPoints[p].y);
+            writer.EndArrayItem();
+        }
+        writer.EndArray();
+
+        writer.EndArrayItem();
+    }
+    writer.EndArray();
+
+    // 대사 저장
+    writer.BeginArray("dialogues");
+    for (int i = 0; i < MAX_DIALOGUES; ++i)
+    {
+        const auto& d = m_dialogues[i];
+        writer.NextArrayItem();
+        writer.Write("enabled", d.enabled);
+        writer.Write("text", d.text);
+        writer.EndArrayItem();
+    }
+    writer.EndArray();
+
     return writer.SaveFile(fullPath);
 }
 
 void TilemapData::Unload()
 {
     m_grid.clear();
+    ResetEnemiesToDefault();
+    ResetDialoguesToDefault();
 }
 
 
@@ -144,4 +243,24 @@ bool TilemapData::IsCorner(int x, int y) const
 bool TilemapData::IsBorder(int x, int y) const
 {
     return (x == 0 || y == 0 || x == m_width - 1 || y == m_height - 1);
+}
+
+
+
+void TilemapData::ResetEnemiesToDefault()
+{
+    for (auto& e : m_enemies)
+    {
+        e = EnemySpawn{};
+    }
+
+}
+
+void TilemapData::ResetDialoguesToDefault()
+{
+    for (auto& d : m_dialogues)
+    {
+        d.enabled = false;
+        d.text.clear();
+    }
 }

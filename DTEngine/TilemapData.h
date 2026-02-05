@@ -1,6 +1,7 @@
 #pragma once
 #include "IResource.h"
 #include <vector>
+#include <array>
 
 class TilemapData : public IResource
 {
@@ -26,6 +27,44 @@ public:
     void SetTileIndex(int x, int y, int paletteIndex);
     int GetTileIndex(int x, int y) const;
 
+    // 적 정보 같이 저장??
+    static constexpr int MAX_ENEMIES = 3;
+    static constexpr int NUM_PATHPOINTS = 8;
+
+    struct EnemySpawn
+    {
+        bool enabled = false;
+        int type = 0;
+        bool isBoss = false;
+
+        std::array<Vector2, NUM_PATHPOINTS> pathPoints;
+
+        EnemySpawn()
+        {
+            for (auto& p : pathPoints)
+            {
+                p = Vector2{ -999.f, -999.f };
+            }
+        }
+    };
+
+    EnemySpawn& GetEnemy(int idx) { return m_enemies[idx]; }
+    const EnemySpawn& GetEnemy(int idx) const { return m_enemies[idx]; }
+
+
+    // 고양이 대사도??
+    static constexpr int MAX_DIALOGUES = 3;
+
+    struct DialogueLine
+    {
+        bool enabled = false;
+        std::string text;
+    };
+
+    DialogueLine& GetDialogue(int idx) { return m_dialogues[idx]; }
+    const DialogueLine& GetDialogue(int idx) const { return m_dialogues[idx]; }
+
+
 private:
     int FindDefaultGrid(int x, int y) const;
     void MakeBorder(); 
@@ -33,11 +72,17 @@ private:
     bool IsCorner(int x, int y) const;
     bool IsBorder(int x, int y) const;
 
+    void ResetEnemiesToDefault();
+    void ResetDialoguesToDefault();
+
 private:
     int m_width = 12; // 이건 테두리 포함한 값임.
     int m_height = 12;
 
     std::vector<int> m_grid;
+
+    std::array<EnemySpawn, MAX_ENEMIES> m_enemies;
+    std::array<DialogueLine, MAX_DIALOGUES> m_dialogues;
 };
 
 // 

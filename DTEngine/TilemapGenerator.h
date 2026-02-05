@@ -26,6 +26,8 @@ public:
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
+    // 적 벡터를 넘겨주는 함수.
+
 	static constexpr int PALETTE_SIZE = 10;
 
 public:
@@ -46,4 +48,5 @@ private:
     TilemapData* m_mapData = nullptr;
 
     std::vector<GameObject*> m_spawnedTiles;
+    std::vector<GameObject*> m_spawnedEnemys;
 };
