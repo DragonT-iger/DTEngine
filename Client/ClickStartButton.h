@@ -23,6 +23,12 @@ private:
 		GameObject* m_warningWindow = nullptr;
 		GameObject* m_settingWindow = nullptr;
 
+
+		GameObject* m_leftPrefabWindowBG = nullptr;
+		GameObject* m_rightPrefabWindowBG = nullptr;
+		GameObject* m_leftRuleWindowBG = nullptr;
+		GameObject* m_rightRuleWindowBG = nullptr;
+
 		Image* m_startClickImg = nullptr;
 
 		int m_maxCount = 3;

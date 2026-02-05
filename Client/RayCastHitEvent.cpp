@@ -446,17 +446,20 @@ void RayCastHitEvent::ToggleSettingWindow()
 				CloseAllWindows();
 				m_settingWindowBG->SetActive(!m_settingWindowBG->IsActive());
 
+				// ray 역시 조절, timescale 조절, start button 막기.
 				if (m_settingWindowBG->IsActive()) // 설정창 열림
 				{
 						GameManager::Instance()->SetTimeScale(0.0f);
 						SetRay(false);
+						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(true); 	// startbutton 안눌리게.
 				}
-				else // 설정창 닫힘
+				else // 설정창 닫힘.
 				{
 						// 이전 배속으로 복원
 						int prevScale = GameManager::Instance()->GetPrevTimeScale();
 						GameManager::Instance()->SetTimeScale(prevScale);
 						SetRay(true);
+						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);	// startbutton 다시 상호작용 가능하게 수정,
 				}
 				
 		}

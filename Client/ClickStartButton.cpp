@@ -16,6 +16,11 @@ DTPROPERTY(ClickStartButton, m_rayObj)
 DTPROPERTY(ClickStartButton, m_tileMapObj)
 DTPROPERTY(ClickStartButton, m_warningWindow)
 DTPROPERTY(ClickStartButton, m_settingWindow)
+
+DTPROPERTY(ClickStartButton, m_leftPrefabWindowBG)
+DTPROPERTY(ClickStartButton, m_rightPrefabWindowBG)
+DTPROPERTY(ClickStartButton, m_leftRuleWindowBG)
+DTPROPERTY(ClickStartButton, m_rightRuleWindowBG)
 ENDPROPERTY()
 
 
@@ -24,11 +29,19 @@ void ClickStartButton::Start()
 		if (!m_startButton || !m_combatObj || !m_rayObj || !m_tileMapObj || !m_warningWindow || !m_settingWindow)
 				return;
 
+		if (!m_leftPrefabWindowBG || !m_rightPrefabWindowBG || !m_leftRuleWindowBG || !m_rightRuleWindowBG)
+				return;
+
 		// 이미지 컴포넌트 가져오고.
 		m_startClickImg = _GetOwner()->GetComponent<Image>();
 
 		m_startButton->SetOnClick([this]()
 				{
+						// 창 켜져있는 경우 안받음.
+						if (m_leftPrefabWindowBG->IsActive() || m_rightPrefabWindowBG->IsActive() || m_leftRuleWindowBG->IsActive() ||
+								m_rightRuleWindowBG->IsActive())
+								return;
+
 						// 이미 시작한 경우 다시 눌리지 않기 위해서.
 						if (isStart)
 								return;
