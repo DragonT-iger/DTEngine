@@ -10,6 +10,8 @@
 #include "UISliderHandle.h"
 #include "UIButton.h"
 
+#include "../Client/GameManager.h"
+
 BEGINPROPERTY(UISlider)
 DTPROPERTY_ACCESSOR(UISlider, m_minValue, GetMinValue, SetMinValue)
 DTPROPERTY_ACCESSOR(UISlider, m_maxValue, GetMaxValue, SetMaxValue)
@@ -38,6 +40,8 @@ void UISlider::Awake()
     m_value = std::clamp(m_value, m_minValue, m_maxValue);
     UpdateHandlePosition();
 }
+
+
 
 void UISlider::Update(float deltaTime)
 {

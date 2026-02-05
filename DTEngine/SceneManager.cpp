@@ -78,23 +78,58 @@ bool SceneManager::BackupActiveScene()
     return false;
 }
 
+
+//MAP 순회하면서 다 RELOAD
 bool SceneManager::RestoreActiveScene()
 {
-    if (!m_active) return false;
+    std::string originalPath = "Assets/Scenes/";
 
-    m_active->Clear();
-
-    std::string fullPath = ResourceManager::Instance().ResolveFullPath(m_backupPath);
-
-    if (m_active->LoadFile(fullPath))
+    for (auto& pair : m_scenes)
     {
-        m_active->SetName(m_originalSceneName);
+        const std::string& sceneName = pair.first;
+        Scene* scene = pair.second.get();
+
+        std::string Path = originalPath + sceneName+ ".scene";
+        scene->Clear();
+        scene->SetBGMPlayed(false);
+        if (!scene->LoadFile(Path))
+        {
+            std::cerr << "[SceneManager] Failed to restore scene! Path was: " << Path << std::endl;
+            return false;
+        }
 
         std::cout << "[SceneManager] Scene Restored from Backup." << std::endl;
+    }
+
+
+    if (auto it = m_scenes.find(m_originalSceneName); it != m_scenes.end())
+    {
+        m_active = it->second.get();
         return true;
     }
 
-    std::cerr << "[SceneManager] Failed to restore scene! Path was: " << fullPath << std::endl;
     return false;
+   
 }
 
+//02_03
+//bool SceneManager::RestoreActiveScene()
+//{
+//    //if (!m_active) return false;
+//
+//       //m_active->Clear();
+//
+//       //
+//       //std::string fullPath = ResourceManager::Instance().ResolveFullPath(m_backupPath);
+//
+//       //if (m_active->LoadFile(fullPath))
+//       //{
+//       //    m_active->SetName(m_originalSceneName);
+//
+//       //    std::cout << "[SceneManager] Scene Restored from Backup." << std::endl;
+//       //    return true;
+//       //}
+//
+//       //std::cerr << "[SceneManager] Failed to restore scene! Path was: " << fullPath << std::endl;
+//       //return false;
+//}

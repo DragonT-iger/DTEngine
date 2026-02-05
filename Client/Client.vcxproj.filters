@@ -132,6 +132,15 @@
     <ClCompile Include="SkillButton.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialSceneTriggerEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCreditTriggerEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MakeSetActiveEvent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -234,6 +243,15 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="SkillButton.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSceneTriggerEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCreditTriggerEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="MakeSetActiveEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>

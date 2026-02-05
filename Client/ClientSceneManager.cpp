@@ -5,12 +5,16 @@
 #include <iostream>
 #include "GameManager.h"
 
+
+//Sound 처리는 Scene에서 처리. 
+
 void ClientSceneManager::LoadScene(const std::string& sceneName)
 {
 
     // 예시임
     if (sceneName == "TutorialScene")
     {
+        InitTutorialScene();
         //GameManager::Instance()->m_leftHealth = 10;
     }
     else if (sceneName == "Stage1" || sceneName == "Stage2")
@@ -22,13 +26,18 @@ void ClientSceneManager::LoadScene(const std::string& sceneName)
         InitEndingScene();
     }
 
+    else if (sceneName == "TitleScene")
+    {
+        InitTitleScene();
+    }
+
+
     SceneManager::Instance().LoadScene(sceneName);
 }
 
 void ClientSceneManager::InitTitleScene()
 {
     std::cout << "[ClientSceneManager] Title Scene Initialization..." << std::endl;
-    // 예: 배경음악 재생, 글로벌 변수 초기화 등
 }
 
 void ClientSceneManager::InitInGameScene()
@@ -39,4 +48,9 @@ void ClientSceneManager::InitInGameScene()
 void ClientSceneManager::InitEndingScene()
 {
     std::cout << "[ClientSceneManager] Ending Scene Initialization..." << std::endl;
+}
+
+void ClientSceneManager::InitTutorialScene()
+{
+
 }

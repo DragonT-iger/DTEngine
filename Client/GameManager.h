@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MonoSingleton.h"
-
+#include "../DTEngine/SoundManager.h"
 class Text;
 
 //우리 엔진의 MonoSingleton은 잘 생각해봐야 하는게 c++ 코드 상에서의 싱글톤이지
@@ -28,11 +28,14 @@ public:
 	void SetUnitCount(int count) { curUnitCount = count; }
 	int GetUnitCount() const { return curUnitCount; }
 
-	void SetBgmValue(int value) { curbgmValue = value; }
-	int GetBgmValue() const { return curbgmValue; }
+	void SetBgmValue(float value) { curbgmValue = value; SoundManager::Instance().SetBGMVolume(value); }
+	float GetBgmValue() const { return curbgmValue; }
 
-	void SetSfxValue(int value) { cursfxValue = value; }
-	int GetSfxValue() const { return cursfxValue; }
+	void SetSfxValue(float value) { cursfxValue = value; SoundManager::Instance().SetSFXVolume(value);}
+	float GetSfxValue() const { return cursfxValue; }
+
+
+
 private:
 	
 	Text* m_money;
@@ -42,11 +45,10 @@ private:
 	static inline int curLife = 9;
 
 	static inline int curMoney = 9; //cost는 좀 짜친데
-	static inline int curUnitCount = 0;		// 3 초과부터는 유닛 소환 불가능으로.
+	static inline int curUnitCount = 0;		// 3 초과부터는 유닛 소환 불가능으로. -> 변할 수도 있음. 
 
-	static inline int curbgmValue = 3;		// slider 값이랑 맞추기 위해서.
-	static inline int cursfxValue = 3;
+	static inline float curbgmValue = 0.5f;		
+	static inline float cursfxValue = 0.5f;
 	
-
 };
 

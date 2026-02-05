@@ -412,6 +412,7 @@ void Material::BindPipeLine()
     if (m_renderMode == RenderMode::Transparent)
     {
         DX11Renderer::Instance().SetBlendMode(BlendMode::AlphaBlend);
+       // DX11Renderer::Instance().SetDepthOff();
     }
     else
     {

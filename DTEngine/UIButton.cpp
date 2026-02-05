@@ -6,6 +6,8 @@
 #include "DX11Renderer.h"
 #include "InputManager.h"
 
+#include "SoundManager.h"
+
 BEGINPROPERTY(UIButton)
 DTPROPERTY_ACCESSOR(UIButton, m_interactable, GetInteractable, SetInteractable)
 DTPROPERTY_ACCESSOR(UIButton, m_normalColor, GetNormalColor, SetNormalColor)

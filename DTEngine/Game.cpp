@@ -42,6 +42,12 @@
 #include "SoundManager.h"
 #include "SkyBoxComponent.h"
 
+#include "BGMUISlider.h"
+
+#include "../Client/ClientSceneManager.h"
+
+
+
 Game::Game() = default;
 Game::~Game() = default;
 
@@ -100,6 +106,12 @@ bool Game::Initialize()
 	}
 
 
+	if (!SoundManager::Instance().Initalize())
+	{
+		assert(false && "SoundManager 초기화 실패");
+		return false;
+	}
+
 	InputManager::Instance().Initialize(); 
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
@@ -110,12 +122,9 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
-	// SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
-	// SceneManager::Instance().LoadScene("TutorialScene");
+//	 SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
+	//SceneManager::Instance().LoadScene("TutorialScene");
 
-
-	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
 	SceneManager::Instance().LoadScene("SampleScene");
@@ -128,6 +137,16 @@ bool Game::Initialize()
 
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
+
+
+	 //SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	 //ClientSceneManager::Instance().LoadScene("TitleScene");
+
+
+	 //SceneManager::Instance().RegisterScene("Scenes/Title.scene");
+	 //SceneManager::Instance().LoadScene("Title");
+
+
 
 	// SceneManager::Instance().RegisterScene("Scenes/SampleScenehshs.scene");
 	// SceneManager::Instance().LoadScene("SampleScenehshs");
@@ -174,11 +193,6 @@ bool Game::Initialize()
 		return false;
 	}
 
-	if (!SoundManager::Instance().Initalize())
-	{
-		assert(false && "SoundManager 초기화 실패");
-		return false;
-	}
 
 	//Scene testScene("TestScene");
 
@@ -341,7 +355,18 @@ void Game::LifeCycle(DeltaTime dt)
 
 			m_editorCameraObject->LateUpdate(dt.rawTime);
 
-			DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+
+
+			std::vector<Light*> temp;
+			for (const auto& lights : Light::GetAllLights())
+			{
+				if (scene->FindGameObject(lights->_GetOwner()->GetName()) != nullptr)
+					temp.push_back(lights);
+			}
+
+			DX11Renderer::Instance().UpdateLights_CBUFFER(temp, m_editorCameraObject->GetComponent<Camera>());
+
+			//DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
 
 
 			Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -403,7 +428,18 @@ void Game::LifeCycle(DeltaTime dt)
 	// 씬 뷰
 	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+
+	std::vector<Light*> temp;
+	for (const auto& lights : Light::GetAllLights())
+	{
+		if (scene->FindGameObject(lights->_GetOwner()->GetName()) != nullptr)
+			temp.push_back(lights);
+	}
+
+	DX11Renderer::Instance().UpdateLights_CBUFFER(temp, m_editorCameraObject->GetComponent<Camera>());
+
+	//DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+
 	scene->Render(editorCam, m_sceneRT.get());
 
 	m_sceneRT->Unbind();
@@ -447,7 +483,18 @@ void Game::LifeCycle(DeltaTime dt)
 				const auto& col = cam->GetClearColor();
 				m_captureRT->Clear(col.x, col.y, col.z, col.w);
 
-				DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam);
+
+
+				std::vector<Light*> temp;
+				for (const auto& lights : Light::GetAllLights())
+				{
+					if (scene->FindGameObject(lights->_GetOwner()->GetName()) != nullptr)
+						temp.push_back(lights);
+				}
+
+				DX11Renderer::Instance().UpdateLights_CBUFFER(temp, cam);
+
+				//DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), cam);
 
 				scene->Render(cam, m_captureRT.get());
 
@@ -532,7 +579,8 @@ void Game::LifeCycle(DeltaTime dt)
 			targetRT->Unbind();
 		}
 	}
-	static const float defaultClearColor[4] = { 0.f, 0.f, 0.f, 1.f };
+
+	static const float defaultClearColor[4] = { 1.f, 1.f, 0.f, 1.f };
 
 	Camera* mainCam = scene->GetMainCamera();
 
@@ -571,6 +619,7 @@ void Game::LifeCycle(DeltaTime dt)
 			m_gameRT->Unbind();
 		}
 	}
+
 	m_gameRT->Bind();
 	scene->RenderUI(mainCam, m_gameRT.get());
 	m_gameRT->Unbind();

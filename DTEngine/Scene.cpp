@@ -38,6 +38,8 @@
 #include "SpriteEffect.h"
 #include "Fog.h"
 
+#include "SoundManager.h"
+
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
     auto go = std::make_unique<GameObject>(name);
@@ -417,7 +419,7 @@ void Scene::Awake()
     m_isIterating = false;
     FlushPending();
 
-    
+
 }
 
 void Scene::Start()
@@ -427,6 +429,8 @@ void Scene::Start()
     for (auto& obj : m_gameObjects) obj->Start();
     m_isIterating = false;
     FlushPending();
+
+    if (!m_bgmPlayed) m_bgmPlayed = SoundManager::Instance().PlaySceneBGM(m_name, true);    
 }
 
 void Scene::Update(float deltaTime)
@@ -469,7 +473,17 @@ void Scene::LateUpdate(float deltaTime)
 
     
     if (m_mainCamera == nullptr) return;
-    DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
+
+    std::vector<Light*> temp;
+    for (const auto& lights : Light::GetAllLights())
+    {
+        if (FindGameObject(lights->_GetOwner()->GetName()) != nullptr)
+            temp.push_back(lights);
+    }
+
+    DX11Renderer::Instance().UpdateLights_CBUFFER(temp, m_mainCamera);
+
+   // DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights() , m_mainCamera->GetComponent<Camera>());
 
     // 물리 업데이트
 }
@@ -740,6 +754,8 @@ void Scene::Enter()
 
 void Scene::Exit()
 {
+    m_bgmPlayed = false;
+
     for (const auto& go : m_gameObjects)
     {
         if (go->IsActive())

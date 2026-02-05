@@ -19,6 +19,13 @@ bool SoundManager::Initalize()
     mMasterGroup->addGroup(mBGMGroup);
     mMasterGroup->addGroup(mSFXGroup);
 
+
+    m_BGMMap.emplace("TitleScene", "Title");
+    m_BGMMap.emplace("TutorialScene", "metal_pipe");
+    m_BGMMap.emplace("Stage_01", "The_World Is_Yours");
+    m_BGMMap.emplace("Stage_02", "Doomsday");
+    m_BGMMap.emplace("Stage_03", "Doomsday");
+
     return true;
 }
 
@@ -46,27 +53,41 @@ void SoundManager::Update(float deltaTime)
         }
     }
 
-    // 2. 현재 BGM 페이드 인
     if (mCurrentBGM)
     {
         float vol;
         mCurrentBGM->getVolume(&vol);
-        if (vol < mTargetBGMVolume) {
-            vol += mFadeSpeed * deltaTime;
-            if (vol > mTargetBGMVolume) vol = mTargetBGMVolume;
-            mCurrentBGM->setVolume(vol);
+
+        if (mPreviousBGM == nullptr)
+        {
+            if (std::abs(vol - mTargetBGMVolume) > 0.001f)
+            {
+                if (vol < mTargetBGMVolume)
+                    vol = std::min(vol + mFadeSpeed * deltaTime, mTargetBGMVolume);
+                else
+                    vol = std::max(vol - mFadeSpeed * deltaTime, mTargetBGMVolume);
+
+                mCurrentBGM->setVolume(vol);
+            }
+        }
+        else
+        {
+            if (vol < mTargetBGMVolume) {
+                vol += mFadeSpeed * deltaTime;
+                if (vol > mTargetBGMVolume) vol = mTargetBGMVolume;
+                mCurrentBGM->setVolume(vol);
+            }
         }
     }
 }
 
-void SoundManager::PlayBGM(const std::string& path, float volume, bool crossfade)
+void SoundManager::PlayBGM(const std::string& path, bool crossfade)
 {
-    Sound* sound = GetSound(path);
+
+    std::string Path = "Assets/Sound/" + path + ".mp3";
+
+    Sound* sound = GetSound(Path);
     if (!sound) return;
-
-    mTargetBGMVolume = Clamp01(volume);
-
-    // 기존 재생 중인 BGM이 있다면 Previous로 밀어냄
     if (mCurrentBGM)
     {
         if (crossfade) {
@@ -78,16 +99,14 @@ void SoundManager::PlayBGM(const std::string& path, float volume, bool crossfade
     }
 
     FMOD::Sound* native = sound->GetNative();
-    native->setMode(FMOD_LOOP_NORMAL); // BGM은 기본 루프
+    native->setMode(FMOD_LOOP_NORMAL);
 
-    // 새 BGM 재생 (BGM 그룹에 할당)
     mSystem->playSound(native, mBGMGroup, false, &mCurrentBGM);
 
-    // 크로스페이드 사용 시 0부터 시작, 아니면 바로 목표 볼륨
     mCurrentBGM->setVolume(crossfade ? 0.0f : mTargetBGMVolume);
 }
 
-void SoundManager::PlaySFX(const std::string& path, float volume)
+void SoundManager::PlaySFX(const std::string& path)
 {
     Sound* sound = GetSound(path);
     if (!sound) return;
@@ -100,7 +119,7 @@ void SoundManager::PlaySFX(const std::string& path, float volume)
     mSystem->playSound(native, mSFXGroup, false, &ch);
 
     if (ch) {
-        ch->setVolume(Clamp01(volume));
+        ch->setVolume(mTargetSFXVolume);
     }
 }
 
@@ -120,12 +139,15 @@ void SoundManager::StopBGM(bool fadeOut)
 
 void SoundManager::SetMasterVolume(float volume)
 {
-    if (mMasterGroup) mMasterGroup->setVolume(Clamp01(volume));
+    //if (mMasterGroup) mMasterGroup->setVolume(Clamp01(volume));
 }
 
 void SoundManager::SetBGMVolume(float volume)
 {
     if (mBGMGroup) mBGMGroup->setVolume(Clamp01(volume));
+
+
+
 }
 
 void SoundManager::SetSFXVolume(float volume)
@@ -141,6 +163,23 @@ SoundManager::~SoundManager()
 Sound* SoundManager::GetSound(const std::string& path)
 {
     return ResourceManager::Instance().Load<Sound>(path);
+}
+
+bool SoundManager::Crosschecked(std::string SceneName)
+{
+    std::string Name = "";
+
+    if (auto it = m_BGMMap.find(SceneName); it != m_BGMMap.end())
+    {
+        Name = it->second;
+    }
+    else
+        return false;
+
+    if (Name == m_On_Played) return false; //겹치는 경우 crossfade 안함. 매 프레임마다 start 호출해서 최적화 하려고.
+    return true;
+
+
 }
 
 void SoundManager::Release()
@@ -165,9 +204,12 @@ void SoundManager::Release()
 
 // --- SFX Loop (특수 효과음용, 직접 정지시켜야 함) ---
 
-void SoundManager::PlayOneShot(const std::string& path, float volume)
+void SoundManager::PlayOneShot(const std::string& path)
 {
-    Sound* sound = GetSound(path);
+
+    std::string Path = "Assets/Sound/" + path + ".mp3";
+
+    Sound* sound = GetSound(Path);
     if (!sound) return;
 
     FMOD::Sound* native = sound->GetNative();
@@ -175,7 +217,7 @@ void SoundManager::PlayOneShot(const std::string& path, float volume)
 
     FMOD::Channel* ch = nullptr;
     mSystem->playSound(native, mSFXGroup, false, &ch);
-    if (ch) ch->setVolume(Clamp01(volume));
+    if (ch) ch->setVolume(mTargetSFXVolume);
 }
 
 FMOD::Channel* SoundManager::PlayLoop(const std::string& path, float volume)
@@ -199,4 +241,46 @@ void SoundManager::ShutDown()
     {
         mMasterGroup->stop();
     }
+}
+
+bool SoundManager::PlaySceneBGM(const std::string& SceneName, bool crossfaded)
+{
+    if (!Crosschecked(SceneName)) return false;
+
+    std::string Name = "";
+    if (auto it = m_BGMMap.find(SceneName); it != m_BGMMap.end())
+    {
+        Name = it->second;
+    }
+    else
+    {
+        std::cout << "Scene 전환 시, Sound처리오류남. Scene Name: -> " << SceneName << std::endl;
+        return false;
+    }
+
+    std::string Path = "Assets/Sound/" + Name + ".mp3";
+
+    Sound* sound = GetSound(Path);
+    if (!sound) return false;
+
+    if (mCurrentBGM)
+    {
+        if (crossfaded) {
+            mPreviousBGM = mCurrentBGM;
+        }
+        else {
+            mCurrentBGM->stop();
+        }
+    }
+
+    FMOD::Sound* native = sound->GetNative();
+    native->setMode(FMOD_LOOP_NORMAL);
+
+    // 새 BGM 재생
+    mSystem->playSound(native, mBGMGroup, false, &mCurrentBGM);
+
+    mCurrentBGM->setVolume(crossfaded ? 0.0f : mTargetBGMVolume);
+    m_On_Played = Name;
+
+    return true;
 }
