@@ -79,6 +79,7 @@ public:
 public:
 	// 이번 스테이지 그리드 등록용. 
 	void SetBattleGrid(BattleGrid* bg) { battleGrid = bg; }
+	BattleGrid* GetBattleGrid() { return battleGrid; }
 
 	// 이번 스테이지 앨리스 등록용.
 	void SetAliceUnit(AliceUnit* aliceUnit) { m_aliceUnit = aliceUnit; }
@@ -96,6 +97,7 @@ public:
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
 	void SetEnemyUnit2(EnemyUnit* enemyUnit) { enemyUnit2 = enemyUnit; }
 
+	EnemyUnit* GetEnemyUnit0() { return enemyUnit0; }
 
 	void PrintFrame();
 private:
