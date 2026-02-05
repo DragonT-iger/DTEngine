@@ -15,16 +15,23 @@ SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-    float4 color = g_AoMap.Sample(g_Sampler, input.UV);    
+    float4 color = g_AoMap.Sample(g_Sampler, input.UV);  
+    
+    color = MaterialColor;
+    
     float mask = g_NoiseMap.Sample(g_Sampler, input.UV).r;
         
-    clip( 0.01f - MaterialColor.a);
+    //clip( 0.01f);
 
    // float alpha = MaterialColor.a;
     
    
+    float alpha = mask - MaterialColor.a;
+    saturate(alpha);
 
-    return float4(color.rgb, mask);
+    
+    
+    return float4(color.rgb, alpha);
     
    
 }

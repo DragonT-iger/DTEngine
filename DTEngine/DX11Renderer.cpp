@@ -601,7 +601,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
     //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
 
-        const std::string path = "Assets/Models/Env/Cube/SkyBox/skybox.dds";
+    const std::string path = "Assets/Models/BackGround/CubeMap_02_05.dds";
 
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
@@ -609,7 +609,8 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
 
 
 }
-//  ★
+
+ 
 void DX11Renderer::BindGlobalResources()
 {
     //imgui에서 0번을 써서 indexing을 하나 높여서 binding한다는 거 잊지마! 
@@ -627,7 +628,7 @@ void DX11Renderer::BindGlobalResources()
     m_context->VSSetConstantBuffers(7, 1, m_cbuffer_SkyBox.GetAddressOf());
     m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Effect.GetAddressOf());
 
-    m_context->VSSetConstantBuffers(8, 1, m_cbuffer_Fog.GetAddressOf());
+    m_context->VSSetConstantBuffers(9, 1, m_cbuffer_Fog.GetAddressOf());
 
     //PS
     m_context->PSSetConstantBuffers(1, 1, m_cbuffer_frame.GetAddressOf());

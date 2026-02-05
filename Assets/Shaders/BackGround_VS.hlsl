@@ -3,7 +3,7 @@
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float3 TexCoord : TEXCOORD0;
+    float2 uv : TEXCOORD0;
 };
 
 VS_OUTPUT VS(VS_INPUT input)
@@ -14,7 +14,7 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(worldPos, View_TM);
     output.Pos = mul(output.Pos, Projection_TM);
 
-    output.TexCoord = input.Pos;
+    output.uv = input.UV;
     
     return output;
 }

@@ -849,5 +849,11 @@
     <FxCompile Include="..\Assets\Shaders\Tile_Stain_PS.hlsl">
       <Filter>Shader\Specific</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_02_VS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Chess_Default_02_PS.hlsl">
+      <Filter>Shader\Specific\Chess</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
