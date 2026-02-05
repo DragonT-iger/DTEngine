@@ -13,7 +13,7 @@ private:
     void InitTitleScene();
     void InitInGameScene();
     void InitEndingScene();
-
+    void InitTutorialScene();
 };
 
 

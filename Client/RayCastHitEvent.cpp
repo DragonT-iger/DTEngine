@@ -20,6 +20,7 @@ DTPROPERTY(RayCastHitEvent, m_rightPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_rightRSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftPSWinodwBG)
 DTPROPERTY(RayCastHitEvent, m_leftRSWinodwBG)
+DTPROPERTY(RayCastHitEvent , m_tutorialManager)
 DTPROPERTY(RayCastHitEvent, m_arrowPool)
 
 ENDPROPERTY()
@@ -65,6 +66,13 @@ void RayCastHitEvent::RaycastCheck()
 		}
 
 
+		if (m_isStartBattle && m_lastSelectedEnemy)
+		{
+			m_lastSelectedEnemy = nullptr;
+			m_arrowPool->_GetOwner()->SetActive(false);
+		}
+		
+		
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera)
 		{
 				const Vector2 mp = Vector2((float)input.GetGameMousePosition().x, (float)input.GetGameMousePosition().y);
@@ -98,6 +106,127 @@ void RayCastHitEvent::RaycastCheck()
 
 				if (hit)
 				{
+					std::cout << hit->GetName() << std::endl;
+
+					if (m_tutorialManager &&
+						m_tutorialManager->GetCurrentStep() >= TutorialManager::TutorialStep::Cat_Explain_EnemyPath &&
+						m_tutorialManager->GetCurrentStep() < TutorialManager::TutorialStep::Cat_Explain_EnemyPathWait)
+					{
+						bool isEnemy = (hit->GetTag() == "Enemy");
+						if (!isEnemy && hit->GetTransform()->GetParent() && hit->GetTransform()->GetParent()->_GetOwner()->GetTag() == "Enemy")
+						{
+							isEnemy = true;
+						}
+
+						if (isEnemy)
+						{
+							EnemyUnit* enemy = hit->GetComponent<EnemyUnit>();
+							if (!enemy && hit->GetTransform()->GetParent())
+							{
+								enemy = hit->GetTransform()->GetParent()->_GetOwner()->GetComponent<EnemyUnit>();
+							}
+							if (!enemy) enemy = CheckEnemyObj(hit); 
+
+							if (enemy && m_arrowPool)
+							{
+								m_arrowPool->_GetOwner()->SetActive(false); 
+
+								std::vector<ArrowSegment> path = enemy->GetArrowSegments();
+								std::vector<GameObject*> heads = m_arrowPool->GetHeads();
+								std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
+								std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+
+								m_arrowPool->DeactivateAll();
+
+								// 화살표 배치
+								for (int i = 0; i < path.size(); ++i)
+								{
+									Transform* tr = bodys[i]->GetTransform();
+									tr->SetPosition(path[i].midWorld);
+									Vector3 s = tr->GetScale();
+									s.x = path[i].lenWorld;
+									tr->SetScale(s);
+									Vector3 e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									bodys[i]->SetActive(true);
+
+									tr = heads[i]->GetTransform();
+									tr->SetPosition(path[i].headWorld);
+									e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									heads[i]->SetActive(true);
+
+									tr = starts[i]->GetTransform();
+									tr->SetPosition(path[i].startWorld);
+									e = tr->GetEditorEuler();
+									e.y = path[i].yawDeg;
+									tr->SetRotationEuler(e);
+									starts[i]->SetActive(true);
+								}
+								m_arrowPool->_GetOwner()->SetActive(true);
+
+								m_tutorialManager->NextStep(true);
+								// 중요: 여기서 return 하여 아래쪽의 RS 창 로직이 실행되지 않도록 함
+								return;
+							}
+						}
+
+						// 적이 아닌 것을 클릭했거나, EnemyUnit을 못 찾은 경우 클릭 무시
+						return;
+					}
+						std::cout << hit->GetName() << std::endl;
+						if (scene->GetName() == "TutorialScene") {
+							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
+								if (isLeft)
+								{
+									if (!m_leftPSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_leftPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+								}
+								if (!isLeft)
+								{
+									if (!m_rightPSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_rightPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+								}
+
+								if(m_tutorialManager) m_tutorialManager->NextStep(true);
+							}
+							else if (hit->GetName() == "Chess") {
+								if (isLeft)
+								{
+									if (!m_leftRSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									m_leftRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+								}
+								if (!isLeft)
+								{
+									if (!m_rightRSWinodwBG)
+										return;
+
+									CloseAllWindows(); // 먼저 다 닫고
+									m_rightRSWinodwBG->GetComponent<OpenRSEvent>()->RequestOpenWindow(hit); // RS 오픈
+								}
+								if (m_tutorialManager) m_tutorialManager->NextStep(true);
+							}
+
+							else {
+								return;
+							}
+						}
+
 						//std::cout << hit->GetName() << std::endl;
 
 						if (m_isHealSkillOn)
@@ -171,45 +300,102 @@ void RayCastHitEvent::RaycastCheck()
 					
 						// 전투 중 클릭해도 tile, chess 선택 안함. 위에는 스킬이라서 처리해야함.
 						if (m_isStartBattle)
-								return;
+						{
+							return;
+						}
+
 
 						// 여기는 화살표 보여주기 위해서
-						if (CheckEnemyObj(hit))
+						EnemyUnit* enemy = CheckEnemyObj(hit);
+
+						if (enemy)
 						{
 								// 여기가 적인 경우임. 그래서 m_Unit이 GameObject 타입이고 unit은 enemyunit component여서 여기서 처리해주면 됨.
 								// 3개의 경로를 전부 다 가지고 있고 선택 시 각각 다른애들 다 끄고 본인만 켜지게 하는 로직이 있어야겠네. 
 								// prefab이 있다보니까 결국 걍 prefab으로 생성을 시키고 전부 setactive false를 하면 다 꺼지잖아.
 								// 클릭되는 경우 해당하는 prefab으로 만들어둔 object setacitve true 나머지 다 false하면 되는거니까
 								// level design이 먼저라 생각하는데 배치 위치에 따라 우리가 작업을 모든 예외처리를 다 할 필요가 없다 라는 생각이라.
+							if (!m_arrowPool) return;
+
+							if (enemy == m_lastSelectedEnemy)
+							{
+								m_lastSelectedEnemy = nullptr;
+								m_arrowPool->_GetOwner()->SetActive(false);
+
+								return;
+							}
+
+							m_lastSelectedEnemy = enemy;
+
+							m_arrowPool->_GetOwner()->SetActive(false);
+
+							std::vector<ArrowSegment> path = enemy->GetArrowSegments();
+							std::vector<GameObject*> heads = m_arrowPool->GetHeads();
+							std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
+							std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+
+							m_arrowPool->DeactivateAll();
+
+							for (int i = 0; i < path.size(); ++i)
+							{
+								Transform* tr = bodys[i]->GetTransform();
+								tr->SetPosition(path[i].midWorld);
+								Vector3 s = tr->GetScale();
+								s.x = path[i].lenWorld;
+								tr->SetScale(s);
+								Vector3 e = tr->GetEditorEuler();
+								e.y = path[i].yawDeg;
+								tr->SetRotationEuler(e);
+								bodys[i]->SetActive(true);
+
+								tr = heads[i]->GetTransform();
+								tr->SetPosition(path[i].headWorld);
+								e = tr->GetEditorEuler();
+								e.y = path[i].yawDeg;
+								tr->SetRotationEuler(e);
+								heads[i]->SetActive(true);
+
+								tr = starts[i]->GetTransform();
+								tr->SetPosition(path[i].startWorld);
+								e = tr->GetEditorEuler();
+								e.y = path[i].yawDeg;
+								tr->SetRotationEuler(e);
+								starts[i]->SetActive(true);
+							}
+
+							m_arrowPool->_GetOwner()->SetActive(true);
+							
+
+							return;
 						}
 
 						if (hit->GetName() == "Glow_W_Height_01_Red_Test" || hit->GetName() == "Glow_W_Height_01_White_Test")
 						{
-								if (isLeft)
-								{
-										if (!m_leftPSWinodwBG)
-												return;
+							if (isLeft)
+							{
+									if (!m_leftPSWinodwBG)
+											return;
 
-										CloseAllWindows(); // 먼저 다 닫고
-										auto psEvent = m_leftPSWinodwBG->GetComponent<OpenPSEvent>();
-										psEvent->SetRayObj(hit);
-										psEvent->SetActivePSWindow(); // PS 오픈
-								}
-								if (!isLeft)
-								{
-										if (!m_rightPSWinodwBG)
-												return;
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_leftPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+							}
+							if (!isLeft)
+							{
+									if (!m_rightPSWinodwBG)
+											return;
 
-										CloseAllWindows(); // 먼저 다 닫고
-										auto psEvent = m_rightPSWinodwBG->GetComponent<OpenPSEvent>();
-										psEvent->SetRayObj(hit);
-										psEvent->SetActivePSWindow(); // PS 오픈
-								}
+									CloseAllWindows(); // 먼저 다 닫고
+									auto psEvent = m_rightPSWinodwBG->GetComponent<OpenPSEvent>();
+									psEvent->SetRayObj(hit);
+									psEvent->SetActivePSWindow(); // PS 오픈
+							}
 						}
 
 						// RS 관련 오브젝트 클릭 시
 						else if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield" 
-								|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+							|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
 						{ 
 								if (isLeft)
 								{
@@ -294,30 +480,30 @@ void RayCastHitEvent::CloseAllWindows()
 		if (m_leftRSWinodwBG) m_leftRSWinodwBG->SetActive(false);
 }
 
-bool RayCastHitEvent::CheckEnemyObj(GameObject* obj)
+EnemyUnit* RayCastHitEvent::CheckEnemyObj(GameObject* obj)
 {
-		if (obj->GetName() == "Chess" || obj->GetName() == "Wand" || obj->GetName() == "Shield"
-				|| obj->GetName() == "Sword" || obj->GetName() == "Spear" || obj->GetName() == "Shield")
+	if (obj->GetName() == "Chess" || obj->GetName() == "Wand" || obj->GetName() == "Shield"
+			|| obj->GetName() == "Sword" || obj->GetName() == "Spear" || obj->GetName() == "Shield")
+	{
+		GameObject* m_Unit = nullptr;
+		GameObject* unitRoot = obj;
+		if (obj->GetName().find("_V1") == std::string::npos)
 		{
-				GameObject* m_Unit = nullptr;
-				GameObject* unitRoot = obj;
-				if (obj->GetName().find("_V1") == std::string::npos)
-				{
-						if (obj->GetTransform()->GetParent())
-								unitRoot = obj->GetTransform()->GetParent()->_GetOwner();
-				}
-
-				m_Unit = unitRoot;
-
-				if (m_Unit)
-				{
-						auto unit = m_Unit->GetComponent<EnemyUnit>();
-						if (!unit)
-								return false;
-
-						return true;
-				}
+			if (obj->GetTransform()->GetParent())
+					unitRoot = obj->GetTransform()->GetParent()->_GetOwner();
 		}
 
-		return false;
+		m_Unit = unitRoot;
+
+		if (m_Unit)
+		{
+			EnemyUnit* unit = m_Unit->GetComponent<EnemyUnit>();
+			if (unit)
+			{
+				return unit;
+			}
+		}
+	}
+
+	return nullptr;
 }

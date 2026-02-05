@@ -156,6 +156,7 @@
     <ClCompile Include="HPBarFollowEvent.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MakeSetActiveEvent.cpp" />
     <ClCompile Include="OpenPSEvent.cpp" />
     <ClCompile Include="OpenRSEvent.cpp" />
     <ClCompile Include="RayCastHitEvent.cpp" />
@@ -168,7 +169,9 @@
     <ClCompile Include="SkillButton.cpp" />
     <ClCompile Include="SkillHoverEvent.cpp" />
     <ClCompile Include="SliderValueEvent.cpp" />
+    <ClCompile Include="TitleCreditTriggerEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
+    <ClCompile Include="TutorialSceneTriggerEvent.cpp" />
     <ClCompile Include="TutorialTrigger.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitActionEvent.cpp" />
@@ -202,6 +205,7 @@
     <ClInclude Include="GameOverEvent.h" />
     <ClInclude Include="HPBarFollowEvent.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />
+    <ClInclude Include="MakeSetActiveEvent.h" />
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
     <ClInclude Include="RayCastHitEvent.h" />
@@ -214,7 +218,9 @@
     <ClInclude Include="SkillButton.h" />
     <ClInclude Include="SkillHoverEvent.h" />
     <ClInclude Include="SliderValueEvent.h" />
+    <ClInclude Include="TitleCreditTriggerEvent.h" />
     <ClInclude Include="TutorialManager.h" />
+    <ClInclude Include="TutorialSceneTriggerEvent.h" />
     <ClInclude Include="TutorialTrigger.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitActionEvent.h" />

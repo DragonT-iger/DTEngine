@@ -44,17 +44,29 @@ void CombatController::Update(float dTime)
 
 void CombatController::Setup()
 {
-    m_allyUnits.clear();
+    m_stageEnd = false;                     
+    m_currPhase = Phase::Ready;             
+    m_stageResult = StageResult::InProgress;
+    m_phaseEntered = false;
+
+      m_allyUnits.clear();
     m_enemyUnits.clear();
     m_battleUnits.clear();
     
-    if (allyUnit0) m_allyUnits.push_back(allyUnit0);
-    if (allyUnit1) m_allyUnits.push_back(allyUnit1);
-    if (allyUnit2) m_allyUnits.push_back(allyUnit2);
+    if (allyUnit0 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit0) == m_allyUnits.end()) // 중복 체크 추가.
+        m_allyUnits.push_back(allyUnit0);
+    if (allyUnit1 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit1) == m_allyUnits.end())
+        m_allyUnits.push_back(allyUnit1);
+    if (allyUnit2 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit2) == m_allyUnits.end())
+        m_allyUnits.push_back(allyUnit2);
 
-    if (enemyUnit0) m_enemyUnits.push_back(enemyUnit0);
-    if (enemyUnit1) m_enemyUnits.push_back(enemyUnit1);
-    if (enemyUnit2) m_enemyUnits.push_back(enemyUnit2);
+    if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end()) 
+        m_enemyUnits.push_back(enemyUnit0);
+    if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
+        m_enemyUnits.push_back(enemyUnit1);
+    if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end()) 
+        m_enemyUnits.push_back(enemyUnit2);
+
 
     for (EnemyUnit* enemy : m_enemyUnits)
     {

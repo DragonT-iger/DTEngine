@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 16.501922607421875,
-          "y": 636.4026489257813,
+          "x": 25.201990127563477,
+          "y": 170.30357360839844,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 6.669809341430664,
-          "y": 1.988332748413086,
-          "z": -0.7484525442123413
+          "x": 4.101422309875488,
+          "y": 11.379562377929688,
+          "z": 32.867713928222656
         },
         "m_rotation": {
-          "w": 0.7377749085426331,
-          "x": 0.10698490589857101,
-          "y": -0.6596160531044006,
-          "z": 0.09565107524394989
+          "w": 0.08248064666986465,
+          "x": 0.01843811199069023,
+          "y": 0.9724212884902954,
+          "z": -0.217379629611969
         },
         "m_scale": {
           "x": 1.0,
@@ -131,8 +131,8 @@
         "m_parent": 0,
         "m_position": {
           "x": 23.380672454833984,
-          "y": 9.342917442321777,
-          "z": 21.553537368774414
+          "y": 15.043000221252441,
+          "z": 25.354000091552734
         },
         "m_rotation": {
           "w": -0.3592212498188019,
@@ -200,13 +200,16 @@
           "Active": true,
           "id": 7171391694734270448,
           "m_mapData": 6189260170659567125,
-          "m_prefab0": 736820918105964445,
-          "m_prefab1": 14720221284518089057,
-          "m_prefab2": 4924267867290484229,
-          "m_prefab3": 0,
-          "m_prefab4": 0,
-          "m_prefab5": 0,
-          "m_prefab6": 0,
+          "m_prefab0": 6882548206746445278,
+          "m_prefab1": 1184002424583072243,
+          "m_prefab2": 14720221284518089057,
+          "m_prefab3": 736820918105964445,
+          "m_prefab4": 4924267867290484229,
+          "m_prefab5": 4924267867290484229,
+          "m_prefab6": 4924267867290484229,
+          "m_prefab7": 4924267867290484229,
+          "m_prefab8": 16302386552932827796,
+          "m_prefab9": 11325787544210787741,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -245,6 +248,7 @@
         {
           "Active": true,
           "id": 8138808444096392086,
+          "m_arrowPool": 7395094084066595855,
           "m_leftPSWinodwBG": 13644169991980458124,
           "m_leftRSWinodwBG": 14800340861935470279,
           "m_rightPSWinodwBG": 14165272807283552,
@@ -624,6 +628,7 @@
           "m_combatObj": 7541685513989182900,
           "m_rayObj": 4771222732717351773,
           "m_startButton": 3172165213437105257,
+          "m_tileMapObj": 0,
           "typeName": "ClickStartButton"
         }
       ],
@@ -707,9 +712,9 @@
         },
         "m_parent": 7391673662214864519,
         "m_position": {
-          "x": 4.0,
+          "x": 10.0,
           "y": 1.0,
-          "z": 16.0
+          "z": 8.0
         },
         "m_rotation": {
           "w": 1.0,
@@ -1744,7 +1749,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5872622350538280037,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -2457,7 +2462,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5872622350538280037,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -3512,7 +3517,9 @@
         {
           "Active": true,
           "id": 7395094084066595855,
-          "m_arrow": 16302386552932827796,
+          "m_body": 14825601716427715504,
+          "m_head": 8409728640540230687,
+          "m_start": 12416746000656621458,
           "typeName": "ArrowObjectPool"
         }
       ],
@@ -3542,6 +3549,499 @@
           "x": 1.0,
           "y": 1.0,
           "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              0.33870965242385864,
+              0.33870965242385864,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 6938256898044817629,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 11913996892996429517,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 737154296677674497,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14480817241846007994,
+          "m_isBoss": true,
+          "m_type": 0,
+          "path1": {
+            "x": 2.0,
+            "y": 1.0
+          },
+          "path2": {
+            "x": 0.0,
+            "y": 1.0
+          },
+          "path3": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "path4": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path5": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path6": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "path7": {
+            "x": -999.0,
+            "y": -999.0
+          },
+          "typeName": "EnemyUnit"
+        }
+      ],
+      "id": 13464306935546999963,
+      "name": "Chess_Spear_Test",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12933353048825525523,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 4.0,
+          "y": 1.0,
+          "z": 16.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 2931371597178195541,
+              "1": 885120150060770054,
+              "3": 13530188703377643776,
+              "4": 5791674905025866242
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 3347158732146458121,
+          "m_materialID": 10671092131083317277,
+          "m_meshIndex": 0,
+          "m_modelID": 15036042619192132349,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 7627764563706841706,
+          "m_skellID": 15036042619192132349,
+          "typeName": "Skeletal"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 12451575108198666350,
+          "m_AniID": 1897428081162014869,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 5024756642527325462,
+      "name": "Chess",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8046445652985953882,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 12933353048825525523,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 0,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 12219225787821283075,
+              "1": 15995925660948491865,
+              "3": 17567310345030162650
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 9501668260440866501,
+          "m_materialID": 10354447960854782024,
+          "m_meshIndex": 0,
+          "m_modelID": 16273426721281812034,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 5591241485802640882,
+          "m_modelID": 16273426721281812034,
+          "typeName": "Rigid"
+        },
+        {
+          "Active": true,
+          "Animated_Time": 1.0,
+          "Loop": true,
+          "Play": true,
+          "id": 9957754052736803962,
+          "m_AniID": 16775286386219350275,
+          "typeName": "Animator"
+        }
+      ],
+      "id": 17883551120886715005,
+      "name": "Spear",
+      "tag": "Untagged",
+      "transform": {
+        "id": 731863129062051938,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 12933353048825525523,
+        "m_position": {
+          "x": -0.5019416809082031,
+          "y": 0.6400325298309326,
+          "z": -0.1998882293701172
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 2073913413768791125
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 14242264481370231429,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 11799401126279950510,
+          "m_fillObject": 10791217083116232753,
+          "m_lerpSpeed": 8.0,
+          "m_targetObject": 3859076468797295072,
+          "typeName": "HPBarFollowEvent"
+        }
+      ],
+      "id": 15169680741293515890,
+      "name": "HPBarEdge_Final",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2408825812661923775,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": -135.99998474121094,
+          "z": 0.0
+        },
+        "m_parent": 12933353048825525523,
+        "m_position": {
+          "x": 0.0,
+          "y": 2.4000000953674316,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": -0.37460657954216003,
+          "x": 0.0,
+          "y": 0.9271838068962097,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 1435333987562861863
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 164396693261571577,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 7825104090131513307,
+      "name": "HPBarVoid",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2155345245299619439,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2408825812661923775,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.009999999776482582
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.949999988079071,
+          "y": 0.699999988079071,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 2,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {
+              "0": 17073523278039357435
+            },
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 17896189522347408235,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 13223504147414108251,
+          "typeName": "MeshRenderer"
+        }
+      ],
+      "id": 2986157812977665485,
+      "name": "HPBarFill",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4058463095124553396,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2155345245299619439,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -0.010999999940395355
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 0.9999999403953552
         }
       }
     }

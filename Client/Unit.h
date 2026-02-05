@@ -81,17 +81,6 @@ struct UnitStats // 유닛 기본 스텟
     int def = 10;
     float maxHp = 100;
     int attackRange = 1;
-
-    UnitStats operator*(float multiplier) const
-    {
-        UnitStats result;
-        result.atk = static_cast<int>(atk * multiplier);
-        result.def = static_cast<int>(def * multiplier);
-        result.maxHp = maxHp * multiplier;
-        result.attackRange = static_cast<int>(attackRange * multiplier);
-        return result;
-    }
-
 };
 
 // 유닛들이 공통적으로 들고있는 요소

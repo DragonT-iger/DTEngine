@@ -3,9 +3,14 @@
 #include "GameObject.h"
 #include "OpenRSEvent.h"
 #include "AllyUnit.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "TutorialManager.h"
+
 
 BEGINPROPERTY(ClickRSOkayEvent)
 DTPROPERTY(ClickRSOkayEvent, m_okayBtn)
+DTPROPERTY(ClickRSOkayEvent, m_tutorialManager)
 ENDPROPERTY()
 
 
@@ -29,11 +34,19 @@ void ClickRSOkayEvent::Start()
             if (unit) 
             {
                 auto alloy = unit->GetComponent<AllyUnit>();
-                alloy->SetMoveRule(mIdx);
-                alloy->SetBattleRule(aIdx);
+
+                if (alloy) {
+                    alloy->SetMoveRule(mIdx);
+                    alloy->SetBattleRule(aIdx);
+                }
             }
         }
-
+        if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene") {
+            if (m_tutorialManager) m_tutorialManager->NextStep(true);
+            //std::cout << "NextStep" << std::endl;
+        }
         // 결과와 상관없이 창 닫기
         _GetOwner()->GetTransform()->GetParent()->_GetOwner()->SetActive(false);});
+
+    
 }

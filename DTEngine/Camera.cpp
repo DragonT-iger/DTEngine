@@ -32,8 +32,8 @@ DTPROPERTY_ACCESSOR(Camera, m_bloomIntensity, GetBloomIntensity, SetBloomIntensi
 
 
 DTPROPERTY_ACCESSOR(Camera, m_useCircleMask, GetUseCircleMask, SetUseCircleMask)
-DTPROPERTY_ACCESSOR(Camera, m_CircleCenter, GetCircleCenter, SetCrircleCenter)
-DTPROPERTY_ACCESSOR(Camera, m_CircleWH, GetCircleWidthHeight, SetCrircleWidthHeight)
+DTPROPERTY_ACCESSOR(Camera, m_CircleCenter, GetCircleCenter, SetCircleCenter)
+DTPROPERTY_ACCESSOR(Camera, m_CircleWH, GetCircleWidthHeight, SetCircleWidthHeight)
 
 
 
@@ -151,7 +151,6 @@ void Camera::Bind()
 const Vector3& Camera::GetCamPos() const 
 {
     Transform* tf = GetComponent<Transform>();
-
     return tf->GetWorldPosition();
 
 }
@@ -186,22 +185,59 @@ Ray Camera::ScreenPointToRay(float x, float y, float viewportW, float viewportH)
 
 Ray Camera::ScreenPointToRay(float x, float y) const
 {
-    DirectX::SimpleMath::Viewport vp;
-    vp.x = 0.0f;
-    vp.y = 0.0f;
+    float screenW = 0.0f;
+    float screenH = 0.0f;
+
 #ifdef _DEBUG
     const auto& gameRes = InputManager::Instance().GetGameResolution();
-    vp.width = static_cast<float>(gameRes.x);
-    vp.height = static_cast<float>(gameRes.y);
+    screenW = static_cast<float>(gameRes.x);
+    screenH = static_cast<float>(gameRes.y);
 #else
-    vp.width = static_cast<float>(DX11Renderer::Instance().Width());
-    vp.height = static_cast<float>(DX11Renderer::Instance().Height());
+    screenW = static_cast<float>(DX11Renderer::Instance().GetWidth());
+    screenH = static_cast<float>(DX11Renderer::Instance().GetHeight());
 #endif
-    vp.width *= m_viewportRect.z;
-    vp.height *= m_viewportRect.w;
 
+    const float refW = static_cast<float>(DX11Renderer::Instance().GetRefWidth());
+    const float refH = static_cast<float>(DX11Renderer::Instance().GetRefHeight());
+
+    float targetAspect = refW / refH;
+    float windowAspect = screenW / screenH;
+
+    float currentScale = 1.0f;
+    float offsetX = 0.0f;
+    float offsetY = 0.0f;
+    float actualWidth = screenW;
+    float actualHeight = screenH;
+
+    if (windowAspect > targetAspect) 
+    {
+        currentScale = screenH / refH;
+        actualWidth = refW * currentScale;
+        actualHeight = screenH;
+        offsetX = (screenW - actualWidth) * 0.5f;
+        offsetY = 0.0f;
+    }
+    else 
+    {
+        currentScale = screenW / refW;
+        actualWidth = screenW;
+        actualHeight = refH * currentScale;
+        offsetX = 0.0f;
+        offsetY = (screenH - actualHeight) * 0.5f;
+    }
+
+    DirectX::SimpleMath::Viewport vp;
+    vp.x = offsetX;
+    vp.y = offsetY;
+    vp.width = actualWidth;
+    vp.height = actualHeight;
     vp.minDepth = 0.0f;
     vp.maxDepth = 1.0f;
+
+    vp.x += vp.width * m_viewportRect.x;
+    vp.y += vp.height * m_viewportRect.y;
+    vp.width *= m_viewportRect.z;
+    vp.height *= m_viewportRect.w;
 
     Vector3 screenNear(x, y, 0.0f);
     Vector3 screenFar(x, y, 1.0f);
@@ -286,8 +322,6 @@ void Camera::UpdateProjectionMatrix()
 
     //float currentAspectRatio = DX11Renderer::Instance().GetAspectRatio(); 
     // 이건 전체 화면의 해상비임 
-
-
 
     // 얘없음  0보다 작은거 들어가서 튕김
 

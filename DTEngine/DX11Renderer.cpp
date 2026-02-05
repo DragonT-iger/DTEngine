@@ -531,6 +531,11 @@ void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector
 }
 
 
+void DX11Renderer::SetDepthOff()
+{
+    m_context->OMSetDepthStencilState(m_TransDepthStencilState.Get(), 0);
+}
+
 void DX11Renderer::SetBlendMode(BlendMode mode)
 {
     float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
@@ -561,6 +566,8 @@ void DX11Renderer::SetCullMode(CullMode mode)
 
     m_context->RSSetState(state);
 }
+
+
 
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
@@ -950,6 +957,14 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     DXHelper::ThrowIfFailed(hr);
 
 
+    //TransDepth
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; 
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+    hr = dev->CreateDepthStencilState(&dsDesc, m_TransDepthStencilState.GetAddressOf());
+    DXHelper::ThrowIfFailed(hr);
+    //m_TransDepthStencilState
+
+
     D3D11_RASTERIZER_DESC rsDesc = {};
     rsDesc.FillMode = D3D11_FILL_SOLID;
     rsDesc.FrontCounterClockwise = FALSE;
@@ -977,6 +992,8 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     blendDesc.RenderTarget[0].BlendEnable = TRUE;
     blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
     blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+
     blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
     blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
@@ -999,8 +1016,6 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
     blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
     blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-
-
 
     //일단 임의로 생성.
     hr = dev->CreateBlendState(
@@ -1134,6 +1149,8 @@ void DX11Renderer::CreateBackbuffers(int width, int height)
 
     m_width = rtvDesc.Width;
     m_height = rtvDesc.Height;
+
+
 
 
 

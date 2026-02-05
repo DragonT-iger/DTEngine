@@ -1,20 +1,25 @@
 #include "SetMainSceneEvent.h"
 #include "UIButton.h"
 #include "GameObject.h"
-#include "SceneManager.h"
+#include "ClientSceneManager.h"
 
 BEGINPROPERTY(SetMainSceneEvent)
 DTPROPERTY(SetMainSceneEvent, m_button)
+DTPROPERTY(SetMainSceneEvent, m_ObjWindow)
 ENDPROPERTY()
 
 void SetMainSceneEvent::Start()
 {
-		if (!m_button)
-				return;
+		if (!m_button || !m_ObjWindow) return;
 
-		// mainscene load해주기. 추후에 mainscene이 생기면 주석 풀기.
-		/*m_button->SetOnClick([this]()
+		auto OnClick = [this]()
+		{
+				if (m_ObjWindow->IsActive())
 				{
-						SceneManager::Instance().LoadScene("MainScene");
-				});*/
+					m_ObjWindow->SetActive(false);
+				}
+				ClientSceneManager::Instance().LoadScene("TitleScene");
+
+		};
+		m_button->SetOnClick(OnClick);
 }

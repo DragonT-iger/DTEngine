@@ -3,10 +3,14 @@
 
 // 적군
 
-struct PathPoint
+struct ArrowSegment
 {
-    Vector3 pathPoint;
-    float dir; // 시선 방향
+    Vector3 headWorld; // 머리 위치
+    Vector3 startWorld; // 시작점 위치
+    
+    Vector3 midWorld; // 선분 중심(월드)
+    float lenWorld; // 선분 길이(월드)
+    float yawDeg; // 방향(도)
 };
 
 class EnemyUnit : public Unit
@@ -26,7 +30,8 @@ public:
 
     void SetPath0();
 
-    std::vector<PathPoint> GetAllPath() const;
+    std::vector<Vector2> CollectPathPoints() const;
+    std::vector<ArrowSegment> GetArrowSegments() const;
 
 private:
     bool m_isBoss = false;      // 보스라면

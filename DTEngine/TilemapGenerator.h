@@ -3,10 +3,11 @@
 #include "ReflectionMacros.h"
 #include <vector>
 
+
 class TilemapData;
 class Prefab;
 
-class TilemapGenerator : public MonoBehaviour // 나중에 singleton MonoBehaviour로 변경 고려
+class TilemapGenerator : public MonoBehaviour 
 {
     DTGENERATED_BODY(TilemapGenerator);
 
@@ -23,7 +24,9 @@ public:
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
 
-	static constexpr int PALETTE_SIZE = 8;
+    void ReplaceTile(int x, int y, Prefab* newPrefab);
+
+	static constexpr int PALETTE_SIZE = 10;
 
 public:
 
@@ -35,6 +38,8 @@ public:
     Prefab* m_prefab5 = nullptr;
     Prefab* m_prefab6 = nullptr;
     Prefab* m_prefab7 = nullptr;
+    Prefab* m_prefab8 = nullptr;
+    Prefab* m_prefab9 = nullptr;
 
 private:
     

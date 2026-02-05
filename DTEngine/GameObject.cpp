@@ -346,10 +346,8 @@ std::vector<std::unique_ptr<GameObject>> GameObject::Clone()
 
 GameObject* GameObject::Find(std::string name)
 {
-    //Scene* curScene = SceneManager::Instance().GetActiveScene();
-    //return curScene->FindGameObject(name);
-
-    return nullptr;
+    Scene* curScene = SceneManager::Instance().GetActiveScene();
+    return curScene->FindGameObject(name);
 
 }
 void GameObject::FlushPending()

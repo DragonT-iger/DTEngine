@@ -86,8 +86,11 @@ public:
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
+    void SetDepthOff();
+
     void SetBlendMode(BlendMode mode);
     void SetCullMode(CullMode mode);
+
 
     void BeginFrame(const float clearColor[4]);
     void BindGlobalResources(); // CB, SAMPLER , 기본 STATE 
@@ -159,6 +162,7 @@ public:
     const Matrix& GetViewMatrix() const { return m_viewTM; }
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
+   
     void OffPS();
 
     void DrawFullScreenQuad();
@@ -166,7 +170,7 @@ public:
     PostProcessManager* GetPostProcessManager() const { return m_postProcessManager.get(); }
 
 
-
+    HWND GetHandle() { return m_hwnd; }
 
 private:
     bool CreateDeviceAndSwapchain();
@@ -240,7 +244,7 @@ private:
 
 
 #pragma endregion 
-
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_TransDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_defaultDepthStencilState;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState>   m_defaultRasterizerState;
 
