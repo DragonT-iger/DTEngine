@@ -23,7 +23,7 @@ public:
     void SetMaxValue(float value) { m_maxValue = value; }
     const float& GetMaxValue() const { return m_maxValue; }
 
-    void SetValue(float value);
+    virtual void  SetValue(float value);
     const float& GetValue() const { return m_value; }
 
     // 정수값만 사용할려면 체크.
@@ -56,7 +56,9 @@ public:
     void OnHandleReleased(float mouseLocalX);
 
     void UpdateHandlePosition();
-private:
+
+protected:
+
     void ApplyTrackColor();
     void ApplyHandleColor();
     bool ComputeHandleBounds(float& minX, float& maxX, float& available) const;

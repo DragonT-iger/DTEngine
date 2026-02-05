@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <string>
 #include <vector>
+#include <map>
 
 class Sound;
 
@@ -24,24 +25,27 @@ public:
     void Release();
 
     // BGM: 하나만 재생되며 교체 시 크로스페이드
-    void PlayBGM(const std::string& path, float volume = 1.0f, bool crossfade = true);
+    void PlayBGM(const std::string& path,  bool crossfade = true);
     void StopBGM(bool fadeOut = true);
 
     // SFX: 여러 개가 동시에 재생됨
-    void PlaySFX(const std::string& path, float volume = 1.0f);
+    void PlaySFX(const std::string& path);
 
     // 볼륨 제어
     void SetMasterVolume(float volume);
     void SetBGMVolume(float volume);
     void SetSFXVolume(float volume);
 
+   
 
-    void PlayOneShot(const std::string& path, float volume = 1.0f);
+    void PlayOneShot(const std::string& path);
 
     FMOD::Channel* PlayLoop(const std::string& path, float volume = 1.0f);
     FMOD::System* GetSystem() { return mSystem; }
 
     void ShutDown();
+
+    bool PlaySceneBGM(const std::string& SceneName, bool crossfaded = true);
 
 private:
     SoundManager() = default;
@@ -49,6 +53,11 @@ private:
 
     float Clamp01(float v) { return v < 0.f ? 0.f : (v > 1.f ? 1.f : v); }
     Sound* GetSound(const std::string& path);
+
+    bool Crosschecked(std::string Song);
+
+    std::map<std::string, std::string> m_BGMMap; //Scene Start때;
+    std::map<std::string, bool> m_havePlatyed;
 
 private:
     FMOD::System* mSystem = nullptr;
@@ -60,6 +69,8 @@ private:
     FMOD::Channel* mCurrentBGM = nullptr;
     FMOD::Channel* mPreviousBGM = nullptr;
 
-    float mTargetBGMVolume = 1.0f;
+    float mTargetBGMVolume = 0.5f;
+    float mTargetSFXVolume = 0.5f;
     float mFadeSpeed = 0.8f; // 초당 페이드 속도 (조절 가능)
-};
+    std::string m_On_Played = "";
+}; 

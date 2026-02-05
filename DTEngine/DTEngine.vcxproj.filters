@@ -398,6 +398,9 @@
     <ClInclude Include="Fog.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="BGMUISlider.h">
+      <Filter>Component\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -646,6 +649,9 @@
     <ClCompile Include="Fog.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="BGMUISlider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -836,6 +842,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Test_HeightFog_PS.hlsl">
       <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tile_Stain_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Tile_Stain_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

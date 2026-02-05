@@ -95,7 +95,7 @@ public:
     bool Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld); // 이게 삼각형 검사까지 추가된거.
 
     void Clear();
-
+    void SetBGMPlayed(bool val) {  m_bgmPlayed = val; }
 private:
 	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
     std::string m_name;
@@ -105,6 +105,7 @@ private:
 
     inline static float m_timeScale = 1.0f; // 배속용.
 
+    bool m_bgmPlayed = false;
 
     // 지연처리
     bool                                            m_isIterating = false;

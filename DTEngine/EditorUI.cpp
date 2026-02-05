@@ -53,6 +53,9 @@
 #include "DX11Renderer.h"
 #include "Effect.h"
 
+
+#include "../Client/ClientSceneManager.h"
+
 namespace fs = std::filesystem;
 
 static ImGuizmo::OPERATION m_currentOperation = ImGuizmo::TRANSLATE;
@@ -2436,6 +2439,29 @@ void EditorUI::CreatePrimitive(const std::string& name, const std::string& asset
     m_selectedGameObject = newGO;
 }
 
+void SetOpaqueBlendState(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+    // DX11Renderer 싱글톤을 통해 Device와 Context를 가져옵니다.
+    // (만약 DX11Renderer에 GetDevice(), GetContext()가 없다면 기존 방식대로 ImGui_ImplDX11_RenderState를 쓰되 헤더를 추가해야 합니다)
+    auto device = DX11Renderer::Instance().GetDevice();
+    auto context = DX11Renderer::Instance().GetContext();
+
+    if (!device || !context)
+        return;
+
+    static Microsoft::WRL::ComPtr<ID3D11BlendState> s_OpaqueBlendState;
+    if (!s_OpaqueBlendState)
+    {
+        D3D11_BLEND_DESC blendDesc = {};
+        blendDesc.RenderTarget[0].BlendEnable = FALSE; // 블렌딩 끄기
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        device->CreateBlendState(&blendDesc, s_OpaqueBlendState.GetAddressOf());
+    }
+
+    const FLOAT blendFactor[4] = { 0,0,0,0 };
+    context->OMSetBlendState(s_OpaqueBlendState.Get(), blendFactor, 0xFFFFFFFF);
+}
+
 
 void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera* camera)
 {
@@ -2458,7 +2484,15 @@ void EditorUI::RenderSceneWindow(RenderTexture* rt, Scene* activeScene , Camera*
         camera->SetAspectRatio(ratio);
     }
 
+    //Alpha Blending 
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    drawList->AddCallback(SetOpaqueBlendState, nullptr);
+
     ImGui::Image((void*)rt->GetSRV(), viewportPanelSize);
+
+    drawList->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
+  
+
 
     bool isHovered = ImGui::IsWindowHovered();
     FreeCamera::SetIsSceneHovered(isHovered);
@@ -2562,7 +2596,15 @@ void EditorUI::RenderGameWindow(RenderTexture* rt, Scene* activeScene)
 #endif
     ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + offX, ImGui::GetCursorPosY() + offY));
 
+
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+    drawList->AddCallback(SetOpaqueBlendState, nullptr);
+
     ImGui::Image((void*)rt->GetSRV(), ImVec2(drawW, drawH));
+
+    drawList->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
+
 
 
     bool isHovered = ImGui::IsItemHovered();
@@ -2757,7 +2799,7 @@ void EditorUI::DrawProjectWindow(Game::EngineMode engineMode)
 
                             SceneManager::Instance().RegisterScene(path.string());
 
-                            SceneManager::Instance().LoadScene(sceneName);
+                            ClientSceneManager::Instance().LoadScene(sceneName);
 
                         }
 

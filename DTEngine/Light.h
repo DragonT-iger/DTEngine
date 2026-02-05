@@ -41,4 +41,5 @@ public:
 
 private:
     static std::vector<Light*> s_allLights;
+    static std::vector<Light*> s_inSceneLights;
 };
