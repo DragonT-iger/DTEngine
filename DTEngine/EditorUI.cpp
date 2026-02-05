@@ -2394,6 +2394,100 @@ void EditorUI::DrawAssetInspector(const std::string& path)
                 ImGui::EndTable();
             }
 
+            ImGui::Separator();
+            ImGui::Text("Enemy Data");
+
+            static const char* EnemyTypeNames[] =
+            {
+                "Rook",
+                "Knight",
+                "Bishop"
+            };
+            static constexpr int ENEMY_TYPE_COUNT = 3;
+
+            ImGui::PushID("Enemy");
+            for (int ei = 0; ei < TilemapData::MAX_ENEMIES; ++ei)
+            {
+                auto& e = tilemap->GetEnemy(ei);
+
+                ImGui::PushID(ei);
+
+                std::string header = "Enemy " + std::to_string(ei);
+                if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+                {
+                    if (ImGui::Checkbox("Enabled", &e.enabled)) changed = true;
+
+                    ImGui::BeginDisabled(!e.enabled);
+
+                    int type = e.type;
+                    if (ImGui::Combo("Type", &type, EnemyTypeNames, ENEMY_TYPE_COUNT))
+                    {
+                        e.type = type; // 0:Rook, 1:Knight, 2:Bishop
+                        changed = true;
+                    }
+
+                    if (ImGui::Checkbox("Is Boss", &e.isBoss)) changed = true;
+
+                    ImGui::SeparatorText("Path Points");
+
+                    for (int pi = 0; pi < TilemapData::NUM_PATHPOINTS; ++pi)
+                    {
+                        ImGui::PushID(pi);
+
+                        float v[2] = { e.pathPoints[pi].x, e.pathPoints[pi].y };
+                        std::string label = "P" + std::to_string(pi);
+
+                        if (ImGui::InputFloat2(label.c_str(), v))
+                        {
+                            e.pathPoints[pi] = Vector2{ v[0], v[1] };
+                            changed = true;
+                        }
+
+                        ImGui::PopID();
+                    }
+
+                    ImGui::EndDisabled();
+                }
+
+                ImGui::PopID();
+            }
+            ImGui::PopID();
+
+            ImGui::Separator();
+            ImGui::Text("Dialogues");
+
+            ImGui::PushID("Dialogue");
+            for (int di = 0; di < TilemapData::MAX_DIALOGUES; ++di)
+            {
+                auto& d = tilemap->GetDialogue(di);
+
+                ImGui::PushID(di);
+
+                std::string header = "Dialogue " + std::to_string(di);
+                if (ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+                {
+                    if (ImGui::Checkbox("Enabled", &d.enabled))
+                        changed = true;
+
+                    ImGui::BeginDisabled(!d.enabled);
+
+                    static constexpr int BUF_SIZE = 2048;
+                    char buf[BUF_SIZE]{};
+                    strncpy_s(buf, d.text.c_str(), BUF_SIZE - 1);
+
+                    if (ImGui::InputTextMultiline("Text", buf, BUF_SIZE, ImVec2(-FLT_MIN, 80)))
+                    {
+                        d.text = buf;
+                        changed = true;
+                    }
+
+                    ImGui::EndDisabled();
+                }
+
+                ImGui::PopID();
+            }
+            ImGui::PopID();
+
             if (changed)
             {
                 tilemap->SaveFile(path);

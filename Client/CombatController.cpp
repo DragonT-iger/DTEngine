@@ -44,6 +44,8 @@ void CombatController::Update(float dTime)
 
 void CombatController::Setup()
 {
+    // 배틀맵을 통해 타일맵 가져와서 적 정보 가져와서 등록해주기.
+    
     m_stageEnd = false;                     
     m_currPhase = Phase::Ready;             
     m_stageResult = StageResult::InProgress;

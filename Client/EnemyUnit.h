@@ -1,5 +1,6 @@
 #pragma once
 #include "Unit.h"
+#include <array>
 
 // 적군
 
@@ -29,6 +30,8 @@ public:
     void SetPathIndex(int i) { m_pathIndex = (std::max)(0, (std::min)(i, 7)); }
 
     void SetPath0();
+
+    //void SetPath();
 
     std::vector<Vector2> CollectPathPoints() const;
     std::vector<ArrowSegment> GetArrowSegments() const;
