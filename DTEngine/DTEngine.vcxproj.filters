@@ -855,5 +855,11 @@
     <FxCompile Include="..\Assets\Shaders\Chess_Default_02_PS.hlsl">
       <Filter>Shader\Specific\Chess</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\UI_Arrow_VS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\UI_Arrow_PS.hlsl">
+      <Filter>Shader\Specific</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
