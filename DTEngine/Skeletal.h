@@ -35,7 +35,6 @@ public:
 	void SetSkeletal(std::string filename);
 	void SetSkeletal(uint64_t id );
 	void ClearVector();
-
 	std::string GetSkeletal() { return m_FbxName; }
 
 	std::vector<Matrix>& GetFinalMatrix() { return m_finalTransforms; }
