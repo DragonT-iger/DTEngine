@@ -230,11 +230,11 @@ void RayCastHitEvent::RaycastCheck()
 
 						//std::cout << hit->GetName() << std::endl;
 
-						if (m_isHealSkillOn)
+						if (m_isHealSkillOn && m_isStartBattle)	// 배틀 상태에서만.
 						{
 								// ray timescale 상관없이 됨. 그냥 바로 작업하자.
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
-										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear")
 								{
 										GameObject* m_Unit = nullptr;
 										GameObject* unitRoot = hit;
@@ -246,6 +246,7 @@ void RayCastHitEvent::RaycastCheck()
 
 										m_Unit = unitRoot;
 
+										int healCount = GameManager::Instance()->GetHealSkillcount();
 										if (m_Unit)
 										{
 												auto unit = m_Unit->GetComponent<AllyUnit>();
@@ -255,20 +256,22 @@ void RayCastHitEvent::RaycastCheck()
 												unit->Heal(30);
 												m_isHealSkillOn = false;
 
-												//std::cout << unit->GetHp() << std::endl;
 
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
 												GameManager::Instance()->SetTimeScale(prevScale);
+
+												// skill count 감소 시키기.
+												GameManager::Instance()->SetHealSkillCount(healCount - 1);
 										}
 								}
 
 								return;
 						}
 
-						if (m_isAttackSkillOn)
+						if (m_isAttackSkillOn && m_isStartBattle) // 배틀 상태에서만.
 						{
 								if (hit->GetName() == "Chess" || hit->GetName() == "Wand" || hit->GetName() == "Shield"
-										|| hit->GetName() == "Sword" || hit->GetName() == "Spear" || hit->GetName() == "Shield")
+										|| hit->GetName() == "Sword" || hit->GetName() == "Spear")
 								{
 										GameObject* m_Unit = nullptr;
 										GameObject* unitRoot = hit;
@@ -280,6 +283,7 @@ void RayCastHitEvent::RaycastCheck()
 
 										m_Unit = unitRoot;
 
+										int attackCount = GameManager::Instance()->GetAttackSkillcount();
 										if (m_Unit)
 										{
 												auto unit = m_Unit->GetComponent<EnemyUnit>();
@@ -292,6 +296,9 @@ void RayCastHitEvent::RaycastCheck()
 
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
 												GameManager::Instance()->SetTimeScale(prevScale);
+
+												// skill count 감소 시키기.
+												GameManager::Instance()->SetAttackSkillCount(attackCount - 1);
 										}
 								}
 								return;
