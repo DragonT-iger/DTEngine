@@ -26,9 +26,11 @@ public:
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
-    // 적 벡터를 넘겨주는 함수.
+    void SpawnEnemies(); // 적 생성
+    std::vector<GameObject*>& GetSpawnedEnemys() { return m_spawnedEnemys; }
 
 	static constexpr int PALETTE_SIZE = 10;
+    static constexpr int NUM_ENEMIES = 3;
 
 public:
 
@@ -42,6 +44,10 @@ public:
     Prefab* m_prefab7 = nullptr;
     Prefab* m_prefab8 = nullptr;
     Prefab* m_prefab9 = nullptr;
+
+    Prefab* m_enemy0 = nullptr;
+    Prefab* m_enemy1 = nullptr;
+    Prefab* m_enemy2 = nullptr;
 
 private:
     

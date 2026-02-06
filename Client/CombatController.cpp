@@ -18,6 +18,7 @@ CombatController::~CombatController()
     battleGrid = nullptr;
 
     m_aliceUnit = nullptr;
+    m_redQueenUnit = nullptr;
 
     allyUnit0 = nullptr;
     allyUnit1 = nullptr;
@@ -51,7 +52,7 @@ void CombatController::Setup()
     m_stageResult = StageResult::InProgress;
     m_phaseEntered = false;
 
-      m_allyUnits.clear();
+    m_allyUnits.clear();
     m_enemyUnits.clear();
     m_battleUnits.clear();
     
@@ -62,18 +63,34 @@ void CombatController::Setup()
     if (allyUnit2 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit2) == m_allyUnits.end())
         m_allyUnits.push_back(allyUnit2);
 
-    if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end()) 
-        m_enemyUnits.push_back(enemyUnit0);
-    if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
-        m_enemyUnits.push_back(enemyUnit1);
-    if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end()) 
-        m_enemyUnits.push_back(enemyUnit2);
+    //if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end()) 
+    //    m_enemyUnits.push_back(enemyUnit0);
+    //if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
+    //    m_enemyUnits.push_back(enemyUnit1);
+    //if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end()) 
+    //    m_enemyUnits.push_back(enemyUnit2);
 
 
-    for (EnemyUnit* enemy : m_enemyUnits)
+    std::vector<GameObject*> enemyObjects = battleGrid->GetEnemyObjects();
+
+    for (int i = 0; i < 3; ++i) 
     {
-        if(enemy) enemy->SetPath0();
+        if (enemyObjects[i])
+        {
+            EnemyUnit* enemy = enemyObjects[i]->GetComponent<EnemyUnit>();
+            if (enemy) 
+            { 
+                AddEnemyUnit(enemy);
+                m_enemyUnits.push_back(enemy); 
+            }
+        }
     }
+
+
+    //for (EnemyUnit* enemy : m_enemyUnits)
+    //{
+    //    if(enemy) enemy->SetPath0();
+    //}
 
     m_isStageStart = true;
 }
@@ -87,6 +104,9 @@ bool CombatController::ReadyPhase()
 
     m_aliceUnit->SetMovePos(m_aliceUnit->GetPos()); // 앨리스는 예외로 이동 안함.
     battleGrid->ReserveMove(m_aliceUnit->GetPos());
+
+    m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
+    battleGrid->ReserveMove(m_redQueenUnit->GetPos());
 
     for (AllyUnit* ally : m_allyUnits)
     {
@@ -125,6 +145,24 @@ bool CombatController::ReadyPhase()
         else
         {
             enemy->SetAttackTarget(nullptr);
+        }
+    }
+
+    if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+    {
+        std::vector<Unit*> targets;
+        GetAttackableTargets(m_redQueenUnit, targets);
+
+        if (!targets.empty())
+        {
+            m_battleUnits.push_back(m_redQueenUnit);
+
+            Unit* target = SelectAttackTarget(m_redQueenUnit, targets, BattleRule::Nearest);
+            m_redQueenUnit->SetAttackTarget(target);
+        }
+        else
+        {
+            m_redQueenUnit->SetAttackTarget(nullptr);
         }
     }
 
@@ -242,6 +280,14 @@ bool CombatController::MoveAndBattlePhase(float dTime)
             enemy->StartAction();
         }
 
+        if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+        {
+            ResolveTurnAction(m_redQueenUnit);
+
+            m_redQueenUnit->SetActionDone(false); 
+            m_redQueenUnit->StartAction(); // 전용 액션 만들어 주기.
+        }
+
         return false;
     }
 
@@ -255,6 +301,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (enemy && enemy->IsAlive()) enemy->UpdateAction(dTime);
     }
 
+    if (m_redQueenUnit && m_redQueenUnit->IsAlive()) m_redQueenUnit->UpdateAction(dTime);
 
     // 실제 이동 및 애니메이션 완료 체크
     for (AllyUnit* ally : m_allyUnits)
@@ -273,6 +320,12 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (!enemy->IsActionDone()) return false;
         if (enemy->GetAction() == TurnAction::Wait) continue;
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
+    }
+
+    if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+    {
+        if (!m_redQueenUnit->IsActionDone()) return false;
+        if (m_redQueenUnit->IsAnimStart() && !m_redQueenUnit->IsAnimDone()) return false;
     }
 
     // 함정타일 밟았을 때, 데미지 처리
@@ -350,6 +403,16 @@ bool CombatController::EndPhase()
                 enemy->StartDieAnim();
                 if (enemy->IsBoss()) m_stageResult = StageResult::Win; // 보스 잡으면 무조건 승리
             }
+        }
+
+        if (m_redQueenUnit && m_redQueenUnit->IsAlive() && m_redQueenUnit->GetHp() <= 0.0f)
+        {
+            m_redQueenUnit->SetIsAlive(false);
+            m_redQueenUnit->SetAction(TurnAction::Die);
+            //m_redQueenUnit->SetActionDone(false);
+            //m_redQueenUnit->StartAction();
+            //m_redQueenUnit->StartDieAnim();
+            m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
         }
 
         int aliveAllyCount = 0;
@@ -937,6 +1000,16 @@ void CombatController::AddAllyUnit(AllyUnit* allyUnit)
     else return;
 
     ++allyCount;
+}
+
+void CombatController::AddEnemyUnit(EnemyUnit* enemyUnit)
+{
+    if (enemyCount == 0) enemyUnit0 = enemyUnit;
+    else if (enemyCount == 1) enemyUnit1 = enemyUnit;
+    else if (enemyCount == 2) enemyUnit2 = enemyUnit;
+    else return;
+
+    ++enemyCount;
 }
 
 void CombatController::PrintFrame()

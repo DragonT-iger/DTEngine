@@ -5,6 +5,7 @@
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
 #include "AliceUnit.h"
+#include "RedQueen.h"
 #include "BattleGrid.h"
 
 
@@ -12,6 +13,7 @@ class Unit;
 class AllyUnit;
 class EnemyUnit;
 class AliceUnit;
+class RedQueenUnit;
 class BattleGrid;
 //class Prefab;
 
@@ -90,7 +92,9 @@ public:
 
 	// 튜토리얼에서 가져와서 방향 돌리기 위한용
 	AllyUnit* GetAllyUnit0() { return allyUnit0; }
+
 	void AddAllyUnit(AllyUnit* allyUnit);
+	void AddEnemyUnit(EnemyUnit* enemyUnit);
 
 	void SetEnemyUnit0(EnemyUnit* enemyUnit) { enemyUnit0 = enemyUnit; }
 	void SetEnemyUnit1(EnemyUnit* enemyUnit) { enemyUnit1 = enemyUnit; }
@@ -108,6 +112,7 @@ private:
 	float m_trapDamage = 30.0f; // 트랩 데미지.
 
 	AliceUnit* m_aliceUnit = nullptr; // 앨리스 // 얘도 등록받아야해. 
+	RedQueenUnit* m_redQueenUnit = nullptr; // 붉은여왕
 
 	std::vector<AllyUnit*> m_allyUnits; // 아군유닛 목록
 	std::vector<EnemyUnit*> m_enemyUnits; // 적군유닛 목록
@@ -129,4 +134,5 @@ private:
 
 	//Prefab* asdf = nullptr;
 	int allyCount = 0;
+	int enemyCount = 0;
 };
