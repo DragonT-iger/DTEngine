@@ -111,6 +111,10 @@ bool CombatController::ReadyPhase()
     m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
     battleGrid->ReserveMove(m_redQueenUnit->GetPos());
 
+
+
+
+
     for (AllyUnit* ally : m_allyUnits)
     {
         if (!ally || !ally->IsAlive()) continue;

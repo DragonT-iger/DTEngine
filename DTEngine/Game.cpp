@@ -43,7 +43,7 @@
 #include "SkyBoxComponent.h"
 
 #include "BGMUISlider.h"
-
+#include "Dissolved.h"
 #include "../Client/ClientSceneManager.h"
 
 
@@ -118,10 +118,10 @@ bool Game::Initialize()
 
 
 	//SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
-	//SceneManager::Instance().LoadScene("GridTestScene");
+//	SceneManager::Instance().LoadScene("GridTestScene");
 
-	SceneManager::Instance().RegisterScene("Scenes/hsGridTestScenehs.scene");
-	SceneManager::Instance().LoadScene("hsGridTestScenehs");
+//	SceneManager::Instance().RegisterScene("Scenes/hsGridTestScenehs.scene");
+//	SceneManager::Instance().LoadScene("hsGridTestScenehs");
 
 
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
@@ -143,8 +143,8 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	//SceneManager::Instance().LoadScene("DTtestScene");
 
-	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
-	 //SceneManager::Instance().LoadScene("SampleSceneBum");
+	 SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
+	 SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
 	/* SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
