@@ -27,8 +27,10 @@ float4 PS(PS_INPUT input) : SV_Target
     
    
     float alpha = mask - MaterialColor.a;
-    saturate(alpha);
-
+    
+   
+    
+    alpha = saturate(alpha);
     
     
     return float4(color.rgb, alpha);
