@@ -17,13 +17,22 @@ void SkillButton::Start()
 				return;
 
 		// window 닫고 timescale 0으로.
+		// 이제 GameManager Count로 체크.
 		m_attackButton->SetOnClick([this]()
 				{
-						if (!m_isAttackUnlocked)
+						
+						int attackCount = GameManager::Instance()->GetAttackSkillcount();
+						std::cout << attackCount << std::endl;
+						if (attackCount < 1)
 								return;
 
 						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();
 						if (!rayEvent)
+								return;
+
+						// 게임 시작 안했으면 처리 안함.
+						bool start = rayEvent->GetStartBattle();
+						if (!start)
 								return;
 
 						// 이미 스킬 활성화 중이면 무시
@@ -37,11 +46,20 @@ void SkillButton::Start()
 
 		m_healButton->SetOnClick([this]()
 				{
-						if (!m_isHealUnlocked)
+						
+						int healCount = GameManager::Instance()->GetHealSkillcount();
+						std::cout << healCount << std::endl;
+
+						if (healCount < 1)
 								return;
 
 						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();
 						if (!rayEvent)
+								return;
+
+						// 게임 시작 안했으면 처리 안함.
+						bool start = rayEvent->GetStartBattle();
+						if (!start)
 								return;
 
 						// 이미 스킬 활성화 중이면 무시

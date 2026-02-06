@@ -37,6 +37,15 @@ public:
 	void SetTimeScale(int scale);
 	int GetTimeScale() const { return curTimeScale; }
 	int GetPrevTimeScale() const { return prevTimeScale; }
+
+
+	int GetHealSkillcount() const { return healSkillCount; }
+	void SetHealSkillCount(int count) { healSkillCount = count; }
+
+	int GetAttackSkillcount() const { return attackSkillCount; }
+	void SetAttackSkillCount(int count) { attackSkillCount = count; }
+
+
 private:
 	
 	Text* m_money;
@@ -54,5 +63,8 @@ private:
 
 	static inline int curTimeScale = 1;		// 배속값 위해서.
 	static inline int prevTimeScale = 1.0f;
+
+	static inline int healSkillCount = 1;
+	static inline int attackSkillCount = 1;
 };
 
