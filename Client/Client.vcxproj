@@ -151,6 +151,7 @@
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="DelayDisableEvent.cpp" />
+    <ClCompile Include="EndSceneManager.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayDisableEvent.h" />
+    <ClInclude Include="EndSceneManager.h" />
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />

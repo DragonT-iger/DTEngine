@@ -131,11 +131,14 @@ bool Game::Initialize()
 	//SceneManager::Instance().LoadScene("TutorialScene");
 
 
+	SceneManager::Instance().RegisterScene("Scenes/EndingScene.scene");
+	SceneManager::Instance().LoadScene("EndingScene");
+
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
-	SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
-	SceneManager::Instance().LoadScene("SampleScene");
+	//SceneManager::Instance().RegisterScene("Scenes/SampleScene.scene");
+	//SceneManager::Instance().LoadScene("SampleScene");
 
 	 //SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	 //SceneManager::Instance().LoadScene("DTtestScene");
