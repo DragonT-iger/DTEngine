@@ -242,15 +242,15 @@ void DX11Renderer::UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix)
     m_context->Unmap(m_cbuffer_matrix_pallette.Get(), 0);
 }
 
-void DX11Renderer::UpdateSkyBox_CBUFFER(SkyBox& data)
+void DX11Renderer::UpdateSkyBox_CBUFFER(IBL& data)
 {
     D3D11_MAPPED_SUBRESOURCE mappedData = {};
 
     HRESULT hr = m_context->Map(m_cbuffer_SkyBox.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
     DXHelper::ThrowIfFailed(hr);
 
-    SkyBox* dataPtr = static_cast<SkyBox*>(mappedData.pData);
-    dataPtr->SkyBox_Color = data.SkyBox_Color;
+    IBL* dataPtr = static_cast<IBL*>(mappedData.pData);
+    dataPtr->IBL_Value = data.IBL_Value;
     
     m_context->Unmap(m_cbuffer_SkyBox.Get(), 0);
 }
@@ -684,7 +684,7 @@ void DX11Renderer::CreateConstantBuffers()
     bd.ByteWidth = sizeof(Matrix_Pallette);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_matrix_pallette.GetAddressOf()));
     //b7
-    bd.ByteWidth = sizeof(SkyBox);
+    bd.ByteWidth = sizeof(IBL);
     DXHelper::ThrowIfFailed(m_device->CreateBuffer(&bd, nullptr, m_cbuffer_SkyBox.GetAddressOf()));
     //b8
     bd.ByteWidth = sizeof(EffectParams);

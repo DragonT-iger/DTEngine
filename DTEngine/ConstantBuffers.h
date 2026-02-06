@@ -66,9 +66,9 @@ struct Matrix_Pallette //b5
 };
 
 __declspec(align(16))
-struct SkyBox //b6
+struct IBL //b6
 {
-    Vector4 SkyBox_Color;
+    Vector4 IBL_Value; //아마 alpha값으로 조정만 해서 수치 조절에 사용할 듯 
 };
 
 // SHADER를 사용한 종합적인 Effect에 필요한 상수버퍼.

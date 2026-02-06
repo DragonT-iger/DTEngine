@@ -113,7 +113,17 @@ float4 PS(PS_INPUT input) : SV_Target
         ambientLighting = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
     
-    float3 TotalAmbi = lerp(Temp_ambientLighting, ambientLighting, MaterialColor.a);
+    
+    
+    
+    
+    // TotalAmbi = ambientLighting * SkyBox_Color.a;
+    
+    float3 TotalAmbi = lerp(ambientLighting, Temp_ambientLighting, SkyBox_Color.a);
+    
+    //TotalAmbi += Temp_ambientLighting * MaterialColor.a;
+
+   // float3 TotalAmbi = lerp(Temp_ambientLighting, ambientLighting, MaterialColor.a);
     
     
     

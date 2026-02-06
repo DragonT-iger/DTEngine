@@ -98,7 +98,7 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float3 Temp_ambientLighting = albedo * 0.7f;
     
-    float3 ambientLighting = Temp_ambientLighting;
+    float3 ambientLighting_IBL = 1;
     
     if (USE_IBL)
     {
@@ -110,15 +110,22 @@ float4 PS(PS_INPUT input) : SV_Target
         float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
 
         // 물리 연산은 Shared 함수 호출 (데이터만 전달)
-        ambientLighting = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
+        ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
     
-    float3 TotalAmbi = lerp(Temp_ambientLighting, ambientLighting, MaterialColor.a);
+   ambientLighting_IBL = ambientLighting_IBL * SkyBox_Color.a;
+    
+   Temp_ambientLighting *= SkyBox_Color.b;
     
     
+   
     
-    //ambientLighting *= MaterialColor.a;
-        
+    float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
+    
+    
+     TotalAmbi = saturate(TotalAmbi);
+    
+    
     float3 finalColor = (directLighting + TotalAmbi) * (Temp + Shadow_Scale);
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;
