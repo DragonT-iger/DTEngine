@@ -915,7 +915,6 @@ void Scene::RenderOpaque(std::vector<GameObject*>& OpaqueVec)
 // 
 
 
-
 void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
 {
 
@@ -951,6 +950,7 @@ void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
         mesh->Bind();
         mesh->Draw();
         };
+
 
 
     for (auto* go : TransVec)

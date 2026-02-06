@@ -178,6 +178,8 @@ public:
     void StartAttackAnim();
     void StartDieAnim();
 
+    void StartDissolve();
+
     bool IsAnimStart() const { return m_animStart; }
     bool IsAnimDone() { return m_anim->GetAnimationDone(); }
 

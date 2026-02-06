@@ -401,6 +401,9 @@
     <ClInclude Include="BGMUISlider.h">
       <Filter>Component\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Dissolved.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -650,6 +653,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="BGMUISlider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Dissolved.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

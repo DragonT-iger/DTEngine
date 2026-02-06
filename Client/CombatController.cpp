@@ -122,6 +122,10 @@ bool CombatController::ReadyPhase()
     //m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
     //battleGrid->ReserveMove(m_redQueenUnit->GetPos());
 
+
+
+
+
     for (AllyUnit* ally : m_allyUnits)
     {
         if (!ally || !ally->IsAlive()) continue;
@@ -162,7 +166,7 @@ bool CombatController::ReadyPhase()
         }
     }
 
-    if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+   /* if (m_redQueenUnit && m_redQueenUnit->IsAlive())
     {
         std::vector<Unit*> targets;
         GetAttackableTargets(m_redQueenUnit, targets);
@@ -178,7 +182,7 @@ bool CombatController::ReadyPhase()
         {
             m_redQueenUnit->SetAttackTarget(nullptr);
         }
-    }
+    }*/
 
     return true;
 }
@@ -294,13 +298,13 @@ bool CombatController::MoveAndBattlePhase(float dTime)
             enemy->StartAction();
         }
 
-        if (m_redQueenUnit && m_redQueenUnit->IsAlive())
-        {
-            ResolveTurnAction(m_redQueenUnit);
+        //if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+        //{
+        //    ResolveTurnAction(m_redQueenUnit);
 
-            m_redQueenUnit->SetActionDone(false); 
-            m_redQueenUnit->StartAction(); // 전용 액션 만들어 주기.
-        }
+        //    m_redQueenUnit->SetActionDone(false); 
+        //    m_redQueenUnit->StartAction(); // 전용 액션 만들어 주기.
+        //}
 
         return false;
     }
@@ -315,7 +319,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (enemy && enemy->IsAlive()) enemy->UpdateAction(dTime);
     }
 
-    if (m_redQueenUnit && m_redQueenUnit->IsAlive()) m_redQueenUnit->UpdateAction(dTime);
+ //   if (m_redQueenUnit && m_redQueenUnit->IsAlive()) m_redQueenUnit->UpdateAction(dTime);
 
     // 실제 이동 및 애니메이션 완료 체크
     for (AllyUnit* ally : m_allyUnits)
@@ -336,11 +340,11 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
     }
 
-    if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+   /* if (m_redQueenUnit && m_redQueenUnit->IsAlive())
     {
         if (!m_redQueenUnit->IsActionDone()) return false;
         if (m_redQueenUnit->IsAnimStart() && !m_redQueenUnit->IsAnimDone()) return false;
-    }
+    }*/
 
     // 함정타일 밟았을 때, 데미지 처리
     for (AllyUnit* ally : m_allyUnits)
@@ -419,15 +423,15 @@ bool CombatController::EndPhase()
             }
         }
 
-        if (m_redQueenUnit && m_redQueenUnit->IsAlive() && m_redQueenUnit->GetHp() <= 0.0f)
-        {
-            m_redQueenUnit->SetIsAlive(false);
-            m_redQueenUnit->SetAction(TurnAction::Die);
-            //m_redQueenUnit->SetActionDone(false);
-            //m_redQueenUnit->StartAction();
-            //m_redQueenUnit->StartDieAnim();
-            m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
-        }
+        //if (m_redQueenUnit && m_redQueenUnit->IsAlive() && m_redQueenUnit->GetHp() <= 0.0f)
+        //{
+        //    m_redQueenUnit->SetIsAlive(false);
+        //    m_redQueenUnit->SetAction(TurnAction::Die);
+        //    //m_redQueenUnit->SetActionDone(false);
+        //    //m_redQueenUnit->StartAction();
+        //    //m_redQueenUnit->StartDieAnim();
+        //    m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
+        //}
 
         int aliveAllyCount = 0;
         for (AllyUnit* ally : m_allyUnits)
