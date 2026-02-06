@@ -142,12 +142,15 @@
     <ClCompile Include="AliceUnit.cpp" />
     <ClCompile Include="ClickSetActiveObjEvent.cpp" />
     <ClCompile Include="ClickStartButton.cpp" />
+    <ClCompile Include="ClickWarningWindowExitButtonEvent.cpp" />
+    <ClCompile Include="ClickWarningWindowOkayEvent.cpp" />
     <ClCompile Include="ClientSceneManager.cpp" />
     <ClCompile Include="AllyUnit.cpp" />
     <ClCompile Include="BattleGrid.cpp" />
     <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="CombatTestRunner.cpp" />
+    <ClCompile Include="DelayDisableEvent.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
@@ -168,6 +171,7 @@
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="SetMainSceneEvent.cpp" />
     <ClCompile Include="SkillButton.cpp" />
+    <ClCompile Include="SkillHoverEvent.cpp" />
     <ClCompile Include="SliderValueEvent.cpp" />
     <ClCompile Include="TitleCreditTriggerEvent.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
@@ -191,6 +195,8 @@
     <ClInclude Include="AliceUnit.h" />
     <ClInclude Include="ClickSetActiveObjEvent.h" />
     <ClInclude Include="ClickStartButton.h" />
+    <ClInclude Include="ClickWarningWindowExitButtonEvent.h" />
+    <ClInclude Include="ClickWarningWindowOkayEvent.h" />
     <ClInclude Include="ClientSceneManager.h" />
     <ClInclude Include="AllyUnit.h" />
     <ClInclude Include="BattleGrid.h" />
@@ -198,6 +204,7 @@
     <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DelayDisableEvent.h" />
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />
@@ -217,6 +224,7 @@
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="SetMainSceneEvent.h" />
     <ClInclude Include="SkillButton.h" />
+    <ClInclude Include="SkillHoverEvent.h" />
     <ClInclude Include="SliderValueEvent.h" />
     <ClInclude Include="TitleCreditTriggerEvent.h" />
     <ClInclude Include="TutorialManager.h" />

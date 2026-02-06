@@ -20,6 +20,8 @@ public:
 
 private:
 		GameObject* m_rayObject = nullptr;
+
+		GameObject* m_nonCostObj = nullptr;
 		
 		// unit info window 
 		GameObject* m_unitRuleWindow = nullptr;

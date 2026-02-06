@@ -144,6 +144,9 @@
     <ClCompile Include="ChesherGuideEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="SkillHoverEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
     <ClCompile Include="TutorialSceneTriggerEvent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -155,6 +158,15 @@
     </ClCompile>
     <ClCompile Include="RedQueen.cpp">
       <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayDisableEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickWarningWindowOkayEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickWarningWindowExitButtonEvent.cpp">
+      <Filter>Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +295,18 @@
     </ClInclude>
     <ClInclude Include="RedQueen.h">
       <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillHoverEvent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayDisableEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickWarningWindowOkayEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickWarningWindowExitButtonEvent.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
