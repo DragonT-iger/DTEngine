@@ -45,7 +45,7 @@ void RuleImageVisualEvent::Start()
 
 											if (step == TutorialManager::TutorialStep::Cat_Explain_Wait)
 											{
-												if (i == 0) 
+												if (i == 1) 
 												{
 													bgEvent->SetMoveIndex(i);
 													UpdateMoveVisuals();

@@ -40,13 +40,13 @@ public:
         Cat_Explain_EnemyPathWait,
         Cat_Strategy_DefenseTile,       // "방어 타일 위에 있으면..."
         Cat_Order_StartBattle,          // "싸움을 붙여 보자고!"
+        Battle,
         Cat_Explain_EnemyRange,         // "토끼 녀석들은 공격 범위가 정해져 있어" 
         Cat_Explain_EnemyRange_End,     // "너를 위해서 말이야" 
         Battle_InProgress,              // (Case 22: 현재 주석처리됨, 순서 유지용)
         Victory                         // 승리 UI (Case 23)
     };
 
-    void Awake() override;
     void Start() override;
 
     void Update(float deltaTime) override;
@@ -62,7 +62,7 @@ private:
     GameObject* leftChat = nullptr;
     GameObject* rightChat = nullptr;
 
-    Text* leftChatText = nullptr; // awake에서 자동으로 할당
+    Text* leftChatText = nullptr;
     Text* rightChatText = nullptr;
 
     GameObject* m_queenUI = nullptr;
@@ -87,6 +87,7 @@ private:
 
     GameObject* m_infoUI = nullptr;
     Prefab* m_glowTilePrefab = nullptr;
+    Prefab* m_redGlowTilePrefab = nullptr;
 
     bool m_rayActive = false;
     bool m_aliceDead = false;
@@ -106,5 +107,7 @@ private:
     GameObject* m_tutorialAdditionalEnemy = nullptr;
 
     RayCastHitEvent* m_rayCastHitEvent = nullptr;
+
+    
 
 };

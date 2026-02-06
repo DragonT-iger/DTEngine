@@ -87,8 +87,8 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
 {
     if (!m_mapData || !newPrefab) return;
 
-    int width = m_mapData->GetWidth();
-    int height = m_mapData->GetHeight();
+    int width = m_mapData->GetExpandedWidth();
+    int height = m_mapData->GetExpandedHeight();
 
     if (x < 0 || x >= width || y < 0 || y >= height) return;
 
@@ -109,7 +109,7 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
         float tileSize = TilemapData::TILE_SIZE;
 
         instance->GetTransform()->SetParent(myTr);
-        instance->GetTransform()->SetPosition(Vector3(x * tileSize, 0, y * tileSize));
+        instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, 0, (y - 1) * tileSize));
         instance->SetActive(true);
 
         m_spawnedTiles[arrayIndex] = instance;

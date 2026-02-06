@@ -13,6 +13,7 @@
 #include "TilemapGenerator.h"
 #include "RayCastHitEvent.h"
 #include "ArrowObjectPool.h"
+#include "GameManager.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -33,16 +34,13 @@ DTPROPERTY(TutorialManager, m_combatController)
 DTPROPERTY(TutorialManager, m_aliceGameObject)
 DTPROPERTY(TutorialManager, m_infoUI);
 DTPROPERTY(TutorialManager, m_glowTilePrefab)
+DTPROPERTY(TutorialManager, m_redGlowTilePrefab)
 DTPROPERTY(TutorialManager, m_tilemapGenerator)
 DTPROPERTY(TutorialManager, m_RRSokayButton)
 DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemyPrefab)
 DTPROPERTY(TutorialManager, m_rayCastHitEvent)
 ENDPROPERTY()
 
-void TutorialManager::Awake()
-{
-    // 초기화 코드가 필요하다면 작성
-}
 
 void TutorialManager::Start()
 {
@@ -51,10 +49,31 @@ void TutorialManager::Start()
 
 void TutorialManager::Update(float deltaTime)
 {
+
+    if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
+    {
+        // GameManager가 존재하는지 먼저 확인
+        if (GameManager::Instance() != nullptr)
+        {
+            GameManager::Instance()->SetMoney(GameManager::Instance()->GetMoney() + 1);
+        }
+        else
+        {
+            // 디버깅용 로그: 씬에 GameManager가 없음을 알림
+            std::cout << "Error: GameManager instance is null!" << std::endl;
+        }
+    }
+
+
+
     if (InputManager::Instance().GetKeyDown(KeyCode::Space) || InputManager::Instance().GetKeyDown(KeyCode::Enter))
     {
         NextStep();
     }
+    
+
+
+
 
     if (m_aliceGameObject) {
         AllyUnit* aliceAllyUnit = m_aliceGameObject->GetComponent<AllyUnit>();
@@ -234,23 +253,22 @@ void TutorialManager::Update(float deltaTime)
                 float duration = 0.5f;
                 float t = m_vignetteDelayTimer / duration;
 
+                Vector2 startCenter = Vector2(0.415f, 0.35f);
+                Vector2 startWH = Vector2(0.15f, 0.15f);
+
+                Vector2 targetCenter = Vector2(0.770f, 0.350f);
+                Vector2 targetWH = Vector2(0.450f, 0.450f);
+
                 if (t >= 1.0f)
                 {
                     t = 1.0f;
                     m_isVignetteSequence = false;
 
-                    mainCam->SetCircleWidthHeight({ 2.0f, 2.0f });
-                    mainCam->SetUseCircleMask(false);
-                    mainCam->SetCircleCenter({ 0.5f, 0.5f });
+                    mainCam->SetCircleCenter(targetCenter);
+                    mainCam->SetCircleWidthHeight(targetWH);
                 }
                 else
                 {
-                    Vector2 startCenter = Vector2(0.415f, 0.35f);
-                    Vector2 startWH = Vector2(0.15f, 0.15f);
-
-                    Vector2 targetCenter = Vector2(0.5f, 0.5f);
-                    Vector2 targetWH = Vector2(2.0f, 2.0f);
-
                     Vector2 currentCenter = Vector2::Lerp(startCenter, targetCenter, t);
                     Vector2 currentWH = Vector2::Lerp(startWH, targetWH, t);
 
@@ -297,6 +315,46 @@ void TutorialManager::Update(float deltaTime)
                 }
 
                 mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
+            }
+        }
+    }
+
+    if (m_CurrentStep == TutorialStep::Cat_Explain_EnemyPath && m_isVignetteSequence)
+    {
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                m_vignetteDelayTimer += deltaTime;
+
+                float duration = 0.5f; 
+                float t = m_vignetteDelayTimer / duration;
+
+                if (t >= 1.0f)
+                {
+                    t = 1.0f;
+                    m_isVignetteSequence = false;
+
+                    mainCam->SetCircleWidthHeight({ 2.0f, 2.0f });
+                    mainCam->SetUseCircleMask(false);
+                    mainCam->SetCircleCenter({ 0.5f, 0.5f });
+                }
+                else
+                {
+                    Vector2 startCenter = Vector2(0.770f, 0.350f);
+                    Vector2 startWH = Vector2(0.450f, 0.450f);
+
+                    Vector2 targetCenter = Vector2(0.5f, 0.5f);
+                    Vector2 targetWH = Vector2(2.0f, 2.0f);
+
+                    Vector2 currentCenter = Vector2::Lerp(startCenter, targetCenter, t);
+                    Vector2 currentWH = Vector2::Lerp(startWH, targetWH, t);
+
+                    mainCam->SetCircleCenter(currentCenter);
+                    mainCam->SetCircleWidthHeight(currentWH);
+                }
             }
         }
     }
@@ -424,11 +482,11 @@ void TutorialManager::NextStep(bool force)
 
         m_canProceedToNextStep = false;
 
-        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 4, m_glowTilePrefab);
-        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
+          if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 5, m_glowTilePrefab);
+        //if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
 
         Scene* activeScene = SceneManager::Instance().GetActiveScene();
-        if (activeScene)
+        if (activeScene) 
         {
             Camera* mainCam = activeScene->GetMainCamera();
             if (mainCam)
@@ -491,7 +549,7 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Cat_Strategy_Closest: // 14
     {
         if (m_catText2) {
-            m_catText2->SetText(L"적은 하나뿐이니,\n이번엔 가까운 놈을 노려 보지");
+            m_catText2->SetText(L"적은 하나뿐이니,\n이번엔 체력이 낮은 놈을 노려 보지");
         }
     }
     break;
@@ -515,6 +573,8 @@ void TutorialManager::NextStep(bool force)
         }
         m_tutorialAdditionalEnemy = m_tutorialAdditionalEnemyPrefab->Instantiate();
 
+        m_isVignetteSequence = true;
+        m_vignetteDelayTimer = 0.0f;
     }
     break;
 
@@ -556,6 +616,11 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
         }
         m_rayCastHitEvent->GetArrowPool()->_GetOwner()->SetActive(false);
+
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab);
+
+        m_combatController->GetBattleGrid()->SetDefenseTile({ 3,6 });
+
     }
     break;
 
@@ -571,18 +636,46 @@ void TutorialManager::NextStep(bool force)
     }
     break;
 
-    case TutorialStep::Cat_Explain_EnemyRange:
+    case TutorialStep::Battle:
     {
         m_combatController->Setup();
+        UnitStats stat = m_combatController->GetAllyUnit0()->GetStats();
+        stat.atk = 55;
+
+        m_combatController->GetAllyUnit0()->SetStats(stat);
+
+
+        //if (m_catText2) {
+        //    m_catText2->SetText(L"아, 참! 깜빡할 뻔했는데,\n이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어.!");
+        //}
+        if (m_BattleStart) m_BattleStart->SetActive(false);
+        
+        m_canProceedToNextStep = false;
+    }
+    break;
+
+    case TutorialStep::Cat_Explain_EnemyRange:
+    {
         if (m_catText2) {
             m_catText2->SetText(L"아, 참! 깜빡할 뻔했는데,\n이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어.!");
         }
-        if (m_BattleStart) m_BattleStart->SetActive(false);
+        m_canProceedToNextStep = true;
+
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 7, m_redGlowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 8, m_glowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 6, m_redGlowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab); // 이건 수정하긴해야됨
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 8, m_redGlowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 6, m_glowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 7, m_redGlowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 8, m_glowTilePrefab);
     }
     break;
 
     case TutorialStep::Cat_Explain_EnemyRange_End: 
     {
+        m_combatController->GetEnemyUnit0()->_GetOwner()->SetActive(false);
         if (m_catText2) {
             m_catText2->SetText(L"뭐, 알고 있으면 좋을 거야.\n너를 위해서 말이야.");
         }

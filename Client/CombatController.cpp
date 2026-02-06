@@ -1,5 +1,8 @@
 #include "CombatController.h"
 #include "GameObject.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "TutorialManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -400,6 +403,24 @@ bool CombatController::EndPhase()
     // 종료조건 만족시 승패 처리
     if (m_stageResult != StageResult::InProgress && !m_stageEnd)
     {
+        //튜토리얼 특수처리
+        //Cat_Explain_EnemyRange 인 경우에 nextstep(true)호출
+        Scene* scene = SceneManager::Instance().GetActiveScene();
+        if (scene)
+        {
+            if (scene->GetName() == "TutorialScene") {
+                GameObject* go = GameObject::Find("TutorialManager");
+                TutorialManager* tutorialMgr = go->GetComponent<TutorialManager>();
+                if (tutorialMgr)
+                {
+                    if (tutorialMgr->GetCurrentStep() == TutorialManager::TutorialStep::Battle)
+                    {
+                        tutorialMgr->NextStep(true);
+                    }
+                }
+            }
+        }
+
         m_stageEnd = true;
         if (m_stageResult == StageResult::Win)
         {
@@ -924,6 +945,8 @@ float CombatController::CalculateDamage(Unit* me, Unit* target)
     if (battleGrid->IsDefenseTile(target->GetMovePos())) bonus2 = 2.0f;
 
     float damage = ((float)me->GetStats().atk - (float)target->GetStats().def * bonus2) * bonus;
+
+    //std::cout << damage << std::endl;
 
     return (std::max)(damage, 0.0f);
 }
