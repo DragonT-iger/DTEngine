@@ -2,14 +2,6 @@
 #include "GameObject.h"
 
 BEGINPROPERTY(EnemyUnit)
-//DTPROPERTY(EnemyUnit, path0)
-//DTPROPERTY(EnemyUnit, path1)
-//DTPROPERTY(EnemyUnit, path2)
-//DTPROPERTY(EnemyUnit, path3)
-//DTPROPERTY(EnemyUnit, path4)
-//DTPROPERTY(EnemyUnit, path5)
-//DTPROPERTY(EnemyUnit, path6)
-//DTPROPERTY(EnemyUnit, path7)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_type, GetUnitType, SetUnitType)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_isBoss, IsBoss, SetBoss)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_pos, GetPos, SetPos)
@@ -91,7 +83,7 @@ static float GetDirFromTo(const Vector2& from, const Vector2& to)
 
 static Vector3 GridToWorld_A(const Vector2& g)
 {
-    return Vector3{ g.x * 2.0f, 1.01f, g.y * 2.0f };
+    return Vector3{ g.x * 2.0f, 1.02f, g.y * 2.0f };
 }
 
 static int Sign(int x)
@@ -154,7 +146,7 @@ std::vector<ArrowSegment> EnemyUnit::GetArrowSegments() const
     std::vector<Vector2> pts = CollectPathPoints();
     if (pts.size() < 2) return segs;
 
-    pts.front() = StepTowardGrid(pts[0], pts[1]);
+    //pts.front() = StepTowardGrid(pts[0], pts[1]);
     pts.back() = StepTowardGrid(pts.back(), pts[pts.size() - 2]);
 
     segs.reserve(pts.size() - 1);

@@ -7,11 +7,13 @@
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
 #include "AliceUnit.h"
+#include "RedQueen.h"
 
 class Unit;
 class AllyUnit;
 class EnemyUnit;
 class AliceUnit;
+class RedQueenUnit;
 
 class TilemapGenerator;
 class TilemapData;
@@ -77,7 +79,7 @@ public:
     void ClearDynamicGrid(); // 유닛 관련 위치 정보 초기화.
     
     void SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, 
-        const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit); // 유닛 위치 동기화.
+        const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit, const RedQueenUnit* redQueenUnit); // 유닛 위치 동기화.
 
     void ReserveMove(const Vector2& p); // 이동목표지점 선점.
     bool IsReserved(const Vector2& p) const; // 여기가 누군가 이미 선점한 이동목표지점인지.
@@ -89,6 +91,12 @@ public:
     bool HasLineOfSight(const Vector2& me, const Vector2& target) const; // LoS 검사. 공격 경로 중간에 벽, 부벽, 유닛이 끼어 있나?
 
     bool FindNextStepAStar(const Vector2& start, const Vector2& goal,
+        const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const;
+
+    bool FindNextStepGreedy(const Vector2& start, const Vector2& goal,
+        const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const; // A* 실패 시, 가까워지는 한칸. 
+
+    bool FindNextStepHybrid(const Vector2& start, const Vector2& goal,
         const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const;
 
     // 이건 사실 여기 있으면 안되지만.. 타일맵은 여기 받으니까..

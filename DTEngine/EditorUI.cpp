@@ -2453,7 +2453,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
             ImGui::PopID();
 
-            ImGui::Separator();
+            /*ImGui::Separator();
             ImGui::Text("Dialogues");
 
             ImGui::PushID("Dialogue");
@@ -2486,7 +2486,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
                 ImGui::PopID();
             }
-            ImGui::PopID();
+            ImGui::PopID();*/
 
             if (changed)
             {

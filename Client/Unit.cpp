@@ -9,7 +9,7 @@ static const UnitStats UnitStatsTable[] =
     { 25,  5, 110, 1 }, // 나이트
     { 30,  2,  90, 2 }, // 비숍
     {  0,  0, 150, 0 }, // 앨리스
-    { 30,  3, 300, 1 }, // 퀸
+    {  0,  0, 150, 0 }, // 퀸
 };
 
 void Unit::Start()
@@ -42,7 +42,7 @@ void Unit::Start()
 
 void Unit::SetUnitType(int type)
 {
-    if (type < UnitType::Rook || type > UnitType::Alice) type = UnitType::Rook;
+    if (type < UnitType::Rook || type > UnitType::Queen) type = UnitType::Rook;
     m_type = type;
     SetStats(UnitStatsTable[type]);
 }
