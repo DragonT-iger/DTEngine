@@ -124,8 +124,8 @@ bool Game::Initialize()
 //	SceneManager::Instance().LoadScene("hsGridTestScenehs");
 
 
-	SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	SceneManager::Instance().LoadScene("DTtestScene");
+	/*SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	SceneManager::Instance().LoadScene("DTtestScene");*/
 
 	//SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
 	//SceneManager::Instance().LoadScene("TutorialScene");
@@ -147,8 +147,8 @@ bool Game::Initialize()
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
-	 //SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
-	 //ClientSceneManager::Instance().LoadScene("TitleScene");
+	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	 ClientSceneManager::Instance().LoadScene("TitleScene");
 
 
 	 //SceneManager::Instance().RegisterScene("Scenes/Title.scene");

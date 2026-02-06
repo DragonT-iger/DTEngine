@@ -1,0 +1,20 @@
+{
+    "Color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "CullMode": 0,
+    "RenderMode": 0,
+    "ShaderID": 16147294092056668639,
+    "ShadowBias": 0.004999999888241291,
+    "ShadowScale": 1.0,
+    "Textures": null,
+    "UVTransform": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+    ]
+}
