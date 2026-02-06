@@ -290,7 +290,7 @@ void RayCastHitEvent::RaycastCheck()
 												if (!unit)
 														return;
 
-												unit->TakeDamage(30);
+												unit->TakeDamage(20);
 												//std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 

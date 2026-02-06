@@ -24,17 +24,17 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
 
     Initialize(width, height);
 
-    for (int h = 0; h < height; ++h)
+    for (int h = 1; h < height + 1; ++h)
     {
-        for (int w = 0; w < width; ++w)
+        for (int w = 1; w < width + 1; ++w)
         {
             int tileIdx = td->GetTileIndex(w, h);
 
-            if (tileIdx == 0 || tileIdx == 1 || tileIdx == 2 || tileIdx == 3) SetTile(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 4) SetSolidWall(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 5) SetBreakableWall(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 6) SetDefenseTile(Vector2{ (float)w, (float)h }); // 인덱스 약속은 나중에 하면 될듯.
-            else if (tileIdx == 7) SetTrapTile(Vector2{ (float)w, (float)h });
+            if (tileIdx == 0 || tileIdx == 1 || tileIdx == 2 || tileIdx == 3) SetTile(Vector2{ (float)(w-1), (float)(h - 1) });
+            else if (tileIdx == 4) SetSolidWall(Vector2{ (float)(w - 1), (float)(h - 1) });
+            else if (tileIdx == 5) SetBreakableWall(Vector2{ (float)(w - 1), (float)(h - 1) });
+            else if (tileIdx == 6) SetDefenseTile(Vector2{ (float)(w - 1), (float)(h - 1) }); // 인덱스 약속은 나중에 하면 될듯.
+            else if (tileIdx == 7) SetTrapTile(Vector2{ (float)(w - 1), (float)(h - 1) });
             else { /*뭔가 이상한 타일.. 암튼 필요없는 정보*/ }
         }
     }
