@@ -178,7 +178,7 @@ void RayCastHitEvent::RaycastCheck()
 						return;
 					}
 						std::cout << hit->GetName() << std::endl;
-						if (scene->GetName() == "TutorialScene") {
+						if (scene->GetName() == "TutorialScene" || "EndingScene") {
 							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
 								if (isLeft)
 								{

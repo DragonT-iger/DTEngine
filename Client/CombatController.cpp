@@ -81,7 +81,7 @@ void CombatController::Setup()
         if (enemyObjects[i])
         {
             EnemyUnit* enemy = enemyObjects[i]->GetComponent<EnemyUnit>();
-            if (enemy) 
+            if (enemy && enemy->_GetOwner()->IsActive()) 
             { 
                 AddEnemyUnit(enemy);
                 m_enemyUnits.push_back(enemy); 
@@ -108,8 +108,8 @@ bool CombatController::ReadyPhase()
     m_aliceUnit->SetMovePos(m_aliceUnit->GetPos()); // 앨리스는 예외로 이동 안함.
     battleGrid->ReserveMove(m_aliceUnit->GetPos());
 
-    m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
-    battleGrid->ReserveMove(m_redQueenUnit->GetPos());
+    //m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
+    //battleGrid->ReserveMove(m_redQueenUnit->GetPos());
 
     for (AllyUnit* ally : m_allyUnits)
     {
