@@ -80,11 +80,10 @@ bool AnimationClip::LoadFile(const std::string& fullPath)
             const auto& key = channel->mScalingKeys[k];
             Vector3 scaleValue(key.mValue.x, key.mValue.y, key.mValue.z);
 
-            if (nodeName == "Armature" || nodeName == "RootNode" || nodeName == "Root" ||nodeName == "Rig") //중첩 Scaling을 방지. 
+            if (nodeName == "Armature" || nodeName == "RootNode" || nodeName == "Root" ||nodeName == "Rig" ) //중첩 Scaling을 방지. 
             {
                 scaleValue = Vector3(1.0f, 1.0f, 1.0f);
             }
-
             ch.ScaleKeys.push_back({ key.mTime, Vector3(scaleValue) });
         }
 

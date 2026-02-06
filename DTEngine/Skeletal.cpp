@@ -7,8 +7,6 @@
 
 #include "AnimationClip.h"
 
-#include <iostream>
-#include <iomanip>
 
 BEGINPROPERTY(Skeletal)
 DTPROPERTY_SETTER(Skeletal, m_skellID, SetSkeletal)
@@ -37,32 +35,40 @@ void Skeletal::Update(float deltaTime)
    
 }
 
+
+
+
+
 void Skeletal::LateUpdate(float dTime)
 {
     if (!m_BoneResource) return;
     size_t nodeCount = m_BoneResource->m_Bones.size();
-
     for (size_t i = 0; i < nodeCount; ++i)
     {
-        BoneNode& resNode = m_BoneResource->m_Bones[i];
-        Matrix localMat = m_AnimatedLocalMatrices[i];
+        if (!m_BoneResource) return;
 
-        Matrix parentG;
-        bool hasParent = (resNode.ParentIndex != -1);
+        size_t nodeCount = m_BoneResource->m_Bones.size();
 
-        if (hasParent)
-            parentG = m_globalTransforms[resNode.ParentIndex];
+        for (size_t i = 0; i < nodeCount; ++i)
+        {
+            BoneNode& resNode = m_BoneResource->m_Bones[i];
 
-        if (hasParent)
-            m_globalTransforms[i] = localMat * parentG;
-        else
-            m_globalTransforms[i] = localMat;
+            Matrix localMat = m_AnimatedLocalMatrices[i];
 
-        m_finalTransforms[i] = (resNode.OffsetMatrix * m_globalTransforms[i]);
+            if (resNode.ParentIndex != -1)
+            {
+                m_globalTransforms[i] = localMat * m_globalTransforms[resNode.ParentIndex];
+            }
+            else
+            {
+                m_globalTransforms[i] = localMat;
+            }
 
+
+            m_finalTransforms[i] = resNode.OffsetMatrix * m_globalTransforms[i];
+        }
     }
 }
-
 
 void Skeletal::SetSkeletal(uint64_t id)
 {
