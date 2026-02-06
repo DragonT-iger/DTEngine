@@ -105,9 +105,6 @@
     <ClCompile Include="AliceUnit.cpp">
       <Filter>Unit</Filter>
     </ClCompile>
-    <ClCompile Include="CombatTestRunner.cpp">
-      <Filter>Battle</Filter>
-    </ClCompile>
     <ClCompile Include="ClickStartButton.cpp">
       <Filter>Event</Filter>
     </ClCompile>
@@ -232,9 +229,6 @@
     </ClInclude>
     <ClInclude Include="AliceUnit.h">
       <Filter>Unit</Filter>
-    </ClInclude>
-    <ClInclude Include="CombatTestRunner.h">
-      <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="ClickStartButton.h">
       <Filter>Event</Filter>

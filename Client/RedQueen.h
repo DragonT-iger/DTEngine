@@ -10,7 +10,7 @@ public:
     RedQueenUnit();
     ~RedQueenUnit() = default;
 
-    const bool& IsBoss() const { return true; }
+    //const bool& IsBoss() const { return true; }
 
 private:
 

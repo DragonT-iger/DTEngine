@@ -7,11 +7,13 @@
 #include "AllyUnit.h"
 #include "EnemyUnit.h"
 #include "AliceUnit.h"
+#include "RedQueen.h"
 
 class Unit;
 class AllyUnit;
 class EnemyUnit;
 class AliceUnit;
+class RedQueenUnit;
 
 class TilemapGenerator;
 class TilemapData;
@@ -77,7 +79,7 @@ public:
     void ClearDynamicGrid(); // 유닛 관련 위치 정보 초기화.
     
     void SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, 
-        const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit); // 유닛 위치 동기화.
+        const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit, const RedQueenUnit* redQueenUnit); // 유닛 위치 동기화.
 
     void ReserveMove(const Vector2& p); // 이동목표지점 선점.
     bool IsReserved(const Vector2& p) const; // 여기가 누군가 이미 선점한 이동목표지점인지.
