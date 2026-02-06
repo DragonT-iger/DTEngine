@@ -93,6 +93,12 @@ public:
     bool FindNextStepAStar(const Vector2& start, const Vector2& goal,
         const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const;
 
+    bool FindNextStepGreedy(const Vector2& start, const Vector2& goal,
+        const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const; // A* 실패 시, 가까워지는 한칸. 
+
+    bool FindNextStepHybrid(const Vector2& start, const Vector2& goal,
+        const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const;
+
     // 이건 사실 여기 있으면 안되지만.. 타일맵은 여기 받으니까..
     std::vector<GameObject*>& GetEnemyObjects();
 

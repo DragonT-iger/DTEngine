@@ -647,9 +647,18 @@ bool CombatController::IsBattleUnit(const Unit* u) const
     return std::find(m_battleUnits.begin(), m_battleUnits.end(), u) != m_battleUnits.end();
 }
 
+static int DistOctileCost(const Vector2& a, const Vector2& b)
+{
+    int dx = std::abs((int)b.x - (int)a.x);
+    int dy = std::abs((int)b.y - (int)a.y);
+    int dmin = (std::min)(dx, dy);
+    int dmax = (std::max)(dx, dy);
+    return 14 * dmin + 10 * (dmax - dmin);
+}
+
 Unit* CombatController::FindNearestEnemy(const Vector2& from) const
 {
-    EnemyUnit* best = nullptr;
+    /*EnemyUnit* best = nullptr;
     int bestDist = 9999;
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -660,6 +669,31 @@ Unit* CombatController::FindNearestEnemy(const Vector2& from) const
         int dist = (std::max)(dx, dy);
         if (dist < bestDist) { bestDist = dist; best = enemy; }
     }
+    return best;*/
+
+    EnemyUnit* best = nullptr;
+    int bestCost = 999999;
+    int bestCheb = 999999; // 동점 깨기용(선택)
+
+    for (EnemyUnit* enemy : m_enemyUnits)
+    {
+        if (!enemy || !enemy->IsAlive()) continue;
+
+        int cost = DistOctileCost(enemy->GetPos(), from);
+
+        // tie-break: 완전 동점이면 더 “기하학적으로” 가까운(체비쇼프) 쪽
+        int dx = std::abs((int)enemy->GetPos().x - (int)from.x);
+        int dy = std::abs((int)enemy->GetPos().y - (int)from.y);
+        int cheb = (std::max)(dx, dy);
+
+        if (!best || cost < bestCost || (cost == bestCost && cheb < bestCheb))
+        {
+            best = enemy;
+            bestCost = cost;
+            bestCheb = cheb;
+        }
+    }
+
     return best;
 }
 
@@ -762,7 +796,15 @@ Vector2 CombatController::DecideMovePos_Ally(AllyUnit* me, const Vector2& moveTa
     int rule = me->GetMoveRule();
     Vector2 next;
 
-    bool found = battleGrid->FindNextStepAStar(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //bool found = battleGrid->FindNextStepAStar(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //if (!found)
+    //{
+    //    found = battleGrid->FindNextStepGreedy(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //}
+
+    //if (!found) return me->GetPos();
+
+    bool found = battleGrid->FindNextStepHybrid(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
     if (!found) return me->GetPos();
 
     // 추격을 선택했을 때 가는 칸이 부벽이면 이동 대신 벽을 공격
@@ -1028,6 +1070,7 @@ void CombatController::PrintFrame()
             }
 
             if (m_aliceUnit && m_aliceUnit->IsAlive() && isSame(m_aliceUnit->GetPos(), p)) c = 'S';
+            if (m_redQueenUnit && m_redQueenUnit->IsAlive() && isSame(m_redQueenUnit->GetPos(), p)) c = 'R';
 
             for (auto* a : m_allyUnits)
                 if (a && a->IsAlive() && isSame(a->GetPos(), p)) c = 'A';
@@ -1062,4 +1105,25 @@ void CombatController::PrintFrame()
     if (enemyUnit0) printUnit("Enemy0", enemyUnit0);
     if (enemyUnit1) printUnit("Enemy1", enemyUnit1);
     if (enemyUnit2) printUnit("Enemy2", enemyUnit2);
+
+    auto dumpCell = [&](int x, int y)
+        {
+            Vector2 p{ (float)x, (float)y };
+            const auto& s = battleGrid->GetStaticTile(p);
+            const auto& d = battleGrid->GetDynamicTile(p);
+
+            std::cout << "[Cell " << x << "," << y << "] "
+                << "tile=" << s.tile
+                << " solid=" << s.solidWall
+                << " break=" << s.breakableWall
+                << " def=" << s.defenseTile
+                << " trap=" << s.trapTile
+                << " unitPresent=" << d.unitPresent
+                << " reserved=" << d.reservedMove
+                << "\n";
+        };
+
+    dumpCell(1, 6);
+    dumpCell(0, 5);
+    dumpCell(1, 5); // Ally2 현재칸
 }
