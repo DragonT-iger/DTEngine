@@ -576,6 +576,9 @@ void TutorialManager::NextStep(bool force)
         }
         m_tutorialAdditionalEnemy = m_tutorialAdditionalEnemyPrefab->Instantiate();
 
+        m_combatController->SetEnemyUnit0(m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>());
+
+        if (m_combatController) m_combatController->GetEnemyUnit0()->SetPath({ {{ 0.f,6.f },{ 4.f,6.f }} });
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
     }
@@ -633,7 +636,6 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n싸움을 붙여 보자고!");
         }
 
-        m_combatController->SetEnemyUnit0(m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>());
         m_canProceedToNextStep = true;
         if (m_BattleStart) m_BattleStart->SetActive(true);
     }
@@ -642,10 +644,9 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Battle:
     {
 
-        if (m_combatController) m_combatController->GetEnemyUnit0()->SetPath({ {{ 0.f,6.f },{ 6.f,6.f }} });
         m_combatController->Setup();
         UnitStats stat = m_combatController->GetAllyUnit0()->GetStats();
-        stat.atk = 55;
+        stat.atk = 60;
 
         m_combatController->GetAllyUnit0()->SetStats(stat);
 

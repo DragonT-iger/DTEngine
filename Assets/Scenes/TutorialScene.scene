@@ -1423,8 +1423,6 @@
         {
           "Active": true,
           "id": 6576746820287875911,
-          "m_life": 12449708723998633757,
-          "m_money": 12258473667679435511,
           "typeName": "GameManager"
         }
       ],
@@ -1990,6 +1988,9 @@
         {
           "Active": true,
           "id": 1838616038401361351,
+          "m_enemy0": 0,
+          "m_enemy1": 0,
+          "m_enemy2": 0,
           "m_mapData": 7521294909207559263,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
@@ -2045,7 +2046,9 @@
           "m_rightPSWinodwBG": 8263240293524681031,
           "m_rightRSWinodwBG": 7614717077102416540,
           "m_settingWindowBG": 0,
+          "m_startButton": 0,
           "m_tutorialManager": 4126822075113408942,
+          "m_warningWindowBG": 0,
           "typeName": "RayCastHitEvent"
         }
       ],
@@ -2281,9 +2284,15 @@
           "Active": true,
           "id": 2578579385162901723,
           "m_combatObj": 3785137383686980969,
+          "m_leftPrefabWindowBG": 0,
+          "m_leftRuleWindowBG": 0,
           "m_rayObj": 0,
+          "m_rightPrefabWindowBG": 0,
+          "m_rightRuleWindowBG": 0,
+          "m_settingWindow": 0,
           "m_startButton": 8141426489862057535,
           "m_tileMapObj": 0,
+          "m_warningWindow": 0,
           "typeName": "ClickStartButton"
         }
       ],
@@ -2387,35 +2396,11 @@
           "Active": true,
           "id": 12608555310526963197,
           "m_isBoss": true,
+          "m_pos": {
+            "x": 0.0,
+            "y": 0.0
+          },
           "m_type": 0,
-          "path1": {
-            "x": 5.0,
-            "y": 5.0
-          },
-          "path2": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path3": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path4": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path5": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path6": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path7": {
-            "x": -999.0,
-            "y": -999.0
-          },
           "typeName": "EnemyUnit"
         }
       ],
@@ -3483,6 +3468,7 @@
         {
           "Active": true,
           "id": 13701506492888235380,
+          "m_nonCostObj": 0,
           "m_rayObject": 0,
           "m_unitRuleWindow": 4418618141693179341,
           "typeName": "OpenPSEvent"
@@ -3800,6 +3786,7 @@
           "m_combatObj": 3785137383686980969,
           "m_knight": 3328525606780682600,
           "m_mapData": 1838616038401361351,
+          "m_nonCostObj": 0,
           "m_rook": 9894459574992437766,
           "m_tutorialManager": 4126822075113408942,
           "typeName": "ClickPSOkayEvent"

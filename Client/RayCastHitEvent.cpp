@@ -121,7 +121,7 @@ void RayCastHitEvent::RaycastCheck()
 
 						if (isEnemy)
 						{
-							EnemyUnit* enemy = hit->GetComponent<EnemyUnit>();
+ 							EnemyUnit* enemy = hit->GetComponent<EnemyUnit>();
 							if (!enemy && hit->GetTransform()->GetParent())
 							{
 								enemy = hit->GetTransform()->GetParent()->_GetOwner()->GetComponent<EnemyUnit>();
@@ -140,7 +140,7 @@ void RayCastHitEvent::RaycastCheck()
 								m_arrowPool->DeactivateAll();
 
 								// 화살표 배치
-								for (int i = 0; i < path.size(); ++i)
+								for (int i = 0; i < path.size() - 1; ++i) // magic -1
 								{
 									Transform* tr = bodys[i]->GetTransform();
 									tr->SetPosition(path[i].midWorld);
