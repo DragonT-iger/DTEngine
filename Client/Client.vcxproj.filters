@@ -153,6 +153,9 @@
     <ClCompile Include="MakeSetActiveEvent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="RedQueen.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -267,7 +270,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ChesherGuideEvent.h">
-    <Filter>Event</Filter>
+      <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="TutorialSceneTriggerEvent.h">
       <Filter>Event</Filter>
@@ -277,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="MakeSetActiveEvent.h">
       <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="RedQueen.h">
+      <Filter>Unit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

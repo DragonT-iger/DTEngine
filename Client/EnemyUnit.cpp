@@ -3,16 +3,16 @@
 
 BEGINPROPERTY(EnemyUnit)
 //DTPROPERTY(EnemyUnit, path0)
-DTPROPERTY(EnemyUnit, path1)
-DTPROPERTY(EnemyUnit, path2)
-DTPROPERTY(EnemyUnit, path3)
-DTPROPERTY(EnemyUnit, path4)
-DTPROPERTY(EnemyUnit, path5)
-DTPROPERTY(EnemyUnit, path6)
-DTPROPERTY(EnemyUnit, path7)
+//DTPROPERTY(EnemyUnit, path1)
+//DTPROPERTY(EnemyUnit, path2)
+//DTPROPERTY(EnemyUnit, path3)
+//DTPROPERTY(EnemyUnit, path4)
+//DTPROPERTY(EnemyUnit, path5)
+//DTPROPERTY(EnemyUnit, path6)
+//DTPROPERTY(EnemyUnit, path7)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_type, GetUnitType, SetUnitType)
 DTPROPERTY_ACCESSOR(EnemyUnit, m_isBoss, IsBoss, SetBoss)
-//DTPROPERTY_ACCESSOR(EnemyUnit, m_pos, GetPos, SetPos)
+DTPROPERTY_ACCESSOR(EnemyUnit, m_pos, GetPos, SetPos)
 ENDPROPERTY()
 
 void EnemyUnit::SetBoss(bool isBoss)
@@ -32,34 +32,44 @@ void EnemyUnit::SetBoss(bool isBoss)
     }
 }
 
+EnemyUnit::EnemyUnit()
+{
+    SetTeam(Team::Enemy);
+    
+    for (auto& p : m_pathPoints)
+    {
+        p = GRIDPOS_INVALID;
+    }
+}
+
 Vector2 EnemyUnit::GetPathPoint(int i) const
 {
-	switch (i)
-	{
-	case 0: return path0;
-	case 1: return path1;
-	case 2: return path2;
-	case 3: return path3;
-	case 4: return path4;
-	case 5: return path5;
-	case 6: return path6;
-	case 7: return path7;
-	default: return GRIDPOS_INVALID;
-	}
+    if (i < 0 || i >= NUM_PATHPOINTS) return GRIDPOS_INVALID;
+    return m_pathPoints[i];
 }
 
 
-void EnemyUnit::SetPath0()
+//void EnemyUnit::SetPath0()
+//{
+//    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+//
+//    Vector2 p0;
+//    p0.x = std::round(pos.x / 2.0f);
+//    p0.y = std::round(pos.z / 2.0f);
+//
+//    m_pos = p0;
+//    path0 = p0;
+//}
+
+
+void EnemyUnit::SetPath(const std::array<Vector2, NUM_PATHPOINTS>& path)
 {
-    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+    m_pathPoints = path;
+    m_pathIndex = 0;
 
-    Vector2 p0;
-    p0.x = std::round(pos.x / 2.0f);
-    p0.y = std::round(pos.z / 2.0f);
-
-    m_pos = p0;
-    path0 = p0;
+    m_pos = m_pathPoints[0];
 }
+
 
 // 화살표 관련 로직
 static float GetDirFromTo(const Vector2& from, const Vector2& to)
@@ -81,7 +91,7 @@ static float GetDirFromTo(const Vector2& from, const Vector2& to)
 
 static Vector3 GridToWorld_A(const Vector2& g)
 {
-    return Vector3{ g.x * 2.0f, 1.1f, g.y * 2.0f };
+    return Vector3{ g.x * 2.0f, 1.01f, g.y * 2.0f };
 }
 
 static int Sign(int x)
@@ -118,16 +128,15 @@ std::vector<Vector2> EnemyUnit::CollectPathPoints() const
     std::vector<Vector2> pts;
     pts.reserve(8);
 
+    //Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
 
-    Vector3 pos = _GetOwner()->GetTransform()->GetPosition();
+    //Vector2 p0;
+    //p0.x = std::round(pos.x / 2.0f);
+    //p0.y = std::round(pos.z / 2.0f);
 
-    Vector2 p0;
-    p0.x = std::round(pos.x / 2.0f);
-    p0.y = std::round(pos.z / 2.0f);
+    //pts.push_back(p0); // 자신의 위치가 시작위치
 
-    pts.push_back(p0); // 자신의 위치가 시작위치
-
-    for (int i = 1; i < 8; ++i) // 0번이 시작위치인데, 시작위치 값을 안넣어줘서 1번부터 시작.
+    for (int i = 0; i < 8; ++i) 
     {
         Vector2 p = GetPathPoint(i);
         if (p == GRIDPOS_INVALID) break;

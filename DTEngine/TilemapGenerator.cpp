@@ -9,6 +9,8 @@
 #include "AssetDatabase.h"
 #include "Prefab.h"
 
+#include "../Client/EnemyUnit.h"
+
 BEGINPROPERTY(TilemapGenerator)
 
 DTPROPERTY(TilemapGenerator, m_mapData)
@@ -24,12 +26,18 @@ DTPROPERTY(TilemapGenerator, m_prefab7)
 DTPROPERTY(TilemapGenerator, m_prefab8)
 DTPROPERTY(TilemapGenerator, m_prefab9)
 
+DTPROPERTY(TilemapGenerator, m_enemy0)
+DTPROPERTY(TilemapGenerator, m_enemy1)
+DTPROPERTY(TilemapGenerator, m_enemy2)
+
+
 ENDPROPERTY()
 
 void TilemapGenerator::Start()
 {
 	//std::cout << "TilemapGenerator Start 호출됨" << std::endl;
     BuildMap();
+    SpawnEnemies();
 }
 
 void TilemapGenerator::BuildMap()
@@ -113,5 +121,44 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
         instance->SetActive(true);
 
         m_spawnedTiles[arrayIndex] = instance;
+    }
+}
+
+void TilemapGenerator::SpawnEnemies()
+{
+    m_spawnedEnemys.clear();
+
+    if (m_mapData == nullptr) return;
+
+    Prefab* enemys[] = { m_enemy0, m_enemy1, m_enemy2 }; // 룩 나 비
+
+    m_spawnedEnemys.resize(NUM_ENEMIES, nullptr);
+    for (int i = 0; i < NUM_ENEMIES; ++i)
+    {
+        const auto& info = m_mapData->GetEnemy(i);
+
+        if (!info.enabled) continue;
+
+        Vector2 pos = info.pathPoints[0];
+        if (pos.x < 0 || pos.y < 0) continue;
+
+        Prefab* prefab = enemys[info.type];
+        if (!prefab) continue;
+
+        GameObject* instance = prefab->Instantiate();
+        if (!instance) continue;
+
+        EnemyUnit* enemy = instance->GetComponent<EnemyUnit>();
+        if (!enemy) continue;
+
+        instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
+        instance->SetActive(true);
+        
+        enemy->SetBoss(info.isBoss);
+        enemy->SetUnitType(info.type);
+        enemy->SetPath(info.pathPoints);
+
+        m_spawnedEnemys[i] = instance;
+
     }
 }

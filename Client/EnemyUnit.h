@@ -18,7 +18,7 @@ class EnemyUnit : public Unit
 {
     DTGENERATED_BODY(EnemyUnit);
 public:
-    EnemyUnit() { SetTeam(Team::Enemy); }
+    EnemyUnit();
     ~EnemyUnit() = default;
 
     const bool& IsBoss() const { return m_isBoss; }
@@ -29,9 +29,10 @@ public:
     int GetPathIndex() const { return m_pathIndex; }
     void SetPathIndex(int i) { m_pathIndex = (std::max)(0, (std::min)(i, 7)); }
 
-    void SetPath0();
+    //void SetPath0();
 
-    //void SetPath();
+    static constexpr int NUM_PATHPOINTS = 8;
+    void SetPath(const std::array<Vector2, NUM_PATHPOINTS>& path);
 
     std::vector<Vector2> CollectPathPoints() const;
     std::vector<ArrowSegment> GetArrowSegments() const;
@@ -43,13 +44,6 @@ private:
     int m_pathIndex = 0; // 현재 목표 인덱스.
 
     // 경로 등록용.
-    Vector2 path0 = GRIDPOS_INVALID; // 시작점
-    Vector2 path1 = GRIDPOS_INVALID;
-    Vector2 path2 = GRIDPOS_INVALID;
-    Vector2 path3 = GRIDPOS_INVALID;
-    Vector2 path4 = GRIDPOS_INVALID;
-    Vector2 path5 = GRIDPOS_INVALID;
-    Vector2 path6 = GRIDPOS_INVALID;
-    Vector2 path7 = GRIDPOS_INVALID;
+    std::array<Vector2, NUM_PATHPOINTS> m_pathPoints;
 
 };

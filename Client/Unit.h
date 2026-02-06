@@ -14,7 +14,7 @@ enum UnitType
     Knight,
     Bishop,
     Alice,
-    //Queen
+    Queen
 };
 
 enum class TurnAction // 이번 턴에 할 행동

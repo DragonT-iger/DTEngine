@@ -8,7 +8,7 @@ static const UnitStats UnitStatsTable[] =
     { 25,  5, 110, 1 }, // 나이트
     { 30,  2,  90, 2 }, // 비숍
     {  0,  0, 150, 0 }, // 앨리스
-    //{ 30,  3, 300, 1 }, // 퀸
+    { 30,  3, 300, 1 }, // 퀸
 };
 
 void Unit::Start()
@@ -352,6 +352,7 @@ void Unit::PlayAnim(uint64_t id, uint64_t id1, uint64_t id2, float speed, bool l
 
 void Unit::StartIdleAnim()
 {
+    if (!m_anim) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_Idle_1.fbx");
     uint64_t id1 = -1;
     uint64_t id2 = -1;
@@ -370,6 +371,7 @@ void Unit::StartIdleAnim()
 
 void Unit::StartMoveAnim()
 {
+    if (!m_anim) return;
     if (m_animStart) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_move_1.fbx");
     uint64_t id1 = -1;
@@ -390,6 +392,7 @@ void Unit::StartMoveAnim()
 
 void Unit::StartAttackAnim()
 {
+    if (!m_anim) return;
     if (m_animStart) return;
     uint64_t id = -1;
     uint64_t id1 = -1;
@@ -413,6 +416,7 @@ void Unit::StartAttackAnim()
 
 void Unit::StartDieAnim()
 {
+    if (!m_anim) return;
     //if (m_animStart) return;
     //std::cout << _GetOwner()->_GetID() << std::endl;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_die.fbx");

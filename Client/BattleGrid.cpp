@@ -452,3 +452,9 @@ bool BattleGrid::FindNextStepAStar(const Vector2& start, const Vector2& goal,
 
     return false;
 }
+
+std::vector<GameObject*>& BattleGrid::GetEnemyObjects()
+{
+    TilemapData* td = m_tilemapGenerator->GetMapData();
+    return m_tilemapGenerator->GetSpawnedEnemys();
+}

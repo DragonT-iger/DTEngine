@@ -160,6 +160,7 @@
     <ClCompile Include="OpenPSEvent.cpp" />
     <ClCompile Include="OpenRSEvent.cpp" />
     <ClCompile Include="RayCastHitEvent.cpp" />
+    <ClCompile Include="RedQueen.cpp" />
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
     <ClCompile Include="RuleImageVisualEvent.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
     <ClInclude Include="RayCastHitEvent.h" />
+    <ClInclude Include="RedQueen.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
     <ClInclude Include="RuleImageVisualEvent.h" />

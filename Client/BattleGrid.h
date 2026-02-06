@@ -91,6 +91,9 @@ public:
     bool FindNextStepAStar(const Vector2& start, const Vector2& goal,
         const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const;
 
+    // 이건 사실 여기 있으면 안되지만.. 타일맵은 여기 받으니까..
+    std::vector<GameObject*>& GetEnemyObjects();
+
 private:
     int m_width = 0;
     int m_height = 0;
