@@ -1,6 +1,7 @@
 #include "Unit.h"
 #include "AssetDatabase.h"
-
+#include "Dissolved.h"
+#include "Effect.h"
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
@@ -419,6 +420,8 @@ void Unit::StartDieAnim()
     if (!m_anim) return;
     //if (m_animStart) return;
     //std::cout << _GetOwner()->_GetID() << std::endl;
+    StartDissolve();
+
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_die.fbx");
     uint64_t id1 = -1;
     uint64_t id2 = -1;
@@ -434,5 +437,48 @@ void Unit::StartDieAnim()
     }
     PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
+}
+
+void Unit::StartDissolve()
+{
+
+
+    auto tf = GetTransform();
+    for (Transform* child : tf->GetChildren())
+    {
+        if (!child) continue;
+        if (child->_GetOwner()->GetName() == "Chess")
+        {
+
+            auto cmp = child->_GetOwner()->AddComponent<Dissolved>();
+            if (cmp)
+            {
+                auto cmp_e = child->_GetOwner()->AddComponent<Effect>();
+                cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit/Rabbit_Texture/Unit__BaseColor.png");
+                cmp->SetNoiseTexture();
+                cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
+
+            }
+        }
+        else
+        {
+            auto cmp = child->_GetOwner()->AddComponent<Dissolved>();
+            if (cmp)
+            {
+                auto cmp_e = child->_GetOwner()->AddComponent<Effect>();
+                cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit/weapon_low_01_BaseColor.png");
+                cmp->SetNoiseTexture();
+                cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
+
+            }
+
+        }
+    }
+
+
+   
+
+    
+
 }
 

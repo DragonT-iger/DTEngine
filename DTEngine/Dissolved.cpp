@@ -8,57 +8,88 @@
 #include "Effect.h"
 
 BEGINPROPERTY(Dissolved)
-
 DTPROPERTY_SETTER(Dissolved, m_Textureid, SetAlbedoTexture)
-DTPROPERTY_SETTER(Dissolved, m_materialid, InjectDissolveMaterila)
-
 ENDPROPERTY()
 
-
+//순회해서 처리하는 장비의 경우 명시적으로 albedo를 넣어줘야 함.
 void Dissolved::SetAlbedoTexture(uint64_t TextureID)
 {
-
-	const std::string& Path = AssetDatabase::Instance().GetPathFromID(TextureID);
-	if (Path != "")
+	if (!m_DiffuseTexture)
 	{
-		Texture* Texture_albedo = ResourceManager::Instance().Load<Texture>(Path);
-		if (Texture_albedo)
-		{ 
-			m_DiffuseTexture = Texture_albedo;
-			m_Textureid = TextureID;
-		}
+		const std::string& Path = AssetDatabase::Instance().GetPathFromID(TextureID);
+		if (Path != "")
+		{
+			Texture* Texture_albedo = ResourceManager::Instance().Load<Texture>(Path);
+			if (Texture_albedo)
+			{
+				m_DiffuseTexture = Texture_albedo;
+				m_Textureid = TextureID;
+			}
 
+
+		}
+		else return;
 
 	}
-	else return;
-	
+}
+
+void Dissolved::Awake()
+{
+	m_NoiseMap = ResourceManager::Instance().Load<Texture>("Assets/Models/Noise/Noise_Map.png");
+}
+
+
+void Dissolved::SetAlbedoTexture(const std::string& Path)
+{
+	if (!m_DiffuseTexture)
+	{
+		if (Path != "")
+		{
+			Texture* Texture_albedo = ResourceManager::Instance().Load<Texture>(Path);
+			if (Texture_albedo)
+			{
+				m_DiffuseTexture = Texture_albedo;
+			}
+
+
+		}
+		else return;
+
+	}
+}
+
+void Dissolved::SetNoiseTexture()
+{
+	if(!m_NoiseMap) m_NoiseMap = ResourceManager::Instance().Load<Texture>("Assets/Models/Noise/Noise_Map.png");
 
 }
 
-void Dissolved::InjectDissolveMaterila(uint64_t material_id )
+void Dissolved::InjectDissolveMaterila(const std::string& path)
 {
-
-
 	auto cmp =  this->_GetOwner()->GetComponent<MeshRenderer>();
 	auto effectcmp = this->_GetOwner()->GetComponent<Effect>(); //이게 있어야 dissolve가 됨.
 	if (cmp && effectcmp)
 	{
-		if (material_id != 0)
-		{
-			std::string path = AssetDatabase::Instance().GetPathFromID(material_id);
+		effectcmp->SetTimeMultiplier(0.1f);
+
 			if (!path.empty())
 			{
 				Material* mat = ResourceManager::Instance().Load<Material>(path);
 				if (mat)
 				{
 					cmp->SetMaterial(mat);
-				}
+					m_path = path;
+
+					if (!m_NoiseMap) SetNoiseTexture();
+
+						if (m_DiffuseTexture && m_NoiseMap)
+					{
+						mat->SetTexture(0, m_DiffuseTexture);
+						mat->SetTexture(6, m_NoiseMap);
+					}
 			}
 		}
 	}
 	else 
 		return;
-
-	
-
 }
