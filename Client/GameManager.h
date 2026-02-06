@@ -2,7 +2,23 @@
 
 #include "MonoSingleton.h"
 #include "../DTEngine/SoundManager.h"
+#include <string>
+#include <array>
+
 class Text;
+class GameObject;
+class TilemapData;
+class TilemapGenerator;
+class BattleGrid;
+class UISlider;
+class ClickStartButton;
+
+enum class BattleResultState
+{
+		None,
+		Victory,
+		Failed
+};
 
 //우리 엔진의 MonoSingleton은 잘 생각해봐야 하는게 c++ 코드 상에서의 싱글톤이지
 //엔진 컴포넌트 상에서는 싱글톤 패턴이 아님. 각자 씬마다의 고유한 인스턴스를 가진다는 뜻임.
@@ -66,5 +82,9 @@ private:
 
 	static inline int healSkillCount = 1;
 	static inline int attackSkillCount = 1;
+	static inline int baseHealSkillCount = 1;
+	static inline int baseAttackSkillCount = 1;
+	static inline int defaultHealSkillCount = 1;
+	static inline int defaultAttackSkillCount = 1;
 };
 

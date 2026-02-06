@@ -16,6 +16,9 @@ void GameManager::Start() {
 	
 	if (m_money) m_money->SetText(std::to_wstring(curMoney));
 	if (m_life) m_life->SetText(std::to_wstring(curLife));
+
+
+	curMoney = 30; // 임시.
 }
 
 void GameManager::SetLife(int life)

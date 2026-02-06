@@ -26,6 +26,8 @@ public:
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
+    void RebuildFromCurrentData(); // 재생성시 호출.
+
     void SpawnEnemies(); // 적 생성
     std::vector<GameObject*>& GetSpawnedEnemys() { return m_spawnedEnemys; }
 
