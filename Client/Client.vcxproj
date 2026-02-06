@@ -152,6 +152,7 @@
     <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="DelayDisableEvent.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
+    <ClCompile Include="ESCEvent.cpp" />
     <ClCompile Include="ExitButtonEvent.cpp" />
     <ClCompile Include="ForwardMover.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayDisableEvent.h" />
     <ClInclude Include="EnemyUnit.h" />
+    <ClInclude Include="ESCEvent.h" />
     <ClInclude Include="ExitButtonEvent.h" />
     <ClInclude Include="ForwardMover.h" />
     <ClInclude Include="GameManager.h" />
