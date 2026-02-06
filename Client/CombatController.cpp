@@ -66,34 +66,43 @@ void CombatController::Setup()
     if (allyUnit2 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit2) == m_allyUnits.end())
         m_allyUnits.push_back(allyUnit2);
 
-    //if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end()) 
-    //    m_enemyUnits.push_back(enemyUnit0);
-    //if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
-    //    m_enemyUnits.push_back(enemyUnit1);
-    //if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end()) 
-    //    m_enemyUnits.push_back(enemyUnit2);
+    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene") {
+
+        if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end())
+            m_enemyUnits.push_back(enemyUnit0);
+        if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
+            m_enemyUnits.push_back(enemyUnit1);
+        if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end())
+            m_enemyUnits.push_back(enemyUnit2);
 
 
-    std::vector<GameObject*> enemyObjects = battleGrid->GetEnemyObjects();
 
-    for (int i = 0; i < 3; ++i) 
-    {
-        if (enemyObjects[i])
-        {
-            EnemyUnit* enemy = enemyObjects[i]->GetComponent<EnemyUnit>();
-            if (enemy) 
-            { 
-                AddEnemyUnit(enemy);
-                m_enemyUnits.push_back(enemy); 
-            }
-        }
+
+    }
+    else {
+        std::vector<GameObject*> enemyObjects = battleGrid->GetEnemyObjects();
+
+       for (int i = 0; i < 3; ++i) 
+       {
+           if (enemyObjects[i])
+           {
+               EnemyUnit* enemy = enemyObjects[i]->GetComponent<EnemyUnit>();
+               if (enemy) 
+               { 
+                   AddEnemyUnit(enemy);
+                   m_enemyUnits.push_back(enemy); 
+               }
+           }
+       }
+
+       //for (EnemyUnit* enemy : m_enemyUnits)
+       //{
+       //    if (enemy) enemy->SetPath0();
+       //}
     }
 
 
-    //for (EnemyUnit* enemy : m_enemyUnits)
-    //{
-    //    if(enemy) enemy->SetPath0();
-    //}
+
 
     m_isStageStart = true;
 }
