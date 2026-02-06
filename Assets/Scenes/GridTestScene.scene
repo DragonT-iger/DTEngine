@@ -171,7 +171,7 @@
         }
       ],
       "id": 12792323375294926988,
-      "name": "Directional Light",
+      "name": "Directional Light_gs",
       "tag": "Untagged",
       "transform": {
         "id": 17987380289712910369,
@@ -351,6 +351,7 @@
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
+          "m_redQueenUnit": 0,
           "typeName": "CombatController"
         }
       ],
@@ -9201,10 +9202,52 @@
         }
       ],
       "id": 15482741027419513389,
-      "name": "GameObject",
+      "name": "Arrow",
       "tag": "Untagged",
       "transform": {
         "id": 16165240501361788912,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5183303689350849534,
+          "m_pos": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "typeName": "RedQueenUnit"
+        }
+      ],
+      "id": 3463645136960540982,
+      "name": "RedQueen",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4945832136228460891,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
