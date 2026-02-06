@@ -41,10 +41,6 @@ DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemyPrefab)
 DTPROPERTY(TutorialManager, m_rayCastHitEvent)
 ENDPROPERTY()
 
-void TutorialManager::Awake()
-{
-    // 초기화 코드가 필요하다면 작성
-}
 
 void TutorialManager::Start()
 {
@@ -669,6 +665,7 @@ void TutorialManager::NextStep(bool force)
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 7, m_redGlowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 8, m_glowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 6, m_redGlowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab); // 이건 수정하긴해야됨
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 8, m_redGlowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 6, m_glowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 7, m_redGlowTilePrefab);

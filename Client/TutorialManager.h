@@ -47,7 +47,6 @@ public:
         Victory                         // 승리 UI (Case 23)
     };
 
-    void Awake() override;
     void Start() override;
 
     void Update(float deltaTime) override;
@@ -63,7 +62,7 @@ private:
     GameObject* leftChat = nullptr;
     GameObject* rightChat = nullptr;
 
-    Text* leftChatText = nullptr; // awake에서 자동으로 할당
+    Text* leftChatText = nullptr;
     Text* rightChatText = nullptr;
 
     GameObject* m_queenUI = nullptr;
