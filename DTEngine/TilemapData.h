@@ -53,16 +53,16 @@ public:
 
 
     // 고양이 대사도??
-    static constexpr int MAX_DIALOGUES = 3;
+    //static constexpr int MAX_DIALOGUES = 3;
 
-    struct DialogueLine
-    {
-        bool enabled = false;
-        std::string text;
-    };
+    //struct DialogueLine
+    //{
+    //    bool enabled = false;
+    //    std::string text;
+    //};
 
-    DialogueLine& GetDialogue(int idx) { return m_dialogues[idx]; }
-    const DialogueLine& GetDialogue(int idx) const { return m_dialogues[idx]; }
+    //DialogueLine& GetDialogue(int idx) { return m_dialogues[idx]; }
+    //const DialogueLine& GetDialogue(int idx) const { return m_dialogues[idx]; }
 
 
 private:
@@ -73,7 +73,7 @@ private:
     bool IsBorder(int x, int y) const;
 
     void ResetEnemiesToDefault();
-    void ResetDialoguesToDefault();
+    //void ResetDialoguesToDefault();
 
 private:
     int m_width = 12; // 이건 테두리 포함한 값임.
@@ -82,7 +82,7 @@ private:
     std::vector<int> m_grid;
 
     std::array<EnemySpawn, MAX_ENEMIES> m_enemies;
-    std::array<DialogueLine, MAX_DIALOGUES> m_dialogues;
+    //std::array<DialogueLine, MAX_DIALOGUES> m_dialogues;
 };
 
 // 

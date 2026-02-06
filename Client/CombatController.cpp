@@ -548,6 +548,7 @@ void CombatController::GetAttackableTargets(Unit* me, std::vector<Unit*>& outTar
         {
             if (CanActuallyAttack(me, enemy)) outTargets.push_back(enemy);
         }
+
     }
     else
     {

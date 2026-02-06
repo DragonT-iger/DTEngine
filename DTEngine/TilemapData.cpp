@@ -130,7 +130,7 @@ bool TilemapData::LoadFile(const std::string& fullPath)
     }
 
     // 대사
-    ResetDialoguesToDefault();
+   /* ResetDialoguesToDefault();
 
     if (reader.BeginArray("dialogues"))
     {
@@ -147,7 +147,7 @@ bool TilemapData::LoadFile(const std::string& fullPath)
             reader.EndArrayItem();
         }
         reader.EndArray();
-    }
+    }*/
 
     MakeBorder();
     return true;
@@ -194,7 +194,7 @@ bool TilemapData::SaveFile(const std::string& fullPath)
     writer.EndArray();
 
     // 대사 저장
-    writer.BeginArray("dialogues");
+   /* writer.BeginArray("dialogues");
     for (int i = 0; i < MAX_DIALOGUES; ++i)
     {
         const auto& d = m_dialogues[i];
@@ -203,7 +203,7 @@ bool TilemapData::SaveFile(const std::string& fullPath)
         writer.Write("text", d.text);
         writer.EndArrayItem();
     }
-    writer.EndArray();
+    writer.EndArray();*/
 
     return writer.SaveFile(fullPath);
 }
@@ -212,7 +212,7 @@ void TilemapData::Unload()
 {
     m_grid.clear();
     ResetEnemiesToDefault();
-    ResetDialoguesToDefault();
+    //ResetDialoguesToDefault();
 }
 
 
@@ -256,11 +256,11 @@ void TilemapData::ResetEnemiesToDefault()
 
 }
 
-void TilemapData::ResetDialoguesToDefault()
-{
-    for (auto& d : m_dialogues)
-    {
-        d.enabled = false;
-        d.text.clear();
-    }
-}
+//void TilemapData::ResetDialoguesToDefault()
+//{
+//    for (auto& d : m_dialogues)
+//    {
+//        d.enabled = false;
+//        d.text.clear();
+//    }
+//}
