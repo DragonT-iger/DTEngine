@@ -610,3 +610,15 @@ std::vector<GameObject*>& BattleGrid::GetEnemyObjects()
     TilemapData* td = m_tilemapGenerator->GetMapData();
     return m_tilemapGenerator->GetSpawnedEnemys();
 }
+
+GameObject* BattleGrid::GetAliceObjects()
+{
+    TilemapData* td = m_tilemapGenerator->GetMapData();
+    return m_tilemapGenerator->GetSpawnedAlice();
+}
+
+GameObject* BattleGrid::GetRedQueenObjects()
+{
+    TilemapData* td = m_tilemapGenerator->GetMapData();
+    return m_tilemapGenerator->GetSpawnedRedQueen();
+}

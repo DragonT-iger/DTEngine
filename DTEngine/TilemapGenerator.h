@@ -3,6 +3,8 @@
 #include "ReflectionMacros.h"
 #include <vector>
 
+#include "../Client/AliceUnit.h"
+#include "../Client/RedQueen.h"
 
 class TilemapData;
 class Prefab;
@@ -26,8 +28,10 @@ public:
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
-    void SpawnEnemies(); // 적 생성
+    void SpawnUnits(); // 적 생성
     std::vector<GameObject*>& GetSpawnedEnemys() { return m_spawnedEnemys; }
+    GameObject* GetSpawnedAlice() const { return m_spawnedAlice; }
+    GameObject* GetSpawnedRedQueen() const { return m_spawnedRedQueen; }
 
 	static constexpr int PALETTE_SIZE = 10;
     static constexpr int NUM_ENEMIES = 3;
@@ -49,10 +53,16 @@ public:
     Prefab* m_enemy1 = nullptr;
     Prefab* m_enemy2 = nullptr;
 
+    Prefab* m_alice = nullptr;
+    Prefab* m_redQueen = nullptr;
+
 private:
     
     TilemapData* m_mapData = nullptr;
 
     std::vector<GameObject*> m_spawnedTiles;
     std::vector<GameObject*> m_spawnedEnemys;
+
+    GameObject* m_spawnedAlice = nullptr;
+    GameObject* m_spawnedRedQueen = nullptr;
 };

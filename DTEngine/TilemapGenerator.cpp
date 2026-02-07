@@ -30,6 +30,8 @@ DTPROPERTY(TilemapGenerator, m_enemy0)
 DTPROPERTY(TilemapGenerator, m_enemy1)
 DTPROPERTY(TilemapGenerator, m_enemy2)
 
+DTPROPERTY(TilemapGenerator, m_alice)
+DTPROPERTY(TilemapGenerator, m_redQueen)
 
 ENDPROPERTY()
 
@@ -37,7 +39,7 @@ void TilemapGenerator::Start()
 {
 	//std::cout << "TilemapGenerator Start 호출됨" << std::endl;
     BuildMap();
-    SpawnEnemies();
+    SpawnUnits();
 }
 
 void TilemapGenerator::BuildMap()
@@ -124,9 +126,11 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
     }
 }
 
-void TilemapGenerator::SpawnEnemies()
+void TilemapGenerator::SpawnUnits()
 {
     m_spawnedEnemys.clear();
+    m_spawnedAlice = nullptr;
+    m_spawnedRedQueen = nullptr;
 
     if (m_mapData == nullptr) return;
 
@@ -160,5 +164,38 @@ void TilemapGenerator::SpawnEnemies()
 
         m_spawnedEnemys[i] = instance;
 
+    }
+
+    // 앨리스
+    {
+        Vector2 pos = m_mapData->GetAlicePos();
+        if (pos.x >= 0 && pos.y >= 0 && m_alice)
+        {
+            GameObject* instance = m_alice->Instantiate();
+            if (instance)
+            {
+                instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
+                instance->SetActive(true);
+
+                m_spawnedAlice = instance;
+            }
+        }
+    }
+
+    // 붉은여왕
+    {
+        const auto& rq = m_mapData->GetRedQueen();
+
+        if (rq.enabled && rq.pos.x >= 0 && rq.pos.y >= 0 && m_redQueen)
+        {
+            GameObject* instance = m_redQueen->Instantiate();
+            if (instance)
+            {
+                instance->GetTransform()->SetPosition(Vector3{ rq.pos.x * 2.0f, 1.0f, rq.pos.y * 2.0f });
+                instance->SetActive(true);
+
+                m_spawnedRedQueen = instance;
+            }
+        }
     }
 }

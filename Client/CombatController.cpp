@@ -87,6 +87,19 @@ void CombatController::Setup()
         }
     }
 
+    GameObject* aliceObject = battleGrid->GetAliceObjects();
+    if (aliceObject)
+    {
+        AliceUnit* alice = aliceObject->GetComponent<AliceUnit>();
+        if (alice) m_aliceUnit = alice;
+    }
+
+    GameObject* queenObject = battleGrid->GetRedQueenObjects();
+    if (queenObject)
+    {
+        RedQueenUnit* queen = queenObject->GetComponent<RedQueenUnit>();
+        if (queen) m_redQueenUnit = queen;
+    }
 
     //for (EnemyUnit* enemy : m_enemyUnits)
     //{

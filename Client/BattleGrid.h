@@ -102,6 +102,9 @@ public:
     // 이건 사실 여기 있으면 안되지만.. 타일맵은 여기 받으니까..
     std::vector<GameObject*>& GetEnemyObjects();
 
+    GameObject* GetAliceObjects();
+    GameObject* GetRedQueenObjects();
+
 private:
     int m_width = 0;
     int m_height = 0;

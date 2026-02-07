@@ -205,6 +205,7 @@
         {
           "Active": true,
           "id": 7171391694734270448,
+          "m_alice": 10176236894119402473,
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
@@ -219,6 +220,7 @@
           "m_prefab7": 0,
           "m_prefab8": 0,
           "m_prefab9": 0,
+          "m_redQueen": 5772689272221282124,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -348,7 +350,7 @@
           "enemyUnit1": 0,
           "enemyUnit2": 0,
           "id": 6276163554272591340,
-          "m_aliceUnit": 9781302197654319293,
+          "m_aliceUnit": 0,
           "m_redQueenUnit": 0,
           "typeName": "CombatController"
         }
@@ -358,48 +360,6 @@
       "tag": "Untagged",
       "transform": {
         "id": 4744754019065986298,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 9781302197654319293,
-          "m_pos": {
-            "x": 0.0,
-            "y": 0.0
-          },
-          "typeName": "AliceUnit"
-        }
-      ],
-      "id": 10494504114322562742,
-      "name": "alice",
-      "tag": "Untagged",
-      "transform": {
-        "id": 1090369088132048465,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
