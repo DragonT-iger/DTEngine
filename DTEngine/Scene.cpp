@@ -845,16 +845,16 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
    
    
 
-        Sorter::Instance().CreateKeyOpaque(opaqueQueue);
-         std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
+       // Sorter::Instance().CreateKeyOpaque(opaqueQueue);
+        // std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
-        RenderOpaque(SortedVector);
-        RenderOutline(SortedVector);
+        RenderOpaque(opaqueQueue);
+      //  RenderOutline(opaqueQueue);
 
-        //Sorter::Instance().CreateKeyTransparent(transparentQueue);
+       // Sorter::Instance().CreateKeyTransparent(transparentQueue);
        // std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
          RenderTrans(transparentQueue, viewTM);
-        //RenderTrans(SortedVectorTrans, viewTM);
+       // RenderTrans(SortedVectorTrans, viewTM);
 
 
          
@@ -1011,7 +1011,7 @@ void Scene::RenderOutline(std::vector<GameObject*>& OutlineVec)
 
     }
 
-
+    DX11Renderer::Instance().SetCullMode(CullMode::Back);
 }
 
 void Scene::RenderUI(Camera* camera, RenderTexture* renderTarget)

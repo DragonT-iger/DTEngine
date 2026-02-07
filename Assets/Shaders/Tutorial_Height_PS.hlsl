@@ -104,13 +104,38 @@ float4 PS(PS_INPUT input) : SV_Target
     }
     
         
-    float3 ambientLighting = albedo * 0.7f;
+    float3 Temp_ambientLighting = albedo * 0.7f;
     
-    float3 finalColor = directLighting + ambientLighting;
+    float3 ambientLighting_IBL = 1;
+    
+    if (USE_IBL)
+    {
+        float3 R = reflect(-V, N);
+        float mipLevel = rough * 7.0f; // Roughness 기반 밉맵 샘플링
         
-    //float4 emissiveTex = g_EmissiveMap.Sample(g_Sampler, input.UV);
+        // Specular 및 Diffuse 환경광 샘플링
+        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
+        float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
+
+        // 물리 연산은 Shared 함수 호출 (데이터만 전달)
+        ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
+    }
+    
+    ambientLighting_IBL = ambientLighting_IBL * SkyBox_Color.a;
+    
+    Temp_ambientLighting *= SkyBox_Color.b;
+    
+    
+   
+    
+    float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
+    
+    
+    TotalAmbi = saturate(TotalAmbi);
+    
         
-    float4 emissiveTex = edgeColor;
+        
+   float4 emissiveTex = edgeColor;
       
    float NdotV = saturate(dot(N, V));
      
@@ -124,7 +149,7 @@ float4 PS(PS_INPUT input) : SV_Target
     
     emissiveResult = emissiveTex.rgb * glowIntensity * (wave + bumpFactor * wave);
         
-    finalColor = directLighting + ambientLighting + emissiveResult;
+    float3 finalColor = (directLighting + TotalAmbi + emissiveResult) * (Temp + Shadow_Scale);
 
     return float4(finalColor, 1.0f);
 }
