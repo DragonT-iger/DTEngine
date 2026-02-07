@@ -54,7 +54,7 @@ private:
 	static inline int maxLife = 9;
 	static inline int curLife = 9;
 
-	static inline int curMoney = 20; //cost는 좀 짜친데
+	static inline int curMoney = 100; //cost는 좀 짜친데
 	static inline int curUnitCount = 0;		// 3 초과부터는 유닛 소환 불가능으로.
 
 	static inline float curbgmValue = 0.5f;		

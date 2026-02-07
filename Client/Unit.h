@@ -7,6 +7,7 @@
 class Animator;
 
 static constexpr Vector2 GRIDPOS_INVALID{ -999, -999 };
+static constexpr uint64_t ANIM_INVALID = (uint64_t)-1;
 
 enum UnitType
 {
@@ -222,8 +223,6 @@ protected:
     bool m_isOnTrapTile = false;
 
 
-
-private:
     ActionPhase m_phase = ActionPhase::None;
 
     RotateAnim m_rot;
