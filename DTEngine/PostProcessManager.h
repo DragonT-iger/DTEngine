@@ -17,6 +17,9 @@ public:
     void Resize(int width, int height);
 
     void Execute(RenderTexture* sceneTexture, ID3D11RenderTargetView* backBufferRTV, uint32_t activeEffectsMask, Camera* camera, int width, int height);
+    void RenderToneMapping(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height);
+    void Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height);
+    
 
     template <typename T>
     T* AddEffect()
@@ -30,7 +33,7 @@ public:
     }
 
 private:
-    void Blit(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height);
+    
 
 private:
     std::vector<std::shared_ptr<IPostProcess>> m_effects;
@@ -40,4 +43,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader> m_fullscreenVS;
     Microsoft::WRL::ComPtr<ID3D11PixelShader>  m_copyPS;
     Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pointSampler;
+
+
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer = nullptr; //ToneMapping
 };

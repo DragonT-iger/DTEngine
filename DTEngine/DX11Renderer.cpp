@@ -33,7 +33,7 @@
 #include "VignetteEffect.h"
 #include "BloomEffect.h"
 #include "CircleMask.h"
-
+#include "ToneMapping.h"
 #include "Font.h"
 
 
@@ -78,12 +78,14 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_postProcessManager->Initialize(width, height);
 
     m_resolvedSceneRT = std::make_unique<RenderTexture>();
-    m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false);
+    m_resolvedSceneRT->Initialize(width, height, RenderTextureType::Tex2D, false , false, true);
 
     m_postProcessManager->AddEffect<GrayScaleEffect>();
 	m_postProcessManager->AddEffect<VignetteEffect>();
 	m_postProcessManager->AddEffect<BloomEffect>();
     m_postProcessManager->AddEffect<CircleMaskEffect>();
+    m_postProcessManager->AddEffect<ToneMapping>();
+
     return true;
 }
 
