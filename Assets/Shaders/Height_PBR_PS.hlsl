@@ -117,9 +117,6 @@ float4 PS(PS_INPUT input) : SV_Target
     
    Temp_ambientLighting *= SkyBox_Color.b;
     
-    
-   
-    
     float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
     
     

@@ -68,7 +68,7 @@ private:
 
 	std::unique_ptr<RenderTexture> m_gameRT;
 	std::unique_ptr<RenderTexture> m_captureRT;
-
+	std::unique_ptr<RenderTexture> m_finalGameRT;
 #ifdef _DEBUG
 
 

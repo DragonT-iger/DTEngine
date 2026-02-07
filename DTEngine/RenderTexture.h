@@ -23,8 +23,8 @@ public:
     RenderTexture();
     ~RenderTexture();
 
-    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false, bool enableAA = false);
-
+    //bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false, bool enableAA = false);
+    bool Initialize(int width, int height, RenderTextureType type = RenderTextureType::Tex2D, bool isSRGB = false, bool enableAA = false, bool isHDR = false);
     void Resize(int width, int height);
 
     void Bind(int faceIndex = 0);
@@ -55,6 +55,8 @@ private:
 
     bool m_isSRGB;
     bool m_enableAA = false;
+    bool m_isHDR = false;
+
     int m_msaa = 8;
 	int m_msaaQuality = 0;
 

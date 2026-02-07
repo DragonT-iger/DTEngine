@@ -150,8 +150,8 @@ bool Game::Initialize()
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
-	/* SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
-	 ClientSceneManager::Instance().LoadScene("TitleScene");*/
+	 //SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	 //ClientSceneManager::Instance().LoadScene("TitleScene");
 
 
 	 //SceneManager::Instance().RegisterScene("Scenes/Title.scene");
@@ -175,10 +175,13 @@ bool Game::Initialize()
 
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true);
+	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true, false); //m_capture(hdr -> 후 최종값이기에 hdr 빼도 됨) ;연산은 capture_rt에서 이루어짐.
 
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false, false);
+
+	m_finalGameRT = std::make_unique<RenderTexture>();
+	m_finalGameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false, false); //Gamma만 처리함. srgb는 받아야함. 
 
 	SetEditorCamera(scene);
 
@@ -187,14 +190,14 @@ bool Game::Initialize()
 
 #else
 	m_gameRT = std::make_unique<RenderTexture>();
-	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false);
+	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false, false);
 
 
 #endif
 
 
 	m_captureRT = std::make_unique<RenderTexture>();
-	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, false, true);
+	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, false, true, true);
 
 
 
@@ -431,30 +434,45 @@ void Game::LifeCycle(DeltaTime dt)
 
 #ifdef _DEBUG
 
+	//Gamma 수동 처리 해야 해서, 기존 postprocessing tone mapping을 editor cam view에서도 처리싴
 	if (scene) scene->RenderShadows();
 
-	m_sceneRT->Bind();
-
-	m_sceneRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
-	// 씬 뷰
-	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
-
-
-	std::vector<Light*> temp;
-	for (const auto& lights : Light::GetAllLights())
+	if (m_captureRT && m_sceneRT &&
+		(m_captureRT->GetWidth() != m_sceneRT->GetWidth() || m_captureRT->GetHeight() != m_sceneRT->GetHeight()))
 	{
-		if (scene->FindGameObject(lights->_GetOwner()->GetName()) != nullptr)
-			temp.push_back(lights);
+		m_captureRT->Resize(m_sceneRT->GetWidth(), m_sceneRT->GetHeight());
 	}
 
-	DX11Renderer::Instance().UpdateLights_CBUFFER(temp, m_editorCameraObject->GetComponent<Camera>());
+	m_captureRT->Bind();
+	m_captureRT->Clear(0.2f, 0.2f, 0.2f, 1.0f);
 
-	//DX11Renderer::Instance().UpdateLights_CBUFFER(Light::GetAllLights(), m_editorCameraObject->GetComponent<Camera>());
+	Camera* editorCam = m_editorCameraObject->GetComponent<Camera>();
 
-	scene->Render(editorCam, m_sceneRT.get());
+	std::vector<Light*> tempLights;
+	for (const auto& light : Light::GetAllLights())
+	{
+		if (scene->FindGameObject(light->_GetOwner()->GetName()) != nullptr)
+			tempLights.push_back(light);
+	}
+	DX11Renderer::Instance().UpdateLights_CBUFFER(tempLights, editorCam);
 
-	m_sceneRT->Unbind();
+	scene->Render(editorCam, m_captureRT.get());
 
+	m_captureRT->Unbind();
+
+	auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
+	if (ppManager && m_captureRT && m_sceneRT)
+	{
+		
+		ppManager->RenderToneMapping(
+			m_captureRT.get(),
+			m_sceneRT->GetRTV(),
+			m_sceneRT->GetWidth(),
+			m_sceneRT->GetHeight()
+		);
+	}
+
+	m_sceneRT->Unbind(); //최종 rt이기 때문에 (연산 x) hdr x = gamma 필요 없음 
 	Camera* mainCam = scene->GetMainCamera();
 
 
@@ -510,6 +528,7 @@ void Game::LifeCycle(DeltaTime dt)
 				scene->Render(cam, m_captureRT.get());
 
 				m_captureRT->Unbind();
+
 			}
 
 			auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
@@ -518,6 +537,7 @@ void Game::LifeCycle(DeltaTime dt)
 			{
 				uint32_t mask = (mainCam) ? mainCam->GetPostProcessMask() : 0;
 
+				//pp 유무와 상관 없이 마지막에 tone mapping 실행 
 				ppManager->Execute(
 					m_captureRT.get(),      
 					m_gameRT->GetRTV(),     
@@ -527,6 +547,8 @@ void Game::LifeCycle(DeltaTime dt)
 					m_gameRT->GetHeight()   
 				);
 			}
+
+
 		}
 	}
 
@@ -537,6 +559,8 @@ void Game::LifeCycle(DeltaTime dt)
 
 	static const float black[4] = { 0.10f, 0.10f, 0.12f, 1.0f };
 	DX11Renderer::Instance().BeginFrame(black);
+
+
 
 	m_imgui->NewFrame();
 	ImGuizmo::BeginFrame();
@@ -667,8 +691,6 @@ void Game::LifeCycle(DeltaTime dt)
 
 	Vector2 finalPos(offsetX, offsetY);
 	Vector2 finalSize(drawWidth, drawHeight);
-
-
 
 
 	DX11Renderer::Instance().BeginUIRender(DX11Renderer::Instance().GetRefWidth(), DX11Renderer::Instance().GetRefHeight());
@@ -1126,6 +1148,9 @@ void Game::OnResize(int width, int height)
 
 	if (m_captureRT)
 		m_captureRT->Resize((int)drawWidth, (int)drawHeight);
+
+	if (m_finalGameRT)
+		m_finalGameRT->Resize((int)drawWidth, (int)drawHeight);
 
 	Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 	if (mainCam) {

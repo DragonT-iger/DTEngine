@@ -407,6 +407,9 @@
     <ClInclude Include="Dissolved.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="ToneMapping.h">
+      <Filter>PostProcessing\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -661,6 +664,9 @@
     <ClCompile Include="Dissolved.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ToneMapping.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -875,6 +881,18 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\Height_PBR_VS.hlsl">
       <Filter>Shader\Specific\Height</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\ToneMapping_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\ToneMapping_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Gamma_Correction_VS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Gamma_Correction_PS.hlsl">
+      <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

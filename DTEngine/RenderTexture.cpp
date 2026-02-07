@@ -6,29 +6,212 @@
 RenderTexture::RenderTexture() = default;
 RenderTexture::~RenderTexture() = default;
 
-bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bool isSRGB, bool enableAA)
+//bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bool isSRGB, bool enableAA)
+//{
+//    m_width = width;
+//    m_height = height;
+//    m_type = type;
+//    m_isSRGB = isSRGB;
+//
+//    // 큐브맵은 AA 구현이 복잡하므로 일단 2D일 때만 적용하도록 예외 처리 가능
+//    if (m_type == RenderTextureType::CubeMap) enableAA = false;
+//    m_enableAA = enableAA;
+//
+//    ID3D11Device* device = DX11Renderer::Instance().GetDevice();
+//
+//    D3D11_TEXTURE2D_DESC textureDesc = {};
+//    textureDesc.Width = width;
+//    textureDesc.Height = height;
+//    textureDesc.MipLevels = 1;
+//    textureDesc.SampleDesc.Count = 1; // SRV용은 항상 1
+//    textureDesc.SampleDesc.Quality = 0;
+//    textureDesc.Usage = D3D11_USAGE_DEFAULT;
+//    textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+//    textureDesc.CPUAccessFlags = 0;
+//    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+//
+//    if (m_type == RenderTextureType::CubeMap)
+//    {
+//        textureDesc.ArraySize = 6;
+//        textureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+//    }
+//    else
+//    {
+//        textureDesc.ArraySize = 1;
+//        textureDesc.MiscFlags = 0;
+//    }
+//
+//    // SRV용 텍스처 생성
+//    if (FAILED(device->CreateTexture2D(&textureDesc, nullptr, m_renderTargetTexture.GetAddressOf())))
+//        return false;
+//
+//    m_renderTargetTexture.As(&m_textureResource);
+//
+//    if (m_enableAA)
+//    {
+//        D3D11_TEXTURE2D_DESC msaaDesc = textureDesc;
+//		msaaDesc.SampleDesc.Count = m_msaa; 
+//		msaaDesc.SampleDesc.Quality = m_msaaQuality;
+//        msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET; 
+//        msaaDesc.MiscFlags = 0;
+//
+//        if (FAILED(device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTexture.GetAddressOf())))
+//            return false;
+//
+//        D3D11_RENDER_TARGET_VIEW_DESC msaaRTVDesc = {};
+//        msaaRTVDesc.Format = isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
+//        msaaRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS; 
+//
+//        if (FAILED(device->CreateRenderTargetView(m_msaaTexture.Get(), &msaaRTVDesc, m_msaaRTV.GetAddressOf())))
+//            return false;
+//    }
+//
+//    m_faceRTVs.clear();
+//    if (!m_enableAA)
+//    {
+//        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+//        rtvDesc.Format = isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
+//
+//        if (m_type == RenderTextureType::CubeMap)
+//        {
+//            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+//            rtvDesc.Texture2DArray.MipSlice = 0;
+//            rtvDesc.Texture2DArray.ArraySize = 1;
+//
+//            for (int i = 0; i < 6; ++i)
+//            {
+//                rtvDesc.Texture2DArray.FirstArraySlice = i;
+//                ComPtr<ID3D11RenderTargetView> rtv;
+//                if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, rtv.GetAddressOf())))
+//                    return false;
+//                m_faceRTVs.push_back(rtv);
+//            }
+//        }
+//        else
+//        {
+//            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+//            rtvDesc.Texture2D.MipSlice = 0;
+//
+//            ComPtr<ID3D11RenderTargetView> rtv;
+//            if (FAILED(device->CreateRenderTargetView(m_renderTargetTexture.Get(), &rtvDesc, rtv.GetAddressOf())))
+//                return false;
+//            m_faceRTVs.push_back(rtv);
+//        }
+//    }
+//
+//    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+//    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+//
+//    if (m_type == RenderTextureType::CubeMap)
+//    {
+//        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+//        srvDesc.TextureCube.MipLevels = 1;
+//        srvDesc.TextureCube.MostDetailedMip = 0;
+//    }
+//    else
+//    {
+//        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+//        srvDesc.Texture2D.MipLevels = 1;
+//        srvDesc.Texture2D.MostDetailedMip = 0;
+//    }
+//
+//    if (FAILED(device->CreateShaderResourceView(m_renderTargetTexture.Get(), &srvDesc, m_srv.GetAddressOf())))
+//        return false;
+//
+//    D3D11_TEXTURE2D_DESC depthDesc = {};
+//    depthDesc.Width = width;
+//    depthDesc.Height = height;
+//    depthDesc.MipLevels = 1;
+//    depthDesc.ArraySize = 1;
+//    depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+//    depthDesc.Usage = D3D11_USAGE_DEFAULT;
+//    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+//
+//    if (m_enableAA)
+//    {
+//        depthDesc.SampleDesc.Count = m_msaa;
+//        depthDesc.SampleDesc.Quality = m_msaaQuality;
+//    }
+//    else
+//    {
+//        depthDesc.SampleDesc.Count = 1;
+//        depthDesc.SampleDesc.Quality = 0;
+//    }
+//
+//    if (FAILED(device->CreateTexture2D(&depthDesc, nullptr, m_depthStencilTexture.GetAddressOf())))
+//        return false;
+//
+//    // DSV 생성
+//    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+//    dsvDesc.Format = depthDesc.Format;
+//    if (m_enableAA)
+//    {
+//        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+//    }
+//    else
+//    {
+//        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+//    }
+//
+//    if (FAILED(device->CreateDepthStencilView(m_depthStencilTexture.Get(), &dsvDesc, m_dsv.GetAddressOf())))
+//        return false;
+//
+//    m_viewport.TopLeftX = 0.0f;
+//    m_viewport.TopLeftY = 0.0f;
+//    m_viewport.Width = static_cast<float>(width);
+//    m_viewport.Height = static_cast<float>(height);
+//    m_viewport.MinDepth = 0.0f;
+//    m_viewport.MaxDepth = 1.0f;
+//
+//    return true;
+//}
+
+bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bool isSRGB, bool enableAA, bool isHDR)
 {
     m_width = width;
     m_height = height;
     m_type = type;
     m_isSRGB = isSRGB;
+    m_isHDR = isHDR; 
 
-    // 큐브맵은 AA 구현이 복잡하므로 일단 2D일 때만 적용하도록 예외 처리 가능
     if (m_type == RenderTextureType::CubeMap) enableAA = false;
     m_enableAA = enableAA;
 
     ID3D11Device* device = DX11Renderer::Instance().GetDevice();
 
+   
+    DXGI_FORMAT textureFormat;
+    DXGI_FORMAT rtvFormat;
+    DXGI_FORMAT srvFormat;
+
+    if (m_isHDR)
+    {
+        // HDR 모드: 16비트 Float (0~1 범위를 넘어선 빛 저장 가능)
+        // RTV, SRV 모두 동일한 포맷을 사용합니다.
+        textureFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+        rtvFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+        srvFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    }
+    else
+    {
+        // LDR 모드 (기존 로직): 8비트 정수
+        // 텍스처는 TYPELESS로 만들고, 뷰(View)에서 해석 방식을 결정
+        textureFormat = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+        rtvFormat = m_isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
+        srvFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+    }
+
+   
     D3D11_TEXTURE2D_DESC textureDesc = {};
     textureDesc.Width = width;
     textureDesc.Height = height;
     textureDesc.MipLevels = 1;
-    textureDesc.SampleDesc.Count = 1; // SRV용은 항상 1
+    textureDesc.SampleDesc.Count = 1;
     textureDesc.SampleDesc.Quality = 0;
     textureDesc.Usage = D3D11_USAGE_DEFAULT;
     textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
     textureDesc.CPUAccessFlags = 0;
-    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+    textureDesc.Format = textureFormat; 
 
     if (m_type == RenderTextureType::CubeMap)
     {
@@ -41,36 +224,38 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bo
         textureDesc.MiscFlags = 0;
     }
 
-    // SRV용 텍스처 생성
     if (FAILED(device->CreateTexture2D(&textureDesc, nullptr, m_renderTargetTexture.GetAddressOf())))
         return false;
 
     m_renderTargetTexture.As(&m_textureResource);
 
+   
     if (m_enableAA)
     {
         D3D11_TEXTURE2D_DESC msaaDesc = textureDesc;
-		msaaDesc.SampleDesc.Count = m_msaa; 
-		msaaDesc.SampleDesc.Quality = m_msaaQuality;
-        msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET; 
+        msaaDesc.SampleDesc.Count = m_msaa;
+        msaaDesc.SampleDesc.Quality = m_msaaQuality;
+        msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;
         msaaDesc.MiscFlags = 0;
 
+        // MSAA 텍스처도 같은 포맷 사용
         if (FAILED(device->CreateTexture2D(&msaaDesc, nullptr, m_msaaTexture.GetAddressOf())))
             return false;
 
         D3D11_RENDER_TARGET_VIEW_DESC msaaRTVDesc = {};
-        msaaRTVDesc.Format = isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
-        msaaRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS; 
+        msaaRTVDesc.Format = rtvFormat; // [수정] 결정된 RTV 포맷 사용
+        msaaRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 
         if (FAILED(device->CreateRenderTargetView(m_msaaTexture.Get(), &msaaRTVDesc, m_msaaRTV.GetAddressOf())))
             return false;
     }
 
+
     m_faceRTVs.clear();
     if (!m_enableAA)
     {
         D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-        rtvDesc.Format = isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
+        rtvDesc.Format = rtvFormat; 
 
         if (m_type == RenderTextureType::CubeMap)
         {
@@ -99,8 +284,9 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bo
         }
     }
 
+
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    srvDesc.Format = srvFormat;
 
     if (m_type == RenderTextureType::CubeMap)
     {
@@ -119,49 +305,50 @@ bool RenderTexture::Initialize(int width, int height, RenderTextureType type, bo
         return false;
 
     D3D11_TEXTURE2D_DESC depthDesc = {};
-    depthDesc.Width = width;
-    depthDesc.Height = height;
-    depthDesc.MipLevels = 1;
-    depthDesc.ArraySize = 1;
-    depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    depthDesc.Usage = D3D11_USAGE_DEFAULT;
-    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-
-    if (m_enableAA)
-    {
-        depthDesc.SampleDesc.Count = m_msaa;
-        depthDesc.SampleDesc.Quality = m_msaaQuality;
-    }
-    else
-    {
-        depthDesc.SampleDesc.Count = 1;
-        depthDesc.SampleDesc.Quality = 0;
-    }
-
-    if (FAILED(device->CreateTexture2D(&depthDesc, nullptr, m_depthStencilTexture.GetAddressOf())))
-        return false;
-
-    // DSV 생성
-    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-    dsvDesc.Format = depthDesc.Format;
-    if (m_enableAA)
-    {
-        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-    }
-    else
-    {
-        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    }
-
-    if (FAILED(device->CreateDepthStencilView(m_depthStencilTexture.Get(), &dsvDesc, m_dsv.GetAddressOf())))
-        return false;
-
+        depthDesc.Width = width;
+        depthDesc.Height = height;
+        depthDesc.MipLevels = 1;
+        depthDesc.ArraySize = 1;
+        depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        depthDesc.Usage = D3D11_USAGE_DEFAULT;
+        depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    
+        if (m_enableAA)
+        {
+            depthDesc.SampleDesc.Count = m_msaa;
+            depthDesc.SampleDesc.Quality = m_msaaQuality;
+        }
+        else
+        {
+            depthDesc.SampleDesc.Count = 1;
+            depthDesc.SampleDesc.Quality = 0;
+        }
+    
+        if (FAILED(device->CreateTexture2D(&depthDesc, nullptr, m_depthStencilTexture.GetAddressOf())))
+            return false;
+    
+        // DSV 생성
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+        dsvDesc.Format = depthDesc.Format;
+        if (m_enableAA)
+        {
+            dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+        }
+        else
+        {
+            dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        }
+    
+        if (FAILED(device->CreateDepthStencilView(m_depthStencilTexture.Get(), &dsvDesc, m_dsv.GetAddressOf())))
+            return false;
+ 
     m_viewport.TopLeftX = 0.0f;
     m_viewport.TopLeftY = 0.0f;
     m_viewport.Width = static_cast<float>(width);
     m_viewport.Height = static_cast<float>(height);
     m_viewport.MinDepth = 0.0f;
     m_viewport.MaxDepth = 1.0f;
+
 
     return true;
 }
@@ -179,7 +366,7 @@ void RenderTexture::Resize(int width, int height)
     m_msaaTexture.Reset();
     m_msaaRTV.Reset();
 
-    Initialize(width, height, m_type, m_isSRGB, m_enableAA);
+    Initialize(width, height, m_type, m_isSRGB, m_enableAA , m_isHDR);
 }
 
 void RenderTexture::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
@@ -215,7 +402,7 @@ void RenderTexture::Bind(int faceIndex)
 
 void RenderTexture::Unbind()
 {
-    if (m_enableAA && m_msaaTexture && m_renderTargetTexture)
+    /*if (m_enableAA && m_msaaTexture && m_renderTargetTexture)
     {
         ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
         DXGI_FORMAT format = m_isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -227,7 +414,31 @@ void RenderTexture::Unbind()
         );
     }
 
+    DX11Renderer::Instance().SetRenderTarget(nullptr);*/
+
+    if (m_enableAA && m_msaaTexture && m_renderTargetTexture)
+    {
+        ID3D11DeviceContext* context = DX11Renderer::Instance().GetContext();
+
+        DXGI_FORMAT format;
+        if (m_isHDR)
+        {
+            format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+        }
+        else
+        {
+            format = m_isSRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
+        }
+
+        context->ResolveSubresource(
+            m_renderTargetTexture.Get(), 0,
+            m_msaaTexture.Get(), 0,
+            format 
+        );
+    }
+
     DX11Renderer::Instance().SetRenderTarget(nullptr);
+
 }
 
 void RenderTexture::Clear(float r, float g, float b, float a, int faceIndex)
