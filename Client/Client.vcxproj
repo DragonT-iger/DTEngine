@@ -149,7 +149,6 @@
     <ClCompile Include="BattleGrid.cpp" />
     <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
-    <ClCompile Include="CombatTestRunner.cpp" />
     <ClCompile Include="DelayDisableEvent.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ESCEvent.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="BattleGrid.h" />
     <ClInclude Include="CombatController.h" />
     <ClInclude Include="ColorToggler.h" />
-    <ClInclude Include="CombatTestRunner.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayDisableEvent.h" />
     <ClInclude Include="EnemyUnit.h" />

@@ -7,6 +7,7 @@
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
 DTPROPERTY_SETTER(CombatController, m_aliceUnit, SetAliceUnit)
+DTPROPERTY_SETTER(CombatController, m_redQueenUnit, SetRedQueenUnit)
 DTPROPERTY_SETTER(CombatController, allyUnit0, SetAllyUnit0)
 DTPROPERTY_SETTER(CombatController, allyUnit1, SetAllyUnit1)
 DTPROPERTY_SETTER(CombatController, allyUnit2, SetAllyUnit2)
@@ -74,6 +75,12 @@ void CombatController::Setup()
             m_enemyUnits.push_back(enemyUnit1);
         if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end())
             m_enemyUnits.push_back(enemyUnit2);
+    //if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end())
+    //    m_enemyUnits.push_back(enemyUnit0);
+    //if (enemyUnit1 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit1) == m_enemyUnits.end())
+    //    m_enemyUnits.push_back(enemyUnit1);
+    //if (enemyUnit2 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit2) == m_enemyUnits.end()) 
+    //    m_enemyUnits.push_back(enemyUnit2);
 
 
 
@@ -101,6 +108,19 @@ void CombatController::Setup()
        //}
     }
 
+    GameObject* aliceObject = battleGrid->GetAliceObjects();
+    if (aliceObject)
+    {
+        AliceUnit* alice = aliceObject->GetComponent<AliceUnit>();
+        if (alice) m_aliceUnit = alice;
+    }
+
+    GameObject* queenObject = battleGrid->GetRedQueenObjects();
+    if (queenObject)
+    {
+        RedQueenUnit* queen = queenObject->GetComponent<RedQueenUnit>();
+        if (queen) m_redQueenUnit = queen;
+    }
 
 
 
@@ -112,10 +132,19 @@ bool CombatController::ReadyPhase()
     m_battleUnits.clear();
 
     battleGrid->ClearDynamicGrid();
-    battleGrid->SyncUnitsPos(m_allyUnits, m_enemyUnits, m_aliceUnit);
+    battleGrid->SyncUnitsPos(m_allyUnits, m_enemyUnits, m_aliceUnit, m_redQueenUnit);
 
-    m_aliceUnit->SetMovePos(m_aliceUnit->GetPos()); // 앨리스는 예외로 이동 안함.
-    battleGrid->ReserveMove(m_aliceUnit->GetPos());
+    if (m_aliceUnit)
+    {
+        m_aliceUnit->SetMovePos(m_aliceUnit->GetPos()); // 앨리스는 예외로 이동 안함.
+        battleGrid->ReserveMove(m_aliceUnit->GetPos());
+    }
+
+    if (m_redQueenUnit)
+    {
+        m_redQueenUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
+        battleGrid->ReserveMove(m_redQueenUnit->GetPos());
+    }
 
 
     //실행 테스트를 위해 임시 주석처리 했음
@@ -165,24 +194,6 @@ bool CombatController::ReadyPhase()
             enemy->SetAttackTarget(nullptr);
         }
     }
-
-   /* if (m_redQueenUnit && m_redQueenUnit->IsAlive())
-    {
-        std::vector<Unit*> targets;
-        GetAttackableTargets(m_redQueenUnit, targets);
-
-        if (!targets.empty())
-        {
-            m_battleUnits.push_back(m_redQueenUnit);
-
-            Unit* target = SelectAttackTarget(m_redQueenUnit, targets, BattleRule::Nearest);
-            m_redQueenUnit->SetAttackTarget(target);
-        }
-        else
-        {
-            m_redQueenUnit->SetAttackTarget(nullptr);
-        }
-    }*/
 
     return true;
 }
@@ -260,6 +271,8 @@ bool CombatController::MoveAndBattlePhase(float dTime)
     {
         m_phaseEntered = true;
 
+        PrintFrame();
+
         for (AllyUnit* ally : m_allyUnits)
         {
             if (!ally || !ally->IsAlive()) continue;
@@ -298,14 +311,6 @@ bool CombatController::MoveAndBattlePhase(float dTime)
             enemy->StartAction();
         }
 
-        //if (m_redQueenUnit && m_redQueenUnit->IsAlive())
-        //{
-        //    ResolveTurnAction(m_redQueenUnit);
-
-        //    m_redQueenUnit->SetActionDone(false); 
-        //    m_redQueenUnit->StartAction(); // 전용 액션 만들어 주기.
-        //}
-
         return false;
     }
 
@@ -318,8 +323,6 @@ bool CombatController::MoveAndBattlePhase(float dTime)
     {
         if (enemy && enemy->IsAlive()) enemy->UpdateAction(dTime);
     }
-
- //   if (m_redQueenUnit && m_redQueenUnit->IsAlive()) m_redQueenUnit->UpdateAction(dTime);
 
     // 실제 이동 및 애니메이션 완료 체크
     for (AllyUnit* ally : m_allyUnits)
@@ -339,12 +342,6 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (enemy->GetAction() == TurnAction::Wait) continue;
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
     }
-
-   /* if (m_redQueenUnit && m_redQueenUnit->IsAlive())
-    {
-        if (!m_redQueenUnit->IsActionDone()) return false;
-        if (m_redQueenUnit->IsAnimStart() && !m_redQueenUnit->IsAnimDone()) return false;
-    }*/
 
     // 함정타일 밟았을 때, 데미지 처리
     for (AllyUnit* ally : m_allyUnits)
@@ -390,7 +387,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            //m_aliceUnit->StartDieAnim();
+            m_aliceUnit->StartDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -419,19 +416,19 @@ bool CombatController::EndPhase()
                 //enemy->SetActionDone(false);
                 //enemy->StartAction();
                 enemy->StartDieAnim();
-                if (enemy->IsBoss()) m_stageResult = StageResult::Win; // 보스 잡으면 무조건 승리
+                if (!m_redQueenUnit && enemy->IsBoss()) m_stageResult = StageResult::Win; // 보스 잡으면 무조건 승리
             }
         }
 
-        //if (m_redQueenUnit && m_redQueenUnit->IsAlive() && m_redQueenUnit->GetHp() <= 0.0f)
-        //{
-        //    m_redQueenUnit->SetIsAlive(false);
-        //    m_redQueenUnit->SetAction(TurnAction::Die);
-        //    //m_redQueenUnit->SetActionDone(false);
-        //    //m_redQueenUnit->StartAction();
-        //    //m_redQueenUnit->StartDieAnim();
-        //    m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
-        //}
+        if (m_redQueenUnit && m_redQueenUnit->IsAlive() && m_redQueenUnit->GetHp() <= 0.0f)
+        {
+            m_redQueenUnit->SetIsAlive(false);
+            m_redQueenUnit->SetAction(TurnAction::Die);
+            //m_redQueenUnit->SetActionDone(false);
+            //m_redQueenUnit->StartAction();
+            m_redQueenUnit->StartDieAnim();
+            m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
+        }
 
         int aliveAllyCount = 0;
         for (AllyUnit* ally : m_allyUnits)
@@ -445,6 +442,10 @@ bool CombatController::EndPhase()
     }   
 
     // 애니메이션 완료 체크
+    
+    //if (m_aliceUnit->IsAnimStart() && !m_aliceUnit->IsAnimDone()) return false;
+    //if (m_redQueenUnit->IsAnimStart() && !m_redQueenUnit->IsAnimDone()) return false;
+
     //if (m_aliceUnit && !m_aliceUnit->IsAlive())
     //{
     //    if (!m_aliceUnit->IsActionDone()) return false;
@@ -582,16 +583,17 @@ void CombatController::GetAttackableTargets(Unit* me, std::vector<Unit*>& outTar
     {
         for (EnemyUnit* enemy : m_enemyUnits)
         {
-            if (CanActuallyAttack(me, enemy)) outTargets.push_back(enemy);
+            if (enemy && CanActuallyAttack(me, enemy)) outTargets.push_back(enemy);
         }
+        if (m_redQueenUnit && CanActuallyAttack(me, m_redQueenUnit)) outTargets.push_back(m_redQueenUnit);
     }
     else
     {
         for (AllyUnit* ally : m_allyUnits)
         {
-            if (CanActuallyAttack(me, ally)) outTargets.push_back(ally);
+            if (ally && CanActuallyAttack(me, ally)) outTargets.push_back(ally);
         }
-        if (CanActuallyAttack(me, m_aliceUnit)) outTargets.push_back(m_aliceUnit);
+        if (m_aliceUnit && CanActuallyAttack(me, m_aliceUnit)) outTargets.push_back(m_aliceUnit);
     }
 }
 
@@ -702,9 +704,18 @@ bool CombatController::IsBattleUnit(const Unit* u) const
     return std::find(m_battleUnits.begin(), m_battleUnits.end(), u) != m_battleUnits.end();
 }
 
+static int DistOctileCost(const Vector2& a, const Vector2& b)
+{
+    int dx = std::abs((int)b.x - (int)a.x);
+    int dy = std::abs((int)b.y - (int)a.y);
+    int dmin = (std::min)(dx, dy);
+    int dmax = (std::max)(dx, dy);
+    return 14 * dmin + 10 * (dmax - dmin);
+}
+
 Unit* CombatController::FindNearestEnemy(const Vector2& from) const
 {
-    EnemyUnit* best = nullptr;
+    /*EnemyUnit* best = nullptr;
     int bestDist = 9999;
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -715,6 +726,31 @@ Unit* CombatController::FindNearestEnemy(const Vector2& from) const
         int dist = (std::max)(dx, dy);
         if (dist < bestDist) { bestDist = dist; best = enemy; }
     }
+    return best;*/
+
+    EnemyUnit* best = nullptr;
+    int bestCost = 999999;
+    int bestCheb = 999999; // 동점 깨기용(선택)
+
+    for (EnemyUnit* enemy : m_enemyUnits)
+    {
+        if (!enemy || !enemy->IsAlive()) continue;
+
+        int cost = DistOctileCost(enemy->GetPos(), from);
+
+        // tie-break: 완전 동점이면 더 “기하학적으로” 가까운(체비쇼프) 쪽
+        int dx = std::abs((int)enemy->GetPos().x - (int)from.x);
+        int dy = std::abs((int)enemy->GetPos().y - (int)from.y);
+        int cheb = (std::max)(dx, dy);
+
+        if (!best || cost < bestCost || (cost == bestCost && cheb < bestCheb))
+        {
+            best = enemy;
+            bestCost = cost;
+            bestCheb = cheb;
+        }
+    }
+
     return best;
 }
 
@@ -742,6 +778,12 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
 
     if (rule == MoveRule::Chase) // 추격
     {
+        if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+        {
+            me->SetMoveTarget(m_redQueenUnit);
+            return m_redQueenUnit->GetPos();
+        }
+        
         for (EnemyUnit* enemy : m_enemyUnits)
         {
             if (enemy && enemy->IsAlive() && enemy->IsBoss())
@@ -771,7 +813,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
 
     for (AllyUnit* ally : m_allyUnits)
     {
-        if (!ally || !ally->IsAlive() || ally == me || ally->GetMoveRule() == 0) continue; // 대기 상태인 유닛도 없는 아군 취급.
+        if (!ally || !ally->IsAlive() || ally == me || ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 상태인 유닛도 없는 아군 취급.
 
         ++aliveAllyCount;
         if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; }
@@ -811,7 +853,15 @@ Vector2 CombatController::DecideMovePos_Ally(AllyUnit* me, const Vector2& moveTa
     int rule = me->GetMoveRule();
     Vector2 next;
 
-    bool found = battleGrid->FindNextStepAStar(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //bool found = battleGrid->FindNextStepAStar(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //if (!found)
+    //{
+    //    found = battleGrid->FindNextStepGreedy(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
+    //}
+
+    //if (!found) return me->GetPos();
+
+    bool found = battleGrid->FindNextStepHybrid(me->GetPos(), moveTarget, me, me->GetMoveTarget(), rule, next);
     if (!found) return me->GetPos();
 
     // 추격을 선택했을 때 가는 칸이 부벽이면 이동 대신 벽을 공격
@@ -1064,6 +1114,7 @@ void CombatController::PrintFrame()
         {
             Vector2 p{ (float)x, (float)y };
             const auto& s = battleGrid->GetStaticTile(p);
+            const auto& d = battleGrid->GetDynamicTile(p);
 
             char c = ' ';
             if (!s.tile) c = ' ';
@@ -1072,7 +1123,13 @@ void CombatController::PrintFrame()
             else if (s.defenseTile) c = 'D';
             else c = '.';
 
+            if (d.reservedMove && !d.unitPresent)
+            {
+                c = 'X';
+            }
+
             if (m_aliceUnit && m_aliceUnit->IsAlive() && isSame(m_aliceUnit->GetPos(), p)) c = 'S';
+            if (m_redQueenUnit && m_redQueenUnit->IsAlive() && isSame(m_redQueenUnit->GetPos(), p)) c = 'R';
 
             for (auto* a : m_allyUnits)
                 if (a && a->IsAlive() && isSame(a->GetPos(), p)) c = 'A';
@@ -1107,4 +1164,25 @@ void CombatController::PrintFrame()
     if (enemyUnit0) printUnit("Enemy0", enemyUnit0);
     if (enemyUnit1) printUnit("Enemy1", enemyUnit1);
     if (enemyUnit2) printUnit("Enemy2", enemyUnit2);
+
+    auto dumpCell = [&](int x, int y)
+        {
+            Vector2 p{ (float)x, (float)y };
+            const auto& s = battleGrid->GetStaticTile(p);
+            const auto& d = battleGrid->GetDynamicTile(p);
+
+            std::cout << "[Cell " << x << "," << y << "] "
+                << "tile=" << s.tile
+                << " solid=" << s.solidWall
+                << " break=" << s.breakableWall
+                << " def=" << s.defenseTile
+                << " trap=" << s.trapTile
+                << " unitPresent=" << d.unitPresent
+                << " reserved=" << d.reservedMove
+                << "\n";
+        };
+
+    dumpCell(1, 6);
+    dumpCell(0, 5);
+    dumpCell(1, 5); // Ally2 현재칸
 }

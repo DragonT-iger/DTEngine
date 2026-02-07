@@ -24,18 +24,18 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
 
     Initialize(width, height);
 
-    for (int h = 0; h < height; ++h)
+    for (int h = 1; h < height + 1; ++h)
     {
-        for (int w = 0; w < width; ++w)
+        for (int w = 1; w < width + 1; ++w)
         {
             int tileIdx = td->GetTileIndex(w, h);
 
-            if (tileIdx == 0 || tileIdx == 1 || tileIdx == 2 || tileIdx == 3) SetTile(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 4) SetSolidWall(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 5) SetBreakableWall(Vector2{ (float)w, (float)h });
-            else if (tileIdx == 6) SetDefenseTile(Vector2{ (float)w, (float)h }); // 인덱스 약속은 나중에 하면 될듯.
-            else if (tileIdx == 7) SetTrapTile(Vector2{ (float)w, (float)h });
-            else { /*뭔가 이상한 타일.. 암튼 필요없는 정보*/ }
+            if (tileIdx == 0 || tileIdx == 1 || tileIdx == 2 || tileIdx == 3) SetTile(Vector2{ (float)(w - 1), (float)(h - 1) });
+            else if (tileIdx == 4) SetSolidWall(Vector2{ (float)(w - 1) , (float)(h - 1) });
+            else if (tileIdx == 5) SetBreakableWall(Vector2{ (float)(w - 1), (float)(h - 1) });
+            else if (tileIdx == 6) SetDefenseTile(Vector2{ (float)(w - 1), (float)(h - 1) }); // 인덱스 약속은 나중에 하면 될듯.
+            else if (tileIdx == 7) SetTrapTile(Vector2{ (float)(w - 1), (float)(h - 1) });
+            else { SetSolidWall(Vector2{ (float)(w - 1), (float)(h - 1) }); }
         }
     }
 
@@ -194,7 +194,7 @@ void BattleGrid::ClearDynamicGrid()
 }
 
 void BattleGrid::SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits, 
-    const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit)
+    const std::vector<EnemyUnit*>& enemyUnits, const AliceUnit* aliceUnit, const RedQueenUnit* redQueenUnit)
 {
     for (auto& d : m_dynamicGrid)
     {
@@ -215,9 +215,15 @@ void BattleGrid::SyncUnitsPos(const std::vector<AllyUnit*>& allyUnits,
         GetDynamicTile(p).unitPresent = true;
     }
 
+    if (aliceUnit)
     {
-        if (!aliceUnit) return;
         const Vector2& p = aliceUnit->GetPos();
+        GetDynamicTile(p).unitPresent = true;
+    }
+
+    if (redQueenUnit)
+    {
+        const Vector2& p = redQueenUnit->GetPos();
         GetDynamicTile(p).unitPresent = true;
     }
 }
@@ -453,8 +459,166 @@ bool BattleGrid::FindNextStepAStar(const Vector2& start, const Vector2& goal,
     return false;
 }
 
+bool BattleGrid::FindNextStepGreedy(const Vector2& start, const Vector2& goal, 
+    const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const
+{
+    outNext = start;
+
+    if (start == GRIDPOS_INVALID || goal == GRIDPOS_INVALID) return false;
+    if (!InBounds(start) || !InBounds(goal)) return false;
+    if (IsBlocked(start, me, target, moveRule)) return false;
+
+    if (start == goal)
+    {
+        outNext = start;
+        return true;
+    }
+
+    const int curH = HeuristicOctile(start, goal);
+
+    Vector2 best = start;
+
+    // 우선순위 키
+    int bestBand = 999;      // 0:감소, 1:동일, 2:증가
+    int bestH = 999999;      // 같은 band 내에서는 goal에 더 가까운(h가 작은) 칸 우선
+    int bestReserved = 1;    // 예약 안 된 칸 우선
+    int bestTie = 999999;    // 마지막 동점깨기
+
+    const int dirs[8][2] = {
+        { 0,-1}, { 1, 0}, { 0, 1}, {-1, 0},
+        { 1,-1}, { 1, 1}, {-1, 1}, {-1,-1},
+    };
+
+    const bool allowCornerCut = false;
+
+    auto tieScore = [&](const Vector2& nb) -> int
+        {
+            // 동점 깨기용. 더 세밀한 근접도(아무거나 OK)
+            int dx = std::abs((int)goal.x - (int)nb.x);
+            int dy = std::abs((int)goal.y - (int)nb.y);
+            return dx + dy; // 맨해튼
+        };
+
+    for (int k = 0; k < 8; ++k)
+    {
+        int sx = dirs[k][0];
+        int sy = dirs[k][1];
+
+        Vector2 nb{ start.x + (float)sx, start.y + (float)sy };
+        if (!InBounds(nb)) continue;
+        if (IsBlocked(nb, me, target, moveRule)) continue;
+
+        // 코너컷 금지(대각 이동 시 옆칸 둘 중 하나라도 막히면 제외)
+        if (!allowCornerCut && sx != 0 && sy != 0)
+        {
+            Vector2 side1{ start.x + (float)sx, start.y };
+            Vector2 side2{ start.x, start.y + (float)sy };
+            if (IsBlocked(side1, me, target, moveRule) ||
+                IsBlocked(side2, me, target, moveRule))
+                continue;
+        }
+
+        int h = HeuristicOctile(nb, goal);
+        int delta = h - curH;
+
+        const int maxWorsen = 0; // 0(증가금지), 10(직선1칸), 14(대각1칸), 20(직선2칸)
+        if (delta > maxWorsen) continue; 
+
+        int band = (delta < 0) ? 0 : (delta == 0 ? 1 : 2);
+
+        int reserved = GetDynamicTile(nb).reservedMove ? 1 : 0;
+        int ts = tieScore(nb);
+
+        bool better = false;
+
+        if (best == start) better = true;
+        else
+        {
+            if (band < bestBand) better = true;
+            else if (band == bestBand)
+            {
+                // 같은 band면 goal에 더 가까운 칸(h가 작은 칸)
+                if (h < bestH) better = true;
+                else if (h == bestH)
+                {
+                    // 예약 안 된 칸 우선
+                    if (reserved < bestReserved) better = true;
+                    else if (reserved == bestReserved)
+                    {
+                        // 마지막 동점깨기
+                        if (ts < bestTie) better = true;
+                    }
+                }
+            }
+        }
+
+        if (better)
+        {
+            best = nb;
+            bestBand = band;
+            bestH = h;
+            bestReserved = reserved;
+            bestTie = ts;
+        }
+    }
+
+    if (best == start) return false;
+    outNext = best;
+    return true;
+}
+
+bool BattleGrid::FindNextStepHybrid(const Vector2& start, const Vector2& goal,
+    const Unit* me, const Unit* target, int moveRule, Vector2& outNext) const
+{
+    outNext = start;
+
+    Vector2 aNext = start;
+    Vector2 gNext = start;
+
+    bool hasA = FindNextStepAStar(start, goal, me, target, moveRule, aNext);
+    bool hasG = FindNextStepGreedy(start, goal, me, target, moveRule, gNext);
+
+    if (!hasA && !hasG) return false;
+    if (hasA && !hasG) { outNext = aNext; return true; }
+    if (!hasA && hasG) { outNext = gNext; return true; }
+
+    // 둘 다 있을 때 비교
+    int curH = HeuristicOctile(start, goal);
+    int aH = HeuristicOctile(aNext, goal);
+    int gH = HeuristicOctile(gNext, goal);
+
+    int aGain = curH - aH; // 클수록 좋음
+    int gGain = curH - gH;
+
+    // 임계치: greedy가 A*보다 "직선 1칸" 이상 더 진전이면 greedy 채택
+    // (원하면 moveRule/유닛 타입에 따라 다르게 줘도 됨)
+    const int greedyWinThreshold = 10;
+
+    if (gGain >= aGain + greedyWinThreshold)
+    {
+        outNext = gNext;
+        return true;
+    }
+
+    outNext = aNext;
+    return true;
+}
+
+
 std::vector<GameObject*>& BattleGrid::GetEnemyObjects()
 {
     TilemapData* td = m_tilemapGenerator->GetMapData();
     return m_tilemapGenerator->GetSpawnedEnemys();
+}
+
+GameObject* BattleGrid::GetAliceObjects()
+{
+    TilemapData* td = m_tilemapGenerator->GetMapData();
+    return m_tilemapGenerator->GetSpawnedAlice();
+}
+
+GameObject* BattleGrid::GetRedQueenObjects()
+{
+    TilemapData* td = m_tilemapGenerator->GetMapData();
+    return m_tilemapGenerator->GetSpawnedRedQueen();
 }
