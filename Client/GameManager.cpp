@@ -11,7 +11,7 @@
 #include "RayCastHitEvent.h"
 #include "UISlider.h"
 #include "ClickStartButton.h"
-
+#include <vector>
 
 
 BEGINPROPERTY(GameManager)
@@ -140,19 +140,6 @@ void GameManager::SetTimeScale(int scale)
 
 void GameManager::ResetBattleResultUI()
 {
-		if (!m_victoryWindow)
-		{
-				std::cout << "victoryWindow 없음" << std::endl;
-				return;
-		}
-
-		if (!m_loseWindow)
-		{
-				std::cout << "losewindow 없음" << std::endl;
-				return;
-		}
-
-		
 		// 초기화 시 결과창 항상 닫혀있는걸로..
 		m_victoryWindow->SetActive(false);
 		m_loseWindow->SetActive(false);
@@ -216,7 +203,7 @@ void GameManager::LoadNextStageFromCurrent()
 
 				m_currentStageIndex = nextIndex;
 
-				// 핵심: 씬을 바꾸지 않고 tilemapdata만 교체 후 타일/적 생성 재구축.
+				// 씬을 바꾸지 않고 tilemapdata만 교체 후 타일/적 생성 재구축.
 				m_stageTilemapGenerator->SetMapData(stageMaps[m_currentStageIndex]);
 				m_stageTilemapGenerator->RebuildFromCurrentData();
 				m_stageBattleGrid->SetTilemapGenerator(m_stageTilemapGenerator);
@@ -280,7 +267,6 @@ void GameManager::HandleSceneInit(const std::string& sceneName)
 		curStageLevel = m_currentStageIndex + 1;
 
 		// 스테이지 진입 시 "보유 총 코스트" 기준 리셋.
-		// (사용량은 이번 판 기준으로 리셋)
 		usedStageMoney = 0;
 		curMoney = totalAcquiredMoney;
 		healSkillCount = defaultHealSkillCount;
@@ -312,7 +298,25 @@ void GameManager::HandleSceneInit(const std::string& sceneName)
 		}
 
 		// 스테이지(다음/재도전) 진입 시 StartButton만 초기 상태로 복구.
-		//if (m_startButtonEvent) m_startButtonEvent->ResetForStage();
+		if (m_startButtonEvent) m_startButtonEvent->ResetForStage();
+}
+
+void GameManager::RegisterRuntimeAlly(GameObject* allyObj)
+{
+		if (!allyObj) return;
+
+		// 중복으로 등록은 아니게.
+		auto it = std::find(m_runtimeAllies.begin(), m_runtimeAllies.end(), allyObj);
+		if (it == m_runtimeAllies.end())
+		{
+				m_runtimeAllies.push_back(allyObj);
+		}
+}
+
+void GameManager::ClearRuntimeUnitCaches()
+{
+		// vector 초기화.
+		m_runtimeAllies.clear();
 }
 
 void GameManager::ApplyResultInteractionLock(bool lock)
@@ -340,4 +344,68 @@ void GameManager::ApplyResultInteractionLock(bool lock)
 		{
 				if (obj) obj->SetActive(!lock);
 		}
+}
+
+void GameManager::EnsureResultWindowRefs()
+{
+		if (!m_victoryWindow)
+		{
+				m_victoryWindow = GameObject::Find("VictoryWindow");
+				if (!m_victoryWindow) m_victoryWindow = GameObject::Find("VictoryWindowBG");
+		}
+
+		if (!m_loseWindow)
+		{
+				m_loseWindow = GameObject::Find("LoseWindow");
+				if (!m_loseWindow) m_loseWindow = GameObject::Find("LoseWindowBG");
+		}
+}
+
+void GameManager::ClearStageUnits()
+{
+		Scene* activeScene = SceneManager::Instance().GetActiveScene();
+		if (!activeScene) return;
+
+		std::vector<GameObject*> toDestroy;
+
+		// allyobj 넣어주기.
+		for (GameObject* allyObj : m_runtimeAllies)
+		{
+				if (allyObj) toDestroy.push_back(allyObj);
+		}
+
+		// tilemapGenerator에 적군 유닛 가져오기.
+		if (m_stageTilemapGenerator)
+		{
+				auto& spawnedEnemies = m_stageTilemapGenerator->GetSpawnedEnemys();
+				for (GameObject* enemyObj : spawnedEnemies)
+				{
+						if (enemyObj) toDestroy.push_back(enemyObj);
+				}
+		}
+
+		// 혹시라도 없으면 찾기. 이건 근데 안할거임. 필요하면 추가할까 생각중.
+		/*const auto& objects = activeScene->GetGameObjects();
+		for (const auto& objPtr : objects)
+		{
+				GameObject* obj = objPtr.get();
+				if (!obj) continue;
+
+				if (obj->GetComponent<AllyUnit>() || obj->GetComponent<EnemyUnit>())
+				{
+						if (std::find(toDestroy.begin(), toDestroy.end(), obj) == toDestroy.end())
+						{
+								toDestroy.push_back(obj);
+						}
+				}
+		}*/
+
+		// 아군 적군 둘 다 삭제. 
+		for (GameObject* obj : toDestroy)
+		{
+				activeScene->Destroy(obj);
+		}
+
+		// 이번 스테이지에서 추적하던 런타임 캐시는 모두 비운다.
+		ClearRuntimeUnitCaches();
 }

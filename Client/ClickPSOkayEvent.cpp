@@ -114,6 +114,12 @@ void ClickPSOkayEvent::SetClick()
 								{
 										m_combatObj->GetComponent<CombatController>()->AddAllyUnit(allyC);
 								}
+
+								// ally 리스트에 추가해주기. 
+								if (GameManager::Instance())
+								{
+										GameManager::Instance()->RegisterRuntimeAlly(go);
+								}
 						}
 
 						std::cout << SceneManager::Instance().GetActiveScene()->GetName() << std::endl;

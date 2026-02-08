@@ -4,6 +4,7 @@
 #include "../DTEngine/SoundManager.h"
 #include <string>
 #include <array>
+#include <vector>
 
 class Text;
 class GameObject;
@@ -88,6 +89,10 @@ public:
 	// Scene 진입 전/후 초기화 훅.
 	void HandleSceneInit(const std::string& sceneName);
 
+	// 아군 생성 유닛 등록용.
+	void RegisterRuntimeAlly(GameObject* allyObj);
+	void ClearRuntimeUnitCaches();
+
 private:
 	
 	Text* m_money;
@@ -155,5 +160,8 @@ private:
 	ClickStartButton* m_startButtonEvent = nullptr;
 
 	void ApplyResultInteractionLock(bool lock);
+	void EnsureResultWindowRefs();		// 결과창 못찾으면 find로 찾기. 
+	void ClearStageUnits();						// stage unit 포인터 비워주기.
+	std::vector<GameObject*> m_runtimeAllies;
 };
 
