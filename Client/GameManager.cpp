@@ -4,11 +4,41 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "ClientSceneManager.h"
+#include "TilemapGenerator.h"
+#include "TilemapData.h"
+#include "BattleGrid.h"
+#include "RayCastHitEvent.h"
+#include "UISlider.h"
+#include "ClickStartButton.h"
+
+
 
 BEGINPROPERTY(GameManager)
 //DTPROPERTY(GameManager, m_leftHealth) static inline은 직렬화 시 의미가 없어짐 값이 덮힘 주의할것
 //DTPROPERTY(GameManager, m_money)
 //DTPROPERTY(GameManager, m_life)
+DTPROPERTY(GameManager, m_victoryWindow)
+DTPROPERTY(GameManager, m_loseWindow)
+DTPROPERTY(GameManager, m_stageTilemap0)
+DTPROPERTY(GameManager, m_stageTilemap1)
+DTPROPERTY(GameManager, m_stageTilemap2)
+DTPROPERTY(GameManager, m_stageTilemap3)
+DTPROPERTY(GameManager, m_stageTilemap4)
+DTPROPERTY(GameManager, m_stageTilemapGenerator)
+DTPROPERTY(GameManager, m_stageBattleGrid)
+DTPROPERTY(GameManager, m_stageLevelText)
+DTPROPERTY(GameManager, m_stageDialogueText)
+DTPROPERTY(GameManager, m_bgmSlider)
+DTPROPERTY(GameManager, m_sfxSlider)
+DTPROPERTY(GameManager, m_startButtonEvent)
+DTPROPERTY(GameManager, m_settingWindow)
+DTPROPERTY(GameManager, m_rayObj)
+DTPROPERTY(GameManager, m_blockInputObj0)
+DTPROPERTY(GameManager, m_blockInputObj1)
+DTPROPERTY(GameManager, m_blockInputObj2)
+DTPROPERTY(GameManager, m_blockInputObj3)
+DTPROPERTY(GameManager, m_blockInputObj4)
 ENDPROPERTY()
 
 
@@ -17,6 +47,16 @@ void GameManager::Start() {
 	if (m_money) m_money->SetText(std::to_wstring(curMoney));
 	if (m_life) m_life->SetText(std::to_wstring(curLife));
 
+	// 설정창 슬라이더가 GameManager 저장값과 동일한 위치를 가지도록 보정.
+	if (m_bgmSlider) m_bgmSlider->SetValue(curbgmValue);
+	if (m_sfxSlider) m_sfxSlider->SetValue(cursfxValue);
+
+	// 씬 진입 시점마다 레벨/대사/코스트 초기화 적용
+	Scene* activeScene = SceneManager::Instance().GetActiveScene();
+	if (activeScene)
+	{
+			HandleSceneInit(activeScene->GetName());
+	}
 
 	curMoney = 30; // 임시.
 }
@@ -34,6 +74,11 @@ int GameManager::GetLife() const
 
 void GameManager::SetMoney(int money)
 {
+		int delta = money - curMoney;
+
+		if (delta > 0) totalAcquiredMoney += delta;   // 획득분 누적
+		if (delta < 0) usedStageMoney += -delta;      // 사용분 누적
+
 	if (m_money) m_money->SetText(std::to_wstring(money));
 	curMoney = money;
 }
@@ -43,11 +88,43 @@ int GameManager::GetMoney() const
 	return curMoney;
 }
 
+void GameManager::GrantHealSkillReward(int amount)
+{
+		if (amount <= 0) return;
+
+		// 보상은 둘 다 올려주기. 
+		defaultHealSkillCount += amount;
+		healSkillCount += amount;
+}
+
+void GameManager::GrantAttackSkillReward(int amount)
+{
+		if (amount <= 0) return;
+
+		// 보상은 둘 다 올려주기. 
+		defaultAttackSkillCount += amount;
+		attackSkillCount += amount;
+}
+
 void GameManager::Update(float deltaTime)
 {
 	if(InputManager::Instance().GetKeyDown(KeyCode::L)) {
 		SetLife(GetLife() - 1);
 	}
+
+	// 여기서 bool 가져와서 성공 실패 나오는 경우 setdelay true
+	if (isDelay)
+	{
+			delayTime += deltaTime;
+	}
+
+	if (delayTime >= 1)
+	{
+			// 초기화 시켜주고 window setactive true 처리하는 함수.
+			isDelay = false;	
+			delayTime = 0;
+	}
+	
 }
 
 void GameManager::SetTimeScale(int scale)
@@ -59,4 +136,208 @@ void GameManager::SetTimeScale(int scale)
 
 		curTimeScale = scale;
 		SceneManager::Instance().GetActiveScene()->SetTimeScale(scale);
+}
+
+void GameManager::ResetBattleResultUI()
+{
+		if (!m_victoryWindow)
+		{
+				std::cout << "victoryWindow 없음" << std::endl;
+				return;
+		}
+
+		if (!m_loseWindow)
+		{
+				std::cout << "losewindow 없음" << std::endl;
+				return;
+		}
+
+		
+		// 초기화 시 결과창 항상 닫혀있는걸로..
+		m_victoryWindow->SetActive(false);
+		m_loseWindow->SetActive(false);
+
+		m_battleResultState = BattleResultState::None;
+		ApplyResultInteractionLock(false);
+}
+
+void GameManager::ShowVictoryWindow()
+{
+		if (!m_victoryWindow)
+		{
+				std::cout << "victoryWindow 없음" << std::endl;
+				return;
+		}
+		if (!m_loseWindow)
+		{
+				std::cout << "losewindow 없음" << std::endl;
+				return;
+		}
+		
+	
+		m_loseWindow->SetActive(false);
+		m_victoryWindow->SetActive(true);
+		ApplyResultInteractionLock(true);
+
+		m_battleResultState = BattleResultState::Victory;
+}
+
+void GameManager::ShowLoseWindow()
+{
+		m_victoryWindow->SetActive(false);
+		m_loseWindow->SetActive(true);
+		ApplyResultInteractionLock(true);
+
+		m_battleResultState = BattleResultState::Failed;
+}
+
+void GameManager::LoadNextStageFromCurrent()
+{
+		if (m_useSingleSceneStageFlow)
+		{
+				Scene* activeScene = SceneManager::Instance().GetActiveScene();
+				if (!activeScene) return;
+
+				TilemapData* stageMaps[5] = { m_stageTilemap0, m_stageTilemap1, m_stageTilemap2, m_stageTilemap3, m_stageTilemap4 };
+				constexpr int STAGE_COUNT = 5;
+
+				int nextIndex = m_currentStageIndex + 1;
+				if (nextIndex >= STAGE_COUNT || !stageMaps[nextIndex])
+				{
+						ClientSceneManager::Instance().LoadScene("EndingScene");
+						return;
+				}
+
+				if (!m_stageTilemapGenerator || !m_stageBattleGrid)
+				{
+						std::cout << "tilemapgenerator, battlegrid 빠짐. gamemanager한테 넣어줘야함." << std::endl;
+						return;
+				}
+
+				m_currentStageIndex = nextIndex;
+
+				// 핵심: 씬을 바꾸지 않고 tilemapdata만 교체 후 타일/적 생성 재구축.
+				m_stageTilemapGenerator->SetMapData(stageMaps[m_currentStageIndex]);
+				m_stageTilemapGenerator->RebuildFromCurrentData();
+				m_stageBattleGrid->SetTilemapGenerator(m_stageTilemapGenerator);
+				ResetBattleResultUI();
+
+				// 단일 씬에서도 스테이지 레벨/힌트/cost UI 정책을 동일하게 적용.
+				HandleSceneInit(activeScene->GetName());
+				return;
+		}
+}
+void GameManager::ReloadCurrentStage()
+{
+		if (m_useSingleSceneStageFlow)
+		{
+				TilemapData* stageMaps[5] = { m_stageTilemap0, m_stageTilemap1, m_stageTilemap2, m_stageTilemap3, m_stageTilemap4 };
+				constexpr int STAGE_COUNT = 5;
+				if (!m_stageTilemapGenerator || !m_stageBattleGrid) return;
+				if (m_currentStageIndex < 0 || m_currentStageIndex >= STAGE_COUNT) return;
+				if (!stageMaps[m_currentStageIndex]) return;
+
+				// 현재 인덱스의 타일맵을 다시 적용해 동일 스테이지를 재시작한다.
+				m_stageTilemapGenerator->SetMapData(stageMaps[m_currentStageIndex]);
+				m_stageTilemapGenerator->RebuildFromCurrentData();
+				m_stageBattleGrid->SetTilemapGenerator(m_stageTilemapGenerator);
+				ResetBattleResultUI();
+
+				Scene* activeScene = SceneManager::Instance().GetActiveScene();
+				if (activeScene) HandleSceneInit(activeScene->GetName());
+				return;
+		}
+
+		Scene* activeScene = SceneManager::Instance().GetActiveScene();
+		if (!activeScene) return;
+
+		// 현재 씬 이름으로 재로드.
+		ClientSceneManager::Instance().LoadScene(activeScene->GetName());
+}
+
+void GameManager::HandleSceneInit(const std::string& sceneName)
+{
+		// 씬/스테이지 초기화 시 슬라이더 핸들을 저장된 오디오 값으로 동기화.
+		if (m_bgmSlider) m_bgmSlider->SetValue(curbgmValue);
+		if (m_sfxSlider) m_sfxSlider->SetValue(cursfxValue);
+
+		if (sceneName == "TitleScene")
+		{
+				curStageLevel = 1;
+				usedStageMoney = 0;
+				stageString = { false, false, false, false, false, false };
+				// 스킬횟수는 "현재치 + 복구기준치" 2개만 사용.
+				// 타이틀 복귀 시에도 보상으로 올라간 default는 유지하고 현재치만 default로 동기화한다.
+				healSkillCount = defaultHealSkillCount;
+				attackSkillCount = defaultAttackSkillCount;
+				ApplyResultInteractionLock(false);
+				if (m_stageLevelText) m_stageLevelText->SetText(L"STAGE 1");
+				if (m_stageDialogueText) m_stageDialogueText->SetText(L"체셔의 규칙이 다시 시작된다.");
+				return;
+		}
+
+		// 단일 씬에서 진행하므로 씬 이름과 무관하게 현재 스테이지 인덱스를 기준으로 UI를 맞춘다.
+		curStageLevel = m_currentStageIndex + 1;
+
+		// 스테이지 진입 시 "보유 총 코스트" 기준 리셋.
+		// (사용량은 이번 판 기준으로 리셋)
+		usedStageMoney = 0;
+		curMoney = totalAcquiredMoney;
+		healSkillCount = defaultHealSkillCount;
+		attackSkillCount = defaultAttackSkillCount;
+		if (m_money) m_money->SetText(std::to_wstring(curMoney));
+
+		if (m_stageLevelText)
+		{
+				m_stageLevelText->SetText(L"STAGE " + std::to_wstring(curStageLevel));
+		}
+
+		if (m_stageDialogueText)
+		{
+				// 스테이지별 힌트는 1회만 노출한다.
+				if (curStageLevel >= 1 && curStageLevel <= 5 && !stageString[curStageLevel])
+				{
+						if (curStageLevel == 1) m_stageDialogueText->SetText(L"규칙을 잘 적용해봐.");
+						else if (curStageLevel == 2) m_stageDialogueText->SetText(L"방어 타일 활용이 핵심이야.");
+						else if (curStageLevel == 3) m_stageDialogueText->SetText(L"함정 타일 타이밍을 노려.");
+						else if (curStageLevel == 4) m_stageDialogueText->SetText(L"우선순위 공격 규칙을 점검해.");
+						else if (curStageLevel == 5) m_stageDialogueText->SetText(L"보스를 먼저 끊는 전략을 써.");
+
+						stageString[curStageLevel] = true;
+				}
+				else
+				{
+						m_stageDialogueText->SetText(L"");
+				}
+		}
+
+		// 스테이지(다음/재도전) 진입 시 StartButton만 초기 상태로 복구.
+		//if (m_startButtonEvent) m_startButtonEvent->ResetForStage();
+}
+
+void GameManager::ApplyResultInteractionLock(bool lock)
+{
+		m_isResultInteractionLocked = lock;
+
+		// 설정창 켜졌으면 꺼버림. 
+		if (lock && m_settingWindow) m_settingWindow->SetActive(false);
+
+		// 레이 상호작용 차단/복구.
+		if (m_rayObj)
+		{
+				RayCastHitEvent* ray = m_rayObj->GetComponent<RayCastHitEvent>();
+				if (ray)
+				{
+						ray->SetRay(!lock);
+						ray->CloseAllWindows();
+				}
+				m_rayObj->SetActive(!lock);
+		}
+
+		// 결과창 외 입력 버튼/오브젝트를 묶어서 on/off.
+		GameObject* blocks[5] = { m_blockInputObj0, m_blockInputObj1, m_blockInputObj2, m_blockInputObj3, m_blockInputObj4 };
+		for (GameObject* obj : blocks)
+		{
+				if (obj) obj->SetActive(!lock);
+		}
 }

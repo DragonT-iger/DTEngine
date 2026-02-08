@@ -137,7 +137,9 @@
     <ClCompile Include="ArrowObjectPool.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
     <ClCompile Include="ChesherGuideEvent.cpp" />
+    <ClCompile Include="ClickNextStageEvent.cpp" />
     <ClCompile Include="ClickPSOkayEvent.cpp" />
+    <ClCompile Include="ClickRetryStageEvent.cpp" />
     <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="AliceUnit.cpp" />
     <ClCompile Include="ClickSetActiveObjEvent.cpp" />
@@ -190,7 +192,9 @@
     <ClInclude Include="ArrowObjectPool.h" />
     <ClInclude Include="CameraControlEvent.h" />
     <ClInclude Include="ChesherGuideEvent.h" />
+    <ClInclude Include="ClickNextStageEvent.h" />
     <ClInclude Include="ClickPSOkayEvent.h" />
+    <ClInclude Include="ClickRetryStageEvent.h" />
     <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="AliceUnit.h" />
     <ClInclude Include="ClickSetActiveObjEvent.h" />

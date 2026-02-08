@@ -1,18 +1,4 @@
 {
-  "dialogues": [
-    {
-      "enabled": false,
-      "text": ""
-    },
-    {
-      "enabled": false,
-      "text": ""
-    },
-    {
-      "enabled": false,
-      "text": ""
-    }
-  ],
   "enemies": [
     {
       "enabled": true,
@@ -24,11 +10,11 @@
         },
         {
           "x": 7.0,
-          "y": 0.0
+          "y": 10.0
         },
         {
-          "x": 0.0,
-          "y": 0.0
+          "x": 7.0,
+          "y": 10.0
         },
         {
           "x": -999.0,

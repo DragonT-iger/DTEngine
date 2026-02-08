@@ -6856,44 +6856,6 @@
       "components": [
         {
           "Active": true,
-          "id": 1301428233140638214,
-          "typeName": "GameManager"
-        }
-      ],
-      "id": 6087103260338894252,
-      "name": "GameManager",
-      "tag": "Untagged",
-      "transform": {
-        "id": 6622374269564757514,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
           "id": 14390870963657472607,
           "m_color": {
             "w": 1.0,
@@ -7388,7 +7350,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [],
       "id": 1733587034267618026,
       "name": "VictoryWindow",
@@ -7420,7 +7382,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -7504,6 +7466,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 3079367535773692044,
+          "m_button": 15330965135586945902,
+          "m_window": 2726193224071851438,
+          "typeName": "ClickNextStageEvent"
         }
       ],
       "id": 3941090608264901492,
@@ -7751,7 +7720,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [],
       "id": 1742869671607418891,
       "name": "LoseWindow",
@@ -7783,7 +7752,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -8152,6 +8121,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 739255718038263801,
+          "m_button": 18133756808909027120,
+          "m_window": 6814653329085445114,
+          "typeName": "ClickRetryStageEvent"
         }
       ],
       "id": 6975457822898686740,
@@ -9248,6 +9224,65 @@
       "tag": "Untagged",
       "transform": {
         "id": 4945832136228460891,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8565764339402807703,
+          "m_bgmSlider": 7127000447013137685,
+          "m_blockInputObj0": 9419903296967584286,
+          "m_blockInputObj1": 0,
+          "m_blockInputObj2": 0,
+          "m_blockInputObj3": 0,
+          "m_blockInputObj4": 0,
+          "m_loseWindow": 6814653329085445114,
+          "m_rayObj": 4771222732717351773,
+          "m_settingWindow": 10500202484059138583,
+          "m_sfxSlider": 539819835045743063,
+          "m_stageBattleGrid": 17217331222344769167,
+          "m_stageDialogueText": 0,
+          "m_stageLevelText": 0,
+          "m_stageTilemap0": 15103945832781831451,
+          "m_stageTilemap1": 6189260170659567125,
+          "m_stageTilemap2": 13964411375409846242,
+          "m_stageTilemap3": 15103945832781831451,
+          "m_stageTilemap4": 6189260170659567125,
+          "m_stageTilemapGenerator": 7171391694734270448,
+          "m_startButtonEvent": 5425226427455043202,
+          "m_victoryWindow": 2726193224071851438,
+          "typeName": "GameManager"
+        }
+      ],
+      "id": 9850476296532746580,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8543604286128089330,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
