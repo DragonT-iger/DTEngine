@@ -117,12 +117,12 @@ bool Game::Initialize()
 
 
 
-	//SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
-	//SceneManager::Instance().LoadScene("GridTestScene");
+	SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
+	SceneManager::Instance().LoadScene("GridTestScene");
 
-	//SceneManager::Instance().RegisterScene("Scenes/hsGridTestScenehs.scene");
-	//SceneManager::Instance().LoadScene("hsGridTestScenehs");
 	
+//	SceneManager::Instance().RegisterScene("Scenes/hsGridTestScenehs.scene");
+//	SceneManager::Instance().LoadScene("hsGridTestScenehs");
 	//SceneManager::Instance().RegisterScene("Scenes/GridTestSceneHS2.scene");
 	//SceneManager::Instance().LoadScene("GridTestSceneHS2");
 
@@ -130,7 +130,7 @@ bool Game::Initialize()
 	/*SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
 	SceneManager::Instance().LoadScene("DTtestScene");*/
 
-	//SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
+	SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
 	//SceneManager::Instance().LoadScene("TutorialScene");
 
 
@@ -153,8 +153,13 @@ bool Game::Initialize()
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
+<<<<<<< HEAD
 	/* SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
 	 ClientSceneManager::Instance().LoadScene("TitleScene");*/
+=======
+	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	 //ClientSceneManager::Instance().LoadScene("TitleScene");
+>>>>>>> newgs
 
 
 	 //SceneManager::Instance().RegisterScene("Scenes/Title.scene");

@@ -17,7 +17,7 @@ void ClientSceneManager::LoadScene(const std::string& sceneName)
         InitTutorialScene();
         //GameManager::Instance()->m_leftHealth = 10;
     }
-    else if (sceneName == "Stage1" || sceneName == "Stage2")
+    else if (sceneName == "Stage1" || sceneName == "Stage2" || sceneName == "Stage3" || sceneName == "Stage4" || sceneName == "Stage5")
     {
         InitInGameScene();
     }

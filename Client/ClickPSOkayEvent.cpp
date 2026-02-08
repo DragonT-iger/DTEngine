@@ -50,8 +50,6 @@ void ClickPSOkayEvent::SetClick()
 								return;
 								//std::cout << "model prefab 없다" << std::endl;
 
-						// manager unit 카운트가 만약 maxcount와 같거나 큰경우 생성 안함. 
-						int managerUnitCount = GameManager::Instance()->GetUnitCount();
 						int managerMoney = GameManager::Instance()->GetMoney();
 
 						if (m_cost > managerMoney)
@@ -152,7 +150,6 @@ void ClickPSOkayEvent::SetClick()
 						}
 
 						// 생성 성공이니까 manager unit count 증가시켜주기.
-						GameManager::Instance()->SetUnitCount(managerUnitCount + 1);
 						GameManager::Instance()->SetMoney(managerMoney - m_cost);
 						if (m_RSWindow)
 						{

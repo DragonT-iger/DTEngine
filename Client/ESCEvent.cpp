@@ -21,6 +21,12 @@ void ESCEvent::Update(float deltaTime)
 
 void ESCEvent::Check()
 {
+		// 승패 결과창 뜨면 처리 안함.
+		if (GameManager::Instance() && GameManager::Instance()->IsResultInteractionLocked())
+		{
+				return;
+		}
+
 		if (m_window)
 		{
 				// 있으면 무조건 닫기.

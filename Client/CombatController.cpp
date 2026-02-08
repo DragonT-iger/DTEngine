@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "TutorialManager.h"
+#include "GameManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -55,6 +56,12 @@ void CombatController::Setup()
     m_currPhase = Phase::Ready;             
     m_stageResult = StageResult::InProgress;
     m_phaseEntered = false;
+
+    // 전투 시작 시 결과 ui 초기화.
+    if (GameManager::Instance())
+    {
+        GameManager::Instance()->ResetBattleResultUI();
+    }
 
     m_allyUnits.clear();
     m_enemyUnits.clear();
@@ -527,7 +534,7 @@ bool CombatController::EndPhase()
         if (m_stageResult == StageResult::Win)
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
-            // 승리 처리
+            
             for (AllyUnit* ally : m_allyUnits)
             {
                 if (ally && ally->IsAlive()) ally->StartIdleAnim();
@@ -537,6 +544,9 @@ bool CombatController::EndPhase()
             {
                 if (enemy && enemy->IsAlive()) enemy->StartDieAnim();
             }
+
+            // 승리 처리
+            GameManager::Instance()->ShowVictoryWindow();
         }
         else if (m_stageResult == StageResult::Lose)
         {
@@ -551,7 +561,10 @@ bool CombatController::EndPhase()
             {
                 if (enemy && enemy->IsAlive()) enemy->StartIdleAnim();
             }
+
+            GameManager::Instance()->ShowLoseWindow();
         }
+
     }
 
     m_phaseEntered = false;
