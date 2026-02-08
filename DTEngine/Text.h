@@ -26,6 +26,7 @@ public:
     const std::wstring& GetText() const { return m_text; }
 
     void SetColor(const Vector4& color) { m_color = color; }
+    Vector4 GetColor() { return m_color; }
 
     //void SetLocalOffset(const Vector2& offset) { m_localOffset = offset; }
 

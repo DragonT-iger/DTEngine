@@ -19,9 +19,18 @@ public:
         Placement,          // 3. 배치 (즉시)
         ShowPopup,          // 4. 팝업 (입력 대기)
         AliceWalk,          // 5. 걷기 (연출 -> 자동 넘김 or 입력)
+        PreCreditDarken,
         Credit_Part1,       // 6. 크레딧1 (입력 대기)
         Credit_Part2,       // 7. 크레딧2 (입력 대기)
         EndingCredit        // 8. 엔딩 (입력 시 타이틀)
+    };
+
+    enum class FadeState
+    {
+        None,
+        FadeIn,     // 나타나는 중
+        Idle,       // 다 나와서 대기 중
+        FadeOut     // 사라지는 중
     };
 
     void Start() override;
@@ -30,6 +39,9 @@ public:
     void NextStep(bool force = false);
 
 private:
+    void SetUIAlpha(GameObject* target, float alpha);
+    bool IsCreditStep(EndStep step);
+
     GameObject* m_dialogueUI = nullptr;
     Text* m_dialogueText = nullptr;
     GameObject* m_popupUI = nullptr;
@@ -41,7 +53,13 @@ private:
 
     EndStep m_currentStep = EndStep::None;
 
+    FadeState m_fadeState = FadeState::None;
+    float m_fadeTimer = 0.0f;
+    const float FADE_DURATION = 1.0f;
+
     bool m_canProceedToNextStep = true;
 
     float m_stateTimer = 0.0f;
+
+    bool m_isEndingSequenceStarted = false;
 };

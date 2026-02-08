@@ -66,7 +66,7 @@ void CombatController::Setup()
     if (allyUnit2 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit2) == m_allyUnits.end())
         m_allyUnits.push_back(allyUnit2);
 
-    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene") {
+    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene" || SceneManager::Instance().GetActiveScene()->GetName() == "EndingScene") {
 
         if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end())
             m_enemyUnits.push_back(enemyUnit0);

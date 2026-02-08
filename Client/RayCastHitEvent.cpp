@@ -59,7 +59,9 @@ void RayCastHitEvent::RaycastCheck()
 
 		// 튜토리얼 씬인 경우에 예외처리
 
-
+		if (scene->GetName() == "EndingScene") {
+			return;
+		}
 
 		if (scene->GetName() == "TutorialScene") {
 			if (m_tutorialManager == nullptr) return;

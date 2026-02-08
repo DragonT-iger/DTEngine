@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "ClientSceneManager.h" 
 #include "Text.h"
+#include "Image.h"
 
 BEGINPROPERTY(EndSceneManager)
 DTPROPERTY(EndSceneManager, m_dialogueUI)
@@ -21,7 +22,7 @@ ENDPROPERTY()
 
 void EndSceneManager::Start()
 {
-    NextStep(true); // 첫 시작은 강제로 진입
+    NextStep(true); 
 }
 
 void EndSceneManager::Update(float deltaTime)
@@ -31,10 +32,9 @@ void EndSceneManager::Update(float deltaTime)
         if (InputManager::Instance().GetKeyDown(KeyCode::Space) ||
             InputManager::Instance().GetKeyDown(KeyCode::Enter))
         {
-            // 마지막 단계면 타이틀로, 아니면 다음 단계로
             if (m_currentStep == EndStep::EndingCredit)
             {
-                ClientSceneManager::Instance().LoadScene("TitleScene");
+                //ClientSceneManager::Instance().LoadScene("TitleScene");
             }
             else
             {
@@ -67,16 +67,121 @@ void EndSceneManager::Update(float deltaTime)
             NextStep(true);
         }
     }
+
+    if (m_currentStep == EndStep::AliceWalk)
+    {
+        if (!m_isEndingSequenceStarted)
+        {
+            if (m_combatController)
+            {
+                EnemyUnit* enemy0 = m_combatController->GetEnemyUnit0();
+                if (enemy0)
+                {
+                    Vector3 pos = enemy0->GetTransform()->GetPosition();
+                    if (pos.z <= 3.0f)
+                    {
+                        m_isEndingSequenceStarted = true;
+                        m_stateTimer = 0.0f;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // 3초 대기
+            m_stateTimer += deltaTime;
+            if (m_stateTimer >= 3.0f)
+            {
+                NextStep(true); 
+            }
+        }
+    }
+
+    if (m_currentStep == EndStep::PreCreditDarken)
+    {
+        m_stateTimer += deltaTime;
+        float duration = 2.0f; 
+
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene && activeScene->GetMainCamera())
+        {
+            float t = m_stateTimer / duration;
+            if (t > 1.0f) t = 1.0f;
+
+            float startSoft = 1.0f;
+            float endSoft = -40.0f;
+            float currentSoft = startSoft + (endSoft - startSoft) * t;
+
+            activeScene->GetMainCamera()->SetVignetteSoftness(currentSoft);
+        }
+
+        if (m_stateTimer >= duration)
+        {
+            NextStep(true);
+        }
+    }
+
+    if (IsCreditStep(m_currentStep))
+    {
+        GameObject* currentUI = nullptr;
+        if (m_currentStep == EndStep::Credit_Part1) currentUI = m_credit1UI;
+        else if (m_currentStep == EndStep::Credit_Part2) currentUI = m_credit2UI;
+        else if (m_currentStep == EndStep::EndingCredit) currentUI = m_finalCreditUI;
+
+        if (m_fadeState == FadeState::FadeIn)
+        {
+            m_fadeTimer += deltaTime;
+            float t = m_fadeTimer / FADE_DURATION;
+            if (t >= 1.0f) {
+                t = 1.0f;
+                m_fadeState = FadeState::Idle;
+            }
+            SetUIAlpha(currentUI, t);
+        }
+        else if (m_fadeState == FadeState::Idle)
+        {
+            SetUIAlpha(currentUI, 1.0f); 
+
+            if (InputManager::Instance().GetKeyDown(KeyCode::Space) ||
+                InputManager::Instance().GetKeyDown(KeyCode::Enter))
+            {
+                m_fadeState = FadeState::FadeOut;
+                m_fadeTimer = 0.0f;
+            }
+        }
+        else if (m_fadeState == FadeState::FadeOut)
+        {
+            m_fadeTimer += deltaTime;
+            float t = m_fadeTimer / FADE_DURATION;
+            if (t >= 1.0f) {
+                t = 1.0f;
+                if (m_currentStep == EndStep::EndingCredit)
+                {
+                    //ClientSceneManager::Instance().LoadScene("TitleScene");
+                }
+                else
+                {
+                    NextStep(true);
+                }
+            }
+            SetUIAlpha(currentUI, 1.0f - t);
+        }
+
+        return;
+    }
 }
 
 void EndSceneManager::NextStep(bool force)
 {
+
     if (!force && !m_canProceedToNextStep)
         return;
 
     int nextIndex = (int)m_currentStep + 1;
     m_currentStep = (EndStep)nextIndex;
     m_stateTimer = 0.0f;
+
+    std::cout << nextIndex << std::endl;
 
     m_canProceedToNextStep = true;
 
@@ -111,16 +216,15 @@ void EndSceneManager::NextStep(bool force)
         if (m_popupUI) m_popupUI->SetActive(true);
     }
     break;
-    case EndStep::Placement: // 3. 배치
+    case EndStep::Placement:
     {
 
         if (m_popupUI) m_popupUI->SetActive(false);
-        // 배치는 즉시 처리하고 바로 다음으로
         NextStep(true);
     }
     break;
 
-    case EndStep::ShowPopup: // 4. 팝업
+    case EndStep::ShowPopup:
     {
         // 암전 해제
         Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -129,39 +233,106 @@ void EndSceneManager::NextStep(bool force)
             activeScene->GetMainCamera()->SetUseVignette(false);
         }
 
+        NextStep(true);
+
         // m_canProceedToNextStep = true 상태 유지 (입력 대기)
     }
     break;
 
-    case EndStep::AliceWalk: // 5. 엘리스 걷기
+    case EndStep::AliceWalk: 
     {
-        m_canProceedToNextStep = false; // 걷는 중 입력 방지
+        m_canProceedToNextStep = false;
 
-        if (m_combatController) m_combatController->Setup();
 
-        // Update에서 시간 체크 후 자동 넘김
+        EnemyUnit* enemy0 = nullptr;
+        if (m_combatController) {
+            enemy0 = m_combatController->GetEnemyUnit0();
+            enemy0->SetPath({ {{2,8},{2,0}} });
+            m_combatController->Setup();
+        } 
+
     }
     break;
 
-    case EndStep::Credit_Part1: // 6. 크레딧 1
+    case EndStep::PreCreditDarken:
     {
-        if (m_credit1UI) m_credit1UI->SetActive(true);
-        // 입력하면 바로 넘어가게 canProceed = true 유지
+        m_canProceedToNextStep = false; 
+
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene && activeScene->GetMainCamera())
+        {
+            activeScene->GetMainCamera()->SetUseVignette(true);
+            activeScene->GetMainCamera()->SetVignetteSoftness(1.0f);
+            activeScene->GetMainCamera()->SetCircleWidthHeight({ 0.0f, 0.0f });
+            activeScene->GetMainCamera()->SetCircleCenter({ 0.5f, 0.5f });
+        }
     }
     break;
 
-    case EndStep::Credit_Part2: // 7. 크레딧 2
+    case EndStep::Credit_Part1:
     {
-        if (m_credit1UI) m_credit1UI->SetActive(false);
-        if (m_credit2UI) m_credit2UI->SetActive(true);
+        if (m_credit1UI) {
+            m_credit1UI->SetActive(true);
+            SetUIAlpha(m_credit1UI, 0.0f); // 투명하게 시작
+        }
+        m_fadeState = FadeState::FadeIn;    // 페이드 인 시작
+        m_fadeTimer = 0.0f;
+        m_canProceedToNextStep = false;     // Update에서 별도 처리하므로 false
     }
     break;
 
-    case EndStep::EndingCredit: // 8. 최종 엔딩
+    case EndStep::Credit_Part2:
     {
-        if (m_credit2UI) m_credit2UI->SetActive(false);
-        if (m_finalCreditUI) m_finalCreditUI->SetActive(true);
+        if (m_credit2UI) {
+            m_credit2UI->SetActive(true);
+            SetUIAlpha(m_credit2UI, 0.0f);
+        }
+        m_fadeState = FadeState::FadeIn;
+        m_fadeTimer = 0.0f;
+        m_canProceedToNextStep = false;
     }
     break;
+
+    case EndStep::EndingCredit:
+    {
+        if (m_finalCreditUI) {
+            m_finalCreditUI->SetActive(true);
+            SetUIAlpha(m_finalCreditUI, 0.0f);
+        }
+        m_fadeState = FadeState::FadeIn;
+        m_fadeTimer = 0.0f;
+        m_canProceedToNextStep = false;
     }
+    break;
+
+    }
+}
+
+bool EndSceneManager::IsCreditStep(EndStep step)
+{
+    return step == EndStep::Credit_Part1 ||
+        step == EndStep::Credit_Part2 ||
+        step == EndStep::EndingCredit;
+}
+
+void EndSceneManager::SetUIAlpha(GameObject* target, float alpha)
+{
+    if (!target) return;
+
+    //Text* textComp = target->GetComponent<Text>();
+    //if (textComp)
+    //{
+    //    Vector4 col = textComp->GetColor();
+    //    col.w = alpha; 
+    //    textComp->SetColor(col);
+    //}
+
+    Image* imgComp = target->GetComponent<Image>();
+    if (imgComp)
+    {
+        Vector4 col = imgComp->GetColor();
+        col.w = alpha;
+        imgComp->SetColor(col);
+    }
+
 }
