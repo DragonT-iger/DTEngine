@@ -45,12 +45,10 @@ float4 PS(PS_INPUT input) : SV_Target
     {
         float4 texBase = g_DiffuseMap.Sample(g_Sampler, input.UV);
         albedo = texBase.rgb;
-    }
-
-    
+    }    
    // return float4(albedo.xyz, 1);
 
-    
+    metal = 0;
     float3 directLighting = float3(0, 0, 0);
     float shadowFactor = CalculateShadow(input.WorldPos, Shadow_Bias);
     
@@ -106,7 +104,7 @@ float4 PS(PS_INPUT input) : SV_Target
         float mipLevel = rough * 7.0f; // Roughness 기반 밉맵 샘플링
         
         // Specular 및 Diffuse 환경광 샘플링
-        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
+        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb * SkyBox_Color.g;
         float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
 
         // 물리 연산은 Shared 함수 호출 (데이터만 전달)

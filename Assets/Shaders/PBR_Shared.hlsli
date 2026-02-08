@@ -93,29 +93,52 @@ float3 CalculateIBL_Combined(
     float3 V, float3 N, float3 albedo,
     float rough, float metal, float ao)
 {
-   // 1. F0 (수직 입사 반사율) 계산 
-
     float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metal);
-    
-   // 2. Fresnel (Schlick) 근사 
-
     float NdotV = saturate(dot(N, V));
-    
-    float3 F = F0 + (1.0f - F0) * pow(1.0f - NdotV, 5.0f);
-    // F = F0 + (max(float3(1.0f - rough, 1.0f - rough, 1.0f - rough), F0) - F0) * pow(1.0f - NdotV, 5.0f);
-    // 3. 에너지 보존 (kS: Specular 기여도, kD: Diffuse 기여도) 
+
+    // 수정된 Fresnel: Roughness가 높을수록 외곽 반사(F)의 최대치가 낮아지도록 보정
+    float3 F = F0 + (max(float3(1.0f - rough, 1.0f - rough, 1.0f - rough), F0) - F0) * pow(1.0f - NdotV, 5.0f);
 
     float3 kS = F;
-    float3 kD = (1.0f - kS) * (1.0f - metal);// 금속은 Diffuse가 없음
-
-    // 4. 최종 Ambient 합성 
+    float3 kD = (1.0f - kS) * (1.0f - metal);
 
     float3 diffuseIBL = kD * ambientDiffuseColor * albedo;
     float3 specularIBL = envColor * F;
 
-   // 5. AO 적용 및 반환 
-    return (diffuseIBL + specularIBL);
+    return (diffuseIBL + specularIBL) * ao;
 }
+
+//float3 CalculateIBL_Combined(
+//    float3 envColor,
+//    float3 ambientDiffuseColor,
+//    float3 V, float3 N, float3 albedo,
+//    float rough, float metal, float ao)
+//{
+//   // 1. F0 (수직 입사 반사율) 계산 
+
+//    float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metal);
+    
+//   // 2. Fresnel (Schlick) 근사 
+
+//    float NdotV = saturate(dot(N, V));
+    
+//    float3 F = F0 + (1.0f - F0) * pow(1.0f - NdotV, 5.0f);
+//    // F = F0 + (max(float3(1.0f - rough, 1.0f - rough, 1.0f - rough), F0) - F0) * pow(1.0f - NdotV, 5.0f);
+//    // 3. 에너지 보존 (kS: Specular 기여도, kD: Diffuse 기여도) 
+
+//    float3 kS = F;
+//    float3 kD = (1.0f - kS) * (1.0f - metal); // 금속은 Diffuse가 없음
+
+//    // 4. 최종 Ambient 합성 
+
+//    float3 diffuseIBL = kD * ambientDiffuseColor * albedo;
+//    float3 specularIBL = envColor * F;
+
+//   // 5. AO 적용 및 반환 
+//    return (diffuseIBL + specularIBL);
+//}
+
+
 
 
 float3 ACESToneMapping(float3 x)

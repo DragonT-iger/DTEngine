@@ -604,6 +604,9 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
 
     const std::string path = "Assets/Models/BackGround/CubeMap_02_05.dds";
+   // const std::string path = "Assets/Models/BackGround/output_skybox_02.dds";
+    //const std::string path = "Assets/Models/BackGround/output_theator_01.dds";
+
 
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();

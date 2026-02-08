@@ -150,12 +150,11 @@ bool Game::Initialize()
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 
-	 //SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
-	 //ClientSceneManager::Instance().LoadScene("TitleScene");
+	// SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	// ClientSceneManager::Instance().LoadScene("TitleScene");
 
 
-	 //SceneManager::Instance().RegisterScene("Scenes/Title.scene");
-	 //SceneManager::Instance().LoadScene("Title");
+
 
 
 
