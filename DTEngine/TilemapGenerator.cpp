@@ -25,6 +25,7 @@ DTPROPERTY(TilemapGenerator, m_prefab6)
 DTPROPERTY(TilemapGenerator, m_prefab7)
 DTPROPERTY(TilemapGenerator, m_prefab8)
 DTPROPERTY(TilemapGenerator, m_prefab9)
+DTPROPERTY(TilemapGenerator, m_prefab10)
 
 DTPROPERTY(TilemapGenerator, m_enemy0)
 DTPROPERTY(TilemapGenerator, m_enemy1)
@@ -55,7 +56,10 @@ void TilemapGenerator::BuildMap()
 
     Transform* myTr = GetTransform();
 
-    Prefab* palette[] = { m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4 , m_prefab5 , m_prefab6, m_prefab7, m_prefab8, m_prefab9 };
+    Prefab* palette[] = { 
+        m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4, 
+        m_prefab5, m_prefab6, m_prefab7, m_prefab8, m_prefab9, m_prefab10 
+    };
 
     m_spawnedTiles.resize(width * height, nullptr);
 

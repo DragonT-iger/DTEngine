@@ -27,9 +27,7 @@ void TilemapData::SetDimensions(int w, int h)
     {
         for (int x = 0; x < m_width; ++x)
         {
-            if (IsBorder(x, y))
-                m_grid[y * m_width + x] = IsCorner(x, y) ? 9 : 8;
-            else
+            if (!IsBorder(x, y))
                 m_grid[y * m_width + x] = FindDefaultGrid(x, y);
         }
     }
@@ -264,8 +262,18 @@ void TilemapData::MakeBorder()
     {
         for (int x = 0; x < m_width; ++x)
         {
-            if (!IsBorder(x, y)) continue;
-            m_grid[y * m_width + x] = IsCorner(x, y) ? 9 : 8;
+            if (!IsBorder(x, y))
+                continue;
+
+            if (IsCorner(x, y))
+            {
+                m_grid[y * m_width + x] = 10; // 꼭짓점
+            }
+            else
+            {
+                // 8 9 번갈아
+                m_grid[y * m_width + x] = ((x + y) % 2 == 0) ? 8 : 9;
+            }
         }
     }
 }
