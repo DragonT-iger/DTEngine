@@ -85,6 +85,9 @@ public:
 
 	// 이번 스테이지 앨리스 등록용.
 	void SetAliceUnit(AliceUnit* aliceUnit) { m_aliceUnit = aliceUnit; }
+
+	// 이번 스테이지 붉은여왕 등록용.
+	void SetRedQueenUnit(RedQueenUnit* redQueenUnit) { m_redQueenUnit = redQueenUnit; }
 	 
 	// 이번 스테이지 아군, 적군 등록용. 어차피 각각 3개가 최대니까.. 
 	void SetAllyUnit0(AllyUnit* allyUnit) { allyUnit0 = allyUnit; }

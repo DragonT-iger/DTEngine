@@ -2453,7 +2453,46 @@ void EditorUI::DrawAssetInspector(const std::string& path)
             }
             ImGui::PopID();
 
+            // 특수 유닛
             ImGui::Separator();
+            ImGui::Text("Special Spawns");
+
+            ImGui::PushID("SpecialSpawns");
+
+            // 앨리스
+            {
+                Vector2 p = tilemap->GetAlicePos();
+                float v[2] = { p.x, p.y };
+
+                if (ImGui::InputFloat2("Alice Pos", v))
+                {
+                    tilemap->SetAlicePos(Vector2{ v[0], v[1] });
+                    changed = true;
+                }
+            }
+
+            // 붉은여왕
+            {
+                auto& rq = tilemap->GetRedQueen();
+
+                if (ImGui::Checkbox("Red Queen Enabled", &rq.enabled))
+                    changed = true;
+
+                ImGui::BeginDisabled(!rq.enabled);
+
+                float v[2] = { rq.pos.x, rq.pos.y };
+                if (ImGui::InputFloat2("Red Queen Pos", v))
+                {
+                    rq.pos = Vector2{ v[0], v[1] };
+                    changed = true;
+                }
+
+                ImGui::EndDisabled();
+            }
+
+            ImGui::PopID();
+
+            /*ImGui::Separator();
             ImGui::Text("Dialogues");
 
             ImGui::PushID("Dialogue");
@@ -2486,7 +2525,7 @@ void EditorUI::DrawAssetInspector(const std::string& path)
 
                 ImGui::PopID();
             }
-            ImGui::PopID();
+            ImGui::PopID();*/
 
             if (changed)
             {

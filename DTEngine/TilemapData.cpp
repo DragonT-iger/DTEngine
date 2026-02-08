@@ -130,7 +130,7 @@ bool TilemapData::LoadFile(const std::string& fullPath)
     }
 
     // 대사
-    ResetDialoguesToDefault();
+   /* ResetDialoguesToDefault();
 
     if (reader.BeginArray("dialogues"))
     {
@@ -147,6 +147,27 @@ bool TilemapData::LoadFile(const std::string& fullPath)
             reader.EndArrayItem();
         }
         reader.EndArray();
+    }*/
+
+    ResetSpecialsToDefault();
+
+    // 앨리스
+    if (reader.BeginObject("alice"))
+    {
+        float x = reader.ReadFloat("x", -999.f);
+        float y = reader.ReadFloat("y", -999.f);
+        m_alicePos = Vector2{ x, y };
+        reader.EndObject();
+    }
+
+    // 붉은여왕
+    if (reader.BeginObject("redQueen"))
+    {
+        m_redQueen.enabled = reader.ReadBool("enabled", false);
+        float x = reader.ReadFloat("x", -999.f);
+        float y = reader.ReadFloat("y", -999.f);
+        m_redQueen.pos = Vector2{ x, y };
+        reader.EndObject();
     }
 
     MakeBorder();
@@ -194,7 +215,7 @@ bool TilemapData::SaveFile(const std::string& fullPath)
     writer.EndArray();
 
     // 대사 저장
-    writer.BeginArray("dialogues");
+   /* writer.BeginArray("dialogues");
     for (int i = 0; i < MAX_DIALOGUES; ++i)
     {
         const auto& d = m_dialogues[i];
@@ -203,7 +224,20 @@ bool TilemapData::SaveFile(const std::string& fullPath)
         writer.Write("text", d.text);
         writer.EndArrayItem();
     }
-    writer.EndArray();
+    writer.EndArray();*/
+
+    // 앨리스
+    writer.BeginObject("alice");
+    writer.Write("x", m_alicePos.x);
+    writer.Write("y", m_alicePos.y);
+    writer.EndObject();
+
+    // 붉은여왕
+    writer.BeginObject("redQueen");
+    writer.Write("enabled", m_redQueen.enabled);
+    writer.Write("x", m_redQueen.pos.x);
+    writer.Write("y", m_redQueen.pos.y);
+    writer.EndObject();
 
     return writer.SaveFile(fullPath);
 }
@@ -212,7 +246,8 @@ void TilemapData::Unload()
 {
     m_grid.clear();
     ResetEnemiesToDefault();
-    ResetDialoguesToDefault();
+    //ResetDialoguesToDefault();
+    ResetSpecialsToDefault();
 }
 
 
@@ -256,11 +291,18 @@ void TilemapData::ResetEnemiesToDefault()
 
 }
 
-void TilemapData::ResetDialoguesToDefault()
+void TilemapData::ResetSpecialsToDefault()
 {
-    for (auto& d : m_dialogues)
-    {
-        d.enabled = false;
-        d.text.clear();
-    }
+    m_alicePos = Vector2{ -999.f, -999.f };
+    m_redQueen.enabled = false;
+    m_redQueen.pos = Vector2{ -999.f, -999.f };
 }
+
+//void TilemapData::ResetDialoguesToDefault()
+//{
+//    for (auto& d : m_dialogues)
+//    {
+//        d.enabled = false;
+//        d.text.clear();
+//    }
+//}

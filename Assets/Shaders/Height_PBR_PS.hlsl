@@ -113,9 +113,9 @@ float4 PS(PS_INPUT input) : SV_Target
         ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
     
-    ambientLighting_IBL = ambientLighting_IBL * SkyBox_Color.a;
+   ambientLighting_IBL = ambientLighting_IBL * SkyBox_Color.a;
     
-    Temp_ambientLighting *= SkyBox_Color.b;
+   Temp_ambientLighting *= SkyBox_Color.b;
     
     
    
@@ -123,8 +123,9 @@ float4 PS(PS_INPUT input) : SV_Target
     float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
     
     
-    TotalAmbi = saturate(TotalAmbi);
-        
+     TotalAmbi = saturate(TotalAmbi);
+    
+    
     float3 finalColor = (directLighting + TotalAmbi) * (Temp + Shadow_Scale);
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;

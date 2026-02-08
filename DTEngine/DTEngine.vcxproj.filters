@@ -102,6 +102,9 @@
     <Filter Include="Component\RenderTarget">
       <UniqueIdentifier>{4ca3ed46-95aa-4ec6-b332-aa71fcc4d720}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Specific\Height">
+      <UniqueIdentifier>{621e41a7-4a4e-403f-9df8-eb1ba381027c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowBase.h">
@@ -866,6 +869,12 @@
     </FxCompile>
     <FxCompile Include="..\Assets\Shaders\UI_Arrow_PS.hlsl">
       <Filter>Shader\Specific</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Height_PBR_PS.hlsl">
+      <Filter>Shader\Specific\Height</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\Height_PBR_VS.hlsl">
+      <Filter>Shader\Specific\Height</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

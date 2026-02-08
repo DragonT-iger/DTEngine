@@ -9,11 +9,16 @@ static const UnitStats UnitStatsTable[] =
     { 25,  5, 110, 1 }, // 나이트
     { 30,  2,  90, 2 }, // 비숍
     {  0,  0, 150, 0 }, // 앨리스
-    { 30,  3, 300, 1 }, // 퀸
+    {  0,  0, 150, 0 }, // 퀸
 };
 
 void Unit::Start()
 {
+    if (_GetOwner()->GetName() == "Alice_tst" || _GetOwner()->GetName() == "unit_Queen_tttst")
+    {
+        m_anim = _GetOwner()->GetComponent<Animator>();
+    }
+    
     Transform* tf = GetTransform();
     if (!tf) return;
 
@@ -42,7 +47,7 @@ void Unit::Start()
 
 void Unit::SetUnitType(int type)
 {
-    if (type < UnitType::Rook || type > UnitType::Alice) type = UnitType::Rook;
+    if (type < UnitType::Rook || type > UnitType::Queen) type = UnitType::Rook;
     m_type = type;
     SetStats(UnitStatsTable[type]);
 }
@@ -331,22 +336,38 @@ void Unit::FinishAction()
 
 void Unit::PlayAnim(uint64_t id, uint64_t id1, uint64_t id2, float speed, bool loop)
 {
+    if (!m_anim) return;
+    
     m_anim->SetClip(id);
-    m_anim1->SetClip(id1);
-    if (id2 != -1) m_anim2->SetClip(id2);
-
     m_anim->SetTime(speed);
     m_anim->SetLoop(loop);
-    m_anim->SetPlay(true);
 
-    m_anim1->SetTime(speed);
-    m_anim1->SetLoop(loop);
-    m_anim1->SetPlay(true);
-
-    if (id2 != -1)
+    if (id1 != ANIM_INVALID)
     {
+        if (!m_anim1) return;
+        m_anim1->SetClip(id1);
+        m_anim1->SetTime(speed);
+        m_anim1->SetLoop(loop);
+    }
+
+    if (id2 != ANIM_INVALID)
+    {
+        if (!m_anim2) return;
+        m_anim2->SetClip(id2);
         m_anim2->SetTime(speed);
         m_anim2->SetLoop(loop);
+    }
+
+
+    m_anim->SetPlay(true);
+
+    if (id1 != ANIM_INVALID)
+    {
+        m_anim1->SetPlay(true);
+    }
+
+    if (id2 != ANIM_INVALID)
+    {
         m_anim2->SetPlay(true);
     }
 }
@@ -355,8 +376,8 @@ void Unit::StartIdleAnim()
 {
     if (!m_anim) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_Idle_1.fbx");
-    uint64_t id1 = -1;
-    uint64_t id2 = -1;
+    uint64_t id1 = ANIM_INVALID;
+    uint64_t id2 = ANIM_INVALID;
     if (m_weaponName == "Sword") {
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_Idle.fbx");
         id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/shield_Idle.fbx");
@@ -375,8 +396,8 @@ void Unit::StartMoveAnim()
     if (!m_anim) return;
     if (m_animStart) return;
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_move_1.fbx");
-    uint64_t id1 = -1;
-    uint64_t id2 = -1;
+    uint64_t id1 = ANIM_INVALID;
+    uint64_t id2 = ANIM_INVALID;
     if (m_weaponName == "Sword") {
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_move.fbx");
         id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/shield_move.fbx");
@@ -395,9 +416,9 @@ void Unit::StartAttackAnim()
 {
     if (!m_anim) return;
     if (m_animStart) return;
-    uint64_t id = -1;
-    uint64_t id1 = -1;
-    uint64_t id2 = -1;
+    uint64_t id = ANIM_INVALID;
+    uint64_t id1 = ANIM_INVALID;
+    uint64_t id2 = ANIM_INVALID;
     if (m_weaponName == "Sword") {
         id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_attack_sword_shield.fbx");
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_attack.fbx");
@@ -423,8 +444,8 @@ void Unit::StartDieAnim()
     StartDissolve();
 
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_die.fbx");
-    uint64_t id1 = -1;
-    uint64_t id2 = -1;
+    uint64_t id1 = ANIM_INVALID;
+    uint64_t id2 = ANIM_INVALID;
     if (m_weaponName == "Sword") {
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_die.fbx");
         id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/shield_die.fbx");

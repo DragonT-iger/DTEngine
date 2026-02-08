@@ -10,6 +10,8 @@ public:
     RedQueenUnit();
     ~RedQueenUnit() = default;
 
+    void StartQueenDieAnim();
+
 private:
 
 };

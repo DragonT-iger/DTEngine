@@ -147,7 +147,7 @@ public:
     void UpdateMaterial_CBUFFER(const MaterialData& M_Data); //r3
     void UpdateTextureFlag_CBUFFER(uint32_t Flags);
     void UpdateMatrixPallette_CBUFFER(std::vector<Matrix>& matrix);
-    void UpdateSkyBox_CBUFFER(SkyBox& data);
+    void UpdateSkyBox_CBUFFER(IBL& data);
     void UpdateEffect_CBUFFER(EffectParams& data);
     void UpdateFog_CBUFFER(FogParams& data);
 

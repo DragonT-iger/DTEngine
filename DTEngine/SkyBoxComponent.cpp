@@ -33,7 +33,7 @@ void SkyBoxComponent::Update(float deltaTime)
 //Material에서 색상 변화할 때, Dirty가 켜지는 식으로 처리하려고 하는데, 
 void SkyBoxComponent::SkyBoxColorBinding()
 {
-	SkyBox data; data.SkyBox_Color = m_SkyBoxColor;
+	IBL data; data.IBL_Value = m_SkyBoxColor;
 	DX11Renderer::Instance().UpdateSkyBox_CBUFFER(data);
 
 

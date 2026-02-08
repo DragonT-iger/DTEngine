@@ -7,6 +7,7 @@
 class Animator;
 
 static constexpr Vector2 GRIDPOS_INVALID{ -999, -999 };
+static constexpr uint64_t ANIM_INVALID = (uint64_t)-1;
 
 enum UnitType
 {
@@ -205,7 +206,7 @@ protected:
     float m_hp = 100;
     bool m_isAlive = true;
 
-    int m_perceptionRange = 5; // 인식범위
+    int m_perceptionRange = 3; // 인식범위
 
     Unit* m_moveTarget = nullptr;
     Vector2 m_moveTargetPos = GRIDPOS_INVALID;
@@ -222,8 +223,6 @@ protected:
     bool m_isOnTrapTile = false;
 
 
-
-private:
     ActionPhase m_phase = ActionPhase::None;
 
     RotateAnim m_rot;
