@@ -83,6 +83,7 @@ public:
     void DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
     void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
 
+    void SetSkyBox(const std::string& path) { m_SkyBoxpath = path; }
 
     //void DrawString3D(const std::wstring& text, const Vector3& localPos, const Vector4& color, const Matrix& worldMatrix);
 
@@ -272,6 +273,9 @@ private:
     Matrix m_projTM;
 
     bool m_isOrthoBackup;
+
+
+    std::string m_SkyBoxpath = "";
 
     // UI 렌더링
     std::unique_ptr<DirectX::DX11::SpriteBatch>  m_spriteBatch;

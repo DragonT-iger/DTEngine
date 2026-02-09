@@ -42,6 +42,7 @@ cbuffer CBuffer_Matrix_Pallette : register(b6)
 cbuffer CBuffer_SkyBox : register(b7)
 {
     float4 SkyBox_Color; 
+    float4x4 Rotation_Matrix;
 };
 
 cbuffer CBuffer_Effect : register(b8)

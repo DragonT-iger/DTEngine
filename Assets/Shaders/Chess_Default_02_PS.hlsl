@@ -101,12 +101,13 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_IBL)
     {
         float3 R = reflect(-V, N);
+        R = ApplyIBLRotation(R);
         float mipLevel = rough * 7.0f; // Roughness 기반 밉맵 샘플링
         
         // Specular 및 Diffuse 환경광 샘플링
-        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb * SkyBox_Color.g;
+        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
         float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
-
+        
         // 물리 연산은 Shared 함수 호출 (데이터만 전달)
         ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
@@ -116,13 +117,12 @@ float4 PS(PS_INPUT input) : SV_Target
     Temp_ambientLighting *= SkyBox_Color.b;
     
     
-   
     
     float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
     
-    
-    TotalAmbi = saturate(TotalAmbi);
-        
+  //  return float4(TotalAmbi, 1);
+
+            
     float3 finalColor = (directLighting + TotalAmbi) * (Temp + Shadow_Scale);
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;

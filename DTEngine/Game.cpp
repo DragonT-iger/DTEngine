@@ -186,10 +186,6 @@ bool Game::Initialize()
 
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false, false);
-
-	m_finalGameRT = std::make_unique<RenderTexture>();
-	m_finalGameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, false, false); //Gamma만 처리함. srgb는 받아야함. 
-
 	SetEditorCamera(scene);
 
 
@@ -1156,8 +1152,6 @@ void Game::OnResize(int width, int height)
 	if (m_captureRT)
 		m_captureRT->Resize((int)drawWidth, (int)drawHeight);
 
-	if (m_finalGameRT)
-		m_finalGameRT->Resize((int)drawWidth, (int)drawHeight);
 
 	Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 	if (mainCam) {

@@ -111,7 +111,7 @@ void PostProcessManager::RenderToneMapping(RenderTexture* src, ID3D11RenderTarge
     if (m_constantBuffer)
     {
         ToneMappingCBuffer data;
-        data.Exposure = 0.5;
+        data.Exposure =1.0f;
         context->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &data, 0, 0);
 
         context->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());

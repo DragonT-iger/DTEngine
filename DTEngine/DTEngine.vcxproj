@@ -201,6 +201,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="HistoryManager.h" />
     <ClInclude Include="Levitating.h" />
     <ClInclude Include="MonoSingleton.h" />
+    <ClInclude Include="MultiSpriteController .h" />
     <ClInclude Include="outline.h" />
     <ClInclude Include="Rigid.h" />
     <ClInclude Include="SkyBoxComponent.h" />
@@ -302,6 +303,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="GrayScaleEffect.cpp" />
     <ClCompile Include="HistoryManager.cpp" />
     <ClCompile Include="Levitating.cpp" />
+    <ClCompile Include="MultiSpriteController.cpp" />
     <ClCompile Include="outline.cpp" />
     <ClCompile Include="Rigid.cpp" />
     <ClCompile Include="SkyBoxComponent.cpp" />

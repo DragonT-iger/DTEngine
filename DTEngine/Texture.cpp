@@ -35,6 +35,7 @@ bool Texture::CheckIsLinearTexture(std::string fileName)
         "ao",          // 앰비언트 오클루전
         "height", "bump",    // 높이/변위 맵
         "spec",
+        "output",
         //"linear",            // 명시적 리니어 태그
         //"data"               // 기타 데이터 텍스처
     };
