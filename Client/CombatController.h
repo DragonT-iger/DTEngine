@@ -15,6 +15,7 @@ class EnemyUnit;
 class AliceUnit;
 class RedQueenUnit;
 class BattleGrid;
+class GameObject;
 //class Prefab;
 
 struct UnitStats;
@@ -140,4 +141,7 @@ private:
 	//Prefab* asdf = nullptr;
 	int allyCount = 0;
 	int enemyCount = 0;
+
+	GameObject* m_victoryBG = nullptr;
+	GameObject* m_loseBG = nullptr;
 };

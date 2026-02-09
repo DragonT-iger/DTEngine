@@ -16,6 +16,9 @@ DTPROPERTY_SETTER(CombatController, allyUnit2, SetAllyUnit2)
 DTPROPERTY_SETTER(CombatController, enemyUnit0, SetEnemyUnit0)
 DTPROPERTY_SETTER(CombatController, enemyUnit1, SetEnemyUnit1)
 DTPROPERTY_SETTER(CombatController, enemyUnit2, SetEnemyUnit2)
+
+DTPROPERTY(CombatController, m_victoryBG)
+DTPROPERTY(CombatController, m_loseBG)
 ENDPROPERTY()
 
 
@@ -551,9 +554,15 @@ bool CombatController::EndPhase()
                 if (enemy && enemy->IsAlive()) enemy->StartDieAnim();
             }
 
-            // 승리 처리
-            GameManager::Instance()->NextStage();
-            ClientSceneManager::Instance().LoadScene("MainGameScene");
+            if (m_victoryBG && m_loseBG)
+            {
+                m_victoryBG->SetActive(true);
+                m_loseBG->SetActive(false);
+            }
+            
+            // 승리 처리 이거 두개 다 clicknextstageevent에서 처리. 
+            //GameManager::Instance()->NextStage(); 
+            //ClientSceneManager::Instance().LoadScene("MainGameScene");
 
             // winUI 안띄우고 임시로 처리중 예제코드
         }
@@ -572,8 +581,14 @@ bool CombatController::EndPhase()
             }
 
             //GameManager::Instance()->ShowLoseWindow();
-            
-            ClientSceneManager::Instance().LoadScene("MainGameScene");
+            if (m_victoryBG && m_loseBG)
+            {
+                m_loseBG->SetActive(true);
+                m_victoryBG->SetActive(false);
+            }
+
+         
+            //ClientSceneManager::Instance().LoadScene("MainGameScene"); 이것도 clickretry에서 처리중.
         }
 
     }

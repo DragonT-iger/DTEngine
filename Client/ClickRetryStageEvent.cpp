@@ -21,7 +21,10 @@ void ClickRetryStageEvent::Start()
 						m_window->SetActive(false);
 
 
-						GameManager::Instance()->NextStage();
+						//GameManager::Instance()->NextStage();
+						// life 줄이기.
+						int life = GameManager::Instance()->GetLife();
+						GameManager::Instance()->SetLife(life - 1);
 						ClientSceneManager::Instance().LoadScene("MainGameScene");
 
 

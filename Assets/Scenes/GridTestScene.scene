@@ -354,7 +354,9 @@
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
+          "m_loseBG": 6814653329085445114,
           "m_redQueenUnit": 0,
+          "m_victoryBG": 2726193224071851438,
           "typeName": "CombatController"
         }
       ],
@@ -6566,7 +6568,7 @@
           "Active": true,
           "id": 12362843549925920395,
           "m_exitButton": 5736328220481272240,
-          "m_settingWindow": 0,
+          "m_settingWindow": 10500202484059138583,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -9287,27 +9289,9 @@
           "Active": true,
           "id": 8565764339402807703,
           "m_bgmSlider": 7127000447013137685,
-          "m_blockInputObj0": 9419903296967584286,
-          "m_blockInputObj1": 0,
-          "m_blockInputObj2": 0,
-          "m_blockInputObj3": 0,
-          "m_blockInputObj4": 0,
-          "m_chesherGuideWindow": 8550812078906235519,
-          "m_loseWindow": 6814653329085445114,
-          "m_rayObj": 4771222732717351773,
-          "m_settingWindow": 10500202484059138583,
+          "m_life": 12106511576426520092,
+          "m_money": 17575368768981490807,
           "m_sfxSlider": 539819835045743063,
-          "m_stageBattleGrid": 17217331222344769167,
-          "m_stageDialogueText": 12433785278535231609,
-          "m_stageLevelText": 0,
-          "m_stageTilemap0": 15103945832781831451,
-          "m_stageTilemap1": 6189260170659567125,
-          "m_stageTilemap2": 13964411375409846242,
-          "m_stageTilemap3": 15103945832781831451,
-          "m_stageTilemap4": 6189260170659567125,
-          "m_stageTilemapGenerator": 7171391694734270448,
-          "m_startButtonEvent": 5425226427455043202,
-          "m_victoryWindow": 2726193224071851438,
           "typeName": "GameManager"
         }
       ],
