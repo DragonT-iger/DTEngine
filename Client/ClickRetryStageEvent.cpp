@@ -2,6 +2,8 @@
 #include "UIButton.h"
 #include "GameObject.h"
 #include "GameManager.h"
+#include "ClientSceneManager.h"
+#include "Scene.h"
 
 BEGINPROPERTY(ClickRetryStageEvent)
 DTPROPERTY(ClickRetryStageEvent, m_button)
@@ -18,7 +20,12 @@ void ClickRetryStageEvent::Start()
 						// 패배 window 꺼주기.
 						m_window->SetActive(false);
 
-						GameManager::Instance()->ReloadCurrentStage();
+
+						GameManager::Instance()->NextStage();
+						ClientSceneManager::Instance().LoadScene("MainGameScene");
+
+
+						//GameManager::Instance()->ReloadCurrentStage();
 				});
 }
 

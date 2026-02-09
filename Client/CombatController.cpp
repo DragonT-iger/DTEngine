@@ -58,10 +58,10 @@ void CombatController::Setup()
     m_phaseEntered = false;
 
     // 전투 시작 시 결과 ui 초기화.
-    if (GameManager::Instance())
-    {
-        GameManager::Instance()->ResetBattleResultUI();
-    }
+    //if (GameManager::Instance())
+    //{
+    //    GameManager::Instance()->ResetBattleResultUI();
+    //}
 
     m_allyUnits.clear();
     m_enemyUnits.clear();
@@ -546,7 +546,7 @@ bool CombatController::EndPhase()
             }
 
             // 승리 처리
-            GameManager::Instance()->ShowVictoryWindow();
+            //GameManager::Instance()->ShowVictoryWindow();
         }
         else if (m_stageResult == StageResult::Lose)
         {
@@ -562,7 +562,7 @@ bool CombatController::EndPhase()
                 if (enemy && enemy->IsAlive()) enemy->StartIdleAnim();
             }
 
-            GameManager::Instance()->ShowLoseWindow();
+            //GameManager::Instance()->ShowLoseWindow();
         }
 
     }
