@@ -59,8 +59,8 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 654.0767211914063,
-          "y": 475.76702880859375,
+          "x": 1076.296630859375,
+          "y": 346.26702880859375,
           "z": 1.6724035739898682
         },
         "m_rotation": {
@@ -205,12 +205,14 @@
         {
           "Active": true,
           "id": 7171391694734270448,
+          "m_alice": 0,
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
           "m_mapData": 15103945832781831451,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
+          "m_prefab10": 0,
           "m_prefab2": 1184002424583072243,
           "m_prefab3": 6882548206746445278,
           "m_prefab4": 16302386552932827796,
@@ -219,6 +221,7 @@
           "m_prefab7": 0,
           "m_prefab8": 0,
           "m_prefab9": 0,
+          "m_redQueen": 0,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -631,8 +634,11 @@
         {
           "Active": true,
           "id": 16259032481906092414,
+          "m_fBigImgObj": 4557166556873748072,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 12964615813891451477,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 2996054049449114401,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -709,8 +715,11 @@
         {
           "Active": true,
           "id": 4696455276472288596,
+          "m_fBigImgObj": 4557166556873748072,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 12964615813891451477,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 2996054049449114401,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -787,8 +796,11 @@
         {
           "Active": true,
           "id": 15949140636188915712,
+          "m_fBigImgObj": 4557166556873748072,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 12964615813891451477,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 2996054049449114401,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1041,8 +1053,11 @@
         {
           "Active": true,
           "id": 10050178375695719958,
+          "m_fBigImgObj": 17047650167834757318,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 9773185401533237681,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 11682503248232769461,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1119,8 +1134,11 @@
         {
           "Active": true,
           "id": 3960452596875304128,
+          "m_fBigImgObj": 17047650167834757318,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 9773185401533237681,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 11682503248232769461,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1197,8 +1215,11 @@
         {
           "Active": true,
           "id": 16798492839494961388,
+          "m_fBigImgObj": 17047650167834757318,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 9773185401533237681,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 11682503248232769461,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1503,6 +1524,7 @@
           "Active": true,
           "id": 10718949589605998082,
           "m_exitButton": 6956302447113660091,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2219,6 +2241,7 @@
           "Active": true,
           "id": 2791222319206022273,
           "m_exitButton": 1026861482826012787,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3033,6 +3056,7 @@
           "Active": true,
           "id": 6095138767685905501,
           "m_exitButton": 1866155636545053865,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3599,6 +3623,7 @@
           "Active": true,
           "id": 17743781830218723958,
           "m_exitButton": 4387214561503760932,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4009,6 +4034,7 @@
           "Active": true,
           "id": 17281548730867793746,
           "m_exitButton": 15017055363453247603,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4497,6 +4523,7 @@
           "Active": true,
           "id": 6293090122218311252,
           "m_exitButton": 9007863559771709075,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4985,6 +5012,7 @@
           "Active": true,
           "id": 1047760766044524883,
           "m_exitButton": 3617803391492812738,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5427,6 +5455,7 @@
           "Active": true,
           "id": 12253110155207299810,
           "m_exitButton": 10194695841313726507,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5627,6 +5656,7 @@
           "Active": true,
           "id": 3036516340741771949,
           "m_exitButton": 12281510067928490994,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5991,6 +6021,7 @@
           "Active": true,
           "id": 16779490005113422998,
           "m_exitButton": 16509577149822491392,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6535,6 +6566,7 @@
           "Active": true,
           "id": 12362843549925920395,
           "m_exitButton": 5736328220481272240,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -9260,12 +9292,13 @@
           "m_blockInputObj2": 0,
           "m_blockInputObj3": 0,
           "m_blockInputObj4": 0,
+          "m_chesherGuideWindow": 8550812078906235519,
           "m_loseWindow": 6814653329085445114,
           "m_rayObj": 4771222732717351773,
           "m_settingWindow": 10500202484059138583,
           "m_sfxSlider": 539819835045743063,
           "m_stageBattleGrid": 17217331222344769167,
-          "m_stageDialogueText": 0,
+          "m_stageDialogueText": 12433785278535231609,
           "m_stageLevelText": 0,
           "m_stageTilemap0": 15103945832781831451,
           "m_stageTilemap1": 6189260170659567125,
@@ -9303,6 +9336,426 @@
         "m_scale": {
           "x": 1.0,
           "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 16598115249766153825,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 4604030031401566081,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 4557166556873748072,
+      "name": "KnightBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5693622551687821049,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 2570665692395957537,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 457486365481855197,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5553067406980689380,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 2996054049449114401,
+      "name": "BishopBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 18267183929315867705,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 17178666691844836766,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 16373488759583587515,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 18158959176896174425,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 12964615813891451477,
+      "name": "RookBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 9734611168053884241,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 3823845874929765251,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 5353554317328566444,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 15254548284037243371,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 11682503248232769461,
+      "name": "BishopBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 17789626747975025783,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 18354813181961587212,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 1545987372916766322,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 2592496486846826743,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 9773185401533237681,
+      "name": "RookBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1243975792058677851,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2427350248234303044,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 15235272543932159330,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 11123396540851510778,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 10396496680590765534,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 17047650167834757318,
+      "name": "KnightBigImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1135289971189881587,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 7121200460097252581,
+        "m_position": {
+          "x": -0.15000000596046448,
+          "y": -0.10000000149011612,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.2999999523162842,
+          "y": 1.2999999523162842,
           "z": 1.0
         }
       }
