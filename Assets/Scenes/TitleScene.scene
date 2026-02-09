@@ -505,7 +505,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [],
       "id": 3052883421313780120,
       "name": "Title_Buttons",
@@ -1324,6 +1324,7 @@
           "Active": true,
           "id": 5384927541598102600,
           "m_exitButton": 13806564913038444330,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -1553,6 +1554,7 @@
           "Active": true,
           "id": 13668076463074258652,
           "m_exitButton": 1886806402145706395,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -1591,6 +1593,10 @@
         {
           "Active": true,
           "id": 16923357626089008734,
+          "m_bgmSlider": 0,
+          "m_life": 0,
+          "m_money": 0,
+          "m_sfxSlider": 0,
           "typeName": "GameManager"
         }
       ],
