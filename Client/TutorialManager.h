@@ -23,6 +23,8 @@ public:
         Intro_WorldExplanation,         // "이곳은 규칙이 지배하는..."
         Setup_CombatUnit,               // 유닛 배치 및 초기화
         Vignette_FadeIn,                // 비네트 효과 시작 (화면 어두워짐)
+        Cat_ShowEyeClosed,              // 고양이 눈 감은 이미지
+        Cat_ShowEyeOpen,                // 고양이 눈 뜬 이미지
         Vignette_FadeOut_CatAppear,     // 비네트 해제 및 고양이 등장 ("너만의 규칙을...")
         Alice_AskRule,                  // "규칙을 어떻게 정해야 하지?"
         Cat_OfferHelp,                  // "내가 한번 도와줘 볼까?"
@@ -108,6 +110,7 @@ private:
 
     RayCastHitEvent* m_rayCastHitEvent = nullptr;
 
-    
+    GameObject* m_catEyeClosedGO = nullptr;
+    GameObject* m_catEyeOpenGO = nullptr;
 
 };

@@ -59,8 +59,8 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 1076.296630859375,
-          "y": 175.26702880859375,
+          "x": 4.296687602996826,
+          "y": 5.267024517059326,
           "z": 1.6724035739898682
         },
         "m_rotation": {
@@ -788,6 +788,8 @@
           "m_BattleStart": 4031496734142982886,
           "m_RRSokayButton": 6730619539311435417,
           "m_aliceGameObject": 12546341400955247519,
+          "m_catEyeClosedGO": 8368691294756821427,
+          "m_catEyeOpenGO": 12737154906237652234,
           "m_catText2": 15520398101814369256,
           "m_catUI": 14845203195939369950,
           "m_catUI2": 17904279207892403596,
@@ -8080,7 +8082,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5333456821614982880,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -8323,7 +8325,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 8262537579753068184,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -8566,7 +8568,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 12101183281258507403,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -9494,6 +9496,98 @@
         "m_scale": {
           "x": 1.2000000476837158,
           "y": 0.4000000059604645,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 9023033010280112144,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 16221279067648743593,
+          "typeName": "Image"
+        }
+      ],
+      "id": 8368691294756821427,
+      "name": "CatEyeClosed",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12700305447393414816,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1920.0,
+          "y": 1200.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 8761957732916876993,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 6058224286738989298,
+          "typeName": "Image"
+        }
+      ],
+      "id": 12737154906237652234,
+      "name": "CatEyeOpen",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14834127080866133097,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16960684287074828472,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1920.0,
+          "y": 1200.0,
           "z": 1.0
         }
       }

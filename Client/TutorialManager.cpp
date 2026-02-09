@@ -40,6 +40,8 @@ DTPROPERTY(TutorialManager, m_tilemapGenerator)
 DTPROPERTY(TutorialManager, m_RRSokayButton)
 DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemyPrefab)
 DTPROPERTY(TutorialManager, m_rayCastHitEvent)
+DTPROPERTY(TutorialManager, m_catEyeClosedGO)
+DTPROPERTY(TutorialManager, m_catEyeOpenGO)
 ENDPROPERTY()
 
 
@@ -50,7 +52,6 @@ void TutorialManager::Start()
 
 void TutorialManager::Update(float deltaTime)
 {
-
     //if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
     //{
     //    if (GameManager::Instance() != nullptr)
@@ -63,8 +64,6 @@ void TutorialManager::Update(float deltaTime)
     //    }
     //}
 
-
-
     if (InputManager::Instance().GetKeyDown(KeyCode::Space) || InputManager::Instance().GetKeyDown(KeyCode::Enter))
     {
         if (m_CurrentStep == TutorialStep::Victory) {
@@ -74,10 +73,6 @@ void TutorialManager::Update(float deltaTime)
             NextStep();
         }
     }
-    
-
-
-
 
     if (m_aliceGameObject) {
         AllyUnit* aliceAllyUnit = m_aliceGameObject->GetComponent<AllyUnit>();
@@ -90,6 +85,28 @@ void TutorialManager::Update(float deltaTime)
             }
         }
     }
+
+    if (m_CurrentStep == TutorialStep::Cat_ShowEyeClosed)
+    {
+        m_vignetteDelayTimer += deltaTime;
+        if (m_vignetteDelayTimer >= 1.5f)
+        {
+            m_canProceedToNextStep = true;
+            NextStep(); 
+        }
+    }
+
+    if (m_CurrentStep == TutorialStep::Cat_ShowEyeOpen)
+    {
+        m_vignetteDelayTimer += deltaTime;
+
+        if (m_vignetteDelayTimer >= 1.5f)
+        {
+            m_canProceedToNextStep = true;
+            NextStep(); 
+        }
+    }
+
 
     if (m_CurrentStep == TutorialStep::Vignette_FadeIn && m_isVignetteSequence)
     {
@@ -134,7 +151,6 @@ void TutorialManager::Update(float deltaTime)
 
                 if (m_currentSoftness > -30.f) {
                     if (m_chessSoldier) m_chessSoldier->SetActive(false);
-
                     if (m_aliceGameObject) m_aliceGameObject->SetActive(false);
                 }
 
@@ -145,6 +161,8 @@ void TutorialManager::Update(float deltaTime)
 
                     m_isVignetteSequence = false;
                     m_canProceedToNextStep = true;
+
+                    if (m_catEyeOpenGO) m_catEyeOpenGO->SetActive(false);
 
                     if (m_firstNextButton) m_firstNextButton->SetActive(true);
                     if (rightChat) rightChat->SetActive(true);
@@ -445,6 +463,25 @@ void TutorialManager::NextStep(bool force)
     }
     break;
 
+    case TutorialStep::Cat_ShowEyeClosed:
+    {
+        m_canProceedToNextStep = false;
+        m_vignetteDelayTimer = 0.0f;
+
+        if (m_catEyeClosedGO) m_catEyeClosedGO->SetActive(true);
+    }
+    break;
+
+    case TutorialStep::Cat_ShowEyeOpen:
+    {
+        m_canProceedToNextStep = false;
+        m_vignetteDelayTimer = 0.0f; 
+
+        if (m_catEyeClosedGO) m_catEyeClosedGO->SetActive(false);
+        if (m_catEyeOpenGO) m_catEyeOpenGO->SetActive(true);
+    }
+    break;
+
     case TutorialStep::Vignette_FadeOut_CatAppear: // 4
     {
         if (m_combatController) m_combatController->SetAllyUnit0(nullptr);
@@ -588,7 +625,6 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
         }
         m_tutorialAdditionalEnemy = m_tutorialAdditionalEnemyPrefab->Instantiate();
-
 
         m_tutorialAdditionalEnemy->GetTransform()->SetPosition({ 0 , 1 ,12 });
         m_tutorialAdditionalEnemy->GetTransform()->SetRotationEuler({ 0, -90, 0 });
