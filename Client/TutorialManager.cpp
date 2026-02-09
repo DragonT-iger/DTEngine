@@ -14,6 +14,7 @@
 #include "RayCastHitEvent.h"
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
+#include "ClientSceneManager.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -50,25 +51,28 @@ void TutorialManager::Start()
 void TutorialManager::Update(float deltaTime)
 {
 
-    if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
-    {
-        // GameManager가 존재하는지 먼저 확인
-        if (GameManager::Instance() != nullptr)
-        {
-            GameManager::Instance()->SetMoney(GameManager::Instance()->GetMoney() + 1);
-        }
-        else
-        {
-            // 디버깅용 로그: 씬에 GameManager가 없음을 알림
-            std::cout << "Error: GameManager instance is null!" << std::endl;
-        }
-    }
+    //if (InputManager::Instance().GetKeyDown(KeyCode::Num0))
+    //{
+    //    if (GameManager::Instance() != nullptr)
+    //    {
+    //        GameManager::Instance()->SetMoney(GameManager::Instance()->GetMoney() + 1);
+    //    }
+    //    else
+    //    {
+    //        std::cout << "Error: GameManager instance is null!" << std::endl;
+    //    }
+    //}
 
 
 
     if (InputManager::Instance().GetKeyDown(KeyCode::Space) || InputManager::Instance().GetKeyDown(KeyCode::Enter))
     {
-        NextStep();
+        if (m_CurrentStep == TutorialStep::Victory) {
+            ClientSceneManager::Instance().LoadScene("MainGameScene");
+        }
+        else {
+            NextStep();
+        }
     }
     
 

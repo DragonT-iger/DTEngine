@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TilemapData.h"
 #include "JsonIO.h"
+#include "GameObject.h"
 #include <algorithm>
 
 void TilemapData::SetDimensions(int w, int h)

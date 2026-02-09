@@ -248,6 +248,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteEffect.h" />
+    <ClInclude Include="StageInitializer.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Text3D.h" />
     <ClInclude Include="Texture.h" />
@@ -342,6 +343,7 @@ xcopy /y /d /i "$(SolutionDir)FMode\studio\lib\x64\fmodstudio*.dll" "$(TargetDir
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpriteEffect.cpp" />
+    <ClCompile Include="StageInitializer.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Text3D.cpp" />
     <ClCompile Include="Texture.cpp" />

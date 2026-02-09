@@ -2,6 +2,7 @@
 #include "UIButton.h"
 #include "GameObject.h"
 #include "GameManager.h"
+#include "ClientSceneManager.h"
 
 BEGINPROPERTY(ClickNextStageEvent)
 DTPROPERTY(ClickNextStageEvent, m_button)
@@ -18,6 +19,11 @@ void ClickNextStageEvent::Start()
 				{
 						m_window->SetActive(false);
 
-						GameManager::Instance()->LoadNextStageFromCurrent();
+
+
+						GameManager::Instance()->NextStage();
+						ClientSceneManager::Instance().LoadScene("MainGameScene");
+						// 이건 GameManager의 curStage 값을 올리고 그냥 그 씬을 재로드 해야겠지
+						//GameManager::Instance()->LoadNextStageFromCurrent();
 				});
 }
