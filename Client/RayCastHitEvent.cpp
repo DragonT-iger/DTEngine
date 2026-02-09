@@ -379,7 +379,7 @@ void RayCastHitEvent::RaycastCheck()
 							return;
 						}
 
-						if (hit->GetName() == "Glow_W_Height_01_Red_Test" || hit->GetName() == "Glow_W_Height_01_White_Test")
+						if (hit->GetName() == "Glow_R_Height_01_White" || hit->GetName() == "Glow_R_Height_01_Red")
 						{
 							if (isLeft)
 							{

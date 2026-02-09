@@ -1070,20 +1070,18 @@ Vector2 CombatController::DecideAttackPos(Unit* me)
         if (mid != GRIDPOS_INVALID)
         {
             Unit* newTarget = FindBlockingUnitByPos(mid, me);
-            if (!newTarget)
-            {
-                return target->GetMovePos();
-            }
-            else
+            if (newTarget)
             {
                 me->SetAttackTarget(newTarget);
                 return newTarget->GetMovePos();
             }
         }
+        return target->GetMovePos();
     }
     else
     {
         me->SetAction(TurnAction::Miss); // 빗나감 설정. 
+        std::cout << "빗나감\n";
         return target->GetPos();
     }
 }
