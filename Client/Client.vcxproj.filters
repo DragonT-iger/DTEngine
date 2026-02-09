@@ -177,6 +177,9 @@
     <ClCompile Include="ClickNextStageEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="BreakableWall.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="ClickRetryStageEvent.h">
       <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakableWall.h">
+      <Filter>Unit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

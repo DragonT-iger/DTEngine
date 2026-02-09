@@ -2,6 +2,7 @@
 #include "TilemapGenerator.h"
 #include "TilemapData.h"     
 #include "GameObject.h"
+#include "BreakableWall.h"
 
 #include <queue>
 
@@ -13,10 +14,19 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
 {
     m_tilemapGenerator = tg;
 
+    UpdateInfo();
+}
 
+void BattleGrid::Start()
+{
+    UpdateInfo();
+}
+
+void BattleGrid::UpdateInfo()
+{
     if (m_tilemapGenerator == nullptr) return;
 
-    TilemapData* td = tg->GetMapData();
+    TilemapData* td = m_tilemapGenerator->GetMapData();
 
 
     int width = td->GetWidth();
@@ -38,27 +48,6 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
             else { SetSolidWall(Vector2{ (float)(w - 1), (float)(h - 1) }); }
         }
     }
-
-    /*for (int y = 0; y < m_height; ++y)
-    {
-        for (int x = 0; x < m_width; ++x)
-        {
-            const BattleStaticTile& t = m_staticGrid[y * m_width + x];
-
-            if (t.tile)
-            {
-                if (t.solidWall)        std::cout << "벽 ";
-                else if (t.breakableWall) std::cout << "부 ";
-                else if (t.defenseTile) std::cout << "방 ";
-                else                    std::cout << "타 ";
-            }
-            else
-            {
-                std::cout << "비 ";
-            }
-        }
-        std::cout << '\n';
-    }*/
 }
 
 void BattleGrid::Initialize(int width, int height)
@@ -123,6 +112,14 @@ void BattleGrid::WallBreak(const Vector2& p)
 {
     if (!InBounds(p)) return;
     GetStaticTile(p).breakableWall = false;
+
+    GameObject* go =  m_tilemapGenerator->GetSpawnedTileAtGrid(p);
+    if (!go) return;
+
+    BreakableWall* bw = go->GetComponent<BreakableWall>();
+    if (!bw) return;
+
+    bw->StartWallBreakAnim();
 }
 
 bool BattleGrid::IsBreakableWall(const Vector2& p) const

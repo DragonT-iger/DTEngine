@@ -79,8 +79,9 @@ public:
     const RedQueenSpawn& GetRedQueen() const { return m_redQueen; }
     RedQueenSpawn& GetRedQueen() { return m_redQueen; }
 
-private:
     int FindDefaultGrid(int x, int y) const;
+
+private:
     void MakeBorder(); 
 
     bool IsCorner(int x, int y) const;

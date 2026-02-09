@@ -147,6 +147,9 @@ public:
     void SetAction(TurnAction action) { m_action = action; }
     bool IsActionDone() const { return m_actionDone; }
     void SetActionDone(bool done) { m_actionDone = done; }
+    bool IsActionResultApplied() const { return m_actionResultApplied; }
+    void SetActionResultApplied(bool applied) { m_actionResultApplied = applied; }
+
 
     void StartAction();
     void UpdateAction(float dTime);
@@ -206,7 +209,7 @@ protected:
     float m_hp = 100;
     bool m_isAlive = true;
 
-    int m_perceptionRange = 3; // 인식범위
+    int m_perceptionRange = 2; // 인식범위
 
     Unit* m_moveTarget = nullptr;
     Vector2 m_moveTargetPos = GRIDPOS_INVALID;
@@ -217,6 +220,7 @@ protected:
 
     TurnAction m_action = TurnAction::Wait;
     bool m_actionDone = false;
+    bool m_actionResultApplied = false;
 
     Dir8 m_dir = Dir8::Down;
 

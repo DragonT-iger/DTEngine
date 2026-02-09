@@ -362,6 +362,8 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (!ally->IsActionDone()) return false;
         if (ally->GetAction() == TurnAction::Wait) continue;
         if (ally->IsAnimStart() && !ally->IsAnimDone()) return false;
+
+        ApplyActionResult(ally);
     }
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -371,6 +373,8 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (!enemy->IsActionDone()) return false;
         if (enemy->GetAction() == TurnAction::Wait) continue;
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
+
+        ApplyActionResult(enemy);
     }
 
     // 함정타일 밟았을 때, 데미지 처리
@@ -417,7 +421,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            m_aliceUnit->StartAliceDieAnim();
+            //m_aliceUnit->StartAliceDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -456,7 +460,7 @@ bool CombatController::EndPhase()
             m_redQueenUnit->SetAction(TurnAction::Die);
             //m_redQueenUnit->SetActionDone(false);
             //m_redQueenUnit->StartAction();
-            m_redQueenUnit->StartQueenDieAnim();
+            //m_redQueenUnit->StartQueenDieAnim();
             m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
         }
 
@@ -534,6 +538,7 @@ bool CombatController::EndPhase()
         if (m_stageResult == StageResult::Win)
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
+            if (m_redQueenUnit) m_redQueenUnit->StartQueenDieAnim();
             
             for (AllyUnit* ally : m_allyUnits)
             {
@@ -551,6 +556,8 @@ bool CombatController::EndPhase()
         else if (m_stageResult == StageResult::Lose)
         {
             std::cout << "Lose!!!!!!!!!!!!" << std::endl;
+            if (m_aliceUnit) m_aliceUnit->StartAliceDieAnim();
+
             // 패배 처리
             for (AllyUnit* ally : m_allyUnits)
             {
@@ -1090,11 +1097,11 @@ void CombatController::ResolveTurnAction(Unit* me)
 
     case TurnAction::Attack: // 공격 처리
     {
-        Unit* target = me->GetAttackTarget();
-        float damage = CalculateDamage(me, target);
+        //Unit* target = me->GetAttackTarget();
+        //float damage = CalculateDamage(me, target);
 
         me->SetDir(me->GetAttackPos());
-        target->TakeDamage(damage);
+        //target->TakeDamage(damage);
 
         //me->StartAttackAnim();
     }  break;
@@ -1109,13 +1116,43 @@ void CombatController::ResolveTurnAction(Unit* me)
     case TurnAction::BreakWall: // 벽 파괴 처리
     {
         me->SetDir(me->GetAttackPos());
-        battleGrid->WallBreak(me->GetAttackPos());
+        //battleGrid->WallBreak(me->GetAttackPos());
 
         //me->StartAttackAnim();
     } break;
 
     default:
         return;
+    }
+}
+
+void CombatController::ApplyActionResult(Unit* me)
+{
+    if (!me || !me->IsAlive() || me->IsActionResultApplied()) return;
+
+    switch (me->GetAction())
+    {
+    case TurnAction::Attack:
+    {
+        Unit* target = me->GetAttackTarget();
+
+        if (target && target->IsAlive())
+        {
+            float damage = CalculateDamage(me, target);
+            target->TakeDamage(damage);
+        }
+        me->SetActionResultApplied(true);
+    } break;
+
+    case TurnAction::BreakWall:
+    {
+        battleGrid->WallBreak(me->GetAttackPos());
+        me->SetActionResultApplied(true);
+    } break;
+
+    default:
+        me->SetActionResultApplied(true);
+        break;
     }
 }
 

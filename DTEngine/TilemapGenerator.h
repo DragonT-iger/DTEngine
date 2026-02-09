@@ -35,6 +35,9 @@ public:
     GameObject* GetSpawnedAlice() const { return m_spawnedAlice; }
     GameObject* GetSpawnedRedQueen() const { return m_spawnedRedQueen; }
 
+    GameObject* GetSpawnedTileAtGrid(const Vector2& gridPos) const;
+    void ReplaceTileAtGrid(const Vector2& gridPos);
+
 	static constexpr int PALETTE_SIZE = 11;
     static constexpr int NUM_ENEMIES = 3;
 
