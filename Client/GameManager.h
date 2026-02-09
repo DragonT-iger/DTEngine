@@ -55,6 +55,8 @@ public:
 	int GetTimeScale() const { return curTimeScale; }
 	int GetPrevTimeScale() const { return prevTimeScale; }
 
+	int GetStageLevel() const { return curStageLevel; }
+
 
 	int GetHealSkillcount() const { return healSkillCount; }
 	void SetHealSkillCount(int count) { healSkillCount = count; }

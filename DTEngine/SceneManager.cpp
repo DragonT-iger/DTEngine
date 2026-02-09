@@ -30,34 +30,47 @@ void SceneManager::RegisterScene(const std::string& filePath)
 void SceneManager::LoadScene(const std::string& name)
 {
     m_nextName = name;
-	std::cout << "[SceneManager] Scene change requested: " << name << std::endl;
+    std::cout << "[SceneManager] Scene change requested: " << name << std::endl;
 }
 
 bool SceneManager::ProcessSceneChange()
 {
     if (m_nextName.empty()) return false;
 
-
     GetActiveScene();
-
     if (m_active)
     {
         m_active->Exit();
+
+        m_active->Clear();
+        m_active->SetBGMPlayed(false);
     }
-    // 현재 씬 정리 필요.
 
     auto it = m_scenes.find(m_nextName);
-    assert(it != m_scenes.end());
+    if (it == m_scenes.end())
+    {
+        std::cerr << "[SceneManager] Error: Scene not found: " << m_nextName << std::endl;
+        m_nextName.clear();
+        return false;
+    }
+
     m_active = it->second.get();
 
-    //if (m_active)
-    //{
-    //    m_active->Awake();
-    //    m_active->Start();
+    std::string scenePath = "Scenes/" + m_nextName + ".scene";
+    std::string fullPath = ResourceManager::Instance().ResolveFullPath(scenePath);
 
-    //    //m_active->Enter(); addcomponent 할때 OnEnable 호출 됨
-    //    
-    //}
+    if (!m_active->LoadFile(fullPath))
+    {
+        std::cerr << "[SceneManager] Failed to reload scene file: " << fullPath << std::endl;
+    }
+
+    std::cout << "[SceneManager] Scene Loaded: " << m_nextName << std::endl;
+
+    if (m_active)
+    {
+        m_active->Awake();
+        m_active->Start();
+    }
 
     m_nextName.clear();
 

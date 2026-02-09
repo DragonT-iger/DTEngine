@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "TutorialManager.h"
 #include "GameManager.h"
+#include "ClientSceneManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -517,8 +518,11 @@ bool CombatController::EndPhase()
         Scene* scene = SceneManager::Instance().GetActiveScene();
         if (scene)
         {
-            if (scene->GetName() == "TutorialScene") {
+            if (scene->GetName() == "TutorialScene" || scene->GetName() == "EndingScene") {
                 GameObject* go = GameObject::Find("TutorialManager");
+
+                if (!go) return false;
+
                 TutorialManager* tutorialMgr = go->GetComponent<TutorialManager>();
                 if (tutorialMgr)
                 {
@@ -527,6 +531,8 @@ bool CombatController::EndPhase()
                         tutorialMgr->NextStep(true);
                     }
                 }
+
+                return false;
             }
         }
 
@@ -546,7 +552,10 @@ bool CombatController::EndPhase()
             }
 
             // 승리 처리
-            //GameManager::Instance()->ShowVictoryWindow();
+            GameManager::Instance()->NextStage();
+            ClientSceneManager::Instance().LoadScene("MainGameScene");
+
+            // winUI 안띄우고 임시로 처리중 예제코드
         }
         else if (m_stageResult == StageResult::Lose)
         {
@@ -563,6 +572,8 @@ bool CombatController::EndPhase()
             }
 
             //GameManager::Instance()->ShowLoseWindow();
+            
+            ClientSceneManager::Instance().LoadScene("MainGameScene");
         }
 
     }

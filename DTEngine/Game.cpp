@@ -45,6 +45,7 @@
 #include "BGMUISlider.h"
 #include "Dissolved.h"
 #include "../Client/ClientSceneManager.h"
+#include "StageInitializer.h"
 
 
 
@@ -135,7 +136,7 @@ bool Game::Initialize()
 
 
 	SceneManager::Instance().RegisterScene("Scenes/EndingScene.scene");
-	SceneManager::Instance().LoadScene("EndingScene");
+	//SceneManager::Instance().LoadScene("EndingScene");
 
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
@@ -152,9 +153,13 @@ bool Game::Initialize()
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
+	SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
 
 	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
-	 //ClientSceneManager::Instance().LoadScene("TitleScene");
+	 ClientSceneManager::Instance().LoadScene("TitleScene");
+
+	 //ClientSceneManager::Instance().LoadScene("MainGameScene");
+	 
 
 
 

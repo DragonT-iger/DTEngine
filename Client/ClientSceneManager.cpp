@@ -30,8 +30,10 @@ void ClientSceneManager::LoadScene(const std::string& sceneName)
     {
         InitTitleScene();
     }
+    
+    std::string path = "Scenes\\" + sceneName;
 
-
+    //SceneManager::Instance().RegisterScene(path);
     SceneManager::Instance().LoadScene(sceneName);
 }
 

@@ -130,36 +130,6 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
     }
 }
 
-
-void TilemapGenerator::RebuildFromCurrentData()
-{
-    Scene* activeScene = SceneManager::Instance().GetActiveScene();
-
-    // 기존 타일 오브젝트 제거
-    for (GameObject* tile : m_spawnedTiles)
-    {
-        if (tile && activeScene)
-        {
-            activeScene->Destroy(tile);
-        }
-    }
-    m_spawnedTiles.clear();
-
-    // 기존 적 오브젝트 제거
-    for (GameObject* enemy : m_spawnedEnemys)
-    {
-        if (enemy && activeScene)
-        {
-            activeScene->Destroy(enemy);
-        }
-    }
-    m_spawnedEnemys.clear();
-
-    // 새 데이터 기준 재생성
-    BuildMap();
-    SpawnUnits();
-}
-
 void TilemapGenerator::SpawnUnits()
 {
     m_spawnedEnemys.clear();
