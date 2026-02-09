@@ -96,7 +96,7 @@ void CombatController::Setup()
     else {
         std::vector<GameObject*> enemyObjects = battleGrid->GetEnemyObjects();
 
-       for (int i = 0; i < 3; ++i) 
+       for (int i = 0; i < enemyObjects.size(); ++i)
        {
            if (enemyObjects[i])
            {
