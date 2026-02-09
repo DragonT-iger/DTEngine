@@ -410,6 +410,9 @@
     <ClInclude Include="ToneMapping.h">
       <Filter>PostProcessing\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="StageInitializer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -665,6 +668,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ToneMapping.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StageInitializer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
