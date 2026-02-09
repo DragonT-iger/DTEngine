@@ -98,12 +98,12 @@ void TutorialManager::Update(float deltaTime)
                 Camera* mainCam = activeScene->GetMainCamera();
                 if (mainCam)
                 {
-                    m_currentSoftness -= deltaTime * 5.0f;
+                    m_currentSoftness -= deltaTime * 15.0f;
                     mainCam->SetVignetteSoftness(m_currentSoftness);
 
-                    if (m_currentSoftness <= -10.0f)
+                    if (m_currentSoftness <= -40.0f)
                     {
-                        m_currentSoftness = -10.0f;
+                        m_currentSoftness = -40.0f;
                         mainCam->SetVignetteSoftness(m_currentSoftness);
 
                         m_isVignetteSequence = false;
@@ -123,7 +123,7 @@ void TutorialManager::Update(float deltaTime)
             Camera* mainCam = activeScene->GetMainCamera();
             if (mainCam)
             {
-                m_currentSoftness += deltaTime * 5.0f;
+                m_currentSoftness += deltaTime * 15.0f;
                 mainCam->SetVignetteSoftness(m_currentSoftness);
 
 

@@ -165,8 +165,17 @@
     <ClCompile Include="ClickWarningWindowExitButtonEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="EndSceneManager.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
     <ClCompile Include="ESCEvent.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickRetryStageEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickNextStageEvent.cpp">
+      <Filter>Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,8 +314,17 @@
     <ClInclude Include="ClickWarningWindowExitButtonEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
+    <ClInclude Include="EndSceneManager.h">
+      <Filter>Tutorial</Filter>
+    </ClInclude>
     <ClInclude Include="ESCEvent.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickNextStageEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickRetryStageEvent.h">
+      <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

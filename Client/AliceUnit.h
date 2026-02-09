@@ -10,6 +10,8 @@ public:
     AliceUnit();
     ~AliceUnit() = default;
 
+    void StartAliceDieAnim();
+
 private:
 
 };

@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "TutorialManager.h"
+#include "GameManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -56,6 +57,12 @@ void CombatController::Setup()
     m_stageResult = StageResult::InProgress;
     m_phaseEntered = false;
 
+    // 전투 시작 시 결과 ui 초기화.
+    if (GameManager::Instance())
+    {
+        GameManager::Instance()->ResetBattleResultUI();
+    }
+
     m_allyUnits.clear();
     m_enemyUnits.clear();
     m_battleUnits.clear();
@@ -67,7 +74,7 @@ void CombatController::Setup()
     if (allyUnit2 && std::find(m_allyUnits.begin(), m_allyUnits.end(), allyUnit2) == m_allyUnits.end())
         m_allyUnits.push_back(allyUnit2);
 
-    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene") {
+    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene" || SceneManager::Instance().GetActiveScene()->GetName() == "EndingScene") {
 
         if (enemyUnit0 && std::find(m_enemyUnits.begin(), m_enemyUnits.end(), enemyUnit0) == m_enemyUnits.end())
             m_enemyUnits.push_back(enemyUnit0);
@@ -112,14 +119,37 @@ void CombatController::Setup()
     if (aliceObject)
     {
         AliceUnit* alice = aliceObject->GetComponent<AliceUnit>();
-        if (alice) m_aliceUnit = alice;
+        if (alice) 
+        { 
+            m_aliceUnit = alice; 
+
+            Vector3 pos = aliceObject->GetTransform()->GetPosition();
+            Vector2 p0;
+            p0.x = std::round(pos.x / 2.0f);
+            p0.y = std::round(pos.z / 2.0f);
+
+            m_aliceUnit->SetPos(p0);
+        }
+
     }
 
     GameObject* queenObject = battleGrid->GetRedQueenObjects();
     if (queenObject)
     {
         RedQueenUnit* queen = queenObject->GetComponent<RedQueenUnit>();
-        if (queen) m_redQueenUnit = queen;
+        if (queen) 
+        {
+            std::cout << "??????????????????//\n";
+            
+            m_redQueenUnit = queen;
+
+            Vector3 pos = queenObject->GetTransform()->GetPosition();
+            Vector2 p0;
+            p0.x = std::round(pos.x / 2.0f);
+            p0.y = std::round(pos.z / 2.0f);
+
+            m_redQueenUnit->SetPos(p0);
+        }
     }
 
 
@@ -387,7 +417,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            m_aliceUnit->StartDieAnim();
+            m_aliceUnit->StartAliceDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -426,7 +456,7 @@ bool CombatController::EndPhase()
             m_redQueenUnit->SetAction(TurnAction::Die);
             //m_redQueenUnit->SetActionDone(false);
             //m_redQueenUnit->StartAction();
-            m_redQueenUnit->StartDieAnim();
+            m_redQueenUnit->StartQueenDieAnim();
             m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
         }
 
@@ -504,7 +534,7 @@ bool CombatController::EndPhase()
         if (m_stageResult == StageResult::Win)
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
-            // 승리 처리
+            
             for (AllyUnit* ally : m_allyUnits)
             {
                 if (ally && ally->IsAlive()) ally->StartIdleAnim();
@@ -514,6 +544,9 @@ bool CombatController::EndPhase()
             {
                 if (enemy && enemy->IsAlive()) enemy->StartDieAnim();
             }
+
+            // 승리 처리
+            GameManager::Instance()->ShowVictoryWindow();
         }
         else if (m_stageResult == StageResult::Lose)
         {
@@ -528,7 +561,10 @@ bool CombatController::EndPhase()
             {
                 if (enemy && enemy->IsAlive()) enemy->StartIdleAnim();
             }
+
+            GameManager::Instance()->ShowLoseWindow();
         }
+
     }
 
     m_phaseEntered = false;
@@ -728,19 +764,20 @@ Unit* CombatController::FindNearestEnemy(const Vector2& from) const
     }
     return best;*/
 
-    EnemyUnit* best = nullptr;
+    Unit* best = nullptr;
     int bestCost = 999999;
     int bestCheb = 999999; // 동점 깨기용(선택)
 
+    // 일반 적들
     for (EnemyUnit* enemy : m_enemyUnits)
     {
         if (!enemy || !enemy->IsAlive()) continue;
 
-        int cost = DistOctileCost(enemy->GetPos(), from);
+        Vector2 p = enemy->GetPos();
 
-        // tie-break: 완전 동점이면 더 “기하학적으로” 가까운(체비쇼프) 쪽
-        int dx = std::abs((int)enemy->GetPos().x - (int)from.x);
-        int dy = std::abs((int)enemy->GetPos().y - (int)from.y);
+        int cost = DistOctileCost(p, from);
+        int dx = std::abs((int)p.x - (int)from.x);
+        int dy = std::abs((int)p.y - (int)from.y);
         int cheb = (std::max)(dx, dy);
 
         if (!best || cost < bestCost || (cost == bestCost && cheb < bestCheb))
@@ -750,6 +787,25 @@ Unit* CombatController::FindNearestEnemy(const Vector2& from) const
             bestCheb = cheb;
         }
     }
+
+    // 붉은 여왕
+    if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+    {
+        Vector2 p = m_redQueenUnit->GetPos();
+
+        int cost = DistOctileCost(p, from);
+        int dx = std::abs((int)p.x - (int)from.x);
+        int dy = std::abs((int)p.y - (int)from.y);
+        int cheb = (std::max)(dx, dy);
+
+        if (!best || cost < bestCost || (cost == bestCost && cheb < bestCheb))
+        {
+            best = m_redQueenUnit;
+            bestCost = cost;
+            bestCheb = cheb;
+        }
+    }
+
 
     return best;
 }
@@ -1164,25 +1220,26 @@ void CombatController::PrintFrame()
     if (enemyUnit0) printUnit("Enemy0", enemyUnit0);
     if (enemyUnit1) printUnit("Enemy1", enemyUnit1);
     if (enemyUnit2) printUnit("Enemy2", enemyUnit2);
+    if (m_redQueenUnit) printUnit("Queen", m_redQueenUnit);
 
-    auto dumpCell = [&](int x, int y)
-        {
-            Vector2 p{ (float)x, (float)y };
-            const auto& s = battleGrid->GetStaticTile(p);
-            const auto& d = battleGrid->GetDynamicTile(p);
+    //auto dumpCell = [&](int x, int y)
+    //    {
+    //        Vector2 p{ (float)x, (float)y };
+    //        const auto& s = battleGrid->GetStaticTile(p);
+    //        const auto& d = battleGrid->GetDynamicTile(p);
 
-            std::cout << "[Cell " << x << "," << y << "] "
-                << "tile=" << s.tile
-                << " solid=" << s.solidWall
-                << " break=" << s.breakableWall
-                << " def=" << s.defenseTile
-                << " trap=" << s.trapTile
-                << " unitPresent=" << d.unitPresent
-                << " reserved=" << d.reservedMove
-                << "\n";
-        };
+    //        std::cout << "[Cell " << x << "," << y << "] "
+    //            << "tile=" << s.tile
+    //            << " solid=" << s.solidWall
+    //            << " break=" << s.breakableWall
+    //            << " def=" << s.defenseTile
+    //            << " trap=" << s.trapTile
+    //            << " unitPresent=" << d.unitPresent
+    //            << " reserved=" << d.reservedMove
+    //            << "\n";
+    //    };
 
-    dumpCell(1, 6);
-    dumpCell(0, 5);
-    dumpCell(1, 5); // Ally2 현재칸
+    //dumpCell(1, 6);
+    //dumpCell(0, 5);
+    //dumpCell(1, 5); // Ally2 현재칸
 }

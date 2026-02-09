@@ -171,7 +171,7 @@
         }
       ],
       "id": 12792323375294926988,
-      "name": "Directional Light",
+      "name": "Directional Light_gs",
       "tag": "Untagged",
       "transform": {
         "id": 17987380289712910369,
@@ -205,6 +205,9 @@
         {
           "Active": true,
           "id": 7171391694734270448,
+          "m_enemy0": 508708062133751256,
+          "m_enemy1": 4258893392164971145,
+          "m_enemy2": 1983203916318101064,
           "m_mapData": 15103945832781831451,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
@@ -254,7 +257,7 @@
         {
           "Active": true,
           "id": 8138808444096392086,
-          "m_arrowPool": 0,
+          "m_arrowPool": 2265729955130946909,
           "m_leftPSWinodwBG": 13644169991980458124,
           "m_leftRSWinodwBG": 14800340861935470279,
           "m_rightPSWinodwBG": 14165272807283552,
@@ -343,11 +346,12 @@
           "allyUnit1": 0,
           "allyUnit2": 0,
           "battleGrid": 17217331222344769167,
-          "enemyUnit0": 570417400661800883,
+          "enemyUnit0": 0,
           "enemyUnit1": 0,
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
+          "m_redQueenUnit": 0,
           "typeName": "CombatController"
         }
       ],
@@ -398,38 +402,6 @@
       "tag": "Untagged",
       "transform": {
         "id": 1090369088132048465,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [],
-      "id": 6136182857642238672,
-      "name": "enemy",
-      "tag": "Untagged",
-      "transform": {
-        "id": 7391673662214864519,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
@@ -520,237 +492,6 @@
         "m_scale": {
           "x": 200.0,
           "y": 200.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 570417400661800883,
-          "m_isBoss": true,
-          "m_type": 0,
-          "path1": {
-            "x": 2.0,
-            "y": 1.0
-          },
-          "path2": {
-            "x": 0.0,
-            "y": 1.0
-          },
-          "path3": {
-            "x": 0.0,
-            "y": 0.0
-          },
-          "path4": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path5": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path6": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "path7": {
-            "x": -999.0,
-            "y": -999.0
-          },
-          "typeName": "EnemyUnit"
-        }
-      ],
-      "id": 3859076468797295072,
-      "name": "Chess_Spear_Test",
-      "tag": "Untagged",
-      "transform": {
-        "id": 6007003118662846288,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 7391673662214864519,
-        "m_position": {
-          "x": 4.0,
-          "y": 1.0,
-          "z": 16.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "0": 2931371597178195541,
-              "1": 885120150060770054,
-              "3": 13530188703377643776,
-              "4": 5791674905025866242
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 7310074725881531405,
-          "m_materialID": 10671092131083317277,
-          "m_meshIndex": 0,
-          "m_modelID": 15036042619192132349,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 5910824544078998904,
-          "m_skellID": 15036042619192132349,
-          "typeName": "Skeletal"
-        },
-        {
-          "Active": true,
-          "Animated_Time": 1.0,
-          "Loop": true,
-          "Play": true,
-          "id": 1205362726852986338,
-          "m_AniID": 1897428081162014869,
-          "typeName": "Animator"
-        }
-      ],
-      "id": 8750728248339346310,
-      "name": "Chess",
-      "tag": "Untagged",
-      "transform": {
-        "id": 8138232525440219409,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 6007003118662846288,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 0,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "0": 12219225787821283075,
-              "1": 15995925660948491865,
-              "3": 17567310345030162650
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 5098202088484987967,
-          "m_materialID": 10354447960854782024,
-          "m_meshIndex": 0,
-          "m_modelID": 16273426721281812034,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 12271847913748979920,
-          "m_modelID": 16273426721281812034,
-          "typeName": "Rigid"
-        },
-        {
-          "Active": true,
-          "Animated_Time": 1.0,
-          "Loop": true,
-          "Play": true,
-          "id": 6344695924710190261,
-          "m_AniID": 16775286386219350275,
-          "typeName": "Animator"
-        }
-      ],
-      "id": 4098735060481435015,
-      "name": "Spear",
-      "tag": "Untagged",
-      "transform": {
-        "id": 12146086727459393711,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 6007003118662846288,
-        "m_position": {
-          "x": -0.5019416809082031,
-          "y": 0.6400325298309326,
-          "z": -0.1998882293701172
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
           "z": 1.0
         }
       }
@@ -3199,206 +2940,6 @@
           "x": 100.0,
           "y": 100.0,
           "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 2,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "0": 2073913413768791125
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 7504682451214846171,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
-          "id": 8472706803506591917,
-          "m_fillObject": 10791217083116232753,
-          "m_lerpSpeed": 8.0,
-          "m_targetObject": 3859076468797295072,
-          "typeName": "HPBarFollowEvent"
-        }
-      ],
-      "id": 6134921577330785994,
-      "name": "HPBarEdge_Final",
-      "tag": "Untagged",
-      "transform": {
-        "id": 6388334563879331418,
-        "m_editorEulerAngles": {
-          "x": 43.0,
-          "y": 135.0,
-          "z": 0.0
-        },
-        "m_parent": 6007003118662846288,
-        "m_position": {
-          "x": 0.0,
-          "y": 2.4000000953674316,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 0.3560554087162018,
-          "x": 0.140253946185112,
-          "y": 0.8595936894416809,
-          "z": -0.3386029601097107
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 0.30000001192092896,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 2,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "0": 1435333987562861863
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 2146534887680807837,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 678987700705615473,
-      "name": "HPBarVoid",
-      "tag": "Untagged",
-      "transform": {
-        "id": 5403761661630331608,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 6388334563879331418,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": -0.009999999776482582
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 0.949999988079071,
-          "y": 0.699999988079071,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 2,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "0": 17073523278039357435
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
-          },
-          "id": 11471131779408590143,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        }
-      ],
-      "id": 10791217083116232753,
-      "name": "HPBarFill",
-      "tag": "Untagged",
-      "transform": {
-        "id": 10153703877577994701,
-        "m_editorEulerAngles": {
-          "x": -0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 5403761661630331608,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": -0.010999999940395355
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": -0.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 0.9999999403953552
         }
       }
     },
@@ -7315,44 +6856,6 @@
       "components": [
         {
           "Active": true,
-          "id": 1301428233140638214,
-          "typeName": "GameManager"
-        }
-      ],
-      "id": 6087103260338894252,
-      "name": "GameManager",
-      "tag": "Untagged",
-      "transform": {
-        "id": 6622374269564757514,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
           "id": 14390870963657472607,
           "m_color": {
             "w": 1.0,
@@ -7847,7 +7350,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [],
       "id": 1733587034267618026,
       "name": "VictoryWindow",
@@ -7879,7 +7382,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -7963,6 +7466,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 3079367535773692044,
+          "m_button": 15330965135586945902,
+          "m_window": 2726193224071851438,
+          "typeName": "ClickNextStageEvent"
         }
       ],
       "id": 3941090608264901492,
@@ -8210,7 +7720,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [],
       "id": 1742869671607418891,
       "name": "LoseWindow",
@@ -8242,7 +7752,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -8611,6 +8121,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 739255718038263801,
+          "m_button": 18133756808909027120,
+          "m_window": 6814653329085445114,
+          "typeName": "ClickRetryStageEvent"
         }
       ],
       "id": 6975457822898686740,
@@ -9644,6 +9161,148 @@
         "m_scale": {
           "x": 0.10000000149011612,
           "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 2265729955130946909,
+          "m_body": 295575776050391810,
+          "m_head": 2143463308152399154,
+          "m_start": 8026549072452664615,
+          "typeName": "ArrowObjectPool"
+        }
+      ],
+      "id": 15482741027419513389,
+      "name": "Arrow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16165240501361788912,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 5183303689350849534,
+          "m_pos": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "typeName": "RedQueenUnit"
+        }
+      ],
+      "id": 3463645136960540982,
+      "name": "RedQueen",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4945832136228460891,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 8565764339402807703,
+          "m_bgmSlider": 7127000447013137685,
+          "m_blockInputObj0": 9419903296967584286,
+          "m_blockInputObj1": 0,
+          "m_blockInputObj2": 0,
+          "m_blockInputObj3": 0,
+          "m_blockInputObj4": 0,
+          "m_loseWindow": 6814653329085445114,
+          "m_rayObj": 4771222732717351773,
+          "m_settingWindow": 10500202484059138583,
+          "m_sfxSlider": 539819835045743063,
+          "m_stageBattleGrid": 17217331222344769167,
+          "m_stageDialogueText": 0,
+          "m_stageLevelText": 0,
+          "m_stageTilemap0": 15103945832781831451,
+          "m_stageTilemap1": 6189260170659567125,
+          "m_stageTilemap2": 13964411375409846242,
+          "m_stageTilemap3": 15103945832781831451,
+          "m_stageTilemap4": 6189260170659567125,
+          "m_stageTilemapGenerator": 7171391694734270448,
+          "m_startButtonEvent": 5425226427455043202,
+          "m_victoryWindow": 2726193224071851438,
+          "typeName": "GameManager"
+        }
+      ],
+      "id": 9850476296532746580,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 8543604286128089330,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
           "z": 1.0
         }
       }

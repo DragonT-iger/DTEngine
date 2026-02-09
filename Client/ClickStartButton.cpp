@@ -35,6 +35,12 @@ void ClickStartButton::Start()
 		// 이미지 컴포넌트 가져오고.
 		m_startClickImg = _GetOwner()->GetComponent<Image>();
 
+		// 이미지 캐싱해두기. 재사용할려고.
+		if (m_startClickImg)
+		{
+				m_defaultStartTextureID = m_startClickImg->GetTextureID();
+		}
+
 		m_startButton->SetOnClick([this]()
 				{
 						// 창 켜져있는 경우 안받음.
@@ -91,4 +97,15 @@ void ClickStartButton::StartGame()
 		m_combatObj->GetComponent<CombatController>()->Setup();
 		m_rayObj->GetComponent<RayCastHitEvent>()->SetStartBattle(true);
 		isStart = true;
+}
+
+void ClickStartButton::ResetForStage()
+{
+		// 다음 스테이지/재도전 진입 시 Start 버튼 상태를 기본으로 복구.
+		isStart = false;
+
+		if (m_startClickImg && m_defaultStartTextureID != 0)
+		{
+				m_startClickImg->SetTextureID(m_defaultStartTextureID);
+		}
 }

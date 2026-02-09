@@ -14,7 +14,8 @@ public:
 		void Start() override;
 		void StartGame();
 		void SetIsStart(bool value) { isStart = value; }
-		
+		void ResetForStage();
+
 private:
 		UIButton* m_startButton = nullptr;
 		GameObject* m_combatObj = nullptr;
@@ -35,5 +36,7 @@ private:
 		int m_cost = 10;
 
 		bool isStart = false;
+
+		uint64_t m_defaultStartTextureID = 0;
 };
 
