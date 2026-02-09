@@ -611,8 +611,7 @@ bool CombatController::CanActuallyAttack(const Unit* me, const Unit* target) con
 
     int a = me->GetStats().attackRange;
 
-    if (!battleGrid->IsInRange(me->GetPos(), target->GetPos(), a))
-        return false;
+    if (!battleGrid->IsInRange(me->GetPos(), target->GetPos(), a)) return false;
 
     return battleGrid->HasLineOfSight(me->GetPos(), target->GetPos());
 }
@@ -994,24 +993,32 @@ static Vector2 GetMidPosForRange2(const Vector2& me, const Vector2& target)
     int dist = (std::max)(dx, dy);
     if (dist != 2) return GRIDPOS_INVALID;
 
-    // 직선, 완전대각은 mid가 확정
-    int sx = Sign(x1 - x0);
-    int sy = Sign(y1 - y0);
+    // L자 케이스는 중간칸 없는거로.
+    if ((dx == 2 && dy == 1) || (dx == 1 && dy == 2)) return GRIDPOS_INVALID;
 
-    if (dx == 2 && dy == 0) { return Vector2{ (float)(x0 + sx), (float)y0 }; }
-    if (dx == 0 && dy == 2) { return Vector2{ (float)x0, (float)(y0 + sy) }; }
-    if (dx == 2 && dy == 2) { return Vector2{ (float)(x0 + sx), (float)(y0 + sy) }; }
+    // 직선, 완전대각은 mid가 확정
+    int sx = (x1 > x0) ? 1 : (x1 < x0 ? -1 : 0);
+    int sy = (y1 > y0) ? 1 : (y1 < y0 ? -1 : 0);
+
+    return Vector2{ (float)(x0 + sx), (float)(y0 + sy) };
+
+    //int sx = Sign(x1 - x0);
+    //int sy = Sign(y1 - y0);
+
+    //if (dx == 2 && dy == 0) { return Vector2{ (float)(x0 + sx), (float)y0 }; }
+    //if (dx == 0 && dy == 2) { return Vector2{ (float)x0, (float)(y0 + sy) }; }
+    //if (dx == 2 && dy == 2) { return Vector2{ (float)(x0 + sx), (float)(y0 + sy) }; }
 
     // 완전대각이 아닌 애매한 케이스는 브레젠험 딱 한번만 해서 mid 구함.
-    int sx2 = (x0 < x1) ? 1 : -1;
-    int sy2 = (y0 < y1) ? 1 : -1;
-    int err = dx - dy;
+    //int sx2 = (x0 < x1) ? 1 : -1;
+    //int sy2 = (y0 < y1) ? 1 : -1;
+    //int err = dx - dy;
 
-    int e2 = err * 2;
-    if (e2 > -dy) { err -= dy; x0 += sx2; }
-    if (e2 < dx) { err += dx; y0 += sy2; }
+    //int e2 = err * 2;
+    //if (e2 > -dy) { err -= dy; x0 += sx2; }
+    //if (e2 < dx) { err += dx; y0 += sy2; }
 
-    return Vector2{ (float)x0, (float)y0 };
+    //return Vector2{ (float)x0, (float)y0 };
 }
 
 
@@ -1059,15 +1066,19 @@ Vector2 CombatController::DecideAttackPos(Unit* me)
     if (battleGrid->IsInRange(me->GetPos(), target->GetMovePos(), a))
     {
         Vector2 mid = GetMidPosForRange2(me->GetPos(), target->GetMovePos());
-        Unit* newTarget = FindBlockingUnitByPos(mid, me);
-        if (!newTarget)
+
+        if (mid != GRIDPOS_INVALID)
         {
-            return target->GetMovePos();
-        }
-        else
-        {
-            me->SetAttackTarget(newTarget);
-            return newTarget->GetMovePos();
+            Unit* newTarget = FindBlockingUnitByPos(mid, me);
+            if (!newTarget)
+            {
+                return target->GetMovePos();
+            }
+            else
+            {
+                me->SetAttackTarget(newTarget);
+                return newTarget->GetMovePos();
+            }
         }
     }
     else
