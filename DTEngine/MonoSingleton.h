@@ -26,6 +26,10 @@ protected:
         //}
     }
 
+    void Awake() override {
+        m_instance = static_cast<T*>(this);
+    }
+
     ////virtual ~MonoSingleton() = default;
     virtual ~MonoSingleton()
     {
