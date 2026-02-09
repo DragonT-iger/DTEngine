@@ -112,7 +112,7 @@ private:
 	static inline int totalAcquiredMoney = 30;			// 이게 초기화때 쓸 돈임.
 	static inline int usedStageMoney = 0;
 
-	static inline int curStageLevel = 0;	// 스테이지 레벨.
+	static inline int curStageLevel = 1;	// 스테이지 레벨.
 
 	static inline float curbgmValue = 0.5f;		
 	static inline float cursfxValue = 0.5f;

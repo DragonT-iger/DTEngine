@@ -23,11 +23,6 @@ private:
     TilemapData* m_mapData6 = nullptr;
 
     TilemapGenerator* m_generator = nullptr;
-    BattleGrid* m_battleGrid = nullptr;
-
-    //GameObject* m_victoryWindow = nullptr;
-    //GameObject* m_loseWindow = nullptr;
-    //GameObject* m_settingWindow = nullptr;
 
     Text* m_stageLevelText = nullptr;
     Text* m_stageDialogueText = nullptr;

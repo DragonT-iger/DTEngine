@@ -15,7 +15,7 @@ DTPROPERTY(StageInitializer, m_mapData4)
 DTPROPERTY(StageInitializer, m_mapData5)
 DTPROPERTY(StageInitializer, m_mapData6)
 DTPROPERTY(StageInitializer, m_generator)
-DTPROPERTY(StageInitializer, m_battleGrid)
+//DTPROPERTY(StageInitializer, m_battleGrid)
 //DTPROPERTY(StageInitializer, m_victoryWindow)
 //DTPROPERTY(StageInitializer, m_loseWindow)
 //DTPROPERTY(StageInitializer, m_settingWindow)
@@ -42,11 +42,6 @@ void StageInitializer::Awake()
     if (m_generator && currentMap)
     {
         m_generator->SetMapData(currentMap);
-
-        if (m_battleGrid)
-        {
-            m_battleGrid->SetTilemapGenerator(m_generator);
-        }
     }
 
     if (m_stageLevelText)
