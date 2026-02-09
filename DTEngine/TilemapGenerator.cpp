@@ -130,7 +130,6 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
     }
 }
 
-
 void TilemapGenerator::RebuildFromCurrentData()
 {
     Scene* activeScene = SceneManager::Instance().GetActiveScene();
