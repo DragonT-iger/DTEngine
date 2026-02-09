@@ -143,6 +143,7 @@
     <ClCompile Include="ClickRSOkayEvent.cpp" />
     <ClCompile Include="AliceUnit.cpp" />
     <ClCompile Include="ClickSetActiveObjEvent.cpp" />
+    <ClCompile Include="ClickSettingButtonEvent.cpp" />
     <ClCompile Include="ClickStartButton.cpp" />
     <ClCompile Include="ClickWarningWindowExitButtonEvent.cpp" />
     <ClCompile Include="ClickWarningWindowOkayEvent.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ClickRSOkayEvent.h" />
     <ClInclude Include="AliceUnit.h" />
     <ClInclude Include="ClickSetActiveObjEvent.h" />
+    <ClInclude Include="ClickSettingButtonEvent.h" />
     <ClInclude Include="ClickStartButton.h" />
     <ClInclude Include="ClickWarningWindowExitButtonEvent.h" />
     <ClInclude Include="ClickWarningWindowOkayEvent.h" />

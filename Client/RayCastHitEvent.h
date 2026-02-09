@@ -17,6 +17,8 @@ public:
 
 		void RaycastCheck();
 		void ToggleSettingWindow();
+		void ApplySettingWindow();
+
 
 		GameObject* GetHitObject() { return m_hitObj; }
 		void SetHitObject(GameObject* hitobj) { m_hitObj = hitobj; }

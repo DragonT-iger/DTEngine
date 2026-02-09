@@ -177,6 +177,9 @@
     <ClCompile Include="ClickNextStageEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="ClickSettingButtonEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -324,6 +327,9 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="ClickRetryStageEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickSettingButtonEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
   </ItemGroup>
