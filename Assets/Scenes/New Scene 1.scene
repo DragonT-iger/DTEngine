@@ -6,6 +6,16 @@
         {
           "Active": true,
           "id": 14950733487881813895,
+          "m_CircleCenter": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_CircleWH": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
           "m_clearColor": {
             "w": 0.20000000298023224,
             "x": 0.20000000298023224,
@@ -17,12 +27,18 @@
           "m_isOrthographic": false,
           "m_nearZ": 0.009999999776482582,
           "m_orthographicSize": 5.0,
+          "m_useBloom": false,
+          "m_useCircleMask": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
           "m_viewportRect": {
             "w": 1.0,
             "x": 0.0,
             "y": 0.0,
             "z": 1.0
           },
+          "m_vignetteRadius": 1.0,
+          "m_vignetteSoftness": 1.0,
           "typeName": "Camera"
         }
       ],
@@ -47,6 +63,188 @@
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 14741889625254073736,
+          "m_CircleCenter": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_CircleWH": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "m_bloomIntensity": 1.0,
+          "m_bloomThreshold": 1.0,
+          "m_clearColor": {
+            "w": 1.0,
+            "x": 0.20000000298023224,
+            "y": 0.20000000298023224,
+            "z": 0.20000000298023224
+          },
+          "m_editorFovY": 60.0,
+          "m_farZ": 1000.0,
+          "m_isOrthographic": false,
+          "m_nearZ": 0.10000000149011612,
+          "m_orthographicSize": 5.0,
+          "m_useBloom": false,
+          "m_useCircleMask": false,
+          "m_useGrayScale": false,
+          "m_useVignette": false,
+          "m_viewportRect": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_vignetteRadius": 1.0,
+          "m_vignetteSoftness": 1.0,
+          "typeName": "Camera"
+        },
+        {
+          "Active": true,
+          "id": 15307133861969448429,
+          "typeName": "FreeCamera"
+        }
+      ],
+      "id": 13252017683952005685,
+      "name": "EditorCamera55",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4750479699307486416,
+        "m_editorEulerAngles": {
+          "x": 24.799989700317383,
+          "y": -52.19996643066406,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 3.077272415161133,
+          "y": 2.2095439434051514,
+          "z": -5.886281967163086
+        },
+        "m_rotation": {
+          "w": 0.8770787715911865,
+          "x": 0.19283819198608398,
+          "y": -0.4296761453151703,
+          "z": 0.09447038918733597
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 9462500747732519687,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 733409162517004118,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.20791471004486084,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "MaterialInstance": {
+            "Color": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "CullMode": 1,
+            "Offset": [
+              0.0,
+              0.0
+            ],
+            "RenderMode": 0,
+            "ShadowBias": 0.004999999888241291,
+            "ShadowScale": 1.0,
+            "Textures": {},
+            "Tiling": [
+              1.0,
+              1.0
+            ]
+          },
+          "id": 6705320244102709518,
+          "m_materialID": 14785535731479647299,
+          "m_meshIndex": 0,
+          "m_modelID": 5153523167697001826,
+          "typeName": "MeshRenderer"
+        },
+        {
+          "Active": true,
+          "id": 8448103819650985463,
+          "m_SkyBoxColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_SkyBoxID": 0,
+          "typeName": "SkyBoxComponent"
+        }
+      ],
+      "id": 16297706226540715836,
+      "name": "Cube",
+      "tag": "Untagged",
+      "transform": {
+        "id": 13982789687064770878,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.3989616632461548,
+          "y": 0.0,
+          "z": -1.9576306343078613
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
         },
         "m_scale": {
           "x": 1.0,
