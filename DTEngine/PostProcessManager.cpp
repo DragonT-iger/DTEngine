@@ -95,6 +95,8 @@ void PostProcessManager::RenderToneMapping(RenderTexture* src, ID3D11RenderTarge
 {
     auto context = DX11Renderer::Instance().GetContext();
 
+    DX11Renderer::Instance().SetCullMode(CullMode::None);
+
     ID3D11RenderTargetView* rtvs[1] = { destRTV };
     context->OMSetRenderTargets(1, rtvs, nullptr); 
 
