@@ -155,7 +155,7 @@ bool Game::Initialize()
 
 	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
 	 //ClientSceneManager::Instance().LoadScene("TitleScene");
->>>>>>> origin/newgs
+
 
 
 
