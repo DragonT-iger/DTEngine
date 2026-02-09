@@ -826,6 +826,8 @@ Unit* CombatController::FindNearestAlly(const AllyUnit* me, const Vector2& from)
     for (AllyUnit* ally : m_allyUnits)
     {
         if (!ally || !ally->IsAlive() || ally == me) continue;
+        if (ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 아군은 제외
+
         int dx = std::abs((int)ally->GetPos().x - (int)from.x);
         int dy = std::abs((int)ally->GetPos().y - (int)from.y);
         int dist = (std::max)(dx, dy);
@@ -877,10 +879,12 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
 
     for (AllyUnit* ally : m_allyUnits)
     {
-        if (!ally || !ally->IsAlive() || ally == me || ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 상태인 유닛도 없는 아군 취급.
+        if (!ally || !ally->IsAlive()) continue;
+        if (ally == me) continue;
+        if (ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 아군은 제외
 
         ++aliveAllyCount;
-        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; }
+        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) allyInPerception = true; 
     }
 
     Unit* target = nullptr;
@@ -897,7 +901,12 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
     if (!allyInPerception)
     {
         target = FindNearestAlly(me, mePos);
-        if (!target) return GRIDPOS_INVALID;
+        if (!target)
+        {
+            target = FindNearestEnemy(mePos);
+            if (!target) return GRIDPOS_INVALID;
+        }
+
 
         me->SetMoveTarget(target);
         return target->GetPos(); // 아군이 인식범위 안에 없으면 아군을 향해 간다. 
