@@ -108,7 +108,8 @@ void GameManager::GrantAttackSkillReward(int amount)
 
 void GameManager::Update(float deltaTime)
 {
-	if(InputManager::Instance().GetKeyDown(KeyCode::L)) {
+	if(InputManager::Instance().GetKeyDown(KeyCode::L)) 
+	{
 		SetLife(GetLife() - 1);
 	}
 
@@ -140,6 +141,9 @@ void GameManager::SetTimeScale(int scale)
 
 void GameManager::ResetBattleResultUI()
 {
+		if (!m_victoryWindow || !m_loseWindow)
+				return;
+
 		// 초기화 시 결과창 항상 닫혀있는걸로..
 		m_victoryWindow->SetActive(false);
 		m_loseWindow->SetActive(false);
@@ -171,6 +175,9 @@ void GameManager::ShowVictoryWindow()
 
 void GameManager::ShowLoseWindow()
 {
+		if (!m_victoryWindow || !m_loseWindow)
+				return;
+
 		m_victoryWindow->SetActive(false);
 		m_loseWindow->SetActive(true);
 		ApplyResultInteractionLock(true);
