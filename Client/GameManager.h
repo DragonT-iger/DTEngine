@@ -13,6 +13,7 @@ class TilemapGenerator;
 class BattleGrid;
 class UISlider;
 class ClickStartButton;
+class ChesherGuideEvent;
 
 enum class BattleResultState
 {
@@ -158,10 +159,13 @@ private:
 	UISlider* m_bgmSlider = nullptr;
 	UISlider* m_sfxSlider = nullptr;
 	ClickStartButton* m_startButtonEvent = nullptr;
+	GameObject* m_chesherGuideWindow = nullptr;
+
 
 	void ApplyResultInteractionLock(bool lock);
 	void EnsureResultWindowRefs();		// 결과창 못찾으면 find로 찾기. 
 	void ClearStageUnits();						// stage unit 포인터 비워주기.
+	void ApplyChesherGuideGate();			// chesherguide 초기화.
 	std::vector<GameObject*> m_runtimeAllies;
 };
 

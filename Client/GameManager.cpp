@@ -11,6 +11,7 @@
 #include "RayCastHitEvent.h"
 #include "UISlider.h"
 #include "ClickStartButton.h"
+#include "ChesherGuideEvent.h"
 #include <vector>
 
 
@@ -32,6 +33,7 @@ DTPROPERTY(GameManager, m_stageDialogueText)
 DTPROPERTY(GameManager, m_bgmSlider)
 DTPROPERTY(GameManager, m_sfxSlider)
 DTPROPERTY(GameManager, m_startButtonEvent)
+DTPROPERTY(GameManager, m_chesherGuideWindow)
 DTPROPERTY(GameManager, m_settingWindow)
 DTPROPERTY(GameManager, m_rayObj)
 DTPROPERTY(GameManager, m_blockInputObj0)
@@ -410,9 +412,26 @@ void GameManager::ClearStageUnits()
 		// 아군 적군 둘 다 삭제. 
 		for (GameObject* obj : toDestroy)
 		{
-				activeScene->Destroy(obj);
+				auto removed = activeScene->_Internal_RemoveGameObject(obj);
+				if (!removed)
+				{
+						activeScene->Destroy(obj);
+				}
 		}
 
 		// 이번 스테이지에서 추적하던 런타임 캐시는 모두 비운다.
 		ClearRuntimeUnitCaches();
+}
+
+void GameManager::ApplyChesherGuideGate()
+{
+		if (!m_chesherGuideWindow) return;
+
+		// 스테이지 시작 시 다시 보이게. 
+		m_chesherGuideWindow->SetActive(true);
+
+		if (ChesherGuideEvent* guide = m_chesherGuideWindow->GetComponent<ChesherGuideEvent>())
+		{
+				guide->SetActiveUI(false);
+		}
 }
