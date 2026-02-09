@@ -10,8 +10,10 @@ class ChesherGuideEvent : public MonoBehaviour
 public:
 		void Start() override;
 		void SetActiveUI(bool b);
+		void Update(float deltaTime) override; 
 		
 private:
+		void CloseGuide();
 		GameObject* m_rayObj = nullptr;
 
 		UIButton* m_battleSkillButton = nullptr;

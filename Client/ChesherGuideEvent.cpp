@@ -1,6 +1,7 @@
 #include "ChesherGuideEvent.h"
 #include "GameObject.h"
 #include "UIButton.h"
+#include "InputManager.h"
 
 
 BEGINPROPERTY(ChesherGuideEvent)
@@ -26,11 +27,25 @@ void ChesherGuideEvent::Start()
 		m_button->SetOnClick([this]() 
 				{
 						// 다시 상호작용 가능하게 켜주기.
-						SetActiveUI(true);
-
-						// 내 부모 타고 올라가서 꺼줘서 button, text, catimg 이렇게 3개 다 꺼주게 하기. 
-						_GetOwner()->GetTransform()->GetParent()->_GetOwner()->SetActive(false);
+					CloseGuide();
 				});
+}
+
+
+void ChesherGuideEvent::Update(float deltaTime)
+{
+	if (InputManager::Instance().GetKeyDown(KeyCode::Enter) ||
+		InputManager::Instance().GetKeyDown(KeyCode::Space))
+	{
+		CloseGuide();
+	}
+}
+
+void ChesherGuideEvent::CloseGuide()
+{
+	SetActiveUI(true);
+
+	_GetOwner()->GetTransform()->GetParent()->_GetOwner()->SetActive(false);
 }
 
 void ChesherGuideEvent::SetActiveUI(bool b)

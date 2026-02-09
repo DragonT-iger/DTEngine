@@ -25,7 +25,7 @@ float4 PS(PS_INPUT input) : SV_Target
         // 밈맵 단계를 0으로 해서 텍스쳐 크기가 작아지더라도 상관없게 이것도 이상함 밈맵을 로드할때 키지도 않았는데 왜 밈멥을 원본으로 해야 안깨짐?
     }
 
-    clip(textureColor.r == 1.0f && textureColor.g == 0.0f ? -1 : 1);
+    //clip(textureColor.r == 1.0f && textureColor.g == 0.0f ? -1 : 1);
     // YENA와 호환성을 위해서 Clip 실제 프로젝트 할때는 알파값을 넣는게 맞다고 생각함
     // 좀 짜친다..
     

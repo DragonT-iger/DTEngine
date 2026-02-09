@@ -86,6 +86,7 @@ void TutorialManager::Update(float deltaTime)
                 m_aliceDead = true;
                 m_canProceedToNextStep = true;
                 NextStep();
+                m_aliceGameObject->GetComponent<Animator>()->SetPlay(true);
             }
         }
     }
@@ -131,7 +132,7 @@ void TutorialManager::Update(float deltaTime)
                 mainCam->SetVignetteSoftness(m_currentSoftness);
 
 
-                if (m_currentSoftness > -5.f) {
+                if (m_currentSoftness > -30.f) {
                     if (m_chessSoldier) m_chessSoldier->SetActive(false);
 
                     if (m_aliceGameObject) m_aliceGameObject->SetActive(false);
@@ -165,6 +166,9 @@ void TutorialManager::Update(float deltaTime)
             {
                 if (m_circleRadius > 0.15f) {
                     m_circleRadius -= 0.9f * deltaTime;
+                }
+                else {
+                    //m_canProceedToNextStep = true;
                 }
                 mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
             }
@@ -483,7 +487,7 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2)
             m_catText2->SetText(L"네 자신을 지키려면 \n체스 병사의 도움이 필요해!");
 
-        if (m_infoUI) m_infoUI->SetActive(true);
+        if (m_infoUI) m_infoUI->SetActive(false);
     }
     break;
 
@@ -584,6 +588,12 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
         }
         m_tutorialAdditionalEnemy = m_tutorialAdditionalEnemyPrefab->Instantiate();
+
+
+        m_tutorialAdditionalEnemy->GetTransform()->SetPosition({ 0 , 1 ,12 });
+        m_tutorialAdditionalEnemy->GetTransform()->SetRotationEuler({ 0, -90, 0 });
+        m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>()->SetPos({ 0 ,6 });
+        m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>()->SetBoss(true);
 
         m_combatController->SetEnemyUnit0(m_tutorialAdditionalEnemy->GetComponent<EnemyUnit>());
 
