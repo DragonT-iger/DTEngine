@@ -77,6 +77,7 @@ public:
 
 	// 이동 및 전투 단계
 	void ResolveTurnAction(Unit* me);
+	void ApplyActionResult(Unit* me);
 	float CalculateDamage(Unit* me, Unit* target);
 
 public:

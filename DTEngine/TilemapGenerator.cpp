@@ -10,6 +10,7 @@
 #include "Prefab.h"
 
 #include "../Client/EnemyUnit.h"
+#include "../Client/BreakableWall.h"
 
 BEGINPROPERTY(TilemapGenerator)
 
@@ -79,6 +80,30 @@ void TilemapGenerator::BuildMap()
             GameObject* instance = prefab->Instantiate();
             if (!instance) continue;
 
+            if (index == 5)
+            {
+                BreakableWall* bw = instance->GetComponent<BreakableWall>();
+                if (bw)
+                {
+                    Vector2 gridPos{ (float)(x - 1), (float)(y - 1) };
+                    bw->Init(this, gridPos);
+                }
+            }
+
+            if (index == 8 || index == 9)
+            {
+                float pitch = 0.0f;
+                float yaw = 0.0f; 
+                float roll = 0.0f; 
+
+                if (x == 0) yaw = 90.0f;
+                else if (x == width - 1) yaw = -90.0f;
+                else if (y == 0) yaw = 0.0f;
+                else if (y == height - 1) yaw = 180.0f;
+
+                instance->GetTransform()->SetRotationEuler(Vector3(pitch, yaw, roll));
+            }
+
             instance->GetTransform()->SetParent(myTr);
             instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, 0, (y - 1) * tileSize));
             instance->SetActive(true);
@@ -128,6 +153,45 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
 
         m_spawnedTiles[arrayIndex] = instance;
     }
+}
+
+GameObject* TilemapGenerator::GetSpawnedTileAtGrid(const Vector2& gridPos) const
+{
+    if (!m_mapData) return nullptr;
+
+    int ex = (int)gridPos.x + 1;
+    int ey = (int)gridPos.y + 1;
+
+    int ew = m_mapData->GetExpandedWidth();
+    int eh = m_mapData->GetExpandedHeight();
+    if (ex < 0 || ex >= ew || ey < 0 || ey >= eh) return nullptr;
+
+    int idx = ey * ew + ex;
+    if (idx < 0 || idx >= (int)m_spawnedTiles.size()) return nullptr;
+
+    return m_spawnedTiles[idx];
+}
+
+void TilemapGenerator::ReplaceTileAtGrid(const Vector2& gridPos)
+{
+    if (!m_mapData) return;
+
+    int ex = (int)gridPos.x + 1;
+    int ey = (int)gridPos.y + 1;
+
+    int ew = m_mapData->GetExpandedWidth();
+    int eh = m_mapData->GetExpandedHeight();
+    if (ex < 0 || ex >= ew || ey < 0 || ey >= eh) return;
+
+    int tileIdx = m_mapData->FindDefaultGrid(ex, ey);
+
+    Prefab* prefab = nullptr;
+    if (tileIdx == 0) prefab = m_prefab1;
+    else if (tileIdx == 1) prefab = m_prefab0;
+
+    if (!prefab) return;
+
+    ReplaceTile(ex, ey, prefab);
 }
 
 void TilemapGenerator::SpawnUnits()

@@ -245,11 +245,13 @@ bool CombatController::ReadyToMovePhase()
         Vector2 movePos = DecideMovePos_Ally(ally, moveTarget);
 
         // 최종 확정 먼저
-        if (movePos == GRIDPOS_INVALID) movePos = ally->GetPos();
+        //if (movePos == GRIDPOS_INVALID) movePos = ally->GetPos();
+        if (movePos == GRIDPOS_INVALID 
+            || battleGrid->IsBlocked(movePos, ally, nullptr, ally->GetMoveRule())) movePos = ally->GetPos();
         ally->SetMovePos(movePos);
 
-        auto p = ally->GetPos();
-        auto mp = ally->GetMovePos();
+        //auto p = ally->GetPos();
+        //auto mp = ally->GetMovePos();
 
         // 액션 확정
         if (ally->GetMovePos() != ally->GetPos()) ally->SetAction(TurnAction::Move);
@@ -366,6 +368,8 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (!ally->IsActionDone()) return false;
         if (ally->GetAction() == TurnAction::Wait) continue;
         if (ally->IsAnimStart() && !ally->IsAnimDone()) return false;
+
+        ApplyActionResult(ally);
     }
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -375,6 +379,8 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (!enemy->IsActionDone()) return false;
         if (enemy->GetAction() == TurnAction::Wait) continue;
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
+
+        ApplyActionResult(enemy);
     }
 
     // 함정타일 밟았을 때, 데미지 처리
@@ -421,7 +427,7 @@ bool CombatController::EndPhase()
             m_aliceUnit->SetAction(TurnAction::Die);
             //m_aliceUnit->SetActionDone(false);
             //m_aliceUnit->StartAction();
-            m_aliceUnit->StartAliceDieAnim();
+            //m_aliceUnit->StartAliceDieAnim();
             m_stageResult = StageResult::Lose; // 앨리스 죽으면 패배
         }
 
@@ -460,7 +466,7 @@ bool CombatController::EndPhase()
             m_redQueenUnit->SetAction(TurnAction::Die);
             //m_redQueenUnit->SetActionDone(false);
             //m_redQueenUnit->StartAction();
-            m_redQueenUnit->StartQueenDieAnim();
+            //m_redQueenUnit->StartQueenDieAnim();
             m_stageResult = StageResult::Win; // 붉은여왕 죽으면 승리
         }
 
@@ -543,6 +549,7 @@ bool CombatController::EndPhase()
         if (m_stageResult == StageResult::Win)
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;
+            if (m_redQueenUnit) m_redQueenUnit->StartQueenDieAnim();
             
             for (AllyUnit* ally : m_allyUnits)
             {
@@ -569,6 +576,8 @@ bool CombatController::EndPhase()
         else if (m_stageResult == StageResult::Lose)
         {
             std::cout << "Lose!!!!!!!!!!!!" << std::endl;
+            if (m_aliceUnit) m_aliceUnit->StartAliceDieAnim();
+
             // 패배 처리
             for (AllyUnit* ally : m_allyUnits)
             {
@@ -630,8 +639,7 @@ bool CombatController::CanActuallyAttack(const Unit* me, const Unit* target) con
 
     int a = me->GetStats().attackRange;
 
-    if (!battleGrid->IsInRange(me->GetPos(), target->GetPos(), a))
-        return false;
+    if (!battleGrid->IsInRange(me->GetPos(), target->GetPos(), a)) return false;
 
     return battleGrid->HasLineOfSight(me->GetPos(), target->GetPos());
 }
@@ -844,6 +852,8 @@ Unit* CombatController::FindNearestAlly(const AllyUnit* me, const Vector2& from)
     for (AllyUnit* ally : m_allyUnits)
     {
         if (!ally || !ally->IsAlive() || ally == me) continue;
+        if (ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 아군은 제외
+
         int dx = std::abs((int)ally->GetPos().x - (int)from.x);
         int dy = std::abs((int)ally->GetPos().y - (int)from.y);
         int dist = (std::max)(dx, dy);
@@ -895,10 +905,12 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
 
     for (AllyUnit* ally : m_allyUnits)
     {
-        if (!ally || !ally->IsAlive() || ally == me || ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 상태인 유닛도 없는 아군 취급.
+        if (!ally || !ally->IsAlive()) continue;
+        if (ally == me) continue;
+        if (ally->GetMoveRule() == MoveRule::Hold) continue; // 대기 아군은 제외
 
         ++aliveAllyCount;
-        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) { allyInPerception = true; }
+        if (battleGrid->IsInRange(mePos, ally->GetPos(), pr)) allyInPerception = true; 
     }
 
     Unit* target = nullptr;
@@ -915,7 +927,12 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
     if (!allyInPerception)
     {
         target = FindNearestAlly(me, mePos);
-        if (!target) return GRIDPOS_INVALID;
+        if (!target)
+        {
+            target = FindNearestEnemy(mePos);
+            if (!target) return GRIDPOS_INVALID;
+        }
+
 
         me->SetMoveTarget(target);
         return target->GetPos(); // 아군이 인식범위 안에 없으면 아군을 향해 간다. 
@@ -1013,24 +1030,32 @@ static Vector2 GetMidPosForRange2(const Vector2& me, const Vector2& target)
     int dist = (std::max)(dx, dy);
     if (dist != 2) return GRIDPOS_INVALID;
 
-    // 직선, 완전대각은 mid가 확정
-    int sx = Sign(x1 - x0);
-    int sy = Sign(y1 - y0);
+    // L자 케이스는 중간칸 없는거로.
+    if ((dx == 2 && dy == 1) || (dx == 1 && dy == 2)) return GRIDPOS_INVALID;
 
-    if (dx == 2 && dy == 0) { return Vector2{ (float)(x0 + sx), (float)y0 }; }
-    if (dx == 0 && dy == 2) { return Vector2{ (float)x0, (float)(y0 + sy) }; }
-    if (dx == 2 && dy == 2) { return Vector2{ (float)(x0 + sx), (float)(y0 + sy) }; }
+    // 직선, 완전대각은 mid가 확정
+    int sx = (x1 > x0) ? 1 : (x1 < x0 ? -1 : 0);
+    int sy = (y1 > y0) ? 1 : (y1 < y0 ? -1 : 0);
+
+    return Vector2{ (float)(x0 + sx), (float)(y0 + sy) };
+
+    //int sx = Sign(x1 - x0);
+    //int sy = Sign(y1 - y0);
+
+    //if (dx == 2 && dy == 0) { return Vector2{ (float)(x0 + sx), (float)y0 }; }
+    //if (dx == 0 && dy == 2) { return Vector2{ (float)x0, (float)(y0 + sy) }; }
+    //if (dx == 2 && dy == 2) { return Vector2{ (float)(x0 + sx), (float)(y0 + sy) }; }
 
     // 완전대각이 아닌 애매한 케이스는 브레젠험 딱 한번만 해서 mid 구함.
-    int sx2 = (x0 < x1) ? 1 : -1;
-    int sy2 = (y0 < y1) ? 1 : -1;
-    int err = dx - dy;
+    //int sx2 = (x0 < x1) ? 1 : -1;
+    //int sy2 = (y0 < y1) ? 1 : -1;
+    //int err = dx - dy;
 
-    int e2 = err * 2;
-    if (e2 > -dy) { err -= dy; x0 += sx2; }
-    if (e2 < dx) { err += dx; y0 += sy2; }
+    //int e2 = err * 2;
+    //if (e2 > -dy) { err -= dy; x0 += sx2; }
+    //if (e2 < dx) { err += dx; y0 += sy2; }
 
-    return Vector2{ (float)x0, (float)y0 };
+    //return Vector2{ (float)x0, (float)y0 };
 }
 
 
@@ -1078,20 +1103,22 @@ Vector2 CombatController::DecideAttackPos(Unit* me)
     if (battleGrid->IsInRange(me->GetPos(), target->GetMovePos(), a))
     {
         Vector2 mid = GetMidPosForRange2(me->GetPos(), target->GetMovePos());
-        Unit* newTarget = FindBlockingUnitByPos(mid, me);
-        if (!newTarget)
+
+        if (mid != GRIDPOS_INVALID)
         {
-            return target->GetMovePos();
+            Unit* newTarget = FindBlockingUnitByPos(mid, me);
+            if (newTarget)
+            {
+                me->SetAttackTarget(newTarget);
+                return newTarget->GetMovePos();
+            }
         }
-        else
-        {
-            me->SetAttackTarget(newTarget);
-            return newTarget->GetMovePos();
-        }
+        return target->GetMovePos();
     }
     else
     {
         me->SetAction(TurnAction::Miss); // 빗나감 설정. 
+        std::cout << "빗나감\n";
         return target->GetPos();
     }
 }
@@ -1116,11 +1143,11 @@ void CombatController::ResolveTurnAction(Unit* me)
 
     case TurnAction::Attack: // 공격 처리
     {
-        Unit* target = me->GetAttackTarget();
-        float damage = CalculateDamage(me, target);
+        //Unit* target = me->GetAttackTarget();
+        //float damage = CalculateDamage(me, target);
 
         me->SetDir(me->GetAttackPos());
-        target->TakeDamage(damage);
+        //target->TakeDamage(damage);
 
         //me->StartAttackAnim();
     }  break;
@@ -1135,13 +1162,43 @@ void CombatController::ResolveTurnAction(Unit* me)
     case TurnAction::BreakWall: // 벽 파괴 처리
     {
         me->SetDir(me->GetAttackPos());
-        battleGrid->WallBreak(me->GetAttackPos());
+        //battleGrid->WallBreak(me->GetAttackPos());
 
         //me->StartAttackAnim();
     } break;
 
     default:
         return;
+    }
+}
+
+void CombatController::ApplyActionResult(Unit* me)
+{
+    if (!me || !me->IsAlive() || me->IsActionResultApplied()) return;
+
+    switch (me->GetAction())
+    {
+    case TurnAction::Attack:
+    {
+        Unit* target = me->GetAttackTarget();
+
+        if (target && target->IsAlive())
+        {
+            float damage = CalculateDamage(me, target);
+            target->TakeDamage(damage);
+        }
+        me->SetActionResultApplied(true);
+    } break;
+
+    case TurnAction::BreakWall:
+    {
+        battleGrid->WallBreak(me->GetAttackPos());
+        me->SetActionResultApplied(true);
+    } break;
+
+    default:
+        me->SetActionResultApplied(true);
+        break;
     }
 }
 
@@ -1203,6 +1260,7 @@ void CombatController::PrintFrame()
             else if (s.solidWall) c = '#';
             else if (s.breakableWall) c = '*';
             else if (s.defenseTile) c = 'D';
+            else if (s.trapTile) c = 'T';
             else c = '.';
 
             if (d.reservedMove && !d.unitPresent)

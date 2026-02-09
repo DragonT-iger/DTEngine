@@ -254,7 +254,7 @@ int TilemapData::FindDefaultGrid(int x, int y) const
 {
     int ix = x - 1;
     int iy = y - 1;
-    return ((ix + iy) % 2 == 0) ? 2 : 3;
+    return ((ix + iy) % 2 == 0) ? 0 : 1;
 }
 
 void TilemapData::MakeBorder()

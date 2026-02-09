@@ -14,7 +14,7 @@ static const UnitStats UnitStatsTable[] =
 
 void Unit::Start()
 {
-    if (_GetOwner()->GetName() == "Alice_tst" || _GetOwner()->GetName() == "unit_Queen_tttst")
+    if (_GetOwner()->GetName() == "unit_Alice_tttst" || _GetOwner()->GetName() == "unit_Queen_tttst")
     {
         m_anim = _GetOwner()->GetComponent<Animator>();
     }
@@ -172,6 +172,7 @@ void Unit::ResetTurnPlan()
     else m_actionDone = true;
     m_animStart = false;
     m_isOnTrapTile = false;
+    m_actionResultApplied = false;
 }
 
 Vector3 Unit::GridToWorld(const Vector2& p)

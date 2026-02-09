@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
     <ClCompile Include="ArrowObjectPool.cpp" />
+    <ClCompile Include="BreakableWall.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
     <ClCompile Include="ChesherGuideEvent.cpp" />
     <ClCompile Include="ClickNextStageEvent.cpp" />
@@ -192,6 +193,7 @@
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
     <ClInclude Include="ArrowObjectPool.h" />
+    <ClInclude Include="BreakableWall.h" />
     <ClInclude Include="CameraControlEvent.h" />
     <ClInclude Include="ChesherGuideEvent.h" />
     <ClInclude Include="ClickNextStageEvent.h" />

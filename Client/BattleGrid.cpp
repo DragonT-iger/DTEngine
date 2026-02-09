@@ -2,6 +2,7 @@
 #include "TilemapGenerator.h"
 #include "TilemapData.h"     
 #include "GameObject.h"
+#include "BreakableWall.h"
 
 #include <queue>
 
@@ -13,10 +14,19 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
 {
     m_tilemapGenerator = tg;
 
+    UpdateInfo();
+}
 
+void BattleGrid::Start()
+{
+    UpdateInfo();
+}
+
+void BattleGrid::UpdateInfo()
+{
     if (m_tilemapGenerator == nullptr) return;
 
-    TilemapData* td = tg->GetMapData();
+    TilemapData* td = m_tilemapGenerator->GetMapData();
 
 
     int width = td->GetWidth();
@@ -38,27 +48,6 @@ void BattleGrid::SetTilemapGenerator(TilemapGenerator* tg)
             else { SetSolidWall(Vector2{ (float)(w - 1), (float)(h - 1) }); }
         }
     }
-
-    /*for (int y = 0; y < m_height; ++y)
-    {
-        for (int x = 0; x < m_width; ++x)
-        {
-            const BattleStaticTile& t = m_staticGrid[y * m_width + x];
-
-            if (t.tile)
-            {
-                if (t.solidWall)        std::cout << "벽 ";
-                else if (t.breakableWall) std::cout << "부 ";
-                else if (t.defenseTile) std::cout << "방 ";
-                else                    std::cout << "타 ";
-            }
-            else
-            {
-                std::cout << "비 ";
-            }
-        }
-        std::cout << '\n';
-    }*/
 }
 
 void BattleGrid::Initialize(int width, int height)
@@ -123,6 +112,14 @@ void BattleGrid::WallBreak(const Vector2& p)
 {
     if (!InBounds(p)) return;
     GetStaticTile(p).breakableWall = false;
+
+    GameObject* go =  m_tilemapGenerator->GetSpawnedTileAtGrid(p);
+    if (!go) return;
+
+    BreakableWall* bw = go->GetComponent<BreakableWall>();
+    if (!bw) return;
+
+    bw->StartWallBreakAnim();
 }
 
 bool BattleGrid::IsBreakableWall(const Vector2& p) const
@@ -307,32 +304,56 @@ bool BattleGrid::IsAttackBlocked(const Vector2& p, const Vector2& me, const Vect
     return false;
 }
 
-bool BattleGrid::HasLineOfSight(const Vector2& me, const Vector2& target) const // 나랑 상대 사이 칸들 공격 막히는지 검사. 브레젠험.
+bool BattleGrid::HasLineOfSight(const Vector2& me, const Vector2& target) const // 나랑 상대 사이 칸들 공격 막히는지 검사. 브레젠험. <- 안씀
 {
+    //int x0 = (int)me.x;
+    //int y0 = (int)me.y;
+    //int x1 = (int)target.x;
+    //int y1 = (int)target.y;
+
+    //int dx = std::abs(x1 - x0);
+    //int dy = std::abs(y1 - y0);
+    //int sx = (x0 < x1) ? 1 : -1;
+    //int sy = (y0 < y1) ? 1 : -1;
+    //int err = dx - dy;
+
+    //while (!(x0 == x1 && y0 == y1)) // 시작칸이랑 도착칸은 검사 안함. 
+    //{
+    //    int e2 = err * 2;
+    //    if (e2 > -dy) { err -= dy; x0 += sx; }
+    //    if (e2 < dx) { err += dx; y0 += sy; }
+
+    //    if (x0 == x1 && y0 == y1) break;
+
+    //    Vector2 p{ (float)x0, (float)y0 };
+    //    if (IsAttackBlocked(p, me, target)) return false;
+    //}
+
+    //return true;
+
     int x0 = (int)me.x;
     int y0 = (int)me.y;
     int x1 = (int)target.x;
     int y1 = (int)target.y;
 
-    int dx = std::abs(x1 - x0);
-    int dy = std::abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1;
-    int sy = (y0 < y1) ? 1 : -1;
-    int err = dx - dy;
+    int adx = std::abs(x1 - x0);
+    int ady = std::abs(y1 - y0);
+    int dist = (std::max)(adx, ady);
 
-    while (!(x0 == x1 && y0 == y1)) // 시작칸이랑 도착칸은 검사 안함. 
-    {
-        int e2 = err * 2;
-        if (e2 > -dy) { err -= dy; x0 += sx; }
-        if (e2 < dx) { err += dx; y0 += sy; }
+    if (dist == 0) return false;
 
-        if (x0 == x1 && y0 == y1) break;
+    if (dist == 1) return true; // 거리 1이면 무조건 공격 가능.
 
-        Vector2 p{ (float)x0, (float)y0 };
-        if (IsAttackBlocked(p, me, target)) return false;
-    }
+    if (dist != 2) return false; // 원거린 무조건 사거리 2임.
 
-    return true;
+    if ((adx == 2 && ady == 1) || (adx == 1 && ady == 2)) return true; // L자 케이스도 무조건 공격 가능.
+
+    // 직선, 완전 대각만 사이 칸 검사. 
+    int sx = (x0 < x1) ? 1 : (x0 > x1 ? -1 : 0);
+    int sy = (y0 < y1) ? 1 : (y0 > y1 ? -1 : 0);
+
+    Vector2 mid{ (float)(x0 + sx), (float)(y0 + sy) };
+    return !IsAttackBlocked(mid, me, target);
 }
 
 static int HeuristicOctile(const Vector2& a, const Vector2& b)
