@@ -90,6 +90,20 @@ void TilemapGenerator::BuildMap()
                 }
             }
 
+            if (index == 8 || index == 9)
+            {
+                float pitch = 0.0f;
+                float yaw = 0.0f; 
+                float roll = 0.0f; 
+
+                if (x == 0) yaw = 90.0f;
+                else if (x == width - 1) yaw = -90.0f;
+                else if (y == 0) yaw = 0.0f;
+                else if (y == height - 1) yaw = 180.0f;
+
+                instance->GetTransform()->SetRotationEuler(Vector3(pitch, yaw, roll));
+            }
+
             instance->GetTransform()->SetParent(myTr);
             instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, 0, (y - 1) * tileSize));
             instance->SetActive(true);
@@ -201,8 +215,8 @@ void TilemapGenerator::ReplaceTileAtGrid(const Vector2& gridPos)
     int tileIdx = m_mapData->FindDefaultGrid(ex, ey);
 
     Prefab* prefab = nullptr;
-    if (tileIdx == 0) prefab = m_prefab0;
-    else if (tileIdx == 1) prefab = m_prefab1;
+    if (tileIdx == 0) prefab = m_prefab1;
+    else if (tileIdx == 1) prefab = m_prefab0;
 
     if (!prefab) return;
 

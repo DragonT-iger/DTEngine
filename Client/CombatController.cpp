@@ -1214,6 +1214,7 @@ void CombatController::PrintFrame()
             else if (s.solidWall) c = '#';
             else if (s.breakableWall) c = '*';
             else if (s.defenseTile) c = 'D';
+            else if (s.trapTile) c = 'T';
             else c = '.';
 
             if (d.reservedMove && !d.unitPresent)
