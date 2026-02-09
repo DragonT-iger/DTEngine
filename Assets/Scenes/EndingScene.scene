@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 35.80180358886719,
-          "y": 613.500244140625,
+          "x": 39.10221481323242,
+          "y": 601.1006469726563,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 5.443530082702637,
-          "y": 4.094882011413574,
-          "z": 1.612425684928894
+          "x": 13.680453300476074,
+          "y": 11.567870140075684,
+          "z": 19.156028747558594
         },
         "m_rotation": {
-          "w": 0.5693608522415161,
-          "x": 0.18390843272209167,
-          "y": -0.7624637484550476,
-          "z": 0.24628232419490814
+          "w": 0.47898826003074646,
+          "x": 0.1700996309518814,
+          "y": -0.8115301728248596,
+          "z": 0.28819283843040466
         },
         "m_scale": {
           "x": 1.0,
@@ -1143,6 +1143,27 @@
         {
           "Active": true,
           "id": 6576746820287875911,
+          "m_bgmSlider": 0,
+          "m_blockInputObj0": 0,
+          "m_blockInputObj1": 0,
+          "m_blockInputObj2": 0,
+          "m_blockInputObj3": 0,
+          "m_blockInputObj4": 0,
+          "m_loseWindow": 0,
+          "m_rayObj": 0,
+          "m_settingWindow": 0,
+          "m_sfxSlider": 0,
+          "m_stageBattleGrid": 0,
+          "m_stageDialogueText": 0,
+          "m_stageLevelText": 0,
+          "m_stageTilemap0": 0,
+          "m_stageTilemap1": 0,
+          "m_stageTilemap2": 0,
+          "m_stageTilemap3": 0,
+          "m_stageTilemap4": 0,
+          "m_stageTilemapGenerator": 0,
+          "m_startButtonEvent": 0,
+          "m_victoryWindow": 0,
           "typeName": "GameManager"
         }
       ],
@@ -1252,12 +1273,14 @@
         {
           "Active": true,
           "id": 1838616038401361351,
+          "m_alice": 0,
           "m_enemy0": 0,
           "m_enemy1": 0,
           "m_enemy2": 0,
           "m_mapData": 716130086308924450,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
+          "m_prefab10": 0,
           "m_prefab2": 4924267867290484229,
           "m_prefab3": 0,
           "m_prefab4": 0,
@@ -1266,6 +1289,7 @@
           "m_prefab7": 0,
           "m_prefab8": 0,
           "m_prefab9": 0,
+          "m_redQueen": 0,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -1398,6 +1422,7 @@
           "enemyUnit2": 0,
           "id": 10045121828271408266,
           "m_aliceUnit": 5882676074383809733,
+          "m_redQueenUnit": 0,
           "typeName": "CombatController"
         }
       ],
@@ -4304,8 +4329,8 @@
           "id": 8078486460983726472,
           "m_isBoss": true,
           "m_pos": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 2.0,
+            "y": 8.0
           },
           "m_type": 0,
           "typeName": "EnemyUnit"
@@ -4793,10 +4818,10 @@
           "Active": true,
           "id": 6104651774238353270,
           "m_battleRule": 0,
-          "m_moveRule": 0,
+          "m_moveRule": 1,
           "m_pos": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 4.0,
+            "y": 9.0
           },
           "m_type": 0,
           "typeName": "AllyUnit"
@@ -4814,9 +4839,9 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": -7.316189289093018,
-          "y": 0.0,
-          "z": -11.491042137145996
+          "x": 8.0,
+          "y": -6.286096096038818,
+          "z": 18.0
         },
         "m_rotation": {
           "w": 1.0,
@@ -5290,7 +5315,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 1966852961273768018,
+          "m_textureID": 9298076218162503694,
           "typeName": "Image"
         }
       ],
@@ -5336,7 +5361,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 8694718934504476724,
+          "m_textureID": 14862973819031059299,
           "typeName": "Image"
         }
       ],
@@ -5382,7 +5407,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5465596390404967456,
+          "m_textureID": 7691920421426771574,
           "typeName": "Image"
         }
       ],
