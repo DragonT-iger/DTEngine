@@ -8834,7 +8834,7 @@
             "y": 1.0,
             "z": 1.0
           },
-          "m_orderInLayer": 0,
+          "m_orderInLayer": 10,
           "m_textureID": 10460717016174508735,
           "typeName": "Image"
         },
@@ -8886,7 +8886,7 @@
             "y": 1.0,
             "z": 1.0
           },
-          "m_orderInLayer": 0,
+          "m_orderInLayer": 10,
           "m_textureID": 10460717016174508735,
           "typeName": "Image"
         },

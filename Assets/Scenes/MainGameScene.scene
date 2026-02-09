@@ -59,8 +59,8 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 654.0767211914063,
-          "y": 475.76702880859375,
+          "x": 1604.296630859375,
+          "y": 975.2670288085938,
           "z": 1.6724035739898682
         },
         "m_rotation": {
@@ -209,7 +209,7 @@
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
-          "m_mapData": 13964411375409846242,
+          "m_mapData": 6189260170659567125,
           "m_prefab0": 736820918105964445,
           "m_prefab1": 14720221284518089057,
           "m_prefab10": 0,
@@ -227,7 +227,6 @@
         {
           "Active": true,
           "id": 4747494500329224221,
-          "m_battleGrid": 17217331222344769167,
           "m_generator": 7171391694734270448,
           "m_mapData1": 6189260170659567125,
           "m_mapData2": 15103945832781831451,
@@ -369,7 +368,9 @@
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
+          "m_loseBG": 6814653329085445114,
           "m_redQueenUnit": 0,
+          "m_victoryBG": 2726193224071851438,
           "typeName": "CombatController"
         }
       ],
@@ -483,6 +484,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 17063651241063330698,
+          "m_button": 3172165213437105257,
+          "m_rayobj": 10500202484059138583,
+          "typeName": "ClickSettingButtonEvent"
         }
       ],
       "id": 9419903296967584286,
@@ -649,8 +657,11 @@
         {
           "Active": true,
           "id": 16259032481906092414,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -727,8 +738,11 @@
         {
           "Active": true,
           "id": 4696455276472288596,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -805,8 +819,11 @@
         {
           "Active": true,
           "id": 15949140636188915712,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1059,8 +1076,11 @@
         {
           "Active": true,
           "id": 10050178375695719958,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1137,8 +1157,11 @@
         {
           "Active": true,
           "id": 3960452596875304128,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1215,8 +1238,11 @@
         {
           "Active": true,
           "id": 16798492839494961388,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1521,6 +1547,7 @@
           "Active": true,
           "id": 10718949589605998082,
           "m_exitButton": 6956302447113660091,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2237,6 +2264,7 @@
           "Active": true,
           "id": 2791222319206022273,
           "m_exitButton": 1026861482826012787,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3051,6 +3079,7 @@
           "Active": true,
           "id": 6095138767685905501,
           "m_exitButton": 1866155636545053865,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3617,6 +3646,7 @@
           "Active": true,
           "id": 17743781830218723958,
           "m_exitButton": 4387214561503760932,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4027,6 +4057,7 @@
           "Active": true,
           "id": 17281548730867793746,
           "m_exitButton": 15017055363453247603,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4515,6 +4546,7 @@
           "Active": true,
           "id": 6293090122218311252,
           "m_exitButton": 9007863559771709075,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5003,6 +5035,7 @@
           "Active": true,
           "id": 1047760766044524883,
           "m_exitButton": 3617803391492812738,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5445,6 +5478,7 @@
           "Active": true,
           "id": 12253110155207299810,
           "m_exitButton": 10194695841313726507,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5645,6 +5679,7 @@
           "Active": true,
           "id": 3036516340741771949,
           "m_exitButton": 12281510067928490994,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6009,6 +6044,7 @@
           "Active": true,
           "id": 16779490005113422998,
           "m_exitButton": 16509577149822491392,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6553,6 +6589,7 @@
           "Active": true,
           "id": 12362843549925920395,
           "m_exitButton": 5736328220481272240,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -9273,8 +9310,8 @@
           "Active": true,
           "id": 8565764339402807703,
           "m_bgmSlider": 7127000447013137685,
-          "m_life": 0,
-          "m_money": 0,
+          "m_life": 12106511576426520092,
+          "m_money": 17575368768981490807,
           "m_sfxSlider": 539819835045743063,
           "typeName": "GameManager"
         }
