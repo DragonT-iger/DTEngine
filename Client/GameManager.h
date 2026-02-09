@@ -13,6 +13,7 @@ class TilemapGenerator;
 class BattleGrid;
 class UISlider;
 class ClickStartButton;
+class ChesherGuideEvent;
 
 //enum class BattleResultState
 //{

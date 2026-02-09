@@ -11,6 +11,7 @@
 #include "RayCastHitEvent.h"
 #include "UISlider.h"
 #include "ClickStartButton.h"
+#include "ChesherGuideEvent.h"
 #include <vector>
 
 

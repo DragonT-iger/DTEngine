@@ -92,10 +92,13 @@ void ClickStartButton::StartGame()
 				}
 		}
 
+		auto rayobj = m_rayObj->GetComponent<RayCastHitEvent>();
+
 		// 이미지 바꿔주기.
 		m_startClickImg->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Battle_start_button_2.png"));
 		m_combatObj->GetComponent<CombatController>()->Setup();
-		m_rayObj->GetComponent<RayCastHitEvent>()->SetStartBattle(true);
+		rayobj->SetStartBattle(true);
+		rayobj->SetRay(true);
 		isStart = true;
 }
 

@@ -74,8 +74,7 @@ void RayCastHitEvent::RaycastCheck()
 			m_lastSelectedEnemy = nullptr;
 			m_arrowPool->_GetOwner()->SetActive(false);
 		}
-		
-		
+
 		if (input.GetKeyDown(KeyCode::MouseLeft) && camera && m_isRay)
 		{
 				const Vector2 mp = Vector2((float)input.GetGameMousePosition().x, (float)input.GetGameMousePosition().y);
@@ -106,7 +105,6 @@ void RayCastHitEvent::RaycastCheck()
 				scene->Raycast2(r, hit, hitT);
 
 				//bool isLeft = x < 960;
-
 				if (hit)
 				{
 					std::cout << hit->GetName() << std::endl;
@@ -293,7 +291,7 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 
 												unit->TakeDamage(20);
-												//std::cout << unit->GetHp() << std::endl;
+												std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
@@ -451,26 +449,31 @@ void RayCastHitEvent::ToggleSettingWindow()
 								SetRay(true);
 				}
 
-				// toggle 해주기.
-				CloseAllWindows();
-				m_settingWindowBG->SetActive(!m_settingWindowBG->IsActive());
-
-				// ray 역시 조절, timescale 조절, start button 막기.
-				if (m_settingWindowBG->IsActive()) // 설정창 열림
-				{
-						GameManager::Instance()->SetTimeScale(0.0f);
-						SetRay(false);
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(true); 	// startbutton 안눌리게.
-				}
-				else // 설정창 닫힘.
-				{
-						// 이전 배속으로 복원
-						int prevScale = GameManager::Instance()->GetPrevTimeScale();
-						GameManager::Instance()->SetTimeScale(prevScale);
-						SetRay(true);
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);	// startbutton 다시 상호작용 가능하게 수정,
-				}
 				
+				ApplySettingWindow();
+		}
+}
+
+void RayCastHitEvent::ApplySettingWindow()
+{
+		// toggle 해주기.
+		CloseAllWindows();
+		m_settingWindowBG->SetActive(!m_settingWindowBG->IsActive());
+
+		// ray 역시 조절, timescale 조절, start button 막기.
+		if (m_settingWindowBG->IsActive()) // 설정창 열림
+		{
+				GameManager::Instance()->SetTimeScale(0.0f);
+				SetRay(false);
+				m_startButton->GetComponent<ClickStartButton>()->SetIsStart(true); 	// startbutton 안눌리게.
+		}
+		else // 설정창 닫힘.
+		{
+				// 이전 배속으로 복원
+				int prevScale = GameManager::Instance()->GetPrevTimeScale();
+				GameManager::Instance()->SetTimeScale(prevScale);
+				SetRay(true);
+				m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);	// startbutton 다시 상호작용 가능하게 수정,
 		}
 }
 
