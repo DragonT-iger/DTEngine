@@ -130,8 +130,6 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
     }
 }
 
-void TilemapGenerator::SpawnUnits() {}
-
 void TilemapGenerator::RebuildFromCurrentData()
 {
     Scene* activeScene = SceneManager::Instance().GetActiveScene();
@@ -158,10 +156,10 @@ void TilemapGenerator::RebuildFromCurrentData()
 
     // 새 데이터 기준 재생성
     BuildMap();
-    SpawnEnemies();
+    SpawnUnits();
 }
 
-void TilemapGenerator::SpawnEnemies()
+void TilemapGenerator::SpawnUnits()
 {
     m_spawnedEnemys.clear();
     m_spawnedAlice = nullptr;
