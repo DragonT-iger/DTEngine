@@ -93,6 +93,10 @@ void PostProcessManager::Execute(RenderTexture* sceneTexture, ID3D11RenderTarget
 
 void PostProcessManager::RenderToneMapping(RenderTexture* src, ID3D11RenderTargetView* destRTV, int width, int height)
 {
+
+    DX11Renderer::Instance().SetCullMode(CullMode::None); // or Back
+    DX11Renderer::Instance().SetDepthOff();
+
     auto context = DX11Renderer::Instance().GetContext();
 
     DX11Renderer::Instance().SetCullMode(CullMode::None);

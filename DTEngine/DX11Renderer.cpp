@@ -287,6 +287,9 @@ void DX11Renderer::UpdateFog_CBUFFER(FogParams& data)
 void DX11Renderer::BeginUIRender(float renderWidth, float renderHeight)
 {
 
+
+    SetCullMode(CullMode::None);
+
     float scaleX = renderWidth  / m_refWidth;
     float scaleY = renderHeight / m_refHeight;
 
@@ -577,7 +580,6 @@ void DX11Renderer::SetCullMode(CullMode mode)
 void DX11Renderer::BeginFrame(const float clearColor[4])
 {
 
-
     assert(m_context && m_msaaTargetRTV);
 
     if (m_defaultDepthStencilState)
@@ -623,6 +625,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     ID3D11ShaderResourceView* CubeMap = temp->GetSRV();
     m_context->PSSetShaderResources(9, 1, &CubeMap);
 
+    
 
 }
 
@@ -843,8 +846,8 @@ void DX11Renderer::CBFlush()
     ID3D11Buffer* nullBuffers[8] = { nullptr, };
 
     // VS와 PS의 1번 슬롯부터 8개 슬롯을 모두 해제
-    m_context->VSSetConstantBuffers(1, 8, nullBuffers);
-    m_context->PSSetConstantBuffers(1, 8, nullBuffers);
+    m_context->VSSetConstantBuffers(1, 9, nullBuffers);
+    m_context->PSSetConstantBuffers(1, 9, nullBuffers);
   
 
 }
