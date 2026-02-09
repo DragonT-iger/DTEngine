@@ -36,7 +36,7 @@ public:
     GameObject* GetSpawnedAlice() const { return m_spawnedAlice; }
     GameObject* GetSpawnedRedQueen() const { return m_spawnedRedQueen; }
 
-	static constexpr int PALETTE_SIZE = 10;
+	static constexpr int PALETTE_SIZE = 11;
     static constexpr int NUM_ENEMIES = 3;
 
 public:
@@ -51,6 +51,7 @@ public:
     Prefab* m_prefab7 = nullptr;
     Prefab* m_prefab8 = nullptr;
     Prefab* m_prefab9 = nullptr;
+    Prefab* m_prefab10 = nullptr;
 
     Prefab* m_enemy0 = nullptr;
     Prefab* m_enemy1 = nullptr;
