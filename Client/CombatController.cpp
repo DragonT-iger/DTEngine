@@ -241,11 +241,13 @@ bool CombatController::ReadyToMovePhase()
         Vector2 movePos = DecideMovePos_Ally(ally, moveTarget);
 
         // 최종 확정 먼저
-        if (movePos == GRIDPOS_INVALID) movePos = ally->GetPos();
+        //if (movePos == GRIDPOS_INVALID) movePos = ally->GetPos();
+        if (movePos == GRIDPOS_INVALID 
+            || battleGrid->IsBlocked(movePos, ally, nullptr, ally->GetMoveRule())) movePos = ally->GetPos();
         ally->SetMovePos(movePos);
 
-        auto p = ally->GetPos();
-        auto mp = ally->GetMovePos();
+        //auto p = ally->GetPos();
+        //auto mp = ally->GetMovePos();
 
         // 액션 확정
         if (ally->GetMovePos() != ally->GetPos()) ally->SetAction(TurnAction::Move);
