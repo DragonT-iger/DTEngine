@@ -70,14 +70,21 @@ void EndSceneManager::Update(float deltaTime)
 
     if (m_currentStep == EndStep::AliceWalk)
     {
-        if (!m_isEndingSequenceStarted)
+        if (m_combatController)
         {
-            if (m_combatController)
+            EnemyUnit* enemy0 = m_combatController->GetEnemyUnit0();
+            if (enemy0)
             {
-                EnemyUnit* enemy0 = m_combatController->GetEnemyUnit0();
-                if (enemy0)
+                Vector3 pos = enemy0->GetTransform()->GetPosition();
+
+                if (pos.z <= 2.0f)
                 {
-                    Vector3 pos = enemy0->GetTransform()->GetPosition();
+                    m_combatController->_GetOwner()->SetActive(false);
+
+                }
+
+                if (!m_isEndingSequenceStarted)
+                {
                     if (pos.z <= 3.0f)
                     {
                         m_isEndingSequenceStarted = true;
@@ -86,13 +93,13 @@ void EndSceneManager::Update(float deltaTime)
                 }
             }
         }
-        else
+
+        if (m_isEndingSequenceStarted)
         {
-            // 3초 대기
             m_stateTimer += deltaTime;
             if (m_stateTimer >= 3.0f)
             {
-                NextStep(true); 
+                NextStep(true);
             }
         }
     }
@@ -247,7 +254,7 @@ void EndSceneManager::NextStep(bool force)
         EnemyUnit* enemy0 = nullptr;
         if (m_combatController) {
             enemy0 = m_combatController->GetEnemyUnit0();
-            enemy0->SetPath({ {{2,8},{2,0}} });
+            enemy0->SetPath({ {{2,8},{2,1}} });
             m_combatController->Setup();
         } 
 
