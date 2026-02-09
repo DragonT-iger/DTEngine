@@ -87,6 +87,11 @@ float3 DisneyPBR(
 }
 
 
+float3 ApplyIBLRotation(float3 dir)
+{
+    return normalize(mul(float4(dir, 0.0f), Rotation_Matrix).xyz);
+}
+
 float3 CalculateIBL_Combined(
     float3 envColor,
     float3 ambientDiffuseColor,

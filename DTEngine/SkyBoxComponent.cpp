@@ -2,12 +2,15 @@
 #include "SkyBoxComponent.h"
 #include "MeshRenderer.h"
 #include "Material.h"
-
+#include "AssetDatabase.h"
+#include "ResourceManager.h"
 #include "DX11Renderer.h"
 
 
 BEGINPROPERTY(SkyBoxComponent)
 DTPROPERTY_SETTER(SkyBoxComponent, m_SkyBoxColor,SetSkyBoxColor);
+DTPROPERTY_SETTER(SkyBoxComponent, m_SkyBoxID, SetSkyBox);
+
 
 
 ENDPROPERTY()
@@ -15,6 +18,10 @@ ENDPROPERTY()
 
 void SkyBoxComponent::Awake()
 {
+	std::string path = AssetDatabase::Instance().GetPathFromID(m_SkyBoxID);
+	DX11Renderer::Instance().SetSkyBox(path);
+
+	
 	SkyBoxColorBinding();
 
 }
@@ -25,7 +32,11 @@ void SkyBoxComponent::Start()
 
 void SkyBoxComponent::Update(float deltaTime)
 {
-	if (m_Dirty)
+
+
+	//if(this->GetTransform()->IsDirty())
+
+	//if (m_Dirty)
 		SkyBoxColorBinding();
 }
 
@@ -34,6 +45,14 @@ void SkyBoxComponent::Update(float deltaTime)
 void SkyBoxComponent::SkyBoxColorBinding()
 {
 	IBL data; data.IBL_Value = m_SkyBoxColor;
+
+	Quaternion q = this->GetTransform()->GetRotationQuat();
+
+	Matrix rot = Matrix::CreateFromQuaternion(q);
+
+	data.Rotation_Matrix = rot.Invert(); //transpose
+
+
 	DX11Renderer::Instance().UpdateSkyBox_CBUFFER(data);
 
 
@@ -48,4 +67,12 @@ void SkyBoxComponent::SetSkyBoxColor(Vector4 Color)
 
 	m_SkyBoxColor = Color;
 	m_Dirty = true;
+}
+
+void SkyBoxComponent::SetSkyBox(uint64_t id)
+{
+	m_SkyBoxID = id;
+	std::string path = AssetDatabase::Instance().GetPathFromID(m_SkyBoxID);
+    DX11Renderer::Instance().SetSkyBox(path);
+
 }

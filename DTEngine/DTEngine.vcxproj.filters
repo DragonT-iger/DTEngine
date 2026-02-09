@@ -410,6 +410,9 @@
     <ClInclude Include="ToneMapping.h">
       <Filter>PostProcessing\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="MultiSpriteController .h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowBase.cpp">
@@ -666,6 +669,9 @@
     </ClCompile>
     <ClCompile Include="ToneMapping.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiSpriteController.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

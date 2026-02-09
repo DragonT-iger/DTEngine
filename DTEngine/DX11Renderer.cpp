@@ -253,6 +253,7 @@ void DX11Renderer::UpdateSkyBox_CBUFFER(IBL& data)
 
     IBL* dataPtr = static_cast<IBL*>(mappedData.pData);
     dataPtr->IBL_Value = data.IBL_Value;
+    dataPtr->Rotation_Matrix = data.Rotation_Matrix;
     
     m_context->Unmap(m_cbuffer_SkyBox.Get(), 0);
 }
@@ -533,6 +534,8 @@ void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector
 }
 
 
+
+
 void DX11Renderer::SetDepthOff()
 {
     m_context->OMSetDepthStencilState(m_TransDepthStencilState.Get(), 0);
@@ -603,9 +606,17 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
     // RenderTarget data처럼 입출력을 동시에 불가능 한 경우도 있으니. 예상 가능한 범위에서 조작하는 게 나아보여. 
     //const std::string path = "Assets/Models/Env/Cube/Forest/Forest.dds";
 
-    const std::string path = "Assets/Models/BackGround/CubeMap_02_05.dds";
-   // const std::string path = "Assets/Models/BackGround/output_skybox_02.dds";
-    //const std::string path = "Assets/Models/BackGround/output_theator_01.dds";
+    //const std::string path = "Assets/Models/BackGround/CubeMap_02_05.dds";
+
+    
+
+    //유일한 
+     std::string path = m_SkyBoxpath;
+    if (m_SkyBoxpath == "")
+    {
+       path = "Assets/Models/BackGround/output_skybox_02.dds";
+    }
+   // const std::string path = "Assets/Models/BackGround/output_theator_01.dds";
 
 
     Texture* temp = ResourceManager::Instance().Load<Texture>(path);

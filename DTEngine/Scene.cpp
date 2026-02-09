@@ -39,6 +39,7 @@
 #include "Fog.h"
 
 #include "SoundManager.h"
+#include "MultiSpriteController .h"
 
 GameObject* Scene::CreateGameObject(const std::string& name)
 {
@@ -849,10 +850,13 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
         // std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
         RenderOpaque(opaqueQueue);
-      //  RenderOutline(opaqueQueue);
+       // RenderOutline(opaqueQueue); 
 
+
+       //Sorting 해야 함... effect 겹치는 거 때문에
+       // 
        // Sorter::Instance().CreateKeyTransparent(transparentQueue);
-       // std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
+      //  std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
          RenderTrans(transparentQueue, viewTM);
        // RenderTrans(SortedVectorTrans, viewTM);
 
