@@ -412,7 +412,12 @@ void TutorialManager::NextStep(bool force)
 
 
         if (m_combatController) m_combatController->GetEnemyUnit0()->SetPath({ {{ 1.f,5.f },{ 5.f,5.f }} });
+        if (m_combatController) {
+            UnitStats stat = m_combatController->GetEnemyUnit0()->GetStats();
+            stat.atk = 60;
 
+            m_combatController->GetEnemyUnit0()->SetStats(stat);
+        }
         if (m_combatController) m_combatController->Setup();
     }
     break;

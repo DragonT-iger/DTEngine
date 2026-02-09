@@ -20,7 +20,7 @@ DTPROPERTY(StageInitializer, m_generator)
 //DTPROPERTY(StageInitializer, m_loseWindow)
 //DTPROPERTY(StageInitializer, m_settingWindow)
 DTPROPERTY(StageInitializer, m_stageLevelText)
-DTPROPERTY(StageInitializer, m_stageDialogueText)
+//DTPROPERTY(StageInitializer, m_stageDialogueText)
 ENDPROPERTY()
 
 void StageInitializer::Awake()
@@ -28,15 +28,38 @@ void StageInitializer::Awake()
     int currentLevel = GameManager::Instance()->GetStageLevel();
 
     TilemapData* currentMap = nullptr;
+    std::wstring stageFirstText;
+
     switch (currentLevel)
     {
-    case 1: currentMap = m_mapData1; break;
-    case 2: currentMap = m_mapData2; break;
-    case 3: currentMap = m_mapData3; break;
-    case 4: currentMap = m_mapData4; break;
-    case 5: currentMap = m_mapData5; break;
-    case 6: currentMap = m_mapData6; break;
-    default: currentMap = m_mapData1; break;
+    case 1:
+        currentMap = m_mapData1;
+        stageFirstText = L"Stage 1"; 
+        break;
+    case 2:
+        currentMap = m_mapData2;
+        stageFirstText = L"Stage 2";
+        break;
+    case 3:
+        currentMap = m_mapData3;
+        stageFirstText = L"Stage 3";
+        break;
+    case 4:
+        currentMap = m_mapData4;
+        stageFirstText = L"Stage 4";
+        break;
+    case 5:
+        currentMap = m_mapData5;
+        stageFirstText = L"Stage 5";
+        break;
+    case 6:
+        currentMap = m_mapData6;
+        stageFirstText = L"Stage 6";
+        break;
+    default:
+        currentMap = m_mapData1;
+        stageFirstText = L"Unknown Stage";
+        break;
     }
 
     if (m_generator && currentMap)
@@ -46,7 +69,7 @@ void StageInitializer::Awake()
 
     if (m_stageLevelText)
     {
-        m_stageLevelText->SetText(L"STAGE " + std::to_wstring(currentLevel));
+        m_stageLevelText->SetText(stageFirstText);
     }
 
 }
