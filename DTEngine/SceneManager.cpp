@@ -53,8 +53,9 @@ bool SceneManager::ProcessSceneChange()
         m_nextName.clear();
         return false;
     }
-
-    m_active = it->second.get();
+    Scene* nextScene = it->second.get();
+    m_active = it->second.get(); 
+    nextScene->Clear();
 
     std::string scenePath = "Scenes/" + m_nextName + ".scene";
     std::string fullPath = ResourceManager::Instance().ResolveFullPath(scenePath);
