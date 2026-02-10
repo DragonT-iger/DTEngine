@@ -137,6 +137,7 @@
     <ClCompile Include="ArrowObjectPool.cpp" />
     <ClCompile Include="BreakableWall.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
+    <ClCompile Include="CameraRotator.cpp" />
     <ClCompile Include="ChesherGuideEvent.cpp" />
     <ClCompile Include="ClickNextStageEvent.cpp" />
     <ClCompile Include="ClickPSOkayEvent.cpp" />
@@ -175,6 +176,8 @@
     <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="SetMainSceneEvent.cpp" />
+    <ClCompile Include="SetMinusSkillText.cpp" />
+    <ClCompile Include="SetSkillText.cpp" />
     <ClCompile Include="SkillButton.cpp" />
     <ClCompile Include="SkillHoverEvent.cpp" />
     <ClCompile Include="SliderValueEvent.cpp" />
@@ -195,6 +198,7 @@
     <ClInclude Include="ArrowObjectPool.h" />
     <ClInclude Include="BreakableWall.h" />
     <ClInclude Include="CameraControlEvent.h" />
+    <ClInclude Include="CameraRotator.h" />
     <ClInclude Include="ChesherGuideEvent.h" />
     <ClInclude Include="ClickNextStageEvent.h" />
     <ClInclude Include="ClickPSOkayEvent.h" />
@@ -233,6 +237,8 @@
     <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="SetMainSceneEvent.h" />
+    <ClInclude Include="SetMinusSkillText.h" />
+    <ClInclude Include="SetSkillText.h" />
     <ClInclude Include="SkillButton.h" />
     <ClInclude Include="SkillHoverEvent.h" />
     <ClInclude Include="SliderValueEvent.h" />

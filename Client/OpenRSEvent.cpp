@@ -44,17 +44,26 @@ void OpenRSEvent::RequestOpenWindow(GameObject* target)
     if (unitName == "Chess_Spear_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Knight.png"));
+        auto transform = barImage->_GetOwner()->GetTransform();
+        transform->SetPosition(Vector3(0.220f, -0.125f, 0));
+        transform->SetScale(Vector3(0.525f, 0.350f, 1.90f));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(1);
     }
     else if (unitName == "Chess_Sword_Shield_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Rook.png"));
+        auto transform = barImage->_GetOwner()->GetTransform();
+        transform->SetPosition(Vector3(0.220f, -0.125f, 0));
+        transform->SetScale(Vector3(0.525f, 0.350f, 1.90f));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(0);
     }
     else if (unitName == "Chess_Wand_V1")
     {
         barImage->SetTextureID(AssetDatabase::Instance().GetIDFromPath("Assets/Models/UI/Alice_UI/Strategy_Bishop.png"));
         m_targetUnit->GetComponent<Unit>()->SetUnitType(2);
+        auto transform = barImage->_GetOwner()->GetTransform();
+        transform->SetPosition(Vector3(0.2f, -0.125f, 0));
+        transform->SetScale(Vector3(0.550f, 0.350f, 1.90f));
     }
      
     // 이동, 전투 값 가져오기.

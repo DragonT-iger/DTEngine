@@ -22,7 +22,7 @@
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_nonCostObj)
 DTPROPERTY(ClickPSOkayEvent, m_button)
-DTPROPERTY(ClickPSOkayEvent, m_mapData)
+//DTPROPERTY(ClickPSOkayEvent, m_mapData)
 DTPROPERTY(ClickPSOkayEvent, m_knight)
 DTPROPERTY(ClickPSOkayEvent, m_rook)
 DTPROPERTY(ClickPSOkayEvent, m_bishop)
@@ -43,8 +43,8 @@ void ClickPSOkayEvent::SetClick()
 
 		m_button->SetOnClick([this]() 
 				{
-						if (!m_mapData)
-								return;
+						//if (!m_mapData)
+						//		return;
 
 						if (!m_knight || !m_rook || !m_bishop)
 								return;

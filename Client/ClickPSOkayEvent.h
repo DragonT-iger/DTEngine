@@ -2,7 +2,6 @@
 #include "MonoBehaviour.h"
 
 class UIButton;
-class TilemapGenerator;
 class Prefab;
 class GameObject;
 class TutorialManager;
@@ -18,7 +17,6 @@ public:
 private:
 
 		UIButton* m_button = nullptr;
-		TilemapGenerator* m_mapData = nullptr;
 		Prefab* m_selectPrefab = nullptr;
 
 		Prefab* m_knight = nullptr;

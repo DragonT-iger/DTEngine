@@ -48,7 +48,7 @@ void HPBarFollowEvent::HPBarCameraSetUp()
 		m_mainCamera = scene->GetMainCamera();
 
 		Transform* camTf = m_mainCamera->GetComponent<Transform>();
-		Vector3 camEuler = camTf->GetEditorEuler();
+		Vector3 camEuler = camTf->GetWorldRotationEuler();
 
 		// 카메라 반대 방향으로 설정 (Y축 180도 반전)
 		Vector3 billboardRot = Vector3(camEuler.x, camEuler.y + 180.0f, camEuler.z);
@@ -59,50 +59,46 @@ void HPBarFollowEvent::HPBarCameraSetUp()
 
 void HPBarFollowEvent::UpdateFillScale(float deltaTime)
 {
-		if (!m_targetObject || !m_fillObject)
-				return;
+    if (!m_targetObject || !m_fillObject)
+        return;
 
-		// 체력이 아니라 isalive로 판단.
-		if (!m_targetUnit->IsAlive())
-		{
-				_GetOwner()->SetActive(false);
-				return;
-		}
-		
-		Transform* parentTf = m_targetObject->GetTransform();
-		if (!parentTf)
-				return;
-		Vector3 parentRot = parentTf->GetEditorEuler();
-		Vector3 inverseRot = Vector3(-parentRot.x, -parentRot.y, -parentRot.z);
+    if (!m_targetUnit->IsAlive())
+    {
+        _GetOwner()->SetActive(false);
+        return;
+    }
 
-		// 비율 계산하고
-		float targetRatio = m_targetUnit->GetHp() / m_targetUnit->GetStats().maxHp;
+    float targetRatio = m_targetUnit->GetHp() / m_targetUnit->GetStats().maxHp;
+    m_currentRatio = Lerp(m_currentRatio, targetRatio, m_lerpSpeed * deltaTime);
 
-		// 보간해서 줄어드는 연출 자연스럽게
-		m_currentRatio = Lerp(m_currentRatio, targetRatio, m_lerpSpeed * deltaTime);
+    Vector3 fillScale = m_fillObject->GetTransform()->GetScale();
+    Vector3 newScale = m_fillBaseScale;
+    newScale.x = m_fillBaseScale.x * m_currentRatio;
+    m_fillObject->GetTransform()->SetScale(newScale);
 
-		Vector3 fillScale = m_fillObject->GetTransform()->GetScale();
+    Vector3 newPos = m_fillBasePosition;
+    float offsetX = m_fillBaseScale.x * (1.0f - m_currentRatio);
+    newPos.x = m_fillBasePosition.x - offsetX;
+    m_fillObject->GetTransform()->SetPosition(newPos);
 
-		// Scale 조절. 
-		Vector3 newScale = m_fillBaseScale;
-		newScale.x = m_fillBaseScale.x * m_currentRatio;
-		m_fillObject->GetTransform()->SetScale(newScale);
 
-		// Position 조정
-		Vector3 newPos = m_fillBasePosition;
-		float offsetX = m_fillBaseScale.x * (1.0f - m_currentRatio);
-		newPos.x = m_fillBasePosition.x - offsetX;
-		m_fillObject->GetTransform()->SetPosition(newPos);
+    if (m_mainCamera)
+    {
+        Transform* camTf = m_mainCamera->GetComponent<Transform>();
+        Transform* parentTf = m_targetObject->GetTransform();
 
-		// 빌보딩
-		Transform* camTf = m_mainCamera->GetComponent<Transform>();
-		Vector3 camEuler = camTf->GetEditorEuler();
+        Vector3 camWorldEuler = camTf->GetWorldRotationEuler();
+        Vector3 parentWorldEuler = parentTf->GetWorldRotationEuler();
 
-		// 부모 회전 역행렬에다가 원래 회전값으로.  + 카메라 반대 방향
-		Vector3 billboardRot = Vector3(0, camEuler.y + 360.0f, 0);
-		Vector3 inverseParentRot = Vector3(0, -parentRot.y, 0);
-		Vector3 finalRot = billboardRot + inverseParentRot;
-		_GetOwner()->GetTransform()->SetRotationEuler(finalRot);
+        Vector3 targetWorldEuler = camWorldEuler;
+        targetWorldEuler.y += 180.0f;
+
+        Vector3 localEuler = targetWorldEuler - parentWorldEuler;
+        localEuler.x += 90.0f;
+
+
+        _GetOwner()->GetTransform()->SetRotationEuler(localEuler);
+    }
 }
 
 float HPBarFollowEvent::Lerp(float start, float end, float t)

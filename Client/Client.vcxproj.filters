@@ -183,6 +183,15 @@
     <ClCompile Include="BreakableWall.cpp">
       <Filter>Unit</Filter>
     </ClCompile>
+    <ClCompile Include="SetSkillText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SetMinusSkillText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraRotator.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -337,6 +346,15 @@
     </ClInclude>
     <ClInclude Include="BreakableWall.h">
       <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="SetSkillText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SetMinusSkillText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraRotator.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
