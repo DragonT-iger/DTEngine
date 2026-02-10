@@ -7,6 +7,7 @@
 
 
 BEGINPROPERTY(BgFadeController)
+DTPROPERTY(BgFadeController, m_settingButton)
 DTPROPERTY(BgFadeController, m_rayObj)
 DTPROPERTY(BgFadeController, m_bgObj)
 DTPROPERTY(BgFadeController, m_skillimg)
@@ -122,4 +123,18 @@ void BgFadeController::SetDefeatObj(bool value)
         m_mainbuttonImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
         m_exitbuttonImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
     }
+}
+
+void BgFadeController::SettingToggleFinish()
+{
+    if (!m_settingButton)
+        return;
+    if (!setFinish)
+    {
+        // button 꺼버리기. toggle 로직 자체를 막아버리기.
+        m_settingButton->GetComponent<UIButton>()->SetActive(false);
+        m_rayObj->GetComponent<RayCastHitEvent>()->SetGameFinish(true);
+        setFinish = true;
+    }
+
 }

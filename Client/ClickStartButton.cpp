@@ -52,13 +52,16 @@ void ClickStartButton::Start()
 						if (isStart)
 								return;
 
+						auto rayobj = m_rayObj->GetComponent<RayCastHitEvent>();
+
+						// 시작하면 초기화. 
+						if (rayobj->GetStartBattle())
+								return;
+
 						int managerMoney = GameManager::Instance()->GetMoney();
 
-						// 이후에는 gameobject 한개 가지고 있어서 띄우기.
 						if (managerMoney >= m_cost)
 						{
-								std::cout << "유닛 생성 cost 보유." << std::endl;
-
 								// 만약 settingwindow 켜져있으면 끄기.
 								if (m_settingWindow->IsActive())
 										m_settingWindow->SetActive(false);
@@ -100,6 +103,7 @@ void ClickStartButton::StartGame()
 		rayobj->SetStartBattle(true);
 		rayobj->SetRay(true);
 		isStart = true;
+		
 }
 
 void ClickStartButton::ResetForStage()

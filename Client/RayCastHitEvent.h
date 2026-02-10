@@ -37,6 +37,9 @@ public:
 		ArrowObjectPool* GetArrowPool() { return m_arrowPool; }
 		void SetRay(bool value) { m_isRay = value; }
 		bool GetRay() { return m_isRay; }
+
+		bool IsGameFinished() const { return m_finishGame; }
+		void SetGameFinish(bool value) { m_finishGame = value; }
 private:
 		GameObject* m_hitObj = nullptr;
 
@@ -62,5 +65,7 @@ private:
 		EnemyUnit* m_lastSelectedEnemy = nullptr;
 
 		int curTimeScale = 1;
+
+		bool m_finishGame = false;
 };
 

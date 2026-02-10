@@ -19,7 +19,10 @@ public:
 		void Init();
 		void SetVictoryObj(bool value);
 		void SetDefeatObj(bool value);
+
+		void SettingToggleFinish();
 private:
+		GameObject* m_settingButton = nullptr;
 		GameObject* m_rayObj = nullptr;
 		GameObject* m_bgObj = nullptr;	// victory or defeat window.
 		Image* m_img = nullptr;					// fade img
@@ -30,9 +33,10 @@ private:
 		Image* m_mainbuttonImg = nullptr;
 		Image* m_exitbuttonImg = nullptr;
 		
+		bool setFinish = false;
 		bool isComplete = false;
 		bool isVictoryObj = false;	
-		float endAlpha = 0.925f;
+		float endAlpha = 0.95f;
 		float startalpha = 0.15f;
 		float fadeSpeed = 0.5f;
 };

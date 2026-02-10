@@ -18,10 +18,15 @@ void ClickWarningWindowExitButtonEvent::Start()
 						// 일단 부모 꺼주기.
 						_GetOwner()->GetTransform()->GetParent()->_GetOwner()->SetActive(false);
 
+						auto rayobj = m_rayObj->GetComponent<RayCastHitEvent>();
 						// ray 다시 처리되게 해주기.
-						m_rayObj->GetComponent<RayCastHitEvent>()->SetRay(true);
+						rayobj->SetRay(true);
 
-						// startbutton 다시 눌릴 수 있게 처리.
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+						if (!rayobj->GetStartBattle())
+						{
+								// startbutton 다시 눌릴 수 있게 처리.
+								rayobj->SetRay(true);
+								m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+						}
 				});
 }
