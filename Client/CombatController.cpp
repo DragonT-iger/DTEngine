@@ -5,6 +5,7 @@
 #include "TutorialManager.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -143,8 +144,6 @@ void CombatController::Setup()
         RedQueenUnit* queen = queenObject->GetComponent<RedQueenUnit>();
         if (queen) 
         {
-            std::cout << "??????????????????//\n";
-            
             m_redQueenUnit = queen;
 
             Vector3 pos = queenObject->GetTransform()->GetPosition();
@@ -155,8 +154,6 @@ void CombatController::Setup()
             m_redQueenUnit->SetPos(p0);
         }
     }
-
-
 
     m_isStageStart = true;
 }
@@ -179,15 +176,6 @@ bool CombatController::ReadyPhase()
         m_redQueenUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
         battleGrid->ReserveMove(m_redQueenUnit->GetPos());
     }
-
-
-    //실행 테스트를 위해 임시 주석처리 했음
-    //m_aliceUnit->SetMovePos(m_redQueenUnit->GetPos()); // 붉은 여왕도 예외로 이동 안함.
-    //battleGrid->ReserveMove(m_redQueenUnit->GetPos());
-
-
-
-
 
     for (AllyUnit* ally : m_allyUnits)
     {
@@ -369,7 +357,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (ally->GetAction() == TurnAction::Wait) continue;
         if (ally->IsAnimStart() && !ally->IsAnimDone()) return false;
 
-        ApplyActionResult(ally);
+        //ApplyActionResult(ally);
     }
 
     for (EnemyUnit* enemy : m_enemyUnits)
@@ -380,7 +368,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
         if (enemy->GetAction() == TurnAction::Wait) continue;
         if (enemy->IsAnimStart() && !enemy->IsAnimDone()) return false;
 
-        ApplyActionResult(enemy);
+        //ApplyActionResult(enemy);
     }
 
     // 함정타일 밟았을 때, 데미지 처리
@@ -1080,7 +1068,7 @@ Unit* CombatController::FindBlockingUnitByPos(const Vector2& pos, Unit* me) cons
             if (ally->GetMovePos() == GRIDPOS_INVALID) continue;
             if (ally->GetMovePos() == pos) return ally;
         }
-        if (m_aliceUnit->GetMovePos() == pos) return m_aliceUnit;
+        if (m_aliceUnit && m_aliceUnit->GetMovePos() == pos) return m_aliceUnit;
     }
 
     return nullptr;
@@ -1143,13 +1131,17 @@ void CombatController::ResolveTurnAction(Unit* me)
 
     case TurnAction::Attack: // 공격 처리
     {
-        //Unit* target = me->GetAttackTarget();
-        //float damage = CalculateDamage(me, target);
+        Unit* target = me->GetAttackTarget();
+        if (target && target->IsAlive())
+        {
+            float damage = CalculateDamage(me, target);
 
-        me->SetDir(me->GetAttackPos());
-        //target->TakeDamage(damage);
+            me->SetDir(me->GetAttackPos());
+            target->TakeDamage(damage);
 
-        //me->StartAttackAnim();
+            //me->StartAttackAnim();
+        }
+
     }  break;
 
     case TurnAction::Miss: // 빗나감 처리
@@ -1162,7 +1154,7 @@ void CombatController::ResolveTurnAction(Unit* me)
     case TurnAction::BreakWall: // 벽 파괴 처리
     {
         me->SetDir(me->GetAttackPos());
-        //battleGrid->WallBreak(me->GetAttackPos());
+        battleGrid->WallBreak(me->GetAttackPos());
 
         //me->StartAttackAnim();
     } break;
