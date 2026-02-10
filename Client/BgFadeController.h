@@ -39,5 +39,7 @@ private:
 		float endAlpha = 0.95f;
 		float startalpha = 0.15f;
 		float fadeSpeed = 0.5f;
+		float delayTime = 0.5f;
+		float time = 0;
 };
 
