@@ -62,7 +62,7 @@ SpriteSheetDim ParseSpriteSheetDimFromPath(const std::string& path)
 
 void SpriteEffect::Update(float dTime)
 {
-    if (!m_play) return;                 // play flag가 꺼지면 update 안 함
+    if (!m_play) return;                
     if (m_cols == 0 || m_rows == 0) return;
     if (m_frameInterpolation <= 0.f) return;
 

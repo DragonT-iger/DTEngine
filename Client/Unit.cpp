@@ -2,12 +2,13 @@
 #include "AssetDatabase.h"
 #include "Dissolved.h"
 #include "Effect.h"
+#include "EffectManager.h"
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
-    { 20, 10, 150, 1 }, // 룩 
-    { 25,  5, 110, 1 }, // 나이트
-    { 30,  2,  90, 2 }, // 비숍
+    { 0, 10, 150, 1 }, // 룩 
+    { 0,  5, 110, 1 }, // 나이트
+    { 0,  2,  90, 2 }, // 비숍 { 30,  2,  90, 2 },
     {  0,  0, 150, 0 }, // 앨리스
     {  0,  0, 150, 0 }, // 퀸
 };
@@ -56,6 +57,14 @@ void Unit::SetStats(const UnitStats& s)
 {
     m_stats = s;
     m_hp = m_stats.maxHp;
+}
+
+void Unit::Heal(float heal)
+
+{
+    EffectManager::Instance().PlayEffect("Heal", this->_GetOwner());
+    m_hp = (std::min)(m_hp + heal, m_stats.maxHp); 
+
 }
 
 void Unit::StartAction()
@@ -413,6 +422,9 @@ void Unit::StartMoveAnim()
     m_animStart = true;
 }
 
+// 타입에 맞는 이펙트 -> 무기타입에 따른.
+// 딜레이 넣기. 
+
 void Unit::StartAttackAnim()
 {
     if (!m_anim) return;
@@ -420,6 +432,8 @@ void Unit::StartAttackAnim()
     uint64_t id = ANIM_INVALID;
     uint64_t id1 = ANIM_INVALID;
     uint64_t id2 = ANIM_INVALID;
+    StartWeaponEffect(m_weaponName);
+
     if (m_weaponName == "Sword") {
         id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_attack_sword_shield.fbx");
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_attack.fbx");
@@ -443,7 +457,6 @@ void Unit::StartDieAnim()
     //if (m_animStart) return;
     //std::cout << _GetOwner()->_GetID() << std::endl;
     StartDissolve();
-
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_die.fbx");
     uint64_t id1 = ANIM_INVALID;
     uint64_t id2 = ANIM_INVALID;
@@ -463,6 +476,8 @@ void Unit::StartDieAnim()
 
 void Unit::StartDissolve()
 {
+
+    EffectManager::Instance().PlayEffect("Smoke", this->_GetOwner());
 
 
     auto tf = GetTransform();
@@ -502,5 +517,23 @@ void Unit::StartDissolve()
 
     
 
+}
+
+void Unit::StartWeaponEffect(const std::string& name)
+{
+    if (name == "" || !this->GetAttackTarget()) return;
+
+
+
+    if(name == "Spear")
+    {
+       
+       EffectManager::Instance().PlayEffect_Targeting("2Attack02", this->_GetOwner() , this->GetAttackTarget()->_GetOwner());
+    }
+
+    else if (name == "Sword")
+    {
+        EffectManager::Instance().PlayEffect_Targeting("Attack01", this->_GetOwner(), this->GetAttackTarget()->_GetOwner());
+    }
 }
 

@@ -850,7 +850,7 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
         // std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
         RenderOpaque(opaqueQueue);
-       // RenderOutline(opaqueQueue); 
+        RenderOutline(opaqueQueue); 
 
 
        //Sorting 해야 함... effect 겹치는 거 때문에

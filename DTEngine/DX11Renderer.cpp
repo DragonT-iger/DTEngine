@@ -616,7 +616,7 @@ void DX11Renderer::BeginFrame(const float clearColor[4])
      std::string path = m_SkyBoxpath;
     if (m_SkyBoxpath == "")
     {
-       path = "Assets/Models/BackGround/output_skybox_02.dds";
+       path = "Assets/Models/BackGround/output_theator_02.dds";
     }
    // const std::string path = "Assets/Models/BackGround/output_theator_01.dds";
 
@@ -668,6 +668,10 @@ void DX11Renderer::BindGlobalResources()
 
     m_context->PSSetShaderResources(10, 1, m_shadowSRV.GetAddressOf());
     m_context->PSSetSamplers(10, 1, m_shadowSampler.GetAddressOf());
+
+
+    ID3D11SamplerState* pSampler = m_samplers[4].Get();
+    m_context->PSSetSamplers(3, 1, &pSampler);
 }
 //  ★
 void DX11Renderer::CreateConstantBuffers()

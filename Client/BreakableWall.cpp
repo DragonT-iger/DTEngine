@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "Animatior.h"
 #include "TilemapGenerator.h"
+#include "Dissolved.h"
+#include "Effect.h"
 
 BEGINPROPERTY(BreakableWall)
 ENDPROPERTY()
@@ -45,8 +47,21 @@ void BreakableWall::StartWallBreakAnim()
 		return;
 	}
 
-	//uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_Idle_1.fbx");
-	//m_anim->SetClip(id);
+
+
+	//auto cmp = this->_GetOwner()->AddComponent<Dissolved>();
+	//if (cmp)
+	//{
+	//	auto cmp_e = this->_GetOwner()->AddComponent<Effect>();
+	//	cmp->SetAlbedoTexture("Assets/Models/BackGround/Height_Tile/Height_BaseColor.png");
+	//	cmp->SetNoiseTexture();
+	//	cmp_e->SetTimeMultiplier(0.1f);
+	//	cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
+
+	//}
+
+
+
 	m_anim->SetTime(1.0f);
 	m_anim->SetLoop(false);
 	m_anim->SetPlay(true);

@@ -47,6 +47,7 @@
 #include "../Client/ClientSceneManager.h"
 #include "StageInitializer.h"
 
+#include "../Client/EffectManager.h"
 
 
 Game::Game() = default;
@@ -113,6 +114,13 @@ bool Game::Initialize()
 		return false;
 	}
 
+
+	if (!EffectManager::Instance().Initialize())
+	{
+		assert(false && "SoundManager 초기화 실패");
+		return false;
+	}
+
 	InputManager::Instance().Initialize(); 
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
@@ -121,18 +129,18 @@ bool Game::Initialize()
 	//SceneManager::Instance().RegisterScene("Scenes/GridTestScene.scene");
 	//SceneManager::Instance().LoadScene("GridTestScene");
 
-	SceneManager::Instance().RegisterScene("Scenes/GridTestSceneHS2.scene");
-	SceneManager::Instance().LoadScene("GridTestSceneHS2");
+	//SceneManager::Instance().RegisterScene("Scenes/GridTestSceneHS2.scene");
+	//SceneManager::Instance().LoadScene("GridTestSceneHS2");
 
 
-	/*SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
-	SceneManager::Instance().LoadScene("DTtestScene");*/
+	///*SceneManager::Instance().RegisterScene("Scenes/DTtestScene.scene");
+	//SceneManager::Instance().LoadScene("DTtestScene");*/
 
-	SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
-	//SceneManager::Instance().LoadScene("TutorialScene");
+	//SceneManager::Instance().RegisterScene("Scenes/TutorialScene.scene");
+	////SceneManager::Instance().LoadScene("TutorialScene");
 
 
-	SceneManager::Instance().RegisterScene("Scenes/EndingScene.scene");
+	//SceneManager::Instance().RegisterScene("Scenes/EndingScene.scene");
 	//SceneManager::Instance().LoadScene("EndingScene");
 
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
@@ -150,7 +158,7 @@ bool Game::Initialize()
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
-	SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
+	//SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
 
 	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
 	 ClientSceneManager::Instance().LoadScene("TitleScene");
@@ -206,6 +214,8 @@ bool Game::Initialize()
 		assert(false && "FSMRegister 초기화 실패");
 		return false;
 	}
+
+	
 
 
 	//Scene testScene("TestScene");

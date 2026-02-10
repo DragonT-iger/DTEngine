@@ -48,9 +48,15 @@ public:
     virtual void Start() override;
     virtual void Update(float dTime) override;
 
+    void Initalize();
+
+
     void RebuildChain();
     void StartChain();           // 외부에서 강제로 시작
     void StopChain();            // 외부에서 강제로 정지
+
+    void SetAutoDestroy(bool enable) { m_bAutoDestroy = enable; }
+    void SetFollowTarget(GameObject* target) { m_followTarget = target; }
 
 private:
     Node m_n1, m_n2, m_n3, m_n4;
@@ -59,6 +65,9 @@ private:
     // prev 이벤트 감지용 상태
     bool m_prevStartedCache[4] = { false,false,false,false };
     bool m_prevFinishedCache[4] = { false,false,false,false };
+
+    bool m_bAutoDestroy = false;     
+    GameObject* m_followTarget = nullptr; 
 
 private:
     bool HasJustStarted(SpriteEffect* fx, int idx);

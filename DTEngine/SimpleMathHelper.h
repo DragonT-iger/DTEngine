@@ -75,4 +75,6 @@ namespace SimpleMathHelper {
         m.Invert(inv);   // SimpleMath 제공
         return inv;
     }
+
+
 }

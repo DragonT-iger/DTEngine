@@ -13,6 +13,7 @@
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
 #include "ClickStartButton.h"
+#include "EffectManager.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -289,7 +290,7 @@ void RayCastHitEvent::RaycastCheck()
 												auto unit = m_Unit->GetComponent<EnemyUnit>();
 												if (!unit)
 														return;
-
+												EffectManager::Instance().PlayEffect("Poison", unit->_GetOwner());
 												unit->TakeDamage(20);
 												std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;

@@ -16,7 +16,7 @@ public:
 
 public:
 	void Awake() override;
-
+	void Update(float dTime) override;
 public:
 
 	//Editor에서 albedo만 넣어주면 됨. 
@@ -35,4 +35,7 @@ private:
 
 	bool m_Dissolve_Start = false;
 	Material* m_material = nullptr;
+
+	bool m_CountDown = false;
+	float m_Time = 0.0f;
 };
