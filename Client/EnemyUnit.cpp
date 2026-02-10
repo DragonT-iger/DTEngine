@@ -83,7 +83,7 @@ static float GetDirFromTo(const Vector2& from, const Vector2& to)
 
 static Vector3 GridToWorld_A(const Vector2& g)
 {
-    return Vector3{ g.x * 2.0f, 1.02f, g.y * 2.0f };
+    return Vector3{ g.x * 2.0f, 1.1f, g.y * 2.0f };
 }
 
 static int Sign(int x)

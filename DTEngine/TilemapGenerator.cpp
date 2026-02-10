@@ -25,8 +25,11 @@ DTPROPERTY(TilemapGenerator, m_prefab5)
 DTPROPERTY(TilemapGenerator, m_prefab6)
 DTPROPERTY(TilemapGenerator, m_prefab7)
 DTPROPERTY(TilemapGenerator, m_prefab8)
-DTPROPERTY(TilemapGenerator, m_prefab9)
-DTPROPERTY(TilemapGenerator, m_prefab10)
+DTPROPERTY(TilemapGenerator, m_bgWall0)
+DTPROPERTY(TilemapGenerator, m_bgWall1)
+
+DTPROPERTY(TilemapGenerator, m_alice)
+DTPROPERTY(TilemapGenerator, m_redQueen)
 
 DTPROPERTY(TilemapGenerator, m_enemy0)
 DTPROPERTY(TilemapGenerator, m_enemy1)
@@ -47,19 +50,51 @@ void TilemapGenerator::Start()
 void TilemapGenerator::BuildMap()
 {
     m_spawnedTiles.clear();
-
     if (m_mapData == nullptr) return;
 
     int width = m_mapData->GetExpandedWidth();
     int height = m_mapData->GetExpandedHeight();
-
     float tileSize = TilemapData::TILE_SIZE;
 
     Transform* myTr = GetTransform();
+    if (myTr == nullptr) return;
 
-    Prefab* palette[] = { 
-        m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4, 
-        m_prefab5, m_prefab6, m_prefab7, m_prefab8, m_prefab9, m_prefab10 
+    if (width == 10 && height == 14 && m_bgWall0)
+    {
+        GameObject* instance = m_bgWall0->Instantiate();
+        if (instance)
+        {
+            Transform* tr = instance->GetTransform();
+            if (tr)
+            {
+                tr->SetParent(myTr);
+                tr->SetPosition(Vector3(7.0f, -0.5f, 11.0f));
+                instance->SetActive(true);
+
+                m_spawnedBgWall = instance;
+            }
+        }
+    }
+    else if (width == 10 && height == 26 && m_bgWall1)
+    {
+        GameObject* instance = m_bgWall1->Instantiate();
+        if (instance)
+        {
+            Transform* tr = instance->GetTransform();
+            if (tr)
+            {
+                tr->SetParent(myTr);
+                tr->SetPosition(Vector3(7.0f, -0.5f, 23.0f));
+                instance->SetActive(true);
+
+                m_spawnedBgWall = instance;
+            }
+        }
+    }
+
+    Prefab* palette[] = {
+        m_prefab0, m_prefab1, m_prefab2, m_prefab3, m_prefab4,
+        m_prefab5, m_prefab6, m_prefab7, m_prefab8, m_prefab9, m_prefab10
     };
 
     m_spawnedTiles.resize(width * height, nullptr);
@@ -70,48 +105,84 @@ void TilemapGenerator::BuildMap()
         {
             int index = m_mapData->GetTileIndex(x, y);
 
+            // 8, 9, 10 필요없어졌는데.. 모든곳에서 다 지우기 귀찮으니까... 일단 걍 생성만 안하게 막아두겠음..
+            if (index == 8 || index == 9 || index == 10) continue;
+
             int arrayIndex = y * width + x;
-            
+
             if (index < 0 || index >= PALETTE_SIZE) continue;
 
             Prefab* prefab = palette[index];
-            if (!prefab) continue;
+            if (prefab == nullptr) continue;
 
             GameObject* instance = prefab->Instantiate();
-            if (!instance) continue;
+            if (instance == nullptr) continue;
+
+            Transform* tr = instance->GetTransform();
+            if (tr == nullptr) continue;
+
+            Vector3 position((x - 1) * tileSize, 0.0f, (y - 1) * tileSize);
+
+            Vector3 scale(1.0f, 1.0f, 1.0f);
+
+            float pitch = 0.0f;
+            float yaw = 0.0f;
+            float roll = 0.0f;
+
+
+            if (index == 0 || index == 1 || index == 2 || index == 3 || index == 4 || index == 6 || index == 7)
+            {
+                pitch = 90.0f;
+            }
 
             if (index == 5)
             {
                 BreakableWall* bw = instance->GetComponent<BreakableWall>();
                 if (bw)
                 {
-                    Vector2 gridPos{ (float)(x - 1), (float)(y - 1) };
+                    Vector2 gridPos((float)(x - 1), (float)(y - 1));
                     bw->Init(this, gridPos);
                 }
             }
 
             if (index == 8 || index == 9)
             {
-                float pitch = 0.0f;
-                float yaw = 0.0f; 
-                float roll = 0.0f; 
+                scale = Vector3(1.0f, 1.0f, 1.0f);
 
-                if (x == 0) yaw = 90.0f;
-                else if (x == width - 1) yaw = -90.0f;
-                else if (y == 0) yaw = 0.0f;
+                if      (x == 0)          yaw = 90.0f;
+                else if (x == width - 1)  yaw = -90.0f;
+                else if (y == 0)          yaw = 0.0f;
                 else if (y == height - 1) yaw = 180.0f;
 
-                instance->GetTransform()->SetRotationEuler(Vector3(pitch, yaw, roll));
+                if      (x == 0)          position.x += 0.3f;
+                else if (x == width - 1)  position.x -= 0.3f;
+                else if (y == 0)          position.z += 0.3f;
+                else if (y == height - 1) position.z -= 0.3f;
+            }
+            else if (index == 10)
+            {
+                if      (x == 0 && y == 0)                  yaw = 90.0f;
+                else if (x == width - 1 && y == 0)          yaw = 0.0f;
+                else if (x == 0 && y == height - 1)         yaw = 180.0f;
+                else if (x == width - 1 && y == height - 1) yaw = -90.0f;
             }
 
-            instance->GetTransform()->SetParent(myTr);
-            instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, 0, (y - 1) * tileSize));
-            instance->SetActive(true);
+            if (index == 6 || index == 7)
+            {
+                position.y = -1.0f;
+            }
 
+            tr->SetScale(scale);
+            tr->SetRotationEuler(Vector3(pitch, yaw, roll));
+            tr->SetPosition(position);
+            tr->SetParent(myTr);
+
+            instance->SetActive(true);
             m_spawnedTiles[arrayIndex] = instance;
         }
     }
 }
+
 
 void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
 {
@@ -186,8 +257,8 @@ void TilemapGenerator::ReplaceTileAtGrid(const Vector2& gridPos)
     int tileIdx = m_mapData->FindDefaultGrid(ex, ey);
 
     Prefab* prefab = nullptr;
-    if (tileIdx == 0) prefab = m_prefab1;
-    else if (tileIdx == 1) prefab = m_prefab0;
+    if (tileIdx == 0) prefab = m_prefab0;
+    else if (tileIdx == 1) prefab = m_prefab1;
 
     if (!prefab) return;
 
