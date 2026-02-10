@@ -13,6 +13,8 @@ DTPROPERTY(BgFadeController, m_bgObj)
 DTPROPERTY(BgFadeController, m_skillimg)
 DTPROPERTY(BgFadeController, m_nextRetryImg)
 DTPROPERTY(BgFadeController, m_text)
+DTPROPERTY(BgFadeController, delayTime)
+
 
 // 아래 두개만 defeat 전용임. victory 경우 없음.
 DTPROPERTY(BgFadeController, m_mainbuttonImg)
@@ -36,28 +38,39 @@ void BgFadeController::BGFadeUpdate(float deltaTime)
 {
     if (!isComplete)
     {
+        // 함수호출하자..
+        SettingToggleFinish();
+
         startalpha += deltaTime * fadeSpeed;
 
         // 목표치 도달 여부 체크
         if (startalpha >= endAlpha)
         {
             startalpha = endAlpha;
-            isComplete = true;
 
             // 완전히 진해진 "직후"에 수행할 로직
             m_img->SetColor(Vector4(1, 1, 1, startalpha));
-            m_bgObj->SetActive(true);
-            auto windowImg = m_bgObj->GetComponent<Image>();
-            windowImg->SetActive(true);
-
-            if (isVictoryObj)
-                SetVictoryObj(true);
-            else
-                SetDefeatObj(true);
 
             // button들 꺼줘서 처리 안되게 할려고.
             m_rayObj->GetComponent<RayCastHitEvent>()->SetButtons(false);
-            return;
+
+            time += deltaTime;
+
+            if (time >= delayTime)
+            {
+                // 여기서 0.5초 추가로 더 계산해주고 이후에 호출.
+                m_bgObj->SetActive(true);
+
+                auto windowImg = m_bgObj->GetComponent<Image>();
+                windowImg->SetActive(true);
+
+                if (isVictoryObj)
+                    SetVictoryObj(true);
+                else
+                    SetDefeatObj(true);
+
+                    isComplete = true;
+            }
         }
 
         // 색상만 적용.
@@ -71,6 +84,8 @@ void BgFadeController::Init()
     if (!m_bgObj)
         return;
     m_bgObj->SetActive(true);
+
+    time = 0;
 
     auto windowImg = m_bgObj->GetComponent<Image>();
 
@@ -129,6 +144,7 @@ void BgFadeController::SettingToggleFinish()
 {
     if (!m_settingButton)
         return;
+    
     if (!setFinish)
     {
         // button 꺼버리기. toggle 로직 자체를 막아버리기.
@@ -136,5 +152,4 @@ void BgFadeController::SettingToggleFinish()
         m_rayObj->GetComponent<RayCastHitEvent>()->SetGameFinish(true);
         setFinish = true;
     }
-
 }

@@ -24,12 +24,15 @@ void ClickRetryStageEvent::Start()
 						//GameManager::Instance()->NextStage();
 						// life 줄이기.
 						int life = GameManager::Instance()->GetLife();
-						GameManager::Instance()->SetLife(life - 1);
+						GameManager::Instance()->SetLife(life - 9);
 
-						// life 없으면 endingscene으로.
-						if (life <= 0)
+
+						std::cout << life << std::endl;
+
+						// life 없으면 maingamescene
+						if (life < 1)
 						{
-								ClientSceneManager::Instance().LoadScene("EndingScene");
+								ClientSceneManager::Instance().LoadScene("TitleScene");
 						}
 						else
 						{
