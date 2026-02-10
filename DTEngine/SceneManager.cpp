@@ -70,7 +70,7 @@ bool SceneManager::ProcessSceneChange()
     if (m_active)
     {
         m_active->Awake();
-        m_active->Start();
+        //m_active->Start();
     }
 
     m_nextName.clear();

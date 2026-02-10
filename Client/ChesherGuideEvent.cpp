@@ -1,7 +1,7 @@
 #include "ChesherGuideEvent.h"
 #include "GameObject.h"
 #include "UIButton.h"
-
+#include "RayCastHitEvent.h"
 
 BEGINPROPERTY(ChesherGuideEvent)
 DTPROPERTY(ChesherGuideEvent, m_rayObj)
@@ -25,6 +25,12 @@ void ChesherGuideEvent::Start()
 		// 내 버튼 클릭되면 실행될 콜백 함수.
 		m_button->SetOnClick([this]() 
 				{
+						auto ray = m_rayObj->GetComponent<RayCastHitEvent>();
+						bool isray = ray->GetRay();
+						if (isray)
+						{
+								ray->SetRay(true);
+						}
 						// 다시 상호작용 가능하게 켜주기.
 						SetActiveUI(true);
 

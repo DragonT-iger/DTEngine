@@ -180,6 +180,12 @@
     <ClCompile Include="ClickSettingButtonEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="SetSkillText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SetMinusSkillText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -331,6 +337,12 @@
     </ClInclude>
     <ClInclude Include="ClickSettingButtonEvent.h">
       <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="SetSkillText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SetMinusSkillText.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
