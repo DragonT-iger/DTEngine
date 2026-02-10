@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 48.80148696899414,
-          "y": 608.7324829101563,
+          "x": 52.30131912231445,
+          "y": 525.3318481445313,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 4.296687602996826,
-          "y": 5.267024517059326,
-          "z": 1.6724035739898682
+          "x": 2.040858745574951,
+          "y": 9.508030891418457,
+          "z": 22.614593505859375
         },
         "m_rotation": {
-          "w": 0.5140602588653564,
-          "x": 0.23319613933563232,
-          "y": -0.7517160177230835,
-          "z": 0.34100526571273804
+          "w": -0.11458739638328552,
+          "x": -0.05626147240400314,
+          "y": -0.8902944326400757,
+          "z": 0.4371272623538971
         },
         "m_scale": {
           "x": 1.0,
@@ -1998,6 +1998,7 @@
           "m_rightPSWinodwBG": 8960625415959528471,
           "m_rightRSWinodwBG": 2864264039527296129,
           "m_settingWindowBG": 0,
+          "m_skillButton": 0,
           "m_startButton": 0,
           "m_tutorialManager": 4126822075113408942,
           "m_warningWindowBG": 0,
@@ -3343,7 +3344,6 @@
           "Active": true,
           "id": 14963027617217799077,
           "m_exitButton": 7906254260234940798,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3536,13 +3536,14 @@
           "Active": true,
           "id": 1838616038401361351,
           "m_alice": 0,
+          "m_bgWall0": 0,
+          "m_bgWall1": 0,
           "m_enemy0": 0,
           "m_enemy1": 0,
           "m_enemy2": 0,
           "m_mapData": 7521294909207559263,
           "m_prefab0": 2144434576612897772,
           "m_prefab1": 12928013286368622248,
-          "m_prefab10": 12894749133452066125,
           "m_prefab2": 4924267867290484229,
           "m_prefab3": 0,
           "m_prefab4": 0,
@@ -3550,7 +3551,6 @@
           "m_prefab6": 0,
           "m_prefab7": 0,
           "m_prefab8": 6219473454575545864,
-          "m_prefab9": 11976589591614734553,
           "m_redQueen": 0,
           "typeName": "TilemapGenerator"
         }
@@ -4842,7 +4842,6 @@
           "Active": true,
           "id": 13900571496093636209,
           "m_exitButton": 5661868650118910293,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5207,7 +5206,6 @@
           "Active": true,
           "id": 18105340472814518642,
           "m_exitButton": 13826289115852010737,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5479,7 +5477,6 @@
           "Active": true,
           "id": 12682932181727541194,
           "m_exitButton": 13602848777294202875,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6099,7 +6096,6 @@
           "Active": true,
           "id": 10413559488292827406,
           "m_exitButton": 13218156868245895529,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6666,7 +6662,6 @@
           "Active": true,
           "id": 14446249824013766284,
           "m_exitButton": 18069547229616471456,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6983,6 +6978,82 @@
         "m_scale": {
           "x": 0.10000000149011612,
           "y": 0.10000000149011612,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17827062240508540199,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 12035985079355135788,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 14103031513704839223,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 5129278507674569943,
+          "m_sceneName": "MainGameScene",
+          "typeName": "LoadSceneEvent"
+        }
+      ],
+      "id": 14016955157126546031,
+      "name": "tutorialPass",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7549688639708370246,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 1300.0,
+          "y": 3.5999999046325684,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 600.0,
+          "y": 400.0,
           "z": 1.0
         }
       }

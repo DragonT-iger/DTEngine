@@ -166,6 +166,7 @@
     <ClCompile Include="GameOverEvent.cpp" />
     <ClCompile Include="HPBarFollowEvent.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
+    <ClCompile Include="LoadSceneEvent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeSetActiveEvent.cpp" />
     <ClCompile Include="OpenPSEvent.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="GameOverEvent.h" />
     <ClInclude Include="HPBarFollowEvent.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />
+    <ClInclude Include="LoadSceneEvent.h" />
     <ClInclude Include="MakeSetActiveEvent.h" />
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
