@@ -12,8 +12,8 @@ public:
     CameraRotator() = default;
     virtual ~CameraRotator() = default;
 
-    virtual void Start() override;
-    virtual void Update(float deltaTime) override;
+    void Start() override;
+    void Update(float deltaTime) override;
 
     void SetTilemapGenerator(TilemapGenerator* generator) { m_tilemapGenerator = generator; }
 
@@ -37,19 +37,16 @@ private:
     TilemapGenerator* m_tilemapGenerator = nullptr;
     Camera* m_targetCamera = nullptr;
 
-    // --- 회전 관련 ---
     float m_targetAngleY = 0.0f;
     float m_currentAngleY = 0.0f;
     float m_rotationLerpSpeed = 10.0f;
 
-    // 스냅 드래그 변수
-    float m_dragAccumulatorX = 0.0f; // 마우스 이동 누적값
-    float m_dragThreshold = 100.0f;  // 이만큼 움직이면 45도 회전 (픽셀 단위)
+    float m_dragAccumulatorX = 0.0f; 
+    float m_dragThreshold = 100.0f;  
     bool m_hasRotatedThisDrag = false;
-    // --- 이동(패닝) 관련 ---
-    float m_panSpeed = 8.0f;
 
-    // --- 줌 관련 ---
+    float m_panSpeed = 12.0f;
+
     float m_currentOrthoSize = 5.0f;
     float m_targetOrthoSize = 5.0f;
     float m_zoomSpeed = 0.2f;

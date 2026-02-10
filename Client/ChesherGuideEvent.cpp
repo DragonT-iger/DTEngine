@@ -4,6 +4,7 @@
 #include "InputManager.h"
 
 #include "RayCastHitEvent.h"
+#include "CameraRotator.h"
 
 BEGINPROPERTY(ChesherGuideEvent)
 DTPROPERTY(ChesherGuideEvent, m_rayObj)
@@ -11,6 +12,7 @@ DTPROPERTY(ChesherGuideEvent, m_battleSkillButton)
 DTPROPERTY(ChesherGuideEvent, m_healSkillButton)
 DTPROPERTY(ChesherGuideEvent, m_settingButton)
 DTPROPERTY(ChesherGuideEvent, m_startButton)
+DTPROPERTY(ChesherGuideEvent, m_cameraRotator)
 ENDPROPERTY()
 
 void ChesherGuideEvent::Start()
@@ -62,4 +64,5 @@ void ChesherGuideEvent::SetActiveUI(bool b)
 		m_healSkillButton->SetActive(b);
 		m_settingButton->SetActive(b);
 		m_startButton->SetActive(b);
+		if(m_cameraRotator) m_cameraRotator->SetActive(b);
 }

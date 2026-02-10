@@ -3,6 +3,7 @@
 
 class GameObject;
 class UIButton;
+class CameraRotator;
 
 class ChesherGuideEvent : public MonoBehaviour
 {
@@ -15,6 +16,7 @@ public:
 private:
 		void CloseGuide();
 		GameObject* m_rayObj = nullptr;
+		CameraRotator* m_cameraRotator = nullptr;
 
 		UIButton* m_battleSkillButton = nullptr;
 		UIButton* m_healSkillButton = nullptr;
