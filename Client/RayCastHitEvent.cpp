@@ -15,6 +15,7 @@
 #include "ClickStartButton.h"
 #include "SkillButton.h"
 #include "UIButton.h"
+#include "Text.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -27,6 +28,8 @@ DTPROPERTY(RayCastHitEvent, m_arrowPool)
 DTPROPERTY(RayCastHitEvent, m_warningWindowBG)
 DTPROPERTY(RayCastHitEvent, m_startButton)
 DTPROPERTY(RayCastHitEvent, m_skillButton)
+DTPROPERTY(RayCastHitEvent, m_attackCountText)
+DTPROPERTY(RayCastHitEvent, m_healCountText)
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
@@ -261,12 +264,13 @@ void RayCastHitEvent::RaycastCheck()
 												unit->Heal(30);
 												m_isHealSkillOn = false;
 
-
+												
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
 												GameManager::Instance()->SetTimeScale(prevScale);
 
 												// skill count 감소 시키기.
 												GameManager::Instance()->SetHealSkillCount(healCount - 1);
+												m_healCountText->SetText(std::to_wstring(healCount - 1));
 										}
 								}
 
@@ -304,6 +308,7 @@ void RayCastHitEvent::RaycastCheck()
 
 												// skill count 감소 시키기.
 												GameManager::Instance()->SetAttackSkillCount(attackCount - 1);
+												m_attackCountText->SetText(std::to_wstring(attackCount - 1));
 										}
 								}
 								return;

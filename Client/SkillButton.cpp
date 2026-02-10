@@ -3,18 +3,29 @@
 #include "RayCastHitEvent.h"
 #include "UIButton.h"
 #include "GameManager.h"
+#include "Text.h"
 
 BEGINPROPERTY(SkillButton)
 DTPROPERTY(SkillButton, m_rayObj)
 DTPROPERTY(SkillButton, m_attackButton)
 DTPROPERTY(SkillButton, m_healButton)
+
+DTPROPERTY(SkillButton, m_attackCountText)
+DTPROPERTY(SkillButton, m_healCountText)
 ENDPROPERTY()
 
 
 void SkillButton::Start()
 {
-		if (!m_rayObj || !m_attackButton || !m_healButton)
+		if (!m_rayObj || !m_attackButton || !m_healButton || !m_attackCountText || !m_healCountText)
 				return;
+
+		int attackCount = GameManager::Instance()->GetMaxAttackSkillCount();
+		int healCount = GameManager::Instance()->GetMaxHealSkillCount();
+
+		m_attackCountText->SetText(std::to_wstring(attackCount));
+		m_healCountText->SetText(std::to_wstring(healCount));
+
 
 		// window 닫고 timescale 0으로.
 		// 이제 GameManager Count로 체크.
@@ -23,7 +34,7 @@ void SkillButton::Start()
 						
 						int attackCount = GameManager::Instance()->GetAttackSkillcount();
 						std::cout << attackCount << std::endl;
-						if (attackCount < 1)
+						if (attackCount <= 0)
 								return;
 
 						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();
@@ -50,7 +61,7 @@ void SkillButton::Start()
 						int healCount = GameManager::Instance()->GetHealSkillcount();
 						std::cout << healCount << std::endl;
 
-						if (healCount < 1)
+						if (healCount <= 0)
 								return;
 
 						auto rayEvent = m_rayObj->GetComponent<RayCastHitEvent>();

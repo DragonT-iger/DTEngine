@@ -21,12 +21,16 @@ public:
 		void SetDefeatObj(bool value);
 
 		void SettingToggleFinish();
+		// int에 따라서 둘 중 한개 켜주기.
+		bool IsMushroomSkillSet();
 private:
 		GameObject* m_settingButton = nullptr;
 		GameObject* m_rayObj = nullptr;
 		GameObject* m_bgObj = nullptr;	// victory or defeat window.
 		Image* m_img = nullptr;					// fade img
-		Image* m_skillimg = nullptr;			
+		Image* m_mushroomSkillimg = nullptr;			
+		Image* m_bottleSkillimg = nullptr;
+		Image* m_lifeImg = nullptr;
 		Image* m_nextRetryImg = nullptr;
 		Text* m_text = nullptr;
 		

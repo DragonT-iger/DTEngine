@@ -200,6 +200,8 @@
           "Active": true,
           "id": 8138808444096392086,
           "m_arrowPool": 2265729955130946909,
+          "m_attackCountText": 7141541801085625769,
+          "m_healCountText": 964351788859007823,
           "m_leftPSWinodwBG": 13644169991980458124,
           "m_leftRSWinodwBG": 14800340861935470279,
           "m_rightPSWinodwBG": 14165272807283552,
@@ -2723,7 +2725,9 @@
           "Active": true,
           "id": 8326612379150985403,
           "m_attackButton": 1839548868479721930,
+          "m_attackCountText": 7141541801085625769,
           "m_healButton": 3158531729957653660,
+          "m_healCountText": 964351788859007823,
           "m_rayObj": 4771222732717351773,
           "typeName": "SkillButton"
         }
@@ -7112,7 +7116,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 1",
+          "m_text": "Stage 3",
           "typeName": "Text"
         }
       ],
@@ -7505,7 +7509,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -7517,7 +7521,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 101,
-          "m_textureID": 0,
+          "m_textureID": 14026112916511173991,
           "typeName": "Image"
         },
         {
@@ -7553,7 +7557,7 @@
         }
       ],
       "id": 5610883531598707665,
-      "name": "Skill_img",
+      "name": "Mushroom_Skill_img",
       "tag": "Untagged",
       "transform": {
         "id": 14894796374042986087,
@@ -13711,7 +13715,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 0,
+          "m_textureID": 16126704482516160642,
           "typeName": "Image"
         }
       ],
@@ -15197,7 +15201,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 4,
-          "m_textureID": 0,
+          "m_textureID": 6223493961461560227,
           "typeName": "Image"
         }
       ],
@@ -15243,7 +15247,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 4,
-          "m_textureID": 0,
+          "m_textureID": 14850833724476311613,
           "typeName": "Image"
         }
       ],
@@ -18023,21 +18027,24 @@
             "z": 1.0
           },
           "m_orderInLayer": 100,
-          "m_textureID": 0,
+          "m_textureID": 12717050120059793372,
           "typeName": "Image"
         },
         {
           "Active": true,
+          "delayTime": 0.5,
           "endAlpha": 0.925000011920929,
           "fadeSpeed": 0.5,
           "id": 13717178830181913947,
           "m_bgObj": 2726193224071851438,
+          "m_bottleSkillimg": 1537376702664246911,
           "m_exitbuttonImg": 0,
+          "m_lifeImg": 0,
           "m_mainbuttonImg": 0,
+          "m_mushroomSkillimg": 14386049168767057338,
           "m_nextRetryImg": 3899538397272052277,
           "m_rayObj": 4771222732717351773,
           "m_settingButton": 9419903296967584286,
-          "m_skillimg": 14386049168767057338,
           "m_text": 14763979527644804673,
           "startalpha": 0.5,
           "typeName": "BgFadeController"
@@ -20773,21 +20780,24 @@
             "z": 1.0
           },
           "m_orderInLayer": 100,
-          "m_textureID": 0,
+          "m_textureID": 12717050120059793372,
           "typeName": "Image"
         },
         {
           "Active": true,
-          "endAlpha": 0.925000011920929,
+          "delayTime": 0.5,
+          "endAlpha": 0.949999988079071,
           "fadeSpeed": 0.5,
           "id": 9034301253770146010,
           "m_bgObj": 6814653329085445114,
+          "m_bottleSkillimg": 0,
           "m_exitbuttonImg": 3517867228643961775,
+          "m_lifeImg": 16169535542551473978,
           "m_mainbuttonImg": 17900694830084947655,
+          "m_mushroomSkillimg": 0,
           "m_nextRetryImg": 16401793022916611652,
           "m_rayObj": 4771222732717351773,
           "m_settingButton": 9419903296967584286,
-          "m_skillimg": 16169535542551473978,
           "m_text": 16152824328685443224,
           "startalpha": 0.15000000596046448,
           "typeName": "BgFadeController"
@@ -28939,34 +28949,36 @@
           "Active": true,
           "id": 17243013143650241415,
           "m_alice": 0,
+          "m_bgWall0": 0,
+          "m_bgWall1": 0,
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
           "m_mapData": 6189260170659567125,
           "m_prefab0": 2144434576612897772,
           "m_prefab1": 12928013286368622248,
-          "m_prefab10": 12894749133452066125,
           "m_prefab2": 18392761606428986916,
           "m_prefab3": 7220029855253685106,
           "m_prefab4": 7639539974161466075,
-          "m_prefab5": 15195296483904062250,
+          "m_prefab5": 0,
           "m_prefab6": 7335722053263946750,
           "m_prefab7": 16479989809337654430,
           "m_prefab8": 11976589591614734553,
-          "m_prefab9": 6219473454575545864,
-          "m_redQueen": 10895878690869253900,
+          "m_redQueen": 0,
           "typeName": "TilemapGenerator"
         },
         {
           "Active": true,
           "id": 14029894267475434786,
           "m_generator": 17243013143650241415,
+          "m_magicBottle": 17556346609147484334,
           "m_mapData1": 6189260170659567125,
-          "m_mapData2": 6141281247936702495,
-          "m_mapData3": 5612826982130958025,
-          "m_mapData4": 13910372280845338280,
-          "m_mapData5": 6655454153380555896,
-          "m_mapData6": 14481442345718310236,
+          "m_mapData2": 0,
+          "m_mapData3": 0,
+          "m_mapData4": 0,
+          "m_mapData5": 0,
+          "m_mapData6": 0,
+          "m_mushroom": 5610883531598707665,
           "m_stageLevelText": 12433785278535231609,
           "typeName": "StageInitializer"
         }
@@ -29075,6 +29087,129 @@
           "x": 0.9999998807907104,
           "y": 0.9999998211860657,
           "z": 0.9999998807907104
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 1537376702664246911,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 101,
+          "m_textureID": 5493588663479970930,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 921864994709074087,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 1348788615191246743,
+          "m_skillButton": 921864994709074087,
+          "m_skillWindowObj": 12310614343167962566,
+          "typeName": "SkillHoverEvent"
+        }
+      ],
+      "id": 17556346609147484334,
+      "name": "Bottle_Skill_img",
+      "tag": "Untagged",
+      "transform": {
+        "id": 2903191109269272542,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 13009793093114018713,
+        "m_position": {
+          "x": 0.14499999582767487,
+          "y": 0.2199999988079071,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.41999998688697815,
+          "y": 0.824999988079071,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 1390366249414626023,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 101,
+          "m_textureID": 16221279067648743593,
+          "typeName": "Image"
+        }
+      ],
+      "id": 12310614343167962566,
+      "name": "SkillHoverImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 12692835607523996562,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 2903191109269272542,
+        "m_position": {
+          "x": 0.5,
+          "y": -1.25,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 0.9999999403953552
         }
       }
     }

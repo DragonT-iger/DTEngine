@@ -3,6 +3,7 @@
 
 class GameObject;
 class UIButton;
+class Text;
 
 class SkillButton : public MonoBehaviour
 {
@@ -18,4 +19,7 @@ private:
 		GameObject* m_rayObj = nullptr;
 		UIButton* m_attackButton = nullptr;
 		UIButton* m_healButton = nullptr;
+
+		Text* m_attackCountText = nullptr;
+		Text* m_healCountText = nullptr;
 };
