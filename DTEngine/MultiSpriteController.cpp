@@ -32,6 +32,13 @@ void MultiSpriteController::Start()
         StartChain();
 }
 
+
+void MultiSpriteController::Initalize()
+{
+    RebuildChain();
+    StopChain();
+}
+
 void MultiSpriteController::RebuildChain()
 {
     m_n1 = Node{ m_fx1, m_delay1, nullptr };
@@ -78,7 +85,6 @@ void MultiSpriteController::StartChain()
     m_head->fx->_GetOwner()->SetActive(true);
     m_head->fx->Restart();
     m_head->started = true;
-
     // 나머지는 대기 상태로 arm
     ArmFollowingNodes();
 }
@@ -133,7 +139,6 @@ bool MultiSpriteController::HasJustFinished(SpriteEffect* fx, int idx)
 
 bool MultiSpriteController::IsChainComplete() const
 {
-    // 마지막 유효 노드가 finished인지로 판단
     Node* last = nullptr;
     for (Node* n = m_head; n; n = n->next) last = n;
     if (!last || !last->fx) return true;
@@ -142,13 +147,15 @@ bool MultiSpriteController::IsChainComplete() const
 
 void MultiSpriteController::Update(float dTime)
 {
-    // MultiSpriteController 자체가 SpriteEffect 상속이지만,
-    // 여기서는 “스케줄러” 역할만 하고, 본인의 SpriteEffect 애니 로직(Update UV)은 쓰지 않는다고 가정.
-    // (원하면 __super::Update(dTime) 호출해서 본인도 시트 애니를 하게 만들 수도 있음)
+   /* if (m_followTarget != nullptr)
+    {
+        Vector3 targetPos = m_followTarget->GetTransform()->GetPosition();
+        GetTransform()->SetPosition(targetPos);
+    }*/
+
 
     if (!m_head) return;
 
-    // prev 탐색을 위해 idx를 매핑해야 함 (4개 고정 슬롯이므로 단순 매핑)
     auto idxOf = [&](SpriteEffect* fx)->int {
         if (fx == m_fx1) return 0;
         if (fx == m_fx2) return 1;
@@ -157,7 +164,7 @@ void MultiSpriteController::Update(float dTime)
         return 0;
         };
 
-    // 순회: prev 이벤트 감지 → cur 타이머 진행 → delay 지나면 Play
+
     Node* prev = m_head;
     Node* cur = m_head->next;
 
@@ -196,16 +203,46 @@ void MultiSpriteController::Update(float dTime)
         cur = cur->next;
     }
 
-    // 체인 완료 후 처리
+    bool isChainComplete = true;
+
+    Node* checkNode = m_head;
+
+    if (checkNode == nullptr)
+    {
+        isChainComplete = true;
+    }
+
+    while (checkNode)
+    {
+        if (checkNode->fx)
+        {
+            
+            bool isNodeFinished = checkNode->started && checkNode->fx->IsFinished();
+
+            if (!isNodeFinished)
+            {
+                isChainComplete = false;
+                break; 
+            }
+        }
+        checkNode = checkNode->next;
+    }
+
     if (IsChainComplete())
     {
+
+        if (m_bAutoDestroy)
+        {
+            this->_GetOwner()->SetActive(false);
+        }
+
         if (m_loopChain)
         {
             StartChain();
         }
         else
         {
-            this->OnDisable();
+            this->_GetOwner()->SetActive(false);
         }
     }
 }

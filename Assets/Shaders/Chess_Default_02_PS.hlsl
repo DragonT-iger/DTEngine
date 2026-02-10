@@ -10,7 +10,7 @@ struct PS_INPUT
     float3 Bitangent : BITANGENT;
 };
 
-SamplerState g_Sampler : register(s0);
+SamplerState g_Sampler : register(s3);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
@@ -37,18 +37,18 @@ float4 PS(PS_INPUT input) : SV_Target
     if (USE_METAL)
         metal = g_MetalMap.Sample(g_Sampler, input.UV).r;
     if (USE_ROUGH)
-        rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
+        rough = g_RoughMap.Sample(g_Sampler, input.UV).r;
     if (USE_AO)
         ao = g_AoMap.Sample(g_Sampler, input.UV).r;
+    
+    
     
     if (USE_ALBEDO)
     {
         float4 texBase = g_DiffuseMap.Sample(g_Sampler, input.UV);
         albedo = texBase.rgb;
     }    
-   // return float4(albedo.xyz, 1);
 
-    metal = 0;
     float3 directLighting = float3(0, 0, 0);
     float shadowFactor = CalculateShadow(input.WorldPos, Shadow_Bias);
     
@@ -105,10 +105,9 @@ float4 PS(PS_INPUT input) : SV_Target
         float mipLevel = rough * 7.0f; // Roughness 기반 밉맵 샘플링
         
         // Specular 및 Diffuse 환경광 샘플링
-        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
-        float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
+        float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb * SkyBox_Color.r;
+        float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 9).rgb * SkyBox_Color.g;
         
-        // 물리 연산은 Shared 함수 호출 (데이터만 전달)
         ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
     
@@ -119,9 +118,6 @@ float4 PS(PS_INPUT input) : SV_Target
     
     
     float3 TotalAmbi = ambientLighting_IBL + Temp_ambientLighting;
-    
-  //  return float4(TotalAmbi, 1);
-
             
     float3 finalColor = (directLighting + TotalAmbi) * (Temp + Shadow_Scale);
     

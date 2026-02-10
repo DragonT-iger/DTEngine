@@ -38,6 +38,21 @@ void Dissolved::Awake()
 	m_NoiseMap = ResourceManager::Instance().Load<Texture>("Assets/Models/Noise/Noise_Map.png");
 }
 
+static float CountDown = 3.0f;
+
+void Dissolved::Update(float dTime)
+{
+	if (m_CountDown)
+	{
+		m_Time += dTime;
+
+		if (m_Time >= CountDown)
+			this->_GetOwner()->SetActive(false);
+	}
+
+
+}
+
 
 void Dissolved::SetAlbedoTexture(const std::string& Path)
 {
@@ -86,6 +101,8 @@ void Dissolved::InjectDissolveMaterila(const std::string& path)
 					{
 						mat->SetTexture(0, m_DiffuseTexture);
 						mat->SetTexture(6, m_NoiseMap);
+
+						m_CountDown = true;
 					}
 			}
 		}

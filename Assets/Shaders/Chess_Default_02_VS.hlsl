@@ -44,10 +44,10 @@ VS_OUTPUT VS(VS_INPUT input)
     output.Pos = mul(output.Pos, Projection_TM);
 
     float3x3 skinRotation = (float3x3) skinMatrix;
-    float3 skinnormal = mul(input.Normal, skinRotation);
-    float3 skintangent = mul(input.Tangent.xyz, skinRotation);
-    float3 skinbitangent = mul(input.Bitangent, skinRotation);
-
+    float3 skinnormal = normalize(mul(input.Normal, skinRotation));
+    float3 skintangent = normalize(mul(input.Tangent.xyz, skinRotation));
+    float3 skinbitangent = normalize(mul(input.Bitangent, skinRotation));
+    
     output.WorldNormal = normalize(mul(skinnormal, (float3x3) WorldInverseTranspose_TM));
     output.Tangent = float4(normalize(mul(skintangent, (float3x3) WorldInverseTranspose_TM)), input.Tangent.w);
     output.Bitangent = normalize(mul(skinbitangent, (float3x3) WorldInverseTranspose_TM));

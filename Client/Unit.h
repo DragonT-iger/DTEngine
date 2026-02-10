@@ -118,7 +118,7 @@ public:
     void TakeDamage(float damage) { m_hp = (std::max)(m_hp - damage, 0.0f); }
 
     // 힐 받음
-    void Heal(float heal) { m_hp = (std::min)(m_hp + heal, m_stats.maxHp); }
+    void Heal(float heal);
 
     // 이동목표
     Unit* GetMoveTarget() const { return m_moveTarget; }
@@ -183,7 +183,7 @@ public:
     void StartDieAnim();
 
     void StartDissolve();
-
+    void StartWeaponEffect(const std::string& name);
     bool IsAnimStart() const { return m_animStart; }
     bool IsAnimDone() { return m_anim->GetAnimationDone(); }
 

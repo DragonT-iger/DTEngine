@@ -110,7 +110,6 @@ float4 PS(PS_INPUT input) : SV_Target
         float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
         float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
 
-        // 물리 연산은 Shared 함수 호출 (데이터만 전달)
         ambientLighting_IBL = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
     

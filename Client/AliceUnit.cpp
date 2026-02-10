@@ -21,6 +21,16 @@ void AliceUnit::StartAliceDieAnim()
     //std::cout << _GetOwner()->_GetID() << std::endl;
     //StartDissolve();
 
+    auto cmp = this->_GetOwner()->AddComponent<Dissolved>();
+    if (cmp)
+    {
+        auto cmp_e = this->_GetOwner()->AddComponent<Effect>();
+        cmp->SetAlbedoTexture("Assets/Models/Main_Char/Alice_BaseColor.png");
+        cmp->SetNoiseTexture();
+        cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
+
+    }
+
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Main_Char/alice_Die.fbx");
     PlayAnim(id, ANIM_INVALID, ANIM_INVALID, 1.0f, false);
     m_animStart = true;

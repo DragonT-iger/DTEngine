@@ -5,6 +5,7 @@
 #include "TutorialManager.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
+#include "EffectManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -1186,6 +1187,10 @@ void CombatController::ApplyActionResult(Unit* me)
         {
             float damage = CalculateDamage(me, target);
             target->TakeDamage(damage);
+
+
+            if (me->GetUnitType() == UnitType::Bishop)
+                EffectManager::Instance().PlayEffect("2Attack03", target->_GetOwner());
         }
         me->SetActionResultApplied(true);
     } break;
