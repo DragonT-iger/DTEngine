@@ -67,6 +67,9 @@ void UISlider::SetValue(float value)
     if (clamped == m_value) return;
 
     m_value = clamped;
+
+    UpdateHandlePosition();
+
     InvokeValueChanged();
 }
 
