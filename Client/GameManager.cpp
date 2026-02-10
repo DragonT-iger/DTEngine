@@ -99,7 +99,7 @@ void GameManager::NextStage()
 
 void GameManager::Update(float deltaTime)
 {
-	std::cout << "bgm " << curbgmValue << " " << cursfxValue << std::endl;
+	//std::cout << "bgm " << curbgmValue << " " << cursfxValue << std::endl;
 }
 
 void GameManager::SetTimeScale(int scale)

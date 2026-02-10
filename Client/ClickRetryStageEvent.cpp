@@ -24,10 +24,10 @@ void ClickRetryStageEvent::Start()
 						//GameManager::Instance()->NextStage();
 						// life 줄이기.
 						int life = GameManager::Instance()->GetLife();
-						GameManager::Instance()->SetLife(life - 9);
+						GameManager::Instance()->SetLife(life - 1);
 
 
-						std::cout << life << std::endl;
+						//std::cout << life << std::endl;
 
 						// life 없으면 maingamescene
 						if (life < 1)
