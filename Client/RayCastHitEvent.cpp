@@ -13,6 +13,8 @@
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
 #include "ClickStartButton.h"
+#include "SkillButton.h"
+#include "UIButton.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -24,13 +26,16 @@ DTPROPERTY(RayCastHitEvent , m_tutorialManager)
 DTPROPERTY(RayCastHitEvent, m_arrowPool)
 DTPROPERTY(RayCastHitEvent, m_warningWindowBG)
 DTPROPERTY(RayCastHitEvent, m_startButton)
+DTPROPERTY(RayCastHitEvent, m_skillButton)
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
 {
 		// 차피 밑에서 검사함.
 		RaycastCheck();
-		ToggleSettingWindow();
+		auto& input = InputManager::Instance();
+		if (input.GetKeyDown(KeyCode::Escape))
+				ToggleSettingWindow();
 }
 
 void RayCastHitEvent::RaycastCheck()
@@ -433,25 +438,22 @@ void RayCastHitEvent::ToggleSettingWindow()
 		if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
 				return;
 
-		auto& input = InputManager::Instance();
-		if (input.GetKeyDown(KeyCode::Escape))
+		if (m_finishGame)
 		{
-				if (m_warningWindowBG->IsActive())
-				{
-						// warningwindow 꺼주고.
-						m_warningWindowBG->SetActive(false);
-
-						// startbutton 다시 상호작용 가능하게 켜주기.
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
-
-						// ray 꺼져있는 상태면 다시 켜줄거임.
-						if (!m_isRay)
-								SetRay(true);
-				}
-
-				
-				ApplySettingWindow();
+				std::cout << "게임끝남" << std::endl;
+				return;
 		}
+				
+
+		if (m_warningWindowBG->IsActive())
+		{
+				// warningwindow 꺼주고. isStart 다시 set 해주기.
+				m_warningWindowBG->SetActive(false);
+
+				if (!m_isStartBattle)
+						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+		}
+		ApplySettingWindow();
 }
 
 void RayCastHitEvent::ApplySettingWindow()
@@ -465,7 +467,7 @@ void RayCastHitEvent::ApplySettingWindow()
 		{
 				GameManager::Instance()->SetTimeScale(0.0f);
 				SetRay(false);
-				m_startButton->GetComponent<ClickStartButton>()->SetIsStart(true); 	// startbutton 안눌리게.
+				SetButtons(false);
 		}
 		else // 설정창 닫힘.
 		{
@@ -473,7 +475,30 @@ void RayCastHitEvent::ApplySettingWindow()
 				int prevScale = GameManager::Instance()->GetPrevTimeScale();
 				GameManager::Instance()->SetTimeScale(prevScale);
 				SetRay(true);
-				m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);	// startbutton 다시 상호작용 가능하게 수정,
+				SetButtons(true);
+
+				// isstart 논리 꼬이는거 수정.
+				if (m_startButton)
+				{
+						auto startScript = m_startButton->GetComponent<ClickStartButton>();
+						if (startScript && !m_isStartBattle)		// 게임 시작이 아닌 경우만
+						{
+								startScript->SetIsStart(false);
+						}
+				}
+		}
+}
+
+void RayCastHitEvent::SetButtons(bool value)
+{
+		// skillbutton, startbutton 둘 다 set 해주기.
+		auto skillbutton = m_skillButton->GetComponent<SkillButton>();
+		if (skillbutton && m_startButton)
+		{
+				skillbutton->GetAttackButton()->SetActive(value);
+				skillbutton->GetHealButton()->SetActive(value);
+
+				m_startButton->GetComponent<UIButton>()->SetActive(value);
 		}
 }
 

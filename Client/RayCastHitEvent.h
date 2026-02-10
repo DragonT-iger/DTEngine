@@ -18,7 +18,7 @@ public:
 		void RaycastCheck();
 		void ToggleSettingWindow();
 		void ApplySettingWindow();
-
+		void SetButtons(bool value);		// button 상호작용 막을려고 해두기.
 
 		GameObject* GetHitObject() { return m_hitObj; }
 		void SetHitObject(GameObject* hitobj) { m_hitObj = hitobj; }
@@ -37,6 +37,9 @@ public:
 		ArrowObjectPool* GetArrowPool() { return m_arrowPool; }
 		void SetRay(bool value) { m_isRay = value; }
 		bool GetRay() { return m_isRay; }
+
+		bool IsGameFinished() const { return m_finishGame; }
+		void SetGameFinish(bool value) { m_finishGame = value; }
 private:
 		GameObject* m_hitObj = nullptr;
 
@@ -50,6 +53,7 @@ private:
 
 		GameObject* m_warningWindowBG = nullptr;
 		GameObject* m_startButton = nullptr;
+		GameObject* m_skillButton = nullptr;
 
 		TutorialManager* m_tutorialManager = nullptr;
 		bool m_isHealSkillOn = false;
@@ -61,5 +65,7 @@ private:
 		EnemyUnit* m_lastSelectedEnemy = nullptr;
 
 		int curTimeScale = 1;
+
+		bool m_finishGame = false;
 };
 

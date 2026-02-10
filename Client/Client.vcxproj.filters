@@ -192,6 +192,12 @@
     <ClCompile Include="CameraRotator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="BgFadeController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickSettingWindowExitButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -354,6 +360,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CameraRotator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BgFadeController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickSettingWindowExitButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
