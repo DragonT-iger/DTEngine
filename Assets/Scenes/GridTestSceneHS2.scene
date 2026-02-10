@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": -1.2983040809631348,
-          "y": 811.3485107421875,
+          "x": 20.80202293395996,
+          "y": 894.9569091796875,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -11.065890312194824,
-          "y": -4.399944305419922,
-          "z": -1.1232093572616577
+          "x": 0.11467737704515457,
+          "y": 1.1206145286560059,
+          "z": 2.419502019882202
         },
         "m_rotation": {
-          "w": 0.6986919641494751,
-          "x": -0.007916407659649849,
-          "y": 0.7153328657150269,
-          "z": 0.008104953914880753
+          "w": 0.0432722270488739,
+          "x": 0.007942729629576206,
+          "y": 0.9826159477233887,
+          "z": -0.18036170303821564
         },
         "m_scale": {
           "x": 1.0,
@@ -205,22 +205,22 @@
         {
           "Active": true,
           "id": 7171391694734270448,
-          "m_alice": 5445845413231721854,
+          "m_alice": 17688493130894654216,
+          "m_bgWall0": 17371836462546986464,
+          "m_bgWall1": 14093764471077609140,
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
           "m_mapData": 15103945832781831451,
           "m_prefab0": 2144434576612897772,
           "m_prefab1": 12928013286368622248,
-          "m_prefab10": 12894749133452066125,
           "m_prefab2": 18392761606428986916,
           "m_prefab3": 7220029855253685106,
           "m_prefab4": 7639539974161466075,
           "m_prefab5": 15195296483904062250,
           "m_prefab6": 7335722053263946750,
           "m_prefab7": 16479989809337654430,
-          "m_prefab8": 12404351958853049311,
-          "m_prefab9": 8810975971747392364,
+          "m_prefab8": 9458376883360111362,
           "m_redQueen": 10895878690869253900,
           "typeName": "TilemapGenerator"
         }
@@ -353,8 +353,10 @@
           "enemyUnit1": 0,
           "enemyUnit2": 0,
           "id": 6276163554272591340,
-          "m_aliceUnit": 9781302197654319293,
+          "m_aliceUnit": 0,
+          "m_loseBG": 0,
           "m_redQueenUnit": 0,
+          "m_victoryBG": 0,
           "typeName": "CombatController"
         }
       ],
@@ -363,48 +365,6 @@
       "tag": "Untagged",
       "transform": {
         "id": 4744754019065986298,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "id": 9781302197654319293,
-          "m_pos": {
-            "x": 0.0,
-            "y": 0.0
-          },
-          "typeName": "AliceUnit"
-        }
-      ],
-      "id": 10494504114322562742,
-      "name": "alice",
-      "tag": "Untagged",
-      "transform": {
-        "id": 1090369088132048465,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
@@ -604,7 +564,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5333456821614982880,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -634,8 +594,11 @@
         {
           "Active": true,
           "id": 16259032481906092414,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -682,7 +645,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 8262537579753068184,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -712,8 +675,11 @@
         {
           "Active": true,
           "id": 4696455276472288596,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -760,7 +726,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 12101183281258507403,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -790,8 +756,11 @@
         {
           "Active": true,
           "id": 15949140636188915712,
+          "m_fBigImgObj": 0,
           "m_fButton": 9450232514678575410,
+          "m_sBigImgObj": 0,
           "m_sButton": 15417259429606272676,
+          "m_tBigImgObj": 0,
           "m_tButton": 11196832958611947967,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1014,7 +983,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 5333456821614982880,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -1044,8 +1013,11 @@
         {
           "Active": true,
           "id": 10050178375695719958,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1092,7 +1064,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 8262537579753068184,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -1122,8 +1094,11 @@
         {
           "Active": true,
           "id": 3960452596875304128,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1170,7 +1145,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 12101183281258507403,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
@@ -1200,8 +1175,11 @@
         {
           "Active": true,
           "id": 16798492839494961388,
+          "m_fBigImgObj": 0,
           "m_fButton": 7619543229225093043,
+          "m_sBigImgObj": 0,
           "m_sButton": 5654175943256943488,
+          "m_tBigImgObj": 0,
           "m_tButton": 8996063328769449522,
           "typeName": "ImageVisualUpdateEvent"
         }
@@ -1506,6 +1484,7 @@
           "Active": true,
           "id": 10718949589605998082,
           "m_exitButton": 6956302447113660091,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2222,6 +2201,7 @@
           "Active": true,
           "id": 2791222319206022273,
           "m_exitButton": 1026861482826012787,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3036,6 +3016,7 @@
           "Active": true,
           "id": 6095138767685905501,
           "m_exitButton": 1866155636545053865,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3602,6 +3583,7 @@
           "Active": true,
           "id": 17743781830218723958,
           "m_exitButton": 4387214561503760932,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4012,6 +3994,7 @@
           "Active": true,
           "id": 17281548730867793746,
           "m_exitButton": 15017055363453247603,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4500,6 +4483,7 @@
           "Active": true,
           "id": 6293090122218311252,
           "m_exitButton": 9007863559771709075,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4988,6 +4972,7 @@
           "Active": true,
           "id": 1047760766044524883,
           "m_exitButton": 3617803391492812738,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5430,6 +5415,7 @@
           "Active": true,
           "id": 12253110155207299810,
           "m_exitButton": 10194695841313726507,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5630,6 +5616,7 @@
           "Active": true,
           "id": 3036516340741771949,
           "m_exitButton": 12281510067928490994,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5994,6 +5981,7 @@
           "Active": true,
           "id": 16779490005113422998,
           "m_exitButton": 16509577149822491392,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6538,6 +6526,7 @@
           "Active": true,
           "id": 12362843549925920395,
           "m_exitButton": 5736328220481272240,
+          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -9174,9 +9163,9 @@
         {
           "Active": true,
           "id": 2265729955130946909,
-          "m_body": 295575776050391810,
-          "m_head": 2143463308152399154,
-          "m_start": 8026549072452664615,
+          "m_body": 1309901842810178711,
+          "m_head": 8652421807051422273,
+          "m_start": 1340938844390133859,
           "typeName": "ArrowObjectPool"
         }
       ],
@@ -9214,70 +9203,11 @@
       "components": [
         {
           "Active": true,
-          "id": 5183303689350849534,
-          "m_pos": {
-            "x": 0.0,
-            "y": 0.0
-          },
-          "typeName": "RedQueenUnit"
-        }
-      ],
-      "id": 3463645136960540982,
-      "name": "RedQueen",
-      "tag": "Untagged",
-      "transform": {
-        "id": 4945832136228460891,
-        "m_editorEulerAngles": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_rotation": {
-          "w": 1.0,
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
           "id": 8565764339402807703,
           "m_bgmSlider": 7127000447013137685,
-          "m_blockInputObj0": 9419903296967584286,
-          "m_blockInputObj1": 0,
-          "m_blockInputObj2": 0,
-          "m_blockInputObj3": 0,
-          "m_blockInputObj4": 0,
-          "m_loseWindow": 6814653329085445114,
-          "m_rayObj": 4771222732717351773,
-          "m_settingWindow": 10500202484059138583,
+          "m_life": 0,
+          "m_money": 0,
           "m_sfxSlider": 539819835045743063,
-          "m_stageBattleGrid": 17217331222344769167,
-          "m_stageDialogueText": 0,
-          "m_stageLevelText": 0,
-          "m_stageTilemap0": 15103945832781831451,
-          "m_stageTilemap1": 6189260170659567125,
-          "m_stageTilemap2": 13964411375409846242,
-          "m_stageTilemap3": 15103945832781831451,
-          "m_stageTilemap4": 6189260170659567125,
-          "m_stageTilemapGenerator": 7171391694734270448,
-          "m_startButtonEvent": 5425226427455043202,
-          "m_victoryWindow": 2726193224071851438,
           "typeName": "GameManager"
         }
       ],
@@ -9322,6 +9252,7 @@
             "y": 1.0,
             "z": 1.0
           },
+          "m_SkyBoxID": 0,
           "typeName": "SkyBoxComponent"
         }
       ],
