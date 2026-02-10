@@ -18,7 +18,7 @@ public:
 		void RaycastCheck();
 		void ToggleSettingWindow();
 		void ApplySettingWindow();
-
+		void SetButtons(bool value);		// button 상호작용 막을려고 해두기.
 
 		GameObject* GetHitObject() { return m_hitObj; }
 		void SetHitObject(GameObject* hitobj) { m_hitObj = hitobj; }
@@ -50,6 +50,7 @@ private:
 
 		GameObject* m_warningWindowBG = nullptr;
 		GameObject* m_startButton = nullptr;
+		GameObject* m_skillButton = nullptr;
 
 		TutorialManager* m_tutorialManager = nullptr;
 		bool m_isHealSkillOn = false;

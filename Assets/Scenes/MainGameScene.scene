@@ -211,6 +211,7 @@
           "m_rightPSWinodwBG": 14165272807283552,
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
+          "m_skillButton": 619973099615200002,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -299,9 +300,9 @@
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
-          "m_loseBG": 6814653329085445114,
+          "m_loseBG": 4660301850912400824,
           "m_redQueenUnit": 0,
-          "m_victoryBG": 2726193224071851438,
+          "m_victoryBG": 11380440959902084178,
           "typeName": "CombatController"
         }
       ],
@@ -836,7 +837,6 @@
           "m_button": 5508172115925057707,
           "m_combatObj": 7541685513989182900,
           "m_knight": 9894459574992437766,
-          "m_mapData": 0,
           "m_nonCostObj": 15190275747362855967,
           "m_rook": 3328525606780682600,
           "m_tutorialManager": 0,
@@ -1255,7 +1255,6 @@
           "m_button": 2056293130688999352,
           "m_combatObj": 7541685513989182900,
           "m_knight": 9894459574992437766,
-          "m_mapData": 0,
           "m_nonCostObj": 13220023044005563302,
           "m_rook": 3328525606780682600,
           "m_tutorialManager": 0,
@@ -1478,7 +1477,6 @@
           "Active": true,
           "id": 10718949589605998082,
           "m_exitButton": 6956302447113660091,
-          "m_settingWindow": 10500202484059138583,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2195,7 +2193,6 @@
           "Active": true,
           "id": 2791222319206022273,
           "m_exitButton": 1026861482826012787,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3010,7 +3007,6 @@
           "Active": true,
           "id": 6095138767685905501,
           "m_exitButton": 1866155636545053865,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3577,7 +3573,6 @@
           "Active": true,
           "id": 17743781830218723958,
           "m_exitButton": 4387214561503760932,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3988,7 +3983,6 @@
           "Active": true,
           "id": 17281548730867793746,
           "m_exitButton": 15017055363453247603,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4477,7 +4471,6 @@
           "Active": true,
           "id": 6293090122218311252,
           "m_exitButton": 9007863559771709075,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4966,7 +4959,6 @@
           "Active": true,
           "id": 1047760766044524883,
           "m_exitButton": 3617803391492812738,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5409,7 +5401,6 @@
           "Active": true,
           "id": 12253110155207299810,
           "m_exitButton": 10194695841313726507,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5610,7 +5601,6 @@
           "Active": true,
           "id": 3036516340741771949,
           "m_exitButton": 12281510067928490994,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5975,7 +5965,6 @@
           "Active": true,
           "id": 16779490005113422998,
           "m_exitButton": 16509577149822491392,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6518,10 +6507,9 @@
         },
         {
           "Active": true,
-          "id": 12362843549925920395,
-          "m_exitButton": 5736328220481272240,
-          "m_settingWindow": 10500202484059138583,
-          "typeName": "ExitButtonEvent"
+          "id": 7996575056057408312,
+          "m_rayObj": 4771222732717351773,
+          "typeName": "ClickSettingWindowExitButton"
         }
       ],
       "id": 14436840571960516674,
@@ -8105,7 +8093,7 @@
         }
       ],
       "id": 6975457822898686740,
-      "name": "RestartButton",
+      "name": "RetryButton",
       "tag": "Untagged",
       "transform": {
         "id": 6612095923831223873,
@@ -18029,7 +18017,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -18043,10 +18031,25 @@
           "m_orderInLayer": 100,
           "m_textureID": 12717050120059793372,
           "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "endAlpha": 0.925000011920929,
+          "fadeSpeed": 0.5,
+          "id": 13717178830181913947,
+          "m_bgObj": 2726193224071851438,
+          "m_exitbuttonImg": 0,
+          "m_mainbuttonImg": 0,
+          "m_nextRetryImg": 3899538397272052277,
+          "m_rayObj": 4771222732717351773,
+          "m_skillimg": 14386049168767057338,
+          "m_text": 14763979527644804673,
+          "startalpha": 0.5,
+          "typeName": "BgFadeController"
         }
       ],
       "id": 11380440959902084178,
-      "name": "BG",
+      "name": "VictoryFadeBG",
       "tag": "Untagged",
       "transform": {
         "id": 15432551339486373704,
@@ -20763,7 +20766,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -20777,10 +20780,25 @@
           "m_orderInLayer": 100,
           "m_textureID": 12717050120059793372,
           "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "endAlpha": 0.925000011920929,
+          "fadeSpeed": 0.5,
+          "id": 9034301253770146010,
+          "m_bgObj": 6814653329085445114,
+          "m_exitbuttonImg": 3517867228643961775,
+          "m_mainbuttonImg": 17900694830084947655,
+          "m_nextRetryImg": 16401793022916611652,
+          "m_rayObj": 4771222732717351773,
+          "m_skillimg": 16169535542551473978,
+          "m_text": 16152824328685443224,
+          "startalpha": 0.15000000596046448,
+          "typeName": "BgFadeController"
         }
       ],
       "id": 4660301850912400824,
-      "name": "BG",
+      "name": "LoseFadeBG",
       "tag": "Untagged",
       "transform": {
         "id": 16540616262022473562,
