@@ -36,6 +36,9 @@ void BgFadeController::BGFadeUpdate(float deltaTime)
 {
     if (!isComplete)
     {
+        // 함수호출하자..
+        SettingToggleFinish();
+
         startalpha += deltaTime * fadeSpeed;
 
         // 목표치 도달 여부 체크
@@ -129,6 +132,7 @@ void BgFadeController::SettingToggleFinish()
 {
     if (!m_settingButton)
         return;
+    
     if (!setFinish)
     {
         // button 꺼버리기. toggle 로직 자체를 막아버리기.
@@ -136,5 +140,4 @@ void BgFadeController::SettingToggleFinish()
         m_rayObj->GetComponent<RayCastHitEvent>()->SetGameFinish(true);
         setFinish = true;
     }
-
 }
