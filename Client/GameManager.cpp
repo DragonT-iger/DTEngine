@@ -42,7 +42,7 @@ void GameManager::Start() {
 	if (m_bgmSlider) m_bgmSlider->SetValue(curbgmValue);
 	if (m_sfxSlider) m_sfxSlider->SetValue(cursfxValue);
 
-	curMoney = 30; // 임시.
+	SetMoney(30);// curMoney = 30; // 임시.
 }
 
 void GameManager::SetLife(int life)

@@ -12,15 +12,16 @@ SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {    
+    float4 color = MaterialColor;
     
-    float4 diffuse = Diffuse.Sample(g_Sampler, input.UV);
-    float4 rendertarget = RenderTarget.Sample(g_Sampler, input.UV);
+    float4 textureColor = 1;
     
-    rendertarget.rgb += MaterialColor;
+    if (UseTexture)
+    {
+        textureColor = g_DiffuseMap.SampleLevel(g_Sampler, input.UV, 0);
+    }
+
+    color *= textureColor;
     
-    float4 finalColor = (1 - diffuse.a) * rendertarget + diffuse.a * diffuse;
-    
-    clip(finalColor.a - 0.01);
-    
-    return finalColor;
+    return color;
 }
