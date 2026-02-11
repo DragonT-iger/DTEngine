@@ -1591,10 +1591,10 @@
         {
           "Active": true,
           "id": 16923357626089008734,
-          "m_bgmSlider": 0,
+          "m_bgmSlider": 7441790386700657482,
           "m_life": 0,
           "m_money": 0,
-          "m_sfxSlider": 0,
+          "m_sfxSlider": 8143202475417070264,
           "typeName": "GameManager"
         }
       ],
@@ -1628,12 +1628,11 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
           "id": 6426031288030803634,
-          "m_settingButton": 0,
           "m_settingWindow": 7492090906511565693,
           "m_window": 9763893117661482478,
           "typeName": "ESCEvent"

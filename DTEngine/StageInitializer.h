@@ -6,6 +6,7 @@ class TilemapGenerator;
 class BattleGrid;
 class GameObject;
 class Text;
+class Image;
 
 class StageInitializer : public MonoBehaviour
 {
@@ -23,6 +24,9 @@ private:
     TilemapData* m_mapData6 = nullptr;
 
     TilemapGenerator* m_generator = nullptr;
+    
+    GameObject* m_mushroom;
+    GameObject* m_magicBottle;
 
     Text* m_stageLevelText = nullptr;
     Text* m_stageDialogueText = nullptr;

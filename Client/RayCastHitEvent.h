@@ -8,6 +8,7 @@ class TutorialManager;
 class Scene;
 class ArrowObjectPool;
 class EnemyUnit;
+class Text;
 
 class RayCastHitEvent : public MonoBehaviour
 {
@@ -67,5 +68,8 @@ private:
 		int curTimeScale = 1;
 
 		bool m_finishGame = false;
+
+		Text* m_attackCountText = nullptr;
+		Text* m_healCountText = nullptr;
 };
 

@@ -56,6 +56,20 @@ int GameManager::GetLife() const
 	return curLife;
 }
 
+void GameManager::ResetLifeAndMoney()
+{
+		maxLife = 9;
+		curLife = 9;
+
+		curMoney = 30;
+		totalAcquiredMoney = 30;
+
+		healSkillCount = 0;
+		attackSkillCount = 0;
+		defaultHealSkillCount = 0;
+		defaultAttackSkillCount = 0;
+}
+
 void GameManager::SetMoney(int money)
 {
 		int delta = money - curMoney;
