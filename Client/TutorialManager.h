@@ -118,6 +118,7 @@ private:
     GameObject* m_tutorialArrow2 = nullptr;
     GameObject* m_tutorialArrow3 = nullptr;
     GameObject* m_tutorialArrow4 = nullptr;
+    GameObject* m_tutorialArrow5 = nullptr;
 
     Prefab* m_defenseTile = nullptr;
 };

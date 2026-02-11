@@ -809,6 +809,7 @@
           "m_tutorialArrow2": 14166769951629709533,
           "m_tutorialArrow3": 8760412656278535566,
           "m_tutorialArrow4": 5318406871677330662,
+          "m_tutorialArrow5": 14738254616438525246,
           "m_victoryUI": 7549546176282884288,
           "rightChat": 3796887031993767285,
           "rightChatText": 3014816446671998180,
@@ -1858,6 +1859,8 @@
           "Active": true,
           "id": 6111372104770950930,
           "m_arrowPool": 12867333551054794008,
+          "m_attackCountText": 0,
+          "m_healCountText": 0,
           "m_leftPSWinodwBG": 8960625415959528471,
           "m_leftRSWinodwBG": 2864264039527296129,
           "m_rightPSWinodwBG": 8960625415959528471,
@@ -1953,6 +1956,7 @@
           "id": 10045121828271408266,
           "m_aliceUnit": 5882676074383809733,
           "m_loseBG": 0,
+          "m_overBG": 0,
           "m_redQueenUnit": 0,
           "m_victoryBG": 0,
           "typeName": "CombatController"
@@ -2618,7 +2622,6 @@
         {
           "Active": true,
           "id": 8297718016937337399,
-          "m_settingButton": 0,
           "m_settingWindow": 5129673964082675281,
           "m_window": 0,
           "typeName": "ESCEvent"
@@ -8353,6 +8356,59 @@
         "m_scale": {
           "x": 0.27000001072883606,
           "y": 0.23000000417232513,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 2409573026818890056,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 17096124724635695227,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 4222190250158597290,
+          "m_Boundary": 10.0,
+          "m_Speed": 5.0,
+          "typeName": "Levitating"
+        }
+      ],
+      "id": 14738254616438525246,
+      "name": "TutorialArrow5",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10266510745372831647,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 6272361326749194410,
+        "m_position": {
+          "x": 965.5999755859375,
+          "y": 426.02899169921875,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 150.0,
+          "y": 150.0,
           "z": 1.0
         }
       }
