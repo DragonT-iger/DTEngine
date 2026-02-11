@@ -43,6 +43,8 @@ void GameManager::Start() {
 	if (m_sfxSlider) m_sfxSlider->SetValue(cursfxValue);
 
 	SetMoney(30);// curMoney = 30; // 임시.
+	healSkillCount = defaultHealSkillCount;
+	attackSkillCount = defaultAttackSkillCount;
 }
 
 void GameManager::SetLife(int life)
@@ -126,3 +128,4 @@ void GameManager::SetTimeScale(int scale)
 		curTimeScale = scale;
 		SceneManager::Instance().GetActiveScene()->SetTimeScale(scale);
 }
+

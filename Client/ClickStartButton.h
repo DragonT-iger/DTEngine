@@ -24,6 +24,7 @@ private:
 		GameObject* m_warningWindow = nullptr;
 		GameObject* m_settingWindow = nullptr;
 
+		GameObject* m_tilemapGenerator = nullptr;
 
 		GameObject* m_leftPrefabWindowBG = nullptr;
 		GameObject* m_rightPrefabWindowBG = nullptr;
