@@ -208,6 +208,7 @@
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
           "m_skillButton": 619973099615200002,
+          "m_skillGuideObj": 16469556109757163476,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -836,6 +837,7 @@
           "m_knight": 1986180583382192364,
           "m_nonCostObj": 15190275747362855967,
           "m_rook": 11842188666389392787,
+          "m_tilemapGenerator": 5569821762295673463,
           "m_tutorialManager": 0,
           "typeName": "ClickPSOkayEvent"
         }
@@ -1254,6 +1256,7 @@
           "m_knight": 1986180583382192364,
           "m_nonCostObj": 13220023044005563302,
           "m_rook": 11842188666389392787,
+          "m_tilemapGenerator": 5569821762295673463,
           "m_tutorialManager": 0,
           "typeName": "ClickPSOkayEvent"
         }
@@ -2730,6 +2733,7 @@
           "m_healButton": 3158531729957653660,
           "m_healCountText": 964351788859007823,
           "m_rayObj": 4771222732717351773,
+          "m_skillGuideObj": 16469556109757163476,
           "typeName": "SkillButton"
         }
       ],
@@ -5402,7 +5406,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 1",
+          "m_text": "Stage 2",
           "typeName": "Text"
         }
       ],
@@ -5796,7 +5800,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
@@ -27288,7 +27292,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -27653,6 +27657,52 @@
         "m_scale": {
           "x": 1.5360000133514404,
           "y": 1.5286624431610107,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 3506775088816026783,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 9470597464644599727,
+          "typeName": "Image"
+        }
+      ],
+      "id": 16469556109757163476,
+      "name": "SkillGuideObj",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3598386504951472576,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 11426099208464666270,
+        "m_position": {
+          "x": -251.25,
+          "y": -772.9999389648438,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 625.0,
+          "y": 100.0,
           "z": 1.0
         }
       }

@@ -32,6 +32,7 @@ DTPROPERTY(RayCastHitEvent, m_startButton)
 DTPROPERTY(RayCastHitEvent, m_skillButton)
 DTPROPERTY(RayCastHitEvent, m_attackCountText)
 DTPROPERTY(RayCastHitEvent, m_healCountText)
+DTPROPERTY(RayCastHitEvent, m_skillGuideObj)
 ENDPROPERTY()
 
 void RayCastHitEvent::Update(float deltaTime)
@@ -274,6 +275,10 @@ void RayCastHitEvent::RaycastCheck()
 												// skill count 감소 시키기.
 												GameManager::Instance()->SetHealSkillCount(healCount - 1);
 												m_healCountText->SetText(std::to_wstring(healCount - 1));
+
+												// skill guide 닫기.
+												if (m_skillGuideObj->IsActive())
+														m_skillGuideObj->SetActive(false);
 										}
 								}
 
@@ -313,6 +318,10 @@ void RayCastHitEvent::RaycastCheck()
 												// skill count 감소 시키기.
 												GameManager::Instance()->SetAttackSkillCount(attackCount - 1);
 												m_attackCountText->SetText(std::to_wstring(attackCount - 1));
+
+												// skill guide 닫기.
+												if (m_skillGuideObj->IsActive())
+														m_skillGuideObj->SetActive(false);
 										}
 								}
 								return;
@@ -460,10 +469,16 @@ void RayCastHitEvent::ToggleSettingWindow()
 		if (m_isAttackSkillOn)
 		{
 				m_isAttackSkillOn = false;	
+
+				if (m_skillGuideObj->IsActive())
+						m_skillGuideObj->SetActive(false);
 		}
 		if (m_isHealSkillOn)
 		{
 				m_isHealSkillOn = false;
+
+				if (m_skillGuideObj->IsActive())
+						m_skillGuideObj->SetActive(false);
 		}
 
 		if (m_warningWindowBG->IsActive())
