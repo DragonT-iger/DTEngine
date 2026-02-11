@@ -159,6 +159,7 @@ bool Game::Initialize()
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
 	 SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
+	 SceneManager::Instance().RegisterScene("Scenes/BossDialogue.scene");
 
 	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
 	 ClientSceneManager::Instance().LoadScene("TitleScene");

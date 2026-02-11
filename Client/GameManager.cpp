@@ -106,9 +106,7 @@ void GameManager::GrantAttackSkillReward(int amount)
 
 void GameManager::NextStage()
 {
-	if (curStageLevel < 6) {
-		curStageLevel++;
-	}
+	curStageLevel++;
 }
 
 void GameManager::Update(float deltaTime)

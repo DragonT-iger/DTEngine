@@ -142,14 +142,19 @@ void EndSceneManager::Update(float deltaTime)
             if (t >= 1.0f) {
                 t = 1.0f;
                 m_fadeState = FadeState::Idle;
+                m_fadeTimer = 0.0f; 
             }
             SetUIAlpha(currentUI, t);
         }
         else if (m_fadeState == FadeState::Idle)
         {
-            SetUIAlpha(currentUI, 1.0f); 
+            m_fadeTimer += deltaTime; 
+            SetUIAlpha(currentUI, 1.0f);
 
-            if (InputManager::Instance().GetKeyDown(KeyCode::Space) ||
+            float autoPassTime = 3.0f; 
+
+            if (m_fadeTimer >= autoPassTime ||
+                InputManager::Instance().GetKeyDown(KeyCode::Space) ||
                 InputManager::Instance().GetKeyDown(KeyCode::Enter))
             {
                 m_fadeState = FadeState::FadeOut;
@@ -162,14 +167,7 @@ void EndSceneManager::Update(float deltaTime)
             float t = m_fadeTimer / FADE_DURATION;
             if (t >= 1.0f) {
                 t = 1.0f;
-                if (m_currentStep == EndStep::EndingCredit)
-                {
-                    //ClientSceneManager::Instance().LoadScene("TitleScene");
-                }
-                else
-                {
-                    NextStep(true);
-                }
+                NextStep(true);
             }
             SetUIAlpha(currentUI, 1.0f - t);
         }
@@ -298,7 +296,7 @@ void EndSceneManager::NextStep(bool force)
         m_fadeTimer = 0.0f;
         m_canProceedToNextStep = false;
     }
-    break;
+    break; 
 
     case EndStep::EndingCredit:
     {
@@ -309,6 +307,12 @@ void EndSceneManager::NextStep(bool force)
         m_fadeState = FadeState::FadeIn;
         m_fadeTimer = 0.0f;
         m_canProceedToNextStep = false;
+    }
+    break;
+
+    case EndStep::ReturnToMain:
+    {
+        ClientSceneManager::Instance().LoadScene("TitleScene");
     }
     break;
 

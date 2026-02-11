@@ -22,7 +22,8 @@ public:
         PreCreditDarken,
         Credit_Part1,       // 6. 크레딧1 (입력 대기)
         Credit_Part2,       // 7. 크레딧2 (입력 대기)
-        EndingCredit        // 8. 엔딩 (입력 시 타이틀)
+        EndingCredit,        // 8. 엔딩 (입력 시 타이틀)
+        ReturnToMain
     };
 
     enum class FadeState
