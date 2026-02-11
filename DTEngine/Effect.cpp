@@ -18,6 +18,7 @@ Effect::Effect()
     m_EM = EffectParams();
 }
 
+
 void Effect::Update(float dt)
 {
     if (m_isAnimating)

@@ -84,7 +84,7 @@ struct EffectParams //b7
 
     Vector4 edgeColor = { 1.0f, 0.5f, 0.2f, 1.0f }; // 테두리 색상
 
-    float noiseScale = 1.0f;
+    float noiseScale = 0.0f;
     float timeMultiplier = 1.0f; // 애니메이션 배속 (추가)
     float effectType = 0.0f;
     float Skinned_Flag = false;

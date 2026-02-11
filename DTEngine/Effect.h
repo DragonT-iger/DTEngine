@@ -11,7 +11,6 @@ public:
     virtual ~Effect() = default;
 
 public:
-
     void Update(float dt) override;
 public:
 
@@ -27,8 +26,8 @@ public:
     float GetTimeMultiplier() const { return m_EM.timeMultiplier; }
     Vector4 GetEdgeColor() const { return m_EM.edgeColor; }
     float GetProgress() const { return m_EM.progress; }
+    void SetNoiseScale(float scale) { m_EM.noiseScale = scale; }
     void SetCameraInverrse(const Matrix mat) { m_EM.invcamerarotation = mat; }
-
     void SetAnimating(bool value) { m_isAnimating = value; }
 private:
     EffectParams m_EM;

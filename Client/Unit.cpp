@@ -59,6 +59,14 @@ void Unit::SetStats(const UnitStats& s)
     m_hp = m_stats.maxHp;
 }
 
+//shader 변경?
+
+void Unit::TakeDamage(float damage)
+{
+    this->_GetOwner()->GetComponent<Effect>()->SetNoiseScale(1);
+    { m_hp = (std::max)(m_hp - damage, 0.0f); }
+}
+
 void Unit::Heal(float heal)
 
 {
