@@ -169,12 +169,12 @@ void RayCastHitEvent::RaycastCheck()
 									tr->SetRotationEuler(e);
 									heads[i]->SetActive(true);
 
-									tr = starts[i]->GetTransform();
-									tr->SetPosition(path[i].startWorld);
-									e = tr->GetEditorEuler();
-									e.y = path[i].yawDeg;
-									tr->SetRotationEuler(e);
-									starts[i]->SetActive(true);
+									//tr = starts[i]->GetTransform();
+									//tr->SetPosition(path[i].startWorld);
+									//e = tr->GetEditorEuler();
+									//e.y = path[i].yawDeg;
+									//tr->SetRotationEuler(e);
+									//starts[i]->SetActive(true);
 								}
 								m_arrowPool->_GetOwner()->SetActive(true);
 
@@ -379,12 +379,12 @@ void RayCastHitEvent::RaycastCheck()
 								tr->SetRotationEuler(e);
 								heads[i]->SetActive(true);
 
-								tr = starts[i]->GetTransform();
-								tr->SetPosition(path[i].startWorld);
-								e = tr->GetEditorEuler();
-								e.y = path[i].yawDeg;
-								tr->SetRotationEuler(e);
-								starts[i]->SetActive(true);
+								//tr = starts[i]->GetTransform();
+								//tr->SetPosition(path[i].startWorld);
+								//e = tr->GetEditorEuler();
+								//e.y = path[i].yawDeg;
+								//tr->SetRotationEuler(e);
+								//starts[i]->SetActive(true);
 							}
 
 							m_arrowPool->_GetOwner()->SetActive(true);
