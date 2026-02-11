@@ -134,29 +134,33 @@ void ClickPSOkayEvent::SetClick()
 						OpenPSEvent* openEvent = parentObj->GetComponent<OpenPSEvent>();
 						GameObject* targetObj = openEvent->GetRayObj();
 
-						auto tileGen = m_tilemapGenerator->GetComponent<TilemapGenerator>();
-
-						if (targetObj && tileGen)
+						if (m_tilemapGenerator)
 						{
-								Vector3 pos = targetObj->GetTransform()->GetPosition();
+								auto tileGen = m_tilemapGenerator->GetComponent<TilemapGenerator>();
 
-								// 좌표만 구해서 함수에 전달
-								Vector2 gridPos(
-										std::round(pos.x / 2.0f),
-										std::round(pos.z / 2.0f)
-								);
-
-								tileGen->ReplaceTileAtGrid(gridPos);
-
-								/*auto effect = targetObj->GetComponent<Effect>();
-								if (effect)
+								if (targetObj && m_tilemapGenerator)
 								{
-										effect->SetAnimating(false);
-										effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+										Vector3 pos = targetObj->GetTransform()->GetPosition();
+
+										// 좌표만 구해서 함수에 전달
+										Vector2 gridPos(
+												std::round(pos.x / 2.0f),
+												std::round(pos.z / 2.0f)
+										);
+
+										tileGen->ReplaceTileAtGrid(gridPos);
+
+										/*auto effect = targetObj->GetComponent<Effect>();
+										if (effect)
+										{
+												effect->SetAnimating(false);
+												effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+										}
+
+										targetObj->SetName("iCube");*/
 								}
-							
-								targetObj->SetName("iCube");*/
 						}
+						
 						// 창 닫기.
 						parentObj->SetActive(false);
 						openEvent->SetIsOpen(false);

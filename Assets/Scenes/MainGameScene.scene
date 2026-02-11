@@ -208,7 +208,7 @@
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
           "m_skillButton": 619973099615200002,
-          "m_skillGuideObj": 16469556109757163476,
+          "m_skillGuideObj": 0,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -2733,7 +2733,7 @@
           "m_healButton": 3158531729957653660,
           "m_healCountText": 964351788859007823,
           "m_rayObj": 4771222732717351773,
-          "m_skillGuideObj": 16469556109757163476,
+          "m_skillGuideObj": 0,
           "typeName": "SkillButton"
         }
       ],
@@ -5406,7 +5406,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 2",
+          "m_text": "Stage 1",
           "typeName": "Text"
         }
       ],
@@ -5800,7 +5800,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -6009,7 +6009,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -6455,6 +6455,12 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 5627783101898628294,
+          "m_button": 9390306124542870207,
+          "typeName": "GameOverEvent"
         }
       ],
       "id": 4285672544238529859,
@@ -8483,7 +8489,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
@@ -8638,7 +8644,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": false,
@@ -8722,6 +8728,13 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 17415663638782849854,
+          "m_ObjWindow": 16338577374539816488,
+          "m_button": 6325898758863286456,
+          "typeName": "SetMainSceneEvent"
         }
       ],
       "id": 2406992976290100513,
