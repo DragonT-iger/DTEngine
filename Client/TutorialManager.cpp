@@ -168,6 +168,7 @@ void TutorialManager::Update(float deltaTime)
                 if (m_currentSoftness >= 1.0f)
                 {
                     SoundManager::Instance().PlayBGM("BGM/Cheshire's Theme", true);
+                    //SoundManager::Instance().PlayOneShot("SFX/AIB_SoundEffect/cat-meow-2-fx-306181");
                     m_currentSoftness = 1.0f;
                     mainCam->SetVignetteSoftness(m_currentSoftness);
 
@@ -782,8 +783,9 @@ void TutorialManager::NextStep(bool force)
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);
-        SoundManager::Instance().StopBGM(true);
         if (m_victoryUI) m_victoryUI->GetComponent<Image>()->SetActive(true);
+        SoundManager::Instance().StopBGM(true);
+        SoundManager::Instance().PlayOneShot("SFX/Result_Victory_sfx");
     }
     break;
 

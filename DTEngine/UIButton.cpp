@@ -79,7 +79,21 @@ void UIButton::Update(float deltaTime)
 
         if (InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
         {
-            SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+            
+
+            if (_GetOwner()->GetName() == "attackskill")
+            {
+                SoundManager::Instance().PlayOneShot("SFX/Skill_Poison_Button");
+            }
+            else if (_GetOwner()->GetName() == "healskill")
+            {
+                SoundManager::Instance().PlayOneShot("SFX/Skill_Heal_Button");
+            }
+            else
+            {
+                SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+            }
+
             SetPressed(true);
         }
         else if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))

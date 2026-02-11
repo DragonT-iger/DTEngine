@@ -33,6 +33,17 @@ void StageInitializer::Awake()
     TilemapData* currentMap = nullptr;
     std::wstring stageFirstText;
 
+    if (currentLevel == 1 || currentLevel == 2 || currentLevel == 3 || currentLevel == 4)
+    {
+        std::cout << currentLevel << " " << "그냥 브금\n";
+        SoundManager::Instance().PlayBGM("BGM/BGM_Setting", true);
+    }
+    else if (currentLevel == 5 || currentLevel == 6)
+    {
+        std::cout << currentLevel << " " << "보스 브금\n";
+        SoundManager::Instance().PlayBGM("BGM/Boss_Setting", true);
+    }
+
     switch (currentLevel)
     {
     case 1:

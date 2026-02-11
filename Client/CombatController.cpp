@@ -58,6 +58,20 @@ void CombatController::Update(float dTime)
 void CombatController::Setup()
 {
     // 배틀맵을 통해 타일맵 가져와서 적 정보 가져와서 등록해주기.
+
+    if (SceneManager::Instance().GetActiveScene()->GetName() != "TutorialScene" && SceneManager::Instance().GetActiveScene()->GetName() != "EndingScene")
+    {
+        int currentLevel = GameManager::Instance()->GetStageLevel();
+
+        if (currentLevel == 1 || currentLevel == 2 || currentLevel == 3 || currentLevel == 4)
+        {
+            SoundManager::Instance().PlayBGM("BGM/BGM_Battle_ver.2", true);
+        }
+        else if (currentLevel == 5 || currentLevel == 6)
+        {
+            SoundManager::Instance().PlayBGM("BGM/Boss_Battle", true);
+        }
+    }
     
     m_stageEnd = false;                     
     m_currPhase = Phase::Ready;             
@@ -297,7 +311,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
     {
         m_phaseEntered = true;
 
-        PrintFrame();
+        //PrintFrame();
 
         for (AllyUnit* ally : m_allyUnits)
         {
