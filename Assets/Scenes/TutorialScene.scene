@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 18.301368713378906,
-          "y": 507.1318054199219,
+          "x": 24.50139617919922,
+          "y": 614.5298461914063,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": -0.23027485609054565,
-          "y": 5.114841938018799,
-          "z": 19.895172119140625
+          "x": 8.799175262451172,
+          "y": 3.8004262447357178,
+          "z": 12.5118989944458
         },
         "m_rotation": {
-          "w": -0.27931171655654907,
-          "x": -0.04499194398522377,
-          "y": -0.94693922996521,
-          "z": 0.1525343805551529
+          "w": 0.5917129516601563,
+          "x": 0.12848103046417236,
+          "y": -0.7777218818664551,
+          "z": 0.16886989772319794
         },
         "m_scale": {
           "x": 1.0,
@@ -795,6 +795,7 @@
           "m_catUI2": 17904279207892403596,
           "m_chessSoldier": 5170480585840548186,
           "m_combatController": 10045121828271408266,
+          "m_defenseTile": 4535067036700176123,
           "m_firstNextButton": 17615222815214009992,
           "m_glowTilePrefab": 13693899292647506346,
           "m_infoUI": 9427420148584979113,
@@ -805,8 +806,9 @@
           "m_tilemapGenerator": 1838616038401361351,
           "m_tutorialAdditionalEnemyPrefab": 508708062133751256,
           "m_tutorialArrow1": 11753123113686128381,
-          "m_tutorialArrow2": 0,
-          "m_tutorialArrow3": 0,
+          "m_tutorialArrow2": 14166769951629709533,
+          "m_tutorialArrow3": 8760412656278535566,
+          "m_tutorialArrow4": 5318406871677330662,
           "m_victoryUI": 6341585058856540258,
           "rightChat": 3796887031993767285,
           "rightChatText": 3014816446671998180,
@@ -5449,7 +5451,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -5618,7 +5620,7 @@
           "typeName": "Image"
         },
         {
-          "Active": true,
+          "Active": false,
           "id": 16194319554760367407,
           "m_hoverColor": {
             "w": 0.30000001192092896,
@@ -5758,7 +5760,7 @@
           "typeName": "Image"
         },
         {
-          "Active": true,
+          "Active": false,
           "id": 4390116179161174798,
           "m_hoverColor": {
             "w": 0.30000001192092896,
@@ -5828,7 +5830,7 @@
           "typeName": "Image"
         },
         {
-          "Active": true,
+          "Active": false,
           "id": 7361201043546811523,
           "m_hoverColor": {
             "w": 0.30000001192092896,
@@ -5898,7 +5900,7 @@
           "typeName": "Image"
         },
         {
-          "Active": true,
+          "Active": false,
           "id": 4149366119023669541,
           "m_hoverColor": {
             "w": 0.30000001192092896,
@@ -7111,6 +7113,165 @@
         "m_position": {
           "x": 1173.4998779296875,
           "y": 104.69999694824219,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 150.0,
+          "y": 150.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 5429180802012049671,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 17096124724635695227,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 14073193558044196500,
+          "m_Boundary": 10.0,
+          "m_Speed": 5.0,
+          "typeName": "Levitating"
+        }
+      ],
+      "id": 8760412656278535566,
+      "name": "TutorialArrow3",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14384352681015227708,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14740713364960919941,
+        "m_position": {
+          "x": 1497.5999755859375,
+          "y": 360.29998779296875,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 150.0,
+          "y": 150.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 16580985619071508209,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 17096124724635695227,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 10378129531174310398,
+          "m_Boundary": 10.0,
+          "m_Speed": 5.0,
+          "typeName": "Levitating"
+        }
+      ],
+      "id": 14166769951629709533,
+      "name": "TutorialArrow2",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14851225424283527786,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14740713364960919941,
+        "m_position": {
+          "x": 1272.0,
+          "y": 298.5,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 150.0,
+          "y": 150.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 15417184765437969475,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 17096124724635695227,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 3118621925626492905,
+          "m_Boundary": 10.0,
+          "m_Speed": 5.0,
+          "typeName": "Levitating"
+        }
+      ],
+      "id": 5318406871677330662,
+      "name": "TutorialArrow4",
+      "tag": "Untagged",
+      "transform": {
+        "id": 3569767203122185634,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 14740713364960919941,
+        "m_position": {
+          "x": 1387.5,
+          "y": 460.3999938964844,
           "z": 0.0
         },
         "m_rotation": {
