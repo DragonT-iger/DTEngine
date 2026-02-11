@@ -410,6 +410,7 @@ void TilemapGenerator::SpawnUnits()
 
         instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
         instance->SetActive(true);
+        instance->GetTransform()->SetParent(GetTransform());
         
         enemy->SetBoss(info.isBoss);
 
@@ -432,6 +433,7 @@ void TilemapGenerator::SpawnUnits()
             {
                 instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
                 instance->SetActive(true);
+                instance->GetTransform()->SetParent(GetTransform());
 
                 m_spawnedAlice = instance;
             }
