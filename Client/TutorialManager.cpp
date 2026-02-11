@@ -42,11 +42,16 @@ DTPROPERTY(TutorialManager, m_tutorialAdditionalEnemyPrefab)
 DTPROPERTY(TutorialManager, m_rayCastHitEvent)
 DTPROPERTY(TutorialManager, m_catEyeClosedGO)
 DTPROPERTY(TutorialManager, m_catEyeOpenGO)
+DTPROPERTY(TutorialManager, m_tutorialArrow1)
+DTPROPERTY(TutorialManager, m_tutorialArrow2)
+DTPROPERTY(TutorialManager, m_tutorialArrow3)
 ENDPROPERTY()
 
 
 void TutorialManager::Start()
 {
+    m_tutorialArrow1->SetActive(false);
+
     NextStep();
 }
 
@@ -568,6 +573,7 @@ void TutorialManager::NextStep(bool force)
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
        
+        m_tutorialArrow1->SetActive(true);
     }
     break;
 
@@ -585,6 +591,7 @@ void TutorialManager::NextStep(bool force)
         }
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
+        m_tutorialArrow1->SetActive(false);
     }
     break;
 

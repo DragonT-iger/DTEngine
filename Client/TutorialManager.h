@@ -113,4 +113,8 @@ private:
     GameObject* m_catEyeClosedGO = nullptr;
     GameObject* m_catEyeOpenGO = nullptr;
 
+
+    GameObject* m_tutorialArrow1 = nullptr;
+    GameObject* m_tutorialArrow2 = nullptr;
+    GameObject* m_tutorialArrow3 = nullptr;
 };
