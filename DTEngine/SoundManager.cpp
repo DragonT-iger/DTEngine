@@ -22,10 +22,10 @@ bool SoundManager::Initalize()
 
     m_BGMMap.emplace("TitleScene", "BGM/Title");
     m_BGMMap.emplace("TutorialScene", "BGM/Queen's Theme");
-    m_BGMMap.emplace("Stage_01", "The_World Is_Yours");
-    m_BGMMap.emplace("Stage_02", "Doomsday");
-    m_BGMMap.emplace("Stage_03", "Doomsday"); 
-    m_BGMMap.emplace("MainGameScene", "BGM/BGM_Setting");
+    //m_BGMMap.emplace("Stage_01", "The_World Is_Yours");
+    //m_BGMMap.emplace("Stage_02", "Doomsday");
+    //m_BGMMap.emplace("Stage_03", "Doomsday"); 
+    //m_BGMMap.emplace("MainGameScene", "BGM/BGM_Setting");
     //m_BGMMap.emplace("GridTestSceneHS2", "BGM/BGM_Setting");
     //m_BGMMap.emplace("GridTestSceneHS2", "BGM/Boss_Setting");
 

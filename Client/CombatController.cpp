@@ -311,7 +311,7 @@ bool CombatController::MoveAndBattlePhase(float dTime)
     {
         m_phaseEntered = true;
 
-        PrintFrame();
+        //PrintFrame();
 
         for (AllyUnit* ally : m_allyUnits)
         {

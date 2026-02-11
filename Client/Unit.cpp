@@ -4,6 +4,7 @@
 #include "Effect.h"
 #include "EffectManager.h"
 #include "SoundManager.h"
+#include <random>
 
 static const UnitStats UnitStatsTable[] =
 {
@@ -317,7 +318,14 @@ bool Unit::TickMove(float dt)
 
     if (!m_move.soundPlayed && t >= 0.75f)
     {
-        SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_int_distribution<int> dist(0, 1);
+
+        int r = dist(gen);
+
+        if (r == 0) SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
+        else SoundManager::Instance().PlayOneShot("SFX/Unit_Move(2)_ver.2");
         m_move.soundPlayed = true;
     }
 
