@@ -5401,7 +5401,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 5",
+          "m_text": "Stage 1",
           "typeName": "Text"
         }
       ],
@@ -6004,7 +6004,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
@@ -6088,6 +6088,12 @@
             "z": 0.6000000238418579
           },
           "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 2573765192187574350,
+          "m_sceneName": "TitleScene",
+          "typeName": "LoadSceneEvent"
         }
       ],
       "id": 15090299138700547528,
@@ -8335,7 +8341,7 @@
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
-          "m_mapData": 6655454153380555896,
+          "m_mapData": 6189260170659567125,
           "m_prefab0": 2144434576612897772,
           "m_prefab1": 12928013286368622248,
           "m_prefab2": 18392761606428986916,
