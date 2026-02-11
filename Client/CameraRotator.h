@@ -50,8 +50,8 @@ private:
     float m_currentOrthoSize = 5.0f;
     float m_targetOrthoSize = 5.0f;
     float m_zoomSpeed = 0.2f;
-    float m_minSize = 1.0f;  // 최소 사이즈 (최대 확대)
-    float m_maxSize = 4.0f; // 최대 사이즈 (최대 축소)
+    float m_minSize = 1.0f;         // 최소 사이즈 (최대 확대)
+    float m_maxSize = 4.0f;         // 최대 사이즈 (최대 축소)
 
 
 };
