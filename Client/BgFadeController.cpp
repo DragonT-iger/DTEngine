@@ -143,12 +143,16 @@ void BgFadeController::SetVictoryObj(bool value)
         if (IsMushroomSkillSet())
         {
             m_mushroomSkillimg->SetActive(value);
+            m_mushroomSkillimg->GetComponent<UIButton>()->SetActive(value);
             m_bottleSkillimg->SetActive(false);
+            m_bottleSkillimg->GetComponent<UIButton>()->SetActive(value);
         }
         else
         {
             m_mushroomSkillimg->SetActive(false);
+            m_mushroomSkillimg->GetComponent<UIButton>()->SetActive(value);
             m_bottleSkillimg->SetActive(value);
+            m_bottleSkillimg->GetComponent<UIButton>()->SetActive(value);
         }
         
         m_bottleSkillimg->SetActive(value);
