@@ -1423,10 +1423,10 @@
         {
           "Active": true,
           "id": 6576746820287875911,
-          "m_bgmSlider": 0,
+          "m_bgmSlider": 18082992374358157572,
           "m_life": 0,
           "m_money": 0,
-          "m_sfxSlider": 0,
+          "m_sfxSlider": 5292677222901776908,
           "typeName": "GameManager"
         }
       ],
@@ -2999,6 +2999,12 @@
           "m_value": 0.0,
           "m_wholeNumbers": false,
           "typeName": "UISlider"
+        },
+        {
+          "Active": true,
+          "id": 391385550805252774,
+          "m_slider": 5292677222901776908,
+          "typeName": "SliderValueEvent"
         }
       ],
       "id": 6912602873348106890,
@@ -3194,6 +3200,12 @@
           "m_value": 0.0,
           "m_wholeNumbers": false,
           "typeName": "UISlider"
+        },
+        {
+          "Active": true,
+          "id": 14680004247884489963,
+          "m_slider": 18082992374358157572,
+          "typeName": "SliderValueEvent"
         }
       ],
       "id": 9867179797831684468,
@@ -7019,7 +7031,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 14103031513704839223,
+          "m_textureID": 0,
           "typeName": "Image"
         },
         {
