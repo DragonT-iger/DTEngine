@@ -2622,6 +2622,8 @@
         {
           "Active": false,
           "id": 8297718016937337399,
+          "m_creditExitButton": 0,
+          "m_isCreditOpen": false,
           "m_settingWindow": 5129673964082675281,
           "m_window": 0,
           "typeName": "ESCEvent"
@@ -3479,7 +3481,7 @@
           "m_battleRule": 0,
           "m_moveRule": 1,
           "m_pos": {
-            "x": 4.0,
+            "x": 5.0,
             "y": 5.0
           },
           "m_type": 0,
@@ -3520,7 +3522,7 @@
         },
         "m_parent": 5502874655027955098,
         "m_position": {
-          "x": 8.0,
+          "x": 10.0,
           "y": 1.0,
           "z": 10.0
         },

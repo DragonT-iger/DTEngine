@@ -17,6 +17,8 @@ public:
     // 클라이언트 씬 매니저의 LoadScene을 사용할것
     void    LoadScene(const std::string& name);
 
+    void    SetOnSceneChangeCallback(std::function<void()> callback) { m_onSceneChangeCallback = callback; }
+
     bool    ProcessSceneChange();
 
     bool    BackupActiveScene();   
@@ -32,6 +34,7 @@ private:
     std::string m_nextName;    
     std::unordered_map<std::string, std::unique_ptr<Scene>> m_scenes;
 
+    std::function<void()> m_onSceneChangeCallback;
 
     const std::string m_backupPath = "Scenes/PlayMode_Backup.scene";
     std::string m_originalSceneName; 
