@@ -61,6 +61,8 @@ cbuffer CBuffer_Effect : register(b8)
     
     
     float4x4 invcamerarotation;
+    float4x4 ownRotationMatrix;
+
 }
 
 cbuffer CBuffer_Fog : register(b9)
