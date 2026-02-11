@@ -171,6 +171,7 @@
     <ClCompile Include="LoadSceneEvent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeSetActiveEvent.cpp" />
+    <ClCompile Include="MultiButtonControlEvent.cpp" />
     <ClCompile Include="OpenPSEvent.cpp" />
     <ClCompile Include="OpenRSEvent.cpp" />
     <ClCompile Include="RayCastHitEvent.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="ImageVisualUpdateEvent.h" />
     <ClInclude Include="LoadSceneEvent.h" />
     <ClInclude Include="MakeSetActiveEvent.h" />
+    <ClInclude Include="MultiButtonControlEvent.h" />
     <ClInclude Include="OpenPSEvent.h" />
     <ClInclude Include="OpenRSEvent.h" />
     <ClInclude Include="RayCastHitEvent.h" />

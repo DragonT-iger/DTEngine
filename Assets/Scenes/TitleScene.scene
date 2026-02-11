@@ -105,21 +105,21 @@
       "transform": {
         "id": 3516436499406544977,
         "m_editorEulerAngles": {
-          "x": 52.30131912231445,
-          "y": 525.3318481445313,
+          "x": 48.50128936767578,
+          "y": 537.23193359375,
           "z": 0.0
         },
         "m_parent": 12244484060044360865,
         "m_position": {
-          "x": 1705.191162109375,
-          "y": 83.91366577148438,
+          "x": -1.0839232206344604,
+          "y": 5.538662910461426,
           "z": 4.141053199768066
         },
         "m_rotation": {
-          "w": -0.11458739638328552,
-          "x": -0.05626147240400314,
-          "y": -0.8902944326400757,
-          "z": 0.4371272623538971
+          "w": -0.022022346034646034,
+          "x": -0.009920641779899597,
+          "y": -0.9114913940429688,
+          "z": 0.41060927510261536
         },
         "m_scale": {
           "x": 1.0,
@@ -253,14 +253,6 @@
       "components": [
         {
           "Active": true,
-          "id": 17405304307745258217,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
           "id": 1801503545669117415,
           "m_color": {
             "w": 1.0,
@@ -337,14 +329,6 @@
       "components": [
         {
           "Active": true,
-          "id": 17830035990897500716,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
           "id": 607827637865568535,
           "m_color": {
             "w": 1.0,
@@ -387,6 +371,17 @@
           "m_Credit": 11664765301882288476,
           "m_Setting": 18387338552566684130,
           "typeName": "TitleCreditTriggerEvent"
+        },
+        {
+          "Active": true,
+          "id": 6766602869545840731,
+          "m_activateTriggerBtn": 1886806402145706395,
+          "m_deactivateTriggerBtn": 9469714705011582143,
+          "m_targetBtn1": 13536231451551382225,
+          "m_targetBtn2": 9469714705011582143,
+          "m_targetBtn3": 3739479284354951149,
+          "m_targetBtn4": 15905771919823294793,
+          "typeName": "MultiButtonControlEvent"
         }
       ],
       "id": 6271355813400708908,
@@ -421,14 +416,6 @@
     {
       "active": true,
       "components": [
-        {
-          "Active": true,
-          "id": 7477329346677975911,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
         {
           "Active": true,
           "id": 10953367961697288893,
@@ -573,14 +560,6 @@
       "components": [
         {
           "Active": true,
-          "id": 1769303613899918730,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
-        {
-          "Active": true,
           "id": 17918960741534274761,
           "m_color": {
             "w": 1.0,
@@ -655,14 +634,6 @@
     {
       "active": false,
       "components": [
-        {
-          "Active": true,
-          "id": 8946460364557472424,
-          "m_materialID": 14785535731479647299,
-          "m_meshIndex": 0,
-          "m_modelID": 13223504147414108251,
-          "typeName": "MeshRenderer"
-        },
         {
           "Active": true,
           "id": 878887115508227902,

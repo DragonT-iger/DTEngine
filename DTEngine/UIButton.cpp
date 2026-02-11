@@ -19,7 +19,14 @@ ENDPROPERTY()
 void UIButton::InvokeClick()
 {
     if (!m_interactable) return;
-    if (m_onClick) m_onClick();
+
+    for (const auto& callback : m_onClickEvents)
+    {
+        if (callback)
+        {
+            callback();
+        }
+    }
 }
 
 void UIButton::Update(float deltaTime)
