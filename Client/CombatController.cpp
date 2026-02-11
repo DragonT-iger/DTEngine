@@ -5,7 +5,6 @@
 #include "TutorialManager.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
-#include "SoundManager.h"
 
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
@@ -534,6 +533,9 @@ bool CombatController::EndPhase()
         }
 
         m_stageEnd = true;
+
+        SoundManager::Instance().StopBGM(true);
+
         if (m_stageResult == StageResult::Win)
         {
             std::cout << "Win!!!!!!!!!!!!" << std::endl;

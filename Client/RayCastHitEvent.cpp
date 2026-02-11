@@ -328,6 +328,8 @@ void RayCastHitEvent::RaycastCheck()
 								// level design이 먼저라 생각하는데 배치 위치에 따라 우리가 작업을 모든 예외처리를 다 할 필요가 없다 라는 생각이라.
 							if (!m_arrowPool) return;
 
+							SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+
 							if (enemy == m_lastSelectedEnemy)
 							{
 								m_lastSelectedEnemy = nullptr;
@@ -382,6 +384,8 @@ void RayCastHitEvent::RaycastCheck()
 
 						if (hit->GetName() == "Glow_R_Height_01_White" || hit->GetName() == "Glow_R_Height_01_Red")
 						{
+							SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+							
 							if (isLeft)
 							{
 									if (!m_leftPSWinodwBG)

@@ -20,11 +20,14 @@ bool SoundManager::Initalize()
     mMasterGroup->addGroup(mSFXGroup);
 
 
-    m_BGMMap.emplace("TitleScene", "Title");
-    m_BGMMap.emplace("TutorialScene", "metal_pipe");
+    m_BGMMap.emplace("TitleScene", "BGM/Title");
+    m_BGMMap.emplace("TutorialScene", "BGM/Queen's Theme");
     m_BGMMap.emplace("Stage_01", "The_World Is_Yours");
     m_BGMMap.emplace("Stage_02", "Doomsday");
-    m_BGMMap.emplace("Stage_03", "Doomsday");
+    m_BGMMap.emplace("Stage_03", "Doomsday"); 
+    m_BGMMap.emplace("MainGameScene", "BGM/BGM_Setting");
+    //m_BGMMap.emplace("GridTestSceneHS2", "BGM/BGM_Setting");
+    //m_BGMMap.emplace("GridTestSceneHS2", "BGM/Boss_Setting");
 
     return true;
 }

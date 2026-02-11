@@ -20,6 +20,12 @@ void Unit::Start()
     {
         m_anim = _GetOwner()->GetComponent<Animator>();
     }
+
+    if (_GetOwner()->GetName() == "unit_Alice")
+    {
+        m_anim = _GetOwner()->GetComponent<Animator>();
+    }
+
     
     Transform* tf = GetTransform();
     if (!tf) return;

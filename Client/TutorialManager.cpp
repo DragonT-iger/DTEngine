@@ -85,6 +85,7 @@ void TutorialManager::Update(float deltaTime)
             if (m_aliceDead == false) {
                 m_aliceDead = true;
                 m_canProceedToNextStep = true;
+                SoundManager::Instance().StopBGM(true);
                 NextStep();
                 m_aliceGameObject->GetComponent<Animator>()->SetPlay(true);
             }
@@ -113,6 +114,7 @@ void TutorialManager::Update(float deltaTime)
 
                         m_isVignetteSequence = false;
                         m_canProceedToNextStep = true;
+                        //SoundManager::Instance().StopBGM(true);
                         NextStep();
                     }
                 }
@@ -140,6 +142,7 @@ void TutorialManager::Update(float deltaTime)
 
                 if (m_currentSoftness >= 1.0f)
                 {
+                    SoundManager::Instance().PlayBGM("BGM/Cheshire's Theme", true);
                     m_currentSoftness = 1.0f;
                     mainCam->SetVignetteSoftness(m_currentSoftness);
 
@@ -713,6 +716,7 @@ void TutorialManager::NextStep(bool force)
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);
+        SoundManager::Instance().StopBGM(true);
     }
     break;
 

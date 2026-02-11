@@ -71,6 +71,6 @@ private:
 
     float mTargetBGMVolume = 0.5f;
     float mTargetSFXVolume = 0.5f;
-    float mFadeSpeed = 0.8f; // 초당 페이드 속도 (조절 가능)
+    float mFadeSpeed = 0.4f; // 초당 페이드 속도 (조절 가능)
     std::string m_On_Played = "";
 }; 

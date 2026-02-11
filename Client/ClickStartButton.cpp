@@ -99,6 +99,8 @@ void ClickStartButton::StartGame()
 		m_combatObj->GetComponent<CombatController>()->Setup();
 		rayobj->SetStartBattle(true);
 		rayobj->SetRay(true);
+		SoundManager::Instance().PlayBGM("BGM/BGM_Battle_ver.2", true);
+		//SoundManager::Instance().PlayBGM("BGM/Boss_Battle", true);
 		isStart = true;
 }
 
