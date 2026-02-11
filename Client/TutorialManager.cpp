@@ -15,6 +15,7 @@
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
+#include "Image.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -765,6 +766,7 @@ void TutorialManager::NextStep(bool force)
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);
+        if (m_victoryUI) m_victoryUI->GetComponent<Image>()->SetActive(true);
     }
     break;
 
