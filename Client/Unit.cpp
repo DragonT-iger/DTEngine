@@ -71,7 +71,7 @@ void Unit::SetStats(const UnitStats& s)
 
 void Unit::TakeDamage(float damage)
 {
-    this->_GetOwner()->GetComponent<Effect>()->SetNoiseScale(1);
+   // this->_GetOwner()->GetComponent<Effect>()->SetNoiseScale(1);
     { m_hp = (std::max)(m_hp - damage, 0.0f); }
 }
 
