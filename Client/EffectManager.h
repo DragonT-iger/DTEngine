@@ -9,9 +9,6 @@
 class Prefab;
 class GameObject;
 
-
-
-
 class EffectManager :public Singleton<EffectManager>
 {
 	friend class Singleton<EffectManager>;

@@ -12,6 +12,7 @@ DTPROPERTY_SETTER(Dissolved, m_Textureid, SetAlbedoTexture)
 ENDPROPERTY()
 
 //순회해서 처리하는 장비의 경우 명시적으로 albedo를 넣어줘야 함.
+
 void Dissolved::SetAlbedoTexture(uint64_t TextureID)
 {
 	if (!m_DiffuseTexture)

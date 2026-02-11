@@ -123,9 +123,9 @@ float4 PS(PS_INPUT input) : SV_Target
     
     float alpha = USE_ALBEDO ? g_DiffuseMap.Sample(g_Sampler, input.UV).a : 1.0f;
     
-    //float4 Color = float4(noiseScalef, 0, 0, 0);
+    float4 Color = float4(effectType, 0, 0, 0);
     
-    //finalColor += Color;
+    finalColor += Color;
     
     return float4(finalColor, alpha);
 }

@@ -26,6 +26,8 @@ public:
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
 
+    void ChangeMark(GameObject* obj);
+
     void ReplaceTile(int x, int y, Prefab* newPrefab);
 
     void SpawnUnits(); // 적 생성

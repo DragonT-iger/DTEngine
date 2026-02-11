@@ -53,7 +53,6 @@ SpriteSheetDim ParseSpriteSheetDimFromPath(const std::string& path)
     }
     catch (...)
     {
-        // 숫자가 아니거나 변환 실패 시 기본값 반환
         return { 0, 0 };
     }
 }
@@ -66,7 +65,6 @@ void SpriteEffect::Update(float dTime)
     if (m_cols == 0 || m_rows == 0) return;
     if (m_frameInterpolation <= 0.f) return;
 
-    // 비루프 + 이미 끝났으면 더 이상 update 안 함
     if (!m_loop && m_finished) return;
 
     m_currentTime += dTime;
@@ -80,12 +78,11 @@ void SpriteEffect::Update(float dTime)
     }
     else
     {
-        // 끝났으면: 초기화 + update stop
         if (frameIdx >= totalFrames)
         {
-            ResetToFirstFrame();     // “00으로”
+            ResetToFirstFrame();     
             m_finished = true;
-            m_play = false;          // update 안 받게
+            m_play = false;          
             return;
         }
     }

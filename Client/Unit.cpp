@@ -71,7 +71,9 @@ void Unit::SetStats(const UnitStats& s)
 
 void Unit::TakeDamage(float damage)
 {
-   // this->_GetOwner()->GetComponent<Effect>()->SetNoiseScale(1);
+    auto cmp = this->_GetOwner()->GetComponent<Effect>();
+   if(cmp) cmp->SetEffectType(1); //쉐이더 하나 받아서 
+
     { m_hp = (std::max)(m_hp - damage, 0.0f); }
 }
 
@@ -513,7 +515,6 @@ void Unit::StartDissolve()
 
     EffectManager::Instance().PlayEffect("Smoke", this->_GetOwner());
 
-
     auto tf = GetTransform();
     for (Transform* child : tf->GetChildren())
     {
@@ -525,13 +526,25 @@ void Unit::StartDissolve()
             if (cmp)
             {
                 auto cmp_e = child->_GetOwner()->AddComponent<Effect>();
-                cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit/Rabbit_Texture/Unit__BaseColor.png");
+
+                if (this->m_team == Team::Enemy)
+                    cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit_Real/Unit__BaseColor.png");
+
+                else
+                    cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit_Real/Unit2__BaseColor.png");
+
+
                 cmp->SetNoiseTexture();
                 cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
 
             }
         }
+
         else
+            child->_GetOwner()->SetActive(false);
+
+       /* else 
+
         {
             auto cmp = child->_GetOwner()->AddComponent<Dissolved>();
             if (cmp)
@@ -543,7 +556,7 @@ void Unit::StartDissolve()
 
             }
 
-        }
+        }*/
     }
 
 

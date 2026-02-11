@@ -9,6 +9,9 @@
 #include "AssetDatabase.h"
 #include "Prefab.h"
 
+#include "MeshRenderer.h"
+#include "Material.h"
+#include "Texture.h"
 #include "../Client/EnemyUnit.h"
 #include "../Client/BreakableWall.h"
 
@@ -193,6 +196,58 @@ void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
     }
 }
 
+bool StartsWith(const std::string& fullString, const std::string& prefix)
+{
+    if (fullString.length() < prefix.length()) return false;
+    return fullString.rfind(prefix, 0) == 0;
+}
+
+void TilemapGenerator::ChangeMark(GameObject* obj)
+{
+    for (Transform* child : _GetOwner()->GetTransform()->GetChildren())
+    {
+        if (child->GetName().rfind("Mark", 0) == 0)
+        {
+            auto meshRenderer = child->GetComponent<MeshRenderer>();
+
+            if (meshRenderer)
+            {
+                int m_type = obj->GetComponent<Unit>()->GetUnitType();
+
+                if (m_type == UnitType::Bishop)
+                {
+                    std::string path = "Assets/Models/UI/Alice_UI/HP_Bishop_boss.png";
+                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
+                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
+                }
+
+                else if (m_type == UnitType::Knight)
+                {
+                    std::string path = "Assets/Models/UI/Alice_UI/HP_Knight_boss.png";
+                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
+                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
+                }
+
+
+                else if (m_type == UnitType::Rook)
+                {
+                    std::string path = "Assets/Models/UI/Alice_UI/HP_Rook_boss.png";
+                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
+                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
+                }
+
+
+            }
+
+            break;
+        }
+    }
+
+
+ 
+
+}
+
 void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
 {
     if (!m_mapData || !newPrefab) return;
@@ -317,6 +372,9 @@ void TilemapGenerator::SpawnUnits()
         instance->SetActive(true);
         
         enemy->SetBoss(info.isBoss);
+
+       // if (enemy->IsBoss()) ChangeMark(instance);
+
         enemy->SetUnitType(info.type);
         enemy->SetPath(info.pathPoints);
 
