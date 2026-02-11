@@ -457,6 +457,14 @@ void RayCastHitEvent::ToggleSettingWindow()
 				return;
 		}
 				
+		if (m_isAttackSkillOn)
+		{
+				m_isAttackSkillOn = false;	
+		}
+		if (m_isHealSkillOn)
+		{
+				m_isHealSkillOn = false;
+		}
 
 		if (m_warningWindowBG->IsActive())
 		{
