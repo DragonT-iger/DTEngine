@@ -40,6 +40,13 @@ void CircleMaskEffect::Initialize()
 
 void CircleMaskEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* camera)
 {
+
+
+    DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
+    DX11Renderer::Instance().SetCullMode(CullMode::None); // or Back
+    DX11Renderer::Instance().SetDepthOff();
+
+
     if (!m_ps || !src || !dest) return;
 
     auto& renderer = DX11Renderer::Instance();

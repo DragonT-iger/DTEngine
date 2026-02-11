@@ -25,7 +25,16 @@ void VignetteEffect::Initialize()
 
 void VignetteEffect::Render(RenderTexture* src, RenderTexture* dest, const Camera* camera)
 {
+
+
     if (!m_ps || !src || !dest) return;
+
+
+
+    DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
+    DX11Renderer::Instance().SetCullMode(CullMode::None); // or Back
+    DX11Renderer::Instance().SetDepthOff();
+
 
     auto& renderer = DX11Renderer::Instance();
     auto context = renderer.GetContext();
