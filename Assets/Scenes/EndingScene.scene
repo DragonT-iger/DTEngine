@@ -53,21 +53,21 @@
       "transform": {
         "id": 12621832947175338989,
         "m_editorEulerAngles": {
-          "x": 35.90258026123047,
-          "y": 583.5916137695313,
+          "x": 41.30264663696289,
+          "y": 584.2914428710938,
           "z": 0.0
         },
         "m_parent": 0,
         "m_position": {
-          "x": 6.591918468475342,
-          "y": 6.286069393157959,
-          "z": 18.753149032592773
+          "x": 5.274153709411621,
+          "y": 4.056896209716797,
+          "z": 17.402095794677734
         },
         "m_rotation": {
-          "w": 0.3532247245311737,
-          "x": 0.1144377738237381,
-          "y": -0.8833118677139282,
-          "z": 0.2861754298210144
+          "w": 0.35274121165275574,
+          "x": 0.13294744491577148,
+          "y": -0.8667124509811401,
+          "z": 0.3266621530056
         },
         "m_scale": {
           "x": 1.0,
@@ -1257,13 +1257,14 @@
           "Active": true,
           "id": 1838616038401361351,
           "m_alice": 0,
+          "m_bgWall0": 0,
+          "m_bgWall1": 0,
           "m_enemy0": 0,
           "m_enemy1": 0,
           "m_enemy2": 0,
           "m_mapData": 716130086308924450,
           "m_prefab0": 2144434576612897772,
           "m_prefab1": 12928013286368622248,
-          "m_prefab10": 12894749133452066125,
           "m_prefab2": 4924267867290484229,
           "m_prefab3": 0,
           "m_prefab4": 0,
@@ -1271,7 +1272,6 @@
           "m_prefab6": 0,
           "m_prefab7": 0,
           "m_prefab8": 6219473454575545864,
-          "m_prefab9": 11976589591614734553,
           "m_redQueen": 0,
           "typeName": "TilemapGenerator"
         }
@@ -1317,6 +1317,7 @@
           "m_rightPSWinodwBG": 8263240293524681031,
           "m_rightRSWinodwBG": 7614717077102416540,
           "m_settingWindowBG": 0,
+          "m_skillButton": 0,
           "m_startButton": 0,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 0,
@@ -2023,7 +2024,6 @@
           "m_button": 10331715619206321962,
           "m_combatObj": 3785137383686980969,
           "m_knight": 3328525606780682600,
-          "m_mapData": 1838616038401361351,
           "m_nonCostObj": 0,
           "m_rook": 9894459574992437766,
           "m_tutorialManager": 0,
@@ -2227,7 +2227,6 @@
           "Active": true,
           "id": 10165915151219709169,
           "m_exitButton": 15651364023894367520,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2592,7 +2591,6 @@
           "Active": true,
           "id": 6214351528606459344,
           "m_exitButton": 18264787850928812993,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2812,7 +2810,6 @@
           "Active": true,
           "id": 1937853670345684716,
           "m_exitButton": 1687731631659127773,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3432,7 +3429,6 @@
           "Active": true,
           "id": 979374376602840237,
           "m_exitButton": 4757413427028052333,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3999,7 +3995,6 @@
           "Active": true,
           "id": 9529039597571086273,
           "m_exitButton": 7275223391532585498,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4800,7 +4795,7 @@
         "m_editorEulerAngles": {
           "x": 30.302358627319336,
           "y": 43.697509765625,
-          "z": 0.0
+          "z": 9.888796057566651e-07
         },
         "m_parent": 14884301072062738685,
         "m_position": {
@@ -4812,7 +4807,7 @@
           "w": 0.8959058523178101,
           "x": 0.2425927072763443,
           "y": 0.35922136902809143,
-          "z": -0.0972696840763092
+          "z": -0.09726967662572861
         },
         "m_scale": {
           "x": 0.9999998211860657,
@@ -5011,6 +5006,28 @@
           },
           "m_type": 0,
           "typeName": "EnemyUnit"
+        },
+        {
+          "Active": true,
+          "id": 9161621059236228859,
+          "m_EM.edgeColor": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_EM.edgeWidth": 0.009999999776482582,
+          "m_EM.glowIntensity": 1.0,
+          "m_EM.noiseScale": 1.0,
+          "m_EM.progress": 0.0,
+          "m_EM.timeMultiplier": 1.0,
+          "m_isAnimating": true,
+          "typeName": "Effect"
+        },
+        {
+          "Active": true,
+          "id": 15039607727608888905,
+          "typeName": "Outline"
         }
       ],
       "id": 1433477908153551067,

@@ -15,6 +15,7 @@
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
+#include "Image.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -45,6 +46,8 @@ DTPROPERTY(TutorialManager, m_catEyeOpenGO)
 DTPROPERTY(TutorialManager, m_tutorialArrow1)
 DTPROPERTY(TutorialManager, m_tutorialArrow2)
 DTPROPERTY(TutorialManager, m_tutorialArrow3)
+DTPROPERTY(TutorialManager, m_tutorialArrow4)
+DTPROPERTY(TutorialManager, m_defenseTile)
 ENDPROPERTY()
 
 
@@ -606,6 +609,7 @@ void TutorialManager::NextStep(bool force)
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
         m_RRSokayButton->SetActive(false);
+        m_tutorialArrow2->SetActive(true);
     }
     break;
 
@@ -614,6 +618,8 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2) {
             m_catText2->SetText(L"적은 하나뿐이니,\n이번엔 체력이 낮은 놈을 노려 보지");
         }
+        m_tutorialArrow2->SetActive(false);
+        m_tutorialArrow3->SetActive(true);
     }
     break;
 
@@ -625,6 +631,8 @@ void TutorialManager::NextStep(bool force)
 
         m_rayActive = false;
         m_RRSokayButton->SetActive(true);
+        m_tutorialArrow3->SetActive(false);
+        m_tutorialArrow4->SetActive(true);
     }
     break;
 
@@ -646,6 +654,7 @@ void TutorialManager::NextStep(bool force)
         if (m_combatController) m_combatController->GetEnemyUnit0()->SetPath({ {{ 0.f,6.f },{ 4.f,6.f }} });
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
+        m_tutorialArrow4->SetActive(false);
     }
     break;
 
@@ -688,7 +697,8 @@ void TutorialManager::NextStep(bool force)
         }
         m_rayCastHitEvent->GetArrowPool()->_GetOwner()->SetActive(false);
 
-        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab);
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_defenseTile);
+
 
         m_combatController->GetBattleGrid()->SetDefenseTile({ 3,6 });
 
@@ -760,6 +770,7 @@ void TutorialManager::NextStep(bool force)
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);
         SoundManager::Instance().StopBGM(true);
+        if (m_victoryUI) m_victoryUI->GetComponent<Image>()->SetActive(true);
     }
     break;
 

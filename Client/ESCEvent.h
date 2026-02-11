@@ -1,7 +1,6 @@
 #pragma once
 #include "MonoBehaviour.h"
 
-class UIButton;
 class GameObject;
 
 class ESCEvent : public MonoBehaviour
@@ -13,8 +12,6 @@ public:
 
 		void Check();
 private:
-		UIButton* m_settingButton = nullptr;
-
 		GameObject* m_window = nullptr;
 		GameObject* m_settingWindow = nullptr;
 };

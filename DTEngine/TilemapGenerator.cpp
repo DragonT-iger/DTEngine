@@ -258,8 +258,14 @@ void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
         Transform* myTr = GetTransform();
         float tileSize = TilemapData::TILE_SIZE;
 
+
+        float yOffset = 0;
+        if (instance->GetName() == "Defense") {
+            yOffset = -1;
+        }
+
         instance->GetTransform()->SetParent(myTr);
-        instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, 0, (y - 1) * tileSize));
+        instance->GetTransform()->SetPosition(Vector3((x - 1) * tileSize, yOffset, (y - 1) * tileSize));
         instance->SetActive(true);
 
         m_spawnedTiles[arrayIndex] = instance;

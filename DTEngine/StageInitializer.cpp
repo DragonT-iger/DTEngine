@@ -21,6 +21,9 @@ DTPROPERTY(StageInitializer, m_generator)
 //DTPROPERTY(StageInitializer, m_settingWindow)
 DTPROPERTY(StageInitializer, m_stageLevelText)
 //DTPROPERTY(StageInitializer, m_stageDialogueText)
+
+DTPROPERTY(StageInitializer, m_mushroom)
+DTPROPERTY(StageInitializer, m_magicBottle)
 ENDPROPERTY()
 
 void StageInitializer::Awake()
@@ -46,26 +49,50 @@ void StageInitializer::Awake()
     case 1:
         currentMap = m_mapData1;
         stageFirstText = L"Stage 1"; 
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(false);
+        m_magicBottle->SetActive(true);
         break;
     case 2:
         currentMap = m_mapData2;
         stageFirstText = L"Stage 2";
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(true);
+        m_magicBottle->SetActive(false);
         break;
     case 3:
         currentMap = m_mapData3;
         stageFirstText = L"Stage 3";
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(false);
+        m_magicBottle->SetActive(true);
         break;
     case 4:
         currentMap = m_mapData4;
         stageFirstText = L"Stage 4";
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(true);
+        m_magicBottle->SetActive(false);
         break;
     case 5:
         currentMap = m_mapData5;
         stageFirstText = L"Stage 5";
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(false);
+        m_magicBottle->SetActive(true);
         break;
     case 6:
         currentMap = m_mapData6;
         stageFirstText = L"Stage 6";
+        if (!m_mushroom || !m_magicBottle)
+            return;
+        m_mushroom->SetActive(true);
+        m_magicBottle->SetActive(false);
         break;
     default:
         currentMap = m_mapData1;

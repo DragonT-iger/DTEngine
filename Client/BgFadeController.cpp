@@ -4,24 +4,28 @@
 #include "Text.h"
 #include "UIButton.h"
 #include "RayCastHitEvent.h"
-
+#include "GameManager.h"
 
 BEGINPROPERTY(BgFadeController)
 DTPROPERTY(BgFadeController, m_settingButton)
 DTPROPERTY(BgFadeController, m_rayObj)
 DTPROPERTY(BgFadeController, m_bgObj)
-DTPROPERTY(BgFadeController, m_skillimg)
+// 아래 두개 gameover 전용임.
+DTPROPERTY(BgFadeController, m_gameOverObj)
+DTPROPERTY(BgFadeController, m_gameOverMainBtnImg)
+DTPROPERTY(BgFadeController, m_lifeImg)
 DTPROPERTY(BgFadeController, m_nextRetryImg)
 DTPROPERTY(BgFadeController, m_text)
-DTPROPERTY(BgFadeController, delayTime)
-
-
+// 아래 두개는 victory 전용.
+DTPROPERTY(BgFadeController, m_mushroomSkillimg)
+DTPROPERTY(BgFadeController, m_bottleSkillimg)
 // 아래 두개만 defeat 전용임. victory 경우 없음.
 DTPROPERTY(BgFadeController, m_mainbuttonImg)
 DTPROPERTY(BgFadeController, m_exitbuttonImg)
 DTPROPERTY(BgFadeController, fadeSpeed)
 DTPROPERTY(BgFadeController, startalpha)
 DTPROPERTY(BgFadeController, endAlpha)
+DTPROPERTY(BgFadeController, delayTime)
 ENDPROPERTY()
 
 void BgFadeController::Start()
@@ -36,7 +40,7 @@ void BgFadeController::Update(float deltaTime)
 
 void BgFadeController::BGFadeUpdate(float deltaTime)
 {
-    if (!isComplete)
+    if (!isComplete || !m_img)
     {
         // 함수호출하자..
         SettingToggleFinish();
@@ -59,16 +63,35 @@ void BgFadeController::BGFadeUpdate(float deltaTime)
             if (time >= delayTime)
             {
                 // 여기서 0.5초 추가로 더 계산해주고 이후에 호출.
-                m_bgObj->SetActive(true);
+                
+                if (m_fadeType == FadeType::GameOver) 
+                {
+                    m_gameOverObj->SetActive(true);
+                    auto windowImg = m_gameOverObj->GetComponent<Image>();
+                    if (windowImg) windowImg->SetActive(true);
+                }
+                else 
+                {
+                    m_bgObj->SetActive(true);
+                    auto windowImg = m_bgObj->GetComponent<Image>();
+                    if (windowImg) windowImg->SetActive(true);
+                }
 
-                auto windowImg = m_bgObj->GetComponent<Image>();
-                windowImg->SetActive(true);
-
-                if (isVictoryObj)
-                    SetVictoryObj(true);
-                else
-                    SetDefeatObj(true);
-
+                switch (m_fadeType)
+                {
+                    case FadeType::Victory:
+                    {
+                        SetVictoryObj(true); break;
+                    }
+                    case FadeType::Defeat:
+                    {
+                        SetDefeatObj(true);  break;
+                    }
+                    case FadeType::GameOver: 
+                    {
+                        SetGameOverObj(true); break;
+                    }
+                }
                     isComplete = true;
             }
         }
@@ -83,6 +106,7 @@ void BgFadeController::Init()
     // 배경 오브젝트는 키는데 img만 꺼주기.
     if (!m_bgObj)
         return;
+
     m_bgObj->SetActive(true);
 
     time = 0;
@@ -95,25 +119,39 @@ void BgFadeController::Init()
     }
 
     auto img = _GetOwner()->GetComponent<Image>();
-
     if (img)
     {
+        
         // startalpha값으로 set 먼저.
         m_img = img;
         m_img->SetColor(Vector4(1, 1, 1, startalpha));
+        
     }
 
     SetVictoryObj(false);
     SetDefeatObj(false);
+    SetGameOverObj(false);
 }
 
 void BgFadeController::SetVictoryObj(bool value)
 {
     // 공통부분은 다 꺼주기. 
-    if (m_skillimg && m_nextRetryImg && m_text)
+    if (m_mushroomSkillimg && m_nextRetryImg && m_text)
     {
         isVictoryObj = true;                 // 여기서 체크해줘도 어차피 defeat면 false임. 
-        m_skillimg->SetActive(value);
+        // 둘 중 한개만.
+        if (IsMushroomSkillSet())
+        {
+            m_mushroomSkillimg->SetActive(value);
+            m_bottleSkillimg->SetActive(false);
+        }
+        else
+        {
+            m_mushroomSkillimg->SetActive(false);
+            m_bottleSkillimg->SetActive(value);
+        }
+        
+        m_bottleSkillimg->SetActive(value);
         m_nextRetryImg->SetActive(value);
         m_text->SetActive(value);
 
@@ -127,7 +165,7 @@ void BgFadeController::SetDefeatObj(bool value)
     if (m_mainbuttonImg && m_exitbuttonImg)
     {
         isVictoryObj = false;
-        m_skillimg->SetActive(value);
+        m_lifeImg->SetActive(value);
         m_nextRetryImg->SetActive(value);
         m_text->SetActive(value);
         m_mainbuttonImg->SetActive(value);
@@ -137,6 +175,16 @@ void BgFadeController::SetDefeatObj(bool value)
         m_nextRetryImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
         m_mainbuttonImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
         m_exitbuttonImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
+    }
+}
+
+void BgFadeController::SetGameOverObj(bool value)
+{
+    if (m_gameOverObj && m_gameOverMainBtnImg)
+    {
+        m_gameOverObj->GetComponent<Image>()->SetActive(value);
+        m_gameOverMainBtnImg->SetActive(value);
+        m_gameOverMainBtnImg->_GetOwner()->GetComponent<UIButton>()->SetActive(value);
     }
 }
 
@@ -151,5 +199,35 @@ void BgFadeController::SettingToggleFinish()
         m_settingButton->GetComponent<UIButton>()->SetActive(false);
         m_rayObj->GetComponent<RayCastHitEvent>()->SetGameFinish(true);
         setFinish = true;
+    }
+}
+
+bool BgFadeController::IsMushroomSkillSet()
+{
+    int currentLevel = GameManager::Instance()->GetStageLevel();
+    // 이거에 따라서 스킬 횟수 증가.
+    switch (currentLevel)
+    {
+    case 1:
+        return false;
+        break;
+    case 2:
+        return true;
+        break;
+    case 3:
+        return false;
+        break;
+    case 4:
+        return true;
+        break;
+    case 5:
+        return false;
+        break;
+    case 6:
+        return true;
+        break;
+    default:
+        return false;
+        break;
     }
 }
