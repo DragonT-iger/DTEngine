@@ -3,6 +3,7 @@
 #include "AssetDatabase.h"
 #include "Dissolved.h"
 #include "Effect.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(RedQueenUnit)
 DTPROPERTY_ACCESSOR(RedQueenUnit, m_pos, GetPos, SetPos)
@@ -33,6 +34,7 @@ void RedQueenUnit::StartQueenDieAnim()
 
 
     uint64_t id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Main_Char/queen_Die.fbx");
+    SoundManager::Instance().PlayOneShot("SFX/Unit_Death");
     PlayAnim(id, ANIM_INVALID, ANIM_INVALID, 1.0f, false);
     m_animStart = true;
 }

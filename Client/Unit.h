@@ -59,6 +59,7 @@ enum class ActionPhase
 struct MoveAnim
 {
     bool active = false;
+    bool soundPlayed = false;
     float t = 0.0f;
     float duration = 1.3f;
     Vector3 from{};

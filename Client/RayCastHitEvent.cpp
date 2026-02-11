@@ -16,6 +16,7 @@
 #include "SkillButton.h"
 #include "UIButton.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -260,6 +261,7 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 
 												unit->Heal(30);
+												SoundManager::Instance().PlayOneShot("SFX/Skill_Heal");
 												m_isHealSkillOn = false;
 
 
@@ -297,6 +299,7 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 												EffectManager::Instance().PlayEffect("Poison", unit->_GetOwner());
 												unit->TakeDamage(20);
+												SoundManager::Instance().PlayOneShot("SFX/Skill_Poison");
 												std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
@@ -330,6 +333,8 @@ void RayCastHitEvent::RaycastCheck()
 								// 클릭되는 경우 해당하는 prefab으로 만들어둔 object setacitve true 나머지 다 false하면 되는거니까
 								// level design이 먼저라 생각하는데 배치 위치에 따라 우리가 작업을 모든 예외처리를 다 할 필요가 없다 라는 생각이라.
 							if (!m_arrowPool) return;
+
+							SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
 
 							if (enemy == m_lastSelectedEnemy)
 							{
@@ -385,6 +390,8 @@ void RayCastHitEvent::RaycastCheck()
 
 						if (hit->GetName() == "Glow_R_Height_01_White" || hit->GetName() == "Glow_R_Height_01_Red")
 						{
+							SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+							
 							if (isLeft)
 							{
 									if (!m_leftPSWinodwBG)

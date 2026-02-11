@@ -15,6 +15,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "TutorialManager.h"
+#include "SoundManager.h"
 
 #include "Effect.h"
 #include "GameManager.h"
@@ -100,6 +101,9 @@ void ClickPSOkayEvent::SetClick()
 						go->GetTransform()->SetRotationEuler(Vector3(0.0f, 180.0f, 0.0f));
 						go->GetTransform()->SetPosition(worldPos);
 						
+						SoundManager::Instance().PlayOneShot("SFX/Unit_Place");
+
+
 						//std::cout << worldPos.x << " " << worldPos.y << std::endl;
 
 						// allyunit 컴포넌트 가져와서 setpos 추가해주기.

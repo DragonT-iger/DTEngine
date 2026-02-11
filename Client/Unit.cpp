@@ -3,22 +3,30 @@
 #include "Dissolved.h"
 #include "Effect.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
+
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
-    { 20, 10, 150, 1 }, // 룩 
-    { 25,  5, 110, 1 }, // 나이트
-    { 30,  2,  90, 2 }, // 비숍 
-    {  0,  0, 150, 0 }, // 앨리스
-    {  0,  0, 150, 0 }, // 퀸
+    { 20, 10, 130, 1 }, // 룩 
+    { 27,  5, 110, 1 }, // 나이트
+    { 26,  5, 110, 2 }, // 비숍
+    {  0,  0,  60, 0 }, // 앨리스
+    {  0,  0,  60, 0 }, // 퀸
 };
 
 void Unit::Start()
 {
-    if (_GetOwner()->GetName() == "unit_Alice_tttst" || _GetOwner()->GetName() == "unit_Queen_tttst")
+    if (_GetOwner()->GetName() == "unit_Alice_ttttst3" || _GetOwner()->GetName() == "unit_Queen_tttst")
     {
         m_anim = _GetOwner()->GetComponent<Animator>();
     }
+
+    if (_GetOwner()->GetName() == "unit_Alice")
+    {
+        m_anim = _GetOwner()->GetComponent<Animator>();
+    }
+
     
     Transform* tf = GetTransform();
     if (!tf) return;
@@ -73,8 +81,8 @@ void Unit::StartAction()
     m_phase = ActionPhase::None;
 
     // 애니메이션 상태 초기화
-    m_rot.active = false;  m_rot.t = 0.0f;
-    m_move.active = false; m_move.t = 0.0f;
+    m_rot.active = false;  m_rot.t = 0.0f; 
+    m_move.active = false; m_move.t = 0.0f; m_move.soundPlayed = false;
 
     switch (m_action)
     {
@@ -307,6 +315,13 @@ bool Unit::TickMove(float dt)
     m_move.t += dt / dur;
     float t = (std::min)(m_move.t, 1.0f);
 
+    if (!m_move.soundPlayed && t >= 0.75f)
+    {
+        SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
+        m_move.soundPlayed = true;
+    }
+
+
     float s = SmoothStep2(t, 0.3f, 0.75f);
     Vector3 p = m_move.from + (m_move.to - m_move.from) * s;
     tr->SetPosition(p);
@@ -314,6 +329,8 @@ bool Unit::TickMove(float dt)
     if (t >= 1.0f)
     {
         tr->SetPosition(m_move.to);
+
+        //SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
 
         m_move.active = false;
         return true;
@@ -418,6 +435,7 @@ void Unit::StartMoveAnim()
     else if (m_weaponName == "Wand") {
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/wand_move.fbx");
     }
+    //SoundManager::Instance().PlayOneShot("SFX/Unit_Move");
     PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
 }
@@ -438,14 +456,20 @@ void Unit::StartAttackAnim()
         id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_attack_sword_shield.fbx");
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/sword_attack.fbx");
         id2 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/shield_attack.fbx");
+
+        SoundManager::Instance().PlayOneShot("SFX/Unit_Attack_Rook");
     }
     else if (m_weaponName == "Spear") {
         id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_attack_spear.fbx");
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/spear_attack.fbx");
+
+        SoundManager::Instance().PlayOneShot("SFX/Unit_Attack_Knight");
     }
     else if (m_weaponName == "Wand") {
         id = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/unit_attack_wand.fbx");
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/wand_attack.fbx");
+
+        SoundManager::Instance().PlayOneShot("SFX/Unit_Attack_Bishop");
     }
     PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
@@ -470,6 +494,8 @@ void Unit::StartDieAnim()
     else if (m_weaponName == "Wand") {
         id1 = AssetDatabase::Instance().GetIDFromPath("Assets/Models/Final_Rabbit/wand_die.fbx");
     }
+
+    SoundManager::Instance().PlayOneShot("SFX/Unit_Death");
     PlayAnim(id, id1, id2, 1.0f, false);
     m_animStart = true;
 }
