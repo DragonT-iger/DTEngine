@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 
 class GameObject;
+class UIButton;
 
 class ESCEvent : public MonoBehaviour
 {
@@ -18,5 +19,7 @@ private:
 		
 		GameObject* m_window = nullptr;
 		GameObject* m_settingWindow = nullptr;
+
+		UIButton* m_creditExitButton = nullptr;
 };
 
