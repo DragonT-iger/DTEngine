@@ -206,8 +206,9 @@
           "Active": true,
           "id": 7171391694734270448,
           "m_alice": 17688493130894654216,
-          "m_bgWall0": 17371836462546986464,
-          "m_bgWall1": 14093764471077609140,
+          "m_bgStain": 3727292950332621517,
+          "m_bgWall0": 8505758128759326094,
+          "m_bgWall1": 5527870150279407016,
           "m_enemy0": 508708062133751256,
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
@@ -266,6 +267,7 @@
           "m_rightPSWinodwBG": 14165272807283552,
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
+          "m_skillButton": 0,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -842,7 +844,6 @@
           "m_button": 5508172115925057707,
           "m_combatObj": 7541685513989182900,
           "m_knight": 9894459574992437766,
-          "m_mapData": 7171391694734270448,
           "m_nonCostObj": 15190275747362855967,
           "m_rook": 3328525606780682600,
           "m_tutorialManager": 0,
@@ -1261,7 +1262,6 @@
           "m_button": 2056293130688999352,
           "m_combatObj": 7541685513989182900,
           "m_knight": 9894459574992437766,
-          "m_mapData": 7171391694734270448,
           "m_nonCostObj": 13220023044005563302,
           "m_rook": 3328525606780682600,
           "m_tutorialManager": 0,
@@ -1484,7 +1484,6 @@
           "Active": true,
           "id": 10718949589605998082,
           "m_exitButton": 6956302447113660091,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -2201,7 +2200,6 @@
           "Active": true,
           "id": 2791222319206022273,
           "m_exitButton": 1026861482826012787,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3016,7 +3014,6 @@
           "Active": true,
           "id": 6095138767685905501,
           "m_exitButton": 1866155636545053865,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3583,7 +3580,6 @@
           "Active": true,
           "id": 17743781830218723958,
           "m_exitButton": 4387214561503760932,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -3994,7 +3990,6 @@
           "Active": true,
           "id": 17281548730867793746,
           "m_exitButton": 15017055363453247603,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4483,7 +4478,6 @@
           "Active": true,
           "id": 6293090122218311252,
           "m_exitButton": 9007863559771709075,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -4972,7 +4966,6 @@
           "Active": true,
           "id": 1047760766044524883,
           "m_exitButton": 3617803391492812738,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5415,7 +5408,6 @@
           "Active": true,
           "id": 12253110155207299810,
           "m_exitButton": 10194695841313726507,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5616,7 +5608,6 @@
           "Active": true,
           "id": 3036516340741771949,
           "m_exitButton": 12281510067928490994,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -5981,7 +5972,6 @@
           "Active": true,
           "id": 16779490005113422998,
           "m_exitButton": 16509577149822491392,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -6526,7 +6516,6 @@
           "Active": true,
           "id": 12362843549925920395,
           "m_exitButton": 5736328220481272240,
-          "m_settingWindow": 0,
           "typeName": "ExitButtonEvent"
         }
       ],
@@ -7213,6 +7202,7 @@
           "Active": true,
           "id": 15191669633757504563,
           "m_battleSkillButton": 1839548868479721930,
+          "m_cameraRotator": 0,
           "m_healSkillButton": 3158531729957653660,
           "m_rayObj": 4771222732717351773,
           "m_settingButton": 3172165213437105257,

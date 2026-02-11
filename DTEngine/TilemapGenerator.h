@@ -58,6 +58,8 @@ public:
     Prefab* m_bgWall0 = nullptr;
     Prefab* m_bgWall1 = nullptr;
 
+    Prefab* m_bgStain = nullptr;
+
     Prefab* m_enemy0 = nullptr;
     Prefab* m_enemy1 = nullptr;
     Prefab* m_enemy2 = nullptr;
@@ -70,6 +72,10 @@ private:
     TilemapData* m_mapData = nullptr;
 
     GameObject* m_spawnedBgWall = nullptr;
+
+    GameObject* m_spawnedBgStain0 = nullptr;
+    GameObject* m_spawnedBgStain1 = nullptr;
+
     std::vector<GameObject*> m_spawnedTiles;
     std::vector<GameObject*> m_spawnedEnemys;
 
