@@ -116,7 +116,7 @@ public:
     void SetIsAlive(bool alive) { m_isAlive = alive; }
 
     // 데미지 받음
-    void TakeDamage(float damage) { m_hp = (std::max)(m_hp - damage, 0.0f); }
+    void TakeDamage(float damage);
 
     // 힐 받음
     void Heal(float heal);

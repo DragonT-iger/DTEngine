@@ -74,7 +74,7 @@ void EffectManager::PlayEffect(const std::string& key, GameObject* target)
     if (ctrl)
     {
         ctrl->Initalize();
-        ctrl->SetAutoDestroy(true);
+        ctrl->SetAutoDestroy(false);
         ctrl->SetFollowTarget(nullptr);
         ctrl->StartChain();
     }
@@ -119,25 +119,19 @@ void EffectManager::PlayEffect_Targeting(const std::string& key, GameObject* fro
     forward.Cross(right, up); 
     up.Normalize();
 
-    offset.z += 2.0f; // 추가 거리 보정
+    offset.z += 1.0f; 
 
     Vector3 worldOffset = (right * offset.x) + (up * offset.y) + (forward * offset.z);
     Vector3 finalPos = startPos + worldOffset;
 
     effectObj->GetTransform()->SetPosition(finalPos);
 
-    // 5. 컨트롤러 설정
     auto ctrl = effectObj->GetComponent<MultiSpriteController>();
     if (ctrl)
     {
         ctrl->Initalize();
         ctrl->SetAutoDestroy(true);
         ctrl->SetFollowTarget(from);
-        ctrl->StartChain();
-    } {
-        ctrl->Initalize();
-        ctrl->SetAutoDestroy(true);
-        ctrl->SetFollowTarget(from); // 생성 후 주체를 따라다니게 설정
         ctrl->StartChain();
     }
 }

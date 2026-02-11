@@ -147,11 +147,11 @@ bool MultiSpriteController::IsChainComplete() const
 
 void MultiSpriteController::Update(float dTime)
 {
-   /* if (m_followTarget != nullptr)
+    if (m_followTarget != nullptr)
     {
         Vector3 targetPos = m_followTarget->GetTransform()->GetPosition();
         GetTransform()->SetPosition(targetPos);
-    }*/
+    }
 
 
     if (!m_head) return;
