@@ -157,6 +157,7 @@
     <ClCompile Include="CombatController.cpp" />
     <ClCompile Include="ColorToggler.cpp" />
     <ClCompile Include="DelayDisableEvent.cpp" />
+    <ClCompile Include="DialogueController.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EndSceneManager.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="ColorToggler.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DelayDisableEvent.h" />
+    <ClInclude Include="DialogueController.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="EndSceneManager.h" />
     <ClInclude Include="EnemyUnit.h" />

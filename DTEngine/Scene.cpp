@@ -1113,6 +1113,9 @@ void Scene::RenderShadows()
         if (go->GetName() == "HPBarEdge_Final") continue;
         if (go->GetName() == "HPBarVoid") continue;
         if (go->GetName() == "HPBarFill") continue;
+        if (go->GetName() == "Mark_Spear") continue;
+        if (go->GetName() == "Mark_Wand") continue;
+        if (go->GetName() == "Mark_Sword_Shield") continue;
         
 
         //if (go->GetComponent<HPBarFollowEvent>()) continue;
