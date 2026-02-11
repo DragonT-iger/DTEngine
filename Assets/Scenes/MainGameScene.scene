@@ -59,9 +59,9 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 2.040858745574951,
-          "y": 9.508030891418457,
-          "z": 22.614593505859375
+          "x": 1705.191162109375,
+          "y": 83.91366577148438,
+          "z": 4.141053199768066
         },
         "m_rotation": {
           "w": -0.11458739638328552,
@@ -297,6 +297,7 @@
           "id": 6276163554272591340,
           "m_aliceUnit": 9781302197654319293,
           "m_loseBG": 4660301850912400824,
+          "m_overBG": 110697927433208073,
           "m_redQueenUnit": 0,
           "m_victoryBG": 11380440959902084178,
           "typeName": "CombatController"
@@ -6884,7 +6885,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "9",
+          "m_text": "30",
           "typeName": "Text"
         }
       ],
@@ -6900,7 +6901,7 @@
         },
         "m_parent": 17126751845073745653,
         "m_position": {
-          "x": 0.32499998807907104,
+          "x": 0.30000001192092896,
           "y": 0.4749999940395355,
           "z": 0.0
         },
@@ -6932,7 +6933,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "30",
+          "m_text": "9",
           "typeName": "Text"
         }
       ],
@@ -6948,7 +6949,7 @@
         },
         "m_parent": 17126751845073745653,
         "m_position": {
-          "x": 0.550000011920929,
+          "x": 0.6000000238418579,
           "y": 0.4749999940395355,
           "z": 0.0
         },
@@ -7116,7 +7117,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 3",
+          "m_text": "Stage 1",
           "typeName": "Text"
         }
       ],
@@ -9263,7 +9264,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 926698930966386204,
           "typeName": "Image"
         },
         {
@@ -9333,7 +9334,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 16872454001086543372,
           "typeName": "Image"
         },
         {
@@ -9403,7 +9404,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 5742940327437384308,
           "typeName": "Image"
         },
         {
@@ -9473,7 +9474,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 16872454001086543372,
           "typeName": "Image"
         },
         {
@@ -9543,7 +9544,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 5742940327437384308,
           "typeName": "Image"
         },
         {
@@ -9613,7 +9614,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 11123396540851510778,
+          "m_textureID": 926698930966386204,
           "typeName": "Image"
         },
         {
@@ -18039,6 +18040,8 @@
           "m_bgObj": 2726193224071851438,
           "m_bottleSkillimg": 1537376702664246911,
           "m_exitbuttonImg": 0,
+          "m_gameOverMainBtnImg": 0,
+          "m_gameOverObj": 0,
           "m_lifeImg": 0,
           "m_mainbuttonImg": 0,
           "m_mushroomSkillimg": 14386049168767057338,
@@ -20792,6 +20795,8 @@
           "m_bgObj": 6814653329085445114,
           "m_bottleSkillimg": 0,
           "m_exitbuttonImg": 3517867228643961775,
+          "m_gameOverMainBtnImg": 0,
+          "m_gameOverObj": 0,
           "m_lifeImg": 16169535542551473978,
           "m_mainbuttonImg": 17900694830084947655,
           "m_mushroomSkillimg": 0,
@@ -29210,6 +29215,253 @@
           "x": 1.0,
           "y": 1.0,
           "z": 0.9999999403953552
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 2589131438613143710,
+      "name": "GameoverWindow",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4953958935418588021,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": false,
+          "id": 591615182586169096,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 101,
+          "m_textureID": 16710748997596350377,
+          "typeName": "Image"
+        }
+      ],
+      "id": 16338577374539816488,
+      "name": "GameoverBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16569247941756905998,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 4953958935418588021,
+        "m_position": {
+          "x": 390.0,
+          "y": 160.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1250.0,
+          "y": 785.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": false,
+          "id": 7350625031126478467,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 101,
+          "m_textureID": 428013013023276196,
+          "typeName": "Image"
+        },
+        {
+          "Active": false,
+          "id": 6325898758863286456,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 2406992976290100513,
+      "name": "MainButton",
+      "tag": "Untagged",
+      "transform": {
+        "id": 14813155109766049269,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16569247941756905998,
+        "m_position": {
+          "x": 0.3499999940395355,
+          "y": 0.7300000190734863,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.30000001192092896,
+          "y": 0.125,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [],
+      "id": 8793186986601499162,
+      "name": "ImageBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 444368562407744288,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16569247941756905998,
+        "m_position": {
+          "x": 0.32499998807907104,
+          "y": 0.42500001192092896,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.3499999940395355,
+          "y": 0.30000001192092896,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 13888689263764668136,
+          "m_color": {
+            "w": 0.949999988079071,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 100,
+          "m_textureID": 12717050120059793372,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "delayTime": 0.5,
+          "endAlpha": 0.949999988079071,
+          "fadeSpeed": 0.5,
+          "id": 13294272929781508235,
+          "m_bgObj": 16338577374539816488,
+          "m_bottleSkillimg": 0,
+          "m_exitbuttonImg": 0,
+          "m_gameOverMainBtnImg": 7350625031126478467,
+          "m_gameOverObj": 16338577374539816488,
+          "m_lifeImg": 0,
+          "m_mainbuttonImg": 0,
+          "m_mushroomSkillimg": 0,
+          "m_nextRetryImg": 0,
+          "m_rayObj": 4771222732717351773,
+          "m_settingButton": 9419903296967584286,
+          "m_text": 0,
+          "startalpha": 0.15000000596046448,
+          "typeName": "BgFadeController"
+        }
+      ],
+      "id": 110697927433208073,
+      "name": "OverFadeBG",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16679488831740166366,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16569247941756905998,
+        "m_position": {
+          "x": -0.31200000643730164,
+          "y": -0.20382164418697357,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 1.5360000133514404,
+          "y": 1.5286624431610107,
+          "z": 1.0
         }
       }
     }

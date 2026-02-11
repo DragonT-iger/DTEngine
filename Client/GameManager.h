@@ -37,7 +37,7 @@ public:
 	void Start() override;
 	void SetLife(int life);
 	int GetLife() const;
-	
+	void ResetLifeAndMoney();
 	void SetMoney(int money);
 	int GetMoney() const;
 	int GetTotalAcquiredMoney() const { return totalAcquiredMoney; }
@@ -121,10 +121,11 @@ private:
 	static inline int curTimeScale = 1;		// 배속값 위해서.
 	static inline int prevTimeScale = 1.0f;
 
-	static inline int healSkillCount = 1;
-	static inline int attackSkillCount = 1;
-	static inline int defaultHealSkillCount = 1;
-	static inline int defaultAttackSkillCount = 1;
+	// 스킬은 처음에 무조건 0. 이후에 count 증가함.
+	static inline int healSkillCount = 0;
+	static inline int attackSkillCount = 0;
+	static inline int defaultHealSkillCount = 0;
+	static inline int defaultAttackSkillCount = 0;
 
 	// delay를 위해서
 	//static inline bool isDelay = false;

@@ -145,4 +145,5 @@ private:
 
 	GameObject* m_victoryBG = nullptr;
 	GameObject* m_loseBG = nullptr;
+	GameObject* m_overBG= nullptr;
 };

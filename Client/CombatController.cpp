@@ -5,7 +5,7 @@
 #include "TutorialManager.h"
 #include "GameManager.h"
 #include "ClientSceneManager.h"
-
+#include "BgFadeController.h"
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
 DTPROPERTY_SETTER(CombatController, m_aliceUnit, SetAliceUnit)
@@ -19,6 +19,7 @@ DTPROPERTY_SETTER(CombatController, enemyUnit2, SetEnemyUnit2)
 
 DTPROPERTY(CombatController, m_victoryBG)
 DTPROPERTY(CombatController, m_loseBG)
+DTPROPERTY(CombatController, m_overBG)
 ENDPROPERTY()
 
 
@@ -563,8 +564,14 @@ bool CombatController::EndPhase()
 
             if (m_victoryBG && m_loseBG)
             {
+                auto value = m_victoryBG->GetComponent<BgFadeController>();
+                if (value)
+                    value->SetFadeType(FadeType::Defeat);
+
                 m_victoryBG->SetActive(true);
                 m_loseBG->SetActive(false);
+                if(m_overBG)
+                    m_overBG->SetActive(false);
             }
             
             // 승리 처리 이거 두개 다 clicknextstageevent에서 처리. 
@@ -590,10 +597,35 @@ bool CombatController::EndPhase()
             }
 
             //GameManager::Instance()->ShowLoseWindow();
-            if (m_victoryBG && m_loseBG)
+            if (m_victoryBG && m_loseBG && m_overBG)
             {
-                m_loseBG->SetActive(true);
+                // 지는 경우.
+                bool isGameOver = (GameManager::Instance()->GetLife() <= 1);
+
                 m_victoryBG->SetActive(false);
+                m_loseBG->SetActive(false);
+                m_overBG->SetActive(false);
+
+                if (isGameOver)
+                {
+                    std::cout << "게임오버임." << std::endl;
+                    if (auto value = m_overBG->GetComponent<BgFadeController>())
+                    {
+                        std::cout << "게임오버 type 설정." << std::endl;
+                        value->SetFadeType(FadeType::GameOver);
+                    }
+                    m_overBG->SetActive(true); 
+                }
+                else
+                {
+                    if (auto value = m_loseBG->GetComponent<BgFadeController>())
+                    {
+                        std::cout << "패배." << std::endl;
+                        value->SetFadeType(FadeType::Defeat);
+                        std::cout << "패배 type 설정." << std::endl;
+                    }
+                    m_loseBG->SetActive(true);
+                }
             }
 
          
@@ -890,7 +922,7 @@ Vector2 CombatController::DecideMoveTarget_Ally(AllyUnit* me) const
     {
         Vector2 defPos = GRIDPOS_INVALID;
         if (battleGrid->GetNearestDefenseTile(mePos, myMovePos, defPos))
-        {
+        { 
             me->SetMoveTarget(nullptr);
             return defPos;
         }
