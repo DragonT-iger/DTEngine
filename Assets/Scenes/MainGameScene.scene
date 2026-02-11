@@ -7129,7 +7129,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "Stage 1",
+          "m_text": "Stage 6",
           "typeName": "Text"
         }
       ],
@@ -7523,7 +7523,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
@@ -28897,11 +28897,11 @@
           "m_generator": 17243013143650241415,
           "m_magicBottle": 17556346609147484334,
           "m_mapData1": 6189260170659567125,
-          "m_mapData2": 0,
-          "m_mapData3": 0,
-          "m_mapData4": 0,
-          "m_mapData5": 0,
-          "m_mapData6": 0,
+          "m_mapData2": 6141281247936702495,
+          "m_mapData3": 5612826982130958025,
+          "m_mapData4": 13910372280845338280,
+          "m_mapData5": 6655454153380555896,
+          "m_mapData6": 14481442345718310236,
           "m_mushroom": 5610883531598707665,
           "m_stageLevelText": 12433785278535231609,
           "typeName": "StageInitializer"
@@ -29015,7 +29015,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -29380,6 +29380,83 @@
         "m_scale": {
           "x": 1.5360000133514404,
           "y": 1.5286624431610107,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 4511038635401225780,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 13518952595041488355,
+          "m_button": 4511038635401225780,
+          "m_window": 13516251893486151673,
+          "typeName": "ClickNextStageEvent"
+        },
+        {
+          "Active": true,
+          "id": 3835651152615194362,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 14103031513704839223,
+          "typeName": "Image"
+        }
+      ],
+      "id": 13516251893486151673,
+      "name": "pASS",
+      "tag": "Untagged",
+      "transform": {
+        "id": 7663227742736034130,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 174.8000030517578,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 341.1000061035156,
+          "y": 189.3000030517578,
           "z": 1.0
         }
       }
