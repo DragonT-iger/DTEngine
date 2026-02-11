@@ -4,6 +4,7 @@
 #include "Effect.h"
 #include "EffectManager.h"
 #include "SoundManager.h"
+#include <random>
 
 static const UnitStats UnitStatsTable[] =
 {
@@ -65,6 +66,16 @@ void Unit::SetStats(const UnitStats& s)
 {
     m_stats = s;
     m_hp = m_stats.maxHp;
+}
+
+//shader 변경?
+
+void Unit::TakeDamage(float damage)
+{
+    auto cmp = this->_GetOwner()->GetComponent<Effect>();
+   if(cmp) cmp->SetEffectType(1); //쉐이더 하나 받아서 
+
+    { m_hp = (std::max)(m_hp - damage, 0.0f); }
 }
 
 void Unit::Heal(float heal)
@@ -317,7 +328,14 @@ bool Unit::TickMove(float dt)
 
     if (!m_move.soundPlayed && t >= 0.75f)
     {
-        SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_int_distribution<int> dist(0, 1);
+
+        int r = dist(gen);
+
+        if (r == 0) SoundManager::Instance().PlayOneShot("SFX/Unit_Move(1)_ver.2");
+        else SoundManager::Instance().PlayOneShot("SFX/Unit_Move(2)_ver.2");
         m_move.soundPlayed = true;
     }
 
@@ -505,7 +523,6 @@ void Unit::StartDissolve()
 
     EffectManager::Instance().PlayEffect("Smoke", this->_GetOwner());
 
-
     auto tf = GetTransform();
     for (Transform* child : tf->GetChildren())
     {
@@ -517,13 +534,25 @@ void Unit::StartDissolve()
             if (cmp)
             {
                 auto cmp_e = child->_GetOwner()->AddComponent<Effect>();
-                cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit/Rabbit_Texture/Unit__BaseColor.png");
+
+                if (this->m_team == Team::Enemy)
+                    cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit_Real/Unit__BaseColor.png");
+
+                else
+                    cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit_Real/Unit2__BaseColor.png");
+
+
                 cmp->SetNoiseTexture();
                 cmp->InjectDissolveMaterila("Assets/Materials/Dissolve_MK_01.mat");
 
             }
         }
+
         else
+            child->_GetOwner()->SetActive(false);
+
+       /* else 
+
         {
             auto cmp = child->_GetOwner()->AddComponent<Dissolved>();
             if (cmp)
@@ -535,7 +564,7 @@ void Unit::StartDissolve()
 
             }
 
-        }
+        }*/
     }
 
 

@@ -6,6 +6,7 @@
 BEGINPROPERTY(ESCEvent)
 DTPROPERTY(ESCEvent, m_settingWindow)
 DTPROPERTY(ESCEvent, m_window)
+DTPROPERTY(ESCEvent, m_isCreditOpen)
 ENDPROPERTY()
 
 
@@ -24,6 +25,9 @@ void ESCEvent::Check()
 		//{
 		//		return;
 		//}
+		if (m_isCreditOpen) {
+			return;
+		}
 
 		if (m_window)
 		{

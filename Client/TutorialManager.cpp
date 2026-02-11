@@ -47,6 +47,7 @@ DTPROPERTY(TutorialManager, m_tutorialArrow1)
 DTPROPERTY(TutorialManager, m_tutorialArrow2)
 DTPROPERTY(TutorialManager, m_tutorialArrow3)
 DTPROPERTY(TutorialManager, m_tutorialArrow4)
+DTPROPERTY(TutorialManager, m_tutorialArrow5)
 DTPROPERTY(TutorialManager, m_defenseTile)
 ENDPROPERTY()
 
@@ -167,6 +168,7 @@ void TutorialManager::Update(float deltaTime)
                 if (m_currentSoftness >= 1.0f)
                 {
                     SoundManager::Instance().PlayBGM("BGM/Cheshire's Theme", true);
+                    //SoundManager::Instance().PlayOneShot("SFX/AIB_SoundEffect/cat-meow-2-fx-306181");
                     m_currentSoftness = 1.0f;
                     mainCam->SetVignetteSoftness(m_currentSoftness);
 
@@ -681,12 +683,22 @@ void TutorialManager::NextStep(bool force)
                 mainCam->SetCircleWidthHeight({ m_circleRadius, m_circleRadius });
             }
         }
+
     }
     break;
 
     case TutorialStep::Cat_Explain_EnemyPathWait:
     {
         m_rayActive = false;
+        Scene* activeScene = SceneManager::Instance().GetActiveScene();
+        if (activeScene)
+        {
+            Camera* mainCam = activeScene->GetMainCamera();
+            if (mainCam)
+            {
+                mainCam->SetUseCircleMask(false); // 아마 opaque 이런 설정이 이상해지는거 같은데 모르겠음
+            }
+        }
     }
     break;
 
@@ -699,6 +711,7 @@ void TutorialManager::NextStep(bool force)
 
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_defenseTile);
 
+        m_tutorialArrow5->SetActive(true);
 
         m_combatController->GetBattleGrid()->SetDefenseTile({ 3,6 });
 
@@ -711,6 +724,7 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"자, 모든 규칙을 정했다면 \n싸움을 붙여 보자고!");
         }
 
+        m_tutorialArrow5->SetActive(false);
         m_canProceedToNextStep = true;
         if (m_BattleStart) m_BattleStart->SetActive(true);
     }
@@ -769,8 +783,9 @@ void TutorialManager::NextStep(bool force)
     {
         if (m_catUI2) m_catUI2->SetActive(false);
         if (m_victoryUI) m_victoryUI->SetActive(true);
-        SoundManager::Instance().StopBGM(true);
         if (m_victoryUI) m_victoryUI->GetComponent<Image>()->SetActive(true);
+        SoundManager::Instance().StopBGM(true);
+        SoundManager::Instance().PlayOneShot("SFX/Result_Victory_sfx");
     }
     break;
 

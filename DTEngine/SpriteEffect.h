@@ -48,4 +48,6 @@ private:
 	bool m_loop = false;
 	bool  m_finished = false; 
 	bool m_startedOnce = false;
+
+	bool XRotated = false;
 };

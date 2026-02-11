@@ -81,14 +81,17 @@ void BgFadeController::BGFadeUpdate(float deltaTime)
                 {
                     case FadeType::Victory:
                     {
+                        SoundManager::Instance().PlayOneShot("SFX/Result_Victory_sfx");
                         SetVictoryObj(true); break;
                     }
                     case FadeType::Defeat:
                     {
+                        SoundManager::Instance().PlayOneShot("SFX/Result_Defeat_sfx");
                         SetDefeatObj(true);  break;
                     }
                     case FadeType::GameOver: 
                     {
+                        SoundManager::Instance().PlayOneShot("SFX/Result_Defeat_sfx");
                         SetGameOverObj(true); break;
                     }
                 }

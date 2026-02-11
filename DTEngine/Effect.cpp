@@ -18,12 +18,29 @@ Effect::Effect()
     m_EM = EffectParams();
 }
 
+static float g_damaged_interval = 1.0f;
+
 void Effect::Update(float dt)
 {
     if (m_isAnimating)
     {
         m_EM.progress += dt * m_EM.timeMultiplier;
+
+        if (m_EM.effectType > 0.0f)
+        {
+            m_Timer += dt;
+
+            if (m_Timer >= g_damaged_interval)
+            {
+                m_Timer = 0.f;
+                SetEffectType(0.0f); // 효과 종료
+
+            }
+        }
     }
+
+   
+
 }
 
 void Effect::BindEP()

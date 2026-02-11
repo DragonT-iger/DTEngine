@@ -9,6 +9,9 @@
 #include "AssetDatabase.h"
 #include "Prefab.h"
 
+#include "MeshRenderer.h"
+#include "Material.h"
+#include "Texture.h"
 #include "../Client/EnemyUnit.h"
 #include "../Client/BreakableWall.h"
 
@@ -25,8 +28,11 @@ DTPROPERTY(TilemapGenerator, m_prefab5)
 DTPROPERTY(TilemapGenerator, m_prefab6)
 DTPROPERTY(TilemapGenerator, m_prefab7)
 DTPROPERTY(TilemapGenerator, m_prefab8)
+
 DTPROPERTY(TilemapGenerator, m_bgWall0)
 DTPROPERTY(TilemapGenerator, m_bgWall1)
+
+DTPROPERTY(TilemapGenerator, m_bgStain)
 
 DTPROPERTY(TilemapGenerator, m_alice)
 DTPROPERTY(TilemapGenerator, m_redQueen)
@@ -50,6 +56,10 @@ void TilemapGenerator::Start()
 void TilemapGenerator::BuildMap()
 {
     m_spawnedTiles.clear();
+    m_spawnedBgWall == nullptr;
+    m_spawnedBgStain0 = nullptr;
+    m_spawnedBgStain1 = nullptr;
+
     if (m_mapData == nullptr) return;
 
     int width = m_mapData->GetExpandedWidth();
@@ -62,32 +72,65 @@ void TilemapGenerator::BuildMap()
     if (width == 10 && height == 14 && m_bgWall0)
     {
         GameObject* instance = m_bgWall0->Instantiate();
-        if (instance)
+        GameObject* instance2 = m_bgStain->Instantiate();
+        if (instance && instance2)
         {
             Transform* tr = instance->GetTransform();
             if (tr)
             {
                 tr->SetParent(myTr);
-                tr->SetPosition(Vector3(7.0f, -0.5f, 11.0f));
+                tr->SetPosition(Vector3(7.0f, 0.0f, 11.0f));
                 instance->SetActive(true);
 
                 m_spawnedBgWall = instance;
+            }
+
+            Transform* tr2 = instance2->GetTransform();
+            if (tr2)
+            {
+                tr2->SetParent(myTr);
+                tr2->SetPosition(Vector3(7.0f, 0.52f, 11.0f));
+                instance2->SetActive(true);
+
+                m_spawnedBgStain0 = instance2;
             }
         }
     }
     else if (width == 10 && height == 26 && m_bgWall1)
     {
         GameObject* instance = m_bgWall1->Instantiate();
-        if (instance)
+        GameObject* instance2 = m_bgStain->Instantiate();
+        GameObject* instance3 = m_bgStain->Instantiate();
+        if (instance && instance2 && instance3)
         {
             Transform* tr = instance->GetTransform();
             if (tr)
             {
                 tr->SetParent(myTr);
-                tr->SetPosition(Vector3(7.0f, -0.5f, 23.0f));
+                tr->SetPosition(Vector3(7.0f, 0.0f, 22.0f));
                 instance->SetActive(true);
 
                 m_spawnedBgWall = instance;
+            }
+
+            Transform* tr2 = instance2->GetTransform();
+            if (tr2)
+            {
+                tr2->SetParent(myTr);
+                tr2->SetPosition(Vector3(7.0f, 0.52f, 11.0f));
+                instance2->SetActive(true);
+
+                m_spawnedBgStain0 = instance2;
+            }
+
+            Transform* tr3 = instance3->GetTransform();
+            if (tr3)
+            {
+                tr3->SetParent(myTr);
+                tr3->SetPosition(Vector3(7.0f, 0.52f, 35.0f));
+                instance3->SetActive(true);
+
+                m_spawnedBgStain1 = instance3;
             }
         }
     }
@@ -191,6 +234,63 @@ void TilemapGenerator::SetTileAt(int x, int y, int paletteIndex)
         // 메모리 상의 데이터 수정
         m_mapData->SetTileIndex(x, y, paletteIndex);
     }
+}
+
+bool StartsWith(const std::string& fullString, const std::string& prefix)
+{
+    if (fullString.length() < prefix.length()) return false;
+    return fullString.rfind(prefix, 0) == 0;
+}
+
+
+Transform* TilemapGenerator::FindChildRecursive(Transform* parent, const std::string& namePrefix)
+{
+    for (Transform* child : parent->GetChildren())
+    {
+        if (child->GetName().rfind(namePrefix, 0) == 0)
+            return child;
+
+        Transform* found = FindChildRecursive(child, namePrefix);
+        if (found) return found;
+    }
+    return nullptr;
+}
+
+void TilemapGenerator::ChangeMark(GameObject* obj)
+{
+    Transform* targetChild = FindChildRecursive(obj->GetTransform(), "Mark");
+
+    if (targetChild)
+    {
+        auto meshRenderer = targetChild->GetComponent<MeshRenderer>();
+        if (meshRenderer)
+        {
+            // Unit 컴포넌트 안전하게 가져오기
+            auto unit = obj->GetComponent<Unit>();
+            if (!unit) return;
+
+            int m_type = unit->GetUnitType();
+            std::string path = "";
+
+            // 유닛 타입에 따른 경로 설정
+            switch (m_type)
+            {
+            case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Bishop_boss.png"; break;
+            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Knight_boss.png"; break;
+            case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Rook_boss.png";   break;
+            default: return; // 정의되지 않은 타입은 리턴
+            }
+
+            // 리소스 로드 및 적용
+            Texture* texture = ResourceManager::Instance().Load<Texture>(path);
+            if (texture)
+            {
+                meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
+            }
+        }
+    }
+ 
+
 }
 
 void TilemapGenerator::ReplaceTile(int x, int y, Prefab* newPrefab)
@@ -315,8 +415,12 @@ void TilemapGenerator::SpawnUnits()
 
         instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
         instance->SetActive(true);
+        instance->GetTransform()->SetParent(GetTransform());
         
         enemy->SetBoss(info.isBoss);
+
+        if (enemy->IsBoss()) ChangeMark(instance);
+
         enemy->SetUnitType(info.type);
         enemy->SetPath(info.pathPoints);
 
@@ -334,6 +438,7 @@ void TilemapGenerator::SpawnUnits()
             {
                 instance->GetTransform()->SetPosition(Vector3{ pos.x * 2.0f, 1.0f, pos.y * 2.0f });
                 instance->SetActive(true);
+                instance->GetTransform()->SetParent(GetTransform());
 
                 m_spawnedAlice = instance;
             }
