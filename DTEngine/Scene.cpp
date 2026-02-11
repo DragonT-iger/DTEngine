@@ -927,7 +927,7 @@ void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
     invRotation._41 = 0.0f; invRotation._42 = 0.0f; invRotation._43 = 0.0f;
     //invRotation = invRotation  //전치 한 번 더 하기 싫어서 그냥 안 함. 
    
-    //
+   
 
 
     auto DrawObject = [&](GameObject* go) 

@@ -19,7 +19,7 @@ bool EffectManager::Initialize()
         "Attack01",
        "2Attack02",
        "2Attack03",
-        "Magic_Circle",
+     "2Magic_Circle",
         "Heal"
     };
 
@@ -69,12 +69,12 @@ void EffectManager::PlayEffect(const std::string& key, GameObject* target)
     Vector3 pos = effectObj->GetTransform()->GetPosition();
 
     effectObj->GetTransform()->SetPosition(position+pos);
-
+    //effectObj->GetTransform()->SetPosition(position);
     auto ctrl = effectObj->GetComponent<MultiSpriteController>();
     if (ctrl)
     {
         ctrl->Initalize();
-        ctrl->SetAutoDestroy(false);
+        ctrl->SetAutoDestroy(true);
         ctrl->SetFollowTarget(nullptr);
         ctrl->StartChain();
     }

@@ -90,7 +90,6 @@ struct EffectParams //b7
     float Skinned_Flag = false;
 
     Matrix invcamerarotation{};
-    Matrix OwnRotate = Matrix();
 };
 __declspec(align(16))
 struct FogParams
