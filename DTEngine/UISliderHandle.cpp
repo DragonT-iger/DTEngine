@@ -96,7 +96,8 @@ void UISliderHandle::Update(float deltaTime)
         if (InputManager::Instance().GetKey(KeyCode::MouseLeft) && !isOutOfBounds)
         {
             float localMouseX = mousePosVec2.x;
-            m_parentSlider->OnHandleDragged(localMouseX);
+
+            m_parentSlider->OnHandleDragged(localMouseX + m_dragOffset);
             return;
         }
 
@@ -104,7 +105,8 @@ void UISliderHandle::Update(float deltaTime)
         if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft) || isOutOfBounds)
         {
             float localMouseX = mousePosVec2.x;
-            m_parentSlider->OnHandleReleased(localMouseX);
+
+            m_parentSlider->OnHandleReleased(localMouseX + m_dragOffset);
             m_isDragging = false;
         }
     }
