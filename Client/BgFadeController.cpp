@@ -119,14 +119,12 @@ void BgFadeController::Init()
     }
 
     auto img = _GetOwner()->GetComponent<Image>();
-    std::cout << _GetOwner()->GetName() << std::endl;
     if (img)
     {
         
         // startalpha값으로 set 먼저.
         m_img = img;
         m_img->SetColor(Vector4(1, 1, 1, startalpha));
-        std::cout << m_img->_GetOwner()->GetName() << std::endl;
         
     }
 

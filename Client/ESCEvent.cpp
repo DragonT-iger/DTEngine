@@ -1,11 +1,9 @@
 #include "ESCEvent.h"
 #include "GameObject.h"
-#include "UIButton.h"
 #include "GameManager.h"
 #include "InputManager.h"
 
 BEGINPROPERTY(ESCEvent)
-DTPROPERTY(ESCEvent, m_settingButton)
 DTPROPERTY(ESCEvent, m_settingWindow)
 DTPROPERTY(ESCEvent, m_window)
 ENDPROPERTY()

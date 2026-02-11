@@ -566,7 +566,7 @@ bool CombatController::EndPhase()
             {
                 auto value = m_victoryBG->GetComponent<BgFadeController>();
                 if (value)
-                    value->SetFadeType(FadeType::Defeat);
+                    value->SetFadeType(FadeType::Victory);
 
                 m_victoryBG->SetActive(true);
                 m_loseBG->SetActive(false);
