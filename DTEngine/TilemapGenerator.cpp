@@ -256,9 +256,22 @@ void TilemapGenerator::ReplaceTileAtGrid(const Vector2& gridPos)
 
     int tileIdx = m_mapData->FindDefaultGrid(ex, ey);
 
+    int firstTileIdx = m_mapData->GetTileIndex(1, 1);
+
     Prefab* prefab = nullptr;
-    if (tileIdx == 0) prefab = m_prefab0;
-    else if (tileIdx == 1) prefab = m_prefab1;
+
+    if (firstTileIdx == 1 || firstTileIdx == 3)
+    {
+        if (tileIdx == 0) prefab = m_prefab1;
+        else if (tileIdx == 1) prefab = m_prefab0;
+    }
+    else 
+    {
+        if (tileIdx == 0) prefab = m_prefab0;
+        else if (tileIdx == 1) prefab = m_prefab1;
+    }
+    
+
 
     if (!prefab) return;
 

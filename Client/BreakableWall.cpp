@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Animatior.h"
 #include "TilemapGenerator.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(BreakableWall)
 ENDPROPERTY()
@@ -50,6 +51,9 @@ void BreakableWall::StartWallBreakAnim()
 	m_anim->SetTime(1.0f);
 	m_anim->SetLoop(false);
 	m_anim->SetPlay(true);
+
+	SoundManager::Instance().PlayOneShot("SFX/Wall_Destroy");
+	std::cout << "(벽 파괴 소리) 콰과과광\n";
 
 	m_animStart = true;
 }

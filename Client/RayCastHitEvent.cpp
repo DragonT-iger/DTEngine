@@ -13,6 +13,7 @@
 #include "ArrowObjectPool.h"
 #include "GameManager.h"
 #include "ClickStartButton.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(RayCastHitEvent)
 DTPROPERTY(RayCastHitEvent, m_settingWindowBG)
@@ -254,6 +255,7 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 
 												unit->Heal(30);
+												SoundManager::Instance().PlayOneShot("SFX/Skill_Heal");
 												m_isHealSkillOn = false;
 
 
@@ -291,6 +293,7 @@ void RayCastHitEvent::RaycastCheck()
 														return;
 
 												unit->TakeDamage(20);
+												SoundManager::Instance().PlayOneShot("SFX/Skill_Poison");
 												std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 

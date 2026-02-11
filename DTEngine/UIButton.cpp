@@ -79,6 +79,7 @@ void UIButton::Update(float deltaTime)
 
         if (InputManager::Instance().GetKeyDown(KeyCode::MouseLeft))
         {
+            SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
             SetPressed(true);
         }
         else if (InputManager::Instance().GetKeyUp(KeyCode::MouseLeft))
