@@ -242,48 +242,53 @@ bool StartsWith(const std::string& fullString, const std::string& prefix)
     return fullString.rfind(prefix, 0) == 0;
 }
 
+
+Transform* TilemapGenerator::FindChildRecursive(Transform* parent, const std::string& namePrefix)
+{
+    for (Transform* child : parent->GetChildren())
+    {
+        if (child->GetName().rfind(namePrefix, 0) == 0)
+            return child;
+
+        Transform* found = FindChildRecursive(child, namePrefix);
+        if (found) return found;
+    }
+    return nullptr;
+}
+
 void TilemapGenerator::ChangeMark(GameObject* obj)
 {
-    for (Transform* child : _GetOwner()->GetTransform()->GetChildren())
+    Transform* targetChild = FindChildRecursive(obj->GetTransform(), "Mark");
+
+    if (targetChild)
     {
-        if (child->GetName().rfind("Mark", 0) == 0)
+        auto meshRenderer = targetChild->GetComponent<MeshRenderer>();
+        if (meshRenderer)
         {
-            auto meshRenderer = child->GetComponent<MeshRenderer>();
+            // Unit 컴포넌트 안전하게 가져오기
+            auto unit = obj->GetComponent<Unit>();
+            if (!unit) return;
 
-            if (meshRenderer)
+            int m_type = unit->GetUnitType();
+            std::string path = "";
+
+            // 유닛 타입에 따른 경로 설정
+            switch (m_type)
             {
-                int m_type = obj->GetComponent<Unit>()->GetUnitType();
-
-                if (m_type == UnitType::Bishop)
-                {
-                    std::string path = "Assets/Models/UI/Alice_UI/HP_Bishop_boss.png";
-                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
-                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
-                }
-
-                else if (m_type == UnitType::Knight)
-                {
-                    std::string path = "Assets/Models/UI/Alice_UI/HP_Knight_boss.png";
-                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
-                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
-                }
-
-
-                else if (m_type == UnitType::Rook)
-                {
-                    std::string path = "Assets/Models/UI/Alice_UI/HP_Rook_boss.png";
-                    Texture* texture = ResourceManager::Instance().Load<Texture>(path);
-                    meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
-                }
-
-
+            case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Bishop_boss.png"; break;
+            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Knight_boss.png"; break;
+            case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Rook_boss.png";   break;
+            default: return; // 정의되지 않은 타입은 리턴
             }
 
-            break;
+            // 리소스 로드 및 적용
+            Texture* texture = ResourceManager::Instance().Load<Texture>(path);
+            if (texture)
+            {
+                meshRenderer->GetSharedMaterial()->SetTexture(0, texture);
+            }
         }
     }
-
-
  
 
 }
@@ -414,7 +419,7 @@ void TilemapGenerator::SpawnUnits()
         
         enemy->SetBoss(info.isBoss);
 
-       // if (enemy->IsBoss()) ChangeMark(instance);
+        if (enemy->IsBoss()) ChangeMark(instance);
 
         enemy->SetUnitType(info.type);
         enemy->SetPath(info.pathPoints);

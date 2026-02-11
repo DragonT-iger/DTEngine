@@ -11,6 +11,7 @@ DTPROPERTY_SETTER(SpriteEffect , m_spriteID ,SetSpriteSheet)
 DTPROPERTY_SETTER(SpriteEffect, m_frameInterpolation, SetFrameInterpolation)
 DTPROPERTY_SETTER(SpriteEffect, m_play, SetPlay)
 DTPROPERTY_SETTER(SpriteEffect, m_loop, SetLoop)
+DTPROPERTY(SpriteEffect, XRotated)
 
 
 ENDPROPERTY()
@@ -156,9 +157,14 @@ void SpriteEffect::BindWrapped()
     if (cmp)
     {
         auto mat = cmp->GetSharedMaterial();
-        if(mat)mat->SetUVTransform(m_uvTrasnform);
+        if (mat) mat->SetUVTransform(m_uvTrasnform);
     }
-    __super::BindEP(); 
+
+    if (XRotated) m_EM.OwnRotate = DirectX::SimpleMath::Matrix::CreateRotationX(DirectX::XM_PIDIV2);
+    else  m_EM.OwnRotate = DirectX::SimpleMath::Matrix();
+   
+
+    __super::BindEP();
 }
 
 void SpriteEffect::SetPlay(bool onoff)

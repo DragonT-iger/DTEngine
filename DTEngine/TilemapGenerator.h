@@ -40,6 +40,8 @@ public:
     GameObject* GetSpawnedTileAtGrid(const Vector2& gridPos) const;
     void ReplaceTileAtGrid(const Vector2& gridPos);
 
+    Transform* FindChildRecursive(Transform* parent, const std::string& namePrefix);
+
 	static constexpr int PALETTE_SIZE = 11;
     static constexpr int NUM_ENEMIES = 3;
 
