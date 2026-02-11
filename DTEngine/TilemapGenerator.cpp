@@ -68,7 +68,7 @@ void TilemapGenerator::BuildMap()
             if (tr)
             {
                 tr->SetParent(myTr);
-                tr->SetPosition(Vector3(7.0f, -0.5f, 11.0f));
+                tr->SetPosition(Vector3(7.0f, 0.0f, 11.0f));
                 instance->SetActive(true);
 
                 m_spawnedBgWall = instance;
@@ -84,7 +84,7 @@ void TilemapGenerator::BuildMap()
             if (tr)
             {
                 tr->SetParent(myTr);
-                tr->SetPosition(Vector3(7.0f, -0.5f, 23.0f));
+                tr->SetPosition(Vector3(7.0f, 0.0f, 23.0f));
                 instance->SetActive(true);
 
                 m_spawnedBgWall = instance;
