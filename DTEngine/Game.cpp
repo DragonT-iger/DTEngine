@@ -169,7 +169,7 @@ bool Game::Initialize()
 
 
 
-
+	 
 
 
 	// SceneManager::Instance().RegisterScene("Scenes/SampleScenehshs.scene");
@@ -260,7 +260,13 @@ bool Game::Initialize()
 	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
 
 
-
+	SceneManager::Instance().SetOnSceneChangeCallback([this]()
+		{
+			if (m_editorUI)
+			{
+				m_editorUI->ClearSelection();
+			}
+		});
 
 	//testScene.SaveFile("Scenes/SampleScene.scene");
 

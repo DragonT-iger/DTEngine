@@ -2,10 +2,13 @@
 #include "GameObject.h"
 #include "GameManager.h"
 #include "InputManager.h"
+#include "UIButton.h"
 
 BEGINPROPERTY(ESCEvent)
 DTPROPERTY(ESCEvent, m_settingWindow)
 DTPROPERTY(ESCEvent, m_window)
+DTPROPERTY(ESCEvent, m_isCreditOpen)
+DTPROPERTY(ESCEvent, m_creditExitButton)
 ENDPROPERTY()
 
 
@@ -24,6 +27,12 @@ void ESCEvent::Check()
 		//{
 		//		return;
 		//}
+
+
+		if (m_isCreditOpen) {
+			if (m_creditExitButton) m_creditExitButton->InvokeClick();
+			return;
+		}
 
 		if (m_window)
 		{

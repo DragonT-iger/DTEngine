@@ -4,6 +4,7 @@
 #include "SimpleMathHelper.h"
 #include "Canvas.h"
 #include <functional>
+#include <vector>
 
 class UIButton : public MonoBehaviour
 {
@@ -39,7 +40,7 @@ public:
     void SetPressed(bool pressed);
     bool IsPressed() const { return m_isPressed; }
 
-    void SetOnClick(std::function<void()> callback) { m_onClick = std::move(callback); }
+    void SetOnClick(std::function<void()> callback) { m_onClickEvents.push_back(std::move(callback)); }
     void InvokeClick();
 
 private:
@@ -51,7 +52,7 @@ private:
     Vector4 m_hoverColor = Vector4(0.8f, 0.8f, 0.8f, 1.f);
     Vector4 m_pressedColor = Vector4(0.6f, 0.6f, 0.6f, 1.f);
 
-    std::function<void()> m_onClick;    // 함수 저장용.
+    std::vector<std::function<void()>> m_onClickEvents;
 
     bool m_interactable = true; // 상호작용
     bool m_isHovered = false;  

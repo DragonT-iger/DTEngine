@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 
 class GameObject;
+class UIButton;
 
 class ESCEvent : public MonoBehaviour
 {
@@ -9,10 +10,16 @@ class ESCEvent : public MonoBehaviour
 public:
 		//void Start() override;
 		void Update(float deltaTime) override;
+		void SetCreditOpen(bool isOpen) { m_isCreditOpen = isOpen; }
 
 		void Check();
 private:
+
+		bool m_isCreditOpen = false;
+		
 		GameObject* m_window = nullptr;
 		GameObject* m_settingWindow = nullptr;
+
+		UIButton* m_creditExitButton = nullptr;
 };
 

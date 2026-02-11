@@ -59,8 +59,8 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 1705.191162109375,
-          "y": 83.91366577148438,
+          "x": -1.0839232206344604,
+          "y": 5.538662910461426,
           "z": 4.141053199768066
         },
         "m_rotation": {
@@ -1347,10 +1347,10 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
-          "Active": true,
+          "Active": false,
           "id": 1679531116507836059,
           "m_color": {
             "w": 1.0,
@@ -1363,7 +1363,7 @@
           "typeName": "Image"
         },
         {
-          "Active": true,
+          "Active": false,
           "id": 4384960832907179784,
           "m_hoverColor": {
             "w": 1.0,
@@ -2622,6 +2622,8 @@
         {
           "Active": false,
           "id": 8297718016937337399,
+          "m_creditExitButton": 0,
+          "m_isCreditOpen": false,
           "m_settingWindow": 5129673964082675281,
           "m_window": 0,
           "typeName": "ESCEvent"
@@ -3479,7 +3481,7 @@
           "m_battleRule": 0,
           "m_moveRule": 1,
           "m_pos": {
-            "x": 4.0,
+            "x": 5.0,
             "y": 5.0
           },
           "m_type": 0,
@@ -3520,7 +3522,7 @@
         },
         "m_parent": 5502874655027955098,
         "m_position": {
-          "x": 8.0,
+          "x": 10.0,
           "y": 1.0,
           "z": 10.0
         },
