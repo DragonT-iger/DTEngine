@@ -1,8 +1,11 @@
 #include "MultiButtonControlEvent.h"
 #include "UIButton.h"
 #include "GameObject.h"
+#include "ESCEvent.h"
 
 BEGINPROPERTY(MultiButtonControlEvent)
+DTPROPERTY(MultiButtonControlEvent, m_escEvent);
+
 DTPROPERTY(MultiButtonControlEvent, m_deactivateTriggerBtn)
 DTPROPERTY(MultiButtonControlEvent, m_activateTriggerBtn)
 
@@ -19,6 +22,7 @@ void MultiButtonControlEvent::Start()
         m_deactivateTriggerBtn->SetOnClick([this]()
             {
                 SetButtonsInteractable(false);
+                m_escEvent->SetCreditOpen(true);
             });
     }
 
@@ -27,6 +31,7 @@ void MultiButtonControlEvent::Start()
         m_activateTriggerBtn->SetOnClick([this]()
             {
                 SetButtonsInteractable(true);
+                m_escEvent->SetCreditOpen(false);
             });
     }
 }

@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 
 class UIButton;
+class ESCEvent;
 
 class MultiButtonControlEvent : public MonoBehaviour
 {
@@ -20,4 +21,6 @@ private:
     UIButton* m_targetBtn2 = nullptr;
     UIButton* m_targetBtn3 = nullptr;
     UIButton* m_targetBtn4 = nullptr;
+
+    ESCEvent* m_escEvent = nullptr;
 };
