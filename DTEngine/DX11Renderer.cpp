@@ -470,7 +470,7 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
         color,
         rotation,
         scale, 
-        m_fontSize
+        m_fontSize / 1.3f
     );
 }
 
@@ -486,7 +486,7 @@ void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector
         color,
         rotation,
         scale,
-        fontSize
+        fontSize / 1.3f
     );
 
 }
@@ -509,7 +509,7 @@ void DX11Renderer::DrawString(const std::wstring& text, const Vector2& position,
         color,
         rotation,
         origin,
-        targetScale 
+        targetScale / 1.3f
     );
 }
 
@@ -532,7 +532,7 @@ void DX11Renderer::DrawString(Font* Font, const std::wstring& text, const Vector
         color,
         rotation,
         origin,
-        targetScale
+        targetScale / 1.3f
     );
 }
 

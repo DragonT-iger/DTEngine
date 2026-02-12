@@ -47,24 +47,24 @@ void StageInitializer::Awake()
     switch (currentLevel)
     {
     case 1:
-        currentMap = m_mapData1;
-        stageFirstText = L"추격 전략을 사용하면 금이 간 벽을 \n부수고 지나갈 수 있으니 참고해"; 
+        currentMap = m_mapData1; 
+        stageFirstText = L"아이콘에 왕관 표시가 된 녀석이 보스야.\n'추격' 규칙으로 벽을 부수고 잡아 봐!"; 
         if (!m_mushroom || !m_magicBottle)
             return;
         m_mushroom->SetActive(false);
         m_magicBottle->SetActive(true);
         break;
     case 2:
-        currentMap = m_mapData2;
-        stageFirstText = L"화면 하단의 아이템창을 누른 뒤, \n대상을 클릭해서 아이템을 사용할 수 있어";
+        currentMap = m_mapData2;    
+        stageFirstText = L"전투 중에 불리한 상황이 된다면,\n 네가 얻은 포션이나 버섯을 사용해 봐.";
         if (!m_mushroom || !m_magicBottle)
             return;
         m_mushroom->SetActive(true);
         m_magicBottle->SetActive(false);
         break;
     case 3:
-        currentMap = m_mapData3;
-        stageFirstText = L"병종을 고려해서 잘 배치해 봐";
+        currentMap = m_mapData3;    
+        stageFirstText = L"나이트는 비숍에게, 비숍은 룩에게,\n 룩은 나이트에게 강해. 그걸 기억하라고.";
         if (!m_mushroom || !m_magicBottle)
             return;
         m_mushroom->SetActive(false);
@@ -80,7 +80,7 @@ void StageInitializer::Awake()
         break;
     case 5:
         currentMap = m_mapData5;
-        stageFirstText = L"여왕의 장미에 닿으면 피해를 입으니 \n돌아가는 게 좋을 거야";
+        stageFirstText = L"가시덤불에 닿으면 피해를 입으니, 잘 생각해.\n닿지 않으려면 어떻게 해야 할까?";
         if (!m_mushroom || !m_magicBottle)
             return;
         m_mushroom->SetActive(false);
