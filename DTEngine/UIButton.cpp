@@ -96,6 +96,10 @@ void UIButton::Update(float deltaTime)
             {
                 SoundManager::Instance().PlayOneShot("SFX/Skill_Heal_Button");
             }
+            else if (_GetOwner()->GetName() == "CatImg" || _GetOwner()->GetName() == "CatHidden")
+            {
+                SoundManager::Instance().PlayOneShot("SFX/Cheshire_Meow");
+            }
             else
             {
                 SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");

@@ -3182,7 +3182,7 @@
             "y": 1.0,
             "z": 1.0
           },
-          "m_orderInLayer": 10,
+          "m_orderInLayer": 1,
           "m_textureID": 9033677130782235516,
           "typeName": "Image"
         },
@@ -3192,10 +3192,34 @@
           "m_Boundary": 20.0,
           "m_Speed": 0.6000000238418579,
           "typeName": "Levitating"
+        },
+        {
+          "Active": true,
+          "id": 14402197881886320870,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
         }
       ],
       "id": 16372851531595845989,
-      "name": "Catmg",
+      "name": "CatImg",
       "tag": "Untagged",
       "transform": {
         "id": 16820316504372852408,
@@ -3204,7 +3228,7 @@
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 0,
+        "m_parent": 16989694108092896948,
         "m_position": {
           "x": 0.0,
           "y": 490.0,
@@ -3212,9 +3236,9 @@
         },
         "m_rotation": {
           "w": 1.0,
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
         "m_scale": {
           "x": 567.0,
@@ -3272,6 +3296,171 @@
         "m_scale": {
           "x": 624.0,
           "y": 615.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 17699829411527384065,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 13310644352218859917,
+          "typeName": "Image"
+        }
+      ],
+      "id": 2086480610518678898,
+      "name": "rabbit",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4618334466348298747,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 2.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 805.0,
+          "y": 580.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 0.9998477101325989,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.017452405765652657
+        },
+        "m_scale": {
+          "x": 315.0,
+          "y": 500.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 2844472192340904677,
+          "m_button": 14402197881886320870,
+          "m_hiddenButton": 5253405844950513004,
+          "m_hiddenObj": 11161541784315715253,
+          "m_obj": 16372851531595845989,
+          "typeName": "SecretTrigger"
+        }
+      ],
+      "id": 9558996778231625541,
+      "name": "rootCat",
+      "tag": "Untagged",
+      "transform": {
+        "id": 16989694108092896948,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 1432106342065228440,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 1,
+          "m_textureID": 6882340199512454646,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 11247410635890527391,
+          "m_Boundary": 20.0,
+          "m_Speed": 0.6000000238418579,
+          "typeName": "Levitating"
+        },
+        {
+          "Active": false,
+          "id": 5253405844950513004,
+          "m_hoverColor": {
+            "w": 1.0,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 1.0,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        }
+      ],
+      "id": 11161541784315715253,
+      "name": "CatHidden",
+      "tag": "Untagged",
+      "transform": {
+        "id": 5349130285986622357,
+        "m_editorEulerAngles": {
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_parent": 16989694108092896948,
+        "m_position": {
+          "x": 0.0,
+          "y": 490.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 620.0,
+          "y": 640.0,
           "z": 1.0
         }
       }
