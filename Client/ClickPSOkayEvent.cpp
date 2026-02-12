@@ -109,6 +109,8 @@ void ClickPSOkayEvent::SetClick()
 
 						//std::cout << worldPos.x << " " << worldPos.y << std::endl;
 
+
+
 						// allyunit 컴포넌트 가져와서 setpos 추가해주기.
 						auto allyC = go->GetComponent<AllyUnit>();
 						if (allyC)
@@ -122,7 +124,9 @@ void ClickPSOkayEvent::SetClick()
 										m_combatObj->GetComponent<CombatController>()->AddAllyUnit(allyC);
 								}
 
-								EffectManager::Instance().PlayEffect("2Magic_Circle", go);
+								if (SceneManager::Instance().GetActiveScene()->GetName() != "TutorialScene") {
+									EffectManager::Instance().PlayEffect("2Magic_Circle", go);
+								}
 
 								// ally 리스트에 추가해주기. 
 								//if (GameManager::Instance())
