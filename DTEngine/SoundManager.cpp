@@ -93,6 +93,13 @@ void SoundManager::PlayBGM(const std::string& path, bool crossfade)
 
     Sound* sound = GetSound(Path);
     if (!sound) return;
+
+    if (mPreviousBGM)
+    {
+        mPreviousBGM->stop(); 
+        mPreviousBGM = nullptr;
+    }
+
     if (mCurrentBGM)
     {
         if (crossfade) {
