@@ -30,13 +30,13 @@ void ArrowObjectPool::Start()
             m_bodys.push_back(body);
         }
 
-        if (m_start)
-        {
-            GameObject* start = m_start->Instantiate();
-            start->GetTransform()->SetParent(_GetOwner()->GetTransform());
-            start->SetActive(false);
-            m_starts.push_back(start);
-        }
+        //if (m_start)
+        //{
+        //    GameObject* start = m_start->Instantiate();
+        //    start->GetTransform()->SetParent(_GetOwner()->GetTransform());
+        //    start->SetActive(false);
+        //    m_starts.push_back(start);
+        //}
     }
 }
 
@@ -46,6 +46,6 @@ void ArrowObjectPool::DeactivateAll()
     {
         m_heads[i]->SetActive(false);
         m_bodys[i]->SetActive(false);
-        m_starts[i]->SetActive(false);
+        //m_starts[i]->SetActive(false);
     }
 }

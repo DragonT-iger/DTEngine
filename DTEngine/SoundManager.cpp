@@ -22,6 +22,8 @@ bool SoundManager::Initalize()
 
     m_BGMMap.emplace("TitleScene", "BGM/Title");
     m_BGMMap.emplace("TutorialScene", "BGM/Queen's Theme");
+    m_BGMMap.emplace("BossDialogue", "BGM/Cheshire's Theme");
+    //m_BGMMap.emplace("EndingScene", "BGM/Cheshire's Theme");
     //m_BGMMap.emplace("Stage_01", "The_World Is_Yours");
     //m_BGMMap.emplace("Stage_02", "Doomsday");
     //m_BGMMap.emplace("Stage_03", "Doomsday"); 
@@ -91,6 +93,13 @@ void SoundManager::PlayBGM(const std::string& path, bool crossfade)
 
     Sound* sound = GetSound(Path);
     if (!sound) return;
+
+    if (mPreviousBGM)
+    {
+        mPreviousBGM->stop(); 
+        mPreviousBGM = nullptr;
+    }
+
     if (mCurrentBGM)
     {
         if (crossfade) {
@@ -107,6 +116,8 @@ void SoundManager::PlayBGM(const std::string& path, bool crossfade)
     mSystem->playSound(native, mBGMGroup, false, &mCurrentBGM);
 
     mCurrentBGM->setVolume(crossfade ? 0.0f : mTargetBGMVolume);
+
+    m_On_Played = path;
 }
 
 void SoundManager::PlaySFX(const std::string& path)

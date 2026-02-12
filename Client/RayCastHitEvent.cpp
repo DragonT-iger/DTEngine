@@ -145,7 +145,7 @@ void RayCastHitEvent::RaycastCheck()
 								std::vector<ArrowSegment> path = enemy->GetArrowSegments();
 								std::vector<GameObject*> heads = m_arrowPool->GetHeads();
 								std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
-								std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+								//std::vector<GameObject*> starts = m_arrowPool->GetStarts();
 
 								m_arrowPool->DeactivateAll();
 
@@ -169,12 +169,12 @@ void RayCastHitEvent::RaycastCheck()
 									tr->SetRotationEuler(e);
 									heads[i]->SetActive(true);
 
-									tr = starts[i]->GetTransform();
-									tr->SetPosition(path[i].startWorld);
-									e = tr->GetEditorEuler();
-									e.y = path[i].yawDeg;
-									tr->SetRotationEuler(e);
-									starts[i]->SetActive(true);
+									//tr = starts[i]->GetTransform();
+									//tr->SetPosition(path[i].startWorld);
+									//e = tr->GetEditorEuler();
+									//e.y = path[i].yawDeg;
+									//tr->SetRotationEuler(e);
+									//starts[i]->SetActive(true);
 								}
 								m_arrowPool->_GetOwner()->SetActive(true);
 
@@ -356,7 +356,7 @@ void RayCastHitEvent::RaycastCheck()
 							std::vector<ArrowSegment> path = enemy->GetArrowSegments();
 							std::vector<GameObject*> heads = m_arrowPool->GetHeads();
 							std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
-							std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+							//std::vector<GameObject*> starts = m_arrowPool->GetStarts();
 
 							m_arrowPool->DeactivateAll();
 
@@ -379,12 +379,12 @@ void RayCastHitEvent::RaycastCheck()
 								tr->SetRotationEuler(e);
 								heads[i]->SetActive(true);
 
-								tr = starts[i]->GetTransform();
-								tr->SetPosition(path[i].startWorld);
-								e = tr->GetEditorEuler();
-								e.y = path[i].yawDeg;
-								tr->SetRotationEuler(e);
-								starts[i]->SetActive(true);
+								//tr = starts[i]->GetTransform();
+								//tr->SetPosition(path[i].startWorld);
+								//e = tr->GetEditorEuler();
+								//e.y = path[i].yawDeg;
+								//tr->SetRotationEuler(e);
+								//starts[i]->SetActive(true);
 							}
 
 							m_arrowPool->_GetOwner()->SetActive(true);

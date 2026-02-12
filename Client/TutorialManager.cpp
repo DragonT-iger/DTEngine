@@ -495,6 +495,8 @@ void TutorialManager::NextStep(bool force)
         m_canProceedToNextStep = false;
         m_vignetteDelayTimer = 0.0f; 
 
+        SoundManager::Instance().PlayOneShot("SFX/Cheshire_Meow");
+
         if (m_catEyeClosedGO) m_catEyeClosedGO->SetActive(false);
         if (m_catEyeOpenGO) m_catEyeOpenGO->SetActive(true);
     }
@@ -757,7 +759,7 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Cat_Explain_EnemyRange:
     {
         if (m_catText2) {
-            m_catText2->SetText(L"아, 참!, 이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어.!");
+            m_catText2->SetText(L"아, 참! 이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어!");
         }
         m_canProceedToNextStep = true;
 
@@ -765,7 +767,7 @@ void TutorialManager::NextStep(bool force)
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 7, m_redGlowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 8, m_glowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 6, m_redGlowTilePrefab);
-        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab);     // 이건 수정하긴해야됨
+        //if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 7, m_glowTilePrefab);     // 이건 수정하긴해야됨
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 8, m_redGlowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 6, m_glowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(5, 7, m_redGlowTilePrefab);

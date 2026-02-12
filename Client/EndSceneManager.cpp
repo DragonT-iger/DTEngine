@@ -14,6 +14,7 @@
 #include "TilemapData.h"
 #include "AliceUnit.h"
 #include "Transform.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(EndSceneManager)
 DTPROPERTY(EndSceneManager, m_aliceDialogueUI)
@@ -31,6 +32,7 @@ ENDPROPERTY()
 
 void EndSceneManager::Start()
 {
+    SoundManager::Instance().StopBGM(true); // 일단 임시로 넣어둠.. 
     NextStep(true); 
 }
 
