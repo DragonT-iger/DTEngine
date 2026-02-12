@@ -740,6 +740,7 @@ void TutorialManager::NextStep(bool force)
 
     case TutorialStep::Cat_Explain_EnemyPathWait:
     {
+        m_secondNextButton->SetActive(true);
         m_rayActive = false;
         Scene* activeScene = SceneManager::Instance().GetActiveScene();
         if (activeScene)
@@ -756,7 +757,6 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Cat_Strategy_DefenseTile: 
     {
 
-        m_secondNextButton->SetActive(true);
 
         if (m_catText2) {
             m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
