@@ -8,6 +8,7 @@
 #include "EffectManager.h"
 
 #include "BgFadeController.h"
+#include "UIButton.h"
 BEGINPROPERTY(CombatController)
 DTPROPERTY_SETTER(CombatController, battleGrid, SetBattleGrid)
 DTPROPERTY_SETTER(CombatController, m_aliceUnit, SetAliceUnit)
@@ -22,6 +23,8 @@ DTPROPERTY_SETTER(CombatController, enemyUnit2, SetEnemyUnit2)
 DTPROPERTY(CombatController, m_victoryBG)
 DTPROPERTY(CombatController, m_loseBG)
 DTPROPERTY(CombatController, m_overBG)
+DTPROPERTY(CombatController, m_healskillButton)
+DTPROPERTY(CombatController, m_attackskillButton)
 ENDPROPERTY()
 
 
@@ -526,6 +529,12 @@ bool CombatController::EndPhase()
     // 종료조건 만족시 승패 처리
     if (m_stageResult != StageResult::InProgress && !m_stageEnd)
     {
+        if (m_healskillButton && m_attackskillButton)
+        {
+            // 이 경우 uibutton 가져와서 꺼주기.
+            m_healskillButton->GetComponent<UIButton>()->SetActive(false);
+            m_attackskillButton->GetComponent<UIButton>()->SetActive(false);
+        }
         //튜토리얼 특수처리
         //Cat_Explain_EnemyRange 인 경우에 nextstep(true)호출
         Scene* scene = SceneManager::Instance().GetActiveScene();

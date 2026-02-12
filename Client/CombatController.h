@@ -146,4 +146,7 @@ private:
 	GameObject* m_victoryBG = nullptr;
 	GameObject* m_loseBG = nullptr;
 	GameObject* m_overBG= nullptr;
+
+	GameObject* m_healskillButton = nullptr;
+	GameObject* m_attackskillButton = nullptr;
 };
