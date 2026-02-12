@@ -1867,6 +1867,7 @@
           "m_rightRSWinodwBG": 2864264039527296129,
           "m_settingWindowBG": 0,
           "m_skillButton": 0,
+          "m_skillGuideObj": 0,
           "m_startButton": 0,
           "m_tutorialManager": 4126822075113408942,
           "m_warningWindowBG": 0,
@@ -1955,6 +1956,8 @@
           "enemyUnit2": 0,
           "id": 10045121828271408266,
           "m_aliceUnit": 5882676074383809733,
+          "m_attackskillButton": 0,
+          "m_healskillButton": 0,
           "m_loseBG": 0,
           "m_overBG": 0,
           "m_redQueenUnit": 0,
@@ -2622,6 +2625,7 @@
         {
           "Active": false,
           "id": 8297718016937337399,
+          "m_isCreditOpen": false,
           "m_settingWindow": 5129673964082675281,
           "m_window": 0,
           "typeName": "ESCEvent"
@@ -4500,6 +4504,7 @@
           "m_knight": 1986180583382192364,
           "m_nonCostObj": 7009104717502001078,
           "m_rook": 11842188666389392787,
+          "m_tilemapGenerator": 0,
           "m_tutorialManager": 4126822075113408942,
           "typeName": "ClickPSOkayEvent"
         }
@@ -6014,7 +6019,7 @@
             "z": 1.0
           },
           "m_orderInLayer": 0,
-          "m_textureID": 14103031513704839223,
+          "m_textureID": 13850350621985400606,
           "typeName": "Image"
         },
         {
@@ -6036,7 +6041,7 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 1452.5,
+          "x": 30.0,
           "y": 3.5999999046325684,
           "z": 0.0
         },
@@ -6048,7 +6053,7 @@
         },
         "m_scale": {
           "x": 440.8999938964844,
-          "y": 171.1999969482422,
+          "y": 70.0,
           "z": 1.0
         }
       }
