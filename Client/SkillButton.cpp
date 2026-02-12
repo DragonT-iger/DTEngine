@@ -12,6 +12,8 @@ DTPROPERTY(SkillButton, m_healButton)
 
 DTPROPERTY(SkillButton, m_attackCountText)
 DTPROPERTY(SkillButton, m_healCountText)
+
+DTPROPERTY(SkillButton, m_skillGuideObj)
 ENDPROPERTY()
 
 
@@ -50,6 +52,12 @@ void SkillButton::Start()
 						if (rayEvent->GetAttackSkill() || rayEvent->GetHealSkill())
 								return;
 
+						if (m_skillGuideObj)
+						{
+								m_skillGuideObj->SetActive(true);
+						}
+								
+
 						rayEvent->CloseAllWindows();
 						GameManager::Instance()->SetTimeScale(0);
 						rayEvent->SetAttackSkill(true);
@@ -77,6 +85,11 @@ void SkillButton::Start()
 						if (rayEvent->GetAttackSkill() || rayEvent->GetHealSkill())
 								return;
 
+						if (m_skillGuideObj)
+						{
+								m_skillGuideObj->SetActive(true);
+						}
+			
 						rayEvent->CloseAllWindows();
 						GameManager::Instance()->SetTimeScale(0.0f);
 						rayEvent->SetHealSkill(true);

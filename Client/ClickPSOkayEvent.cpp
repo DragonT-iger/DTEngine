@@ -32,6 +32,7 @@ DTPROPERTY(ClickPSOkayEvent, m_bishop)
 DTPROPERTY(ClickPSOkayEvent, m_RSWindow)
 DTPROPERTY(ClickPSOkayEvent, m_combatObj)
 DTPROPERTY(ClickPSOkayEvent, m_tutorialManager)
+DTPROPERTY(ClickPSOkayEvent, m_tilemapGenerator)
 ENDPROPERTY()
 
 void ClickPSOkayEvent::Start()
@@ -129,31 +130,41 @@ void ClickPSOkayEvent::SetClick()
 								//		GameManager::Instance()->RegisterRuntimeAlly(go);
 								//}
 						}
-
-						std::cout << SceneManager::Instance().GetActiveScene()->GetName() << std::endl;
-
 						
-
-
-
 						// 상태 바꿔주기.
 						parentObj->GetComponent<OpenPSEvent>()->SetIsOpen(false);
 
-						// iCube로 바꿔서 다시 rayhit 안되게 하기.
+						// iCube로 바꿔서 다시 rayhit 안되게 하기. | 이제 tilemapgenerator에 replace 사용하기.
 						OpenPSEvent* openEvent = parentObj->GetComponent<OpenPSEvent>();
 						GameObject* targetObj = openEvent->GetRayObj();
 
-						if (targetObj)
+						if (m_tilemapGenerator)
 						{
-								auto effect = targetObj->GetComponent<Effect>();
-								if (effect)
+								auto tileGen = m_tilemapGenerator->GetComponent<TilemapGenerator>();
+
+								if (targetObj && m_tilemapGenerator)
 								{
-										effect->SetAnimating(false);
-										effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+										Vector3 pos = targetObj->GetTransform()->GetPosition();
+
+										// 좌표만 구해서 함수에 전달
+										Vector2 gridPos(
+												std::round(pos.x / 2.0f),
+												std::round(pos.z / 2.0f)
+										);
+
+										tileGen->ReplaceTileAtGrid(gridPos);
+
+										/*auto effect = targetObj->GetComponent<Effect>();
+										if (effect)
+										{
+												effect->SetAnimating(false);
+												effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+										}
+
+										targetObj->SetName("iCube");*/
 								}
-							
-								targetObj->SetName("iCube");
 						}
+						
 						// 창 닫기.
 						parentObj->SetActive(false);
 						openEvent->SetIsOpen(false);
@@ -164,7 +175,7 @@ void ClickPSOkayEvent::SetClick()
 						}
 
 						// 생성 성공이니까 manager unit count 증가시켜주기.
-						GameManager::Instance()->SetMoney(managerMoney - m_cost);
+						//GameManager::Instance()->SetMoney(managerMoney - m_cost);
 						if (m_RSWindow)
 						{
 								auto rswindow = m_RSWindow->GetComponent<OpenRSEvent>();

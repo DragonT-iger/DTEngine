@@ -26,7 +26,7 @@ private:
 		GameObject* m_nonCostObj = nullptr;
 		GameObject* m_RSWindow = nullptr;
 		GameObject* m_combatObj = nullptr;
-
+		GameObject* m_tilemapGenerator = nullptr;
 		int index = 0;
 
 		TutorialManager* m_tutorialManager = nullptr;

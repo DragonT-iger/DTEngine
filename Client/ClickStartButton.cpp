@@ -8,6 +8,8 @@
 #include "AssetDatabase.h"
 #include "Image.h"
 #include "GameManager.h"
+#include "TilemapGenerator.h"
+
 
 BEGINPROPERTY(ClickStartButton)
 DTPROPERTY(ClickStartButton, m_startButton)
@@ -21,6 +23,7 @@ DTPROPERTY(ClickStartButton, m_leftPrefabWindowBG)
 DTPROPERTY(ClickStartButton, m_rightPrefabWindowBG)
 DTPROPERTY(ClickStartButton, m_leftRuleWindowBG)
 DTPROPERTY(ClickStartButton, m_rightRuleWindowBG)
+DTPROPERTY(ClickStartButton, m_tilemapGenerator)
 ENDPROPERTY()
 
 
@@ -81,19 +84,44 @@ void ClickStartButton::Start()
 
 void ClickStartButton::StartGame()
 {
-		// 전투 시작 시 타일들 전부 깜빡거리는거 꺼주기 위해서.
-		for (auto obj : m_tileMapObj->GetTransform()->GetChildren())
+
+		auto tileGen = m_tileMapObj->GetComponent<TilemapGenerator>();
+		if (!tileGen) return;
+
+		auto children = m_tileMapObj->GetTransform()->GetChildren();
+
+		//std::cout << "children 찾아서 바꿔주기." << std::endl;
+		for (auto childTf : children)
 		{
-				if (obj->GetName() == "Glow_W_Height_01_Red_Test" || obj->GetName() == "Glow_W_Height_01_White_Test")
+				GameObject* tileObj = childTf->_GetOwner();
+				if (tileObj->GetName() == "Glow_R_Height_01_Red" ||
+						tileObj->GetName() == "Glow_R_Height_01_White")
 				{
-						auto effect = obj->GetComponent<Effect>();
-						if (effect)
-						{
-								effect->SetAnimating(false);
-								effect->SetEdgeColor(Vector4(0, 0, 0, 1));
-						}
+						Vector3 pos = childTf->GetPosition();
+
+						// 좌표만 구해서 함수에 전달
+						Vector2 gridPos(
+								std::round(pos.x / 2.0f),
+								std::round(pos.z / 2.0f)
+						);
+
+						tileGen->ReplaceTileAtGrid(gridPos);
 				}
 		}
+
+		//// 전투 시작 시 타일들 전부 깜빡거리는거 꺼주기 위해서.
+		//for (auto obj : m_tileMapObj->GetTransform()->GetChildren())
+		//{
+		//		if (obj->GetName() == "Glow_W_Height_01_Red_Test" || obj->GetName() == "Glow_W_Height_01_White_Test")
+		//		{
+		//				auto effect = obj->GetComponent<Effect>();
+		//				if (effect)
+		//				{
+		//						effect->SetAnimating(false);
+		//						effect->SetEdgeColor(Vector4(0, 0, 0, 1));
+		//				}
+		//		}
+		//}
 
 		auto rayobj = m_rayObj->GetComponent<RayCastHitEvent>();
 

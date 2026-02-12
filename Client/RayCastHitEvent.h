@@ -71,5 +71,7 @@ private:
 
 		Text* m_attackCountText = nullptr;
 		Text* m_healCountText = nullptr;
+
+		GameObject* m_skillGuideObj = nullptr;
 };
 
