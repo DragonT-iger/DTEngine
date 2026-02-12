@@ -27,6 +27,7 @@ DTPROPERTY(EndSceneManager, m_credit2UI)
 DTPROPERTY(EndSceneManager, m_finalCreditUI)
 DTPROPERTY(EndSceneManager, m_combatController)
 DTPROPERTY(EndSceneManager, m_additionalFall1)
+DTPROPERTY(EndSceneManager, m_chatNext)
 //DTPROPERTY(EndSceneManager, m_additionalFall2)
 ENDPROPERTY()
 
@@ -408,6 +409,7 @@ void EndSceneManager::NextStep(bool force)
 
         if (m_aliceDialogueUI) m_aliceDialogueUI->SetActive(false);
         if (m_chesherDialogueUI) m_chesherDialogueUI->SetActive(false);
+        if (m_chatNext) m_chatNext->SetActive(false);
 
         Scene* activeScene = SceneManager::Instance().GetActiveScene();
         if (activeScene && activeScene->GetMainCamera())

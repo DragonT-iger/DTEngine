@@ -50,6 +50,7 @@ DTPROPERTY(TutorialManager, m_tutorialArrow3)
 DTPROPERTY(TutorialManager, m_tutorialArrow4)
 DTPROPERTY(TutorialManager, m_tutorialArrow5)
 DTPROPERTY(TutorialManager, m_defenseTile)
+DTPROPERTY(TutorialManager, m_tutorialPass)
 ENDPROPERTY()
 
 
@@ -465,6 +466,7 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Vignette_FadeIn: // 3
     {
         m_canProceedToNextStep = false;
+        m_tutorialPass->SetActive(false);
 
         Scene* activeScene = SceneManager::Instance().GetActiveScene();
         if (activeScene)
@@ -513,6 +515,7 @@ void TutorialManager::NextStep(bool force)
 
     case TutorialStep::Alice_AskRule: // 5
     {
+        m_tutorialPass->SetActive(true);
         if (rightChat) rightChat->SetActive(false);
         if (leftChat) leftChat->SetActive(true);
         if (leftChatText) leftChatText->SetText(L"규칙을 어떻게 정해야 하지?");
@@ -554,6 +557,7 @@ void TutorialManager::NextStep(bool force)
             m_catText2->SetText(L"빛나는 타일을 눌러봐");
 
         m_canProceedToNextStep = false;
+        m_secondNextButton->SetActive(false);
 
           if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 5, m_glowTilePrefab);
         //if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
@@ -651,6 +655,7 @@ void TutorialManager::NextStep(bool force)
     case TutorialStep::Cat_Explain_EnemyPath: // 16
     {
         m_canProceedToNextStep = true;
+        m_secondNextButton->SetActive(true);
         if (m_catText2) {
             m_catText2->SetText(L"참, 적은 지정된 경로를\n따라서 움직여.");
         }
@@ -677,6 +682,7 @@ void TutorialManager::NextStep(bool force)
         }
 
         m_canProceedToNextStep = false;
+        m_secondNextButton->SetActive(false);
 
         m_rayActive = true;
 
@@ -714,6 +720,9 @@ void TutorialManager::NextStep(bool force)
 
     case TutorialStep::Cat_Strategy_DefenseTile: 
     {
+
+        m_secondNextButton->SetActive(true);
+
         if (m_catText2) {
             m_catText2->SetText(L"잘됐네 , 딱 보니까 방어 타일 위에 있으면 \n저 녀석을 막기 좋겠어.");
         }
@@ -756,15 +765,17 @@ void TutorialManager::NextStep(bool force)
         if (m_BattleStart) m_BattleStart->SetActive(false);
         
         m_canProceedToNextStep = false;
+        m_secondNextButton->SetActive(false);
     }
     break;
 
     case TutorialStep::Cat_Explain_EnemyRange:
     {
         if (m_catText2) {
-            m_catText2->SetText(L"아, 참! 이 토끼 녀석들은\n공격할 수 있는 범위가 정해져 있어!");
+            m_catText2->SetText(L"아, 참! 이 토끼 녀석들은 공격할 수 \n있는 범위가 정해져 있어!");
         }
         m_canProceedToNextStep = true;
+        m_secondNextButton->SetActive(true);
 
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 6, m_glowTilePrefab);
         if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(3, 7, m_redGlowTilePrefab);

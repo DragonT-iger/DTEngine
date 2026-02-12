@@ -213,6 +213,12 @@
     <ClCompile Include="WASANS.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="EndSceneTrigger.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDialogueTrigger.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -396,6 +402,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WASANS.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EndSceneTrigger.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDialogueTrigger.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

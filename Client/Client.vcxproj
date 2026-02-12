@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
     <ClCompile Include="ArrowObjectPool.cpp" />
+    <ClCompile Include="BossDialogueTrigger.cpp" />
     <ClCompile Include="BreakableWall.cpp" />
     <ClCompile Include="BgFadeController.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="DialogueController.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EndSceneManager.cpp" />
+    <ClCompile Include="EndSceneTrigger.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ESCEvent.cpp" />
     <ClCompile Include="ExitButtonEvent.cpp" />
@@ -203,6 +205,7 @@
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
     <ClInclude Include="ArrowObjectPool.h" />
+    <ClInclude Include="BossDialogueTrigger.h" />
     <ClInclude Include="BreakableWall.h" />
     <ClInclude Include="BgFadeController.h" />
     <ClInclude Include="CameraControlEvent.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="DialogueController.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="EndSceneManager.h" />
+    <ClInclude Include="EndSceneTrigger.h" />
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ESCEvent.h" />
     <ClInclude Include="ExitButtonEvent.h" />

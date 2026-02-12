@@ -30,8 +30,8 @@ public:
     void Start() override;
     void Update(float deltaTime) override;
 
-private:
     void NextDialogue();
+private:
 
 private:
     GameObject* m_aliceObject = nullptr;
