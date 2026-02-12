@@ -15,6 +15,8 @@
 #include "../Client/EnemyUnit.h"
 #include "../Client/BreakableWall.h"
 
+#include "../Client/EffectManager.h"
+
 BEGINPROPERTY(TilemapGenerator)
 
 DTPROPERTY(TilemapGenerator, m_mapData)
@@ -178,6 +180,8 @@ void TilemapGenerator::BuildMap()
                 pitch = 90.0f;
             }
 
+           
+
             if (index == 5)
             {
                 BreakableWall* bw = instance->GetComponent<BreakableWall>();
@@ -215,10 +219,18 @@ void TilemapGenerator::BuildMap()
                 position.y = -1.0f;
             }
 
+
+
             tr->SetScale(scale);
             tr->SetRotationEuler(Vector3(pitch, yaw, roll));
             tr->SetPosition(position);
             tr->SetParent(myTr);
+
+
+            if (index == 2 || index == 3)
+            {
+                EffectManager::Instance().PlayEffect("5Magic_Circle", tr->_GetOwner());
+            }
 
             instance->SetActive(true);
             m_spawnedTiles[arrayIndex] = instance;

@@ -19,7 +19,8 @@ bool EffectManager::Initialize()
         "Attack01",
        "2Attack02",
        "2Attack03",
-       "2Magic_Circle",
+       "5Magic_Circle",
+       "Magic_Circle_2",
         "Heal"
     };
 
@@ -119,7 +120,7 @@ void EffectManager::PlayEffect_Targeting(const std::string& key, GameObject* fro
     forward.Cross(right, up); 
     up.Normalize();
 
-    offset.z += 3.0f; 
+    offset.z += 2.3f; 
 
     Vector3 worldOffset = (right * offset.x) + (up * offset.y) + (forward * offset.z);
     Vector3 finalPos = startPos + worldOffset;
