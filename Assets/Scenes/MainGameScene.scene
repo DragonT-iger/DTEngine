@@ -9119,6 +9119,45 @@
           "z": 1.0
         }
       }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 9269151462565116160,
+          "m_button": 15330965135586945902,
+          "typeName": "CheatNextStage"
+        }
+      ],
+      "id": 2473807927522104270,
+      "name": "GameObject",
+      "tag": "Untagged",
+      "transform": {
+        "id": 1133374216925799669,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 0,
+        "m_position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      }
     }
   ]
 }

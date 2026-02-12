@@ -140,6 +140,7 @@
     <ClCompile Include="BgFadeController.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
     <ClCompile Include="CameraRotator.cpp" />
+    <ClCompile Include="CheatNextStage.cpp" />
     <ClCompile Include="ChesherGuideEvent.cpp" />
     <ClCompile Include="ClickNextStageEvent.cpp" />
     <ClCompile Include="ClickPSOkayEvent.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="BgFadeController.h" />
     <ClInclude Include="CameraControlEvent.h" />
     <ClInclude Include="CameraRotator.h" />
+    <ClInclude Include="CheatNextStage.h" />
     <ClInclude Include="ChesherGuideEvent.h" />
     <ClInclude Include="ClickNextStageEvent.h" />
     <ClInclude Include="ClickPSOkayEvent.h" />
