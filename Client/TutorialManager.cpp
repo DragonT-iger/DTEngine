@@ -604,6 +604,9 @@ void TutorialManager::NextStep(bool force)
         if (m_catText2) {
             m_catText2->SetText(L"병사를 선택해서 이동과 전투\n규칙을 정해줄 수 있어");
         }
+
+        m_originalTilemap = m_tilemapGenerator->GetWhiteTile();
+        if (m_tilemapGenerator) m_tilemapGenerator->ReplaceTile(4, 5, m_originalTilemap);
         m_isVignetteSequence = true;
         m_vignetteDelayTimer = 0.0f;
         m_tutorialArrow1->SetActive(false);

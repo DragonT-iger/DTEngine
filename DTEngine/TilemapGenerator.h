@@ -26,6 +26,9 @@ public:
     void SetMapData(TilemapData* data) { m_mapData = data; }
     TilemapData* GetMapData() const { return m_mapData; }
 
+    Prefab* GetRedTile() { return m_prefab0; }
+    Prefab* GetWhiteTile() { return m_prefab1; }
+
     void ChangeMark(GameObject* obj);
 
     void ReplaceTile(int x, int y, Prefab* newPrefab);
