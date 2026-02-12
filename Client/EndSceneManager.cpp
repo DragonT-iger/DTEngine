@@ -115,43 +115,57 @@ void EndSceneManager::Update(float deltaTime)
 
     if (m_currentStep == EndStep::DarkCatDialogue)
     {
-        if (m_isTyping)
+        if (m_currentStep == EndStep::DarkCatDialogue)
         {
-            if (InputManager::Instance().GetKeyDown(KeyCode::Space) ||
-                InputManager::Instance().GetKeyDown(KeyCode::Enter))
+            if (m_isTyping)
             {
-                if (m_popupUI)
+                // 스페이스바/엔터로 타이핑 스킵
+                if (InputManager::Instance().GetKeyDown(KeyCode::Space) ||
+                    InputManager::Instance().GetKeyDown(KeyCode::Enter))
                 {
-                    Text* textComp = m_popupUI->GetComponent<Text>();
-                    if (textComp) textComp->SetText(m_targetPopupText);
-                }
-                m_isTyping = false;
-                m_canProceedToNextStep = true;
-            }
-            else
-            {
-                m_typingTimer += deltaTime;
-                if (m_typingTimer >= TYPING_SPEED)
-                {
-                    m_typingTimer = 0.0f;
-                    m_typingIndex++;
-
                     if (m_popupUI)
                     {
                         Text* textComp = m_popupUI->GetComponent<Text>();
-                        if (textComp)
+                        if (textComp) textComp->SetText(m_targetPopupText);
+                    }
+                    m_isTyping = false;
+                    m_stateTimer = 0.0f; 
+                }
+                else
+                {
+                    m_typingTimer += deltaTime;
+                    if (m_typingTimer >= TYPING_SPEED)
+                    {
+                        m_typingTimer = 0.0f;
+                        m_typingIndex++;
+
+                        if (m_popupUI)
                         {
-                            if (m_typingIndex <= m_targetPopupText.length())
+                            Text* textComp = m_popupUI->GetComponent<Text>();
+                            if (textComp)
                             {
-                                textComp->SetText(m_targetPopupText.substr(0, m_typingIndex));
-                            }
-                            else
-                            {
-                                m_isTyping = false;
-                                m_canProceedToNextStep = true;
+                                if (m_typingIndex <= m_targetPopupText.length())
+                                {
+                                    textComp->SetText(m_targetPopupText.substr(0, m_typingIndex));
+                                }
+                                else
+                                {
+                                    m_isTyping = false;
+                                    m_stateTimer = 0.0f; 
+                                }
                             }
                         }
                     }
+                }
+            }
+            else
+            {
+                m_stateTimer += deltaTime;
+                float waitDuration = 2.0f; 
+
+                if (m_stateTimer >= waitDuration)
+                {
+                    NextStep(true);
                 }
             }
         }
