@@ -7,10 +7,16 @@
 #include "SceneManager.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "Image.h"
 
-BEGINPROPERTY(CameraRotator)
+BEGINPROPERTY(CameraRotator)    
 
 DTPROPERTY(CameraRotator, m_tilemapGenerator)
+DTPROPERTY(CameraRotator, m_rightPSWindowBG)
+DTPROPERTY(CameraRotator, m_leftPSWindowBG)
+DTPROPERTY(CameraRotator, m_rightRSWindowBG)
+DTPROPERTY(CameraRotator, m_leftRSWindowBG)
+DTPROPERTY(CameraRotator, m_victoryWindowImage)
 
 
 ENDPROPERTY()
@@ -35,6 +41,20 @@ void CameraRotator::Start()
 
 void CameraRotator::Update(float deltaTime)
 {
+    if (m_rightPSWindowBG->IsActive() || m_leftPSWindowBG->IsActive())
+    {
+        return;
+    }
+
+    if (m_rightRSWindowBG->IsActive() || m_leftRSWindowBG->IsActive())
+    {
+        return;
+    }
+
+    if (m_victoryWindowImage->IsActive()) {
+        return;
+    }
+
     HandleInput(deltaTime);
     PerformTransformation(deltaTime);
 }

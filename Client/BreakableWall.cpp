@@ -68,7 +68,7 @@ void BreakableWall::StartWallBreakAnim()
 	m_anim->SetPlay(true);
 
 	SoundManager::Instance().PlayOneShot("SFX/Wall_Destroy");
-	std::cout << "(벽 파괴 소리) 콰과과광\n";
+	//std::cout << "(벽 파괴 소리) 콰과과광\n";
 
 	m_animStart = true;
 }

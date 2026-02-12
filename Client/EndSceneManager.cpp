@@ -338,7 +338,7 @@ void EndSceneManager::NextStep(bool force)
     m_currentStep = (EndStep)nextIndex;
     m_stateTimer = 0.0f;
 
-    std::cout << nextIndex << std::endl;
+    //std::cout << nextIndex << std::endl;
 
     m_canProceedToNextStep = true;
 

@@ -40,7 +40,7 @@ bool EffectManager::Initialize()
         }
         else
         {
-            std::cout << "Effect InitalizeFailed" << "Path: " << fullPath << std::endl;
+            //std::cout << "Effect InitalizeFailed" << "Path: " << fullPath << std::endl;
             return false;
         }
     }

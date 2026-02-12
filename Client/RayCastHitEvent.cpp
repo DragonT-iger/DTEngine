@@ -118,7 +118,7 @@ void RayCastHitEvent::RaycastCheck()
 				//bool isLeft = x < 960;
 				if (hit)
 				{
-					std::cout << hit->GetName() << std::endl;
+					//std::cout << hit->GetName() << std::endl;
 
 					if (m_tutorialManager &&
 						m_tutorialManager->GetCurrentStep() >= TutorialManager::TutorialStep::Cat_Explain_EnemyPath &&
@@ -188,7 +188,7 @@ void RayCastHitEvent::RaycastCheck()
 						// 적이 아닌 것을 클릭했거나, EnemyUnit을 못 찾은 경우 클릭 무시
 						return;
 					}
-						std::cout << hit->GetName() << std::endl;
+						//std::cout << hit->GetName() << std::endl;
 						if (scene->GetName() == "TutorialScene") {
 							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
 								if (isLeft)
@@ -309,7 +309,7 @@ void RayCastHitEvent::RaycastCheck()
 												EffectManager::Instance().PlayEffect("Poison", unit->_GetOwner());
 												unit->TakeDamage(20);
 												SoundManager::Instance().PlayOneShot("SFX/Skill_Poison");
-												std::cout << unit->GetHp() << std::endl;
+												//std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
@@ -462,7 +462,7 @@ void RayCastHitEvent::ToggleSettingWindow()
 
 		if (m_finishGame)
 		{
-				std::cout << "게임끝남" << std::endl;
+				//std::cout << "게임끝남" << std::endl;
 				return;
 		}
 				
