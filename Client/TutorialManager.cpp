@@ -105,21 +105,56 @@ void TutorialManager::Update(float deltaTime)
     if (m_CurrentStep == TutorialStep::Cat_ShowEyeClosed)
     {
         m_vignetteDelayTimer += deltaTime;
-        if (m_vignetteDelayTimer >= 1.5f)
+        float duration = 2.0f; 
+
+        if (m_catEyeClosedGO)
+        {
+            Image* img = m_catEyeClosedGO->GetComponent<Image>();
+            if (img)
+            {
+                float t = m_vignetteDelayTimer / duration;
+                if (t > 1.0f) t = 1.0f;
+
+                float alpha = sinf(t * 3.14159265f);
+
+                Vector4 color = img->GetColor();
+                color.w = alpha;
+                img->SetColor(color);
+            }
+        }
+
+        if (m_vignetteDelayTimer >= duration)
         {
             m_canProceedToNextStep = true;
-            NextStep(); 
+            NextStep();
         }
     }
 
     if (m_CurrentStep == TutorialStep::Cat_ShowEyeOpen)
     {
         m_vignetteDelayTimer += deltaTime;
+        float duration = 2.0f;
 
-        if (m_vignetteDelayTimer >= 1.5f)
+        if (m_catEyeOpenGO)
+        {
+            Image* img = m_catEyeOpenGO->GetComponent<Image>();
+            if (img)
+            {
+                float t = m_vignetteDelayTimer / duration;
+                if (t > 1.0f) t = 1.0f;
+
+                float alpha = sinf(t * 3.14159265f);
+
+                Vector4 color = img->GetColor();
+                color.w = alpha;
+                img->SetColor(color);
+            }
+        }
+
+        if (m_vignetteDelayTimer >= duration)
         {
             m_canProceedToNextStep = true;
-            NextStep(); 
+            NextStep();
         }
     }
 
