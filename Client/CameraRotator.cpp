@@ -54,12 +54,13 @@ void CameraRotator::Update(float deltaTime)
     if (m_victoryWindowImage->IsActive()) {
         return;
     }
+    float unscaledDeltatime = SceneManager::Instance().GetUnscaledDeltaTime();
 
-    HandleInput(deltaTime);
-    PerformTransformation(deltaTime);
+    HandleInput(unscaledDeltatime);
+    PerformTransformation(unscaledDeltatime);
 }
 
-void CameraRotator::HandleInput(float deltaTime)
+void CameraRotator::HandleInput(float unscaledDeltatime)
 {
     InputManager& input = InputManager::Instance();
 
@@ -106,7 +107,7 @@ void CameraRotator::HandleInput(float deltaTime)
         float zoomFactor = m_currentOrthoSize / m_maxSize;
 
         Vector3 pos = GetTransform()->GetPosition();
-        pos.z += moveDir.z * m_panSpeed * zoomFactor * deltaTime;
+        pos.z += moveDir.z * m_panSpeed * zoomFactor * unscaledDeltatime;
 
         if (pos.z < -10) {
             pos.z = -10;
