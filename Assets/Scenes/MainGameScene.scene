@@ -208,7 +208,7 @@
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
           "m_skillButton": 619973099615200002,
-          "m_skillGuideObj": 0,
+          "m_skillGuideObj": 5768408878176791174,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -2735,7 +2735,7 @@
           "m_healButton": 3158531729957653660,
           "m_healCountText": 964351788859007823,
           "m_rayObj": 4771222732717351773,
-          "m_skillGuideObj": 0,
+          "m_skillGuideObj": 5768408878176791174,
           "typeName": "SkillButton"
         }
       ],
@@ -4949,7 +4949,7 @@
         {
           "Active": true,
           "id": 3380641475858076824,
-          "m_ObjWindow": 0,
+          "m_ObjWindow": 10500202484059138583,
           "m_button": 3049911565632274764,
           "typeName": "SetMainSceneEvent"
         }
@@ -8940,6 +8940,104 @@
         "m_scale": {
           "x": 341.1000061035156,
           "y": 189.3000030517578,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": false,
+      "components": [
+        {
+          "Active": true,
+          "id": 2122348359418238881,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 9470597464644599727,
+          "typeName": "Image"
+        }
+      ],
+      "id": 5768408878176791174,
+      "name": "SkillGuideObj",
+      "tag": "Untagged",
+      "transform": {
+        "id": 10289516761530978414,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 11426099208464666270,
+        "m_position": {
+          "x": -300.0,
+          "y": -1100.0,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 700.0,
+          "y": 90.0,
+          "z": 1.0
+        }
+      }
+    },
+    {
+      "active": true,
+      "components": [
+        {
+          "Active": true,
+          "id": 10150370562226263490,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 0,
+          "m_textureID": 9728408131212704457,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1126196497239667009,
+          "m_obj": 1443532965570328810,
+          "typeName": "ImageSwitcher"
+        }
+      ],
+      "id": 1443532965570328810,
+      "name": "StageImg",
+      "tag": "Untagged",
+      "transform": {
+        "id": 4303285566022651337,
+        "m_editorEulerAngles": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "m_parent": 5061715440723838360,
+        "m_position": {
+          "x": -1.2000000476837158,
+          "y": -0.8347216844558716,
+          "z": 0.0
+        },
+        "m_rotation": {
+          "w": 1.0,
+          "x": -0.0,
+          "y": 0.0,
+          "z": -0.0
+        },
+        "m_scale": {
+          "x": 0.800000011920929,
+          "y": 0.25,
           "z": 1.0
         }
       }
