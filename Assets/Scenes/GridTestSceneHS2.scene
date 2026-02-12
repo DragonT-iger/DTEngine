@@ -59,9 +59,9 @@
         },
         "m_parent": 0,
         "m_position": {
-          "x": 0.11467737704515457,
-          "y": 1.1206145286560059,
-          "z": 2.419502019882202
+          "x": -0.5752238035202026,
+          "y": 2.4859797954559326,
+          "z": 6.518360614776611
         },
         "m_rotation": {
           "w": 0.0432722270488739,
@@ -205,7 +205,7 @@
         {
           "Active": true,
           "id": 7171391694734270448,
-          "m_alice": 17688493130894654216,
+          "m_alice": 1675349215534129300,
           "m_bgStain": 3727292950332621517,
           "m_bgWall0": 8505758128759326094,
           "m_bgWall1": 5527870150279407016,
@@ -213,16 +213,16 @@
           "m_enemy1": 4258893392164971145,
           "m_enemy2": 1983203916318101064,
           "m_mapData": 15103945832781831451,
-          "m_prefab0": 2144434576612897772,
-          "m_prefab1": 12928013286368622248,
-          "m_prefab2": 18392761606428986916,
-          "m_prefab3": 7220029855253685106,
-          "m_prefab4": 7639539974161466075,
-          "m_prefab5": 15195296483904062250,
+          "m_prefab0": 9370218117724469139,
+          "m_prefab1": 11092341394286765338,
+          "m_prefab2": 5167724897747945614,
+          "m_prefab3": 9140935697209757186,
+          "m_prefab4": 15673526347291015282,
+          "m_prefab5": 3713556880460109446,
           "m_prefab6": 7335722053263946750,
           "m_prefab7": 16479989809337654430,
           "m_prefab8": 9458376883360111362,
-          "m_redQueen": 10895878690869253900,
+          "m_redQueen": 7559348070259695600,
           "typeName": "TilemapGenerator"
         }
       ],
@@ -262,12 +262,15 @@
           "Active": true,
           "id": 8138808444096392086,
           "m_arrowPool": 2265729955130946909,
+          "m_attackCountText": 0,
+          "m_healCountText": 0,
           "m_leftPSWinodwBG": 13644169991980458124,
           "m_leftRSWinodwBG": 14800340861935470279,
           "m_rightPSWinodwBG": 14165272807283552,
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
           "m_skillButton": 0,
+          "m_skillGuideObj": 0,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -356,7 +359,10 @@
           "enemyUnit2": 0,
           "id": 6276163554272591340,
           "m_aliceUnit": 0,
+          "m_attackskillButton": 0,
+          "m_healskillButton": 0,
           "m_loseBG": 0,
+          "m_overBG": 0,
           "m_redQueenUnit": 0,
           "m_victoryBG": 0,
           "typeName": "CombatController"
@@ -846,6 +852,7 @@
           "m_knight": 9894459574992437766,
           "m_nonCostObj": 15190275747362855967,
           "m_rook": 3328525606780682600,
+          "m_tilemapGenerator": 0,
           "m_tutorialManager": 0,
           "typeName": "ClickPSOkayEvent"
         }
@@ -1264,6 +1271,7 @@
           "m_knight": 9894459574992437766,
           "m_nonCostObj": 13220023044005563302,
           "m_rook": 3328525606780682600,
+          "m_tilemapGenerator": 0,
           "m_tutorialManager": 0,
           "typeName": "ClickPSOkayEvent"
         }
@@ -2736,8 +2744,11 @@
           "Active": true,
           "id": 8326612379150985403,
           "m_attackButton": 1839548868479721930,
+          "m_attackCountText": 0,
           "m_healButton": 3158531729957653660,
+          "m_healCountText": 0,
           "m_rayObj": 4771222732717351773,
+          "m_skillGuideObj": 0,
           "typeName": "SkillButton"
         }
       ],
@@ -6799,6 +6810,7 @@
           "m_settingWindow": 10500202484059138583,
           "m_startButton": 793254361010250082,
           "m_tileMapObj": 10154570672934640085,
+          "m_tilemapGenerator": 0,
           "m_warningWindow": 3229347010474187303,
           "typeName": "ClickStartButton"
         }
@@ -9153,8 +9165,8 @@
         {
           "Active": true,
           "id": 2265729955130946909,
-          "m_body": 1309901842810178711,
-          "m_head": 8652421807051422273,
+          "m_body": 11357877006066424826,
+          "m_head": 2786988773369704404,
           "m_start": 1340938844390133859,
           "typeName": "ArrowObjectPool"
         }
