@@ -22,8 +22,8 @@ void SkillButton::Start()
 		if (!m_rayObj || !m_attackButton || !m_healButton || !m_attackCountText || !m_healCountText)
 				return;
 
-		int attackCount = GameManager::Instance()->GetAttackSkillcount();
-		int healCount = GameManager::Instance()->GetHealSkillcount();
+		int attackCount = GameManager::Instance()->GetMaxAttackSkillCount();
+		int healCount = GameManager::Instance()->GetMaxHealSkillCount();
 
 		m_attackCountText->SetText(std::to_wstring(attackCount));
 		m_healCountText->SetText(std::to_wstring(healCount));

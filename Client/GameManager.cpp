@@ -43,8 +43,8 @@ void GameManager::Start() {
 	if (m_sfxSlider) m_sfxSlider->SetValue(cursfxValue);
 
 	SetMoney(30);// curMoney = 30; // 임시.
-	//healSkillCount = defaultHealSkillCount;
-	//attackSkillCount = defaultAttackSkillCount;
+	healSkillCount = defaultHealSkillCount;
+	attackSkillCount = defaultAttackSkillCount;
 }
 
 void GameManager::SetLife(int life)
@@ -93,7 +93,7 @@ void GameManager::GrantHealSkillReward(int amount)
 		if (amount <= 0) return;
 
 		// 보상은 둘 다 올려주기. 
-		//defaultHealSkillCount += amount;
+		defaultHealSkillCount += amount;
 		healSkillCount += amount;
 }
 
@@ -102,7 +102,7 @@ void GameManager::GrantAttackSkillReward(int amount)
 		if (amount <= 0) return;
 
 		// 보상은 둘 다 올려주기. 
-		//defaultAttackSkillCount += amount;
+		defaultAttackSkillCount += amount;
 		attackSkillCount += amount;
 }
 
