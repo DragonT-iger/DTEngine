@@ -191,6 +191,8 @@ public:
     bool IsOnTrapTile() const { return m_isOnTrapTile; }
     void SetOnTrapTile(bool on) { m_isOnTrapTile = on; }
 
+    void DamageEffect();
+
 private:
     static Vector3 GridToWorld(const Vector2& p);
     static float   DirToYaw(Dir8 d);
@@ -239,4 +241,6 @@ protected:
     Animator* m_anim2 = nullptr;
 
     std::string m_weaponName;
+
+    GameObject* m_Chess = nullptr;
 };

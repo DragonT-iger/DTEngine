@@ -87,7 +87,8 @@ void Dissolved::InjectDissolveMaterila(const std::string& path)
 	if (cmp && effectcmp)
 	{
 		effectcmp->SetTimeMultiplier(0.1f);
-
+		effectcmp->SetEdgeColor(Vector4(0, 0, 0, 1));
+		effectcmp->Reset();
 			if (!path.empty())
 			{
 				Material* mat = ResourceManager::Instance().Load<Material>(path);

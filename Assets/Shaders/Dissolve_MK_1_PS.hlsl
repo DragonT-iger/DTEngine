@@ -20,7 +20,10 @@ float4 PS(PS_INPUT input) : SV_TARGET
     clip(outlineMask);
 
     float4 albedo = g_DiffuseMap.Sample(g_Sampler, input.UV);
-
+    
+    albedo = float4(0.2f, 0.2f, 0.2f, 0.2f);
+    
+    return albedo;
     if (baseMask < 0)
     {
         float edgeFactor = saturate(1.0f - (abs(baseMask) / edgeWidth));
