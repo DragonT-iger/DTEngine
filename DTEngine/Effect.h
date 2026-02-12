@@ -32,6 +32,8 @@ public:
     void SetNoiseScale(float scale) { m_EM.noiseScale = scale; }
     void SetCameraInverrse(const Matrix mat) { m_EM.invcamerarotation = mat; }
     void SetAnimating(bool value) { m_isAnimating = value; }
+
+    void Reset() { m_EM.progress = 0.0f; }
 protected:
     EffectParams m_EM;
     bool m_isAnimating = true; // 에디터에서 체크박스로 제어 가능

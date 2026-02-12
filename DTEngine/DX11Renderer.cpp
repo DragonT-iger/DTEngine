@@ -57,7 +57,7 @@ bool DX11Renderer::Initialize(HWND hwnd, int width, int height, bool vsync)
     m_spriteBatch = std::make_unique<DirectX::DX11::SpriteBatch>(m_context.Get());
 
     try {
-        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/NotoSansKR-Black.spritefont");
+        m_font = std::make_unique<DirectX::DX11::SpriteFont>(m_device.Get(), L"Assets/Fonts/Main_Font_24.spritefont");
 
         if (m_font)
         {

@@ -125,7 +125,7 @@ void ClickPSOkayEvent::SetClick()
 								}
 
 								if (SceneManager::Instance().GetActiveScene()->GetName() != "TutorialScene") {
-									EffectManager::Instance().PlayEffect("2Magic_Circle", go);
+									EffectManager::Instance().PlayEffect("Magic_Circle_2", go);
 								}
 
 								// ally 리스트에 추가해주기. 

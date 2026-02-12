@@ -4,8 +4,10 @@
 #include "Effect.h"
 #include "EffectManager.h"
 #include "SoundManager.h"
+#include "AliceUnit.h"
+#include "RedQueen.h"
 #include <random>
-
+#include "outline.h"
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
@@ -38,6 +40,7 @@ void Unit::Start()
         if (child->_GetOwner()->GetName() == "Chess")
         {
             m_anim = child->_GetOwner()->GetComponent<Animator>();
+            m_Chess = child->_GetOwner();
         }
         else if (child->_GetOwner()->GetName() == "Shield")
         {
@@ -68,13 +71,9 @@ void Unit::SetStats(const UnitStats& s)
     m_hp = m_stats.maxHp;
 }
 
-//shader 변경?
-
 void Unit::TakeDamage(float damage)
 {
-    auto cmp = this->_GetOwner()->GetComponent<Effect>();
-   if(cmp) cmp->SetEffectType(1); //쉐이더 하나 받아서 
-
+    DamageEffect();
     { m_hp = (std::max)(m_hp - damage, 0.0f); }
 }
 
@@ -201,6 +200,16 @@ void Unit::ResetTurnPlan()
     m_animStart = false;
     m_isOnTrapTile = false;
     m_actionResultApplied = false;
+}
+
+void Unit::DamageEffect()
+{
+    Effect* cmp = nullptr;
+
+    if (m_Chess)   cmp = m_Chess->GetComponent<Effect>();
+    else  cmp = GetComponent<Effect>();
+
+     cmp->SetEffectType(1);
 }
 
 Vector3 Unit::GridToWorld(const Vector2& p)
@@ -534,6 +543,8 @@ void Unit::StartDissolve()
             if (cmp)
             {
                 auto cmp_e = child->_GetOwner()->AddComponent<Effect>();
+
+                child->GetComponent<Outline>()->SetActive(false);
 
                 if (this->m_team == Team::Enemy)
                     cmp->SetAlbedoTexture("Assets/Models/Final_Rabbit_Real/Unit__BaseColor.png");
