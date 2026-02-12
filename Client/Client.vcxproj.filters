@@ -210,6 +210,9 @@
     <ClCompile Include="MultiButtonControlEvent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="WASANS.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -390,6 +393,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MultiButtonControlEvent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WASANS.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

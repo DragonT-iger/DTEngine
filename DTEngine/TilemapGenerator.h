@@ -45,6 +45,8 @@ public:
 	static constexpr int PALETTE_SIZE = 11;
     static constexpr int NUM_ENEMIES = 3;
 
+    std::vector<GameObject*>& GetSpawnedTiles() { return m_spawnedTiles; }
+
 public:
 
     Prefab* m_prefab0 = nullptr; 

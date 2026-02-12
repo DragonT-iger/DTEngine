@@ -104,6 +104,7 @@ public:
 
     // 이건 사실 여기 있으면 안되지만.. 타일맵은 여기 받으니까..
     std::vector<GameObject*>& GetEnemyObjects();
+    TilemapGenerator* GetTilemapGenerator() { return m_tilemapGenerator; }
 
     GameObject* GetAliceObjects();
     GameObject* GetRedQueenObjects();

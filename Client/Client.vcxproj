@@ -193,6 +193,7 @@
     <ClCompile Include="TutorialTrigger.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitActionEvent.cpp" />
+    <ClCompile Include="WASANS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTEngine\DTEngine.vcxproj">
@@ -260,6 +261,7 @@
     <ClInclude Include="TutorialTrigger.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitActionEvent.h" />
+    <ClInclude Include="WASANS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
