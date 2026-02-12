@@ -72,7 +72,7 @@ void StageInitializer::Awake()
         break;
     case 4:
         currentMap = m_mapData4;
-        stageFirstText = L"마우스 왼쪽 버튼을 클릭한 채로 \n마우스를 움직여 화면을 돌릴 수 있어";
+        stageFirstText = L"마우스 오른쪽 버튼을 클릭한 채로 \n마우스를 움직여 화면을 돌릴 수 있어";
         if (!m_mushroom || !m_magicBottle)
             return;
         m_mushroom->SetActive(true);
