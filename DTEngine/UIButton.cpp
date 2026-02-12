@@ -157,6 +157,8 @@ void UIButton::SetPressed(bool pressed)
     m_isPressed = pressed;
 
 	//std::cout << "UIButton Pressed State Changed: " << (m_isPressed ? "Pressed" : "Released") << std::endl;
+    
+    //std::cout << "버튼 가지고 있는 오브젝트 이름 : " << _GetOwner()->GetName() << std::endl;
     UpdateVisualState();
 }
 

@@ -9,6 +9,7 @@
 #include "ClientSceneManager.h" 
 #include "Text.h"
 #include "Image.h"
+#include "SoundManager.h"
 
 BEGINPROPERTY(EndSceneManager)
 DTPROPERTY(EndSceneManager, m_dialogueUI)
@@ -22,6 +23,7 @@ ENDPROPERTY()
 
 void EndSceneManager::Start()
 {
+    SoundManager::Instance().StopBGM(true); // 일단 임시로 넣어둠.. 
     NextStep(true); 
 }
 

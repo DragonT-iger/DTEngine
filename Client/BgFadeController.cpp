@@ -173,6 +173,7 @@ void BgFadeController::SetDefeatObj(bool value)
     {
         isVictoryObj = false;
         m_lifeImg->SetActive(value);
+        m_lifeImg->GetComponent<UIButton>()->SetActive(value);
         m_nextRetryImg->SetActive(value);
         m_text->SetActive(value);
         m_mainbuttonImg->SetActive(value);
