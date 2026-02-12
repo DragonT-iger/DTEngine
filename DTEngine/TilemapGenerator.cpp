@@ -275,10 +275,12 @@ void TilemapGenerator::ChangeMark(GameObject* obj)
             // 유닛 타입에 따른 경로 설정
             switch (m_type)
             {
-            case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Bishop_boss.png"; break;
-            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Knight_boss.png"; break;
-            case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Rook_boss.png";   break;
-            default: return; // 정의되지 않은 타입은 리턴
+               
+
+            case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Boss_Bishop.png"; break;
+            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Boss_Knight.png.png"; break;
+            case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Boss_Rook.png";   break;
+            default: return; 
             }
 
             // 리소스 로드 및 적용

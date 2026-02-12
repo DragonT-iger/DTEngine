@@ -19,11 +19,11 @@ bool EffectManager::Initialize()
         "Attack01",
        "2Attack02",
        "2Attack03",
-     "2Magic_Circle",
+       "2Magic_Circle",
         "Heal"
     };
 
-    std::string basePath = "Assets/Prefab/Effect/Effect_";
+    std::string basePath = "Assets/Prefab/Effect/v4/Effect_";
     std::string extension = ".prefab";
 
     for (const auto& key : effectKeys)
@@ -68,7 +68,7 @@ void EffectManager::PlayEffect(const std::string& key, GameObject* target)
 
     Vector3 pos = effectObj->GetTransform()->GetPosition();
 
-    effectObj->GetTransform()->SetPosition(position+pos);
+    effectObj->GetTransform()->SetPosition(position + pos);
     //effectObj->GetTransform()->SetPosition(position);
     auto ctrl = effectObj->GetComponent<MultiSpriteController>();
     if (ctrl)
@@ -119,7 +119,7 @@ void EffectManager::PlayEffect_Targeting(const std::string& key, GameObject* fro
     forward.Cross(right, up); 
     up.Normalize();
 
-    offset.z += 1.0f; 
+    offset.z += 3.0f; 
 
     Vector3 worldOffset = (right * offset.x) + (up * offset.y) + (forward * offset.z);
     Vector3 finalPos = startPos + worldOffset;
