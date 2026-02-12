@@ -259,6 +259,7 @@ bool Game::Initialize()
 	//std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
 	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
 
+#ifdef _DEBUG
 
 	SceneManager::Instance().SetOnSceneChangeCallback([this]()
 		{
@@ -268,6 +269,8 @@ bool Game::Initialize()
 			}
 		});
 
+
+#endif // _DEBUG
 	//testScene.SaveFile("Scenes/SampleScene.scene");
 
 

@@ -54,6 +54,7 @@ SpriteSheetDim ParseSpriteSheetDimFromPath(const std::string& path)
     }
     catch (...)
     {
+        // 숫자가 아니거나 변환 실패 시 기본값 반환
         return { 0, 0 };
     }
 }
@@ -66,6 +67,7 @@ void SpriteEffect::Update(float dTime)
     if (m_cols == 0 || m_rows == 0) return;
     if (m_frameInterpolation <= 0.f) return;
 
+    // 비루프 + 이미 끝났으면 더 이상 update 안 함
     if (!m_loop && m_finished) return;
 
     m_currentTime += dTime;
@@ -79,11 +81,12 @@ void SpriteEffect::Update(float dTime)
     }
     else
     {
+        // 끝났으면: 초기화 + update stop
         if (frameIdx >= totalFrames)
         {
-            ResetToFirstFrame();     
+            ResetToFirstFrame();     // “00으로”
             m_finished = true;
-            m_play = false;          
+            m_play = false;          // update 안 받게
             return;
         }
     }
@@ -160,10 +163,12 @@ void SpriteEffect::BindWrapped()
         if (mat) mat->SetUVTransform(m_uvTrasnform);
     }
 
-    if (XRotated) m_EM.OwnRotate = DirectX::SimpleMath::Matrix::CreateRotationX(DirectX::XM_PIDIV2);
-    else  m_EM.OwnRotate = DirectX::SimpleMath::Matrix();
-   
-
+    if (XRotated)
+    {
+        Matrix rotX = DirectX::SimpleMath::Matrix::CreateRotationX(DirectX::XM_PIDIV2);
+        m_EM.invcamerarotation = (rotX).Transpose();
+    }
+   //else 인 경우는 밖에서 받음 ㅇ
     __super::BindEP();
 }
 

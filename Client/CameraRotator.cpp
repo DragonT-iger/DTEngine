@@ -88,6 +88,13 @@ void CameraRotator::HandleInput(float deltaTime)
         Vector3 pos = GetTransform()->GetPosition();
         pos.z += moveDir.z * m_panSpeed * zoomFactor * deltaTime;
 
+        if (pos.z < -10) {
+            pos.z = -10;
+        }
+        if (pos.z > 50) {
+            pos.z = 50;
+        }
+
         GetTransform()->SetPosition(pos);
     }
 

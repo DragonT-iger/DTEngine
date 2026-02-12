@@ -20,6 +20,8 @@
 #include "Effect.h"
 #include "GameManager.h"
 
+#include "EffectManager.h"
+
 BEGINPROPERTY(ClickPSOkayEvent)
 DTPROPERTY(ClickPSOkayEvent, m_nonCostObj)
 DTPROPERTY(ClickPSOkayEvent, m_button)
@@ -118,6 +120,8 @@ void ClickPSOkayEvent::SetClick()
 								{
 										m_combatObj->GetComponent<CombatController>()->AddAllyUnit(allyC);
 								}
+
+								EffectManager::Instance().PlayEffect("2Magic_Circle", go);
 
 								// ally 리스트에 추가해주기. 
 								//if (GameManager::Instance())

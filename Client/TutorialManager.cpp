@@ -16,6 +16,7 @@
 #include "GameManager.h"
 #include "ClientSceneManager.h"
 #include "Image.h"
+#include "SoundManager.h"
 
 
 BEGINPROPERTY(TutorialManager)
@@ -79,7 +80,11 @@ void TutorialManager::Update(float deltaTime)
             ClientSceneManager::Instance().LoadScene("MainGameScene");
         }
         else {
-            NextStep();
+            if (m_canProceedToNextStep)
+            {
+                SoundManager::Instance().PlayOneShot("SFX/UI_Click_ver.2");
+                NextStep();
+            }
         }
     }
 
