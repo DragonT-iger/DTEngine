@@ -16,7 +16,7 @@ public:
 
 	std::vector<GameObject*>& GetHeads() { return m_heads; }
 	std::vector<GameObject*>& GetBodys() { return m_bodys; }
-	std::vector<GameObject*>& GetStarts() { return m_starts; }
+	//std::vector<GameObject*>& GetStarts() { return m_starts; }
 
 	void DeactivateAll();
 
@@ -27,5 +27,5 @@ private:
 
 	std::vector<GameObject*> m_heads;
 	std::vector<GameObject*> m_bodys;
-	std::vector<GameObject*> m_starts;
+	//std::vector<GameObject*> m_starts;
 };

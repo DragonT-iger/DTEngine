@@ -145,7 +145,7 @@ void RayCastHitEvent::RaycastCheck()
 								std::vector<ArrowSegment> path = enemy->GetArrowSegments();
 								std::vector<GameObject*> heads = m_arrowPool->GetHeads();
 								std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
-								std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+								//std::vector<GameObject*> starts = m_arrowPool->GetStarts();
 
 								m_arrowPool->DeactivateAll();
 
@@ -356,7 +356,7 @@ void RayCastHitEvent::RaycastCheck()
 							std::vector<ArrowSegment> path = enemy->GetArrowSegments();
 							std::vector<GameObject*> heads = m_arrowPool->GetHeads();
 							std::vector<GameObject*> bodys = m_arrowPool->GetBodys();
-							std::vector<GameObject*> starts = m_arrowPool->GetStarts();
+							//std::vector<GameObject*> starts = m_arrowPool->GetStarts();
 
 							m_arrowPool->DeactivateAll();
 
