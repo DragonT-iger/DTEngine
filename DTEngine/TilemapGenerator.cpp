@@ -43,9 +43,6 @@ DTPROPERTY(TilemapGenerator, m_enemy0)
 DTPROPERTY(TilemapGenerator, m_enemy1)
 DTPROPERTY(TilemapGenerator, m_enemy2)
 
-DTPROPERTY(TilemapGenerator, m_alice)
-DTPROPERTY(TilemapGenerator, m_redQueen)
-
 ENDPROPERTY()
 
 void TilemapGenerator::Start()
@@ -470,6 +467,7 @@ void TilemapGenerator::SpawnUnits()
             {
                 instance->GetTransform()->SetPosition(Vector3{ rq.pos.x * 2.0f, 1.0f, rq.pos.y * 2.0f });
                 instance->SetActive(true);
+                instance->GetTransform()->SetParent(GetTransform());
 
                 m_spawnedRedQueen = instance;
             }

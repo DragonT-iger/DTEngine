@@ -20,7 +20,7 @@ static const UnitStats UnitStatsTable[] =
 
 void Unit::Start()
 {
-    if (_GetOwner()->GetName() == "unit_Alice_ttttst3" || _GetOwner()->GetName() == "unit_Queen_tttst")
+    if (_GetOwner()->GetName() == "unit_Alice_4" || _GetOwner()->GetName() == "unit_Queen_3")
     {
         m_anim = _GetOwner()->GetComponent<Animator>();
     }
