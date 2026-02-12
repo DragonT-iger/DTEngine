@@ -226,7 +226,7 @@ void TilemapGenerator::BuildMap()
 
             if (index == 2 || index == 3)
             {
-                EffectManager::Instance().PlayEffect("5Magic_Circle", tr->_GetOwner());
+                EffectManager::Instance().PlayEffect("6Magic_Circle", tr->_GetOwner());
             }
 
             instance->SetActive(true);
@@ -285,10 +285,10 @@ void TilemapGenerator::ChangeMark(GameObject* obj)
             switch (m_type)
             {
                
-
             case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Boss_Bishop.png"; break;
-            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Boss_Knight.png.png"; break;
+            case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Boss_Knight.png"; break;
             case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Boss_Rook.png";   break;
+
             default: return; 
             }
 
@@ -430,9 +430,11 @@ void TilemapGenerator::SpawnUnits()
         
         enemy->SetBoss(info.isBoss);
 
-        if (enemy->IsBoss()) ChangeMark(instance);
 
         enemy->SetUnitType(info.type);
+
+        if (enemy->IsBoss()) ChangeMark(instance);
+
         enemy->SetPath(info.pathPoints);
 
         m_spawnedEnemys[i] = instance;

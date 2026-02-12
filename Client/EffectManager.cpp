@@ -20,6 +20,7 @@ bool EffectManager::Initialize()
        "2Attack02",
        "2Attack03",
        "5Magic_Circle",
+       "6Magic_Circle",
        "Magic_Circle_2",
         "Heal"
     };

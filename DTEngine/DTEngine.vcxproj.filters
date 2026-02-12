@@ -906,5 +906,11 @@
     <FxCompile Include="..\Assets\Shaders\Gamma_Correction_PS.hlsl">
       <Filter>Shader\PostProcessing</Filter>
     </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\HP_Bar_VS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Assets\Shaders\HP_Bar_PS.hlsl">
+      <Filter>Shader\Default</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
