@@ -45,7 +45,7 @@ private:
     float m_dragThreshold = 100.0f;  
     bool m_hasRotatedThisDrag = false;
 
-    float m_panSpeed = 12.0f;
+    float m_panSpeed = 18.0f;
 
     float m_currentOrthoSize = 5.0f;
     float m_targetOrthoSize = 5.0f;

@@ -279,6 +279,10 @@ void EndSceneManager::Update(float deltaTime)
             NextStep(true);
         }
     }
+    if (m_currentStep == EndStep::PreCreditDarken) {
+        SoundManager::Instance().StopBGM(true);
+        SoundManager::Instance().PlayBGM("BGM/Cheshire's Theme", true);
+    }
 
     if (IsCreditStep(m_currentStep))
     {
