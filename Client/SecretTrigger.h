@@ -16,6 +16,7 @@ private:
 		GameObject* m_obj = nullptr;
 		GameObject* m_hiddenObj = nullptr;
 		UIButton* m_button = nullptr;
+		UIButton* m_hiddenButton = nullptr;
 		Vector3 m_size;
 };
 
