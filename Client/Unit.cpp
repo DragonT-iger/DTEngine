@@ -8,6 +8,9 @@
 #include "RedQueen.h"
 #include <random>
 #include "outline.h"
+
+#include "SceneManager.h"
+#include "Scene.h"
 static const UnitStats UnitStatsTable[] =
 {
     // 공, 방, 체, 공격범위
@@ -204,6 +207,10 @@ void Unit::ResetTurnPlan()
 
 void Unit::DamageEffect()
 {
+
+    if (SceneManager::Instance().GetActiveScene()->GetName() == "TutorialScene" && m_Chess)
+        return;
+
     Effect* cmp = nullptr;
 
     if (m_Chess)   cmp = m_Chess->GetComponent<Effect>();
