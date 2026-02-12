@@ -1189,6 +1189,10 @@ void CombatController::ResolveTurnAction(Unit* me)
             me->SetDir(me->GetAttackPos());
             target->TakeDamage(damage);
 
+
+            if (me->GetUnitType() == UnitType::Bishop)
+                EffectManager::Instance().PlayEffect("2Attack03", target->_GetOwner());
+
             //me->StartAttackAnim();
         }
 
@@ -1230,8 +1234,7 @@ void CombatController::ApplyActionResult(Unit* me)
             target->TakeDamage(damage);
 
 
-            if (me->GetUnitType() == UnitType::Bishop)
-                EffectManager::Instance().PlayEffect("2Attack03", target->_GetOwner());
+           
         }
         me->SetActionResultApplied(true);
     } break;
