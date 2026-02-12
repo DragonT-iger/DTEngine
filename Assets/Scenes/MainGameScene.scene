@@ -8338,6 +8338,7 @@
           "m_leftRSWindowBG": 14800340861935470279,
           "m_rightPSWindowBG": 14165272807283552,
           "m_rightRSWindowBG": 82358940468270108,
+          "m_settingWindow": 10500202484059138583,
           "m_tilemapGenerator": 17243013143650241415,
           "m_victoryWindowImage": 17812575110181904750,
           "typeName": "CameraRotator"

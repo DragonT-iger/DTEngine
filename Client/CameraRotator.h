@@ -59,5 +59,7 @@ private:
     GameObject* m_leftRSWindowBG = nullptr;
     Image* m_victoryWindowImage = nullptr;
 
+    GameObject* m_settingWindow = nullptr;
+
 
 };

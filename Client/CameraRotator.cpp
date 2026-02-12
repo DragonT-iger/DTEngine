@@ -17,6 +17,7 @@ DTPROPERTY(CameraRotator, m_leftPSWindowBG)
 DTPROPERTY(CameraRotator, m_rightRSWindowBG)
 DTPROPERTY(CameraRotator, m_leftRSWindowBG)
 DTPROPERTY(CameraRotator, m_victoryWindowImage)
+DTPROPERTY(CameraRotator, m_settingWindow)
 
 
 ENDPROPERTY()
@@ -54,6 +55,11 @@ void CameraRotator::Update(float deltaTime)
     if (m_victoryWindowImage->IsActive()) {
         return;
     }
+
+    if (m_settingWindow->IsActive()) {
+        return;
+    }
+
     float unscaledDeltatime = SceneManager::Instance().GetUnscaledDeltaTime();
 
     HandleInput(unscaledDeltatime);
