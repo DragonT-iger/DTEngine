@@ -280,6 +280,7 @@
           "m_additionalFall1": 0,
           "m_aliceDialogueText": 12484987367814263988,
           "m_aliceDialogueUI": 7113545219377372366,
+          "m_chatNext": 9305590142413052508,
           "m_chesherDialogueText": 7888410864918192925,
           "m_chesherDialogueUI": 11648235397986673678,
           "m_combatController": 10045121828271408266,
@@ -5050,32 +5051,77 @@
     },
     {
       "active": true,
-      "components": [],
-      "id": 15892503467223746151,
-      "name": "GameObject",
+      "components": [
+        {
+          "Active": true,
+          "id": 3398352628663261295,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_orderInLayer": 2,
+          "m_textureID": 2925151103467306181,
+          "typeName": "Image"
+        },
+        {
+          "Active": true,
+          "id": 1810193943806230907,
+          "m_hoverColor": {
+            "w": 0.8999999761581421,
+            "x": 0.800000011920929,
+            "y": 0.800000011920929,
+            "z": 0.800000011920929
+          },
+          "m_interactable": true,
+          "m_normalColor": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "m_pressedColor": {
+            "w": 0.8999999761581421,
+            "x": 0.6000000238418579,
+            "y": 0.6000000238418579,
+            "z": 0.6000000238418579
+          },
+          "typeName": "UIButton"
+        },
+        {
+          "Active": true,
+          "id": 5877212920166596822,
+          "m_Button": 1810193943806230907,
+          "m_EndSceneManager": 5510044032766754135,
+          "typeName": "EndSceneTrigger"
+        }
+      ],
+      "id": 9305590142413052508,
+      "name": "ChatNext",
       "tag": "Untagged",
       "transform": {
-        "id": 13762508404858584550,
+        "id": 4792268043848778718,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 0,
+        "m_parent": 16960684287074828472,
         "m_position": {
-          "x": 0.0,
-          "y": 0.0,
+          "x": 1684.739013671875,
+          "y": 1099.5,
           "z": 0.0
         },
         "m_rotation": {
           "w": 1.0,
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
         "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
+          "x": 168.89999389648438,
+          "y": 50.0,
           "z": 1.0
         }
       }

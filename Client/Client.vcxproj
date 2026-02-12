@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AliceComponent.cpp" />
     <ClCompile Include="ArrowObjectPool.cpp" />
+    <ClCompile Include="BossDialogueTrigger.cpp" />
     <ClCompile Include="BreakableWall.cpp" />
     <ClCompile Include="BgFadeController.cpp" />
     <ClCompile Include="CameraControlEvent.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="DialogueController.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EndSceneManager.cpp" />
+    <ClCompile Include="EndSceneTrigger.cpp" />
     <ClCompile Include="EnemyUnit.cpp" />
     <ClCompile Include="ESCEvent.cpp" />
     <ClCompile Include="ExitButtonEvent.cpp" />
@@ -167,6 +169,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameOverEvent.cpp" />
     <ClCompile Include="HPBarFollowEvent.cpp" />
+    <ClCompile Include="ImageSwitcher.cpp" />
     <ClCompile Include="ImageVisualUpdateEvent.cpp" />
     <ClCompile Include="LoadSceneEvent.cpp" />
     <ClCompile Include="main.cpp" />
@@ -179,6 +182,7 @@
     <ClCompile Include="Rotator.cpp" />
     <ClCompile Include="MonitorScreen.cpp" />
     <ClCompile Include="RuleImageVisualEvent.cpp" />
+    <ClCompile Include="SecretTrigger.cpp" />
     <ClCompile Include="SelectIndexEvent.cpp" />
     <ClCompile Include="SetActiveEvent.cpp" />
     <ClCompile Include="SetMainSceneEvent.cpp" />
@@ -203,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="AliceComponent.h" />
     <ClInclude Include="ArrowObjectPool.h" />
+    <ClInclude Include="BossDialogueTrigger.h" />
     <ClInclude Include="BreakableWall.h" />
     <ClInclude Include="BgFadeController.h" />
     <ClInclude Include="CameraControlEvent.h" />
@@ -229,6 +234,7 @@
     <ClInclude Include="DialogueController.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="EndSceneManager.h" />
+    <ClInclude Include="EndSceneTrigger.h" />
     <ClInclude Include="EnemyUnit.h" />
     <ClInclude Include="ESCEvent.h" />
     <ClInclude Include="ExitButtonEvent.h" />
@@ -236,6 +242,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameOverEvent.h" />
     <ClInclude Include="HPBarFollowEvent.h" />
+    <ClInclude Include="ImageSwitcher.h" />
     <ClInclude Include="ImageVisualUpdateEvent.h" />
     <ClInclude Include="LoadSceneEvent.h" />
     <ClInclude Include="MakeSetActiveEvent.h" />
@@ -247,6 +254,7 @@
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="MonitorScreen.h" />
     <ClInclude Include="RuleImageVisualEvent.h" />
+    <ClInclude Include="SecretTrigger.h" />
     <ClInclude Include="SelectIndexEvent.h" />
     <ClInclude Include="SetActiveEvent.h" />
     <ClInclude Include="SetMainSceneEvent.h" />

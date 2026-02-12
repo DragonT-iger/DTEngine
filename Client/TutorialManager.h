@@ -90,6 +90,7 @@ private:
     GameObject* m_infoUI = nullptr;
     Prefab* m_glowTilePrefab = nullptr;
     Prefab* m_redGlowTilePrefab = nullptr;
+    Prefab* m_originalTilemap = nullptr;
 
     bool m_rayActive = false;
     bool m_aliceDead = false;
@@ -119,6 +120,8 @@ private:
     GameObject* m_tutorialArrow3 = nullptr;
     GameObject* m_tutorialArrow4 = nullptr;
     GameObject* m_tutorialArrow5 = nullptr;
+
+    GameObject* m_tutorialPass = nullptr;
 
     Prefab* m_defenseTile = nullptr;
 };

@@ -208,7 +208,7 @@
           "m_rightRSWinodwBG": 82358940468270108,
           "m_settingWindowBG": 10500202484059138583,
           "m_skillButton": 619973099615200002,
-          "m_skillGuideObj": 0,
+          "m_skillGuideObj": 5768408878176791174,
           "m_startButton": 13952739433572599621,
           "m_tutorialManager": 0,
           "m_warningWindowBG": 3229347010474187303,
@@ -2693,7 +2693,7 @@
           "m_healButton": 3158531729957653660,
           "m_healCountText": 964351788859007823,
           "m_rayObj": 4771222732717351773,
-          "m_skillGuideObj": 0,
+          "m_skillGuideObj": 5768408878176791174,
           "typeName": "SkillButton"
         }
       ],
@@ -4907,7 +4907,7 @@
         {
           "Active": true,
           "id": 3380641475858076824,
-          "m_ObjWindow": 0,
+          "m_ObjWindow": 10500202484059138583,
           "m_button": 3049911565632274764,
           "typeName": "SetMainSceneEvent"
         }
@@ -5128,9 +5128,9 @@
           "m_FontID": 0,
           "m_color": {
             "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
@@ -5176,9 +5176,9 @@
           "m_FontID": 0,
           "m_color": {
             "w": 1.0,
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
@@ -5366,7 +5366,7 @@
           },
           "m_fontSize": 1.0,
           "m_orderInLayer": 0,
-          "m_text": "추격 전략을 사용하면 금이 간 벽을 \n부수고 지나갈 수 있으니 참고해",
+          "m_text": "화면 하단의 아이템창을 누른 뒤, \n대상을 클릭해서 아이템을 사용할 수 있어",
           "typeName": "Text"
         }
       ],
@@ -5463,8 +5463,8 @@
         },
         "m_parent": 5061715440723838360,
         "m_position": {
-          "x": -0.25,
-          "y": 0.33000001311302185,
+          "x": -0.44999998807907104,
+          "y": 0.3199999928474426,
           "z": 0.0
         },
         "m_rotation": {
@@ -5474,7 +5474,7 @@
           "z": -0.0
         },
         "m_scale": {
-          "x": 0.10000000149011612,
+          "x": 0.3199999928474426,
           "y": 0.10000000149011612,
           "z": 1.0
         }
@@ -5760,7 +5760,7 @@
       }
     },
     {
-      "active": false,
+      "active": true,
       "components": [
         {
           "Active": true,
@@ -8407,7 +8407,7 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
@@ -8861,47 +8861,47 @@
       }
     },
     {
-      "active": true,
+      "active": false,
       "components": [
         {
           "Active": true,
-          "id": 16571642761500929758,
+          "id": 2122348359418238881,
           "m_color": {
-            "x": 7.0,
-            "y": 1.7999999523162842,
-            "z": -1.100000023841858
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
           },
-          "m_intensity": 0.20000000298023224,
-          "m_range": 20.0,
-          "m_type": 1,
-          "typeName": "Light"
+          "m_orderInLayer": 0,
+          "m_textureID": 9470597464644599727,
+          "typeName": "Image"
         }
       ],
-      "id": 6048448526984874890,
-      "name": "PointLight",
+      "id": 5768408878176791174,
+      "name": "SkillGuideObj",
       "tag": "Untagged",
       "transform": {
-        "id": 12863787541843198329,
+        "id": 10289516761530978414,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 0,
+        "m_parent": 11426099208464666270,
         "m_position": {
-          "x": 6.3420000076293945,
-          "y": 12.567000389099121,
-          "z": 11.729999542236328
+          "x": -300.0,
+          "y": -1100.0,
+          "z": 0.0
         },
         "m_rotation": {
           "w": 1.0,
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
         "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
+          "x": 700.0,
+          "y": 90.0,
           "z": 1.0
         }
       }
@@ -8911,114 +8911,50 @@
       "components": [
         {
           "Active": true,
-          "id": 1367579581169488339,
-          "m_Boundary": 2.0,
-          "m_Speed": 0.10000000149011612,
-          "typeName": "Levitating"
-        }
-      ],
-      "id": 3031979197538544830,
-      "name": "Final_BackGround_Cylinder",
-      "tag": "Untagged",
-      "transform": {
-        "id": 10628586096983488192,
-        "m_editorEulerAngles": {
-          "x": 90.0,
-          "y": 0.0,
-          "z": -0.0
-        },
-        "m_parent": 0,
-        "m_position": {
-          "x": 4.508999824523926,
-          "y": -80.76200103759766,
-          "z": 10.47599983215332
-        },
-        "m_rotation": {
-          "w": 0.7071067094802856,
-          "x": 0.7071067690849304,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "m_scale": {
-          "x": 25.0,
-          "y": 25.0,
-          "z": 55.79999923706055
-        }
-      }
-    },
-    {
-      "active": true,
-      "components": [
-        {
-          "Active": true,
-          "MaterialInstance": {
-            "Color": [
-              1.0,
-              1.0,
-              1.0,
-              1.0
-            ],
-            "CullMode": 1,
-            "Offset": [
-              0.0,
-              0.0
-            ],
-            "RenderMode": 0,
-            "ShadowBias": 0.004999999888241291,
-            "ShadowScale": 1.0,
-            "Textures": {
-              "7": 12642361992085805742
-            },
-            "Tiling": [
-              1.0,
-              1.0
-            ]
+          "id": 10150370562226263490,
+          "m_color": {
+            "w": 1.0,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
           },
-          "id": 1616129413158963655,
-          "m_materialID": 10057328170734293766,
-          "m_meshIndex": 0,
-          "m_modelID": 12237453971953167360,
-          "typeName": "MeshRenderer"
+          "m_orderInLayer": 0,
+          "m_textureID": 9728408131212704457,
+          "typeName": "Image"
         },
         {
           "Active": true,
-          "id": 14766641519003113602,
-          "m_SkyBoxColor": {
-            "w": 0.5099999904632568,
-            "x": 0.8389999866485596,
-            "y": 0.5529999732971191,
-            "z": 0.5490000247955322
-          },
-          "m_SkyBoxID": 9504857397457920793,
-          "typeName": "SkyBoxComponent"
+          "id": 1126196497239667009,
+          "m_obj": 1443532965570328810,
+          "typeName": "ImageSwitcher"
         }
       ],
-      "id": 9306066698044264192,
-      "name": "Cylinder",
+      "id": 1443532965570328810,
+      "name": "StageImg",
       "tag": "Untagged",
       "transform": {
-        "id": 4727603551371249949,
+        "id": 4303285566022651337,
         "m_editorEulerAngles": {
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
         },
-        "m_parent": 10628586096983488192,
+        "m_parent": 5061715440723838360,
         "m_position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": -0.17900000512599945
+          "x": -0.8999999761581421,
+          "y": -0.8347216844558716,
+          "z": 0.0
         },
         "m_rotation": {
           "w": 1.0,
-          "x": 0.0,
+          "x": -0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -0.0
         },
         "m_scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 0.30000001192092896
+          "x": 0.41999998688697815,
+          "y": 0.18000000715255737,
+          "z": 1.0
         }
       }
     }

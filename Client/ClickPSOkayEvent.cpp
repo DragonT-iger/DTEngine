@@ -125,7 +125,7 @@ void ClickPSOkayEvent::SetClick()
 								}
 
 								if (SceneManager::Instance().GetActiveScene()->GetName() != "TutorialScene") {
-									EffectManager::Instance().PlayEffect("2Magic_Circle", go);
+									EffectManager::Instance().PlayEffect("Magic_Circle_2", go);
 								}
 
 								// ally 리스트에 추가해주기. 
@@ -179,7 +179,7 @@ void ClickPSOkayEvent::SetClick()
 						}
 
 						// 생성 성공이니까 manager unit count 증가시켜주기.
-						//GameManager::Instance()->SetMoney(managerMoney - m_cost);
+						GameManager::Instance()->SetMoney(managerMoney - m_cost);
 						if (m_RSWindow)
 						{
 								auto rswindow = m_RSWindow->GetComponent<OpenRSEvent>();

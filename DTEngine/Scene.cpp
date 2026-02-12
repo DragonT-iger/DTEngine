@@ -634,6 +634,7 @@ bool Scene::Raycast2(const Ray& rayWorld, GameObject*& outHit, float& outTWorld)
 
         if (go->GetName() == "Skybox(temp)") continue; // 나중에 스카이박스 처리 바꿔주기.
         if (go->GetName() == "Tile_Stain_MK_2") continue;
+        if (go->GetName() == "Magic_Circle") continue;
 
         if (!go || !go->IsActiveInHierarchy()) continue;
         if (go->GetComponent<Image>()) continue;

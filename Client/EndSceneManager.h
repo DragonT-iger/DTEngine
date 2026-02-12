@@ -1,5 +1,6 @@
 #pragma once
 #include "MonoBehaviour.h"
+#include "SimpleMathHelper.h"
 
 class GameObject;
 class CombatController;
@@ -70,6 +71,8 @@ private:
 
     GameObject* m_additionalFall1 = nullptr;
     GameObject* m_additionalFall2 = nullptr;
+
+    GameObject* m_chatNext = nullptr;
 
 
     CombatController* m_combatController = nullptr;
