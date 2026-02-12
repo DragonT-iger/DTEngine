@@ -482,6 +482,25 @@ bool CombatController::EndPhase()
 
         if (aliveAllyCount == 0 && m_stageResult != StageResult::Win) m_stageResult = StageResult::Lose; // 전멸하면 패배
 
+
+        if (m_redQueenUnit && m_redQueenUnit->IsAlive())
+        {
+            int aliveEnemyCount = 0;
+            for (EnemyUnit* enemy : m_enemyUnits)
+            {
+                if (enemy && enemy->IsAlive()) ++aliveEnemyCount;
+            }
+            
+            int movableAllyCount = 0;
+            for (AllyUnit* ally : m_allyUnits)
+            {
+                if (ally && ally->IsAlive() && ally->GetMoveRule() != MoveRule::Hold) ++movableAllyCount;
+            }
+
+            // 붉은 여왕이 살아있는데 다른 적은 다 죽었고, 살아있는 아군이 전부 대기면 패배.
+            if (aliveEnemyCount == 0 && movableAllyCount == 0 && m_stageResult != StageResult::Win) m_stageResult = StageResult::Lose;
+        }
+
         return false;
     }   
 
