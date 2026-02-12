@@ -165,7 +165,7 @@
         }
       ],
       "id": 12792323375294926988,
-      "name": "Directional Light",
+      "name": "Directional Light_ending",
       "tag": "Untagged",
       "transform": {
         "id": 17987380289712910369,
@@ -5144,7 +5144,7 @@
         }
       ],
       "id": 13344592000985756479,
-      "name": "PointLight",
+      "name": "PointLight_ending",
       "tag": "Untagged",
       "transform": {
         "id": 11985063086611721247,
