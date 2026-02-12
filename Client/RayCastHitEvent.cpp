@@ -457,39 +457,62 @@ void RayCastHitEvent::RaycastCheck()
 
 void RayCastHitEvent::ToggleSettingWindow()
 {
-		if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
-				return;
+	if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
+		return;
 
-		if (m_finishGame)
-		{
-				//std::cout << "게임끝남" << std::endl;
-				return;
-		}
-				
-		if (m_isAttackSkillOn)
-		{
-				m_isAttackSkillOn = false;	
+	if (m_finishGame)
+	{
+		return;
+	}
 
-				if (m_skillGuideObj->IsActive())
-						m_skillGuideObj->SetActive(false);
-		}
-		if (m_isHealSkillOn)
-		{
-				m_isHealSkillOn = false;
+	// 1. 스킬(공격/힐) 사용 모드 취소
+	if (m_isAttackSkillOn || m_isHealSkillOn)
+	{
+		m_isAttackSkillOn = false;
+		m_isHealSkillOn = false;
 
-				if (m_skillGuideObj->IsActive())
-						m_skillGuideObj->SetActive(false);
-		}
+		if (m_skillGuideObj && m_skillGuideObj->IsActive())
+			m_skillGuideObj->SetActive(false);
 
-		if (m_warningWindowBG->IsActive())
-		{
-				// warningwindow 꺼주고. isStart 다시 set 해주기.
-				m_warningWindowBG->SetActive(false);
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
 
-				if (!m_isStartBattle)
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
-		}
-		ApplySettingWindow();
+		return; 
+	}
+
+	if (m_warningWindowBG->IsActive())
+	{
+		m_warningWindowBG->SetActive(false);
+
+		if (!m_isStartBattle)
+			m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
+		SetButtons(true);
+
+		return; 
+	}
+	bool isOtherWindowOpen = false;
+	if (m_rightPSWinodwBG && m_rightPSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_rightRSWinodwBG && m_rightRSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_leftPSWinodwBG && m_leftPSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_leftRSWinodwBG && m_leftRSWinodwBG->IsActive()) isOtherWindowOpen = true;
+
+	if (isOtherWindowOpen)
+	{
+		CloseAllWindows(); 
+
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
+		SetButtons(true);
+
+		return;
+	}
+	ApplySettingWindow();
 }
 
 void RayCastHitEvent::ApplySettingWindow()
