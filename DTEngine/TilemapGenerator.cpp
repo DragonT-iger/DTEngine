@@ -285,10 +285,10 @@ void TilemapGenerator::ChangeMark(GameObject* obj)
             switch (m_type)
             {
                
-
             case UnitType::Bishop: path = "Assets/Models/UI/Alice_UI/HP_Boss_Bishop.png"; break;
             case UnitType::Knight: path = "Assets/Models/UI/Alice_UI/HP_Boss_Knight.png"; break;
             case UnitType::Rook:   path = "Assets/Models/UI/Alice_UI/HP_Boss_Rook.png";   break;
+
             default: return; 
             }
 
@@ -430,9 +430,11 @@ void TilemapGenerator::SpawnUnits()
         
         enemy->SetBoss(info.isBoss);
 
-        if (enemy->IsBoss()) ChangeMark(instance);
 
         enemy->SetUnitType(info.type);
+
+        if (enemy->IsBoss()) ChangeMark(instance);
+
         enemy->SetPath(info.pathPoints);
 
         m_spawnedEnemys[i] = instance;
