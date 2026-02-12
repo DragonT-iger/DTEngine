@@ -209,6 +209,8 @@ void Unit::DamageEffect()
     if (m_Chess)   cmp = m_Chess->GetComponent<Effect>();
     else  cmp = GetComponent<Effect>();
 
+    if (!cmp) return;
+
      cmp->SetEffectType(1);
 }
 
