@@ -450,7 +450,7 @@ void TutorialManager::NextStep(bool force)
     int nextStepIndex = (int)m_CurrentStep + 1;
     m_CurrentStep = (TutorialStep)nextStepIndex;
 
-    std::cout << "Step Index: " << nextStepIndex << std::endl;
+    //std::cout << "Step Index: " << nextStepIndex << std::endl;
 
     switch (m_CurrentStep)
     {
@@ -846,7 +846,7 @@ void TutorialManager::NextStep(bool force)
     break;
 
     default:
-        std::cout << "튜토리얼 끝" << std::endl;
+        //std::cout << "튜토리얼 끝" << std::endl;
         break;
     }
 }

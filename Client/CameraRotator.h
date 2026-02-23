@@ -4,7 +4,7 @@
 
 class TilemapGenerator;
 class Camera;
-
+class Image;
 class CameraRotator : public MonoBehaviour
 {
     DTGENERATED_BODY(CameraRotator)
@@ -45,13 +45,21 @@ private:
     float m_dragThreshold = 100.0f;  
     bool m_hasRotatedThisDrag = false;
 
-    float m_panSpeed = 12.0f;
+    float m_panSpeed = 18.0f;
 
     float m_currentOrthoSize = 5.0f;
     float m_targetOrthoSize = 5.0f;
     float m_zoomSpeed = 0.2f;
     float m_minSize = 1.0f;         // 최소 사이즈 (최대 확대)
     float m_maxSize = 4.0f;         // 최대 사이즈 (최대 축소)
+
+    GameObject* m_rightPSWindowBG = nullptr;
+    GameObject* m_leftPSWindowBG = nullptr;
+    GameObject* m_rightRSWindowBG = nullptr;
+    GameObject* m_leftRSWindowBG = nullptr;
+    Image* m_victoryWindowImage = nullptr;
+
+    GameObject* m_settingWindow = nullptr;
 
 
 };

@@ -39,19 +39,19 @@ void ClientSceneManager::LoadScene(const std::string& sceneName)
 
 void ClientSceneManager::InitTitleScene()
 {
-    std::cout << "[ClientSceneManager] Title Scene Initialization..." << std::endl;
+    //std::cout << "[ClientSceneManager] Title Scene Initialization..." << std::endl;
     GameManager::Instance()->ResetLifeAndMoney();
     GameManager::Instance()->SetStageLevel(1);
 }
 
 void ClientSceneManager::InitInGameScene()
 {
-    std::cout << "[ClientSceneManager] In-Game Initialization..." << std::endl;
+    //std::cout << "[ClientSceneManager] In-Game Initialization..." << std::endl;
 }
 
 void ClientSceneManager::InitEndingScene()
 {
-    std::cout << "[ClientSceneManager] Ending Scene Initialization..." << std::endl;
+    //std::cout << "[ClientSceneManager] Ending Scene Initialization..." << std::endl;
 }
 
 void ClientSceneManager::InitTutorialScene()

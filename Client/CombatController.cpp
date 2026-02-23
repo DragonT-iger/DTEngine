@@ -583,7 +583,7 @@ bool CombatController::EndPhase()
 
         if (m_stageResult == StageResult::Win)
         {
-            std::cout << "Win!!!!!!!!!!!!" << std::endl;
+            //std::cout << "Win!!!!!!!!!!!!" << std::endl;
             if (m_redQueenUnit) m_redQueenUnit->StartQueenDieAnim();
             
             for (AllyUnit* ally : m_allyUnits)
@@ -616,7 +616,7 @@ bool CombatController::EndPhase()
         }
         else if (m_stageResult == StageResult::Lose)
         {
-            std::cout << "Lose!!!!!!!!!!!!" << std::endl;
+            //std::cout << "Lose!!!!!!!!!!!!" << std::endl;
             if (m_aliceUnit) m_aliceUnit->StartAliceDieAnim();
 
             // 패배 처리
@@ -642,10 +642,10 @@ bool CombatController::EndPhase()
 
                 if (isGameOver)
                 {
-                    std::cout << "게임오버임." << std::endl;
+                    //std::cout << "게임오버임." << std::endl;
                     if (auto value = m_overBG->GetComponent<BgFadeController>())
                     {
-                        std::cout << "게임오버 type 설정." << std::endl;
+                        //std::cout << "게임오버 type 설정." << std::endl;
                         value->SetFadeType(FadeType::GameOver);
                     }
                     m_overBG->SetActive(true); 
@@ -654,9 +654,9 @@ bool CombatController::EndPhase()
                 {
                     if (auto value = m_loseBG->GetComponent<BgFadeController>())
                     {
-                        std::cout << "패배." << std::endl;
+                        //std::cout << "패배." << std::endl;
                         value->SetFadeType(FadeType::Defeat);
-                        std::cout << "패배 type 설정." << std::endl;
+                        //std::cout << "패배 type 설정." << std::endl;
                     }
                     m_loseBG->SetActive(true);
                 }
@@ -1184,7 +1184,7 @@ Vector2 CombatController::DecideAttackPos(Unit* me)
     else
     {
         me->SetAction(TurnAction::Miss); // 빗나감 설정. 
-        std::cout << "빗나감\n";
+        //std::cout << "빗나감\n";
         return target->GetPos();
     }
 }
@@ -1354,9 +1354,9 @@ void CombatController::PrintFrame()
             for (auto* e : m_enemyUnits)
                 if (e && e->IsAlive() && isSame(e->GetPos(), p)) c = (e->IsBoss() ? 'B' : 'E');
 
-            std::cout << c << ' ';
+            //std::cout << c << ' ';
         }
-        std::cout << "\n";
+       // std::cout << "\n";
     }
 
     auto printUnit = [](const char* name, const Unit* u)

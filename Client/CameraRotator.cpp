@@ -7,10 +7,17 @@
 #include "SceneManager.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "Image.h"
 
-BEGINPROPERTY(CameraRotator)
+BEGINPROPERTY(CameraRotator)    
 
 DTPROPERTY(CameraRotator, m_tilemapGenerator)
+DTPROPERTY(CameraRotator, m_rightPSWindowBG)
+DTPROPERTY(CameraRotator, m_leftPSWindowBG)
+DTPROPERTY(CameraRotator, m_rightRSWindowBG)
+DTPROPERTY(CameraRotator, m_leftRSWindowBG)
+DTPROPERTY(CameraRotator, m_victoryWindowImage)
+DTPROPERTY(CameraRotator, m_settingWindow)
 
 
 ENDPROPERTY()
@@ -35,11 +42,31 @@ void CameraRotator::Start()
 
 void CameraRotator::Update(float deltaTime)
 {
-    HandleInput(deltaTime);
-    PerformTransformation(deltaTime);
+    if (m_rightPSWindowBG->IsActive() || m_leftPSWindowBG->IsActive())
+    {
+        return;
+    }
+
+    if (m_rightRSWindowBG->IsActive() || m_leftRSWindowBG->IsActive())
+    {
+        return;
+    }
+
+    if (m_victoryWindowImage->IsActive()) {
+        return;
+    }
+
+    if (m_settingWindow->IsActive()) {
+        return;
+    }
+
+    float unscaledDeltatime = SceneManager::Instance().GetUnscaledDeltaTime();
+
+    HandleInput(unscaledDeltatime);
+    PerformTransformation(unscaledDeltatime);
 }
 
-void CameraRotator::HandleInput(float deltaTime)
+void CameraRotator::HandleInput(float unscaledDeltatime)
 {
     InputManager& input = InputManager::Instance();
 
@@ -86,7 +113,7 @@ void CameraRotator::HandleInput(float deltaTime)
         float zoomFactor = m_currentOrthoSize / m_maxSize;
 
         Vector3 pos = GetTransform()->GetPosition();
-        pos.z += moveDir.z * m_panSpeed * zoomFactor * deltaTime;
+        pos.z += moveDir.z * m_panSpeed * zoomFactor * unscaledDeltatime;
 
         if (pos.z < -10) {
             pos.z = -10;

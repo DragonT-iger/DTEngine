@@ -118,7 +118,7 @@ void RayCastHitEvent::RaycastCheck()
 				//bool isLeft = x < 960;
 				if (hit)
 				{
-					std::cout << hit->GetName() << std::endl;
+					//std::cout << hit->GetName() << std::endl;
 
 					if (m_tutorialManager &&
 						m_tutorialManager->GetCurrentStep() >= TutorialManager::TutorialStep::Cat_Explain_EnemyPath &&
@@ -188,7 +188,7 @@ void RayCastHitEvent::RaycastCheck()
 						// 적이 아닌 것을 클릭했거나, EnemyUnit을 못 찾은 경우 클릭 무시
 						return;
 					}
-						std::cout << hit->GetName() << std::endl;
+						//std::cout << hit->GetName() << std::endl;
 						if (scene->GetName() == "TutorialScene") {
 							if (hit->GetName() == "Glow_R_Height_01_White" && hit->GetComponent<Transform>()->GetPosition().z < 9) {
 								if (isLeft)
@@ -309,7 +309,7 @@ void RayCastHitEvent::RaycastCheck()
 												EffectManager::Instance().PlayEffect("Poison", unit->_GetOwner());
 												unit->TakeDamage(20);
 												SoundManager::Instance().PlayOneShot("SFX/Skill_Poison");
-												std::cout << unit->GetHp() << std::endl;
+												//std::cout << unit->GetHp() << std::endl;
 												m_isAttackSkillOn = false;
 
 												int prevScale = GameManager::Instance()->GetPrevTimeScale();
@@ -457,39 +457,62 @@ void RayCastHitEvent::RaycastCheck()
 
 void RayCastHitEvent::ToggleSettingWindow()
 {
-		if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
-				return;
+	if (!m_settingWindowBG || !m_warningWindowBG || !m_startButton)
+		return;
 
-		if (m_finishGame)
-		{
-				std::cout << "게임끝남" << std::endl;
-				return;
-		}
-				
-		if (m_isAttackSkillOn)
-		{
-				m_isAttackSkillOn = false;	
+	if (m_finishGame)
+	{
+		return;
+	}
 
-				if (m_skillGuideObj->IsActive())
-						m_skillGuideObj->SetActive(false);
-		}
-		if (m_isHealSkillOn)
-		{
-				m_isHealSkillOn = false;
+	// 1. 스킬(공격/힐) 사용 모드 취소
+	if (m_isAttackSkillOn || m_isHealSkillOn)
+	{
+		m_isAttackSkillOn = false;
+		m_isHealSkillOn = false;
 
-				if (m_skillGuideObj->IsActive())
-						m_skillGuideObj->SetActive(false);
-		}
+		if (m_skillGuideObj && m_skillGuideObj->IsActive())
+			m_skillGuideObj->SetActive(false);
 
-		if (m_warningWindowBG->IsActive())
-		{
-				// warningwindow 꺼주고. isStart 다시 set 해주기.
-				m_warningWindowBG->SetActive(false);
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
 
-				if (!m_isStartBattle)
-						m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
-		}
-		ApplySettingWindow();
+		return; 
+	}
+
+	if (m_warningWindowBG->IsActive())
+	{
+		m_warningWindowBG->SetActive(false);
+
+		if (!m_isStartBattle)
+			m_startButton->GetComponent<ClickStartButton>()->SetIsStart(false);
+
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
+		SetButtons(true);
+
+		return; 
+	}
+	bool isOtherWindowOpen = false;
+	if (m_rightPSWinodwBG && m_rightPSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_rightRSWinodwBG && m_rightRSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_leftPSWinodwBG && m_leftPSWinodwBG->IsActive()) isOtherWindowOpen = true;
+	else if (m_leftRSWinodwBG && m_leftRSWinodwBG->IsActive()) isOtherWindowOpen = true;
+
+	if (isOtherWindowOpen)
+	{
+		CloseAllWindows(); 
+
+		int prevScale = GameManager::Instance()->GetPrevTimeScale();
+		GameManager::Instance()->SetTimeScale((float)prevScale);
+		SetRay(true);
+		SetButtons(true);
+
+		return;
+	}
+	ApplySettingWindow();
 }
 
 void RayCastHitEvent::ApplySettingWindow()

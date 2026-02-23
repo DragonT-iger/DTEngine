@@ -279,6 +279,10 @@ void EndSceneManager::Update(float deltaTime)
             NextStep(true);
         }
     }
+    if (m_currentStep == EndStep::PreCreditDarken) {
+        SoundManager::Instance().StopBGM(true);
+        SoundManager::Instance().PlayBGM("BGM/Cheshire's Theme", true);
+    }
 
     if (IsCreditStep(m_currentStep))
     {
@@ -338,7 +342,7 @@ void EndSceneManager::NextStep(bool force)
     m_currentStep = (EndStep)nextIndex;
     m_stateTimer = 0.0f;
 
-    std::cout << nextIndex << std::endl;
+    //std::cout << nextIndex << std::endl;
 
     m_canProceedToNextStep = true;
 

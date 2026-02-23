@@ -35,7 +35,7 @@ void SkillButton::Start()
 				{
 						
 						int attackCount = GameManager::Instance()->GetAttackSkillcount();
-						std::cout << attackCount << std::endl;
+						//std::cout << attackCount << std::endl;
 						if (attackCount <= 0)
 								return;
 
@@ -67,7 +67,7 @@ void SkillButton::Start()
 				{
 						
 						int healCount = GameManager::Instance()->GetHealSkillcount();
-						std::cout << healCount << std::endl;
+						//std::cout << healCount << std::endl;
 
 						if (healCount <= 0)
 								return;
