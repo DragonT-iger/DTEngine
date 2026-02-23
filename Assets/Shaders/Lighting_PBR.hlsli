@@ -5,7 +5,6 @@
 
 static const float PI = 3.14159265359f;
 
-// 1. 노멀 분포 함수 (GGX)
 float DistributionGGX(float3 N, float3 H, float roughness)
 {
     float a = roughness * roughness;
@@ -20,7 +19,6 @@ float DistributionGGX(float3 N, float3 H, float roughness)
     return nom / max(denom, 0.0000001);
 }
 
-// 2. 기하 함수 (Smith-Schlick)
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
     float r = (roughness + 1.0);
@@ -42,7 +40,6 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     return ggx1 * ggx2;
 }
 
-// 3. 프레넬 방정식
 float3 FresnelSchlick(float cosTheta, float3 F0)
 {
     return F0 + (1.0 - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
@@ -54,9 +51,7 @@ float3 ComputePBRLighting(float3 worldPos, float3 normal, float3 viewDir,
     float3 N = normalize(normal);
     float3 V = normalize(viewDir);
     
-    //roughness = 0.5; //Yena 반사광 만드려면 roughness를 고정해야 함.
-    //Yena는 0에 가까운 부분만 spec이 나오는게 아니라 모든 부분이 spec이 균등하게 나옴
-    
+ 
     float3 F0 = 0.08;
     F0 = lerp(F0, albedo, metallic);
 

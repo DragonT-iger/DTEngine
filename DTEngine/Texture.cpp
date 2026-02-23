@@ -108,8 +108,6 @@ bool Texture::LoadFile(const std::string& fullPath)
         else
             loadFlags = DirectX::WIC_LOADER_IGNORE_SRGB; 
 
-        //    이게 왜 false 여야 되는거지 Yena는 그냥 Default 여도 되는데 뭔가 꼬여있다. 
-        //    이 말은 지금 무시 했지만 어디선가 보간이 되고 있다는건데 UI만 이해할수가 없네? 나중에 노말맵도 보간되는거 아니야 이러면? 일단 무시하고 하자.
 
         hr = DirectX::CreateWICTextureFromFileEx(
             device, context,

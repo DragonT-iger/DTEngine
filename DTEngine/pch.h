@@ -11,6 +11,7 @@
 #include "framework.h"
 #include "GameObject.h" //magic include
 
+
 struct HWND__;
 using HWND = HWND__*;
 

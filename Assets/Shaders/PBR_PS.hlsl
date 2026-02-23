@@ -14,7 +14,6 @@ SamplerState g_Sampler : register(s0);
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-    // [1] 데이터 초기화 및 기본값 설정
     float3 N = normalize(input.WorldNormal);
     float3 V;
     
@@ -34,33 +33,26 @@ float4 PS(PS_INPUT input) : SV_Target
     
      
     
-    // [2] 플래그 기반 텍스처 샘플링 및 데이터 업데이트
-    // Normal Map 적용
     if (USE_NORMAL)
     {
         float4 texNormal = g_NormalMap.Sample(g_Sampler, input.UV);
         N = GetWorldNormalFromNormalMap(texNormal, N, input.Tangent , input.Bitangent);
     }
 
-    // PBR 속성 적용
     if (USE_METAL)
         metal = g_MetalMap.Sample(g_Sampler, input.UV).r ;
     if (USE_ROUGH)
         rough = g_RoughMap.Sample(g_Sampler, input.UV).r * Roughness_Factor;
     if (USE_AO)
         ao = g_AoMap.Sample(g_Sampler, input.UV).r;
-    
-    // Albedo 적용 (AO를 미리 곱함)
     if (USE_ALBEDO)
     {
         float4 texBase = g_DiffuseMap.Sample(g_Sampler, input.UV);
         albedo = texBase.rgb;
     }
 
-    // [3] 직접광(Direct Lighting) 계산 - 루프 내부에 로직 인라이닝
     float3 directLighting = float3(0, 0, 0);
     
-    // 첫 번째 조명(주광원)에 대한 그림자 계산
     float shadowFactor = CalculateShadow(input.WorldPos , Shadow_Bias);
 
     for (int i = 0; i < ActiveCount; ++i)
@@ -82,15 +74,12 @@ float4 PS(PS_INPUT input) : SV_Target
             L = normalize(toLight);
             
             float range = Lights[i].PositionRange.w;
-            // 거리 기반 감쇠 (Lighting.hlsli 공식 적용)
             attenuation = saturate(1.0 / (1.0 + 0.1 * dist / range + 0.01 * dist / range * dist / range));
         }
 
-        // 첫 번째 조명에만 그림자 적용 (Shadow Factor)
         float currentShadow = (i == 0) ? shadowFactor : 1.0f;
 
-        // DisneyPBR (Shared 함수) 호출하여 누적
-        // 최종 광원 세기에 감쇠와 그림자 인자를 통합하여 전달
+        
         directLighting += DisneyPBR(
             input.WorldPos,
             N,
@@ -104,7 +93,6 @@ float4 PS(PS_INPUT input) : SV_Target
         );
     }
 
-    // [4] 간접광(IBL) 계산 - Shared 함수 활용
     float3 ambientLighting = float3(0, 0, 0);
     if (USE_IBL)
     {
@@ -115,12 +103,10 @@ float4 PS(PS_INPUT input) : SV_Target
         float3 specEnv = g_CubeMap.SampleLevel(g_Sampler, R, mipLevel).rgb;
         float3 diffEnv = g_CubeMap.SampleLevel(g_Sampler, N, 7.0f).rgb;
 
-        // 물리 연산은 Shared 함수 호출 (데이터만 전달)
         ambientLighting = CalculateIBL_Combined(specEnv, diffEnv, V, N, albedo, rough, metal, ao);
     }
 
-    // [5] 최종 결과 합성 및 감마 보정
-    float3 finalColor = directLighting + ambientLighting;// * 0.5f;
+    float3 finalColor = directLighting + ambientLighting;
 
         
     

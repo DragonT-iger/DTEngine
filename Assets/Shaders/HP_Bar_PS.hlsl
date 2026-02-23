@@ -1,6 +1,3 @@
-// 기본적인 Lambert Lighting 모델이고 간이 환경광이 적용되어 있음.
-// 텍스쳐가 있으면 텍스쳐 색상, 없으면 머티리얼 색상을 사용함.
-// Forward 방식임.
 
 #include "Lighting.hlsli"
 #include "Resource.hlsli"

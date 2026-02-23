@@ -24,7 +24,7 @@ float3 ApplyHeightFog(float3 finalColor, float3 worldPos, float3 cameraPos)
     float dist = length(viewDir);
     float3 unitDir = viewDir / dist;
 
-    // 안개가 시작되는 거리(StartDistance) 보정 [cite: 19, 93]
+    // 안개가 시작되는 거리(StartDistance) 보정
     float modifiedDist = max(dist - FogStartDistance, 0.0f);
     
     // 현재 픽셀의 상대적 높이 계산 (기준 높이 적용)
@@ -36,8 +36,6 @@ float3 ApplyHeightFog(float3 finalColor, float3 worldPos, float3 cameraPos)
         slope = 0.0001f;
 
     // 높이 기반 지수 안개 적분 공식
-    // exp(-relativeCameraY * FogHeightFalloff)는 카메라 높이에서의 밀도
-    // (1.0 - exp(-modifiedDist * slope * FogHeightFalloff)) / (slope * FogHeightFalloff)는 경로 적분 결과
     float fogAmount = (FogGlobalDensity / FogHeightFalloff) * exp(-relativeCameraY * FogHeightFalloff) * (1.0f - exp(-modifiedDist * slope * FogHeightFalloff)) / slope;
 
     float fogFactor = saturate(fogAmount);

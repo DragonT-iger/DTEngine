@@ -8,7 +8,6 @@
 
 
 
-// Sphere_2.fx 쪽 구현 스타일과 동일 계열
 float SchlickFresnel_Disney(float u)
 {
     float m = saturate(1.0f - u);
@@ -30,7 +29,6 @@ float smithG_GGX(float NdotV, float alphaG)
     return 1.0f / (NdotV + sqrt(a + b - a * b));
 }
 
-// Tangent-space normal map -> World normal
 float3 GetWorldNormalFromNormalMap(float4 texNormal, float3 N, float4 tangent , float3 Bitangent)
 {
     float3 nTS = texNormal.xyz * 2.0f - 1.0f;
@@ -45,20 +43,18 @@ float3 GetWorldNormalFromNormalMap(float4 texNormal, float3 N, float4 tangent , 
     return normalize(mul(nTS, TBN));
 }
 
-// "Sphere_2.fx 스타일(Disney 계열)" PBR
 float3 DisneyPBR(
     float3 worldPos,
     float3 N, // world normal (normalized)
     float3 V,
     float3 albedo,
-    float roughness, // [0..1]
-    float metallic, // [0..1]
+    float roughness,
+    float metallic,
     float3 L, // light dir (world, normalized)
     float3 lightRGB, // light color
     float intensity // light intensity
 )
 {
-    //float3 V = normalize(CameraPos - worldPos); // Lighting.hlsli cbuffer의 CameraPos 사용(:contentReference[oaicite:6]{index=6}) Ortho 호환 X
     float3 H = normalize(L + V);
 
     float NdotL = saturate(dot(N, L));
@@ -79,7 +75,6 @@ float3 DisneyPBR(
     float3 F = R0 + (1.0f - R0) * SchlickFresnel_Disney(LdotH);
     float G = smithG_GGX(NdotL, alpha) * smithG_GGX(NdotV, alpha);
 
-    // (Sphere_2.fx처럼) 스펙 항을 D*F*G 형태로 두고, 여기서 필요하면 / (4*NdotL*NdotV) 형태로 보정 가능
     float3 specularPart = (D * F * G);
 
     float3 brdf = (diffusePart * (1.0f - metallic) + specularPart);

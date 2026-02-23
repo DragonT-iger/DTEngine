@@ -779,9 +779,10 @@ void Scene::Exit()
 
 void Scene::Render(Camera* camera, RenderTexture* renderTarget)
 {
+    
+
+
     if (!camera) return;
-
-
 
     float width = (float)DX11Renderer::Instance().GetWidth();
     float height = (float)DX11Renderer::Instance().GetHeight();
@@ -848,19 +849,18 @@ void Scene::Render(Camera* camera, RenderTexture* renderTarget)
    
    
 
-       // Sorter::Instance().CreateKeyOpaque(opaqueQueue);
-        // std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
+        Sorter::Instance().CreateKeyOpaque(opaqueQueue);
+         std::vector<GameObject*>& SortedVector = Sorter::Instance().GetOpaqueVec();
 
-        RenderOpaque(opaqueQueue);
-        RenderOutline(opaqueQueue); 
+        RenderOpaque(SortedVector);
+        RenderOutline(SortedVector);
 
 
-       //Sorting 해야 함... effect 겹치는 거 때문에
-       // 
-       // Sorter::Instance().CreateKeyTransparent(transparentQueue);
-      //  std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
-         RenderTrans(transparentQueue, viewTM);
-       // RenderTrans(SortedVectorTrans, viewTM);
+        
+        Sorter::Instance().CreateKeyTransparent(transparentQueue);
+        std::vector<GameObject*>& SortedVectorTrans = Sorter::Instance().GetTransVec();
+        //RenderTrans(transparentQueue, viewTM);
+        RenderTrans(SortedVectorTrans, viewTM);
 
 
          
@@ -910,16 +910,6 @@ void Scene::RenderOpaque(std::vector<GameObject*>& OpaqueVec)
 
     }
 }
-
-// 일단 예정은 Plane; Sprite Effect 정도임. 
-// Plane은 Tile위에 Alpha Blending으로 
-
-
-// Pre multiplied state로 기존 alpha blending statee를 변경시킬거임. 
-// 
-// Alpha Blending이 필요한 Object는 shader에서 alpha를 곱하는 형태로 처리 
-// 
-
 
 void Scene::RenderTrans(std::vector<GameObject*>& TransVec , const Matrix& cam)
 {

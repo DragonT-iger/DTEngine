@@ -49,7 +49,6 @@
 
 #include "../Client/EffectManager.h"
 
-
 Game::Game() = default;
 Game::~Game() = default;
 

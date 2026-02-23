@@ -15,7 +15,6 @@ PS_INPUT VS(VS_INPUT input)
 {
     PS_INPUT output;
 
-    // 1. 스키닝 계산 (Skeletal_VS.hlsl의 로직 적용)
     float4x4 skinMatrix = (float4x4) 0;
     
     if (Skinned_Flag >0.5)

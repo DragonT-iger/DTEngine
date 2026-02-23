@@ -1051,7 +1051,8 @@ bool DX11Renderer::CreateDeviceAndSwapchain()
     DXGI_SWAP_CHAIN_DESC1 scd{};
     scd.Width = 0;
     scd.Height = 0;
-    scd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    scd.Format = DXGI_FORMAT_R8G8B8A8_UNORM; 
+   // scd.Format = DXGI_FORMAT_R16G16B16A16_FLOAT; //로 고정, 후 조정 
     scd.SampleDesc = { 1, 0 };
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     scd.BufferCount = 2;

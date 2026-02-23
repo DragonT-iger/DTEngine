@@ -23,5 +23,5 @@ float4 PS(PS_INPUT input) : SV_Target
 
     
     
-    return envColor * CalculateShadow(input.WorldPos, 0.005); // 의존성슈바
+    return envColor * CalculateShadow(input.WorldPos, 0.005); 
 }
