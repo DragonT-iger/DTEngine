@@ -106,5 +106,4 @@ private:
     std::string m_renameTargetFile; 
     char m_renameBuffer[256] = "";  
     char m_componentSearchBuffer[128] = "";
-
 };

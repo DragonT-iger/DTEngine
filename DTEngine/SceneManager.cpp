@@ -37,7 +37,6 @@ bool SceneManager::ProcessSceneChange()
 {
     if (m_nextName.empty()) return false;
 
-    GetActiveScene();
     if (m_active)
     {
         m_active->Exit();
@@ -137,24 +136,32 @@ bool SceneManager::RestoreActiveScene()
    
 }
 
-//02_03
-//bool SceneManager::RestoreActiveScene()
-//{
-//    //if (!m_active) return false;
-//
-//       //m_active->Clear();
-//
-//       //
-//       //std::string fullPath = ResourceManager::Instance().ResolveFullPath(m_backupPath);
-//
-//       //if (m_active->LoadFile(fullPath))
-//       //{
-//       //    m_active->SetName(m_originalSceneName);
-//
-//       //    std::cout << "[SceneManager] Scene Restored from Backup." << std::endl;
-//       //    return true;
-//       //}
-//
-//       //std::cerr << "[SceneManager] Failed to restore scene! Path was: " << fullPath << std::endl;
-//       //return false;
-//}
+bool SceneManager::FlushSceneReload()
+{
+    std::string originalPath = "Assets/Scenes/";
+
+    Scene* activeScene = GetActiveScene();
+
+    if (m_active)
+    {
+        m_active->Exit();
+
+        m_active->Clear();
+        m_active->SetBGMPlayed(false);
+    }
+
+    if (m_onSceneChangeCallback)
+    {
+        m_onSceneChangeCallback();
+    }
+
+    std::string scenePath = "Scenes/" + m_active->GetName() + ".scene";
+    std::string fullPath = ResourceManager::Instance().ResolveFullPath(scenePath);
+
+    if (!m_active->LoadFile(fullPath))
+    {
+        std::cerr << "[SceneManager] Failed to reload scene file: " << fullPath << std::endl;
+    }
+    return true;
+}
+

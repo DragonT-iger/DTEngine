@@ -2582,17 +2582,19 @@ void SetOpaqueBlendState(const ImDrawList* parent_list, const ImDrawCmd* cmd)
     if (!device || !context)
         return;
 
-    static Microsoft::WRL::ComPtr<ID3D11BlendState> s_OpaqueBlendState;
-    if (!s_OpaqueBlendState)
-    {
-        D3D11_BLEND_DESC blendDesc = {};
-        blendDesc.RenderTarget[0].BlendEnable = FALSE; // 블렌딩 끄기
-        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-        device->CreateBlendState(&blendDesc, s_OpaqueBlendState.GetAddressOf());
-    }
+    DX11Renderer::Instance().SetBlendMode(BlendMode::Opaque);
 
-    const FLOAT blendFactor[4] = { 0,0,0,0 };
-    context->OMSetBlendState(s_OpaqueBlendState.Get(), blendFactor, 0xFFFFFFFF);
+    //static Microsoft::WRL::ComPtr<ID3D11BlendState> s_OpaqueBlendState;
+    //if (!s_OpaqueBlendState)
+    //{
+    //    D3D11_BLEND_DESC blendDesc = {};
+    //    blendDesc.RenderTarget[0].BlendEnable = FALSE; // 블렌딩 끄기
+    //    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    //    device->CreateBlendState(&blendDesc, s_OpaqueBlendState.GetAddressOf());
+    //}
+
+    //const FLOAT blendFactor[4] = { 0,0,0,0 };
+    //context->OMSetBlendState(s_OpaqueBlendState.Get(), blendFactor, 0xFFFFFFFF);
 }
 
 

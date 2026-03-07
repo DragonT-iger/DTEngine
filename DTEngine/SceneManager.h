@@ -24,6 +24,7 @@ public:
     bool    BackupActiveScene();   
     bool    RestoreActiveScene();  
 
+    bool FlushSceneReload();
 
 	float  GetUnscaledDeltaTime() const { return m_unScaledDeltaTime; }
 	void  SetUnscaledDeltaTime(float dt) { m_unScaledDeltaTime = dt; }

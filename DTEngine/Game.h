@@ -19,6 +19,9 @@ class PrefabSelectWindow;
 class SettingsWindow;
 class Prefab;
 
+
+
+
 class Game : public WindowBase {
 public:
 	Game();
@@ -27,14 +30,14 @@ public:
 	enum class EngineMode {
 		Edit,
 		Play,
-		Pause 
+		Pause
 	};
 
 	bool Initialize();
 	void Run();
 	void Release();
 
-	
+
 	//void LifeCycle(float deltaTime);
 	void LifeCycle(DeltaTime dt);
 	void UpdateTimeScale(); // 배속 테스트용
@@ -53,10 +56,10 @@ protected:
 	void OnResize(int width, int height) override;
 	void OnClose() override;
 
-private: 
+private:
 
 	void RenderScene(Scene* scene, Camera* camera, RenderTexture* rt);
-
+	bool RestoreCheck(HRESULT hr);
 
 	const std::string m_backupPath = "Scenes/_PlayMode_Backup.scene";
 	std::string m_originalSceneName = "";
@@ -68,6 +71,7 @@ private:
 
 	std::unique_ptr<RenderTexture> m_gameRT;
 	std::unique_ptr<RenderTexture> m_captureRT;
+
 #ifdef _DEBUG
 
 
@@ -79,6 +83,7 @@ private:
 
 	GameObject* m_editorCameraObject = nullptr;
 
+	bool m_forceDeviceLostOnce = false;
 
 #endif
 };

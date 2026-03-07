@@ -38,7 +38,7 @@ class RenderTexture;
 class Font;
 
 namespace DirectX {
-	inline namespace DX11 {
+    inline namespace DX11 {
         class SpriteBatch;
         class SpriteFont;
         class CommonStates;
@@ -72,12 +72,12 @@ public:
     const Matrix& GetLightViewProjScaleMatrix() const { return m_lightViewProjScale; }
 
     void DrawUI(Texture* texture, const Vector2& position, const Vector2& size, const Vector4& color = Vector4(1, 1, 1, 1), float rotation = 0.0f);
-    
-	// DXTK로 하면 MeshRenderer의 의존성을 줄여버릴 수 있으므로 그냥 이걸로 처리
 
+    // DXTK로 하면 MeshRenderer의 의존성을 줄여버릴 수 있으므로 그냥 이걸로 처리
 
+    bool DeviceRestore_Occlude(HRESULT hr);
 
-    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2( 1,1 ));
+    void DrawString(const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2(1, 1));
     void DrawString(Font* Font, const std::wstring& text, const Vector2& position, const float& fontSize, const Vector4& color = Vector4(0, 0, 0, 1), float rotation = 0.0f, Vector2 scale = Vector2(1, 1));
 
     void DrawString(const std::wstring& text, const Vector2& position, const Vector2& size, float rotation, const Vector4& color = Vector4(1, 1, 1, 1), float fontSizeMultiplier = 1.0f);
@@ -100,6 +100,8 @@ public:
 
     void EndFrame();
     void Present();
+    HRESULT Present_(); //device lost 
+    
 
     void SetFullscreen(bool enable);
     void Destroy();
@@ -109,6 +111,8 @@ public:
     void SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr);
 
     void SetViewport(float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f, float topLeftX = 0.0f, float topLeftY = 0.0f);
+
+    int DeviceRestore(HRESULT hr);
 
     HWND GetHwnd();
     ID3D11Device* GetDevice()  const;
@@ -121,8 +125,8 @@ public:
     bool GetVsync() { return m_vsync; }
     void SetVsync(bool vsync) { m_vsync = vsync; }
 
-	int GetRefWidth() const { return m_refWidth; }
-	int GetRefHeight() const { return m_refHeight; }
+    int GetRefWidth() const { return m_refWidth; }
+    int GetRefHeight() const { return m_refHeight; }
 
     float GetAspectRatio() const
     {
@@ -132,8 +136,8 @@ public:
 
     float GetRefAspectRatio() const
     {
-		return static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
-	}
+        return static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
+    }
 
 
     int GetWidth() { return m_width; }
@@ -163,7 +167,7 @@ public:
     const Matrix& GetViewMatrix() const { return m_viewTM; }
     const Matrix& GetProjectionMatrix() const { return m_projTM; }
 
-   
+
     void OffPS();
 
     void DrawFullScreenQuad();
@@ -180,7 +184,7 @@ private:
     void ReleaseCB();
     void CreateSamplers();
 
-   
+
     struct LightData
     {
         DirectX::SimpleMath::Vector4 PositionRange;  // xyz: 위치, w: 범위(Range)
@@ -198,13 +202,13 @@ private:
         int ActiveCount;                             // 현재 활성화된 조명 개수
         Vector3 CameraPos;
 
-        Vector3 CameraDir; 
+        Vector3 CameraDir;
         float IsOrtho;
 
         Matrix LightViewProjScale;
         Vector4 ShadowMapInfo; // 텍셀 크기
     };
- 
+
 
 private:
     // Platform
@@ -216,7 +220,7 @@ private:
     Microsoft::WRL::ComPtr<IDXGISwapChain1>        m_swapchain;
 
     // Backbuffer & Depth
-    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_backbufferTex; 
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_backbufferTex;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_rtv;
     Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_depthTex;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_dsv;
@@ -231,15 +235,15 @@ private:
 
 #pragma region CB
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;  
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_frame = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_world_M = nullptr;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr; 
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_lights = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_material = nullptr;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr; 
-    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr;  
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Texture_flags = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_matrix_pallette = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_SkyBox = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Effect = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer>           m_cbuffer_Fog = nullptr;
 
@@ -266,8 +270,8 @@ private:
     bool  m_vsync = false;
 
     int m_refWidth = 1920;
-	int m_refHeight = 1200; // 16:10 의도한거임  // 이게 UI의 기준이 되는 사이즈
-	float m_refAspect = static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
+    int m_refHeight = 1200; // 16:10 의도한거임  // 이게 UI의 기준이 되는 사이즈
+    float m_refAspect = static_cast<float>(m_refWidth) / static_cast<float>(m_refHeight);
 
     Matrix m_viewTM;
     Matrix m_projTM;
@@ -284,9 +288,9 @@ private:
 
 
     // 컬링
-    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullBack; 
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullBack;
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullFront;
-    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullNone; 
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rsCullNone;
 
 
     Microsoft::WRL::ComPtr<ID3D11Texture2D>          m_shadowMapTex;
@@ -294,7 +298,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_shadowSRV;
     RenderViewport                                   m_shadowViewport;
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_msaaTargetTex; 
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>        m_msaaTargetTex;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_msaaTargetRTV;
     UINT m_msaaQuality = 0;
     int m_msaa = 8;
@@ -303,10 +307,10 @@ private:
     std::unique_ptr< RenderTexture> m_resolvedSceneRT;
 
     Matrix m_lightViewProjScale;
-    
 
 
-    private:
-      uint16_t m_currentShaderID = 0; 
-      ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };
+
+private:
+    uint16_t m_currentShaderID = 0;
+    ID3D11ShaderResourceView* m_currentSRVs[16] = { nullptr, };
 };

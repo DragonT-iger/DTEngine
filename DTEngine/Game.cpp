@@ -58,7 +58,7 @@ bool Game::Initialize()
 	SetConsoleOutputCP(CP_UTF8);
 
 	m_timer = std::make_unique<GameTimer>();
-	m_timer->Reset(); 
+	m_timer->Reset();
 
 	constexpr int initW = 1920, initH = 1200;
 
@@ -86,7 +86,7 @@ bool Game::Initialize()
 	m_editorUI = std::make_unique<EditorUI>();
 
 #endif
-	if(!ResourceManager::Instance().Initialize("Assets"))
+	if (!ResourceManager::Instance().Initialize("Assets"))
 	{
 		assert(false && "ResourceManager 초기화 실패");
 		return false;
@@ -100,7 +100,7 @@ bool Game::Initialize()
 
 	RegisterCoreTypes registerCoreTypes = RegisterCoreTypes();
 
-	if(!registerCoreTypes.Initialize())
+	if (!registerCoreTypes.Initialize())
 	{
 		assert(false && "핵심 타입 등록 실패");
 		return false;
@@ -116,11 +116,11 @@ bool Game::Initialize()
 
 	if (!EffectManager::Instance().Initialize())
 	{
-		assert(false && "SoundManager 초기화 실패");
+		assert(false && "EffectManager 초기화 실패");
 		return false;
 	}
 
-	InputManager::Instance().Initialize(); 
+	InputManager::Instance().Initialize();
 	InputManager::Instance().SetWindowHandle(GetHwnd());
 
 
@@ -157,22 +157,22 @@ bool Game::Initialize()
 	 //SceneManager::Instance().RegisterScene("Scenes/SampleSceneBum.scene");
 	 //SceneManager::Instance().LoadScene("SampleSceneBum");
 
-	 SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
-	 SceneManager::Instance().RegisterScene("Scenes/BossDialogue.scene");
+	SceneManager::Instance().RegisterScene("Scenes/MainGameScene.scene");
+	SceneManager::Instance().RegisterScene("Scenes/BossDialogue.scene");
 
-	 SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
-	 ClientSceneManager::Instance().LoadScene("TitleScene");
+	SceneManager::Instance().RegisterScene("Scenes/TitleScene.scene");
+	ClientSceneManager::Instance().LoadScene("TitleScene");
 
-	 //ClientSceneManager::Instance().LoadScene("MainGameScene");
-	 
-
+	//ClientSceneManager::Instance().LoadScene("MainGameScene");
 
 
-	 
 
 
-	// SceneManager::Instance().RegisterScene("Scenes/SampleScenehshs.scene");
-	// SceneManager::Instance().LoadScene("SampleScenehshs");
+
+
+
+   // SceneManager::Instance().RegisterScene("Scenes/SampleScenehshs.scene");
+   // SceneManager::Instance().LoadScene("SampleScenehshs");
 
 	SceneManager::Instance().ProcessSceneChange();
 
@@ -187,7 +187,7 @@ bool Game::Initialize()
 
 #ifdef _DEBUG
 	m_sceneRT = std::make_unique<RenderTexture>();
-	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true , true, false); //m_capture(hdr -> 후 최종값이기에 hdr 빼도 됨) ;연산은 capture_rt에서 이루어짐.
+	m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, true, false); //m_capture(hdr -> 후 최종값이기에 hdr 빼도 됨) ;연산은 capture_rt에서 이루어짐.
 
 	m_gameRT = std::make_unique<RenderTexture>();
 	m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false, false);
@@ -207,56 +207,6 @@ bool Game::Initialize()
 	m_captureRT = std::make_unique<RenderTexture>();
 	m_captureRT->Initialize(initW, initH, RenderTextureType::Tex2D, false, true, true);
 
-
-
-	if (!FSMRegister::Instance().Initalize())
-	{
-		assert(false && "FSMRegister 초기화 실패");
-		return false;
-	}
-
-	
-
-
-	//Scene testScene("TestScene");
-
-	//GameObject* parentGO = testScene.CreateGameObject("Parent");
-	//Transform* parentTF = parentGO->GetTransform();
-	//parentTF->SetPosition(Vector3(1.0f, 0.0f, 0.0f));
-	//parentTF->SetRotationEuler(Vector3(0.0f, 45.0f, 0.0f));
-	//parentTF->SetScale(Vector3(1.0f, 2.0f, 1.0f));
-
-	//GameObject* childGO = testScene.CreateGameObject("Child");
-	//Transform* childTF = childGO->GetTransform();
-	//childTF->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
-
-	//childTF->SetParent(parentTF);
-
-	//GameObject* camera = testScene.CreateGameObject("Camera");
-	//camera->GetTransform()->SetPosition(Vector3(0, 2, -5));
-	//camera->GetTransform()->SetRotationEuler(Vector3(15.0f, 0.0f, 0.0f));
-	//camera->AddComponent<Camera>();
-
-
-
-
-	//GameObject* cubeGO = testScene.CreateGameObject("TestCube");
-
-	//Mesh* cubeMesh = ResourceManager::Instance().Load<Mesh>("TestCubeMesh");
-	//Material* defaultMat = ResourceManager::Instance().Load<Material>("Shaders/Default");
-
-	//MeshRenderer* renderer = cubeGO->AddComponent<MeshRenderer>();
-	//renderer->SetMesh(cubeMesh);
-	//renderer->SetMaterial(defaultMat);
-
-
-
-
-
-	//std::cout << "--- SAVING ---" << std::endl;
-	//std::cout << "Parent ID: " << parentTF->_GetID() << std::endl;
-	//std::cout << "Child Parent ID (before save): " << (childTF->GetParent() ? childTF->GetParent()->_GetID() : 0) << std::endl;
-	//std::cout << "Child Position (before save): " << childTF->GetPosition().y << std::endl;
 
 #ifdef _DEBUG
 
@@ -292,10 +242,18 @@ void Game::Run()
 		float timeScale = SceneManager::Instance().GetActiveScene()->GetTimeScale();
 		dt.scaledTime = dt.rawTime * timeScale;
 
+#ifdef _DEBUG
+		if (GetAsyncKeyState(VK_F9) & 1)  // F9 한 번 눌렀을 때
+		{
+			m_forceDeviceLostOnce = true;
+			OutputDebugStringA("[DEBUG] ForceDeviceLost requested (F9)\n");
+		}
+#endif
+
 		SceneManager::Instance().SetUnscaledDeltaTime(dt.rawTime);
 
 		LifeCycle(dt);
- 		//LifeCycle(m_timer->DeltaTime());
+		//LifeCycle(m_timer->DeltaTime());
 	}
 }
 
@@ -315,7 +273,7 @@ void Game::LifeCycle(DeltaTime dt)
 {
 	if (SceneManager::Instance().ProcessSceneChange()) {
 
-		
+
 
 #ifdef _DEBUG
 
@@ -330,11 +288,12 @@ void Game::LifeCycle(DeltaTime dt)
 	{
 		activeScene->Awake();
 
+
 #ifdef _DEBUG
 		if (m_engineMode == EngineMode::Play)
 #endif
 		{
-			activeScene->Start(); 
+			activeScene->Start();
 		}
 	}
 
@@ -370,7 +329,7 @@ void Game::LifeCycle(DeltaTime dt)
 		scene->LateUpdate(dt.scaledTime);
 
 #ifndef _DEBUG
-	
+
 #endif
 
 
@@ -482,7 +441,7 @@ void Game::LifeCycle(DeltaTime dt)
 	auto ppManager = DX11Renderer::Instance().GetPostProcessManager();
 	if (ppManager && m_captureRT && m_sceneRT)
 	{
-		
+
 		ppManager->RenderToneMapping(
 			m_captureRT.get(),
 			m_sceneRT->GetRTV(),
@@ -527,7 +486,7 @@ void Game::LifeCycle(DeltaTime dt)
 				}
 				// --------------------------------------------------------------------------
 
-				m_captureRT->Bind(); 
+				m_captureRT->Bind();
 				const auto& col = cam->GetClearColor();
 				m_captureRT->Clear(col.x, col.y, col.z, col.w);
 
@@ -558,12 +517,12 @@ void Game::LifeCycle(DeltaTime dt)
 
 				//pp 유무와 상관 없이 마지막에 tone mapping 실행 
 				ppManager->Execute(
-					m_captureRT.get(),      
-					m_gameRT->GetRTV(),     
+					m_captureRT.get(),
+					m_gameRT->GetRTV(),
 					mask,
 					mainCam,
-					m_gameRT->GetWidth(),   
-					m_gameRT->GetHeight()   
+					m_gameRT->GetWidth(),
+					m_gameRT->GetHeight()
 				);
 			}
 
@@ -571,7 +530,7 @@ void Game::LifeCycle(DeltaTime dt)
 		}
 	}
 
-	m_gameRT->Bind(); 
+	m_gameRT->Bind();
 	scene->RenderUI(mainCam, m_gameRT.get());
 	m_gameRT->Unbind();
 
@@ -641,7 +600,7 @@ void Game::LifeCycle(DeltaTime dt)
 
 	const float* clearColor = (mainCam) ? (float*)&mainCam->GetClearColor() : defaultClearColor;
 
-	
+
 	if (mainCam && m_captureRT && m_gameRT)
 	{
 		m_captureRT->Bind();
@@ -729,7 +688,28 @@ void Game::LifeCycle(DeltaTime dt)
 
 
 	DX11Renderer::Instance().EndFrame();
-	DX11Renderer::Instance().Present();
+
+	//DX11Renderer::Instance().Present();
+	HRESULT hr = DX11Renderer::Instance().Present_();
+
+
+
+#ifdef _DEBUG
+	if (m_forceDeviceLostOnce)
+	{
+		m_forceDeviceLostOnce = false;
+		hr = DXGI_ERROR_DEVICE_REMOVED; // 또는 DXGI_ERROR_DEVICE_RESET
+		OutputDebugStringA("[DEBUG] ForceDeviceLost fired -> DXGI_ERROR_DEVICE_REMOVED\n");
+	}
+#endif
+
+	if (hr != S_OK)
+	{
+		if (bool Valid = RestoreCheck(hr); !Valid)
+		{
+			Release(); //프로세스 종료 
+		}
+	}
 
 	InputManager::Instance().EndFrame();
 
@@ -755,15 +735,15 @@ void Game::UpdateTimeScale() // 배속 테스트용
 void Game::LifeCycle(float deltaTime)
 {
 	if (SceneManager::Instance().ProcessSceneChange()) {
-	
+
 
 #ifdef _DEBUG
 
 		Scene* curScene = SceneManager::Instance().GetActiveScene();
 		SetEditorCamera(curScene);
-	
+
 #endif
-	
+
 	}; // Awake Start
 
 
@@ -782,7 +762,7 @@ void Game::LifeCycle(float deltaTime)
 #ifdef _DEBUG
 	if (m_engineMode == EngineMode::Play)
 	{
-#endif  
+#endif
 		static float elapsedTime = 0.0f;
 		static float fixedDeltaTime = 0.02f;
 
@@ -805,12 +785,12 @@ void Game::LifeCycle(float deltaTime)
 	}
 
 
-	
+
 
 	if (m_engineMode == EngineMode::Edit || m_engineMode == EngineMode::Pause) {
 
 		if (m_editorCameraObject != nullptr) {
-		
+
 			m_editorCameraObject->Update(deltaTime);
 
 			m_editorCameraObject->LateUpdate(deltaTime);
@@ -875,7 +855,7 @@ void Game::LifeCycle(float deltaTime)
 
 	m_sceneRT->Bind();
 
-	
+
 
 	// 씬 뷰
 
@@ -950,8 +930,8 @@ void Game::LifeCycle(float deltaTime)
 
 	//ImGuizmo::SetRect(
 	//	0, 0,
-	//	(float)DX11Renderer::Instance().GetWidth(), 
-	//	(float)DX11Renderer::Instance().GetHeight() 
+	//	(float)DX11Renderer::Instance().GetWidth(),
+	//	(float)DX11Renderer::Instance().GetHeight()
 	//);
 
 	m_editorUI->Render(scene , m_engineMode);
@@ -1047,7 +1027,7 @@ void Game::SetPlayState(bool isPlay)
 		if (m_editorCameraObject && m_editorCameraObject->GetTransform())
 		{
 			lastPos = m_editorCameraObject->GetTransform()->GetPosition();
-			lastRot = m_editorCameraObject->GetTransform()->GetEditorEuler(); 
+			lastRot = m_editorCameraObject->GetTransform()->GetEditorEuler();
 			hasLastState = true;
 		}
 
@@ -1080,14 +1060,14 @@ void Game::SetPlayState(bool isPlay)
 			if (Camera* cam = go->GetComponent<Camera>())
 			{
 				newMainCam = cam;
-				break; 
+				break;
 			}
 		}
 
 		scene->SetMainCamera(newMainCam);
 
 
-		
+
 
 	}
 
@@ -1146,7 +1126,7 @@ void Game::OnResize(int width, int height)
 	float windowWidth = static_cast<float>(width);
 	float windowHeight = static_cast<float>(height);
 
-	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio(); 
+	float targetAspect = DX11Renderer::Instance().GetRefAspectRatio();
 	float windowAspect = windowWidth / windowHeight;
 
 	float drawWidth, drawHeight;
@@ -1171,7 +1151,7 @@ void Game::OnResize(int width, int height)
 
 	Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
 	if (mainCam) {
-		mainCam->SetAspectRatio(targetAspect); 
+		mainCam->SetAspectRatio(targetAspect);
 		mainCam->SetViewDirty();
 	}
 }
@@ -1185,5 +1165,124 @@ void Game::RenderScene(Scene* scene, Camera* camera, RenderTexture* rt)
 
 	scene->Render(camera, rt);
 
-	
+
 }
+
+
+
+
+bool Game::RestoreCheck(HRESULT hr)
+{
+
+	bool Result = false;
+
+	m_timer->Stop();
+	if (hr == DXGI_STATUS_OCCLUDED)
+	{
+		Result = DX11Renderer::Instance().DeviceRestore_Occlude(hr);
+	}
+
+
+	// Scene 정보를 기억해 두었다가. 다시 load하는게 맞긴 할 텐데, 
+	// Play하고 있는 정보를 
+	// 일단 Scene 재시작부터 만들어 보자. 
+	// 이게 되면 플레이하던 시점의 정보를 
+
+	else if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+	{
+		float height = DX11Renderer::Instance().GetHeight();
+		float width = DX11Renderer::Instance().GetWidth();
+		bool  vsync = DX11Renderer::Instance().GetVsync();
+
+		
+
+#ifdef _DEBUG
+		if (m_imgui)
+		{
+			m_imgui->Shutdown();
+		}
+
+#endif
+
+
+		DX11Renderer::Instance().Destroy();
+		bool Initalize = DX11Renderer::Instance().Initialize(GetHwnd(), width, height, vsync); //Device 재생성 
+
+		if (!Initalize) return Result;
+
+
+	
+
+		ResourceManager::Instance().UnloadAll();
+		//수동 해제 
+		EffectManager::Instance().Initialize(); //Resourcemanager에 Caching에 의존하므로
+
+
+#ifdef _DEBUG
+		if (!m_imgui->Initialize(&DX11Renderer::Instance())) {
+			assert(false && "ImGui 초기화 실패");
+			return false;
+		}
+		ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+
+		if (m_editorUI)
+		{
+			m_editorUI.reset();
+			m_editorUI = std::make_unique<EditorUI>();
+
+		}
+
+#endif
+
+
+#ifdef _DEBUG
+		
+
+		m_sceneRT = std::make_unique<RenderTexture>();
+		m_sceneRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, true, false); //m_capture(hdr -> 후 최종값이기에 hdr 빼도 됨) ;연산은 capture_rt에서 이루어짐.
+
+		m_gameRT = std::make_unique<RenderTexture>();
+		m_gameRT->Initialize(1920, 1200, RenderTextureType::Tex2D, true, false, false);
+
+#endif
+
+
+		m_captureRT = std::make_unique<RenderTexture>();
+		m_captureRT->Initialize(1920, 1200, RenderTextureType::Tex2D, false, true, true);
+
+
+		// 만져야 하는 부분은 Model 이나 Material 인 거 같은데, Scene load 하면서 load했던 데이터들을 다시 
+		// SceneManager:: m_active 외의 나머지의 경우는 SceneManager::ProcessSceneChange() 에서 load하기에 m_active의 경우만 처리.
+		if (Result = SceneManager::Instance().FlushSceneReload(); Result)
+		{
+#ifdef _DEBUG
+			SetEditorCamera(SceneManager::Instance().GetActiveScene());
+#endif
+
+
+			std::cout << "DeviceRestore & SceneFlushed and Reloaded" << SceneManager::Instance().GetActiveScene()->GetName() << std::endl;
+			Result = true;;
+		}
+
+		else
+		{
+			std::cout << "Scene Flushing and Reloading  Failed " << std::endl; //이때는 그냥 프로세스 Crash 내는 게 더 나을 거 같은데 
+			Result = false;
+		}
+
+
+
+	}
+	else //이 상태에서는 진짜 문제를 모르니깐 여기서는 그 게임 오류 났을 때 오류 문제 물어보는 창이 나와야 할 거 같음. ; 여기까지가 베포 단계가 아닐까 싶긴 함. ㅇㅇ 
+	{
+		//여기서는 그냥 크래시 내고, window 창 하나 띄우자. 
+
+		return Result;
+
+
+	}
+
+	m_timer->Start();
+	return Result;
+}
+
