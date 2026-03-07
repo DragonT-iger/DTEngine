@@ -225,9 +225,6 @@
     <ClCompile Include="SecretTrigger.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\ThirdParty\Profier\tracy\public\TracyClient.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CheatNextStage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
