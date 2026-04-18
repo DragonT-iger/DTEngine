@@ -35,6 +35,13 @@ void ClientSceneManager::LoadScene(const std::string& sceneName)
 
     //SceneManager::Instance().RegisterScene(path);
     SceneManager::Instance().LoadScene(sceneName);
+
+    // 씬 전환 후 TimeScale을 항상 1로 초기화.
+// 메인게임 중 SetTimeScale(0)이 호출된 채로 씬이 전환되면
+// 다음 씬도 TimeScale=0으로 시작해 Update/deltaTime이 전부 0이 됨.
+    Scene* loadedScene = SceneManager::Instance().GetActiveScene();
+    if (loadedScene) loadedScene->SetTimeScale(1);
+    if (GameManager::Instance()) GameManager::Instance()->SetTimeScale(1);
 }
 
 void ClientSceneManager::InitTitleScene()
