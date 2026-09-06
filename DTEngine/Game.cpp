@@ -1170,7 +1170,10 @@ void Game::OnResize(int width, int height)
 		m_captureRT->Resize((int)drawWidth, (int)drawHeight);
 
 
-	Camera* mainCam = SceneManager::Instance().GetActiveScene()->GetMainCamera();
+	Scene* activeScene = SceneManager::Instance().GetActiveScene();
+	if (!activeScene) return;
+
+	Camera* mainCam = activeScene->GetMainCamera();
 	if (mainCam) {
 		mainCam->SetAspectRatio(targetAspect); 
 		mainCam->SetViewDirty();
